@@ -229,6 +229,59 @@ public static class ZoneAndSafetyTests
         }
     }
 
+    /// <summary>
+    /// ダウンロードから起動したときの自動のインストール: アプリのファイルだけを写す（ダウンロードのほかのファイルは写さない）。
+    /// 設定は、ダウンロード側で使っていて入れる先にないときだけ引き継ぐ。入れる先のほうが新しい版なら exe を上書きしない
+    /// </summary>
+    public static void TestInstallFromDownloads()
+    {
+        string root = Path.Combine(Path.GetTempPath(), "pfc-install-" + Guid.NewGuid().ToString("N"));
+        string from = Path.Combine(root, "Downloads");
+        string to = Path.Combine(root, "Tools", "ProFanController");
+        var running = new Version(6, 6, 0, 0);
+        try
+        {
+            // exe をダウンロードフォルダーにそのまま置いた（ほかのダウンロードと一緒）
+            Directory.CreateDirectory(Path.Combine(from, "Other"));
+            File.WriteAllText(Path.Combine(from, "ProFanController.exe"), "new exe");
+            File.WriteAllText(Path.Combine(from, "photo.jpg"), "not ours");
+            File.WriteAllText(Path.Combine(from, "Other", "file.txt"), "not ours");
+            Directory.CreateDirectory(Path.Combine(from, "licenses"));
+            File.WriteAllText(Path.Combine(from, "licenses", "LICENSE.txt"), "MIT");
+
+            var r = InstallCheck.InstallFrom(from, to, running);
+            T.Check(r.Exe == Path.Combine(to, "ProFanController.exe") && File.ReadAllText(r.Exe) == "new exe" && r.CopiedApp, "exe installed");
+            T.Check(File.Exists(Path.Combine(to, "licenses", "LICENSE.txt")), "bundled licenses installed");
+            T.Check(!File.Exists(Path.Combine(to, "photo.jpg")) && !Directory.Exists(Path.Combine(to, "Other")), "other downloads are not copied");
+            T.Check(!r.MovedSettings && !File.Exists(Path.Combine(to, "config.json")), "no settings to carry over");
+
+            // ダウンロードの場所で使っていた設定は、入れる先になければ引き継ぐ
+            Directory.CreateDirectory(Path.Combine(from, "data"));
+            File.WriteAllText(Path.Combine(from, "config.json"), "{\"used\":true}");
+            File.WriteAllText(Path.Combine(from, "data", "history.csv"), "1,2,3");
+            r = InstallCheck.InstallFrom(from, to, running);
+            T.Check(r.MovedSettings && File.ReadAllText(Path.Combine(to, "config.json")) == "{\"used\":true}", "settings used in Downloads are carried over");
+            T.Check(File.Exists(Path.Combine(to, "data", "history.csv")), "records are carried over with the settings");
+
+            // 入れる先の設定のほうが新しければ、そのまま
+            File.WriteAllText(Path.Combine(to, "config.json"), "{\"installed\":true}");
+            File.SetLastWriteTimeUtc(Path.Combine(from, "config.json"), DateTime.UtcNow.AddDays(-1));
+            r = InstallCheck.InstallFrom(from, to, running);
+            T.Check(!r.MovedSettings && File.ReadAllText(Path.Combine(to, "config.json")) == "{\"installed\":true}", "newer settings at the install folder are kept");
+
+            // 入れる先の exe のほうが新しい版なら、古い版で上書きしない（このテストの exe を「新しい版」として置く）
+            File.Copy(Environment.ProcessPath!, Path.Combine(to, "ProFanController.exe"), overwrite: true);
+            var installed = InstallCheck.FileVersion(Path.Combine(to, "ProFanController.exe"));
+            r = InstallCheck.InstallFrom(from, to, new Version(0, 0, 1, 0));
+            T.Check(installed is not null && !r.CopiedApp && File.ReadAllText(Path.Combine(from, "ProFanController.exe")) == "new exe"
+                    && new FileInfo(r.Exe).Length > 100, $"a newer installed version ({installed}) is not overwritten");
+        }
+        finally
+        {
+            try { Directory.Delete(root, true); } catch { /* 一時フォルダーなので残っても害はない */ }
+        }
+    }
+
     public static void TestAppearanceSettings()
     {
         var a = new AppearanceConfig();

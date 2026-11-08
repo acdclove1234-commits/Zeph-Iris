@@ -1603,3 +1603,4 @@ afb9660d	A calibration is in progress.
 c8e0f349	A fan sound check is in progress.
 69ade00e	Setup is in progress.
 82fa072a	Choose the display language again after it has finished.
+31040161	Installed from {0} to {1} and started from there. From now on, the app in this folder runs (you can delete the downloaded files).

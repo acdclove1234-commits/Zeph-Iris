@@ -91,15 +91,23 @@ public static class InstallCheck
         return null;
     }
 
-    /// <summary>移すときのおすすめの場所</summary>
+    /// <summary>移すときのおすすめの場所（ダウンロードなどから起動したときは、ここへ自動で入れる）</summary>
     public const string RecommendedFolder = @"C:\Tools\ProFanController";
 
-    /// <summary>写さないフォルダー（ログは書き込み中で写せないことがあり、移した先で新しく作られる）</summary>
-    private static readonly string[] SkipFolders = { "logs" };
+    /// <summary>
+    /// 写すアプリのファイル（exe と、配布の zip に入っている説明書・バッチ・ライセンス）。
+    /// これ以外は写さない（exe をダウンロードフォルダーにそのまま置いたとき、ダウンロードの中身を丸ごと写さないため）
+    /// </summary>
+    private static readonly string[] AppFiles =
+        { "ProFanController.exe", "README_en.txt", "はじめにお読みください.txt", "1_PawnIO をインストール.bat", "2_更新.bat", "update.ps1" }; // no-loc
+    private static readonly string[] AppFolders = { "licenses" };
+    /// <summary>設定と記録（設定を引き継ぐときだけ写す。ログは書き込み中で写せないことがあり、写した先で新しく作られる）</summary>
+    private static readonly string[] DataFolders = { "data", "backups", "records", "reports", "images" };
+    private const string ConfigFile = "config.json";
 
     /// <summary>
-    /// いまのフォルダーの中身（exe・設定・記録）を、移す先へ写す。移す先に設定（config.json）があれば、
-    /// 上書きする前に移す先の backups に控えを残す。使用中で写せないファイルは飛ばす（ログに残す）。
+    /// いまのフォルダーのアプリ（exe・配布物）と設定・記録を、移す先へ写す（設定画面の「移す」ボタン）。
+    /// 移す先に設定（config.json）があれば、上書きする前に移す先の backups に控えを残す。使用中で写せないファイルは飛ばす（ログに残す）。
     /// 移す先がいまのフォルダーと同じなら何もしない。写した先の exe の場所を返す
     /// </summary>
     public static string CopyInstall(string fromDirectory, string toDirectory)
@@ -109,31 +117,94 @@ public static class InstallCheck
         string exe = Path.Combine(to, "ProFanController.exe");
         if (string.Equals(from, to, StringComparison.OrdinalIgnoreCase)) return exe;
         Directory.CreateDirectory(to);
-        string targetConfig = Path.Combine(to, "config.json");
-        if (File.Exists(targetConfig))
-        {
-            string backups = Path.Combine(to, "backups");
-            Directory.CreateDirectory(backups);
-            File.Copy(targetConfig, Path.Combine(backups, $"config_{DateTime.Now:yyyyMMdd_HHmmss}_before-move.json"), overwrite: true);
-        }
-        CopyTree(from, to, top: true);
+        BackUpConfig(to, "before-move");
+        CopyApp(from, to);
+        CopyData(from, to);
         if (!File.Exists(exe)) throw new IOException(L("ProFanController.exe を写せませんでした"));
         return exe;
     }
 
-    private static void CopyTree(string from, string to, bool top)
+    /// <summary>自動で入れた結果。CopiedApp = exe を写した（入れる先のほうが新しい版なら写さない）、MovedSettings = 設定と記録も写した</summary>
+    public sealed record InstallResult(string Exe, bool CopiedApp, bool MovedSettings);
+
+    /// <summary>
+    /// ダウンロード・デスクトップ・一時フォルダー（zip の中から開いたとき）で起動したとき: アプリを toDirectory に入れる。
+    ///   exe と配布物: 入れる先の exe のほうが新しい版なら写さない（古い版で上書きしない）
+    ///   設定と記録: いまのフォルダーに設定があり、入れる先に設定がない（または、いまのほうが新しい）ときだけ写す
+    ///   （入れる先の設定は backups に控える）。入れる先の exe の場所を返す
+    /// </summary>
+    public static InstallResult InstallFrom(string fromDirectory, string toDirectory, Version? runningVersion)
     {
+        string from = Path.GetFullPath(fromDirectory).TrimEnd(Path.DirectorySeparatorChar);
+        string to = Path.GetFullPath(toDirectory).TrimEnd(Path.DirectorySeparatorChar);
+        string exe = Path.Combine(to, "ProFanController.exe");
+        if (string.Equals(from, to, StringComparison.OrdinalIgnoreCase)) return new InstallResult(exe, false, false);
         Directory.CreateDirectory(to);
-        foreach (var file in Directory.GetFiles(from))
+
+        bool copyApp = !(File.Exists(exe) && runningVersion is not null && FileVersion(exe) is { } installed && installed > runningVersion);
+        if (copyApp) CopyApp(from, to);
+
+        string fromConfig = Path.Combine(from, ConfigFile), toConfig = Path.Combine(to, ConfigFile);
+        bool moveSettings = File.Exists(fromConfig)
+                            && (!File.Exists(toConfig) || File.GetLastWriteTimeUtc(fromConfig) > File.GetLastWriteTimeUtc(toConfig));
+        if (moveSettings)
         {
-            try { File.Copy(file, Path.Combine(to, Path.GetFileName(file)), overwrite: true); }
-            catch (IOException ex) { Logger.Warn($"移すときに写せなかったファイル: {file}: {ex.Message}"); }
+            BackUpConfig(to, "before-install");
+            CopyData(from, to);
         }
-        foreach (var dir in Directory.GetDirectories(from))
+        if (!File.Exists(exe)) throw new IOException(L("ProFanController.exe を写せませんでした"));
+        return new InstallResult(exe, copyApp, moveSettings);
+    }
+
+    /// <summary>exe の版（読めなければ null）</summary>
+    public static Version? FileVersion(string exe)
+    {
+        try
         {
-            if (top && SkipFolders.Contains(Path.GetFileName(dir), StringComparer.OrdinalIgnoreCase)) continue;
-            CopyTree(dir, Path.Combine(to, Path.GetFileName(dir)), top: false);
+            var info = FileVersionInfo.GetVersionInfo(exe);
+            return new Version(info.FileMajorPart, info.FileMinorPart, info.FileBuildPart, Math.Max(0, info.FilePrivatePart));
         }
+        catch (Exception ex)
+        {
+            Logger.Warn($"exe の版を読めません: {exe}: {ex.Message}");
+            return null;
+        }
+    }
+
+    private static void BackUpConfig(string to, string why)
+    {
+        string targetConfig = Path.Combine(to, ConfigFile);
+        if (!File.Exists(targetConfig)) return;
+        string backups = Path.Combine(to, "backups");
+        Directory.CreateDirectory(backups);
+        File.Copy(targetConfig, Path.Combine(backups, $"config_{DateTime.Now:yyyyMMdd_HHmmss}_{why}.json"), overwrite: true);
+    }
+
+    private static void CopyApp(string from, string to)
+    {
+        foreach (var name in AppFiles) CopyFile(Path.Combine(from, name), Path.Combine(to, name));
+        foreach (var dir in AppFolders) CopyTree(Path.Combine(from, dir), Path.Combine(to, dir));
+    }
+
+    private static void CopyData(string from, string to)
+    {
+        CopyFile(Path.Combine(from, ConfigFile), Path.Combine(to, ConfigFile));
+        foreach (var dir in DataFolders) CopyTree(Path.Combine(from, dir), Path.Combine(to, dir));
+    }
+
+    private static void CopyFile(string from, string to)
+    {
+        if (!File.Exists(from)) return;
+        try { File.Copy(from, to, overwrite: true); }
+        catch (IOException ex) { Logger.Warn($"移すときに写せなかったファイル: {from}: {ex.Message}"); }
+    }
+
+    private static void CopyTree(string from, string to)
+    {
+        if (!Directory.Exists(from)) return;
+        Directory.CreateDirectory(to);
+        foreach (var file in Directory.GetFiles(from)) CopyFile(file, Path.Combine(to, Path.GetFileName(file)));
+        foreach (var dir in Directory.GetDirectories(from)) CopyTree(dir, Path.Combine(to, Path.GetFileName(dir)));
     }
 
     /// <summary>自動起動のタスクの XML から、起動する exe の場所を取り出す（なければ null）</summary>

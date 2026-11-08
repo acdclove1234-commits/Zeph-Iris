@@ -65,23 +65,22 @@ and can be checked from a phone.
 
 
 ■ First-time setup (once)
-  1. Put this folder somewhere it will stay.
-       Recommended: C:\Tools\ProFanController
-     (Running it from the Desktop or Downloads folder can break the start-at-logon setting.)
-
-  2. Double-click ProFanController.exe -> "Yes" (administrator confirmation).
+  1. Double-click ProFanController.exe -> "Yes" (administrator confirmation).
      - If "Windows protected your PC" appears, press "More info" -> "Run anyway"
        (shown because this is a personal app without a code-signing certificate).
+     - When opened from Downloads, the Desktop or inside the zip, the app installs itself to
+       C:\Tools\ProFanController and starts again from there (you can delete the downloaded files
+       afterwards). Placed anywhere else (for example D:\Apps), it runs where it is.
 
-  3. The first page of the setup wizard checks the fan control driver (PawnIO).
-     - If it says PawnIO is missing, press "Install PawnIO" [PawnIO をインストール]
-       (installed with winget, which comes with Windows; needs the internet and takes up to a few minutes).
-     - Then press "Restart the app" [アプリを起動し直す]; the wizard opens again.
+  2. The first page of the setup wizard checks the fan control driver (PawnIO).
+     - If PawnIO is missing, the installation starts by itself, and the app restarts when it is done
+       (installed with winget, which comes with Windows; needs the internet and takes up to a few
+       minutes; the wizard opens again after the restart).
      - If a PC restart is required, restart the PC and start ProFanController.exe.
      - If it fails, right-click "1_PawnIO をインストール.bat" (= install PawnIO) in this folder ->
        "Run as administrator", or get the installer from https://pawnio.eu/
 
-  4. Follow the wizard.
+  3. Follow the wizard.
      - "Test" [テスト] on each fan header runs it at full speed for 8 seconds.
        Watch which fan speeds up and give it a name and a type (fan / pump / not used).
      - At the end, three profiles are made for you: Silent / Standard / Performance.

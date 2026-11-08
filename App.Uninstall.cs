@@ -37,14 +37,20 @@ public partial class App
     /// アプリを正しく終了して（ファンは BIOS 制御に戻る）、すぐに起動し直す。
     /// PawnIO はハードウェアを開くときにしか読み込まれないので、入れたあとはこれで使えるようになる
     /// </summary>
-    public void RestartApplication()
+    public void RestartApplication(string extraArguments = "")
     {
         if (_exiting || _cleanupStarted) return;
-        Logger.Info("アプリを起動し直します（PawnIO の読み込み・表示言語の切り替えなど）");
+        Logger.Info("アプリを起動し直します（PawnIO の読み込みなど）");
         // 新しいアプリは、このアプリが終わる（二重起動の防止の印を離す）まで最大 30 秒待ってから始まる
-        StartSelf(RestartArgument);
+        StartSelf(extraArguments.Length > 0 ? $"{RestartArgument} {extraArguments}" : RestartArgument);
         ExitApplication();
     }
+
+    /// <summary>セットアップの画面で PawnIO を自動で入れて起動し直したときの引数（もう一度は自動で入れない）</summary>
+    public const string PawnIoTriedArgument = "--pawnio-tried";
+
+    /// <summary>この起動の前に、PawnIO を自動で入れて起動し直した（くり返さない）</summary>
+    public bool PawnIoAutoTried { get; private set; }
 
     // ----- お片付け -----
 

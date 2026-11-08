@@ -1603,3 +1603,4 @@ afb9660d	Kalibrasyon sürüyor.
 c8e0f349	Bir fanın sesi kontrol ediliyor.
 69ade00e	Kurulum sürüyor.
 82fa072a	Bittikten sonra görüntüleme dilini yeniden seçin.
+31040161	{0} konumundan {1} konumuna yüklendi ve oradan başlatıldı. Bundan sonra bu klasördeki uygulama çalışır (indirilen dosyaları silebilirsiniz).

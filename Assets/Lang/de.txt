@@ -1603,3 +1603,4 @@ afb9660d	Eine Kalibrierung läuft noch.
 c8e0f349	Die Geräuschprüfung eines Lüfters läuft noch.
 69ade00e	Die Einrichtung läuft noch.
 82fa072a	Wählen Sie die Anzeigesprache erneut, wenn das abgeschlossen ist.
+31040161	Von {0} nach {1} installiert und von dort gestartet. Ab jetzt läuft die App in diesem Ordner (die heruntergeladenen Dateien können Sie löschen).

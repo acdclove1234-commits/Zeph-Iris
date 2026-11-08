@@ -84,6 +84,7 @@ public partial class App : Application
             Shutdown();
             return;
         }
+        PawnIoAutoTried = e.Args.Contains(PawnIoTriedArgument, StringComparer.OrdinalIgnoreCase);
         bool recovered = e.Args.Contains(Watchdog.RecoveredArgument, StringComparer.OrdinalIgnoreCase);
         bool restarting = e.Args.Contains(RestartArgument, StringComparer.OrdinalIgnoreCase);
 
@@ -102,6 +103,18 @@ public partial class App : Application
                     "ProFanController", MessageBoxButton.OK, MessageBoxImage.Information);
             _mutex.Dispose();
             _mutex = null;
+            Shutdown();
+            return;
+        }
+
+        // ダウンロード・デスクトップ・一時フォルダー（zip の中から開いた）で起動したら、C:\Tools\ProFanController に入れて、そこから起動し直す
+        if (RelocateFromUnstableFolder(e.Args))
+        {
+            _exiting = true; // 何も始めていないので、終了の処理（BIOS への切り替えなど）はしない
+            try { _mutex.ReleaseMutex(); } catch { /* 持っていない */ }
+            _mutex.Dispose();
+            _mutex = null;
+            Logger.Flush();
             Shutdown();
             return;
         }
@@ -300,6 +313,7 @@ public partial class App : Application
             tray.ShowBalloon("ProFanController", L("予期せず終了したため、自動で起動し直しました。"), AlertLevel.Warning);
             Notifier.Notify("ProFanController", msg, AlertLevel.Warning);
         }
+        if (InstalledFrom(e.Args) is { } installedFrom) AfterRelocation(window, installedFrom);
         _ = CheckInstallAsync();
     }
 

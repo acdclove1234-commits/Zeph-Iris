@@ -1603,3 +1603,4 @@ afb9660d	Kalibrasi sedang berjalan.
 c8e0f349	Pemeriksaan suara kipas sedang berjalan.
 69ade00e	Penyiapan sedang berjalan.
 82fa072a	Pilih lagi bahasa tampilan setelah selesai.
+31040161	Dipasang dari {0} ke {1} dan dijalankan dari sana. Mulai sekarang aplikasi di folder ini yang berjalan (file unduhan boleh dihapus).

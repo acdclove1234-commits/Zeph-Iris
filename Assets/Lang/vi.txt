@@ -1603,3 +1603,4 @@ afb9660d	Đang hiệu chỉnh.
 c8e0f349	Đang nghe thử tiếng quạt.
 69ade00e	Đang thiết lập.
 82fa072a	Hãy chọn lại ngôn ngữ hiển thị sau khi xong.
+31040161	Đã cài từ {0} vào {1} và khởi động từ đó. Từ nay ứng dụng trong thư mục này sẽ chạy (có thể xóa các tệp đã tải về).

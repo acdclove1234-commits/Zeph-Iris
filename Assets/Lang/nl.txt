@@ -1603,3 +1603,4 @@ afb9660d	Er loopt een kalibratie.
 c8e0f349	Er loopt een geluidscontrole van een ventilator.
 69ade00e	De installatie is nog bezig.
 82fa072a	Kies de weergavetaal opnieuw wanneer dit klaar is.
+31040161	Geïnstalleerd van {0} naar {1} en vanaf daar gestart. Vanaf nu draait de app in deze map (de gedownloade bestanden kun je verwijderen).

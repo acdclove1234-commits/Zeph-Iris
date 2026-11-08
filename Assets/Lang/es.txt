@@ -1603,3 +1603,4 @@ afb9660d	Hay una calibración en curso.
 c8e0f349	Se está comprobando el sonido de un ventilador.
 69ade00e	La configuración está en curso.
 82fa072a	Vuelve a elegir el idioma cuando haya terminado.
+31040161	Se instaló de {0} a {1} y se inició desde ahí. A partir de ahora se usa la aplicación de esta carpeta (puedes borrar los archivos descargados).

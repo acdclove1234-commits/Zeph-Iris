@@ -1603,3 +1603,4 @@ afb9660d	Un calibrage est en cours.
 c8e0f349	Une vérification du bruit d'un ventilateur est en cours.
 69ade00e	La configuration est en cours.
 82fa072a	Choisissez de nouveau la langue d'affichage une fois l'opération terminée.
+31040161	Installée de {0} vers {1} et lancée depuis cet emplacement. Désormais, c'est l'application de ce dossier qui fonctionne (vous pouvez supprimer les fichiers téléchargés).

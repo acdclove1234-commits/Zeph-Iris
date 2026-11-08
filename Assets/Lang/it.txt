@@ -1603,3 +1603,4 @@ afb9660d	È in corso una calibrazione.
 c8e0f349	È in corso il controllo del rumore di una ventola.
 69ade00e	È in corso la configurazione.
 82fa072a	Scegli di nuovo la lingua quando sarà terminato.
+31040161	Installata da {0} in {1} e avviata da lì. D'ora in poi funziona l'app in questa cartella (puoi eliminare i file scaricati).

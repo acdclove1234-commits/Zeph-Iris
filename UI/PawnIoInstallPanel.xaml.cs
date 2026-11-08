@@ -113,8 +113,14 @@ public partial class PawnIoInstallPanel : UserControl
         StatusLine.Foreground = brush;
     }
 
+    /// <summary>入ってアプリを起動し直せば使えるとき、自動で起動し直す（初めてのセットアップの画面）</summary>
+    public bool AutoRestartAfterInstall { get; set; }
+
+    /// <summary>インストールを始める（初めてのセットアップの画面が、開いたときに呼ぶ）</summary>
+    public void StartInstall() => OnInstallClick(this, new RoutedEventArgs());
+
     /// <summary>
-    /// ボタンが押されたときだけ、winget で PawnIO をインストールする。
+    /// winget で PawnIO をインストールする（ボタンを押したとき・初めてのセットアップの画面を開いたとき）。
     /// 終わったら PawnIO が入ったかを確かめ直し、起動し直し・PC の再起動が要るかを伝える
     /// </summary>
     private async void OnInstallClick(object sender, RoutedEventArgs e)
@@ -169,6 +175,12 @@ public partial class PawnIoInstallPanel : UserControl
                 if (r.NeedsAppRestart) RestartButton.Visibility = Visibility.Visible;
                 if (r.OfferOfficialSite) SiteButton.Visibility = Visibility.Visible;
                 ButtonRow.Visibility = Visibility.Visible;
+                // 初めてのセットアップ: 入って、起動し直せば使えるなら、そのまま起動し直す
+                if (AutoRestartAfterInstall && r is { Ok: true, NeedsAppRestart: true } && !_pcRestartPending)
+                {
+                    Logger.Info("PawnIO が入ったので、セットアップを続けるために自動で起動し直します");
+                    OnRestartClick(this, new RoutedEventArgs());
+                }
             }
         }
     }

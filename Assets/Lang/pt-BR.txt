@@ -1603,3 +1603,4 @@ afb9660d	Há uma calibração em andamento.
 c8e0f349	Há uma verificação do som de uma ventoinha em andamento.
 69ade00e	A configuração está em andamento.
 82fa072a	Escolha o idioma de novo quando terminar.
+31040161	Instalado de {0} para {1} e iniciado a partir de lá. De agora em diante, o app desta pasta é que roda (você pode apagar os arquivos baixados).

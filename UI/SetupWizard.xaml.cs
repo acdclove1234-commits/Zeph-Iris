@@ -31,16 +31,23 @@ public partial class SetupWizard : Window
         }
         else
         {
-            // PawnIO がないと端子が見つからない。ここからインストールできるようにする（押したときだけ winget を動かす）
+            // PawnIO がないと端子が見つからない。セットアップに必要なので、この画面を開いたらすぐに winget でインストールを始め、
+            // 入ったら自動で起動し直す（起動し直したアプリで、もう一度この画面が開く）。
+            // 起動し直してもまだ読み込めないとき（PC の再起動が要るなど）は、くり返さずにボタンと公式サイトの案内を残す
+            var app = (App)Application.Current;
             PawnIoStatus.Visibility = Visibility.Collapsed;
             PawnIoPanel.LoadedAtStartup = false;
             PawnIoPanel.Visibility = Visibility.Visible;
             PawnIoPanel.RestartRequested += () =>
             {
-                // ウィザードを閉じてから、アプリを起動し直す（初めてのセットアップなら、起動し直したアプリでもう一度ウィザードが開く）
                 DialogResult = false;
-                Dispatcher.BeginInvoke(() => ((App)Application.Current).RestartApplication());
+                Dispatcher.BeginInvoke(() => app.RestartApplication(App.PawnIoTriedArgument));
             };
+            if (!app.PawnIoAutoTried)
+            {
+                PawnIoPanel.AutoRestartAfterInstall = true;
+                Loaded += (_, _) => PawnIoPanel.StartInstall();
+            }
         }
 
         // 既存の設定で名前が付いている端子は、その名前を引き継ぐ

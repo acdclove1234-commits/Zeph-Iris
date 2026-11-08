@@ -1603,3 +1603,4 @@ afb9660d	Trwa kalibracja.
 c8e0f349	Trwa sprawdzanie dźwięku wentylatora.
 69ade00e	Trwa konfiguracja.
 82fa072a	Wybierz język ponownie, gdy to się zakończy.
+31040161	Zainstalowano z {0} do {1} i uruchomiono stamtąd. Od teraz działa aplikacja z tego folderu (pobrane pliki można usunąć).

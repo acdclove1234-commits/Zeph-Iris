@@ -51,8 +51,8 @@ What happens with unsupported or unchecked parts:
 
 ## Getting started (release zip)
 
-1. Download `ProFanController-<version>-windows-x64.zip` from [Releases](../../releases), extract it, and put the `ProFanController` folder somewhere it will stay, such as `C:\Tools\ProFanController`
-2. Start `ProFanController.exe`. If PawnIO is not installed, press "Install PawnIO" on the first setup screen (it uses winget), then "Restart the app"
+1. Download `ProFanController-<version>-windows-x64.zip` from [Releases](../../releases) and extract it
+2. Start `ProFanController.exe`. Opened from Downloads, the Desktop or inside the zip, it installs itself to `C:\Tools\ProFanController` and starts again from there (anywhere else, it runs where it is). If PawnIO is not installed, the first setup screen installs it (with winget) and restarts the app
    (if that fails, right-click `1_PawnIO をインストール.bat` ("install PawnIO") → Run as administrator, or use the installer from the [official site](https://pawnio.eu/))
 3. Follow the setup to name your fan headers
 

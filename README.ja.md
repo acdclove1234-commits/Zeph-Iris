@@ -50,8 +50,8 @@ Windows 用のファン制御・監視ツールです。マザーボードのフ
 
 ## 使い方（配布用の zip）
 
-1. [Releases](../../releases) から `ProFanController-<版>-windows-x64.zip` をダウンロードして展開し、`ProFanController` フォルダーを `C:\Tools\ProFanController` など動かさない場所に置く
-2. `ProFanController.exe` を起動する。PawnIO が入っていなければ、セットアップの最初の画面の「PawnIO をインストール」で入れて（winget を使います）、「アプリを起動し直す」を押す
+1. [Releases](../../releases) から `ProFanController-<版>-windows-x64.zip` をダウンロードして展開する
+2. `ProFanController.exe` を起動する。ダウンロード・デスクトップ・zip の中から開いたときは、自分で `C:\Tools\ProFanController` に入って、そこから起動し直します（ほかの場所なら、その場所のまま動きます）。PawnIO が入っていなければ、セットアップの最初の画面が自動で入れて（winget を使います）、アプリを起動し直します
    （うまくいかないときは「1_PawnIO をインストール.bat」を右クリック →「管理者として実行」するか、[公式サイト](https://pawnio.eu/)のインストーラーを使う）
 3. セットアップの案内に沿って、ファン端子に名前を付ける
 

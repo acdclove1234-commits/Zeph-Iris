@@ -569,92 +569,93 @@ d45f8ae5	静音 1 時間	UI/WidgetWindow.xaml:23
 27ef87be	ワンタッチ操作を解除	UI/WidgetWindow.xaml:24
 0abff5dc	メイン画面を開く	UI/WidgetWindow.xaml:25
 ae8884f0	ウィジェットを閉じる	UI/WidgetWindow.xaml:26
-bd7aaf0b	行っています…	App.Uninstall.cs:93
-8394b962	失敗しました: {0}	App.Uninstall.cs:101
-c6d96aae	お片付け: {0}: {1}: {2}	App.Uninstall.cs:105
-95db46c4	ファンの制御は動いていませんでした	App.Uninstall.cs:130
-362dcae4	すべてのファンを BIOS の自動制御に戻しました	App.Uninstall.cs:137
-3bd7ef7e	BIOS 制御に戻せなかったファンの端子があります（端子の名前はログにあります）。	App.Uninstall.cs:140
-63098690	{0:F0} 秒たっても、ファンを BIOS 制御に戻し終わりませんでした。	App.Uninstall.cs:141
-a9982b5a	見張りプロセスも終わらせました	App.Uninstall.cs:155
-4df819d3	ファンの制御を止めて、ハードウェアを閉じました	App.Uninstall.cs:157
-235f026e	（{0}）	App.Uninstall.cs:157
-81156e08	ファンの制御が 5 秒以内に止まりませんでした。ファンは BIOS 制御に戻してありますが、念のため	App.Uninstall.cs:158
-ef5acb7a	見張りプロセスが安全な回転数にしました	App.Uninstall.cs:159
-fb7db8c2	PC を再起動してください	App.Uninstall.cs:159
-fe1e7d87	（PC を再起動すると BIOS の制御に戻ります）。	App.Uninstall.cs:160
-e39402e8	ライティングの制御を止めて、デバイスを離しました	App.Uninstall.cs:166
-8008dbae	ライティングの制御は使っていませんでした（接続を閉じました）	App.Uninstall.cs:166
-775adf46	スマホ監視	App.Uninstall.cs:170
-817c491e	ファイアウォールの許可を消せませんでした。「Windows セキュリティ」→「ファイアウォールとネットワーク保護」→「詳細設定」→「受信の規則」から「ProFanController Web」を削除してください。	App.Uninstall.cs:173
-629589af	スマホ監視を止めて、ファイアウォールの許可を消しました	App.Uninstall.cs:174
-1d979f07	自動起動を消せませんでした。タスクスケジューラ（タスク スケジューラ ライブラリ）から「ProFanController」を削除してください。	App.Uninstall.cs:180
-bc13583b	ログオン時の自動起動を消しました	App.Uninstall.cs:181
-22c99fc8	クラッシュしたときの記録の設定を消せませんでした（HKEY_LOCAL_MACHINE\\{0}）。そのままでも害はありません。	App.Uninstall.cs:187
-14dd713f	クラッシュしたときの記録の設定を消しました	App.Uninstall.cs:188
-f29a03c3	アンインストール	App.Uninstall.cs:199
-d66766d3	ここでは行いません	App.Uninstall.cs:203
-1e82ca4a	実行ファイルのパスが分かりません。	App.Uninstall.cs:219
-eb8f4a4f	設定・ログ・記録を消す準備ができませんでした（{0}）。\nアプリが終了したあとに、フォルダーごと削除してください:\n{1}	App.Uninstall.cs:231
-8df0902c	フォルダーを開く	App.Uninstall.cs:235
-c5234463	ProFanController がまだ動いているため、設定・ログ・記録は消しませんでした。\n	App.Uninstall.cs:256
-32a27012	アプリを終了してから、次のフォルダーをフォルダーごと削除してください:\n{0}	App.Uninstall.cs:257
-ecdec9de	{0}を消しました。\n\n	App.Uninstall.cs:265
-a261a21a	このお知らせを閉じると、エクスプローラーでアプリのフォルダーを開きます。フォルダーごと削除すれば、お片付けは終わりです:\n{0}	App.Uninstall.cs:266
-62664073	消せなかったものがあります（ほかのアプリが開いているかもしれません）:\n・	App.Uninstall.cs:270
-d6750fd2	\n・	App.Uninstall.cs:271
-bf71d238	\n…ほか {0} 個	App.Uninstall.cs:271
-df6134ea	\n\nこのお知らせを閉じたあと、次のフォルダーをフォルダーごと削除してください:\n{0}	App.Uninstall.cs:272
-10d89683	ProFanController のお片付け	App.Uninstall.cs:277
-2d7f91ad	ProFanController はすでに起動しています。\nタスクトレイのアイコンから開いてください。	App.xaml.cs:101
-ec6a9bb6	記録の保存	App.xaml.cs:161
-77d62ee9	ProFanController: 回復しました	App.xaml.cs:224
-977b8544	プロファイルを自動で切り替えました	App.xaml.cs:236
-790c11cc	{0} を検出 → {1}	App.xaml.cs:236
-5b860ae3	DRY RUN（テストモード）で動いています。温度に応じた回転数を計算するだけで、ファンは動かしていません。	App.xaml.cs:283
-874003cc	制御を開始する	App.xaml.cs:284
-812bba50	設定ファイルが壊れていたため、バックアップ（{0:yyyy/MM/dd HH:mm}）から復旧しました。壊れたファイルは config.broken_*.json として残しています。	App.xaml.cs:294
-9ca7b4fa	ProFanController が予期せず終了したため、見張りプロセスが自動で起動し直しました。ファンは安全な回転数にしてから制御を再開しています。原因はログで確認できます。	App.xaml.cs:298
-7b249720	ログを開く	App.xaml.cs:299
-3a7e2e72	予期せず終了したため、自動で起動し直しました。	App.xaml.cs:300
-c0fd45c5	タスクトレイで動作を続けています。終了するにはアイコンを右クリックしてください。	App.xaml.cs:318
-fa5d05c3	ProFanController: メンテナンス	App.xaml.cs:321
-c51b6c55	Windows の起動時に自動で立ち上がるのは、別の場所のアプリです（{0}）。古い版が立ち上がっているかもしれません。	App.xaml.cs:343
-268b2432	このアプリは「{0}」フォルダーの中から動いています。整理したときに消えたり、別の版が増えたりしないよう、	App.xaml.cs:348
-80df7870	下のボタンで {0} に移してください（設定はそのまま持っていき、自動起動も移した先に登録し直して、起動し直します）。	App.xaml.cs:349
-8d7ede7f	{0} が動いています。同じ LED やファンを操作するので、色が勝手に戻る・ちらつく・回転数が反映されない原因になります。そのソフトの LED・ファンの制御を止めるか、終了してください。	App.xaml.cs:354
-0cac6658	{0} に移す	App.xaml.cs:361
-f8529664	自動起動をこの場所にする	App.xaml.cs:365
-c674f1d5	自動起動を、いま動いているこのアプリに登録し直しました。	App.xaml.cs:370
-f5c17fde	自動起動を登録し直せませんでした（ログを確認してください）。	App.xaml.cs:370
-467c4a19	{0} へ移せませんでした: {1}	App.xaml.cs:405
-14d2e005	音の取り込み	App.xaml.cs:438
-c08fb050	 ／ 	App.xaml.cs:617
-48ccab47	使っていたセンサーが見つかりません	App.xaml.cs:617
-9c32a53a	ハードウェアの変更を検出しました	App.xaml.cs:619
-58f4eb35	ProFanController: ハードウェアの変更	App.xaml.cs:620
-646e0b57	{0}。PC の画面で、新しいセンサーへの置き換えを確認してください。	App.xaml.cs:620
-9dddc76a	ファン制御に問題があります	App.xaml.cs:650
-8ad6890e	{0}（安全のため BIOS の制御にしています。自動で復旧を試みます）	App.xaml.cs:650
-cdfd31fc	ProFanController: ファン制御の問題	App.xaml.cs:651
-30b6b07e	一部の部品を読み取れません	App.xaml.cs:654
-465384a0	ファン制御が復旧しました	App.xaml.cs:657
-2a57fe9c	通常の制御に戻りました。	App.xaml.cs:657
-96429453	ProFanController: 復旧	App.xaml.cs:658
-a8e2e175	ファン制御が通常に戻りました。	App.xaml.cs:658
-0d78d54c	ほかのプログラムが config.json を開いたままにしているため読めませんでした（ファイルはそのままです）。	App.xaml.cs:674
-9b03cdae	元のファイルは config.broken_日時.json として残しました。	App.xaml.cs:675
-b07af289	config.json を読み込めず、バックアップからも復旧できませんでした。\n{0}\n\n{1}\n空の設定で起動します。	App.xaml.cs:676
-645b237e	ブースト	App.xaml.cs:730
-169abc6e	ポンプ以外の全ファンを {0} 分間 100% にします。	App.xaml.cs:730
-c342d519	「静音」で使うプロファイルが見つかりません。設定画面の「ワンタッチ操作」で選んでください。	App.xaml.cs:734
-77a0d0ea	スマホ用の Web サーバーを開始できませんでした（ポート {0}）: {1}	App.xaml.cs:860
-eec05191	緊急全開	App.xaml.cs:870
-0413f77c	一時停止中	App.xaml.cs:870
-45fadb4f	制御中	App.xaml.cs:870
-404e2134	ウィジェット	App.xaml.cs:948
-1f2511a8	画面	App.xaml.cs:952
-0f13893a	タスクトレイ	App.xaml.cs:1004
+31040161	{0} から {1} に入れて、そこから起動しました。これからはこの場所のアプリが動きます（ダウンロードしたファイルは消してかまいません）。	App.SelfInstall.cs:63
+8df0902c	フォルダーを開く	App.SelfInstall.cs:64
+bd7aaf0b	行っています…	App.Uninstall.cs:99
+8394b962	失敗しました: {0}	App.Uninstall.cs:107
+c6d96aae	お片付け: {0}: {1}: {2}	App.Uninstall.cs:111
+95db46c4	ファンの制御は動いていませんでした	App.Uninstall.cs:136
+362dcae4	すべてのファンを BIOS の自動制御に戻しました	App.Uninstall.cs:143
+3bd7ef7e	BIOS 制御に戻せなかったファンの端子があります（端子の名前はログにあります）。	App.Uninstall.cs:146
+63098690	{0:F0} 秒たっても、ファンを BIOS 制御に戻し終わりませんでした。	App.Uninstall.cs:147
+a9982b5a	見張りプロセスも終わらせました	App.Uninstall.cs:161
+4df819d3	ファンの制御を止めて、ハードウェアを閉じました	App.Uninstall.cs:163
+235f026e	（{0}）	App.Uninstall.cs:163
+81156e08	ファンの制御が 5 秒以内に止まりませんでした。ファンは BIOS 制御に戻してありますが、念のため	App.Uninstall.cs:164
+ef5acb7a	見張りプロセスが安全な回転数にしました	App.Uninstall.cs:165
+fb7db8c2	PC を再起動してください	App.Uninstall.cs:165
+fe1e7d87	（PC を再起動すると BIOS の制御に戻ります）。	App.Uninstall.cs:166
+e39402e8	ライティングの制御を止めて、デバイスを離しました	App.Uninstall.cs:172
+8008dbae	ライティングの制御は使っていませんでした（接続を閉じました）	App.Uninstall.cs:172
+775adf46	スマホ監視	App.Uninstall.cs:176
+817c491e	ファイアウォールの許可を消せませんでした。「Windows セキュリティ」→「ファイアウォールとネットワーク保護」→「詳細設定」→「受信の規則」から「ProFanController Web」を削除してください。	App.Uninstall.cs:179
+629589af	スマホ監視を止めて、ファイアウォールの許可を消しました	App.Uninstall.cs:180
+1d979f07	自動起動を消せませんでした。タスクスケジューラ（タスク スケジューラ ライブラリ）から「ProFanController」を削除してください。	App.Uninstall.cs:186
+bc13583b	ログオン時の自動起動を消しました	App.Uninstall.cs:187
+22c99fc8	クラッシュしたときの記録の設定を消せませんでした（HKEY_LOCAL_MACHINE\\{0}）。そのままでも害はありません。	App.Uninstall.cs:193
+14dd713f	クラッシュしたときの記録の設定を消しました	App.Uninstall.cs:194
+f29a03c3	アンインストール	App.Uninstall.cs:205
+d66766d3	ここでは行いません	App.Uninstall.cs:209
+1e82ca4a	実行ファイルのパスが分かりません。	App.Uninstall.cs:225
+eb8f4a4f	設定・ログ・記録を消す準備ができませんでした（{0}）。\nアプリが終了したあとに、フォルダーごと削除してください:\n{1}	App.Uninstall.cs:237
+c5234463	ProFanController がまだ動いているため、設定・ログ・記録は消しませんでした。\n	App.Uninstall.cs:262
+32a27012	アプリを終了してから、次のフォルダーをフォルダーごと削除してください:\n{0}	App.Uninstall.cs:263
+ecdec9de	{0}を消しました。\n\n	App.Uninstall.cs:271
+a261a21a	このお知らせを閉じると、エクスプローラーでアプリのフォルダーを開きます。フォルダーごと削除すれば、お片付けは終わりです:\n{0}	App.Uninstall.cs:272
+62664073	消せなかったものがあります（ほかのアプリが開いているかもしれません）:\n・	App.Uninstall.cs:276
+d6750fd2	\n・	App.Uninstall.cs:277
+bf71d238	\n…ほか {0} 個	App.Uninstall.cs:277
+df6134ea	\n\nこのお知らせを閉じたあと、次のフォルダーをフォルダーごと削除してください:\n{0}	App.Uninstall.cs:278
+10d89683	ProFanController のお片付け	App.Uninstall.cs:283
+2d7f91ad	ProFanController はすでに起動しています。\nタスクトレイのアイコンから開いてください。	App.xaml.cs:102
+ec6a9bb6	記録の保存	App.xaml.cs:174
+77d62ee9	ProFanController: 回復しました	App.xaml.cs:237
+977b8544	プロファイルを自動で切り替えました	App.xaml.cs:249
+790c11cc	{0} を検出 → {1}	App.xaml.cs:249
+5b860ae3	DRY RUN（テストモード）で動いています。温度に応じた回転数を計算するだけで、ファンは動かしていません。	App.xaml.cs:296
+874003cc	制御を開始する	App.xaml.cs:297
+812bba50	設定ファイルが壊れていたため、バックアップ（{0:yyyy/MM/dd HH:mm}）から復旧しました。壊れたファイルは config.broken_*.json として残しています。	App.xaml.cs:307
+9ca7b4fa	ProFanController が予期せず終了したため、見張りプロセスが自動で起動し直しました。ファンは安全な回転数にしてから制御を再開しています。原因はログで確認できます。	App.xaml.cs:311
+7b249720	ログを開く	App.xaml.cs:312
+3a7e2e72	予期せず終了したため、自動で起動し直しました。	App.xaml.cs:313
+c0fd45c5	タスクトレイで動作を続けています。終了するにはアイコンを右クリックしてください。	App.xaml.cs:332
+fa5d05c3	ProFanController: メンテナンス	App.xaml.cs:335
+c51b6c55	Windows の起動時に自動で立ち上がるのは、別の場所のアプリです（{0}）。古い版が立ち上がっているかもしれません。	App.xaml.cs:357
+268b2432	このアプリは「{0}」フォルダーの中から動いています。整理したときに消えたり、別の版が増えたりしないよう、	App.xaml.cs:362
+80df7870	下のボタンで {0} に移してください（設定はそのまま持っていき、自動起動も移した先に登録し直して、起動し直します）。	App.xaml.cs:363
+8d7ede7f	{0} が動いています。同じ LED やファンを操作するので、色が勝手に戻る・ちらつく・回転数が反映されない原因になります。そのソフトの LED・ファンの制御を止めるか、終了してください。	App.xaml.cs:368
+0cac6658	{0} に移す	App.xaml.cs:375
+f8529664	自動起動をこの場所にする	App.xaml.cs:379
+c674f1d5	自動起動を、いま動いているこのアプリに登録し直しました。	App.xaml.cs:384
+f5c17fde	自動起動を登録し直せませんでした（ログを確認してください）。	App.xaml.cs:384
+467c4a19	{0} へ移せませんでした: {1}	App.xaml.cs:419
+14d2e005	音の取り込み	App.xaml.cs:452
+c08fb050	 ／ 	App.xaml.cs:631
+48ccab47	使っていたセンサーが見つかりません	App.xaml.cs:631
+9c32a53a	ハードウェアの変更を検出しました	App.xaml.cs:633
+58f4eb35	ProFanController: ハードウェアの変更	App.xaml.cs:634
+646e0b57	{0}。PC の画面で、新しいセンサーへの置き換えを確認してください。	App.xaml.cs:634
+9dddc76a	ファン制御に問題があります	App.xaml.cs:664
+8ad6890e	{0}（安全のため BIOS の制御にしています。自動で復旧を試みます）	App.xaml.cs:664
+cdfd31fc	ProFanController: ファン制御の問題	App.xaml.cs:665
+30b6b07e	一部の部品を読み取れません	App.xaml.cs:668
+465384a0	ファン制御が復旧しました	App.xaml.cs:671
+2a57fe9c	通常の制御に戻りました。	App.xaml.cs:671
+96429453	ProFanController: 復旧	App.xaml.cs:672
+a8e2e175	ファン制御が通常に戻りました。	App.xaml.cs:672
+0d78d54c	ほかのプログラムが config.json を開いたままにしているため読めませんでした（ファイルはそのままです）。	App.xaml.cs:688
+9b03cdae	元のファイルは config.broken_日時.json として残しました。	App.xaml.cs:689
+b07af289	config.json を読み込めず、バックアップからも復旧できませんでした。\n{0}\n\n{1}\n空の設定で起動します。	App.xaml.cs:690
+645b237e	ブースト	App.xaml.cs:744
+169abc6e	ポンプ以外の全ファンを {0} 分間 100% にします。	App.xaml.cs:744
+c342d519	「静音」で使うプロファイルが見つかりません。設定画面の「ワンタッチ操作」で選んでください。	App.xaml.cs:748
+77a0d0ea	スマホ用の Web サーバーを開始できませんでした（ポート {0}）: {1}	App.xaml.cs:874
+eec05191	緊急全開	App.xaml.cs:884
+0413f77c	一時停止中	App.xaml.cs:884
+45fadb4f	制御中	App.xaml.cs:884
+404e2134	ウィジェット	App.xaml.cs:962
+1f2511a8	画面	App.xaml.cs:966
+0f13893a	タスクトレイ	App.xaml.cs:1018
 e6a34da2	停止中	Audio/AudioCapture.cs:76
 652c7b75	音を取り込めません（{0} 秒後に再試行）: {1}	Audio/AudioCapture.cs:173
 2674d6a9	音の出力先（スピーカー・ヘッドホン）が見つかりません	Audio/AudioCapture.cs:200
@@ -948,7 +949,7 @@ fcc150e0	（比べた時間: 基準 {0} 分・最近 {1} 分。室温の違い�
 d9bee020	ダウンロード	Core/InstallCheck.cs:81
 4a049af4	デスクトップ	Core/InstallCheck.cs:82
 4033fb1e	一時フォルダー	Core/InstallCheck.cs:83
-e39c4b26	ProFanController.exe を写せませんでした	Core/InstallCheck.cs:120
+e39c4b26	ProFanController.exe を写せませんでした	Core/InstallCheck.cs:123
 d6132623	ProFanController テスト通知	Core/Notifier.cs:65
 7be18f84	{0} からのテスト通知です。この通知が届けば設定は完了です。	Core/Notifier.cs:65
 15278ea5	送信しました。スマホに届いたか確認してください	Core/Notifier.cs:66
@@ -1512,13 +1513,13 @@ e210ecbe	共振回避	UI/Controls/CurveEditor.cs:177
 487d0d7b	PawnIO はインストールされましたが、仕上げに PC の再起動が必要です。PC を再起動すると、ファンを制御できるようになります。	UI/PawnIoInstallPanel.xaml.cs:88
 1f017018	PawnIO はインストールされましたが、まだ読み込まれていません。アプリを起動し直すと、ファンを制御できるようになります。	UI/PawnIoInstallPanel.xaml.cs:89
 2dcc9e2e	✖ PawnIO（ファン制御用のドライバー）が見つかりません。このままでは、温度の表示だけでファンは制御できません。	UI/PawnIoInstallPanel.xaml.cs:99
-77545609	winget を起動しています…	UI/PawnIoInstallPanel.xaml.cs:127
-ce5c7208	PawnIO が入ったか確かめています…	UI/PawnIoInstallPanel.xaml.cs:140
-5424a4cc	インストール	UI/PawnIoInstallPanel.xaml.cs:147
-df36daf0	インストールの途中でエラーが起きました: {0}　公式サイトのインストーラーを使ってください。	UI/PawnIoInstallPanel.xaml.cs:154
-09d11793	{0}（{1} 秒）　画面を閉じずにお待ちください。ほかの操作はできます。	UI/PawnIoInstallPanel.xaml.cs:189
-27daf2fe	ブラウザーを開けませんでした。{0} を開いてください。	UI/PawnIoInstallPanel.xaml.cs:211
-f0a541e0	まだ PawnIO が見つかりません。インストーラーを実行したあとなら、PC を再起動してからもう一度確かめてください。	UI/PawnIoInstallPanel.xaml.cs:224
+77545609	winget を起動しています…	UI/PawnIoInstallPanel.xaml.cs:133
+ce5c7208	PawnIO が入ったか確かめています…	UI/PawnIoInstallPanel.xaml.cs:146
+5424a4cc	インストール	UI/PawnIoInstallPanel.xaml.cs:153
+df36daf0	インストールの途中でエラーが起きました: {0}　公式サイトのインストーラーを使ってください。	UI/PawnIoInstallPanel.xaml.cs:160
+09d11793	{0}（{1} 秒）　画面を閉じずにお待ちください。ほかの操作はできます。	UI/PawnIoInstallPanel.xaml.cs:201
+27daf2fe	ブラウザーを開けませんでした。{0} を開いてください。	UI/PawnIoInstallPanel.xaml.cs:223
+f0a541e0	まだ PawnIO が見つかりません。インストーラーを実行したあとなら、PC を再起動してからもう一度確かめてください。	UI/PawnIoInstallPanel.xaml.cs:236
 3699179e	使っている場所: {0}	UI/RemapDialog.xaml.cs:19
 841ef786	（使わない）	UI/RemapDialog.xaml.cs:54
 cbfdf76e	（このファンを削除する）	UI/RemapDialog.xaml.cs:56
@@ -1533,14 +1534,14 @@ ecf8e3b5	書き出した PC: {0}（{1:yyyy/MM/dd HH:mm}）	UI/RemapDialog.xaml.c
 b44944a1	読み込む	UI/RemapDialog.xaml.cs:99
 39a0848e	読み込むプロファイルを 1 つ以上選んでください。	UI/RemapDialog.xaml.cs:108
 390affbd	✔ PawnIO ドライバ検出済み ／ ファン端子 {0} 個を検出しました	UI/SetupWizard.xaml.cs:29
-e92bc9eb	完了して適用	UI/SetupWizard.xaml.cs:108
-e051dd30	少なくとも 1 つの端子を「ファン」か「ポンプ」にしてください。	UI/SetupWizard.xaml.cs:116
-fb7c18a5	CPU の温度センサーを選んでください。	UI/SetupWizard.xaml.cs:121
-9fba3a25	・{0}（ポンプ）: {1}	UI/SetupWizard.xaml.cs:165
-fe5a2b13	固定 70% で制御	UI/SetupWizard.xaml.cs:165
-0c1d2ab2	BIOS 制御のまま監視	UI/SetupWizard.xaml.cs:165
-d6d4423a	・{0}（ファン）: {1} に連動	UI/SetupWizard.xaml.cs:166
-9833252d	作成するプロファイル: {0} ／ {1} ／ {2}\n普段使うプロファイル: {3}\n\n	UI/SetupWizard.xaml.cs:167
+e92bc9eb	完了して適用	UI/SetupWizard.xaml.cs:115
+e051dd30	少なくとも 1 つの端子を「ファン」か「ポンプ」にしてください。	UI/SetupWizard.xaml.cs:123
+fb7c18a5	CPU の温度センサーを選んでください。	UI/SetupWizard.xaml.cs:128
+9fba3a25	・{0}（ポンプ）: {1}	UI/SetupWizard.xaml.cs:172
+fe5a2b13	固定 70% で制御	UI/SetupWizard.xaml.cs:172
+0c1d2ab2	BIOS 制御のまま監視	UI/SetupWizard.xaml.cs:172
+d6d4423a	・{0}（ファン）: {1} に連動	UI/SetupWizard.xaml.cs:173
+9833252d	作成するプロファイル: {0} ／ {1} ／ {2}\n普段使うプロファイル: {3}\n\n	UI/SetupWizard.xaml.cs:174
 0c5502cd	ProFanController を開く	UI/TrayIcon.cs:82
 9a801bfe	ブースト（全開）15 分	UI/TrayIcon.cs:88
 46dbb6b6	静音 30 分	UI/TrayIcon.cs:89
