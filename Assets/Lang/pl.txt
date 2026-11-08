@@ -382,9 +382,7 @@ aefcd37e	Przy autostarcie zawsze uruchamia się w zasobniku. Zamknięcie okna kr
 e162bf76	Pokaż miniwidżet
 1b093ce9	Pokazuje temperatury i obroty zawsze na wierzchu. Przeciągnij, aby przenieść; prawy przycisk, aby zmienić przezroczystość
 1483f6b3	Wygląd
-07df2653	Zmień język, motyw, kolor akcentu, tło, kolor tekstu, czcionkę i rozmiar tekstu. Zmiany działają od razu (język zmienia się po ponownym uruchomieniu aplikacji)
 b8eab0de	Język · Language
-4aaa8fe4	Język tekstów na ekranie. „Auto” podąża za językiem wyświetlania Windows (angielski, jeśli nie jest obsługiwany). Po zmianie uruchom aplikację ponownie
 9bb17d53	Motyw
 ae52556f	„Jak w Windows” podąża za trybem ciemnym/jasnym z Ustawień Windows (Personalizacja → Kolory → tryb aplikacji)
 aab63522	Kolor akcentu
@@ -1426,7 +1424,6 @@ c96a6fad	{0} · {1}
 3e7b80f4	Prawie biały
 33e39538	Blady
 ec6cb7af	Prawie czarny
-c53be0dd	Zmieniono język wyświetlania. Zostanie zastosowany po ponownym uruchomieniu aplikacji.\nUruchomić ponownie teraz? (Podczas ponownego uruchamiania wentylatorami steruje BIOS)
 3036c063	Nie można znaleźć adresu sieciowego tego komputera
 f028972c	Nie udało się uruchomić serwera WWW. Spróbuj innego numeru portu (szczegóły w dzienniku)
 26d33196	Nie znaleziono PawnIO (sterownika do sterowania wentylatorami). W tym stanie wyświetlane są tylko temperatury, a wentylatorami nie można sterować.
@@ -1598,3 +1595,11 @@ f951f047	Poziom
 a4ae5bfd	Wirtualne wyjście
 d2937a7a	Oprogramowanie dźwięku: {0} (światło podąża za dźwiękiem przed efektami; jeśli wydaje się przesunięte, dopasuj je „Testem synchronizacji”)
 db4d82a2	Pulpit zdalny
+d6776d41	Zmień język, motyw, kolor akcentu, tło, kolor tekstu, czcionkę i rozmiar tekstu. Zmiany działają od razu
+e0480009	Język tekstów na ekranie. „Auto” podąża za językiem wyświetlania Windows (angielski, jeśli nie jest obsługiwany). Zmienia się od razu po wybraniu
+e45b0531	Trwa automatyczne strojenie.
+e955d878	Trwa test chłodzenia.
+afb9660d	Trwa kalibracja.
+c8e0f349	Trwa sprawdzanie dźwięku wentylatora.
+69ade00e	Trwa konfiguracja.
+82fa072a	Wybierz język ponownie, gdy to się zakończy.

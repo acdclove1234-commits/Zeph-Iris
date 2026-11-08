@@ -382,9 +382,7 @@ aefcd37e	Khi tự khởi động luôn chạy trong khay hệ thống. Đóng c�
 e162bf76	Hiện tiện ích mini
 1b093ce9	Luôn hiển thị nhiệt độ và tốc độ quay trên cùng. Kéo để di chuyển, nhấp phải để đổi độ trong suốt
 1483f6b3	Giao diện
-07df2653	Có thể đổi ngôn ngữ hiển thị, chủ đề, màu nhấn, màu nền, màu chữ, phông chữ và cỡ chữ. Thay đổi được áp dụng ngay (ngôn ngữ hiển thị đổi sau khi khởi động lại ứng dụng)
 b8eab0de	Ngôn ngữ · Language
-4aaa8fe4	Ngôn ngữ của chữ trên màn hình. "Tự động" thì theo ngôn ngữ hiển thị của Windows (tiếng Anh nếu không hỗ trợ). Sau khi đổi, hãy khởi động lại ứng dụng
 9bb17d53	Chủ đề
 ae52556f	"Theo Windows" sẽ theo chế độ tối/sáng trong Cài đặt Windows (Cá nhân hóa → Màu → chế độ ứng dụng)
 aab63522	Màu nhấn
@@ -1426,7 +1424,6 @@ c96a6fad	{0} · {1}
 3e7b80f4	Gần trắng
 33e39538	Nhạt
 ec6cb7af	Gần đen
-c53be0dd	Đã đổi ngôn ngữ hiển thị. Sẽ áp dụng khi khởi động lại ứng dụng.\nKhởi động lại ngay? (Trong lúc khởi động lại, quạt do BIOS điều khiển)
 3036c063	Không tìm thấy địa chỉ mạng của PC này
 f028972c	Không khởi động được máy chủ web. Hãy thử số cổng khác (chi tiết trong nhật ký)
 26d33196	Không tìm thấy PawnIO (driver điều khiển quạt). Như vậy chỉ hiển thị được nhiệt độ, không điều khiển được quạt.
@@ -1598,3 +1595,11 @@ f951f047	Mức
 a4ae5bfd	Đầu ra ảo
 d2937a7a	Phần mềm âm thanh: {0} (ánh sáng theo âm thanh trước khi áp hiệu ứng; nếu thấy lệch, hãy chỉnh bằng "Kiểm tra đồng bộ")
 db4d82a2	Máy tính Từ xa
+d6776d41	Có thể đổi ngôn ngữ hiển thị, chủ đề, màu nhấn, màu nền, màu chữ, phông chữ và cỡ chữ. Thay đổi được áp dụng ngay
+e0480009	Ngôn ngữ của chữ trên màn hình. "Tự động" thì theo ngôn ngữ hiển thị của Windows (tiếng Anh nếu không hỗ trợ). Chọn là đổi ngay
+e45b0531	Đang tự tinh chỉnh.
+e955d878	Đang kiểm tra làm mát.
+afb9660d	Đang hiệu chỉnh.
+c8e0f349	Đang nghe thử tiếng quạt.
+69ade00e	Đang thiết lập.
+82fa072a	Hãy chọn lại ngôn ngữ hiển thị sau khi xong.

@@ -59,9 +59,10 @@ public partial class App : Application
     protected override void OnStartup(StartupEventArgs e)
     {
         base.OnStartup(e);
-        // 画面の言語は、何かを表示する前に決める（設定の「表示言語」。空なら Windows の表示言語）
+        // 画面の言語は、何かを表示する前に決める（設定の「表示言語」。空なら Windows の表示言語）。
+        // XAML の日本語を訳す仕組みは、日本語で起動しても登録しておく（あとから別の言語に切り替えられるように）
         Localization.Init(ConfigStore.ReadLanguage());
-        if (!Localization.IsSource) XamlLocalizer.Register();
+        XamlLocalizer.Register();
 
         // 見張りプロセスは Program.Main で、App を作らずに動かす（ここには来ない）
         // シャットダウンの取り消しに備えたプロセス: 待ってから、まだ Windows が動いていればアプリを起動し直す
@@ -185,20 +186,14 @@ public partial class App : Application
                 if (a is not null && (a.Theme == AppThemes.System || a.Accent == AppearanceConfig.SystemAccent)) ThemeManager.Apply(a);
             });
         };
-        var window = new MainWindow(controller, tray.CreateWindowIcon());
-        _window = window;
-        window.HiddenToTray += (_, _) =>
-        {
-            if (_trayHintShown) return;
-            _trayHintShown = true;
-            tray.ShowBalloon("ProFanController", L("タスクトレイで動作を続けています。終了するにはアイコンを右クリックしてください。"), AlertLevel.Info);
-        };
-        window.WidgetToggleRequested += ToggleWidget;
+        _windowIcon = tray.CreateWindowIcon();
+        var window = CreateMainWindow(controller, carry: null);
 
-        // エンジン・プロセス監視のイベントは別スレッドで来るので、UI スレッドに移す
+        // エンジン・プロセス監視のイベントは別スレッドで来るので、UI スレッドに移す。
+        // メイン画面は表示言語を切り替えると作り直すので、いつも _window（いまの画面）に渡す
         engine.CatalogReady += c => Dispatcher.InvokeAsync(() =>
         {
-            window.OnCatalogReady(c);
+            _window?.OnCatalogReady(c);
             // GPU ファンの設定を変えたときなどにも呼ばれるので、起動時の確認は 1 回だけ
             if (!_firstCatalog) return;
             _firstCatalog = false;
@@ -206,32 +201,34 @@ public partial class App : Application
             {
                 // 初回起動: ウィザードを案内する
                 ShowMainWindow();
-                window.OpenWizard();
+                _window?.OpenWizard();
                 return;
             }
             CheckHardwareChange(c);
         });
         engine.SnapshotReady += s => Dispatcher.InvokeAsync(() =>
         {
-            window.OnSnapshot(s);
-            if (controller.Config.Rgb.Enabled) Rgb.Update(window.RgbTemperature(s), s.Emergency);
-            window.ForwardSnapshotToWizard(s);
+            var w = _window;
+            if (w is null) return;
+            w.OnSnapshot(s);
+            if (controller.Config.Rgb.Enabled) Rgb.Update(w.RgbTemperature(s), s.Emergency);
+            w.ForwardSnapshotToWizard(s);
             _widget?.SetProfile(s.Profile);
-            tray.SetTooltip(window.TraySummary);
+            tray.SetTooltip(w.TraySummary);
             _statusJson = BuildStatusJson(s);
         });
         engine.Alert += (message, level) => Dispatcher.InvokeAsync(() =>
         {
-            window.ShowAlert(message, level);
-            window.OnEngineAlert(message, level);
+            _window?.ShowAlert(message, level);
+            _window?.OnEngineAlert(message, level);
             Notifier.Notify(level == AlertLevel.Info ? L("ProFanController: 回復しました") : "ProFanController", message, level, isRecovery: level == AlertLevel.Info);
             // 同じ通知は 5 分間出さない（温度が境目を行き来したときの連発防止。画面のバナーとログには毎回残す）
             if (_lastBalloon.TryGetValue(message, out var last) && DateTime.Now - last < TimeSpan.FromMinutes(5)) return;
             _lastBalloon[message] = DateTime.Now;
             tray.ShowBalloon("ProFanController", message, level);
         });
-        engine.CalibrationProgressChanged += p => Dispatcher.InvokeAsync(() => window.OnCalibrationProgress(p));
-        engine.CalibrationFinished += (id, result, message) => Dispatcher.InvokeAsync(() => window.OnCalibrationFinished(id, result, message));
+        engine.CalibrationProgressChanged += p => Dispatcher.InvokeAsync(() => _window?.OnCalibrationProgress(p));
+        engine.CalibrationFinished += (id, result, message) => Dispatcher.InvokeAsync(() => _window?.OnCalibrationFinished(id, result, message));
         controller.Switcher.MatchChanged += (process, profile) => Dispatcher.InvokeAsync(() =>
         {
             controller.SetAutoMatch(process, profile);
@@ -240,8 +237,6 @@ public partial class App : Application
         });
 
         engine.Resumed += () => Dispatcher.InvokeAsync(() => Logger.Info("スリープ復帰後の制御を再開"));
-        window.MaintenanceNotice += (msg, level) => Notifier.Notify(L("ProFanController: メンテナンス"), msg, level);
-        window.RecordSaved += r => Logger.Info($"異常の記録: {r.CsvPath}");
 
         controller.EffectiveProfileChanged += UpdateTrayProfiles;
         controller.Committed += UpdateTrayProfiles;
@@ -305,14 +300,34 @@ public partial class App : Application
             tray.ShowBalloon("ProFanController", L("予期せず終了したため、自動で起動し直しました。"), AlertLevel.Warning);
             Notifier.Notify("ProFanController", msg, AlertLevel.Warning);
         }
-        _ = CheckInstallAsync(window);
+        _ = CheckInstallAsync();
+    }
+
+    private System.Windows.Media.ImageSource? _windowIcon;
+
+    /// <summary>メイン画面を作り、App への知らせをつなぐ（起動したときと、表示言語を切り替えたとき）</summary>
+    private MainWindow CreateMainWindow(AppController controller, MainWindowCarry? carry)
+    {
+        var window = new MainWindow(controller, _windowIcon!, carry);
+        _window = window;
+        MainWindow = window;
+        window.HiddenToTray += (_, _) =>
+        {
+            if (_trayHintShown) return;
+            _trayHintShown = true;
+            _tray?.ShowBalloon("ProFanController", L("タスクトレイで動作を続けています。終了するにはアイコンを右クリックしてください。"), AlertLevel.Info);
+        };
+        window.WidgetToggleRequested += ToggleWidget;
+        window.MaintenanceNotice += (msg, level) => Notifier.Notify(L("ProFanController: メンテナンス"), msg, level);
+        window.RecordSaved += r => Logger.Info($"異常の記録: {r.CsvPath}");
+        return window;
     }
 
     /// <summary>
     /// 起動して少し落ち着いてから、置き場所・自動起動・取り合いになるソフトを確かめて、気になることがあればお知らせに出す
     /// （ほかの PC で「新しい版を入れたのに古い画面のまま」「色が勝手に戻る」などが起きたときの原因を見つけやすくするため）
     /// </summary>
-    private async Task CheckInstallAsync(MainWindow window)
+    private async Task CheckInstallAsync()
     {
         try
         {
@@ -342,17 +357,17 @@ public partial class App : Application
             if (unstable is not null)
             {
                 // 置き場所を直せば、自動起動も一緒に直る（自動起動を使っていたときは、移した先に登録し直す）
-                window.ShowAlert(string.Join("\n", parts), AlertLevel.Warning,
-                    L($"{InstallCheck.RecommendedFolder} に移す"), () => MoveToRecommended(window, registerAutoStart: registered is not null));
+                _window?.ShowAlert(string.Join("\n", parts), AlertLevel.Warning,
+                    L($"{InstallCheck.RecommendedFolder} に移す"), () => MoveToRecommended(registerAutoStart: registered is not null));
                 return;
             }
-            window.ShowAlert(string.Join("\n", parts), AlertLevel.Warning,
+            _window?.ShowAlert(string.Join("\n", parts), AlertLevel.Warning,
                 elsewhere ? L("自動起動をこの場所にする") : null,
                 elsewhere ? () =>
                 {
                     bool ok = AutoStart.Enable();
                     Logger.Info(ok ? $"自動起動をこの場所に登録し直しました: {exe}" : "自動起動を登録し直せませんでした");
-                    window.ShowAlert(ok ? L("自動起動を、いま動いているこのアプリに登録し直しました。") : L("自動起動を登録し直せませんでした（ログを確認してください）。"),
+                    _window?.ShowAlert(ok ? L("自動起動を、いま動いているこのアプリに登録し直しました。") : L("自動起動を登録し直せませんでした（ログを確認してください）。"),
                         ok ? AlertLevel.Info : AlertLevel.Warning);
                 } : null);
         }
@@ -366,7 +381,7 @@ public partial class App : Application
     /// いまのフォルダーの中身を C:\Tools\ProFanController へ写し、（自動起動を使っていたなら）自動起動をそこに登録し直して、
     /// 写した先のアプリで起動し直す。このアプリは正しく終了する（ファンは BIOS 制御に戻る）
     /// </summary>
-    private void MoveToRecommended(MainWindow window, bool registerAutoStart)
+    private void MoveToRecommended(bool registerAutoStart)
     {
         try
         {
@@ -387,7 +402,7 @@ public partial class App : Application
         catch (Exception ex)
         {
             Logger.Warn($"{InstallCheck.RecommendedFolder} へ移せませんでした: {ex}");
-            window.ShowAlert(L($"{InstallCheck.RecommendedFolder} へ移せませんでした: {ex.Message}"), AlertLevel.Warning);
+            _window?.ShowAlert(L($"{InstallCheck.RecommendedFolder} へ移せませんでした: {ex.Message}"), AlertLevel.Warning);
         }
     }
 

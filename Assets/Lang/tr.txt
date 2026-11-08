@@ -382,9 +382,7 @@ aefcd37e	Otomatik başlatmada her zaman sistem tepsisinde başlar. Pencereyi × 
 e162bf76	Mini pencere öğesini göster
 1b093ce9	Sıcaklıkları ve devirleri her zaman en üstte gösterir. Taşımak için sürükleyin; saydamlığı değiştirmek için sağ tıklayın
 1483f6b3	Görünüm
-07df2653	Görüntüleme dilini, temayı, vurgu rengini, arka planı, yazı rengini, yazı tipini ve yazı boyutunu değiştirin. Değişiklikler hemen uygulanır (görüntüleme dili uygulama yeniden başlatılınca değişir)
 b8eab0de	Dil · Language
-4aaa8fe4	Ekrandaki metinlerin dili. "Otomatik", Windows görüntüleme dilini izler (desteklenmiyorsa İngilizce). Değiştirdikten sonra uygulamayı yeniden başlatın
 9bb17d53	Tema
 ae52556f	"Windows ile aynı", Windows Ayarları'ndaki koyu/açık modu (Kişiselleştirme → Renkler → uygulama modu) izler
 aab63522	Vurgu rengi
@@ -1426,7 +1424,6 @@ c96a6fad	{0} · {1}
 3e7b80f4	Beyaza yakın
 33e39538	Soluk
 ec6cb7af	Siyaha yakın
-c53be0dd	Görüntüleme dili değiştirildi. Uygulama yeniden başlatılınca geçerli olur.\nŞimdi yeniden başlatılsın mı? (Yeniden başlatma sırasında fanları BIOS kontrol eder)
 3036c063	Bu bilgisayarın ağ adresi bulunamadı
 f028972c	Web sunucusu başlatılamadı. Başka bir bağlantı noktası numarası deneyin (ayrıntılar günlükte)
 26d33196	PawnIO (fan kontrol sürücüsü) bulunamadı. Bu hâliyle yalnızca sıcaklıklar gösterilir, fanlar kontrol edilemez.
@@ -1598,3 +1595,11 @@ f951f047	Seviye
 a4ae5bfd	Sanal çıkış
 d2937a7a	Ses yazılımı: {0} (ışık, efektler uygulanmadan önceki sese göre yanar; sesle uyumsuz gelirse "Senkron testi" ile ayarlayın)
 db4d82a2	Uzak Masaüstü
+d6776d41	Görüntüleme dilini, temayı, vurgu rengini, arka planı, yazı rengini, yazı tipini ve yazı boyutunu değiştirin. Değişiklikler hemen uygulanır
+e0480009	Ekrandaki metinlerin dili. "Otomatik", Windows görüntüleme dilini izler (desteklenmiyorsa İngilizce). Seçtiğiniz anda değişir
+e45b0531	Otomatik ayar sürüyor.
+e955d878	Soğutma testi sürüyor.
+afb9660d	Kalibrasyon sürüyor.
+c8e0f349	Bir fanın sesi kontrol ediliyor.
+69ade00e	Kurulum sürüyor.
+82fa072a	Bittikten sonra görüntüleme dilini yeniden seçin.

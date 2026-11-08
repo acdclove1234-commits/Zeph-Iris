@@ -382,9 +382,7 @@ aefcd37e	Al iniciarse automáticamente, siempre arranca en la bandeja. Cerrar la
 e162bf76	Mostrar el miniwidget
 1b093ce9	Muestra temperaturas y velocidades siempre encima. Arrastra para moverlo; clic derecho para cambiar la opacidad
 1483f6b3	Apariencia
-07df2653	Cambia el idioma, el tema, el color de acento, el fondo, el color del texto, la fuente y el tamaño del texto. Los cambios se aplican al momento (el idioma cambia al reiniciar la aplicación)
 b8eab0de	Idioma · Language
-4aaa8fe4	Idioma del texto en pantalla. «Auto» sigue el idioma de Windows (inglés si no es compatible). Tras cambiarlo, reinicia la aplicación
 9bb17d53	Tema
 ae52556f	«Igual que Windows» sigue el modo oscuro/claro de la Configuración de Windows (Personalización → Colores → modo de aplicación)
 aab63522	Color de acento
@@ -1426,7 +1424,6 @@ c96a6fad	{0} · {1}
 3e7b80f4	Casi blanco
 33e39538	Pálido
 ec6cb7af	Casi negro
-c53be0dd	Se cambió el idioma de la interfaz. Se aplica al reiniciar la aplicación.\n¿Reiniciar ahora? (Mientras se reinicia, la BIOS controla los ventiladores)
 3036c063	No se encuentra la dirección de red de este PC
 f028972c	No se pudo iniciar el servidor web. Pruebe con otro número de puerto (hay detalles en el registro)
 26d33196	No se encuentra PawnIO (el controlador para controlar ventiladores). Así solo se muestran temperaturas y no se pueden controlar los ventiladores.
@@ -1598,3 +1595,11 @@ f951f047	Nivel
 a4ae5bfd	Salida virtual
 d2937a7a	Software de audio: {0} (la luz sigue al sonido antes de los efectos; si parece desfasada, ajústela con la «Prueba de sincronización»)
 db4d82a2	Escritorio remoto
+d6776d41	Cambia el idioma, el tema, el color de acento, el fondo, el color del texto, la fuente y el tamaño del texto. Los cambios se aplican al momento
+e0480009	Idioma del texto en pantalla. «Auto» sigue el idioma de Windows (inglés si no es compatible). Cambia en cuanto eliges uno
+e45b0531	Hay un ajuste automático en curso.
+e955d878	Hay una prueba de refrigeración en curso.
+afb9660d	Hay una calibración en curso.
+c8e0f349	Se está comprobando el sonido de un ventilador.
+69ade00e	La configuración está en curso.
+82fa072a	Vuelve a elegir el idioma cuando haya terminado.

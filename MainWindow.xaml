@@ -2423,13 +2423,13 @@
                             <StackPanel>
                                 <TextBlock Text="見た目" Style="{StaticResource H2}"/>
                                 <TextBlock Style="{StaticResource Caption}" TextWrapping="Wrap" Margin="0,4,0,0"
-                                           Text="表示言語・テーマ・アクセント色・背景色・文字色・フォント・文字の大きさを変えられます。変えるとすぐに反映されます（表示言語は、アプリを起動し直すと切り替わります）"/>
+                                           Text="表示言語・テーマ・アクセント色・背景色・文字色・フォント・文字の大きさを変えられます。変えるとすぐに反映されます"/>
                                 <!-- 表示言語（読めない言語になっていても探せるよう、見出しに英語も添える。MainWindow.Settings.cs） -->
                                 <DockPanel Style="{StaticResource LightRow}" Margin="0,14,0,0">
                                     <TextBlock Text="表示言語 · Language" Style="{StaticResource RowLabel}"/>
                                     <ComboBox x:Name="LanguageCombo" Width="320" HorizontalAlignment="Left" DisplayMemberPath="Label" SelectedValuePath="Id"
                                               SelectionChanged="OnLanguageChanged"
-                                              ToolTip="画面の言葉の言語。「自動」なら Windows の表示言語に合わせます（対応していない言語なら英語）。変えたら、アプリを起動し直すと切り替わります"/>
+                                              ToolTip="画面の言葉の言語。「自動」なら Windows の表示言語に合わせます（対応していない言語なら英語）。選ぶとすぐに切り替わります"/>
                                 </DockPanel>
                                 <DockPanel Style="{StaticResource LightRow}" Margin="0,8,0,0">
                                     <TextBlock Text="テーマ" Style="{StaticResource RowLabel}"/>

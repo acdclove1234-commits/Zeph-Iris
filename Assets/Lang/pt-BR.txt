@@ -382,9 +382,7 @@ aefcd37e	Ao iniciar automaticamente, sempre começa na bandeja. Fechar a janela 
 e162bf76	Mostrar o miniwidget
 1b093ce9	Mostra temperaturas e rotações sempre por cima. Arraste para mover; clique com o botão direito para mudar a opacidade
 1483f6b3	Aparência
-07df2653	Mude o idioma, o tema, a cor de destaque, o fundo, a cor do texto, a fonte e o tamanho do texto. As mudanças valem na hora (o idioma muda depois de reiniciar o app)
 b8eab0de	Idioma · Language
-4aaa8fe4	Idioma do texto na tela. "Auto" segue o idioma de exibição do Windows (inglês se não for suportado). Depois de mudar, reinicie o app
 9bb17d53	Tema
 ae52556f	"Igual ao Windows" segue o modo escuro/claro das Configurações do Windows (Personalização → Cores → modo de aplicativo)
 aab63522	Cor de destaque
@@ -1426,7 +1424,6 @@ c96a6fad	{0} · {1}
 3e7b80f4	Quase branco
 33e39538	Pálido
 ec6cb7af	Quase preto
-c53be0dd	O idioma de exibição foi alterado. Ele muda quando o app reinicia.\nReiniciar agora? (Durante a reinicialização, a BIOS controla as ventoinhas)
 3036c063	O endereço de rede deste PC não foi encontrado
 f028972c	Não foi possível iniciar o servidor web. Tente outro número de porta (há detalhes no log)
 26d33196	O PawnIO (o driver de controle das ventoinhas) não foi encontrado. Assim, só as temperaturas são exibidas e as ventoinhas não podem ser controladas.
@@ -1598,3 +1595,11 @@ f951f047	Nível
 a4ae5bfd	Saída virtual
 d2937a7a	Software de áudio: {0} (a luz acompanha o som antes dos efeitos; se parecer fora de sincronia, ajuste com o "Teste de sincronia")
 db4d82a2	Área de Trabalho Remota
+d6776d41	Mude o idioma, o tema, a cor de destaque, o fundo, a cor do texto, a fonte e o tamanho do texto. As mudanças valem na hora
+e0480009	Idioma do texto na tela. "Auto" segue o idioma de exibição do Windows (inglês se não for suportado). Muda assim que você escolhe
+e45b0531	Há um ajuste automático em andamento.
+e955d878	Há um teste de resfriamento em andamento.
+afb9660d	Há uma calibração em andamento.
+c8e0f349	Há uma verificação do som de uma ventoinha em andamento.
+69ade00e	A configuração está em andamento.
+82fa072a	Escolha o idioma de novo quando terminar.

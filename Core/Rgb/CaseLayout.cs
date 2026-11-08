@@ -17,7 +17,8 @@ public static class CaseDirections
     public const string Outward = "Outward";
     public const string Inward = "Inward";
 
-    public static readonly IReadOnlyList<(string Id, string Label)> All = new[]
+    public static IReadOnlyList<(string Id, string Label)> All => _all.Value;
+    private static readonly PerLanguage<IReadOnlyList<(string Id, string Label)>> _all = new(() => new[]
     {
         (Up, L("下から上へ")),
         (Down, L("上から下へ")),
@@ -25,7 +26,7 @@ public static class CaseDirections
         (FrontToBack, L("前から後ろ（背面）へ")),
         (Outward, L("中心から外へ")),
         (Inward, L("外から中心へ")),
-    };
+    });
 
     public static string Normalize(string? id) => All.Any(d => d.Id == id) ? id! : Up;
 }
@@ -47,8 +48,9 @@ public static class CaseLayout
 
     private const double FanR = 0.085, TopR = 0.075, HeadR = 0.06;
 
-    /// <summary>選べる場所（先頭の「決めない」を除く）</summary>
-    public static readonly IReadOnlyList<CasePlace> Places = new CasePlace[]
+    /// <summary>選べる場所（先頭の「決めない」を除く。名前は表示言語で作り直す）</summary>
+    public static IReadOnlyList<CasePlace> Places => _places.Value;
+    private static readonly PerLanguage<IReadOnlyList<CasePlace>> _places = new(() => new CasePlace[]
     {
         new("front-3-down", L("前面のファン 3 つ（上から順）"), L("ファン"), 0.88, 0.22, 0.88, 0.70, 3, FanR),
         new("front-3-up", L("前面のファン 3 つ（下から順）"), L("ファン"), 0.88, 0.70, 0.88, 0.22, 3, FanR),
@@ -73,7 +75,7 @@ public static class CaseLayout
         new("strip-front-up", L("前面の縦のテープ（下から上へ）"), L("テープ"), 0.97, 0.96, 0.97, 0.04),
         new("strip-top", L("天面の縁のテープ（前から後ろへ）"), L("テープ"), 0.96, 0.02, 0.04, 0.02),
         new("strip-bottom", L("底面の縁のテープ（前から後ろへ）"), L("テープ"), 0.96, 0.98, 0.04, 0.98),
-    };
+    });
 
     public static CasePlace? Find(string? id) => string.IsNullOrEmpty(id) ? null : Places.FirstOrDefault(p => p.Id == id);
 

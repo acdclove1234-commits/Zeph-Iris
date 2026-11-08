@@ -219,6 +219,8 @@ public static class Watchdog
         }
         else
         {
+            // 見張りが起動したあとに表示言語を選び直していることがあるので、案内を出す前に設定の言語を読み直す
+            Localization.Init(cfg.Language);
             string why = cfg.Safety.WatchdogRestart
                 ? L($"{CrashWindow.TotalMinutes:F0} 分間に {recent} 回終了したため、自動での再起動はやめました。")
                 : L("自動での再起動はオフになっています。");

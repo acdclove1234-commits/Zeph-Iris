@@ -254,9 +254,9 @@ public sealed class WebServer : IDisposable
 /// <summary>スマホ用の 1 ページだけの画面（2 秒ごとに状態を取得して表示）</summary>
 internal static class WebPage
 {
-    /// <summary>画面の言語に訳したページ（言語は起動時に決まるので、最初に作ったものを使い続ける）</summary>
-    public static string Html => _html ??= Localize(Template);
-    private static string? _html;
+    /// <summary>画面の言語に訳したページ（言語ごとに 1 回作る。表示言語を切り替えたら作り直す）</summary>
+    public static string Html => _html.Value;
+    private static readonly PerLanguage<string> _html = new(() => Localize(Template));
 
     /// <summary>ページの中の日本語を、画面の言語に置き換える（HTML の文字は HTML 用に、JavaScript の文字は JSON の形で埋め込む）</summary>
     internal static string Localize(string t)

@@ -7,7 +7,7 @@ and can be checked from a phone.
 
 * The user interface is available in 18 languages, including English. It follows the Windows
   display language; to choose another one, go to Settings [設定] -> Appearance [見た目] ->
-  Language [表示言語] (the app restarts to switch).
+  Language [表示言語] (it switches right away, without restarting the app).
   Below, screen and button names are given in English with the Japanese label in brackets,
   for example: Settings [設定].
 

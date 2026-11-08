@@ -15,16 +15,18 @@ namespace ProFanController.UI;
 public sealed class TrayIcon : IDisposable
 {
     private readonly WinForms.NotifyIcon _icon;
-    private readonly WinForms.ToolStripMenuItem _pauseItem;
-    private readonly WinForms.ToolStripMenuItem _widgetItem;
-    private readonly WinForms.ToolStripMenuItem _profileMenu;
     private readonly Drawing.Icon _appIcon;
+    private readonly Action _open, _togglePause, _toggleWidget, _exit;
     private readonly Action<string> _selectProfile;
     private readonly Action<string> _command;
-    private readonly WinForms.ToolStripMenuItem _ledMenu;
-    private readonly WinForms.ToolStripMenuItem _musicMenu;
-    private readonly WinForms.ToolStripMenuItem _ledToggle;
-    private readonly WinForms.ToolStripMenuItem _lightsOffItem;
+    // メニューの項目（表示言語を切り替えたら、メニューごと作り直す）
+    private WinForms.ToolStripMenuItem _pauseItem = null!;
+    private WinForms.ToolStripMenuItem _widgetItem = null!;
+    private WinForms.ToolStripMenuItem _profileMenu = null!;
+    private WinForms.ToolStripMenuItem _ledMenu = null!;
+    private WinForms.ToolStripMenuItem _musicMenu = null!;
+    private WinForms.ToolStripMenuItem _ledToggle = null!;
+    private WinForms.ToolStripMenuItem _lightsOffItem = null!;
     /// <summary>「LED の光り方」の各項目と、その光り方（チェックを付けるため）</summary>
     private readonly List<(WinForms.ToolStripMenuItem Item, string Mode)> _ledModeItems = new();
     /// <summary>「音楽連動の光り方」の各項目と、その光り方</summary>
@@ -39,9 +41,43 @@ public sealed class TrayIcon : IDisposable
     public TrayIcon(Action open, Action togglePause, Action toggleWidget, Action<string> selectProfile, Action<string> command, Action exit)
     {
         _appIcon = CreateAppIcon();
+        _open = open;
+        _togglePause = togglePause;
+        _toggleWidget = toggleWidget;
+        _exit = exit;
         _selectProfile = selectProfile;
         _command = command;
 
+        _icon = new WinForms.NotifyIcon
+        {
+            Icon = _appIcon,
+            Text = "ProFanController",
+            ContextMenuStrip = BuildMenu(),
+            Visible = true,
+        };
+        _icon.MouseClick += (_, e) =>
+        {
+            if (e.Button == WinForms.MouseButtons.Left) _open();
+        };
+    }
+
+    /// <summary>
+    /// 表示言語を切り替えたとき: メニューを今の言語で作り直す（プロファイル・一時停止・ウィジェットの表示は、
+    /// 呼んだ側が SetProfiles などで入れ直す）
+    /// </summary>
+    public void Relabel()
+    {
+        var old = _icon.ContextMenuStrip;
+        _ledModeItems.Clear();
+        _musicItems.Clear();
+        _icon.ContextMenuStrip = BuildMenu();
+        old?.Dispose();
+    }
+
+    private WinForms.ContextMenuStrip BuildMenu()
+    {
+        Action open = _open, togglePause = _togglePause, toggleWidget = _toggleWidget, exit = _exit;
+        Action<string> command = _command;
         var menu = new WinForms.ContextMenuStrip();
         menu.Items.Add(new WinForms.ToolStripMenuItem(L("ProFanController を開く"), null, (_, _) => open()) { Font = new Drawing.Font(menu.Font, Drawing.FontStyle.Bold) });
         _profileMenu = new WinForms.ToolStripMenuItem(L("プロファイル"));
@@ -95,18 +131,7 @@ public sealed class TrayIcon : IDisposable
         menu.Items.Add(_pauseItem);
         menu.Items.Add(new WinForms.ToolStripSeparator());
         menu.Items.Add(new WinForms.ToolStripMenuItem(L("終了（BIOS 制御に戻す）"), null, (_, _) => exit()));
-
-        _icon = new WinForms.NotifyIcon
-        {
-            Icon = _appIcon,
-            Text = "ProFanController",
-            ContextMenuStrip = menu,
-            Visible = true,
-        };
-        _icon.MouseClick += (_, e) =>
-        {
-            if (e.Button == WinForms.MouseButtons.Left) open();
-        };
+        return menu;
     }
 
     /// <summary>光り方の表示名（画面の「光り方」と同じ言葉）</summary>

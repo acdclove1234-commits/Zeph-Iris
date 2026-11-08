@@ -86,7 +86,7 @@ public static class Localization
 
     /// <summary>
     /// 設定の値（空なら Windows の表示言語）から使う言語を決めて、翻訳表を読み込む。
-    /// 画面を作る前に 1 回だけ呼ぶ（言語を変えたら、アプリを起動し直して当てる）
+    /// 起動して画面を作る前に呼ぶ。表示言語を選び直したときにも呼び、そのあと画面を作り直す（App.SwitchLanguage）
     /// </summary>
     public static void Init(string? setting, string? windowsLanguage = null)
     {
@@ -248,6 +248,30 @@ public static class Localization
     }
 
     public static string Escape(string s) => s.Replace("\\", "\\\\").Replace("\r", "\\r").Replace("\n", "\\n").Replace("\t", "\\t");
+}
+
+/// <summary>
+/// 訳した言葉を含む値を、言語ごとに 1 回だけ作って使い回す（選択肢の一覧など）。
+/// 表示言語を切り替えたら、次に読んだときに作り直す（static readonly に L() の結果を入れると、起動したときの言語のまま残るため）
+/// </summary>
+public sealed class PerLanguage<T>
+{
+    private sealed record Entry(string Language, T Value);
+    private readonly Func<T> _make;
+    private Entry? _entry;
+
+    public PerLanguage(Func<T> make) => _make = make;
+
+    public T Value
+    {
+        get
+        {
+            var e = _entry;
+            string language = Localization.Language;
+            if (e is null || e.Language != language) _entry = e = new Entry(language, _make());
+            return e.Value;
+        }
+    }
 }
 
 /// <summary>

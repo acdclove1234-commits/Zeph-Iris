@@ -37,7 +37,7 @@ public sealed class CurveEditor : FrameworkElement
     private static readonly Pen StopPen = Freeze(new Pen(new SolidColorBrush(Color.FromArgb(0x99, 0xFB, 0xBF, 0x24)), 1) { DashStyle = DashStyles.Dot });
     private static readonly Brush StopZone = Freeze(new SolidColorBrush(Color.FromArgb(0x18, 0xFB, 0xBF, 0x24)));
     // 日本語（「現在」など）を確実に表示できるよう、和文フォントへのフォールバックを明示する
-    private static readonly FontFamily UiFont = UiFonts.Family;
+    private static FontFamily UiFont => UiFonts.Family;
     private static Brush TipBg => ThemePalette.TipBg;
     private static readonly Brush BandBrush = Freeze(new SolidColorBrush(Color.FromArgb(0x26, 0xF4, 0x72, 0xB6)));
     private static readonly Pen BandPen = Freeze(new Pen(new SolidColorBrush(Color.FromArgb(0x88, 0xF4, 0x72, 0xB6)), 1) { DashStyle = DashStyles.Dash });

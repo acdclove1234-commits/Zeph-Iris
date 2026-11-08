@@ -382,9 +382,7 @@ aefcd37e	Beim automatischen Start immer im Infobereich. Wird das Fenster mit × 
 e162bf76	Mini-Widget anzeigen
 1b093ce9	Zeigt Temperaturen und Drehzahlen immer im Vordergrund. Ziehen zum Verschieben, Rechtsklick zum Ändern der Deckkraft
 1483f6b3	Darstellung
-07df2653	Ändern Sie Anzeigesprache, Design, Akzentfarbe, Hintergrund, Textfarbe, Schriftart und Textgröße. Änderungen gelten sofort (die Anzeigesprache wechselt nach einem Neustart der App)
 b8eab0de	Sprache · Language
-4aaa8fe4	Sprache der Bildschirmtexte. „Auto“ folgt der Windows-Anzeigesprache (Englisch, falls nicht unterstützt). Nach einer Änderung die App neu starten
 9bb17d53	Design
 ae52556f	„Wie Windows“ folgt Dunkel/Hell aus den Windows-Einstellungen (Personalisierung → Farben → App-Modus)
 aab63522	Akzentfarbe
@@ -1426,7 +1424,6 @@ c96a6fad	{0} · {1}
 3e7b80f4	Fast weiß
 33e39538	Blass
 ec6cb7af	Fast schwarz
-c53be0dd	Die Anzeigesprache wurde geändert. Sie wird nach einem Neustart der App übernommen.\nJetzt neu starten? (Während des Neustarts steuert das BIOS die Lüfter)
 3036c063	Die Netzwerkadresse dieses PCs wurde nicht gefunden
 f028972c	Der Webserver konnte nicht gestartet werden. Versuchen Sie eine andere Portnummer (Details im Protokoll)
 26d33196	PawnIO (der Treiber für die Lüftersteuerung) wurde nicht gefunden. So werden nur Temperaturen angezeigt, die Lüfter lassen sich nicht steuern.
@@ -1598,3 +1595,11 @@ f951f047	Pegel
 a4ae5bfd	Virtuelle Ausgabe
 d2937a7a	Audiosoftware: {0} (die Beleuchtung folgt dem Ton vor den Effekten; wirkt sie versetzt, gleichen Sie es mit dem „Synchronisationstest“ an)
 db4d82a2	Remotedesktop
+d6776d41	Ändern Sie Anzeigesprache, Design, Akzentfarbe, Hintergrund, Textfarbe, Schriftart und Textgröße. Änderungen gelten sofort
+e0480009	Sprache der Bildschirmtexte. „Auto“ folgt der Windows-Anzeigesprache (Englisch, falls nicht unterstützt). Wechselt sofort nach der Auswahl
+e45b0531	Die automatische Abstimmung läuft noch.
+e955d878	Ein Kühltest läuft noch.
+afb9660d	Eine Kalibrierung läuft noch.
+c8e0f349	Die Geräuschprüfung eines Lüfters läuft noch.
+69ade00e	Die Einrichtung läuft noch.
+82fa072a	Wählen Sie die Anzeigesprache erneut, wenn das abgeschlossen ist.

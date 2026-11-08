@@ -407,7 +407,8 @@ public partial class MainWindow
             BackgroundSwatches.ItemsSource = _backgroundChoices;
             TextColorSwatches.ItemsSource = _textColorChoices;
             // 文字色の見本は、ダーク／ライトで色が変わるので、テーマを入れ替えたら作り直す
-            ThemeManager.Changed += () => Dispatcher.BeginInvoke(RefreshAppearanceUi);
+            _themeChanged = () => Dispatcher.BeginInvoke(RefreshAppearanceUi);
+            ThemeManager.Changed += _themeChanged;
             var fonts = new List<ChoiceOption>
             {
                 new("", L("既定（英数字 Montserrat・日本語 ProFan Maru）")),
@@ -501,19 +502,25 @@ public partial class MainWindow
     private bool _languageSyncing;
 
     /// <summary>
-    /// 表示言語を変えたとき: 保存して、起動し直すか聞く（画面の言葉は起動するときに決まるため）。
-    /// 聞く文は、選んだ言語で出す（今の言語が読めない人が選び直すこともあるので）
+    /// 表示言語を変えたとき: 保存して、すぐにその言語で画面を作り直す（確認は出さない。アプリは止めないので、ファンの制御も続く）。
+    /// テスト・調整の途中は、作り直すと結果を受け取れなくなるので切り替えず、選択を元に戻して理由を出す
     /// </summary>
     private void OnLanguageChanged(object sender, SelectionChangedEventArgs e)
     {
-        if (_languageSyncing || !IsLoaded || LanguageCombo.SelectedValue is not string code || code == Config.Language) return;
+        if (_languageSyncing || _detached || !IsLoaded || LanguageCombo.SelectedValue is not string code || code == Config.Language) return;
+        if (LanguageSwitchBlocker() is { } busy)
+        {
+            _languageSyncing = true;
+            LanguageCombo.SelectedValue = Localization.Languages.Any(l => l.Code == Config.Language) ? Config.Language : "";
+            _languageSyncing = false;
+            MessageBox.Show(this, Localization.JoinSentences(busy, L("終わってから、表示言語を選び直してください。")),
+                "ProFanController", MessageBoxButton.OK, MessageBoxImage.Information);
+            return;
+        }
         Config.Language = code;
         FlushCommit();
-        string next = Localization.Effective(code);
-        if (next == Localization.Language) return; // 「自動」にしても、同じ言語のまま
-        string ask = Localization.LookupIn(next, "表示言語を変えました。アプリを起動し直すと切り替わります。\n今すぐ起動し直しますか？（ファンは、起動し直すあいだ BIOS の制御になります）");
-        if (MessageBox.Show(this, ask, "ProFanController", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
-            CurrentApp.RestartApplication();
+        // 選択欄の変更の処理の途中でこの画面を閉じないよう、処理が終わってから作り直す
+        Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Background, () => CurrentApp.SwitchLanguage());
     }
 
     private void OnAccentDefaultClick(object sender, RoutedEventArgs e)

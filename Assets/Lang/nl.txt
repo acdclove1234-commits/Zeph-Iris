@@ -382,9 +382,7 @@ aefcd37e	Bij automatisch starten start hij altijd in het systeemvak. Sluit je he
 e162bf76	Miniwidget tonen
 1b093ce9	Toont temperaturen en toerentallen altijd bovenop. Sleep om te verplaatsen, rechtsklik om de transparantie te wijzigen
 1483f6b3	Uiterlijk
-07df2653	Wijzig weergavetaal, thema, accentkleur, achtergrond, tekstkleur, lettertype en tekstgrootte. Wijzigingen gelden meteen (de weergavetaal wisselt na herstarten van de app)
 b8eab0de	Taal · Language
-4aaa8fe4	Taal van de schermteksten. "Auto" volgt de weergavetaal van Windows (Engels als die niet wordt ondersteund). Herstart de app na een wijziging
 9bb17d53	Thema
 ae52556f	"Zoals Windows" volgt donker/licht uit de Windows-instellingen (Persoonlijke instellingen → Kleuren → app-modus)
 aab63522	Accentkleur
@@ -1426,7 +1424,6 @@ c96a6fad	{0} · {1}
 3e7b80f4	Bijna wit
 33e39538	Bleek
 ec6cb7af	Bijna zwart
-c53be0dd	De weergavetaal is gewijzigd. Hij wisselt zodra de app opnieuw start.\nNu opnieuw starten? (Tijdens het herstarten regelt het BIOS de ventilatoren)
 3036c063	Het netwerkadres van deze pc is niet gevonden
 f028972c	Kan de webserver niet starten. Probeer een ander poortnummer (details in het logboek)
 26d33196	PawnIO (het stuurprogramma voor ventilatorregeling) is niet gevonden. Zo worden alleen temperaturen getoond en kunnen de ventilatoren niet worden geregeld.
@@ -1598,3 +1595,11 @@ f951f047	Niveau
 a4ae5bfd	Virtuele uitvoer
 d2937a7a	Audiosoftware: {0} (het licht volgt het geluid vóór de effecten; lijkt het verschoven, stem het dan af met de "Synchronisatietest")
 db4d82a2	Extern bureaublad
+d6776d41	Wijzig weergavetaal, thema, accentkleur, achtergrond, tekstkleur, lettertype en tekstgrootte. Wijzigingen gelden meteen
+e0480009	Taal van de schermteksten. "Auto" volgt de weergavetaal van Windows (Engels als die niet wordt ondersteund). Wisselt meteen zodra je er een kiest
+e45b0531	Er loopt een automatische afstemming.
+e955d878	Er loopt een koeltest.
+afb9660d	Er loopt een kalibratie.
+c8e0f349	Er loopt een geluidscontrole van een ventilator.
+69ade00e	De installatie is nog bezig.
+82fa072a	Kies de weergavetaal opnieuw wanneer dit klaar is.

@@ -44,7 +44,7 @@ public sealed class AppConfig : ObservableObject
     public double EmergencyHotspotTemperature { get => _emergencyHotspotTemperature; set => Set(ref _emergencyHotspotTemperature, value); }
     /// <summary>手動起動時もウィンドウを出さずにタスクトレイで開始する（自動起動時は常にトレイ）</summary>
     public bool StartMinimized { get => _startMinimized; set => Set(ref _startMinimized, value); }
-    /// <summary>画面の言語（"ja"・"en"・"zh-Hans" など。空なら Windows の表示言語。変えたらアプリを起動し直して当てる）</summary>
+    /// <summary>画面の言語（"ja"・"en"・"zh-Hans" など。空なら Windows の表示言語。変えたら、アプリは止めずに画面を作り直して当てる）</summary>
     public string Language { get => _language; set => Set(ref _language, value ?? ""); }
     private string _language = "";
     /// <summary>手動で選んだプロファイル名（自動切り替えのルールに一致しないときに使う）</summary>

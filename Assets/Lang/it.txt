@@ -382,9 +382,7 @@ aefcd37e	All'avvio automatico parte sempre nell'area di notifica. Chiudendo la f
 e162bf76	Mostra il mini widget
 1b093ce9	Mostra temperature e velocità sempre in primo piano. Trascina per spostarlo, clic destro per cambiare l'opacità
 1483f6b3	Aspetto
-07df2653	Cambia lingua, tema, colore di accento, sfondo, colore del testo, carattere e dimensione del testo. Le modifiche si applicano subito (la lingua cambia dopo il riavvio dell'app)
 b8eab0de	Lingua · Language
-4aaa8fe4	Lingua del testo a schermo. «Auto» segue la lingua di visualizzazione di Windows (inglese se non supportata). Dopo averla cambiata, riavvia l'app
 9bb17d53	Tema
 ae52556f	«Come Windows» segue scuro/chiaro delle Impostazioni di Windows (Personalizzazione → Colori → modalità app)
 aab63522	Colore di accento
@@ -1426,7 +1424,6 @@ c96a6fad	{0} · {1}
 3e7b80f4	Quasi bianco
 33e39538	Pallido
 ec6cb7af	Quasi nero
-c53be0dd	La lingua di visualizzazione è stata cambiata. Si applica al riavvio dell'app.\nRiavviare ora? (Durante il riavvio le ventole sono controllate dal BIOS)
 3036c063	Impossibile trovare l'indirizzo di rete di questo PC
 f028972c	Impossibile avviare il server web. Prova un altro numero di porta (dettagli nel log)
 26d33196	PawnIO (il driver per il controllo ventole) non trovato. Così vengono mostrate solo le temperature e le ventole non si possono controllare.
@@ -1598,3 +1595,11 @@ f951f047	Livello
 a4ae5bfd	Uscita virtuale
 d2937a7a	Software audio: {0} (la luce segue il suono prima degli effetti; se sembra sfasata, regolala con il «Test di sincronizzazione»)
 db4d82a2	Desktop remoto
+d6776d41	Cambia lingua, tema, colore di accento, sfondo, colore del testo, carattere e dimensione del testo. Le modifiche si applicano subito
+e0480009	Lingua del testo a schermo. «Auto» segue la lingua di visualizzazione di Windows (inglese se non supportata). Cambia subito appena la scegli
+e45b0531	È in corso una regolazione automatica.
+e955d878	È in corso un test di raffreddamento.
+afb9660d	È in corso una calibrazione.
+c8e0f349	È in corso il controllo del rumore di una ventola.
+69ade00e	È in corso la configurazione.
+82fa072a	Scegli di nuovo la lingua quando sarà terminato.

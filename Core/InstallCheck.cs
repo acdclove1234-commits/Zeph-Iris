@@ -18,7 +18,8 @@ public static class InstallCheck
     /// 同じ LED・ファンを操作するメーカーのソフト。動いていると、色や回転数をこのアプリと取り合って、
     /// 色が勝手に戻る・ちらつく・回転数が反映されない、などが起きる（どちらか最後に書いたほうが勝つため）
     /// </summary>
-    public static readonly IReadOnlyList<ConflictingApp> KnownConflicts = new ConflictingApp[]
+    public static IReadOnlyList<ConflictingApp> KnownConflicts => _knownConflicts.Value;
+    private static readonly PerLanguage<IReadOnlyList<ConflictingApp>> _knownConflicts = new(() => new ConflictingApp[]
     {
         new("LightingService", L("ASUS Aura（Armoury Crate の LED）")),
         new("ArmouryCrate", "ASUS Armoury Crate"),
@@ -34,7 +35,7 @@ public static class InstallCheck
         new("FanControl", "FanControl", Exact: true),
         new("SpeedFan", "SpeedFan", Exact: true),
         new("ArgusMonitor", "Argus Monitor"),
-    };
+    });
 
     /// <summary>プロセス名の一覧から、取り合いになるソフトを探す（同じソフトは 1 回だけ。このアプリ自身は除く）</summary>
     public static List<string> FindConflicts(IEnumerable<string> processNames)

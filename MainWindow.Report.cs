@@ -60,18 +60,17 @@ public partial class MainWindow
     /// <summary>劣化チェックで注意が見つかった（App が通知に使う）</summary>
     public event Action<string, AlertLevel>? MaintenanceNotice;
 
-    private void InitReport()
+    private void InitReport() => _recorder.Saved += OnRecordSaved;
+
+    private void OnRecordSaved(FlightRecord r)
     {
-        _recorder.Saved += r =>
+        RefreshRecords();
+        ShowAlert(L($"異常の前後 10 分の記録を保存しました: {r.Title}"), AlertLevel.Info, L("記録を見る"), () =>
         {
-            RefreshRecords();
-            ShowAlert(L($"異常の前後 10 分の記録を保存しました: {r.Title}"), AlertLevel.Info, L("記録を見る"), () =>
-            {
-                NavReport.IsChecked = true;
-                ShowRecordSummary(r);
-            });
-            RecordSaved?.Invoke(r);
-        };
+            NavReport.IsChecked = true;
+            ShowRecordSummary(r);
+        });
+        RecordSaved?.Invoke(r);
     }
 
     // =====================================================================

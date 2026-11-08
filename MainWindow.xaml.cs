@@ -46,10 +46,20 @@ public partial class MainWindow : Window
     public event EventHandler? HiddenToTray;
     public event Action? WidgetToggleRequested;
 
-    public MainWindow(AppController controller, ImageSource icon)
+    /// <param name="carry">表示言語を切り替えて画面を作り直すときの、前の画面の記録（履歴・電力量など）。起動時は null</param>
+    public MainWindow(AppController controller, ImageSource icon, MainWindowCarry? carry = null)
     {
         InitializeComponent();
         _controller = controller;
+        if (carry is not null)
+        {
+            _history = carry.History;
+            _longTerm = carry.LongTerm;
+            _energy = carry.Energy;
+            _recorder = carry.Recorder;
+            _historyRestored = carry.HistoryRestored;
+            _nextHealthCheck = carry.NextHealthCheck;
+        }
 
         Icon = icon;
         LogoImage.Source = icon;
@@ -100,6 +110,11 @@ public partial class MainWindow : Window
         InitReport();
         InitLighting();
         InitListen();
+        if (carry?.LightHistory is { } lightHistory)
+        {
+            _lightHistory = lightHistory;
+            UpdateLightingUndoButtons();
+        }
     }
 
     // =====================================================================
@@ -562,6 +577,12 @@ public partial class MainWindow : Window
 
     protected override void OnClosing(CancelEventArgs e)
     {
+        // 表示言語の切り替えで作り直した前の画面: 記録は新しい画面が続けて使うので、ここでは保存しない
+        if (_detached)
+        {
+            base.OnClosing(e);
+            return;
+        }
         if (_commitTimer.IsEnabled) FlushCommit();
         if (AllowClose) SaveReportData();
         if (!AllowClose)

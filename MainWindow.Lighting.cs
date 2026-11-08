@@ -84,16 +84,20 @@ public sealed class LightingChoiceVm : ObservableObject
 public sealed class RgbZoneVm : ObservableObject
 {
     public const string SameId = "device";
-    public static readonly IReadOnlyList<ChoiceOption> MirrorChoices = new ChoiceOption[]
+    public static IReadOnlyList<ChoiceOption> MirrorChoices => _mirrorChoices.Value;
+    private static readonly PerLanguage<IReadOnlyList<ChoiceOption>> _mirrorChoices = new(() => new ChoiceOption[]
     {
         new(SameId, L("デバイスと同じ")), new("on", L("オン")), new("off", L("オフ")),
-    };
-    public static readonly IReadOnlyList<ChoiceOption> ReverseChoices = new ChoiceOption[]
+    });
+    public static IReadOnlyList<ChoiceOption> ReverseChoices => _reverseChoices.Value;
+    private static readonly PerLanguage<IReadOnlyList<ChoiceOption>> _reverseChoices = new(() => new ChoiceOption[]
     {
         new(SameId, L("デバイスと同じ")), new("on", L("逆向き")), new("off", L("そのまま")),
-    };
+    });
 
-    public static readonly IReadOnlyList<ChoiceOption> SoundChoices = MusicSounds.Ids.Select(id => new ChoiceOption(id, MusicSounds.Label(id))).ToList();
+    public static IReadOnlyList<ChoiceOption> SoundChoices => _soundChoices.Value;
+    private static readonly PerLanguage<IReadOnlyList<ChoiceOption>> _soundChoices =
+        new(() => MusicSounds.Ids.Select(id => new ChoiceOption(id, MusicSounds.Label(id))).ToList());
 
     private string _effectId = RgbZoneSettings.SameAsDevice, _mirrorId = SameId, _reverseId = SameId, _soundId = MusicSounds.Auto;
     private int _gainR = 100, _gainG = 100, _gainB = 100, _level = 100;
@@ -174,7 +178,8 @@ public sealed class RgbZoneVm : ObservableObject
 public sealed class CasePlaceVm : ObservableObject
 {
     public const string NoPlace = "";
-    public static readonly IReadOnlyList<ChoiceOption> PlaceChoices = CreatePlaceChoices();
+    public static IReadOnlyList<ChoiceOption> PlaceChoices => _placeChoices.Value;
+    private static readonly PerLanguage<IReadOnlyList<ChoiceOption>> _placeChoices = new(CreatePlaceChoices);
 
     private static List<ChoiceOption> CreatePlaceChoices()
     {
@@ -222,30 +227,36 @@ public sealed class CasePlaceVm : ObservableObject
 public sealed class RgbDeviceVm : ObservableObject
 {
     /// <summary>「左右対称」の選択肢（設定では null = 自動、true = オン、false = オフ）</summary>
-    public static readonly IReadOnlyList<ChoiceOption> MirrorChoices = new ChoiceOption[]
+    public static IReadOnlyList<ChoiceOption> MirrorChoices => _mirrorChoices.Value;
+    private static readonly PerLanguage<IReadOnlyList<ChoiceOption>> _mirrorChoices = new(() => new ChoiceOption[]
     {
         new("auto", L("自動（30 個以上で対称）")), new("on", L("オン")), new("off", L("オフ")),
-    };
+    });
     /// <summary>「1 秒に送る回数」の選択肢（設定では 0 = 自動）</summary>
-    public static readonly IReadOnlyList<ChoiceOption> FpsChoices = new ChoiceOption[]
+    public static IReadOnlyList<ChoiceOption> FpsChoices => _fpsChoices.Value;
+    private static readonly PerLanguage<IReadOnlyList<ChoiceOption>> _fpsChoices = new(() => new ChoiceOption[]
     {
         new("0", L("自動")), new("4", L("4 回")), new("8", L("8 回")), new("12", L("12 回")), new("15", L("15 回")),
         new("20", L("20 回")), new("30", L("30 回")), new("60", L("60 回")),
-    };
+    });
     /// <summary>グラボの「1 秒に送る回数」の選択肢（グラボは自動の回数より上げられない。下げるのは可）</summary>
-    public static readonly IReadOnlyList<ChoiceOption> GpuFpsChoices = new ChoiceOption[]
+    public static IReadOnlyList<ChoiceOption> GpuFpsChoices => _gpuFpsChoices.Value;
+    private static readonly PerLanguage<IReadOnlyList<ChoiceOption>> _gpuFpsChoices = new(() => new ChoiceOption[]
     {
         new("0", L("自動")), new("1", L("1 回")), new("2", L("2 回")), new("3", L("3 回")), new("4", L("4 回")), new("5", L("5 回")),
-    };
+    });
     /// <summary>「早めに光らせる」（デバイスの遅れ）の選択肢（ミリ秒。設定では -1 = 自動）</summary>
-    public static readonly IReadOnlyList<ChoiceOption> LeadChoices = new ChoiceOption[]
+    public static IReadOnlyList<ChoiceOption> LeadChoices => _leadChoices.Value;
+    private static readonly PerLanguage<IReadOnlyList<ChoiceOption>> _leadChoices = new(() => new ChoiceOption[]
     {
         new("-1", L("自動")), new("0", L("0 ミリ秒")), new("20", L("20 ミリ秒")), new("40", L("40 ミリ秒")), new("60", L("60 ミリ秒")),
         new("80", L("80 ミリ秒")), new("100", L("100 ミリ秒")), new("150", L("150 ミリ秒")), new("200", L("200 ミリ秒")),
-    };
-    private static readonly IReadOnlyList<ChoiceOption> FastEffects = CreateEffectOptions(slow: false);
+    });
+    private static IReadOnlyList<ChoiceOption> FastEffects => _fastEffects.Value;
+    private static readonly PerLanguage<IReadOnlyList<ChoiceOption>> _fastEffects = new(() => CreateEffectOptions(slow: false));
     // 更新が遅いデバイスでは、ストロボは使わない（一部しか書き換わらずチカチカするため）
-    private static readonly IReadOnlyList<ChoiceOption> SlowEffects = CreateEffectOptions(slow: true);
+    private static IReadOnlyList<ChoiceOption> SlowEffects => _slowEffects.Value;
+    private static readonly PerLanguage<IReadOnlyList<ChoiceOption>> _slowEffects = new(() => CreateEffectOptions(slow: true));
 
     private bool _selected, _canSelect, _showEffect, _swap, _reverse, _animateOnGpu, _showDetails;
     private int _gainR = 100, _gainG = 100, _gainB = 100, _level = 100;
@@ -692,19 +703,21 @@ internal static class LightingRules
 public partial class MainWindow
 {
     /// <summary>色の候補（固定色・呼吸・パレット「選んだ色」の色）と、その名前</summary>
-    private static readonly (string Hex, string Name)[] SwatchColors =
+    private static (string Hex, string Name)[] SwatchColors => _swatchColors.Value;
+    private static readonly PerLanguage<(string Hex, string Name)[]> _swatchColors = new(() => new[]
     {
         ("#6A00FF", L("紫")), ("#0040FF", L("青")), ("#00B4FF", L("水色")), ("#00FF50", L("緑")),
         ("#FFB000", L("オレンジ")), ("#FF0000", L("赤")), ("#FF0080", L("ピンク")), ("#FFFFFF", L("白")),
-    };
+    });
 
     /// <summary>「止めるときの LED」の選択肢</summary>
-    private static readonly IReadOnlyList<ChoiceOption> StopOptions = new ChoiceOption[]
+    private static IReadOnlyList<ChoiceOption> StopOptions => _stopOptions.Value;
+    private static readonly PerLanguage<IReadOnlyList<ChoiceOption>> _stopOptions = new(() => new ChoiceOption[]
     {
         new(RgbStopBehaviors.Off, L("消灯（LED を消す）")),
         new(RgbStopBehaviors.Static, L("固定色（「色」で選んだ色にする）")),
         new(RgbStopBehaviors.Keep, L("そのまま（最後の色で止まる）")),
-    };
+    });
 
     /// <summary>画面の動きの更新は最大 1 秒に 60 回（秒）</summary>
     private const double LiveFrameSec = 1.0 / 60;

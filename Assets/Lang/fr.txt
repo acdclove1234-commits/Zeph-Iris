@@ -382,9 +382,7 @@ aefcd37e	Au démarrage automatique, il démarre toujours dans la zone de notific
 e162bf76	Afficher le mini-widget
 1b093ce9	Affiche températures et vitesses toujours au premier plan. Faites glisser pour déplacer, clic droit pour changer l'opacité
 1483f6b3	Apparence
-07df2653	Changez la langue d'affichage, le thème, la couleur d'accent, le fond, la couleur du texte, la police et la taille du texte. Les changements s'appliquent immédiatement (la langue change après redémarrage de l'application)
 b8eab0de	Langue · Language
-4aaa8fe4	Langue du texte à l'écran. « Auto » suit la langue d'affichage de Windows (anglais si elle n'est pas prise en charge). Après un changement, redémarrez l'application
 9bb17d53	Thème
 ae52556f	« Comme Windows » suit le mode sombre/clair des paramètres Windows (Personnalisation → Couleurs → mode des applications)
 aab63522	Couleur d'accent
@@ -1426,7 +1424,6 @@ c96a6fad	{0} · {1}
 3e7b80f4	Presque blanc
 33e39538	Pâle
 ec6cb7af	Presque noir
-c53be0dd	La langue d'affichage a été modifiée. Elle change au redémarrage de l'application.\nRedémarrer maintenant ? (Pendant le redémarrage, le BIOS contrôle les ventilateurs)
 3036c063	L'adresse réseau de ce PC est introuvable
 f028972c	Impossible de démarrer le serveur web. Essayez un autre numéro de port (détails dans le journal)
 26d33196	PawnIO (le pilote de contrôle des ventilateurs) est introuvable. En l'état, seules les températures s'affichent et les ventilateurs ne peuvent pas être contrôlés.
@@ -1598,3 +1595,11 @@ f951f047	Niveau
 a4ae5bfd	Sortie virtuelle
 d2937a7a	Logiciels audio : {0} (la lumière suit le son avant les effets ; si elle semble décalée, ajustez-la avec le « Test de synchro »)
 db4d82a2	Bureau à distance
+d6776d41	Changez la langue d'affichage, le thème, la couleur d'accent, le fond, la couleur du texte, la police et la taille du texte. Les changements s'appliquent immédiatement
+e0480009	Langue du texte à l'écran. « Auto » suit la langue d'affichage de Windows (anglais si elle n'est pas prise en charge). Le changement est immédiat dès que vous en choisissez une
+e45b0531	Un réglage automatique est en cours.
+e955d878	Un test de refroidissement est en cours.
+afb9660d	Un calibrage est en cours.
+c8e0f349	Une vérification du bruit d'un ventilateur est en cours.
+69ade00e	La configuration est en cours.
+82fa072a	Choisissez de nouveau la langue d'affichage une fois l'opération terminée.

@@ -383,9 +383,9 @@ aefcd37e	自動起動のときは常にタスクトレイで起動します。�
 e162bf76	ミニウィジェットを表示する	MainWindow.xaml:2414
 1b093ce9	常に最前面に温度と回転数を表示します。ドラッグで移動、右クリックで不透明度を変更できます	MainWindow.xaml:2415
 1483f6b3	見た目	MainWindow.xaml:2424
-07df2653	表示言語・テーマ・アクセント色・背景色・文字色・フォント・文字の大きさを変えられます。変えるとすぐに反映されます（表示言語は、アプリを起動し直すと切り替わります）	MainWindow.xaml:2426
+d6776d41	表示言語・テーマ・アクセント色・背景色・文字色・フォント・文字の大きさを変えられます。変えるとすぐに反映されます	MainWindow.xaml:2426
 b8eab0de	表示言語 · Language	MainWindow.xaml:2429
-4aaa8fe4	画面の言葉の言語。「自動」なら Windows の表示言語に合わせます（対応していない言語なら英語）。変えたら、アプリを起動し直すと切り替わります	MainWindow.xaml:2432
+e0480009	画面の言葉の言語。「自動」なら Windows の表示言語に合わせます（対応していない言語なら英語）。選ぶとすぐに切り替わります	MainWindow.xaml:2432
 9bb17d53	テーマ	MainWindow.xaml:2435
 ae52556f	「Windows に合わせる」なら、Windows の設定（個人用設定 → 色 → アプリ モード）のダーク／ライトに合わせます	MainWindow.xaml:2438
 aab63522	アクセント色	MainWindow.xaml:2440
@@ -606,55 +606,55 @@ d6750fd2	\n・	App.Uninstall.cs:271
 bf71d238	\n…ほか {0} 個	App.Uninstall.cs:271
 df6134ea	\n\nこのお知らせを閉じたあと、次のフォルダーをフォルダーごと削除してください:\n{0}	App.Uninstall.cs:272
 10d89683	ProFanController のお片付け	App.Uninstall.cs:277
-2d7f91ad	ProFanController はすでに起動しています。\nタスクトレイのアイコンから開いてください。	App.xaml.cs:100
-ec6a9bb6	記録の保存	App.xaml.cs:160
-c0fd45c5	タスクトレイで動作を続けています。終了するにはアイコンを右クリックしてください。	App.xaml.cs:194
-77d62ee9	ProFanController: 回復しました	App.xaml.cs:227
-977b8544	プロファイルを自動で切り替えました	App.xaml.cs:239
-790c11cc	{0} を検出 → {1}	App.xaml.cs:239
-fa5d05c3	ProFanController: メンテナンス	App.xaml.cs:243
-5b860ae3	DRY RUN（テストモード）で動いています。温度に応じた回転数を計算するだけで、ファンは動かしていません。	App.xaml.cs:288
-874003cc	制御を開始する	App.xaml.cs:289
-812bba50	設定ファイルが壊れていたため、バックアップ（{0:yyyy/MM/dd HH:mm}）から復旧しました。壊れたファイルは config.broken_*.json として残しています。	App.xaml.cs:299
-9ca7b4fa	ProFanController が予期せず終了したため、見張りプロセスが自動で起動し直しました。ファンは安全な回転数にしてから制御を再開しています。原因はログで確認できます。	App.xaml.cs:303
-7b249720	ログを開く	App.xaml.cs:304
-3a7e2e72	予期せず終了したため、自動で起動し直しました。	App.xaml.cs:305
-c51b6c55	Windows の起動時に自動で立ち上がるのは、別の場所のアプリです（{0}）。古い版が立ち上がっているかもしれません。	App.xaml.cs:328
-268b2432	このアプリは「{0}」フォルダーの中から動いています。整理したときに消えたり、別の版が増えたりしないよう、	App.xaml.cs:333
-80df7870	下のボタンで {0} に移してください（設定はそのまま持っていき、自動起動も移した先に登録し直して、起動し直します）。	App.xaml.cs:334
-8d7ede7f	{0} が動いています。同じ LED やファンを操作するので、色が勝手に戻る・ちらつく・回転数が反映されない原因になります。そのソフトの LED・ファンの制御を止めるか、終了してください。	App.xaml.cs:339
-0cac6658	{0} に移す	App.xaml.cs:346
-f8529664	自動起動をこの場所にする	App.xaml.cs:350
-c674f1d5	自動起動を、いま動いているこのアプリに登録し直しました。	App.xaml.cs:355
-f5c17fde	自動起動を登録し直せませんでした（ログを確認してください）。	App.xaml.cs:355
-467c4a19	{0} へ移せませんでした: {1}	App.xaml.cs:390
-14d2e005	音の取り込み	App.xaml.cs:423
-c08fb050	 ／ 	App.xaml.cs:602
-48ccab47	使っていたセンサーが見つかりません	App.xaml.cs:602
-9c32a53a	ハードウェアの変更を検出しました	App.xaml.cs:604
-58f4eb35	ProFanController: ハードウェアの変更	App.xaml.cs:605
-646e0b57	{0}。PC の画面で、新しいセンサーへの置き換えを確認してください。	App.xaml.cs:605
-9dddc76a	ファン制御に問題があります	App.xaml.cs:635
-8ad6890e	{0}（安全のため BIOS の制御にしています。自動で復旧を試みます）	App.xaml.cs:635
-cdfd31fc	ProFanController: ファン制御の問題	App.xaml.cs:636
-30b6b07e	一部の部品を読み取れません	App.xaml.cs:639
-465384a0	ファン制御が復旧しました	App.xaml.cs:642
-2a57fe9c	通常の制御に戻りました。	App.xaml.cs:642
-96429453	ProFanController: 復旧	App.xaml.cs:643
-a8e2e175	ファン制御が通常に戻りました。	App.xaml.cs:643
-0d78d54c	ほかのプログラムが config.json を開いたままにしているため読めませんでした（ファイルはそのままです）。	App.xaml.cs:659
-9b03cdae	元のファイルは config.broken_日時.json として残しました。	App.xaml.cs:660
-b07af289	config.json を読み込めず、バックアップからも復旧できませんでした。\n{0}\n\n{1}\n空の設定で起動します。	App.xaml.cs:661
-645b237e	ブースト	App.xaml.cs:715
-169abc6e	ポンプ以外の全ファンを {0} 分間 100% にします。	App.xaml.cs:715
-c342d519	「静音」で使うプロファイルが見つかりません。設定画面の「ワンタッチ操作」で選んでください。	App.xaml.cs:719
-77a0d0ea	スマホ用の Web サーバーを開始できませんでした（ポート {0}）: {1}	App.xaml.cs:845
-eec05191	緊急全開	App.xaml.cs:855
-0413f77c	一時停止中	App.xaml.cs:855
-45fadb4f	制御中	App.xaml.cs:855
-404e2134	ウィジェット	App.xaml.cs:933
-1f2511a8	画面	App.xaml.cs:937
-0f13893a	タスクトレイ	App.xaml.cs:989
+2d7f91ad	ProFanController はすでに起動しています。\nタスクトレイのアイコンから開いてください。	App.xaml.cs:101
+ec6a9bb6	記録の保存	App.xaml.cs:161
+77d62ee9	ProFanController: 回復しました	App.xaml.cs:224
+977b8544	プロファイルを自動で切り替えました	App.xaml.cs:236
+790c11cc	{0} を検出 → {1}	App.xaml.cs:236
+5b860ae3	DRY RUN（テストモード）で動いています。温度に応じた回転数を計算するだけで、ファンは動かしていません。	App.xaml.cs:283
+874003cc	制御を開始する	App.xaml.cs:284
+812bba50	設定ファイルが壊れていたため、バックアップ（{0:yyyy/MM/dd HH:mm}）から復旧しました。壊れたファイルは config.broken_*.json として残しています。	App.xaml.cs:294
+9ca7b4fa	ProFanController が予期せず終了したため、見張りプロセスが自動で起動し直しました。ファンは安全な回転数にしてから制御を再開しています。原因はログで確認できます。	App.xaml.cs:298
+7b249720	ログを開く	App.xaml.cs:299
+3a7e2e72	予期せず終了したため、自動で起動し直しました。	App.xaml.cs:300
+c0fd45c5	タスクトレイで動作を続けています。終了するにはアイコンを右クリックしてください。	App.xaml.cs:318
+fa5d05c3	ProFanController: メンテナンス	App.xaml.cs:321
+c51b6c55	Windows の起動時に自動で立ち上がるのは、別の場所のアプリです（{0}）。古い版が立ち上がっているかもしれません。	App.xaml.cs:343
+268b2432	このアプリは「{0}」フォルダーの中から動いています。整理したときに消えたり、別の版が増えたりしないよう、	App.xaml.cs:348
+80df7870	下のボタンで {0} に移してください（設定はそのまま持っていき、自動起動も移した先に登録し直して、起動し直します）。	App.xaml.cs:349
+8d7ede7f	{0} が動いています。同じ LED やファンを操作するので、色が勝手に戻る・ちらつく・回転数が反映されない原因になります。そのソフトの LED・ファンの制御を止めるか、終了してください。	App.xaml.cs:354
+0cac6658	{0} に移す	App.xaml.cs:361
+f8529664	自動起動をこの場所にする	App.xaml.cs:365
+c674f1d5	自動起動を、いま動いているこのアプリに登録し直しました。	App.xaml.cs:370
+f5c17fde	自動起動を登録し直せませんでした（ログを確認してください）。	App.xaml.cs:370
+467c4a19	{0} へ移せませんでした: {1}	App.xaml.cs:405
+14d2e005	音の取り込み	App.xaml.cs:438
+c08fb050	 ／ 	App.xaml.cs:617
+48ccab47	使っていたセンサーが見つかりません	App.xaml.cs:617
+9c32a53a	ハードウェアの変更を検出しました	App.xaml.cs:619
+58f4eb35	ProFanController: ハードウェアの変更	App.xaml.cs:620
+646e0b57	{0}。PC の画面で、新しいセンサーへの置き換えを確認してください。	App.xaml.cs:620
+9dddc76a	ファン制御に問題があります	App.xaml.cs:650
+8ad6890e	{0}（安全のため BIOS の制御にしています。自動で復旧を試みます）	App.xaml.cs:650
+cdfd31fc	ProFanController: ファン制御の問題	App.xaml.cs:651
+30b6b07e	一部の部品を読み取れません	App.xaml.cs:654
+465384a0	ファン制御が復旧しました	App.xaml.cs:657
+2a57fe9c	通常の制御に戻りました。	App.xaml.cs:657
+96429453	ProFanController: 復旧	App.xaml.cs:658
+a8e2e175	ファン制御が通常に戻りました。	App.xaml.cs:658
+0d78d54c	ほかのプログラムが config.json を開いたままにしているため読めませんでした（ファイルはそのままです）。	App.xaml.cs:674
+9b03cdae	元のファイルは config.broken_日時.json として残しました。	App.xaml.cs:675
+b07af289	config.json を読み込めず、バックアップからも復旧できませんでした。\n{0}\n\n{1}\n空の設定で起動します。	App.xaml.cs:676
+645b237e	ブースト	App.xaml.cs:730
+169abc6e	ポンプ以外の全ファンを {0} 分間 100% にします。	App.xaml.cs:730
+c342d519	「静音」で使うプロファイルが見つかりません。設定画面の「ワンタッチ操作」で選んでください。	App.xaml.cs:734
+77a0d0ea	スマホ用の Web サーバーを開始できませんでした（ポート {0}）: {1}	App.xaml.cs:860
+eec05191	緊急全開	App.xaml.cs:870
+0413f77c	一時停止中	App.xaml.cs:870
+45fadb4f	制御中	App.xaml.cs:870
+404e2134	ウィジェット	App.xaml.cs:948
+1f2511a8	画面	App.xaml.cs:952
+0f13893a	タスクトレイ	App.xaml.cs:1004
 e6a34da2	停止中	Audio/AudioCapture.cs:76
 652c7b75	音を取り込めません（{0} 秒後に再試行）: {1}	Audio/AudioCapture.cs:173
 2674d6a9	音の出力先（スピーカー・ヘッドホン）が見つかりません	Audio/AudioCapture.cs:200
@@ -944,11 +944,11 @@ f91be135	以前より少し冷えにくくなっています。そろそろフ�
 7ed2ece5	以前よりよく冷えるようになっています。掃除・部品の交換・ファンの追加などをした場合は問題ありません。	Core/HealthAnalyzer.cs:237
 58d9c8ca	以前と同じように冷えています。	Core/HealthAnalyzer.cs:238
 fcc150e0	（比べた時間: 基準 {0} 分・最近 {1} 分。室温の違いは差し引いています）	Core/HealthAnalyzer.cs:240
-5ba2a332	ASUS Aura（Armoury Crate の LED）	Core/InstallCheck.cs:23
-d9bee020	ダウンロード	Core/InstallCheck.cs:80
-4a049af4	デスクトップ	Core/InstallCheck.cs:81
-4033fb1e	一時フォルダー	Core/InstallCheck.cs:82
-e39c4b26	ProFanController.exe を写せませんでした	Core/InstallCheck.cs:119
+5ba2a332	ASUS Aura（Armoury Crate の LED）	Core/InstallCheck.cs:24
+d9bee020	ダウンロード	Core/InstallCheck.cs:81
+4a049af4	デスクトップ	Core/InstallCheck.cs:82
+4033fb1e	一時フォルダー	Core/InstallCheck.cs:83
+e39c4b26	ProFanController.exe を写せませんでした	Core/InstallCheck.cs:120
 d6132623	ProFanController テスト通知	Core/Notifier.cs:65
 7be18f84	{0} からのテスト通知です。この通知が届けば設定は完了です。	Core/Notifier.cs:65
 15278ea5	送信しました。スマホに届いたか確認してください	Core/Notifier.cs:66
@@ -1026,37 +1026,37 @@ e6a01093	PawnIO はインストールされていませんでした。	Core/Pawn
 fa206abb	アンインストールが取り消されました（{0}）。	Core/PawnIoSetup.cs:145
 3d287832	ほかのソフトのインストールが動いています（{0}）。終わってから、	Core/PawnIoSetup.cs:146
 2f57cd74	PawnIO をアンインストールできませんでした（winget のエラー {0}）。	Core/PawnIoSetup.cs:147
-fdc538fc	下から上へ	Core/Rgb/CaseLayout.cs:22
-d8dd2f02	上から下へ	Core/Rgb/CaseLayout.cs:23
-d26407fa	後ろ（背面）から前へ	Core/Rgb/CaseLayout.cs:24
-ad4d7e26	前から後ろ（背面）へ	Core/Rgb/CaseLayout.cs:25
-d20e03f3	中心から外へ	Core/Rgb/CaseLayout.cs:26
-3c957a43	外から中心へ	Core/Rgb/CaseLayout.cs:27
-a4a3fddd	前面のファン 3 つ（上から順）	Core/Rgb/CaseLayout.cs:53
-5f05f426	前面のファン 3 つ（下から順）	Core/Rgb/CaseLayout.cs:54
-ddc8e746	前面のファン 2 つ（上から順）	Core/Rgb/CaseLayout.cs:55
-57464a90	前面のファン（上）	Core/Rgb/CaseLayout.cs:56
-3ef45d3f	前面のファン（中）	Core/Rgb/CaseLayout.cs:57
-434a387d	前面のファン（下）	Core/Rgb/CaseLayout.cs:58
-be82dbb4	天面のファン 3 つ（前から順）	Core/Rgb/CaseLayout.cs:59
-cb58decc	天面のファン 3 つ（後ろから順）	Core/Rgb/CaseLayout.cs:60
-91bda7f3	天面のファン 2 つ（前から順）	Core/Rgb/CaseLayout.cs:61
-b71e6d1a	背面のファン	Core/Rgb/CaseLayout.cs:62
-1091fb70	底面のファン 3 つ（前から順）	Core/Rgb/CaseLayout.cs:63
-1a85a2f8	底面のファン 3 つ（後ろから順）	Core/Rgb/CaseLayout.cs:64
-b066a299	CPU クーラー・水冷ヘッド	Core/Rgb/CaseLayout.cs:65
-5a66eda2	部品	Core/Rgb/CaseLayout.cs:65
-c662c824	グラボ（背面側から前へ）	Core/Rgb/CaseLayout.cs:66
-aa463c32	グラボ（前から背面側へ）	Core/Rgb/CaseLayout.cs:67
-d28e8e28	メモリ（上から下へ）	Core/Rgb/CaseLayout.cs:68
-0b4a03fa	メモリ（下から上へ）	Core/Rgb/CaseLayout.cs:69
-bc4075b9	マザーボード（背面の I/O カバー）	Core/Rgb/CaseLayout.cs:70
-06e66fb6	マザーボード（下側・チップセット）	Core/Rgb/CaseLayout.cs:71
-03940065	前面の縦のテープ（上から下へ）	Core/Rgb/CaseLayout.cs:72
-a2b18858	テープ	Core/Rgb/CaseLayout.cs:72
-cb71e013	前面の縦のテープ（下から上へ）	Core/Rgb/CaseLayout.cs:73
-face4d45	天面の縁のテープ（前から後ろへ）	Core/Rgb/CaseLayout.cs:74
-a1303c99	底面の縁のテープ（前から後ろへ）	Core/Rgb/CaseLayout.cs:75
+fdc538fc	下から上へ	Core/Rgb/CaseLayout.cs:23
+d8dd2f02	上から下へ	Core/Rgb/CaseLayout.cs:24
+d26407fa	後ろ（背面）から前へ	Core/Rgb/CaseLayout.cs:25
+ad4d7e26	前から後ろ（背面）へ	Core/Rgb/CaseLayout.cs:26
+d20e03f3	中心から外へ	Core/Rgb/CaseLayout.cs:27
+3c957a43	外から中心へ	Core/Rgb/CaseLayout.cs:28
+a4a3fddd	前面のファン 3 つ（上から順）	Core/Rgb/CaseLayout.cs:55
+5f05f426	前面のファン 3 つ（下から順）	Core/Rgb/CaseLayout.cs:56
+ddc8e746	前面のファン 2 つ（上から順）	Core/Rgb/CaseLayout.cs:57
+57464a90	前面のファン（上）	Core/Rgb/CaseLayout.cs:58
+3ef45d3f	前面のファン（中）	Core/Rgb/CaseLayout.cs:59
+434a387d	前面のファン（下）	Core/Rgb/CaseLayout.cs:60
+be82dbb4	天面のファン 3 つ（前から順）	Core/Rgb/CaseLayout.cs:61
+cb58decc	天面のファン 3 つ（後ろから順）	Core/Rgb/CaseLayout.cs:62
+91bda7f3	天面のファン 2 つ（前から順）	Core/Rgb/CaseLayout.cs:63
+b71e6d1a	背面のファン	Core/Rgb/CaseLayout.cs:64
+1091fb70	底面のファン 3 つ（前から順）	Core/Rgb/CaseLayout.cs:65
+1a85a2f8	底面のファン 3 つ（後ろから順）	Core/Rgb/CaseLayout.cs:66
+b066a299	CPU クーラー・水冷ヘッド	Core/Rgb/CaseLayout.cs:67
+5a66eda2	部品	Core/Rgb/CaseLayout.cs:67
+c662c824	グラボ（背面側から前へ）	Core/Rgb/CaseLayout.cs:68
+aa463c32	グラボ（前から背面側へ）	Core/Rgb/CaseLayout.cs:69
+d28e8e28	メモリ（上から下へ）	Core/Rgb/CaseLayout.cs:70
+0b4a03fa	メモリ（下から上へ）	Core/Rgb/CaseLayout.cs:71
+bc4075b9	マザーボード（背面の I/O カバー）	Core/Rgb/CaseLayout.cs:72
+06e66fb6	マザーボード（下側・チップセット）	Core/Rgb/CaseLayout.cs:73
+03940065	前面の縦のテープ（上から下へ）	Core/Rgb/CaseLayout.cs:74
+a2b18858	テープ	Core/Rgb/CaseLayout.cs:74
+cb71e013	前面の縦のテープ（下から上へ）	Core/Rgb/CaseLayout.cs:75
+face4d45	天面の縁のテープ（前から後ろへ）	Core/Rgb/CaseLayout.cs:76
+a1303c99	底面の縁のテープ（前から後ろへ）	Core/Rgb/CaseLayout.cs:77
 f18c7cb3	ほかのデバイスの色	Core/Rgb/DeviceRenderer.cs:204
 1ad230d1	控えめ	Core/Rgb/MusicTuning.cs:19
 7c96252e	ふつう	Core/Rgb/MusicTuning.cs:20
@@ -1115,10 +1115,10 @@ b599c0f6	高音（ハイハット）	Core/Rgb/MusicTuning.cs:353
 34c5e8d2	音全体（音量）	Core/Rgb/MusicTuning.cs:354
 1e73f52b	使用率が {0:F0}〜{1:F0}% と変わっているのに、{2:F0} 分以上 {3:F1}°C のまま変化していません	Core/SensorGuard.cs:98
 f898c734	https のアドレスではありません: {0}	Core/SystemTool.cs:50
-9181a7c0	{0:F0} 分間に {1} 回終了したため、自動での再起動はやめました。	Core/Watchdog.cs:223
-abf150b9	自動での再起動はオフになっています。	Core/Watchdog.cs:224
-08738032	ProFanController が予期せず終了しました。\n\nファンは安全な回転数（{0:F0}%、ポンプは 100%）に固定しています。{1}\n	Core/Watchdog.cs:226
-a506afc7	PC を再起動すると BIOS の制御に戻ります（ProFanController を起動し直すと、アプリの制御で動きます）。\n\nログ: 	Core/Watchdog.cs:227
+9181a7c0	{0:F0} 分間に {1} 回終了したため、自動での再起動はやめました。	Core/Watchdog.cs:225
+abf150b9	自動での再起動はオフになっています。	Core/Watchdog.cs:226
+08738032	ProFanController が予期せず終了しました。\n\nファンは安全な回転数（{0:F0}%、ポンプは 100%）に固定しています。{1}\n	Core/Watchdog.cs:228
+a506afc7	PC を再起動すると BIOS の制御に戻ります（ProFanController を起動し直すと、アプリの制御で動きます）。\n\nログ: 	Core/Watchdog.cs:229
 5e11c7bc	このネットワークからは使えません。	Core/WebServer.cs:78
 3540eeb1	鍵の間違いが続いたため、しばらく受け付けません。1 分ほど待ってください。	Core/WebServer.cs:91
 aacf373e	アクセス用の鍵が違います。PC の設定画面に表示されている URL を使ってください。	Core/WebServer.cs:99
@@ -1239,132 +1239,137 @@ d01ee250	。「元に戻す」で取り消せます。読み込んだファン�
 e5decd8b	新しいハードウェアに合わせて設定を置き換えました（「元に戻す」で戻せます）。念のため、ファンカーブを確認してください。	MainWindow.Integrations.cs:255
 49a0ae7a	ハードウェアの変更があります。見つからないセンサーを使っているカーブは、安全のため一定の回転数で回しています。	MainWindow.Integrations.cs:264
 dff7789c	対応付けを開く	MainWindow.Integrations.cs:265
-cd091397	デバイスと同じ	MainWindow.Lighting.cs:89
-0592e9ca	オン	MainWindow.Lighting.cs:89
-1f9312b8	オフ	MainWindow.Lighting.cs:89
-b9b3d3ce	そのまま	MainWindow.Lighting.cs:93
-ce8e2c71	LED {0} 個	MainWindow.Lighting.cs:105
-55059eac	決めない（デバイスの中の並びで光る）	MainWindow.Lighting.cs:181
-0a0e4a97	{0} ・ {1}	MainWindow.Lighting.cs:196
-c14c8eef	自動（30 個以上で対称）	MainWindow.Lighting.cs:227
-87b3c1e5	4 回	MainWindow.Lighting.cs:232
-a3cdd021	8 回	MainWindow.Lighting.cs:232
-d156a2e0	12 回	MainWindow.Lighting.cs:232
-b36e663d	15 回	MainWindow.Lighting.cs:232
-e7e154a9	20 回	MainWindow.Lighting.cs:233
-0981fbf4	30 回	MainWindow.Lighting.cs:233
-9c06e78d	60 回	MainWindow.Lighting.cs:233
-cd131a9e	1 回	MainWindow.Lighting.cs:238
-165d9de3	2 回	MainWindow.Lighting.cs:238
-677e1948	3 回	MainWindow.Lighting.cs:238
-d94ab30a	5 回	MainWindow.Lighting.cs:238
-c1f61982	0 ミリ秒	MainWindow.Lighting.cs:243
-bb064292	20 ミリ秒	MainWindow.Lighting.cs:243
-a005fa30	40 ミリ秒	MainWindow.Lighting.cs:243
-5058b4c6	60 ミリ秒	MainWindow.Lighting.cs:243
-4ddb9494	80 ミリ秒	MainWindow.Lighting.cs:244
-82d5d569	100 ミリ秒	MainWindow.Lighting.cs:244
-64846588	150 ミリ秒	MainWindow.Lighting.cs:244
-18d8483c	200 ミリ秒	MainWindow.Lighting.cs:244
-6e3ebc87	ちかちか対策中（色が変わったときだけ送る）	MainWindow.Lighting.cs:264
-33747dd6	グラボ: 書き込みを最小限に（1 秒に最大 {0} 回）	MainWindow.Lighting.cs:265
-4295e02e	更新が遅いデバイス（1 秒に {0} 回{1}）	MainWindow.Lighting.cs:266
-47cc8c5f	・自動	MainWindow.Lighting.cs:266
-a6d44dde	このグラボは、色を書き込むたびに一瞬ちかちかすることがあります（OpenRGB 1.1 の書き込み方が原因と考えられますが、この機種では確認中です）。書き込みを最小限にするため、明るさは変えず、色がはっきり変わったときだけ（0.25 秒以上あけて）送り、同じ色の送り直しもしません。レインボー（流れる）は止まった虹に、呼吸は固定色になります（光る場所ごとに 1 色しか出せないため）。音楽連動で音が止まったときは、色を 20 秒ごとに切り替えます。気になる場合は光り方を「固定色」にしてください	MainWindow.Lighting.cs:314
-0488c9d7	グラボの LED は、OpenRGB が 1 個ずつ書き込むため、1 回の色替えに 20〜200 ミリ秒ほどかかります。書き込みが続くと、ちかちかしたり遅れたりするので、書き込みを最小限にしています: 	MainWindow.Lighting.cs:316
-cf0c037b	明るさは一定（色の切り替えでビートを見せる）、色がはっきり変わったときだけ送る（1 秒に最大 5 回）、温度モードは温度の段が変わったときだけ切り替える、	MainWindow.Lighting.cs:317
-fb923916	レインボー（流れる）・呼吸は止まった虹・固定色（「虹・呼吸も動かす」で変えられます）、同じ色の送り直しは 60 秒ごと。	MainWindow.Lighting.cs:318
-8ed6eae0	ほかのデバイスとタイミングがずれるときは「早めに光らせる」で合わせてください	MainWindow.Lighting.cs:319
-8444c4be	メモリなど、基板の内側の配線（I2C）でつながる LED は、1 回送るのに時間がかかるため、自動では 1 秒に 8 回までにしています（右の「1 秒に送る回数」で変えられます）。音楽連動の色の切り替えは定期便を待たずにすぐ送ります。同じ色の送り直しは 60 秒ごとです	MainWindow.Lighting.cs:320
-2a5ce6d5	自動（全体の設定）	MainWindow.Lighting.cs:483
-7a4362e3	（激しい点滅）	MainWindow.Lighting.cs:488
-2e7616aa	紫	MainWindow.Lighting.cs:697
-d624abb5	青	MainWindow.Lighting.cs:697
-1740eec3	水色	MainWindow.Lighting.cs:697
-5474bf7c	緑	MainWindow.Lighting.cs:697
-77065b38	オレンジ	MainWindow.Lighting.cs:698
-e02e2d73	赤	MainWindow.Lighting.cs:698
-e0684d2d	ピンク	MainWindow.Lighting.cs:698
-f88712a8	白	MainWindow.Lighting.cs:698
-f73d92df	消灯（LED を消す）	MainWindow.Lighting.cs:704
-faccb7c6	固定色（「色」で選んだ色にする）	MainWindow.Lighting.cs:705
-8261ae67	そのまま（最後の色で止まる）	MainWindow.Lighting.cs:706
-d24118e5	\n光に敏感な方は使わないでください。「激しい点滅を抑える」がオンのあいだは選べません	MainWindow.Lighting.cs:808
-fa397c65	⚠ 激しく点滅します	MainWindow.Lighting.cs:810
-5812e0db	「色と明るさ」で選んだ色だけで光ります。色は変わらず、音に合わせて明るさだけが変わります	MainWindow.Lighting.cs:823
-a3ff6ad5	「色と明るさ」で選んだ色と、その両隣の色で光ります	MainWindow.Lighting.cs:825
-a0c6bf54	{0}の色で光ります。ビートのたびに、この中の次の色へ切り替わります	MainWindow.Lighting.cs:826
-b4e8382b	自動（先読み）	MainWindow.Lighting.cs:833
-3084a002	曲のテンポをつかんだら、次のビートを先読みして遅れなく光らせます（おすすめ）	MainWindow.Lighting.cs:833
-90659e1d	キックだけ	MainWindow.Lighting.cs:834
-86ca4d12	先読みはせず、バスドラムが鳴ったときだけ光ります。テンポが変わる曲向け	MainWindow.Lighting.cs:834
-12e78249	テンポもビートも使わず、音の大きさだけで光ります	MainWindow.Lighting.cs:835
-80f08891	パレットの色で、ゆっくり色が移り変わります	MainWindow.Lighting.cs:845
-df788b17	「色」で選んだ色が、ゆっくり明るくなったり暗くなったりします	MainWindow.Lighting.cs:846
-680555ce	「色」で選んだ色で光り続けます	MainWindow.Lighting.cs:847
-3b1d43a4	音が止まったら LED を消します	MainWindow.Lighting.cs:848
-25525b81	{0}（{1}）	MainWindow.Lighting.cs:855
-bb1834e5	下の設定を自分で調整した状態です。ほかのプリセットを選ぶと、その組み合わせに戻ります	MainWindow.Lighting.cs:861
-1cf255e8	作業中や夜に。ゆったりと色が移り変わります	MainWindow.Lighting.cs:866
-9df36e7d	迷ったらこれ。低音に合わせて気持ちよく脈打ちます	MainWindow.Lighting.cs:867
-4beab2e2	ドラムのたびに光の輪が広がる、にぎやかな光り方です	MainWindow.Lighting.cs:868
-f6ac23cd	ビートごとに強く色が切り替わる、いちばん激しい光り方です	MainWindow.Lighting.cs:869
-b7e7d574	LED の並びに低音〜高音を並べて、音を目で見る光り方です	MainWindow.Lighting.cs:870
-7c3c3b30	映画やゲームの邪魔をしない、控えめで暖かい光り方です	MainWindow.Lighting.cs:871
-355fd781	{0}\n光り方: {1} ・ 強さ: {2} ・ 色: {3}	MainWindow.Lighting.cs:874
-67f5dc44	\n（「激しい点滅を抑える」をオフにすると、さらに激しく点滅します）	MainWindow.Lighting.cs:875
-e3c74af7	ゆったり穏やか。色は小節ごとにゆっくり変わります	MainWindow.Lighting.cs:885
-8265bcd4	ほどよい反応。色は 2 拍ごとに変わります	MainWindow.Lighting.cs:886
-39194da9	キビキビ反応。色は 1 拍ごとに変わります	MainWindow.Lighting.cs:887
-283c2191	最大の反応。色は 1 拍ごとに一瞬で変わり、小節の頭を強調します	MainWindow.Lighting.cs:888
-899bfdf5	{0}\n選ぶと: 反応の速さ {1:F0} ms ・ 滑らかさ {2:F0} ms ・ メリハリ {3:F0}% ・ いちばん暗いとき {4:F0}%	MainWindow.Lighting.cs:891
-1763988d	流れる速さ	MainWindow.Lighting.cs:1031
-782c7098	いまは半分のテンポ	MainWindow.Lighting.cs:1040
-3da3fc0d	いまは 2 倍のテンポ	MainWindow.Lighting.cs:1040
-587c7525	すべて初期値です（強さ「{0}」の値）	MainWindow.Lighting.cs:1133
-08d68b95	初期値から変えている値: 	MainWindow.Lighting.cs:1134
-57a4e475	反応のしかたの値を初期値に戻しました。右上の「元に戻す」で、戻す前の値にできます。	MainWindow.Lighting.cs:1149
-6d49db83	激しい点滅を許可しますか？\n\n強い光の点滅は、光に敏感な方の体調（光過敏性発作など）に影響することがあります。	MainWindow.Lighting.cs:1166
-91f616cf	気分が悪くなったら、すぐに「激しい点滅を抑える」をオンに戻してください。	MainWindow.Lighting.cs:1167
-165c4145	接続できました。{0} 個のデバイスが見つかりました。	MainWindow.Lighting.cs:1230
-3757a4b4	「OpenRGB と連携する」をオンにすると始まります	MainWindow.Lighting.cs:1230
-d7b2f046	接続できません: {0}\nOpenRGB を起動して「SDK Server」タブの「Start Server」を押してから、もう一度試してください。	MainWindow.Lighting.cs:1235
-23ecbb88	「OpenRGB と連携する」がオフです。オンにすると接続します	MainWindow.Lighting.cs:1245
-f8d56f66	オフ（「OpenRGB と連携する」をオンにすると、LED の色を変え始めます）	MainWindow.Lighting.cs:1269
-dabf7260	デバイスの一覧を読み込んでから選べます。上の「接続テスト」を押してください	MainWindow.Lighting.cs:1429
-70f103b7	少なくとも 1 つは選んでください（LED を消したいときは、上の「OpenRGB と連携する」をオフにします）	MainWindow.Lighting.cs:1456
-355efac9	いま見つからないデバイスの設定も残してあります（つなぎ直すと元どおりに使えます）: {0}	MainWindow.Lighting.cs:1504
-49610d95	音を出しているアプリを探しています…	MainWindow.Lighting.cs:1531
-937d0bba	　（音が出ています）	MainWindow.Lighting.cs:1557
-bd2b75f3	　（再生中）	MainWindow.Lighting.cs:1557
-e197ab2d	アプリが見つかりません。曲を再生してから、もう一度押してください	MainWindow.Lighting.cs:1568
-8dc805b8	同期テストは、「OpenRGB と連携する」がオンで、光り方が「音楽連動」のときに使えます。	MainWindow.Lighting.cs:1637
-1071825a	クリック音を鳴らせませんでした	MainWindow.Lighting.cs:1644
-9fb33dc5	0.6 秒ごとに「カチッ」と鳴り、LED が白く光ります。光が音より早ければ「+」、遅ければ「−」で、音と光がそろうところを探してください。	MainWindow.Lighting.cs:1650
-462dc044	もう一度押すか、この画面を離れると止まります。	MainWindow.Lighting.cs:1651
-8cd7762f	{0} が動いています。同じ LED を操作するので、色が勝手に戻る・ちらつく・ほかのデバイスとそろわない原因になります。	MainWindow.Lighting.cs:1724
-55b403e0	そのソフトの LED の制御（ライティング）を止めるか、終了してください（Lian Li の L-Connect は、ファンの回転だけ使う設定にできます）。	MainWindow.Lighting.cs:1725
-caf81aa5	OpenRGB の設定で「Shared SMBus Access」（SMBus をほかのソフトと共有する）がオフになっています。	MainWindow.Lighting.cs:1728
-7051883b	このアプリはメモリの温度を同じ配線（SMBus）で読むので、ぶつかって温度が読めなくなることがあります。	MainWindow.Lighting.cs:1729
-2810f408	OpenRGB の Settings で「Shared SMBus Access」をオンにして、OpenRGB を起動し直してください（または、設定 →「メモリの温度を読む」をオフに）。	MainWindow.Lighting.cs:1730
-0b102823	\n設定ファイル: {0}	MainWindow.Lighting.cs:1731
-7c87a784	 ・ 	MainWindow.Lighting.cs:1887
-cde5d20f	「OpenRGB と連携する」をオンにすると、音の取り込みが始まります	MainWindow.Lighting.cs:1899
-37b53bcd	{0}（{1} の音だけに反応）	MainWindow.Lighting.cs:1901
-8e13b3ed	\n聞いている出力先: {0}	MainWindow.Lighting.cs:1907
-67520391	+{0} ms にする	MainWindow.Lighting.cs:1917
-a33ee710	音の取り込みを準備しています…	MainWindow.Lighting.cs:1930
-aeb57d02	音楽連動で OpenRGB と連携しているときに表示します	MainWindow.Lighting.cs:1930
-6a7d3717	テンポ: 使わない	MainWindow.Lighting.cs:1938
-d9cb0d66	音の大きさだけで光っています	MainWindow.Lighting.cs:1939
-8d9ab8cc	キックに合わせて光っています	MainWindow.Lighting.cs:1945
-58c9b655	テンポをつかんでいます（確かさ {0:F0}%）	MainWindow.Lighting.cs:1946
-7ddda7d0	テンポ検出中…	MainWindow.Lighting.cs:1950
-12235fc4	候補 {0:F0} BPM（確かさ {1:F0}%）	MainWindow.Lighting.cs:1952
-f689911d	ビートがはっきりした曲なら、数秒でテンポをつかみます	MainWindow.Lighting.cs:1953
-64ff1784	音量 {0} ・ 基準 {1:F0} dBFS	MainWindow.Lighting.cs:1962
-87c8c605	● 音を検出しています	MainWindow.Lighting.cs:1963
-eafa50be	○ 無音（音が鳴ると反応します）	MainWindow.Lighting.cs:1963
+e45b0531	おまかせ調整の途中です。	MainWindow.Language.cs:55
+e955d878	冷却テストの途中です。	MainWindow.Language.cs:56
+afb9660d	キャリブレーションの途中です。	MainWindow.Language.cs:57
+c8e0f349	ファンの音を確かめている途中です。	MainWindow.Language.cs:58
+69ade00e	セットアップの途中です。	MainWindow.Language.cs:59
+cd091397	デバイスと同じ	MainWindow.Lighting.cs:90
+0592e9ca	オン	MainWindow.Lighting.cs:90
+1f9312b8	オフ	MainWindow.Lighting.cs:90
+b9b3d3ce	そのまま	MainWindow.Lighting.cs:95
+ce8e2c71	LED {0} 個	MainWindow.Lighting.cs:109
+55059eac	決めない（デバイスの中の並びで光る）	MainWindow.Lighting.cs:186
+0a0e4a97	{0} ・ {1}	MainWindow.Lighting.cs:201
+c14c8eef	自動（30 個以上で対称）	MainWindow.Lighting.cs:233
+87b3c1e5	4 回	MainWindow.Lighting.cs:239
+a3cdd021	8 回	MainWindow.Lighting.cs:239
+d156a2e0	12 回	MainWindow.Lighting.cs:239
+b36e663d	15 回	MainWindow.Lighting.cs:239
+e7e154a9	20 回	MainWindow.Lighting.cs:240
+0981fbf4	30 回	MainWindow.Lighting.cs:240
+9c06e78d	60 回	MainWindow.Lighting.cs:240
+cd131a9e	1 回	MainWindow.Lighting.cs:246
+165d9de3	2 回	MainWindow.Lighting.cs:246
+677e1948	3 回	MainWindow.Lighting.cs:246
+d94ab30a	5 回	MainWindow.Lighting.cs:246
+c1f61982	0 ミリ秒	MainWindow.Lighting.cs:252
+bb064292	20 ミリ秒	MainWindow.Lighting.cs:252
+a005fa30	40 ミリ秒	MainWindow.Lighting.cs:252
+5058b4c6	60 ミリ秒	MainWindow.Lighting.cs:252
+4ddb9494	80 ミリ秒	MainWindow.Lighting.cs:253
+82d5d569	100 ミリ秒	MainWindow.Lighting.cs:253
+64846588	150 ミリ秒	MainWindow.Lighting.cs:253
+18d8483c	200 ミリ秒	MainWindow.Lighting.cs:253
+6e3ebc87	ちかちか対策中（色が変わったときだけ送る）	MainWindow.Lighting.cs:275
+33747dd6	グラボ: 書き込みを最小限に（1 秒に最大 {0} 回）	MainWindow.Lighting.cs:276
+4295e02e	更新が遅いデバイス（1 秒に {0} 回{1}）	MainWindow.Lighting.cs:277
+47cc8c5f	・自動	MainWindow.Lighting.cs:277
+a6d44dde	このグラボは、色を書き込むたびに一瞬ちかちかすることがあります（OpenRGB 1.1 の書き込み方が原因と考えられますが、この機種では確認中です）。書き込みを最小限にするため、明るさは変えず、色がはっきり変わったときだけ（0.25 秒以上あけて）送り、同じ色の送り直しもしません。レインボー（流れる）は止まった虹に、呼吸は固定色になります（光る場所ごとに 1 色しか出せないため）。音楽連動で音が止まったときは、色を 20 秒ごとに切り替えます。気になる場合は光り方を「固定色」にしてください	MainWindow.Lighting.cs:325
+0488c9d7	グラボの LED は、OpenRGB が 1 個ずつ書き込むため、1 回の色替えに 20〜200 ミリ秒ほどかかります。書き込みが続くと、ちかちかしたり遅れたりするので、書き込みを最小限にしています: 	MainWindow.Lighting.cs:327
+cf0c037b	明るさは一定（色の切り替えでビートを見せる）、色がはっきり変わったときだけ送る（1 秒に最大 5 回）、温度モードは温度の段が変わったときだけ切り替える、	MainWindow.Lighting.cs:328
+fb923916	レインボー（流れる）・呼吸は止まった虹・固定色（「虹・呼吸も動かす」で変えられます）、同じ色の送り直しは 60 秒ごと。	MainWindow.Lighting.cs:329
+8ed6eae0	ほかのデバイスとタイミングがずれるときは「早めに光らせる」で合わせてください	MainWindow.Lighting.cs:330
+8444c4be	メモリなど、基板の内側の配線（I2C）でつながる LED は、1 回送るのに時間がかかるため、自動では 1 秒に 8 回までにしています（右の「1 秒に送る回数」で変えられます）。音楽連動の色の切り替えは定期便を待たずにすぐ送ります。同じ色の送り直しは 60 秒ごとです	MainWindow.Lighting.cs:331
+2a5ce6d5	自動（全体の設定）	MainWindow.Lighting.cs:494
+7a4362e3	（激しい点滅）	MainWindow.Lighting.cs:499
+2e7616aa	紫	MainWindow.Lighting.cs:709
+d624abb5	青	MainWindow.Lighting.cs:709
+1740eec3	水色	MainWindow.Lighting.cs:709
+5474bf7c	緑	MainWindow.Lighting.cs:709
+77065b38	オレンジ	MainWindow.Lighting.cs:710
+e02e2d73	赤	MainWindow.Lighting.cs:710
+e0684d2d	ピンク	MainWindow.Lighting.cs:710
+f88712a8	白	MainWindow.Lighting.cs:710
+f73d92df	消灯（LED を消す）	MainWindow.Lighting.cs:717
+faccb7c6	固定色（「色」で選んだ色にする）	MainWindow.Lighting.cs:718
+8261ae67	そのまま（最後の色で止まる）	MainWindow.Lighting.cs:719
+d24118e5	\n光に敏感な方は使わないでください。「激しい点滅を抑える」がオンのあいだは選べません	MainWindow.Lighting.cs:821
+fa397c65	⚠ 激しく点滅します	MainWindow.Lighting.cs:823
+5812e0db	「色と明るさ」で選んだ色だけで光ります。色は変わらず、音に合わせて明るさだけが変わります	MainWindow.Lighting.cs:836
+a3ff6ad5	「色と明るさ」で選んだ色と、その両隣の色で光ります	MainWindow.Lighting.cs:838
+a0c6bf54	{0}の色で光ります。ビートのたびに、この中の次の色へ切り替わります	MainWindow.Lighting.cs:839
+b4e8382b	自動（先読み）	MainWindow.Lighting.cs:846
+3084a002	曲のテンポをつかんだら、次のビートを先読みして遅れなく光らせます（おすすめ）	MainWindow.Lighting.cs:846
+90659e1d	キックだけ	MainWindow.Lighting.cs:847
+86ca4d12	先読みはせず、バスドラムが鳴ったときだけ光ります。テンポが変わる曲向け	MainWindow.Lighting.cs:847
+12e78249	テンポもビートも使わず、音の大きさだけで光ります	MainWindow.Lighting.cs:848
+80f08891	パレットの色で、ゆっくり色が移り変わります	MainWindow.Lighting.cs:858
+df788b17	「色」で選んだ色が、ゆっくり明るくなったり暗くなったりします	MainWindow.Lighting.cs:859
+680555ce	「色」で選んだ色で光り続けます	MainWindow.Lighting.cs:860
+3b1d43a4	音が止まったら LED を消します	MainWindow.Lighting.cs:861
+25525b81	{0}（{1}）	MainWindow.Lighting.cs:868
+bb1834e5	下の設定を自分で調整した状態です。ほかのプリセットを選ぶと、その組み合わせに戻ります	MainWindow.Lighting.cs:874
+1cf255e8	作業中や夜に。ゆったりと色が移り変わります	MainWindow.Lighting.cs:879
+9df36e7d	迷ったらこれ。低音に合わせて気持ちよく脈打ちます	MainWindow.Lighting.cs:880
+4beab2e2	ドラムのたびに光の輪が広がる、にぎやかな光り方です	MainWindow.Lighting.cs:881
+f6ac23cd	ビートごとに強く色が切り替わる、いちばん激しい光り方です	MainWindow.Lighting.cs:882
+b7e7d574	LED の並びに低音〜高音を並べて、音を目で見る光り方です	MainWindow.Lighting.cs:883
+7c3c3b30	映画やゲームの邪魔をしない、控えめで暖かい光り方です	MainWindow.Lighting.cs:884
+355fd781	{0}\n光り方: {1} ・ 強さ: {2} ・ 色: {3}	MainWindow.Lighting.cs:887
+67f5dc44	\n（「激しい点滅を抑える」をオフにすると、さらに激しく点滅します）	MainWindow.Lighting.cs:888
+e3c74af7	ゆったり穏やか。色は小節ごとにゆっくり変わります	MainWindow.Lighting.cs:898
+8265bcd4	ほどよい反応。色は 2 拍ごとに変わります	MainWindow.Lighting.cs:899
+39194da9	キビキビ反応。色は 1 拍ごとに変わります	MainWindow.Lighting.cs:900
+283c2191	最大の反応。色は 1 拍ごとに一瞬で変わり、小節の頭を強調します	MainWindow.Lighting.cs:901
+899bfdf5	{0}\n選ぶと: 反応の速さ {1:F0} ms ・ 滑らかさ {2:F0} ms ・ メリハリ {3:F0}% ・ いちばん暗いとき {4:F0}%	MainWindow.Lighting.cs:904
+1763988d	流れる速さ	MainWindow.Lighting.cs:1044
+782c7098	いまは半分のテンポ	MainWindow.Lighting.cs:1053
+3da3fc0d	いまは 2 倍のテンポ	MainWindow.Lighting.cs:1053
+587c7525	すべて初期値です（強さ「{0}」の値）	MainWindow.Lighting.cs:1146
+08d68b95	初期値から変えている値: 	MainWindow.Lighting.cs:1147
+57a4e475	反応のしかたの値を初期値に戻しました。右上の「元に戻す」で、戻す前の値にできます。	MainWindow.Lighting.cs:1162
+6d49db83	激しい点滅を許可しますか？\n\n強い光の点滅は、光に敏感な方の体調（光過敏性発作など）に影響することがあります。	MainWindow.Lighting.cs:1179
+91f616cf	気分が悪くなったら、すぐに「激しい点滅を抑える」をオンに戻してください。	MainWindow.Lighting.cs:1180
+165c4145	接続できました。{0} 個のデバイスが見つかりました。	MainWindow.Lighting.cs:1243
+3757a4b4	「OpenRGB と連携する」をオンにすると始まります	MainWindow.Lighting.cs:1243
+d7b2f046	接続できません: {0}\nOpenRGB を起動して「SDK Server」タブの「Start Server」を押してから、もう一度試してください。	MainWindow.Lighting.cs:1248
+23ecbb88	「OpenRGB と連携する」がオフです。オンにすると接続します	MainWindow.Lighting.cs:1258
+f8d56f66	オフ（「OpenRGB と連携する」をオンにすると、LED の色を変え始めます）	MainWindow.Lighting.cs:1282
+dabf7260	デバイスの一覧を読み込んでから選べます。上の「接続テスト」を押してください	MainWindow.Lighting.cs:1442
+70f103b7	少なくとも 1 つは選んでください（LED を消したいときは、上の「OpenRGB と連携する」をオフにします）	MainWindow.Lighting.cs:1469
+355efac9	いま見つからないデバイスの設定も残してあります（つなぎ直すと元どおりに使えます）: {0}	MainWindow.Lighting.cs:1517
+49610d95	音を出しているアプリを探しています…	MainWindow.Lighting.cs:1544
+937d0bba	　（音が出ています）	MainWindow.Lighting.cs:1570
+bd2b75f3	　（再生中）	MainWindow.Lighting.cs:1570
+e197ab2d	アプリが見つかりません。曲を再生してから、もう一度押してください	MainWindow.Lighting.cs:1581
+8dc805b8	同期テストは、「OpenRGB と連携する」がオンで、光り方が「音楽連動」のときに使えます。	MainWindow.Lighting.cs:1650
+1071825a	クリック音を鳴らせませんでした	MainWindow.Lighting.cs:1657
+9fb33dc5	0.6 秒ごとに「カチッ」と鳴り、LED が白く光ります。光が音より早ければ「+」、遅ければ「−」で、音と光がそろうところを探してください。	MainWindow.Lighting.cs:1663
+462dc044	もう一度押すか、この画面を離れると止まります。	MainWindow.Lighting.cs:1664
+8cd7762f	{0} が動いています。同じ LED を操作するので、色が勝手に戻る・ちらつく・ほかのデバイスとそろわない原因になります。	MainWindow.Lighting.cs:1737
+55b403e0	そのソフトの LED の制御（ライティング）を止めるか、終了してください（Lian Li の L-Connect は、ファンの回転だけ使う設定にできます）。	MainWindow.Lighting.cs:1738
+caf81aa5	OpenRGB の設定で「Shared SMBus Access」（SMBus をほかのソフトと共有する）がオフになっています。	MainWindow.Lighting.cs:1741
+7051883b	このアプリはメモリの温度を同じ配線（SMBus）で読むので、ぶつかって温度が読めなくなることがあります。	MainWindow.Lighting.cs:1742
+2810f408	OpenRGB の Settings で「Shared SMBus Access」をオンにして、OpenRGB を起動し直してください（または、設定 →「メモリの温度を読む」をオフに）。	MainWindow.Lighting.cs:1743
+0b102823	\n設定ファイル: {0}	MainWindow.Lighting.cs:1744
+7c87a784	 ・ 	MainWindow.Lighting.cs:1900
+cde5d20f	「OpenRGB と連携する」をオンにすると、音の取り込みが始まります	MainWindow.Lighting.cs:1912
+37b53bcd	{0}（{1} の音だけに反応）	MainWindow.Lighting.cs:1914
+8e13b3ed	\n聞いている出力先: {0}	MainWindow.Lighting.cs:1920
+67520391	+{0} ms にする	MainWindow.Lighting.cs:1930
+a33ee710	音の取り込みを準備しています…	MainWindow.Lighting.cs:1943
+aeb57d02	音楽連動で OpenRGB と連携しているときに表示します	MainWindow.Lighting.cs:1943
+6a7d3717	テンポ: 使わない	MainWindow.Lighting.cs:1951
+d9cb0d66	音の大きさだけで光っています	MainWindow.Lighting.cs:1952
+8d9ab8cc	キックに合わせて光っています	MainWindow.Lighting.cs:1958
+58c9b655	テンポをつかんでいます（確かさ {0:F0}%）	MainWindow.Lighting.cs:1959
+7ddda7d0	テンポ検出中…	MainWindow.Lighting.cs:1963
+12235fc4	候補 {0:F0} BPM（確かさ {1:F0}%）	MainWindow.Lighting.cs:1965
+f689911d	ビートがはっきりした曲なら、数秒でテンポをつかみます	MainWindow.Lighting.cs:1966
+64ff1784	音量 {0} ・ 基準 {1:F0} dBFS	MainWindow.Lighting.cs:1975
+87c8c605	● 音を検出しています	MainWindow.Lighting.cs:1976
+eafa50be	○ 無音（音が鳴ると反応します）	MainWindow.Lighting.cs:1976
 8117844a	CPU ・ {0}	MainWindow.Monitoring.cs:41
 2a0c461e	GPU ・ {0}	MainWindow.Monitoring.cs:68
 7df797d5	VRAM（ビデオメモリ）	MainWindow.Monitoring.cs:94
@@ -1378,26 +1383,26 @@ efd9152e	寿命 {0:F0}%	MainWindow.Monitoring.cs:151
 22024d48	収集中	MainWindow.Report.cs:40
 5afe281d	異常の前後 10 分の記録を保存しました: {0}	MainWindow.Report.cs:68
 61c7691d	記録を見る	MainWindow.Report.cs:68
-29d6a363	{0:N0} 円	MainWindow.Report.cs:178
-37d31a15	CPU・GPU はセンサーの値、それ以外は {0:F0} W として計算しています（単価 {1:0.##} 円/kWh）。アプリが動いている間だけ数えます。	MainWindow.Report.cs:183
-e03883da	CPU {0:F0} W ・ GPU {1:F0} W ・ その他 {2:F0} W	MainWindow.Report.cs:185
-83b6ebdd	{0:F2} kWh ・ {1:F1} 時間	MainWindow.Report.cs:193
-2f240cf7	{0:F1} kWh（記録のある日の平均から）	MainWindow.Report.cs:197
-b5d6b2e1	約 {0} ・ {1:F1} 時間	MainWindow.Report.cs:202
-8dec5fdd	約 {0}	MainWindow.Report.cs:204
-c4867bf2	{0:M/d（ddd）}  {1:F2} kWh ・ 約 {2} ・ {3:F1} 時間	MainWindow.Report.cs:212
-df95f0be	記録を読み込んで調べています…	MainWindow.Report.cs:230
-8223041f	 ・ 基準: {0:yyyy/MM/dd} の掃除以降	MainWindow.Report.cs:244
-c427ad3a	{0:HH:mm} に確認 ・ 記録 {1:F0} 日分{2}	MainWindow.Report.cs:245
-00cd1e3b	メンテナンスのお知らせ: {0} に変化があります。	MainWindow.Report.cs:253
-4c563244	診断を見る	MainWindow.Report.cs:255
-5ff17925	調べられませんでした: {0}	MainWindow.Report.cs:261
-aa4e55c3	ファンやフィルター・ラジエーターを掃除しましたか？\n\nこれ以降の記録を新しい基準にして比べます（判定できるまで 10 日ほどかかります）。	MainWindow.Report.cs:273
-d83f7d90	掃除した	MainWindow.Report.cs:274
-b5814c1a	開けませんでした: {0}	MainWindow.Report.cs:311
-5f439d96	消費電力（目安）	MainWindow.Report.cs:323
-039fa193	電力	MainWindow.Report.cs:324
-239f35c2	今日 {0:F2} kWh ・ 約 {1:N0} 円	MainWindow.Report.cs:331
+29d6a363	{0:N0} 円	MainWindow.Report.cs:177
+37d31a15	CPU・GPU はセンサーの値、それ以外は {0:F0} W として計算しています（単価 {1:0.##} 円/kWh）。アプリが動いている間だけ数えます。	MainWindow.Report.cs:182
+e03883da	CPU {0:F0} W ・ GPU {1:F0} W ・ その他 {2:F0} W	MainWindow.Report.cs:184
+83b6ebdd	{0:F2} kWh ・ {1:F1} 時間	MainWindow.Report.cs:192
+2f240cf7	{0:F1} kWh（記録のある日の平均から）	MainWindow.Report.cs:196
+b5d6b2e1	約 {0} ・ {1:F1} 時間	MainWindow.Report.cs:201
+8dec5fdd	約 {0}	MainWindow.Report.cs:203
+c4867bf2	{0:M/d（ddd）}  {1:F2} kWh ・ 約 {2} ・ {3:F1} 時間	MainWindow.Report.cs:211
+df95f0be	記録を読み込んで調べています…	MainWindow.Report.cs:229
+8223041f	 ・ 基準: {0:yyyy/MM/dd} の掃除以降	MainWindow.Report.cs:243
+c427ad3a	{0:HH:mm} に確認 ・ 記録 {1:F0} 日分{2}	MainWindow.Report.cs:244
+00cd1e3b	メンテナンスのお知らせ: {0} に変化があります。	MainWindow.Report.cs:252
+4c563244	診断を見る	MainWindow.Report.cs:254
+5ff17925	調べられませんでした: {0}	MainWindow.Report.cs:260
+aa4e55c3	ファンやフィルター・ラジエーターを掃除しましたか？\n\nこれ以降の記録を新しい基準にして比べます（判定できるまで 10 日ほどかかります）。	MainWindow.Report.cs:272
+d83f7d90	掃除した	MainWindow.Report.cs:273
+b5814c1a	開けませんでした: {0}	MainWindow.Report.cs:310
+5f439d96	消費電力（目安）	MainWindow.Report.cs:322
+039fa193	電力	MainWindow.Report.cs:323
+239f35c2	今日 {0:F2} kWh ・ 約 {1:N0} 円	MainWindow.Report.cs:330
 b46fd1a2	現在「{0}」が起動中のため「{1}」を使っています	MainWindow.Settings.cs:38
 7cc5282f	新しいプロファイル	MainWindow.Settings.cs:72
 ca0a2914	{0} のコピー	MainWindow.Settings.cs:77
@@ -1422,21 +1427,21 @@ abe0a99c	アプリ名とプロファイルを指定してください。	MainWin
 ef7d18bc	Windows に合わせる	MainWindow.Settings.cs:396
 639ba182	ダーク	MainWindow.Settings.cs:397
 37141fb8	ライト	MainWindow.Settings.cs:398
-8f4f452a	既定（英数字 Montserrat・日本語 ProFan Maru）	MainWindow.Settings.cs:413
-25ae07d9	ProFan Maru（同梱の丸ゴシック）	MainWindow.Settings.cs:414
-75788b92	自動（Windows の表示言語）	MainWindow.Settings.cs:417
-1755da21	やや控えめ	MainWindow.Settings.cs:452
-79a677b2	やや濃い	MainWindow.Settings.cs:452
-4bf63202	濃い	MainWindow.Settings.cs:452
-26559a27	灰色	MainWindow.Settings.cs:457
-77d49f1b	色相 {0}°	MainWindow.Settings.cs:457
-c96a6fad	{0}・{1}	MainWindow.Settings.cs:461
-3e7b80f4	白に近い	MainWindow.Settings.cs:471
-33e39538	淡い	MainWindow.Settings.cs:471
-ec6cb7af	黒に近い	MainWindow.Settings.cs:472
-c53be0dd	表示言語を変えました。アプリを起動し直すと切り替わります。\n今すぐ起動し直しますか？（ファンは、起動し直すあいだ BIOS の制御になります）	MainWindow.Settings.cs:514
-3036c063	この PC のネットワークアドレスが見つかりません	MainWindow.Settings.cs:633
-f028972c	Web サーバーを開始できませんでした。ポート番号を変えて試してください（ログに詳細があります）	MainWindow.Settings.cs:634
+8f4f452a	既定（英数字 Montserrat・日本語 ProFan Maru）	MainWindow.Settings.cs:414
+25ae07d9	ProFan Maru（同梱の丸ゴシック）	MainWindow.Settings.cs:415
+75788b92	自動（Windows の表示言語）	MainWindow.Settings.cs:418
+1755da21	やや控えめ	MainWindow.Settings.cs:453
+79a677b2	やや濃い	MainWindow.Settings.cs:453
+4bf63202	濃い	MainWindow.Settings.cs:453
+26559a27	灰色	MainWindow.Settings.cs:458
+77d49f1b	色相 {0}°	MainWindow.Settings.cs:458
+c96a6fad	{0}・{1}	MainWindow.Settings.cs:462
+3e7b80f4	白に近い	MainWindow.Settings.cs:472
+33e39538	淡い	MainWindow.Settings.cs:472
+ec6cb7af	黒に近い	MainWindow.Settings.cs:473
+82fa072a	終わってから、表示言語を選び直してください。	MainWindow.Settings.cs:516
+3036c063	この PC のネットワークアドレスが見つかりません	MainWindow.Settings.cs:640
+f028972c	Web サーバーを開始できませんでした。ポート番号を変えて試してください（ログに詳細があります）	MainWindow.Settings.cs:641
 26d33196	PawnIO（ファン制御用のドライバー）が見つかりません。このままでは温度の表示だけで、ファンは制御できません。	MainWindow.Setup.cs:23
 233ed082	設定の「安全・バックアップ」から、ボタン 1 つでインストールできます。	MainWindow.Setup.cs:24
 5d6faa41	インストールの画面を開く	MainWindow.Setup.cs:25
@@ -1467,32 +1472,32 @@ e8547f63	現在 {0:F0}°C ／ 最高 {1:F0}°C	MainWindow.Tools.cs:285
 8c1ed861	冷却テストのレポートを保存	MainWindow.Tools.cs:323
 73ba74aa	テキスト (*.txt)|*.txt	MainWindow.Tools.cs:324
 dab5f292	直近の冷却テストの結果を評価して、ファン設定の改善案を教えてください。	MainWindow.Tools.cs:334
-6451d704	ハードウェアアクセス: LibreHardwareMonitor + PawnIO\n	MainWindow.xaml.cs:89
-6c7b6a5b	設定ファイル: {0}	MainWindow.xaml.cs:90
-1ffe58b3	温度が上限に達しています	MainWindow.xaml.cs:388
-4eed19a9	ブースト中	MainWindow.xaml.cs:390
-8052eef4	ポンプ以外を 100% で回しています	MainWindow.xaml.cs:390
-732c5446	BIOS 制御（ポンプ監視は継続）	MainWindow.xaml.cs:392
-9903c467	計算だけで、ファンには書き込んでいません（ポンプ保護は働きます）。下のボタンで制御を始めます	MainWindow.xaml.cs:394
-138d15fc	制御中（要確認）	MainWindow.xaml.cs:396
-9a955596	見つからないセンサーがあります（部品の交換など）	MainWindow.xaml.cs:396
-cde39c73	値が固まっているセンサーがあります	MainWindow.xaml.cs:398
-c347c56a	{0} 個を制御中	MainWindow.xaml.cs:400
-cbfa5900	制御を開始する（DRY RUN を解除）	MainWindow.xaml.cs:403
-559e78f2	制御を再開する	MainWindow.xaml.cs:404
-f1198e29	警告	MainWindow.xaml.cs:424
-b47a04b8	お知らせ	MainWindow.xaml.cs:426
-d3ec144f	仮想（{0}）	MainWindow.xaml.cs:455
-f45a5a37	検出したハードウェアの一覧です。画像のボタンから、自分で撮った写真などに差し替えられます	MainWindow.xaml.cs:493
-31e94c42	ファンごとに温度と回転数の関係を設定します。変更はすぐに反映・保存されます	MainWindow.xaml.cs:494
-b5ccd0c3	記録からの自動診断と、ファンのホコリ・劣化のチェック（AI のアドバイスはオプション）	MainWindow.xaml.cs:495
-2efbce3f	負荷をかけて、カーブを自動で作ったり、今の設定でどこまで冷えるかを測ったりします	MainWindow.xaml.cs:496
-73339fb8	最大 24 時間分の温度と回転数（アプリを閉じていた間を除く。再起動前の分は 1 分ごとの平均）	MainWindow.xaml.cs:497
-389ce2cc	電気代の目安・異常の記録	MainWindow.xaml.cs:498
-4bd55735	OpenRGB 連携で、PC の LED を温度・レインボー・音楽などに合わせて光らせます	MainWindow.xaml.cs:499
-acea69f7	このPCで検出されたすべての温度・回転数・制御チャネルと、仮想センサー	MainWindow.xaml.cs:500
-7626e5f7	プロファイル・自動切り替え・起動方法・制御全体の動作	MainWindow.xaml.cs:501
-d3bf5d86	DRY RUN を解除しました。ファンの制御を始めています。	MainWindow.xaml.cs:538
+6451d704	ハードウェアアクセス: LibreHardwareMonitor + PawnIO\n	MainWindow.xaml.cs:99
+6c7b6a5b	設定ファイル: {0}	MainWindow.xaml.cs:100
+1ffe58b3	温度が上限に達しています	MainWindow.xaml.cs:403
+4eed19a9	ブースト中	MainWindow.xaml.cs:405
+8052eef4	ポンプ以外を 100% で回しています	MainWindow.xaml.cs:405
+732c5446	BIOS 制御（ポンプ監視は継続）	MainWindow.xaml.cs:407
+9903c467	計算だけで、ファンには書き込んでいません（ポンプ保護は働きます）。下のボタンで制御を始めます	MainWindow.xaml.cs:409
+138d15fc	制御中（要確認）	MainWindow.xaml.cs:411
+9a955596	見つからないセンサーがあります（部品の交換など）	MainWindow.xaml.cs:411
+cde39c73	値が固まっているセンサーがあります	MainWindow.xaml.cs:413
+c347c56a	{0} 個を制御中	MainWindow.xaml.cs:415
+cbfa5900	制御を開始する（DRY RUN を解除）	MainWindow.xaml.cs:418
+559e78f2	制御を再開する	MainWindow.xaml.cs:419
+f1198e29	警告	MainWindow.xaml.cs:439
+b47a04b8	お知らせ	MainWindow.xaml.cs:441
+d3ec144f	仮想（{0}）	MainWindow.xaml.cs:470
+f45a5a37	検出したハードウェアの一覧です。画像のボタンから、自分で撮った写真などに差し替えられます	MainWindow.xaml.cs:508
+31e94c42	ファンごとに温度と回転数の関係を設定します。変更はすぐに反映・保存されます	MainWindow.xaml.cs:509
+b5ccd0c3	記録からの自動診断と、ファンのホコリ・劣化のチェック（AI のアドバイスはオプション）	MainWindow.xaml.cs:510
+2efbce3f	負荷をかけて、カーブを自動で作ったり、今の設定でどこまで冷えるかを測ったりします	MainWindow.xaml.cs:511
+73339fb8	最大 24 時間分の温度と回転数（アプリを閉じていた間を除く。再起動前の分は 1 分ごとの平均）	MainWindow.xaml.cs:512
+389ce2cc	電気代の目安・異常の記録	MainWindow.xaml.cs:513
+4bd55735	OpenRGB 連携で、PC の LED を温度・レインボー・音楽などに合わせて光らせます	MainWindow.xaml.cs:514
+acea69f7	このPCで検出されたすべての温度・回転数・制御チャネルと、仮想センサー	MainWindow.xaml.cs:515
+7626e5f7	プロファイル・自動切り替え・起動方法・制御全体の動作	MainWindow.xaml.cs:516
+d3bf5d86	DRY RUN を解除しました。ファンの制御を始めています。	MainWindow.xaml.cs:553
 7f6b69df	ProFanController 見張り	Program.cs:31
 0788f8eb	背面	UI/Controls/CasePreview.cs:59
 c85ab318	前	UI/Controls/CasePreview.cs:60
@@ -1536,24 +1541,24 @@ fe5a2b13	固定 70% で制御	UI/SetupWizard.xaml.cs:165
 0c1d2ab2	BIOS 制御のまま監視	UI/SetupWizard.xaml.cs:165
 d6d4423a	・{0}（ファン）: {1} に連動	UI/SetupWizard.xaml.cs:166
 9833252d	作成するプロファイル: {0} ／ {1} ／ {2}\n普段使うプロファイル: {3}\n\n	UI/SetupWizard.xaml.cs:167
-0c5502cd	ProFanController を開く	UI/TrayIcon.cs:46
-9a801bfe	ブースト（全開）15 分	UI/TrayIcon.cs:52
-46dbb6b6	静音 30 分	UI/TrayIcon.cs:53
-670ac712	静音 2 時間	UI/TrayIcon.cs:53
-f64f01ee	LED の光り方	UI/TrayIcon.cs:62
-bc541527	LED 連携	UI/TrayIcon.cs:70
-555e63bb	消灯（制御は続ける）	UI/TrayIcon.cs:73
-16b197c1	LED をすべて消します。連携は続けるので、機器が自分の光り方に戻りません	UI/TrayIcon.cs:75
-08f31115	音楽連動の光り方	UI/TrayIcon.cs:81
-a673c69a	ミニウィジェットを表示	UI/TrayIcon.cs:92
-df9fa4f9	終了（BIOS 制御に戻す）	UI/TrayIcon.cs:97
-bb5165cb	LED 連携をオフにする	UI/TrayIcon.cs:152
-5d04ed25	LED 連携をオンにする	UI/TrayIcon.cs:152
-9803ac5d	LED の光り方: オフ	UI/TrayIcon.cs:155
-633b3564	LED の光り方: 消灯中	UI/TrayIcon.cs:155
-79fe6abe	LED の光り方: {0}	UI/TrayIcon.cs:155
-88443ff4	激しく点滅します。ライティング画面で「激しい点滅を抑える」をオフにすると選べます	UI/TrayIcon.cs:167
-d6903426	プロファイル: {0}	UI/TrayIcon.cs:192
+0c5502cd	ProFanController を開く	UI/TrayIcon.cs:82
+9a801bfe	ブースト（全開）15 分	UI/TrayIcon.cs:88
+46dbb6b6	静音 30 分	UI/TrayIcon.cs:89
+670ac712	静音 2 時間	UI/TrayIcon.cs:89
+f64f01ee	LED の光り方	UI/TrayIcon.cs:98
+bc541527	LED 連携	UI/TrayIcon.cs:106
+555e63bb	消灯（制御は続ける）	UI/TrayIcon.cs:109
+16b197c1	LED をすべて消します。連携は続けるので、機器が自分の光り方に戻りません	UI/TrayIcon.cs:111
+08f31115	音楽連動の光り方	UI/TrayIcon.cs:117
+a673c69a	ミニウィジェットを表示	UI/TrayIcon.cs:128
+df9fa4f9	終了（BIOS 制御に戻す）	UI/TrayIcon.cs:133
+bb5165cb	LED 連携をオフにする	UI/TrayIcon.cs:177
+5d04ed25	LED 連携をオンにする	UI/TrayIcon.cs:177
+9803ac5d	LED の光り方: オフ	UI/TrayIcon.cs:180
+633b3564	LED の光り方: 消灯中	UI/TrayIcon.cs:180
+79fe6abe	LED の光り方: {0}	UI/TrayIcon.cs:180
+88443ff4	激しく点滅します。ライティング画面で「激しい点滅を抑える」をオフにすると選べます	UI/TrayIcon.cs:192
+d6903426	プロファイル: {0}	UI/TrayIcon.cs:217
 9dc4a781	アプリのフォルダーの中の{0}を、アプリが終了したあとに消します。	UI/UninstallDialog.xaml.cs:39
 e0cb734a	アプリ本体（exe など）と、ほかのファイルは残します。もう一度使うかもしれないときは、オフのままにしてください。	UI/UninstallDialog.xaml.cs:40
 d8539cf0	PawnIO はこの PC にインストールされていません（何もしません）。	UI/UninstallDialog.xaml.cs:45

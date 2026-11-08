@@ -382,9 +382,7 @@ aefcd37e	Saat mulai otomatis selalu mulai di baki sistem. Menutup jendela dengan
 e162bf76	Tampilkan widget mini
 1b093ce9	Menampilkan suhu dan putaran selalu di atas. Seret untuk memindah; klik kanan untuk mengubah transparansi
 1483f6b3	Tampilan
-07df2653	Ubah bahasa tampilan, tema, warna aksen, warna latar, warna teks, font, dan ukuran teks. Perubahan langsung berlaku (bahasa tampilan berganti setelah aplikasi dimulai ulang)
 b8eab0de	Bahasa · Language
-4aaa8fe4	Bahasa teks di layar. "Otomatis" mengikuti bahasa tampilan Windows (Inggris jika tidak didukung). Setelah mengubahnya, mulai ulang aplikasi
 9bb17d53	Tema
 ae52556f	"Ikuti Windows" mengikuti gelap/terang di Pengaturan Windows (Personalisasi → Warna → mode aplikasi)
 aab63522	Warna aksen
@@ -1426,7 +1424,6 @@ c96a6fad	{0} · {1}
 3e7b80f4	Hampir putih
 33e39538	Pucat
 ec6cb7af	Hampir hitam
-c53be0dd	Bahasa tampilan diubah. Berlaku setelah aplikasi dijalankan ulang.\nJalankan ulang sekarang? (Selama dijalankan ulang, kipas dikendalikan BIOS)
 3036c063	Alamat jaringan PC ini tidak ditemukan
 f028972c	Server web tidak bisa dimulai. Coba nomor port lain (detail ada di log)
 26d33196	PawnIO (driver kendali kipas) tidak ditemukan. Dalam keadaan ini, hanya suhu yang ditampilkan dan kipas tidak bisa dikendalikan.
@@ -1598,3 +1595,11 @@ f951f047	Level
 a4ae5bfd	Keluaran virtual
 d2937a7a	Perangkat lunak audio: {0} (cahaya mengikuti suara sebelum efek diterapkan; jika terasa tidak pas, sesuaikan dengan "Uji sinkron")
 db4d82a2	Desktop Jarak Jauh
+d6776d41	Ubah bahasa tampilan, tema, warna aksen, warna latar, warna teks, font, dan ukuran teks. Perubahan langsung berlaku
+e0480009	Bahasa teks di layar. "Otomatis" mengikuti bahasa tampilan Windows (Inggris jika tidak didukung). Langsung berganti begitu dipilih
+e45b0531	Penyetelan otomatis sedang berjalan.
+e955d878	Uji pendinginan sedang berjalan.
+afb9660d	Kalibrasi sedang berjalan.
+c8e0f349	Pemeriksaan suara kipas sedang berjalan.
+69ade00e	Penyiapan sedang berjalan.
+82fa072a	Pilih lagi bahasa tampilan setelah selesai.

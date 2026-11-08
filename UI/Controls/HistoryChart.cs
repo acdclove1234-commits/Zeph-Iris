@@ -30,7 +30,7 @@ public sealed class HistoryChart : FrameworkElement
     private static Pen CursorPen => ThemePalette.Cached("history.cursor", c => new Pen(new SolidColorBrush(ThemeManager.WithAlpha(c.Text, 0x88)), 1));
     private static Brush TipBg => ThemePalette.TipBg;
     private static Brush TextBrush => ThemePalette.Text;
-    private static readonly FontFamily UiFont = UiFonts.Family;
+    private static FontFamily UiFont => UiFonts.Family;
 
     private double? _mouseX;
 
