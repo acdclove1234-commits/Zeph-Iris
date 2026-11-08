@@ -68,6 +68,55 @@ public sealed class OnsetDetector
         /// </summary>
         internal static int HoldHops = 1;
     }
+    /// <summary>光らせる出来事の大きさの見分け方（テストから変えられるようにしてある。アプリの中では変えない）</summary>
+    internal static class EventTune
+    {
+        /// <summary>
+        /// ハイハット・スネア・立ち上がりの出来事にする、立ち上がりの大きさの下限（「反応の感度」1.0 のとき）。
+        /// 大きさ = その帯の立ち上がり（log の差の合計） ÷ いちばん大きい帯の直近 3 秒の平均。
+        /// 帯ごとの平均で割った強さだけで決めると、ほかの音がない帯（低音の大きい曲の高音など）では
+        /// 小さな音も大きな音と同じように光っていた。合成音で測ると、ふつうのハイハット 約 5・6 dB 小さい 約 3.6・
+        /// 14 dB 小さい 約 1.3〜1.8・20 dB 小さい 0.7〜0.9・スネア 8〜16。1.5 で、20 dB 小さい音はまったく・14 dB 小さい音も
+        /// ほとんど光らず、ふつうのハイハット・スネアは今までどおり見つかる（FaintSoundTests）。
+        /// 「反応の感度」を上げると下限が下がる（キックとテンポの追跡には使わない）
+        /// </summary>
+        internal static double MinSize = 1.5;
+        /// <summary>
+        /// ハイハット・立ち上がりを見つけてから、大きさを決めるまでに待つ回数（1 回 ≈ 11 ミリ秒）。
+        /// 見つけた回は立ち上がりの途中なので、その回だけでは大きな音も小さく見える
+        /// </summary>
+        internal static int HoldHops = 1;
+    }
+
+    /// <summary>見つけたハイハット・立ち上がりを、大きさが分かるまで少し待ってから出来事にする</summary>
+    private sealed class PendingEvent
+    {
+        private long _hop = -1;
+        private double _t;
+        private float _strength;
+        private double _size;
+
+        public void Clear() => _hop = -1;
+
+        public void Step(bool fired, long hop, double t, float strength, double size, double minSize, AudioEventKind kind, EventRing events)
+        {
+            if (fired && _hop < 0)
+            {
+                _hop = hop;
+                _t = t;
+                _strength = strength;
+                _size = 0;
+            }
+            if (_hop < 0) return;
+            if (size > _size) _size = size;
+            if (hop < _hop + EventTune.HoldHops) return;
+            if (_size >= minSize) events.Add(kind, _t, _strength);
+            _hop = -1;
+        }
+    }
+
+    private readonly PendingEvent _hatPend = new(), _onsetPend = new();
+
     /// <summary>キックと同時（± この秒数）ならスネアにしない</summary>
     private const double SnareKickWindowSec = 0.020;
     /// <summary>
@@ -96,6 +145,9 @@ public sealed class OnsetDetector
     private readonly double[] _band = new double[4];
     private readonly WarmEma[] _mean = new WarmEma[4];
     private readonly double _aMean;
+
+    /// <summary>調査用: 帯 g の直近 3 秒の平均（立ち上がりの強さ）</summary>
+    internal double BandMean(int g) => _mean[g].V;
     private readonly PeakPicker[] _pickers = new PeakPicker[4];
     private readonly PeakPicker _combined;
     private readonly int _snareWindow;
@@ -103,6 +155,8 @@ public sealed class OnsetDetector
     private long _lastHatHop = long.MinValue / 4;
     private long _snareHop = -1;
     private bool _snareG1;
+    /// <summary>決めるまでの間に、中音の立ち上がりが小さすぎない大きさになったか（EventTune.MinSize）</summary>
+    private bool _snareBig;
     private double _snareT;
     private float _snareS;
     private double _snareMid, _snareHi;
@@ -238,6 +292,8 @@ public sealed class OnsetDetector
         _lastKickHop = long.MinValue / 4;
         _lastHatHop = long.MinValue / 4;
         _snareHop = -1;
+        _hatPend.Clear();
+        _onsetPend.Clear();
         Odf = Low = StrongestStrength = KickStrength = 0;
         KickFired = LowFired = false;
     }
@@ -315,6 +371,16 @@ public sealed class OnsetDetector
             else _pickers[0].Cancel();
         }
 
+        // 小さすぎる音は出来事にしない（EventTune.MinSize）。キック・テンポの追跡に使う値はそのまま。
+        // 大きさ = 帯の立ち上がり ÷ いちばん大きい帯の直近の平均
+        double loudest = MeanFloor;
+        for (int g = 0; g < 4; g++)
+            if (_mean[g].V > loudest) loudest = _mean[g].V;
+        double minSize = EventTune.MinSize / Math.Max(0.1, s.BeatSensitivity);
+        double hatSize = _band[3] / loudest;
+        double snareSize = Math.Max(_band[1], _band[2]) / loudest;
+        double anySize = Math.Max(Math.Max(_band[0], _band[1]), Math.Max(_band[2], _band[3])) / loudest;
+
         bool emit = activity >= MinActivity && events is not null;
         KickFired = isKick && emit;
         LowFired = (isKick || g1) && emit;
@@ -331,11 +397,14 @@ public sealed class OnsetDetector
         if (!emit)
         {
             _snareHop = -1;
+            _hatPend.Clear();
+            _onsetPend.Clear();
             return;
         }
         if (isKick) events!.Add(AudioEventKind.Kick, tKick, (float)_pickers[0].Strength);
-        if (hat) events!.Add(AudioEventKind.Hat, tTrue, (float)_pickers[3].Strength);
-        if (onset) events!.Add(AudioEventKind.Onset, tTrue, (float)_combined.Strength);
+        // ハイハット・立ち上がり: 検出した回は立ち上がりの途中なので、EventTune.HoldHops 回のうちのいちばん大きい立ち上がりで決める
+        _hatPend.Step(hat, hop, tTrue, (float)_pickers[3].Strength, hatSize, minSize, AudioEventKind.Hat, events!);
+        _onsetPend.Step(onset, hop, tTrue, (float)_combined.Strength, anySize, minSize, AudioEventKind.Onset, events!);
 
         // 5. スネア: 中音の帯で検出し、直前 20 ミリ秒（約 2 回）にキックがなければスネアとする。
         //    1 コマだけ待って決める（キックはほとんどその時までに見つかっている。待つほど光が遅れる。SnareTune.HoldHops）。
@@ -353,6 +422,7 @@ public sealed class OnsetDetector
                 _snareT = tTrue;
                 _snareS = (float)snareS;
                 _snareG1 = false;
+                _snareBig = false;
                 _snareMid = _snareHi = 0;
                 _snareKickBandFirst = _bandNorm[0];
                 _snareHatFirst = hat;
@@ -366,6 +436,7 @@ public sealed class OnsetDetector
             // 決めるまでの間の、中音とハイハットの帯のいちばん強い立ち上がり（ハイハットの漏れか、スネアの響き線かを見分ける）
             _snareMid = Math.Max(_snareMid, _bandNorm[2]);
             _snareHi = Math.Max(_snareHi, _bandNorm[3]);
+            if (snareSize >= minSize) _snareBig = true;
         }
         if (_snareHop >= 0 && hop >= _snareHop + Math.Min(SnareTune.HoldHops, _snareWindow))
         {
@@ -379,7 +450,7 @@ public sealed class OnsetDetector
             if (SnareTune.HiMin > 0 && !_snareG1 && _snareHi < SnareTune.HiMin) hatOnly = true;
             DiagSnare?.Invoke(_snareT, _snareS, _snareG1, kickNear, hatOnly);
             DiagSnareFirst?.Invoke(_snareT, _snareKickBandFirst, _snareHatFirst, _snareG1First, kickNear, hatOnly, _lastKickHop - _snareHop);
-            if (!kickNear && !hatOnly) events!.Add(AudioEventKind.Snare, _snareT, _snareS);
+            if (!kickNear && !hatOnly && _snareBig) events!.Add(AudioEventKind.Snare, _snareT, _snareS);
             _snareHop = -1;
         }
     }
