@@ -35,9 +35,10 @@ public static class InstallCheck
         new("FanControl", "FanControl", Exact: true),
         new("SpeedFan", "SpeedFan", Exact: true),
         new("ArgusMonitor", "Argus Monitor"),
-        // 6.6.1 までの名前のこのアプリ。新しい版と一緒に動くと、同じファンを 2 つのアプリが制御してしまう
-        new(AppIdentity.LegacyName, L("ProFanController（前の版）"), Exact: true),
-    });
+    }
+    // 前の名前のこのアプリ（Fanlume・ProFanController）。新しい版と一緒に動くと、同じファンを 2 つのアプリが制御してしまう
+    .Concat(AppIdentity.LegacyApps.Select(a => new ConflictingApp(a.Name, L($"{a.Name}（前の版）"), Exact: true)))
+    .ToArray());
 
     /// <summary>プロセス名の一覧から、取り合いになるソフトを探す（同じソフトは 1 回だけ。このアプリ自身は除く）</summary>
     public static List<string> FindConflicts(IEnumerable<string> processNames)
@@ -95,7 +96,7 @@ public static class InstallCheck
 
     /// <summary>
     /// 移すときのおすすめの場所（ダウンロードなどから起動したときは、ここへ自動で入れる）。
-    /// インストーラーが入れる場所（C:\Program Files\Fanlume）と同じにして、置き場所が 1 つにまとまるようにする
+    /// インストーラーが入れる場所（C:\Program Files\Zeph-Iris）と同じにして、置き場所が 1 つにまとまるようにする
     /// </summary>
     public static string RecommendedFolder { get; } = Path.Combine(
         Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles) is { Length: > 0 } pf ? pf : @"C:\Program Files", AppIdentity.Name);
@@ -126,7 +127,7 @@ public static class InstallCheck
         BackUpConfig(to, "before-move");
         CopyApp(from, to);
         CopyData(from, to);
-        if (!File.Exists(exe)) throw new IOException(L("Fanlume.exe を写せませんでした"));
+        if (!File.Exists(exe)) throw new IOException(L("Zeph-Iris.exe を写せませんでした"));
         return exe;
     }
 
@@ -158,7 +159,7 @@ public static class InstallCheck
             BackUpConfig(to, "before-install");
             CopyData(from, to);
         }
-        if (!File.Exists(exe)) throw new IOException(L("Fanlume.exe を写せませんでした"));
+        if (!File.Exists(exe)) throw new IOException(L("Zeph-Iris.exe を写せませんでした"));
         return new InstallResult(exe, copyApp, moveSettings);
     }
 

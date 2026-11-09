@@ -101,7 +101,7 @@ public sealed class CoolingTestReport
     public string ToText()
     {
         var sb = new StringBuilder();
-        sb.AppendLine(L($"Fanlume 冷却テスト  {StartedAt:yyyy/MM/dd HH:mm}"));
+        sb.AppendLine(L($"Zeph-Iris 冷却テスト  {StartedAt:yyyy/MM/dd HH:mm}"));
         sb.AppendLine(L($"プロファイル: {Profile} ／ 負荷時間: {LoadDuration.TotalMinutes:F0} 分（CPU 全コア）"));
         if (AbortReason is not null) sb.AppendLine($"※ {AbortReason}");
         sb.AppendLine();

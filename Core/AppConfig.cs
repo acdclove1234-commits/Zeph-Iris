@@ -762,7 +762,7 @@ public sealed class NotifyConfig : ObservableObject
     /// <summary>温度が下がった・ポンプが回復した、などの「回復」も通知する</summary>
     public bool IncludeRecovery { get => _includeRecovery; set => Set(ref _includeRecovery, value); }
 
-    public static string NewTopic() => "fanlume-" + Convert.ToHexString(System.Security.Cryptography.RandomNumberGenerator.GetBytes(6)).ToLowerInvariant();
+    public static string NewTopic() => "zephiris-" + Convert.ToHexString(System.Security.Cryptography.RandomNumberGenerator.GetBytes(6)).ToLowerInvariant();
 }
 
 /// <summary>消費電力量と電気代の計算</summary>

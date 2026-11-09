@@ -36,7 +36,7 @@ public partial class App
         if (cfg.LastRunVersion is { Length: > 0 } before && before != now)
         {
             Logger.Info($"更新されました: {before} → {now}");
-            _window?.ShowAlert(L($"Fanlume を {before} から {now} に更新しました。"), AlertLevel.Info);
+            _window?.ShowAlert(L($"Zeph-Iris を {before} から {now} に更新しました。"), AlertLevel.Info);
             _tray?.ShowBalloon(AppIdentity.Name, L($"{now} に更新しました。"), AlertLevel.Info);
             // 新しい版で困ったときに戻せるよう、前の版を覚えておく
             cfg.PreviousVersion = before;
@@ -113,7 +113,7 @@ public partial class App
             if (AvailableUpdate is { } u && !userAsked && cfg.NotifiedVersion != u.Tag)
             {
                 cfg.NotifiedVersion = u.Tag;
-                _window?.ShowAlert(L($"新しい版 Fanlume {u.Version.ToString(3)} があります。「更新する」を押すと、ダウンロードして入れ替えます（そのあいだ十数秒、ファンは BIOS の設定で回ります）。"),
+                _window?.ShowAlert(L($"新しい版 Zeph-Iris {u.Version.ToString(3)} があります。「更新する」を押すと、ダウンロードして入れ替えます（そのあいだ十数秒、ファンは BIOS の設定で回ります）。"),
                     AlertLevel.Info, L("更新する"), () => _window?.BeginUpdate());
                 _tray?.ShowBalloon(AppIdentity.Name, L($"新しい版 {u.Version.ToString(3)} があります。"), AlertLevel.Info);
             }

@@ -75,7 +75,7 @@ public sealed class FanEngine : IDisposable
     public const double GpuGuardCoreTemp = 85.0;
     public const double GpuGuardHotspotTemp = 100.0;
     /// <summary>見張りプロセスに「生きている」ことを知らせる名前付きイベント</summary>
-    public const string HeartbeatName = @"Global\Fanlume.Heartbeat";
+    public const string HeartbeatName = @"Global\Zeph-Iris.Heartbeat";
 
     /// <summary>Calibrator・SensorGuard には「経過時間だけが意味を持つ時刻」を渡す（時計合わせで時刻が飛んでも狂わないように）</summary>
     private static readonly DateTime MonoEpoch = new(2000, 1, 1);

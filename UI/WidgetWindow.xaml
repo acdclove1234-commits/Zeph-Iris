@@ -6,7 +6,7 @@
 <Window x:Class="ProFanController.UI.WidgetWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Fanlume Widget" WindowStyle="None" AllowsTransparency="True" Background="Transparent"
+        Title="Zeph-Iris Widget" WindowStyle="None" AllowsTransparency="True" Background="Transparent"
         Topmost="True" ShowInTaskbar="False" ResizeMode="NoResize" SizeToContent="WidthAndHeight"
         FontFamily="{DynamicResource UiFont}" Foreground="{DynamicResource TextBrush}"
         TextOptions.TextFormattingMode="Ideal" TextOptions.TextRenderingMode="ClearType" FontWeight="Medium"
@@ -31,7 +31,7 @@
             <DockPanel Margin="0,0,0,8">
                 <TextBlock x:Name="ProfileText" DockPanel.Dock="Right" FontSize="11" Foreground="{DynamicResource SubTextBrush}"
                            VerticalAlignment="Center" Margin="12,0,0,0"/>
-                <TextBlock Text="Fanlume" FontWeight="Bold" FontSize="13" Foreground="{DynamicResource SubTextBrush}"/>
+                <TextBlock Text="Zeph-Iris" FontWeight="Bold" FontSize="13" Foreground="{DynamicResource SubTextBrush}"/>
             </DockPanel>
             <ItemsControl x:Name="TempList">
                 <ItemsControl.ItemTemplate>

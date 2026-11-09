@@ -1,16 +1,16 @@
 ﻿# ==================================================
-# make-dist.ps1 - 配布用のインストーラー（Fanlume-<版>-setup.exe）を作る
+# make-dist.ps1 - 配布用のインストーラー（Zeph-Iris-<版>-setup.exe）を作る
 #   名前は英数字だけにする（GitHub のリリースは、ファイル名の日本語を「.」に置き換えるため）
 #   1. .NET ランタイムごと exe 1 つに発行する（Portable の発行プロファイル。.NET が入っていない PC でも動く）
 #   2. この Distribution フォルダーの説明書・バッチ・ライセンスと一緒に、1 つのフォルダーへまとめる
-#   3. Inno Setup（ISCC.exe）で Installer\Fanlume.iss から setup.exe を作り、リポジトリの一番上に置く（設定・ログ・記録は入れない）
+#   3. Inno Setup（ISCC.exe）で Installer\Zeph-Iris.iss から setup.exe を作り、リポジトリの一番上に置く（設定・ログ・記録は入れない）
 # 使い方（リポジトリの一番上で）: powershell -ExecutionPolicy Bypass -File Distribution\make-dist.ps1
 #   Inno Setup 6 が必要（winget install JRSoftware.InnoSetup）。別の場所に入れたときは、環境変数 ISCC に ISCC.exe の場所を入れる
 # ==================================================
 $ErrorActionPreference = 'Stop'
 $root = Split-Path $PSScriptRoot -Parent
 $project = Join-Path $root 'ProFanController.csproj'
-$script = Join-Path $root 'Installer\Fanlume.iss'
+$script = Join-Path $root 'Installer\Zeph-Iris.iss'
 $version = ([xml](Get-Content $project -Raw)).Project.PropertyGroup.Version | Where-Object { $_ } | Select-Object -First 1
 if (-not $version) { throw 'ProFanController.csproj に <Version> がありません' }
 
@@ -21,20 +21,20 @@ $iscc = @($env:ISCC,
         Where-Object { $_ -and (Test-Path $_) } | Select-Object -First 1
 if (-not $iscc) { throw 'Inno Setup 6 の ISCC.exe が見つかりません（winget install JRSoftware.InnoSetup で入れてください）' }
 
-$work = Join-Path ([IO.Path]::GetTempPath()) "Fanlume_dist_$([Guid]::NewGuid().ToString('N'))"
+$work = Join-Path ([IO.Path]::GetTempPath()) "Zeph-Iris_dist_$([Guid]::NewGuid().ToString('N'))"
 $publish = Join-Path $work 'publish'
-$package = Join-Path $work 'Fanlume'
+$package = Join-Path $work 'Zeph-Iris'
 try {
-    Write-Host "Fanlume $version を発行しています..." -ForegroundColor Cyan
+    Write-Host "Zeph-Iris $version を発行しています..." -ForegroundColor Cyan
     dotnet publish $project -p:PublishProfile=Portable "-p:PublishDir=$publish\" --nologo -v quiet
     if ($LASTEXITCODE -ne 0) { throw 'dotnet publish に失敗しました' }
 
     New-Item -ItemType Directory -Force $package | Out-Null
-    Copy-Item (Join-Path $publish 'Fanlume.exe') $package
+    Copy-Item (Join-Path $publish 'Zeph-Iris.exe') $package
     # このスクリプト自身は入れない
     Get-ChildItem $PSScriptRoot | Where-Object { $_.Name -ne 'make-dist.ps1' } | Copy-Item -Destination $package -Recurse
 
-    $setup = Join-Path $root "Fanlume-$version-setup.exe"
+    $setup = Join-Path $root "Zeph-Iris-$version-setup.exe"
     if (Test-Path $setup) { Remove-Item $setup }
     Write-Host "インストーラーを作っています（$iscc）..." -ForegroundColor Cyan
     & $iscc /Q "/DAppVersion=$version" "/DSourceDir=$package" "/DOutputDir=$root" $script

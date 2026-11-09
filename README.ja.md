@@ -1,10 +1,10 @@
-# Fanlume
+# Zeph-Iris
 
 [English](README.md) | **日本語**
 
-> 6.6.1 までの名前は **ProFanController** です。設定と記録は Fanlume にそのまま引き継げます（「[ProFanController から移るとき](#profancontroller-から移るとき)」を見てください）。
+> 6.6.1 までの名前は **ProFanController**、6.7.0〜6.7.3 の名前は **Fanlume** です（同じ名前の別のサービスがあったため変えました）。設定と記録は Zeph-Iris にそのまま引き継げます（「[Fanlume・ProFanController から移るとき](#fanlumeprofancontroller-から移るとき)」を見てください）。
 
-Windows 用のファン制御・監視ツールです。マザーボードのファン端子を温度に合わせて制御し、OpenRGB と連携して PC の LED も光らせます（温度・レインボー・音楽連動など）。
+**Zeph-Iris**（ゼフィリス）は、西風の神ゼピュロス（ファン）と虹の女神イリス（LED）から名付けました。Windows 用のファン制御・監視ツールです。マザーボードのファン端子を温度に合わせて制御し、OpenRGB と連携して PC の LED も光らせます（温度・レインボー・音楽連動など）。
 
 > 画面の表示は 18 言語に対応しています（日本語・英語・中国語〈簡体字・繁体字〉・韓国語・ロシア語・ウクライナ語・ドイツ語・フランス語・スペイン語・イタリア語・ポルトガル語〈ブラジル〉・ポーランド語・オランダ語・トルコ語・ベトナム語・タイ語・インドネシア語）。Windows の表示言語に合わせて選ばれ、設定 →「見た目」→「表示言語」で変えられます（選ぶとすぐに切り替わります。アプリは起動し直しません）。日本語以外は新しく訳したもので、ぎこちない言い回しが残っているかもしれません。直し方は「[翻訳](#翻訳)」を見てください。
 
@@ -52,18 +52,24 @@ Windows 用のファン制御・監視ツールです。マザーボードのフ
 
 ## 使い方（インストーラー）
 
-1. [Releases](../../releases) から `Fanlume-<版>-setup.exe` をダウンロードして実行する。`C:\Program Files\Fanlume` に入り、スタートメニューにも登録されます。コード署名をしていないため「Windows によって PC が保護されました」と出たら、「詳細情報」→「実行」を押してください
-2. 最後の画面の「Fanlume を実行する」はチェックしたままにする。PawnIO が入っていなければ、セットアップの最初の画面が自動で入れて（winget を使います）、アプリを起動し直します
-   （うまくいかないときは、アプリのフォルダーの「1_PawnIO をインストール.bat」を右クリック →「管理者として実行」するか、[公式サイト](https://pawnio.eu/)のインストーラーを使う）
+1. [Releases](../../releases) から `Zeph-Iris-<版>-setup.exe` をダウンロードして実行する。`C:\Program Files\Zeph-Iris` に入り、スタートメニューにも登録されます。コード署名をしていないため「Windows によって PC が保護されました」と出たら、「詳細情報」→「実行」を押してください
+2. 最後の画面の「Zeph-Iris を実行する」はチェックしたままにする。PawnIO（ファン制御に使うドライバー）が入っていなければ、インストーラーが winget で入れます。うまくいかなければ、アプリのはじめの設定の画面がもう一度入れます
+   （それでもだめなときは、アプリのフォルダーの「1_PawnIO をインストール.bat」を右クリック →「管理者として実行」するか、[公式サイト](https://pawnio.eu/)のインストーラーを使う）
 3. セットアップの案内に沿って、ファン端子に名前を付ける
 
-詳しくは、アプリのフォルダーにある「はじめにお読みください.txt」（英語は `README_en.txt`。このリポジトリでは `Distribution/` の中）を見てください。新しい版への更新は、アプリの設定 →「一般」→「アップデート」→「更新する」を押すだけです（6.7.1 から）。新しいインストーラーをダウンロードし、GitHub に公開されたものと同じか（大きさ・SHA-256）を確かめてから、画面を出さずに入れ替えます。新しいインストーラーを手で実行してもかまいません。どちらも、動いている Fanlume を正しく終了してから（そのあいだファンは BIOS の設定で回ります）入れ替え、設定・記録はそのまま残ります。
+詳しくは、アプリのフォルダーにある「はじめにお読みください.txt」（英語は `README_en.txt`。このリポジトリでは `Distribution/` の中）を見てください。新しい版への更新は、アプリの設定 →「一般」→「アップデート」→「更新する」を押すだけです（6.7.1 から）。新しいインストーラーをダウンロードし、GitHub に公開されたものと同じか（大きさ・SHA-256）を確かめてから、画面を出さずに入れ替えます。新しいインストーラーを手で実行してもかまいません。どちらも、動いている Zeph-Iris を正しく終了してから（そのあいだファンは BIOS の設定で回ります）入れ替え、設定・記録はそのまま残ります。
 
-使うのをやめるときは、Windows の「設定」→「アプリ」→「インストールされているアプリ」からアンインストールします（Fanlume を終了し、ログオン時の自動起動・ファイアウォールの許可などを消して、設定・記録も消すかを尋ねます）。アプリの設定 →「安全・バックアップ」→「アンインストール（お片付け）」からも行えます。こちらは PawnIO のアンインストールも選べ、最後にアンインストーラーを実行します。
+使うのをやめるときは、Windows の「設定」→「アプリ」→「インストールされているアプリ」からアンインストールします（Zeph-Iris を終了し、ログオン時の自動起動・ファイアウォールの許可などを消して、設定・記録も消すかを尋ねます）。アプリの設定 →「安全・バックアップ」→「アンインストール（お片付け）」からも行えます。こちらは PawnIO のアンインストールも選べ、最後にアンインストーラーを実行します。
 
-### ProFanController から移るとき
+### Fanlume・ProFanController から移るとき
 
-Fanlume のインストーラーを実行します。動いている ProFanController は、先に正しく終了させます。Fanlume をはじめて起動すると、`C:\Tools\ProFanController` の設定と記録を写し、ログオン時の自動起動とスマホ監視用のファイアウォールの許可を新しい名前に切り替えます。前のフォルダーはそのまま残すので、Fanlume が動くのを確かめてから削除してください。ProFanController で書き出した設定ファイル（`*.profan.json`）も読み込めます。
+Zeph-Iris のインストーラーを一度だけ手で実行します（Fanlume 6.7.1〜6.7.3 の「更新する」は、新しい名前の版を見つけられません）。動いている Fanlume・ProFanController は、先に正しく終了させます。Zeph-Iris をはじめて起動すると、次のことを行います。
+
+- `C:\Program Files\Fanlume`（なければ `C:\Tools\ProFanController`）の設定と記録を写す
+- ログオン時の自動起動とスマホ監視用のファイアウォールの許可を、新しい名前に切り替える
+- Fanlume を、設定・記録を残すよう伝えて、Fanlume のアンインストーラーで外す（「インストールされているアプリ」から前の名前が消えます）
+
+前のフォルダーには設定の写しが残るので、Zeph-Iris が動くのを確かめてから削除してください。前の版で書き出した設定ファイル（`*.fanlume.json`・`*.profan.json`）も読み込めます。
 
 ## ソースからのビルド
 
@@ -74,7 +80,7 @@ Fanlume のインストーラーを実行します。動いている ProFanContr
 dotnet build -c Release
 # ロジックのテスト
 dotnet run -c Release --project Tests/LogicTests
-# インストーラーを作る（.NET ランタイムごと exe 1 つに発行し、Distribution の中身と一緒に Installer/Fanlume.iss でまとめる）
+# インストーラーを作る（.NET ランタイムごと exe 1 つに発行し、Distribution の中身と一緒に Installer/Zeph-Iris.iss でまとめる）
 powershell -ExecutionPolicy Bypass -File Distribution/make-dist.ps1
 ```
 
@@ -94,7 +100,7 @@ powershell -ExecutionPolicy Bypass -File Distribution/make-dist.ps1
 | `UI/`・`MainWindow*` | 画面（WPF） |
 | `Tests/LogicTests/` | ロジックのテスト（画面・実機なしで動く） |
 | `Distribution/` | アプリと一緒に入れる説明書（日本語・英語）・バッチ・ライセンスと、インストーラーを作るスクリプト |
-| `Installer/` | インストーラーの Inno Setup のスクリプト（`Fanlume.iss`） |
+| `Installer/` | インストーラーの Inno Setup のスクリプト（`Zeph-Iris.iss`） |
 | `Assets/Lang/` | 画面の言葉の翻訳表（言語ごとに 1 ファイル）と、元の文の一覧（`keys.tsv`） |
 | `tools/` | 開発用の道具（同梱フォントの文字を絞る `FontSubset`、訳す文を一覧にする `LocTool` など。アプリには入らない） |
 
@@ -106,6 +112,23 @@ powershell -ExecutionPolicy Bypass -File Distribution/make-dist.ps1
 - コードの文を変えたら、`dotnet run --project tools/LocTool -- extract` で `keys.tsv` を作り直し、`-- missing <言語>` でまだ訳していない文を一覧にします。
 - 訳がない文は日本語のまま表示されるので、行が足りなくてもアプリは壊れません。
 
+## 不具合の報告
+
+[Issues](../../issues/new/choose) に、マザーボード・CPU・グラボの型番と、アプリのフォルダーの `logs` フォルダーを添えて送ってください。動作を確かめたのはまだ 1 台だけなので、ほかの部品での報告はとても助かります。
+
+## 謝辞
+
+Zeph-Iris は、次のオープンソースのおかげで動いています。作って、育ててくださっている皆さんに感謝します。
+
+- [LibreHardwareMonitor](https://github.com/LibreHardwareMonitor/LibreHardwareMonitor) — 温度を読み、ファン端子を動かします
+- [PawnIO](https://pawnio.eu/) — LibreHardwareMonitor がハードウェアに触れるためのドライバーです
+- [OpenRGB](https://openrgb.org/) — LED を光らせます。PNY Epic-X のグラボの色を書き込む場所も、OpenRGB の調査を参考にしました（Zeph-Iris は OpenRGB と SDK の通信でやり取りしていて、OpenRGB のコードは含んでいません）
+- [NAudio](https://github.com/naudio/NAudio) — 音楽連動の音を取り込みます
+- [QRCoder](https://github.com/codebude/QRCoder) — スマホ監視の QR コードを作ります
+- [Montserrat](https://github.com/JulietaUla/Montserrat)・[Zen Maru Gothic](https://github.com/googlefonts/zen-marugothic) — 画面のフォントです
+- [Inno Setup](https://jrsoftware.org/isinfo.php) — インストーラーを作ります
+- [.NET](https://github.com/dotnet)・WPF
+
 ## ライセンス
 
-Fanlume は [MIT License](LICENSE) です。使っている部品（LibreHardwareMonitorLib は MPL-2.0、NAudio・QRCoder・.NET は MIT、フォントは SIL Open Font License 1.1 など）のライセンスは [CREDITS.txt](CREDITS.txt) にまとめています。インストーラーは Inno Setup で作っています。OpenRGB・PawnIO・Ollama はこのリポジトリに含まず、別に入れて使います。
+Zeph-Iris は [MIT License](LICENSE) です。使っている部品（LibreHardwareMonitorLib は MPL-2.0、NAudio・QRCoder・.NET は MIT、フォントは SIL Open Font License 1.1 など）のライセンスは [CREDITS.txt](CREDITS.txt) にまとめています。インストーラーは Inno Setup で作っています。OpenRGB・PawnIO・Ollama はこのリポジトリに含まず、別に入れて使います。

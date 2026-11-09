@@ -26,9 +26,9 @@ namespace ProFanController;
 public static class Watchdog
 {
     /// <summary>本体が正しく終了するときにセットする（見張りも終了する）</summary>
-    public const string StopEventName = @"Global\Fanlume.WatchdogStop";
+    public const string StopEventName = @"Global\Zeph-Iris.WatchdogStop";
     /// <summary>本体が正しく終了するが、BIOS 制御に戻せたか確認できなかったとき（見張りは安全な回転数にして終わる。再起動はしない）</summary>
-    public const string StopUnsafeEventName = @"Global\Fanlume.WatchdogStopUnsafe";
+    public const string StopUnsafeEventName = @"Global\Zeph-Iris.WatchdogStopUnsafe";
     public const string Argument = "--watchdog";
     public const string RecoveredArgument = "--recovered";
 
@@ -265,8 +265,8 @@ public static class Watchdog
             ? L($"{CrashWindow.TotalMinutes:F0} 分間に {recent} 回終了したため、自動での再起動はやめました。")
             : L("自動での再起動はオフになっています。");
         ShowMessage?.Invoke(
-            L($"Fanlume が予期せず終了しました。\n\nファンは安全な回転数（{cfg.Safety.WatchdogSafeDuty:F0}%、ポンプは 100%）に固定しています。{why}\n") +
-            L("PC を再起動すると BIOS の制御に戻ります（Fanlume を起動し直すと、アプリの制御で動きます）。\n\nログ: ") + Logger.Directory +
+            L($"Zeph-Iris が予期せず終了しました。\n\nファンは安全な回転数（{cfg.Safety.WatchdogSafeDuty:F0}%、ポンプは 100%）に固定しています。{why}\n") +
+            L("PC を再起動すると BIOS の制御に戻ります（Zeph-Iris を起動し直すと、アプリの制御で動きます）。\n\nログ: ") + Logger.Directory +
             RollbackHint(cfg, DateTime.Now));
     }
 
@@ -277,7 +277,7 @@ public static class Watchdog
         {
             if (!AppUpdater.CanRollBack(cfg.Update, current ?? AppUpdater.CurrentVersion, now)) return "";
             string previous = cfg.Update.PreviousVersion ?? "";
-            return "\n\n" + L($"この版には最近更新したばかりです。新しい版で落ち続けるときは、リリースのページ（{AppUpdater.ReleasesPage}）から {previous} のインストーラー（Fanlume-{previous}-setup.exe）を実行すると、前の版に戻せます。");
+            return "\n\n" + L($"この版には最近更新したばかりです。新しい版で落ち続けるときは、リリースのページ（{AppUpdater.ReleasesPage}）から {previous} のインストーラー（Zeph-Iris-{previous}-setup.exe）を実行すると、前の版に戻せます。");
         }
         catch
         {

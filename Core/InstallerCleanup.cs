@@ -1,6 +1,6 @@
 // ==================================================
 // InstallerCleanup.cs - インストーラー（Inno Setup）で入れたときの、アンインストールの後片付け
-//   アンインストーラーは、アプリを正しく終了させて（ファンは BIOS 制御に戻る）から「Fanlume.exe --uninstall-cleanup」を呼ぶ。
+//   アンインストーラーは、アプリを正しく終了させて（ファンは BIOS 制御に戻る）から「Zeph-Iris.exe --uninstall-cleanup」を呼ぶ。
 //   ここでは、このアプリが Windows に登録したもの（自動起動のタスク・ファイアウォールの許可・クラッシュの記録の設定。前の名前のものも）を消し、
 //   選んだときだけ設定・ログ・記録を消す。画面の部品（WPF）は読み込まない（Program.Main から呼ぶ）
 // Dependencies: .NET 8 (MIT License)
@@ -22,8 +22,8 @@ public static class InstallerCleanup
     /// <summary>インストーラーがアプリのフォルダーに置くアンインストーラー</summary>
     public const string UninstallerName = "unins000.exe";
 
-    /// <summary>アンインストーラーに、設定・ログ・記録を消すかを伝える引数（/FANLUMEDATA=delete または keep。Installer/Fanlume.iss が読む）</summary>
-    public static string UninstallerArguments(bool deleteData) => $"/SILENT /SUPPRESSMSGBOXES /NORESTART /FANLUMEDATA={(deleteData ? "delete" : "keep")}";
+    /// <summary>アンインストーラーに、設定・ログ・記録を消すかを伝える引数（/ZEPHIRISDATA=delete または keep。Installer/Zeph-Iris.iss が読む）</summary>
+    public static string UninstallerArguments(bool deleteData) => $"/SILENT /SUPPRESSMSGBOXES /NORESTART /ZEPHIRISDATA={(deleteData ? "delete" : "keep")}";
 
     /// <summary>インストーラーで入れたときの、アンインストーラーの場所（インストーラーで入れていなければ null）</summary>
     public static string? UninstallerPath(string appDirectory)

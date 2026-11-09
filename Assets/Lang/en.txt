@@ -1,4 +1,4 @@
-# Fanlume UI text (en). Each line: hash of the Japanese source text, TAB, translation. Line breaks: backslash + n.
+# Zeph-Iris UI text (en). Each line: hash of the Japanese source text, TAB, translation. Line breaks: backslash + n.
 9cefb48e	Starting…
 3c3d953a	Detecting hardware
 68a076e4	Pause (hand back to BIOS)
@@ -469,7 +469,7 @@ db0f8cfc	Electricity price per kWh
 b4d79a66	CPU and GPU use their sensor values. Monitors and speakers are not included. This is not measured at the wall, so it is only an estimate.
 69355ed4	Safety
 619b1ea2	Use the watchdog process (recommended)
-615a97bc	Prevents the fans from staying at a low speed if the app is killed or freezes. Task Manager shows two Fanlume processes; one of them is the watchdog
+b686ae3d	Prevents the fans from staying at a low speed if the app is killed or freezes. Task Manager shows two Zeph-Iris processes; one of them is the watchdog
 f739cc9b	Speed in that case
 43c454af	Pumps always go to 100%
 d063c0c0	Restart the app automatically (up to 3 times in 10 minutes; after that a message is shown)
@@ -515,12 +515,12 @@ cb0aedd5	Temperature sensors
 772bcb56	Set up from scratch with the setup wizard
 1c166250	Later
 381b7b8a	Replace and apply
-50ab5a2c	Setup - Fanlume
+da0c276f	Setup - Zeph-Iris
 f918c02e	1  Welcome
 38684fb3	2  Identify headers
 76236dbf	3  Cooling policy
 b303c749	4  Done
-890d0c09	Welcome to Fanlume
+ab449e0a	Welcome to Zeph-Iris
 26578394	This wizard checks what is connected to your motherboard's fan headers\nand automatically creates fan curves and profiles (Silent / Standard / Performance) for your PC.
 80f88c90	Before you start
 b1838111	• Stay next to the case so you can hear and see the fans.\n• Close heavy programs (such as games).\n• Your current settings will be overwritten, but you can go back with "Undo" afterwards.
@@ -549,8 +549,8 @@ b58afa04	All set
 aceb0a14	Cancel
 f193a383	Back
 303830fc	Next
-2a910283	Uninstall (clean up) - Fanlume
-caf7be2a	Before you stop using Fanlume, this returns your PC to how it was before the app. "Clean up and exit" does the following, from top to bottom.
+a7710fc4	Uninstall (clean up) - Zeph-Iris
+7e52ad37	Before you stop using Zeph-Iris, this returns your PC to how it was before the app. "Clean up and exit" does the following, from top to bottom.
 2ed98b28	Also do (neither happens unless you choose it)
 9dc58ae6	Also delete settings, logs and records
 f6fb6e2a	Also uninstall PawnIO (the fan control driver)
@@ -583,9 +583,9 @@ fe1e7d87	 (restarting the PC returns control to the BIOS).
 e39402e8	Lighting control stopped and the devices were released
 8008dbae	Lighting control was not in use (the connection was closed)
 775adf46	Phone view
-63aa333a	Could not remove the firewall rule. Delete "Fanlume Web" under "Windows Security" → "Firewall & network protection" → "Advanced settings" → "Inbound Rules".
+7a5758ef	Could not remove the firewall rule. Delete "Zeph-Iris Web" under "Windows Security" → "Firewall & network protection" → "Advanced settings" → "Inbound Rules".
 629589af	Phone view stopped and the firewall rule was removed
-31af9d29	Could not remove the automatic start. Delete "Fanlume" from Task Scheduler (Task Scheduler Library).
+855084fc	Could not remove the automatic start. Delete "Zeph-Iris" from Task Scheduler (Task Scheduler Library).
 bc13583b	The start at logon was removed
 22c99fc8	Could not remove the crash dump setting (HKEY_LOCAL_MACHINE\\{0}). Leaving it does no harm.
 14dd713f	The crash dump setting was removed
@@ -594,7 +594,7 @@ d66766d3	Not done here
 1e82ca4a	The path of the executable is unknown.
 eb8f4a4f	Could not prepare to delete the settings, logs and records ({0}).\nAfter the app exits, delete the whole folder:\n{1}
 8df0902c	Open folder
-fa3ff255	Fanlume is still running, so the settings, logs and records were not deleted.\n
+94fb9fd8	Zeph-Iris is still running, so the settings, logs and records were not deleted.\n
 32a27012	Exit the app, then delete this whole folder:\n{0}
 ecdec9de	Deleted {0}.\n\n
 a261a21a	When you close this message, Explorer opens the app's folder. Delete the whole folder to finish the clean-up:\n{0}
@@ -602,18 +602,18 @@ a261a21a	When you close this message, Explorer opens the app's folder. Delete th
 d6750fd2	\n•
 bf71d238	\n…and {0} more
 df6134ea	\n\nAfter closing this message, delete this whole folder:\n{0}
-766fce35	Fanlume clean-up
-da630a7f	Fanlume is already running.\nOpen it from the tray icon.
+9c469322	Zeph-Iris clean-up
+13b0e2e6	Zeph-Iris is already running.\nOpen it from the tray icon.
 ec6a9bb6	Saving records
 c0fd45c5	Still running in the tray. To exit, right-click the icon.
-0a3f2987	Fanlume: recovered
+813ce530	Zeph-Iris: recovered
 977b8544	The profile was switched automatically
 790c11cc	{0} detected → {1}
-a75f3e15	Fanlume: maintenance
+e586d56a	Zeph-Iris: maintenance
 5b860ae3	Running in DRY RUN (test mode). It only calculates the speeds for the temperatures; the fans are not being driven.
 874003cc	Start controlling
 812bba50	The settings file was damaged, so it was restored from a backup ({0:yyyy/MM/dd HH:mm}). The damaged file is kept as config.broken_*.json.
-5b1e3ca8	Fanlume exited unexpectedly, so the watchdog process restarted it automatically. Control resumed after setting the fans to a safe speed. See the log for the cause.
+47b4365f	Zeph-Iris exited unexpectedly, so the watchdog process restarted it automatically. Control resumed after setting the fans to a safe speed. See the log for the cause.
 7b249720	Open log
 3a7e2e72	It exited unexpectedly and was restarted automatically.
 c51b6c55	The app that starts automatically with Windows is in another location ({0}). An old version may be starting.
@@ -630,15 +630,15 @@ f5c17fde	Could not register the automatic start again (check the log).
 c08fb050	 / 
 48ccab47	A sensor in use cannot be found
 9c32a53a	Hardware changes detected
-6317f1df	Fanlume: hardware change
+c1f02356	Zeph-Iris: hardware change
 646e0b57	{0}. Confirm the switch to the new sensors on the PC screen.
 9dddc76a	There is a problem with fan control
 8ad6890e	{0} (the BIOS is in control for safety; recovery is attempted automatically)
-f8b8b77e	Fanlume: fan control problem
+2820bd11	Zeph-Iris: fan control problem
 30b6b07e	Some parts cannot be read
 465384a0	Fan control recovered
 2a57fe9c	Back to normal control.
-25db31e1	Fanlume: recovered
+f1a9779a	Zeph-Iris: recovered
 a8e2e175	Fan control is back to normal.
 0d78d54c	config.json could not be read because another program keeps it open (the file is untouched).
 9b03cdae	The original file was kept as config.broken_<date>.json.
@@ -742,8 +742,8 @@ e0f9ce74	The speed sensor cannot be read.
 da1c2ba4	Returns every fan to automatic BIOS (motherboard) control and checks that it worked (if not, it stops here and changes nothing)
 cf1947e1	Stops fan control and closes the hardware (PawnIO driver). Also tells the watchdog process it is a proper exit so it ends too (instead of treating the stopped control as a fault and restarting)
 a1e35f8f	Stops lighting control and releases the LED devices (OpenRGB and others), ending with the same effect as a normal exit
-1fdea37e	Stops the phone view and removes the Windows Firewall rule it added (Fanlume Web)
-14f09703	Removes the start at logon (the "Fanlume" task in Task Scheduler)
+153ed949	Stops the phone view and removes the Windows Firewall rule it added (Zeph-Iris Web)
+d1b6444e	Removes the start at logon (the "Zeph-Iris" task in Task Scheduler)
 aa1f9cbb	Removes the crash dump setting (Windows Error Reporting\\LocalDumps in the registry)
 7ca65cf7	Uninstalls PawnIO (the fan control driver) with winget
 a6b6b0e5	Exits the app (with the same clean-up as a normal exit; it does not restart itself)
@@ -761,7 +761,7 @@ c96515c1	• Restarting the PC puts everything back as it was.
 7fadc402	When you close this, the app exits (it does not restart itself). Settings, logs and records stay in the folder.
 2735adba	The app itself cannot be deleted while it runs. If you stop using it, delete this folder after it exits (Explorer opens it):\n{0}
 47bb6afa	The file is empty.
-51d76551	This is not a Fanlume settings file.
+474014d2	This is not a Zeph-Iris settings file.
 59d09ada	It contains no profiles.
 8f6cc529	No matching header found (not imported)
 a63b0e26	Same header
@@ -777,7 +777,7 @@ a63b0e26	Same header
 1b6b7859	Good
 0b497be2	Somewhat high
 6eb7c426	Insufficient cooling
-b6e52ff7	Fanlume cooling test  {0:yyyy/MM/dd HH:mm}
+cbe4aaa4	Zeph-Iris cooling test  {0:yyyy/MM/dd HH:mm}
 f18a2032	Profile: {0} / load time: {1:F0} min (all CPU cores)
 a659e995	Verdict              : {0}
 67316e06	Idle CPU temperature : {0:F1} °C
@@ -939,8 +939,8 @@ fcc150e0	 (time compared: baseline {0} min, recent {1} min; differences in room 
 d9bee020	Downloads
 4a049af4	Desktop
 4033fb1e	Temp folder
-687bc2e0	Couldn't copy Fanlume.exe
-2a3da751	Fanlume test notification
+d99e1723	Couldn't copy Zeph-Iris.exe
+131a1082	Zeph-Iris test notification
 7be18f84	This is a test notification from {0}. If you received it, the setup is complete.
 15278ea5	Sent. Check that it arrived on your phone
 4ce2da04	Couldn't send: {0}
@@ -1108,8 +1108,8 @@ b599c0f6	Highs (hi-hat)
 f898c734	Not an https address: {0}
 9181a7c0	It exited {1} times in {0:F0} minutes, so automatic restart has been stopped.
 abf150b9	Automatic restart is turned off.
-50be9a1c	Fanlume quit unexpectedly.\n\nThe fans are fixed at a safe speed ({0:F0}%, pumps at 100%). {1}\n
-af5a88ef	Restarting the PC returns control to the BIOS (restart Fanlume to have the app control them again).\n\nLog: 
+82655ed5	Zeph-Iris quit unexpectedly.\n\nThe fans are fixed at a safe speed ({0:F0}%, pumps at 100%). {1}\n
+91122f58	Restarting the PC returns control to the BIOS (restart Zeph-Iris to have the app control them again).\n\nLog: 
 5e11c7bc	It can't be used from this network.
 3540eeb1	Too many wrong keys, so access is paused for a while. Wait about 1 minute.
 aacf373e	The access key is wrong. Use the URL shown in the PC's settings screen.
@@ -1217,13 +1217,13 @@ ca58240b	Restore from backup
 0a066c64	Restored the settings from {0} (you can undo this with "Undo").
 4a2fd247	This backup couldn't be read.\n{0}
 1b7a6d56	Export settings
-f48eb65b	Fanlume settings (*.fanlume.json)|*.fanlume.json
-f1a7dc7f	Fanlume-settings_{0}_{1:yyyyMMdd}{2}
+5e2d8db8	Zeph-Iris settings (*.zeph-iris.json)|*.zeph-iris.json
+bf4b6694	Zeph-Iris-settings_{0}_{1:yyyyMMdd}{2}
 dd581e02	Exported {0} profiles. Send this file to the other person and have them load it with Settings → "Safety & backup" → "Import settings".
 25f3627c	Couldn't export.\n{0}
 e6cdafd7	Please wait until hardware initialization finishes.
 de0ce3c8	Import settings
-70585dc7	Fanlume settings (*.fanlume.json;*.json)|*.fanlume.json;*.json
+67578d3a	Zeph-Iris settings (*.zeph-iris.json;*.json)|*.zeph-iris.json;*.json
 49c7511d	This file can't be loaded.\n{0}
 d01ee250	. You can undo this with "Undo". Check the curves of the imported fans before using them.
 565076e7	Check curves
@@ -1482,7 +1482,7 @@ b5ccd0c3	Automatic diagnosis from the records and checks for dust and wear on th
 acea69f7	All temperatures, speeds and control channels detected on this PC, plus virtual sensors
 7626e5f7	Profiles, automatic switching, startup and overall control behavior
 d3bf5d86	DRY RUN was turned off. Starting fan control.
-256148cd	Fanlume watchdog
+81d7e612	Zeph-Iris watchdog
 0788f8eb	Rear
 c85ab318	Front
 0f616edd	Top
@@ -1506,11 +1506,11 @@ f0a541e0	PawnIO still can't be found. If you have already run the installer, res
 3699179e	Used in: {0}
 841ef786	(not used)
 cbfdf76e	(delete this fan)
-5dde97f8	Hardware change - Fanlume
+8098e34b	Hardware change - Zeph-Iris
 41580e6f	Sensors or headers used in the settings can't be found. Ones with the same role on the new hardware were chosen automatically.
 80403780	 Check the contents and press "Replace and apply" (the current settings are backed up before the change, and you can also "Undo" later).\n
 8f763b23	Until then, curves that use missing sensors run at a constant speed for safety (change it in Settings → "Safety & backup").
-d49f09aa	Import settings - Fanlume
+4adf0059	Import settings - Zeph-Iris
 63ed3acb	Check which fan headers and temperature sensors on this PC the ones in the file should correspond to.
 65901272	 Ones with the same name are chosen automatically. Fans set to "(delete this fan)" are not imported.
 ecf8e3b5	Exported from PC: {0} ({1:yyyy/MM/dd HH:mm})
@@ -1525,7 +1525,7 @@ fe5a2b13	Control at a fixed 70%
 0c1d2ab2	Monitor under BIOS control
 d6d4423a	• {0} (fan): follows {1}
 9833252d	Profiles to create: {0} / {1} / {2}\nProfile for everyday use: {3}\n\n
-12b1edf7	Open Fanlume
+892a3878	Open Zeph-Iris
 9a801bfe	Boost (full speed) 15 min
 46dbb6b6	Silent 30 min
 670ac712	Silent 2 hours
@@ -1604,11 +1604,9 @@ c8e0f349	A fan sound check is in progress.
 69ade00e	Setup is in progress.
 82fa072a	Choose the display language again after it has finished.
 31040161	Installed from {0} to {1} and started from there. From now on, the app in this folder runs (you can delete the downloaded files).
-4a3be0af	ProFanController (the previous version)
-67d28cec	Carried over the settings and records of the previous version (ProFanController) from {0}. That folder is no longer used; check what is in it, then you can delete it.
-82ee83eb	Could not start the uninstaller ({0}).\nAfter the app exits, uninstall Fanlume from Windows Settings → Apps → Installed apps.
-adc330eb	When you close this, the app exits, and then the uninstaller removes the app and the {0}. Fanlume also disappears from Installed apps in Windows.
-f10b7201	When you close this, the app exits, and then the uninstaller removes the app. Fanlume also disappears from Installed apps in Windows. Settings, logs and records stay in the folder.
+0f9a00ea	Could not start the uninstaller ({0}).\nAfter the app exits, uninstall Zeph-Iris from Windows Settings → Apps → Installed apps.
+adc330eb	When you close this, the app exits, and then the uninstaller removes the app and the {0}. Zeph-Iris also disappears from Installed apps in Windows.
+f10b7201	When you close this, the app exits, and then the uninstaller removes the app. Zeph-Iris also disappears from Installed apps in Windows. Settings, logs and records stay in the folder.
 6f13f8bc	Updates
 6e708964	Check for updates
 1c275381	Update
@@ -1616,10 +1614,10 @@ f10b7201	When you close this, the app exits, and then the uninstaller removes th
 2420b253	Check for new versions automatically
 094990a5	Asks GitHub for the latest version at most once a day and tells you when a new one is out (only the app's name and version are sent)
 395b0a50	"Update" downloads the installer, checks that it matches the file published on GitHub, and replaces the app without showing any screens. For about 10–20 seconds the app is closed and the fans run on the BIOS settings; then it starts again. Settings, logs and records are kept.
-3ef4127e	Fanlume was updated from {0} to {1}.
+9f2b9221	Zeph-Iris was updated from {0} to {1}.
 d256382b	Updated to {0}.
 042a94f0	Checking…
-42e9517b	A new version, Fanlume {0}, is available. "Update" downloads it and replaces the app (for about 10–20 seconds the fans run on the BIOS settings).
+de427ef4	A new version, Zeph-Iris {0}, is available. "Update" downloads it and replaces the app (for about 10–20 seconds the fans run on the BIOS settings).
 bb0f9e93	Version {0} is available.
 ebc47f06	You have the latest version ({0}).
 993c451d	Could not check for a new version ({0}). Check that the PC is connected to the internet.
@@ -1634,7 +1632,7 @@ cb8ee667	Current version: {0}
 e1525ed0	Version {0} is available (released {1:yyyy/MM/dd}, {2:F0} MB).
 7d2bdd2c	You have the latest version (checked {0:M/d HH:mm}).
 a94ca4e7	Not checked yet.
-d24d8900	Update to Fanlume {0}.\n\nAfter the installer ({1:F0} MB) is downloaded and checked, the app closes. Until the replacement is done (about 10–20 seconds) the fans run on the BIOS settings, and then the app starts again.\n\nUpdate now?
+b6e4f6c5	Update to Zeph-Iris {0}.\n\nAfter the installer ({1:F0} MB) is downloaded and checked, the app closes. Until the replacement is done (about 10–20 seconds) the fans run on the BIOS settings, and then the app starts again.\n\nUpdate now?
 98b3be1a	Downloading… {0:P0}
 c1f570b8	\n\nYou can also update by running the installer from the releases page yourself.
 d4af943f	Room temperature sensor
@@ -1645,9 +1643,12 @@ ee455e9f	Go back to the previous version
 c1d1f65d	The previous version is not known, so the app cannot go back.
 a8c3ec6f	Could not read the previous version from GitHub ({0}). Check that the PC is connected to the internet.
 87370a47	The installer for the previous version ({0}) was not found on GitHub.
-b635421a	You updated to this version recently. If the new version keeps closing, run the {1} installer (Fanlume-{2}-setup.exe) from the releases page ({0}) to go back to the previous version.
+874d775f	You updated to this version recently. If the new version keeps closing, run the {1} installer (Zeph-Iris-{2}-setup.exe) from the releases page ({0}) to go back to the previous version.
 dd7ad3b9	Automatic (not found)
 c4d4fe99	Automatic ({0})
 096f8d69	Don't use one (compare with idle time only)
 72959f2c	Go back to the previous version ({0})
 f2252901	Go back to the previous version ({0}).\n\nAfter the previous version's installer is downloaded from GitHub and checked, the app closes. Until the replacement is done (about 10–20 seconds) the fans run on the BIOS settings, and then the app starts again. Settings, logs and records are kept.\n\nGo back now?
+6d39169b	Carried over the settings and records of the previous version from {0}. That folder is no longer used; check what is in it, then you can delete it.
+f66007ff	{0} (the previous version)
+7f8ae76b	Zeph-Iris runs thanks to open-source software such as LibreHardwareMonitor, PawnIO, OpenRGB, NAudio, QRCoder, Montserrat, Zen Maru Gothic and Inno Setup. Many thanks to everyone who makes them (their licences are in the licenses folder of the app).

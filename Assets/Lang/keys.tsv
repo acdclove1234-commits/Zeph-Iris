@@ -482,7 +482,7 @@ db0f8cfc	1 kWh あたりの電気代	MainWindow.xaml:2884
 b4d79a66	CPU と GPU はセンサーの値を使います。モニターやスピーカーは含みません。コンセントで測った値ではないので、あくまで目安です。	MainWindow.xaml:2894
 69355ed4	安全機能	MainWindow.xaml:2903
 619b1ea2	見張りプロセスを使う（おすすめ）	MainWindow.xaml:2906
-615a97bc	アプリが強制終了・フリーズしたとき、ファンが低い回転のまま止まってしまうのを防ぎます。タスクマネージャーに Fanlume が 2 つ表示されますが、片方は見張り役です	MainWindow.xaml:2908
+b686ae3d	アプリが強制終了・フリーズしたとき、ファンが低い回転のまま止まってしまうのを防ぎます。タスクマネージャーに Zeph-Iris が 2 つ表示されますが、片方は見張り役です	MainWindow.xaml:2908
 f739cc9b	そのときの回転数	MainWindow.xaml:2921
 43c454af	ポンプは常に 100% にします	MainWindow.xaml:2921
 d063c0c0	アプリを自動で起動し直す（10 分間に 3 回までで、それ以上はお知らせを表示）	MainWindow.xaml:2925
@@ -528,12 +528,12 @@ cb0aedd5	温度センサー	UI/RemapDialog.xaml:104
 772bcb56	セットアップウィザードで最初から設定する	UI/RemapDialog.xaml:111
 1c166250	あとで	UI/RemapDialog.xaml:114
 381b7b8a	置き換えて適用	UI/RemapDialog.xaml:115
-50ab5a2c	セットアップ - Fanlume	UI/SetupWizard.xaml:10
+da0c276f	セットアップ - Zeph-Iris	UI/SetupWizard.xaml:10
 f918c02e	1  ようこそ	UI/SetupWizard.xaml:24
 38684fb3	2  端子の識別	UI/SetupWizard.xaml:25
 76236dbf	3  冷却方針	UI/SetupWizard.xaml:26
 b303c749	4  完了	UI/SetupWizard.xaml:27
-890d0c09	Fanlume へようこそ	UI/SetupWizard.xaml:33
+ab449e0a	Zeph-Iris へようこそ	UI/SetupWizard.xaml:33
 26578394	このウィザードでは、マザーボードのファン端子に何がつながっているかを確認し、\nあなたの PC に合わせたファンカーブとプロファイル（静音／標準／パフォーマンス）を自動で作成します。	UI/SetupWizard.xaml:35
 80f88c90	準備	UI/SetupWizard.xaml:38
 b1838111	・ケースの横で、ファンの音や回転が分かるようにしておいてください。\n・重い処理（ゲームなど）は終了しておいてください。\n・現在の設定は上書きされますが、完了後に「元に戻す」で戻せます。	UI/SetupWizard.xaml:42
@@ -562,8 +562,8 @@ b58afa04	準備ができました	UI/SetupWizard.xaml:152
 aceb0a14	キャンセル	UI/SetupWizard.xaml:170
 f193a383	戻る	UI/SetupWizard.xaml:172
 303830fc	次へ	UI/SetupWizard.xaml:173
-2a910283	アンインストール（お片付け） - Fanlume	UI/UninstallDialog.xaml:9
-caf7be2a	Fanlume を使うのをやめる前に、PC をこのアプリを入れる前の状態に戻します。「お片付けして終了する」を押すと、次のことを上から順に行います。	UI/UninstallDialog.xaml:43
+a7710fc4	アンインストール（お片付け） - Zeph-Iris	UI/UninstallDialog.xaml:9
+7e52ad37	Zeph-Iris を使うのをやめる前に、PC をこのアプリを入れる前の状態に戻します。「お片付けして終了する」を押すと、次のことを上から順に行います。	UI/UninstallDialog.xaml:43
 2ed98b28	あわせて行うこと（どちらも、選ばなければ行いません）	UI/UninstallDialog.xaml:52
 9dc58ae6	設定・ログ・記録も消す	UI/UninstallDialog.xaml:55
 f6fb6e2a	PawnIO（ファン制御用のドライバー）もアンインストールする	UI/UninstallDialog.xaml:61
@@ -579,7 +579,7 @@ d45f8ae5	静音 1 時間	UI/WidgetWindow.xaml:23
 27ef87be	ワンタッチ操作を解除	UI/WidgetWindow.xaml:24
 0abff5dc	メイン画面を開く	UI/WidgetWindow.xaml:25
 ae8884f0	ウィジェットを閉じる	UI/WidgetWindow.xaml:26
-67d28cec	前の版（ProFanController）の設定と記録を {0} から引き継ぎました。前の版のフォルダーはもう使わないので、中身を確かめてから消してかまいません。	App.SelfInstall.cs:63
+6d39169b	前の版の設定と記録を {0} から引き継ぎました。前の版のフォルダーはもう使わないので、中身を確かめてから消してかまいません。	App.SelfInstall.cs:63
 8df0902c	フォルダーを開く	App.SelfInstall.cs:64
 31040161	{0} から {1} に入れて、そこから起動しました。これからはこの場所のアプリが動きます（ダウンロードしたファイルは消してかまいません）。	App.SelfInstall.cs:72
 bd7aaf0b	行っています…	App.Uninstall.cs:98
@@ -599,18 +599,18 @@ fe1e7d87	（PC を再起動すると BIOS の制御に戻ります）。	App.Uni
 e39402e8	ライティングの制御を止めて、デバイスを離しました	App.Uninstall.cs:171
 8008dbae	ライティングの制御は使っていませんでした（接続を閉じました）	App.Uninstall.cs:171
 775adf46	スマホ監視	App.Uninstall.cs:175
-63aa333a	ファイアウォールの許可を消せませんでした。「Windows セキュリティ」→「ファイアウォールとネットワーク保護」→「詳細設定」→「受信の規則」から「Fanlume Web」を削除してください。	App.Uninstall.cs:178
+7a5758ef	ファイアウォールの許可を消せませんでした。「Windows セキュリティ」→「ファイアウォールとネットワーク保護」→「詳細設定」→「受信の規則」から「Zeph-Iris Web」を削除してください。	App.Uninstall.cs:178
 629589af	スマホ監視を止めて、ファイアウォールの許可を消しました	App.Uninstall.cs:179
-31af9d29	自動起動を消せませんでした。タスクスケジューラ（タスク スケジューラ ライブラリ）から「Fanlume」を削除してください。	App.Uninstall.cs:185
+855084fc	自動起動を消せませんでした。タスクスケジューラ（タスク スケジューラ ライブラリ）から「Zeph-Iris」を削除してください。	App.Uninstall.cs:185
 bc13583b	ログオン時の自動起動を消しました	App.Uninstall.cs:186
 22c99fc8	クラッシュしたときの記録の設定を消せませんでした（HKEY_LOCAL_MACHINE\\{0}）。そのままでも害はありません。	App.Uninstall.cs:192
 14dd713f	クラッシュしたときの記録の設定を消しました	App.Uninstall.cs:193
 f29a03c3	アンインストール	App.Uninstall.cs:204
 d66766d3	ここでは行いません	App.Uninstall.cs:208
-82ee83eb	アンインストーラーを起動できませんでした（{0}）。\nアプリが終了したあとに、Windows の「設定」→「アプリ」→「インストールされているアプリ」から Fanlume をアンインストールしてください。	App.Uninstall.cs:237
+0f9a00ea	アンインストーラーを起動できませんでした（{0}）。\nアプリが終了したあとに、Windows の「設定」→「アプリ」→「インストールされているアプリ」から Zeph-Iris をアンインストールしてください。	App.Uninstall.cs:237
 1e82ca4a	実行ファイルのパスが分かりません。	App.Uninstall.cs:246
 eb8f4a4f	設定・ログ・記録を消す準備ができませんでした（{0}）。\nアプリが終了したあとに、フォルダーごと削除してください:\n{1}	App.Uninstall.cs:258
-fa3ff255	Fanlume がまだ動いているため、設定・ログ・記録は消しませんでした。\n	App.Uninstall.cs:283
+94fb9fd8	Zeph-Iris がまだ動いているため、設定・ログ・記録は消しませんでした。\n	App.Uninstall.cs:283
 32a27012	アプリを終了してから、次のフォルダーをフォルダーごと削除してください:\n{0}	App.Uninstall.cs:284
 ecdec9de	{0}を消しました。\n\n	App.Uninstall.cs:292
 a261a21a	このお知らせを閉じると、エクスプローラーでアプリのフォルダーを開きます。フォルダーごと削除すれば、お片付けは終わりです:\n{0}	App.Uninstall.cs:293
@@ -618,8 +618,8 @@ a261a21a	このお知らせを閉じると、エクスプローラーでアプ�
 d6750fd2	\n・	App.Uninstall.cs:298
 bf71d238	\n…ほか {0} 個	App.Uninstall.cs:298
 df6134ea	\n\nこのお知らせを閉じたあと、次のフォルダーをフォルダーごと削除してください:\n{0}	App.Uninstall.cs:299
-766fce35	Fanlume のお片付け	App.Uninstall.cs:304
-3ef4127e	Fanlume を {0} から {1} に更新しました。	App.Update.cs:39
+9c469322	Zeph-Iris のお片付け	App.Uninstall.cs:304
+9f2b9221	Zeph-Iris を {0} から {1} に更新しました。	App.Update.cs:39
 d256382b	{0} に更新しました。	App.Update.cs:40
 1f0a60f2	更新したばかりの版（{0}）が予期せず終了しました。何度も続くときは、前の版（{1}）に戻せます。	App.Update.cs:54
 ee455e9f	前の版に戻す	App.Update.cs:55
@@ -627,61 +627,61 @@ c1d1f65d	前の版が分からないため、戻せません。	App.Update.cs:74
 a8c3ec6f	前の版を GitHub から読めませんでした（{0}）。インターネットにつながっているか確かめてください。	App.Update.cs:80
 87370a47	前の版（{0}）のインストーラーが GitHub に見つかりませんでした。	App.Update.cs:82
 042a94f0	確認しています…	App.Update.cs:102
-42e9517b	新しい版 Fanlume {0} があります。「更新する」を押すと、ダウンロードして入れ替えます（そのあいだ十数秒、ファンは BIOS の設定で回ります）。	App.Update.cs:116
+de427ef4	新しい版 Zeph-Iris {0} があります。「更新する」を押すと、ダウンロードして入れ替えます（そのあいだ十数秒、ファンは BIOS の設定で回ります）。	App.Update.cs:116
 bb0f9e93	新しい版 {0} があります。	App.Update.cs:118
 ebc47f06	最新の版です（{0}）。	App.Update.cs:124
 993c451d	新しい版を確かめられませんでした（{0}）。インターネットにつながっているか確かめてください。	App.Update.cs:129
 31eb4f99	アプリを終了しているところなので、更新しません。	App.Update.cs:144
 b79b5ccf	更新できませんでした（{0}）。	App.Update.cs:162
-da630a7f	Fanlume はすでに起動しています。\nタスクトレイのアイコンから開いてください。	App.xaml.cs:102
+13b0e2e6	Zeph-Iris はすでに起動しています。\nタスクトレイのアイコンから開いてください。	App.xaml.cs:102
 ec6a9bb6	記録の保存	App.xaml.cs:188
-0a3f2987	Fanlume: 回復しました	App.xaml.cs:251
+813ce530	Zeph-Iris: 回復しました	App.xaml.cs:251
 977b8544	プロファイルを自動で切り替えました	App.xaml.cs:263
 790c11cc	{0} を検出 → {1}	App.xaml.cs:263
 5b860ae3	DRY RUN（テストモード）で動いています。温度に応じた回転数を計算するだけで、ファンは動かしていません。	App.xaml.cs:310
 874003cc	制御を開始する	App.xaml.cs:311
 812bba50	設定ファイルが壊れていたため、バックアップ（{0:yyyy/MM/dd HH:mm}）から復旧しました。壊れたファイルは config.broken_*.json として残しています。	App.xaml.cs:321
-5b1e3ca8	Fanlume が予期せず終了したため、見張りプロセスが自動で起動し直しました。ファンは安全な回転数にしてから制御を再開しています。原因はログで確認できます。	App.xaml.cs:325
+47b4365f	Zeph-Iris が予期せず終了したため、見張りプロセスが自動で起動し直しました。ファンは安全な回転数にしてから制御を再開しています。原因はログで確認できます。	App.xaml.cs:325
 7b249720	ログを開く	App.xaml.cs:326
 3a7e2e72	予期せず終了したため、自動で起動し直しました。	App.xaml.cs:327
-c0fd45c5	タスクトレイで動作を続けています。終了するにはアイコンを右クリックしてください。	App.xaml.cs:351
-a75f3e15	Fanlume: メンテナンス	App.xaml.cs:354
-c51b6c55	Windows の起動時に自動で立ち上がるのは、別の場所のアプリです（{0}）。古い版が立ち上がっているかもしれません。	App.xaml.cs:376
-268b2432	このアプリは「{0}」フォルダーの中から動いています。整理したときに消えたり、別の版が増えたりしないよう、	App.xaml.cs:381
-80df7870	下のボタンで {0} に移してください（設定はそのまま持っていき、自動起動も移した先に登録し直して、起動し直します）。	App.xaml.cs:382
-8d7ede7f	{0} が動いています。同じ LED やファンを操作するので、色が勝手に戻る・ちらつく・回転数が反映されない原因になります。そのソフトの LED・ファンの制御を止めるか、終了してください。	App.xaml.cs:387
-0cac6658	{0} に移す	App.xaml.cs:394
-f8529664	自動起動をこの場所にする	App.xaml.cs:398
-c674f1d5	自動起動を、いま動いているこのアプリに登録し直しました。	App.xaml.cs:403
-f5c17fde	自動起動を登録し直せませんでした（ログを確認してください）。	App.xaml.cs:403
-467c4a19	{0} へ移せませんでした: {1}	App.xaml.cs:438
-14d2e005	音の取り込み	App.xaml.cs:471
-c08fb050	 ／ 	App.xaml.cs:650
-48ccab47	使っていたセンサーが見つかりません	App.xaml.cs:650
-9c32a53a	ハードウェアの変更を検出しました	App.xaml.cs:652
-6317f1df	Fanlume: ハードウェアの変更	App.xaml.cs:653
-646e0b57	{0}。PC の画面で、新しいセンサーへの置き換えを確認してください。	App.xaml.cs:653
-9dddc76a	ファン制御に問題があります	App.xaml.cs:683
-8ad6890e	{0}（安全のため BIOS の制御にしています。自動で復旧を試みます）	App.xaml.cs:683
-f8b8b77e	Fanlume: ファン制御の問題	App.xaml.cs:684
-30b6b07e	一部の部品を読み取れません	App.xaml.cs:687
-465384a0	ファン制御が復旧しました	App.xaml.cs:690
-2a57fe9c	通常の制御に戻りました。	App.xaml.cs:690
-25db31e1	Fanlume: 復旧	App.xaml.cs:691
-a8e2e175	ファン制御が通常に戻りました。	App.xaml.cs:691
-0d78d54c	ほかのプログラムが config.json を開いたままにしているため読めませんでした（ファイルはそのままです）。	App.xaml.cs:707
-9b03cdae	元のファイルは config.broken_日時.json として残しました。	App.xaml.cs:708
-b07af289	config.json を読み込めず、バックアップからも復旧できませんでした。\n{0}\n\n{1}\n空の設定で起動します。	App.xaml.cs:709
-645b237e	ブースト	App.xaml.cs:763
-169abc6e	ポンプ以外の全ファンを {0} 分間 100% にします。	App.xaml.cs:763
-c342d519	「静音」で使うプロファイルが見つかりません。設定画面の「ワンタッチ操作」で選んでください。	App.xaml.cs:767
-77a0d0ea	スマホ用の Web サーバーを開始できませんでした（ポート {0}）: {1}	App.xaml.cs:893
-eec05191	緊急全開	App.xaml.cs:903
-0413f77c	一時停止中	App.xaml.cs:903
-45fadb4f	制御中	App.xaml.cs:903
-404e2134	ウィジェット	App.xaml.cs:981
-1f2511a8	画面	App.xaml.cs:985
-0f13893a	タスクトレイ	App.xaml.cs:1037
+c0fd45c5	タスクトレイで動作を続けています。終了するにはアイコンを右クリックしてください。	App.xaml.cs:357
+e586d56a	Zeph-Iris: メンテナンス	App.xaml.cs:360
+c51b6c55	Windows の起動時に自動で立ち上がるのは、別の場所のアプリです（{0}）。古い版が立ち上がっているかもしれません。	App.xaml.cs:382
+268b2432	このアプリは「{0}」フォルダーの中から動いています。整理したときに消えたり、別の版が増えたりしないよう、	App.xaml.cs:387
+80df7870	下のボタンで {0} に移してください（設定はそのまま持っていき、自動起動も移した先に登録し直して、起動し直します）。	App.xaml.cs:388
+8d7ede7f	{0} が動いています。同じ LED やファンを操作するので、色が勝手に戻る・ちらつく・回転数が反映されない原因になります。そのソフトの LED・ファンの制御を止めるか、終了してください。	App.xaml.cs:393
+0cac6658	{0} に移す	App.xaml.cs:400
+f8529664	自動起動をこの場所にする	App.xaml.cs:404
+c674f1d5	自動起動を、いま動いているこのアプリに登録し直しました。	App.xaml.cs:409
+f5c17fde	自動起動を登録し直せませんでした（ログを確認してください）。	App.xaml.cs:409
+467c4a19	{0} へ移せませんでした: {1}	App.xaml.cs:444
+14d2e005	音の取り込み	App.xaml.cs:477
+c08fb050	 ／ 	App.xaml.cs:656
+48ccab47	使っていたセンサーが見つかりません	App.xaml.cs:656
+9c32a53a	ハードウェアの変更を検出しました	App.xaml.cs:658
+c1f02356	Zeph-Iris: ハードウェアの変更	App.xaml.cs:659
+646e0b57	{0}。PC の画面で、新しいセンサーへの置き換えを確認してください。	App.xaml.cs:659
+9dddc76a	ファン制御に問題があります	App.xaml.cs:689
+8ad6890e	{0}（安全のため BIOS の制御にしています。自動で復旧を試みます）	App.xaml.cs:689
+2820bd11	Zeph-Iris: ファン制御の問題	App.xaml.cs:690
+30b6b07e	一部の部品を読み取れません	App.xaml.cs:693
+465384a0	ファン制御が復旧しました	App.xaml.cs:696
+2a57fe9c	通常の制御に戻りました。	App.xaml.cs:696
+f1a9779a	Zeph-Iris: 復旧	App.xaml.cs:697
+a8e2e175	ファン制御が通常に戻りました。	App.xaml.cs:697
+0d78d54c	ほかのプログラムが config.json を開いたままにしているため読めませんでした（ファイルはそのままです）。	App.xaml.cs:713
+9b03cdae	元のファイルは config.broken_日時.json として残しました。	App.xaml.cs:714
+b07af289	config.json を読み込めず、バックアップからも復旧できませんでした。\n{0}\n\n{1}\n空の設定で起動します。	App.xaml.cs:715
+645b237e	ブースト	App.xaml.cs:769
+169abc6e	ポンプ以外の全ファンを {0} 分間 100% にします。	App.xaml.cs:769
+c342d519	「静音」で使うプロファイルが見つかりません。設定画面の「ワンタッチ操作」で選んでください。	App.xaml.cs:773
+77a0d0ea	スマホ用の Web サーバーを開始できませんでした（ポート {0}）: {1}	App.xaml.cs:899
+eec05191	緊急全開	App.xaml.cs:909
+0413f77c	一時停止中	App.xaml.cs:909
+45fadb4f	制御中	App.xaml.cs:909
+404e2134	ウィジェット	App.xaml.cs:987
+1f2511a8	画面	App.xaml.cs:991
+0f13893a	タスクトレイ	App.xaml.cs:1043
 e6a34da2	停止中	Audio/AudioCapture.cs:76
 652c7b75	音を取り込めません（{0} 秒後に再試行）: {1}	Audio/AudioCapture.cs:173
 2674d6a9	音の出力先（スピーカー・ヘッドホン）が見つかりません	Audio/AudioCapture.cs:200
@@ -741,10 +741,10 @@ f32b8618	復元前	Core/AppConfig.cs:1375
 c7f7bdf4	自動: {0}	Core/AppController.cs:98
 ab7eac67	ブースト中（残り {0}）	Core/AppController.cs:120
 9134a95f	静音モード中（残り {0}）	Core/AppController.cs:121
-ddecc240	ダウンロードしたファイルが、GitHub に書かれた大きさより大きくなりました。	Core/AppUpdater.cs:183
-74c1cfd5	インストーラーの版（{0}）が、リリースの版（{1}）と違います。	Core/AppUpdater.cs:198
-e3910d2d	ダウンロードしたファイルの大きさ（{0} バイト）が、GitHub に書かれた大きさ（{1} バイト）と違います。	Core/AppUpdater.cs:218
-6a1c29a5	ダウンロードしたファイルが、GitHub に公開されたものと一致しません（SHA-256 が違います）。更新を中止しました。	Core/AppUpdater.cs:223
+ddecc240	ダウンロードしたファイルが、GitHub に書かれた大きさより大きくなりました。	Core/AppUpdater.cs:186
+74c1cfd5	インストーラーの版（{0}）が、リリースの版（{1}）と違います。	Core/AppUpdater.cs:201
+e3910d2d	ダウンロードしたファイルの大きさ（{0} バイト）が、GitHub に書かれた大きさ（{1} バイト）と違います。	Core/AppUpdater.cs:221
+6a1c29a5	ダウンロードしたファイルが、GitHub に公開されたものと一致しません（SHA-256 が違います）。更新を中止しました。	Core/AppUpdater.cs:226
 ad045555	FFT の大きさは 2 のべき乗にする	Core/Audio/Fft.cs:23
 86b7be3f	マザーボードの端子	Core/Audio/OutputPath.cs:148
 29ea7bfd	HDMI・DisplayPort	Core/Audio/OutputPath.cs:150
@@ -782,8 +782,8 @@ e0f9ce74	回転数センサーが読めません。	Core/Calibrator.cs:80
 da1c2ba4	すべてのファンを BIOS（マザーボード）の自動制御に戻し、戻ったことを確かめます（戻せなかったときは、ここで中止して何も変えません）	Core/CleanUninstall.cs:76
 cf1947e1	ファンの制御を止めて、ハードウェア（PawnIO ドライバー）を閉じます。見張りプロセスにも「正しい終了」を伝えて終わらせます（止めたファンの制御を異常と見なして、起動し直さないように）	Core/CleanUninstall.cs:77
 a1e35f8f	ライティングの制御を止めて、LED のデバイス（OpenRGB など）を離します（ふだんの終了と同じ光り方で止めます）	Core/CleanUninstall.cs:78
-1fdea37e	スマホ監視を止めて、Windows ファイアウォールに追加した許可（Fanlume Web）を消します	Core/CleanUninstall.cs:79
-14f09703	ログオン時の自動起動（タスクスケジューラの「Fanlume」）を消します	Core/CleanUninstall.cs:80
+153ed949	スマホ監視を止めて、Windows ファイアウォールに追加した許可（Zeph-Iris Web）を消します	Core/CleanUninstall.cs:79
+d1b6444e	ログオン時の自動起動（タスクスケジューラの「Zeph-Iris」）を消します	Core/CleanUninstall.cs:80
 aa1f9cbb	クラッシュしたときの記録の設定（レジストリの Windows Error Reporting\\LocalDumps）を消します	Core/CleanUninstall.cs:81
 7ca65cf7	PawnIO（ファン制御用のドライバー）を winget でアンインストールします	Core/CleanUninstall.cs:82
 a6b6b0e5	アプリを終了します（ふだんの終了と同じ後片付けをします。自動で起動し直しません）	Core/CleanUninstall.cs:83
@@ -802,24 +802,24 @@ f10b7201	閉じるとアプリが終了し、続けてアンインストーラ�
 894f5f7e	閉じるとアプリが終了し、そのあとで{0}を消します。	Core/CleanUninstall.cs:141
 7fadc402	閉じるとアプリが終了します（自動では起動し直しません）。設定・ログ・記録はフォルダーに残します。	Core/CleanUninstall.cs:142
 2735adba	アプリ本体は動いている間は消せません。使うのをやめるなら、終了したあとに次のフォルダーを削除してください（エクスプローラーで開きます）:\n{0}	Core/CleanUninstall.cs:143
-47bb6afa	ファイルが空です。	Core/ConfigTransfer.cs:84
-51d76551	Fanlume の設定ファイルではありません。	Core/ConfigTransfer.cs:86
-59d09ada	プロファイルが入っていません。	Core/ConfigTransfer.cs:87
-8f6cc529	対応する端子が見つかりません（読み込まない）	Core/ConfigTransfer.cs:108
-a63b0e26	同じ端子	Core/ConfigTransfer.cs:108
-17f329b8	同じ名前の端子	Core/ConfigTransfer.cs:108
-411bcf86	同じセンサー	Core/ConfigTransfer.cs:126
-5c522e51	{0}（読み込み）	Core/ConfigTransfer.cs:183
-0da8db2c	{0}（読み込み {1}）	Core/ConfigTransfer.cs:184
-6bb3e62c	{0} 個のプロファイルを読み込みました（追加 {1}・置き換え {2}）	Core/ConfigTransfer.cs:218
-03b7c771	。対応する端子がない {0} 個のファンは読み込んでいません	Core/ConfigTransfer.cs:219
-5e0e7e59	。安全のため、読み込んだファンは「このツールで制御する」をオフにしてあります	Core/ConfigTransfer.cs:220
+47bb6afa	ファイルが空です。	Core/ConfigTransfer.cs:85
+474014d2	Zeph-Iris の設定ファイルではありません。	Core/ConfigTransfer.cs:87
+59d09ada	プロファイルが入っていません。	Core/ConfigTransfer.cs:88
+8f6cc529	対応する端子が見つかりません（読み込まない）	Core/ConfigTransfer.cs:109
+a63b0e26	同じ端子	Core/ConfigTransfer.cs:109
+17f329b8	同じ名前の端子	Core/ConfigTransfer.cs:109
+411bcf86	同じセンサー	Core/ConfigTransfer.cs:127
+5c522e51	{0}（読み込み）	Core/ConfigTransfer.cs:184
+0da8db2c	{0}（読み込み {1}）	Core/ConfigTransfer.cs:185
+6bb3e62c	{0} 個のプロファイルを読み込みました（追加 {1}・置き換え {2}）	Core/ConfigTransfer.cs:219
+03b7c771	。対応する端子がない {0} 個のファンは読み込んでいません	Core/ConfigTransfer.cs:220
+5e0e7e59	。安全のため、読み込んだファンは「このツールで制御する」をオフにしてあります	Core/ConfigTransfer.cs:221
 2732738f	中断	Core/CoolingTest.cs:94
 165e874b	とても良好	Core/CoolingTest.cs:95
 1b6b7859	良好	Core/CoolingTest.cs:96
 0b497be2	やや高め	Core/CoolingTest.cs:97
 6eb7c426	冷却不足	Core/CoolingTest.cs:98
-b6e52ff7	Fanlume 冷却テスト  {0:yyyy/MM/dd HH:mm}	Core/CoolingTest.cs:104
+cbe4aaa4	Zeph-Iris 冷却テスト  {0:yyyy/MM/dd HH:mm}	Core/CoolingTest.cs:104
 f18a2032	プロファイル: {0} ／ 負荷時間: {1:F0} 分（CPU 全コア）	Core/CoolingTest.cs:105
 a659e995	判定              : {0}	Core/CoolingTest.cs:108
 67316e06	待機時の CPU 温度  : {0:F1} °C	Core/CoolingTest.cs:109
@@ -978,12 +978,12 @@ f91be135	以前より少し冷えにくくなっています。そろそろフ�
 58d9c8ca	以前と同じように冷えています。	Core/HealthAnalyzer.cs:253
 fcc150e0	（比べた時間: 基準 {0} 分・最近 {1} 分。室温の違いは差し引いています）	Core/HealthAnalyzer.cs:255
 5ba2a332	ASUS Aura（Armoury Crate の LED）	Core/InstallCheck.cs:24
-4a3be0af	ProFanController（前の版）	Core/InstallCheck.cs:39
-d9bee020	ダウンロード	Core/InstallCheck.cs:83
-4a049af4	デスクトップ	Core/InstallCheck.cs:84
-4033fb1e	一時フォルダー	Core/InstallCheck.cs:85
-687bc2e0	Fanlume.exe を写せませんでした	Core/InstallCheck.cs:129
-2a3da751	Fanlume テスト通知	Core/Notifier.cs:65
+f66007ff	{0}（前の版）	Core/InstallCheck.cs:40
+d9bee020	ダウンロード	Core/InstallCheck.cs:84
+4a049af4	デスクトップ	Core/InstallCheck.cs:85
+4033fb1e	一時フォルダー	Core/InstallCheck.cs:86
+d99e1723	Zeph-Iris.exe を写せませんでした	Core/InstallCheck.cs:130
+131a1082	Zeph-Iris テスト通知	Core/Notifier.cs:65
 7be18f84	{0} からのテスト通知です。この通知が届けば設定は完了です。	Core/Notifier.cs:65
 15278ea5	送信しました。スマホに届いたか確認してください	Core/Notifier.cs:66
 4ce2da04	送信できませんでした: {0}	Core/Notifier.cs:70
@@ -1151,17 +1151,17 @@ b599c0f6	高音（ハイハット）	Core/Rgb/MusicTuning.cs:353
 f898c734	https のアドレスではありません: {0}	Core/SystemTool.cs:50
 9181a7c0	{0:F0} 分間に {1} 回終了したため、自動での再起動はやめました。	Core/Watchdog.cs:265
 abf150b9	自動での再起動はオフになっています。	Core/Watchdog.cs:266
-50be9a1c	Fanlume が予期せず終了しました。\n\nファンは安全な回転数（{0:F0}%、ポンプは 100%）に固定しています。{1}\n	Core/Watchdog.cs:268
-af5a88ef	PC を再起動すると BIOS の制御に戻ります（Fanlume を起動し直すと、アプリの制御で動きます）。\n\nログ: 	Core/Watchdog.cs:269
-b635421a	この版には最近更新したばかりです。新しい版で落ち続けるときは、リリースのページ（{0}）から {1} のインストーラー（Fanlume-{2}-setup.exe）を実行すると、前の版に戻せます。	Core/Watchdog.cs:280
+82655ed5	Zeph-Iris が予期せず終了しました。\n\nファンは安全な回転数（{0:F0}%、ポンプは 100%）に固定しています。{1}\n	Core/Watchdog.cs:268
+91122f58	PC を再起動すると BIOS の制御に戻ります（Zeph-Iris を起動し直すと、アプリの制御で動きます）。\n\nログ: 	Core/Watchdog.cs:269
+874d775f	この版には最近更新したばかりです。新しい版で落ち続けるときは、リリースのページ（{0}）から {1} のインストーラー（Zeph-Iris-{2}-setup.exe）を実行すると、前の版に戻せます。	Core/Watchdog.cs:280
 5e11c7bc	このネットワークからは使えません。	Core/WebServer.cs:78
 3540eeb1	鍵の間違いが続いたため、しばらく受け付けません。1 分ほど待ってください。	Core/WebServer.cs:91
 aacf373e	アクセス用の鍵が違います。PC の設定画面に表示されている URL を使ってください。	Core/WebServer.cs:99
-1e1ddced	接続中…	Core/WebServer.cs:278
-6b1221b3	システム	Core/WebServer.cs:280
-73dd9d77	全開 5分	Core/WebServer.cs:282
-f27c7942	 更新 ・ 	Core/WebServer.cs:285
-908c69fa	PC に接続できません	Core/WebServer.cs:286
+1e1ddced	接続中…	Core/WebServer.cs:273
+6b1221b3	システム	Core/WebServer.cs:275
+73dd9d77	全開 5分	Core/WebServer.cs:277
+f27c7942	 更新 ・ 	Core/WebServer.cs:280
+908c69fa	PC に接続できません	Core/WebServer.cs:281
 88209a5b	（なし）	Core/Winget.cs:71
 59d07259	winget.exe が見つかりません	Core/Winget.cs:203
 f20bb342	winget を起動できませんでした	Core/Winget.cs:240
@@ -1261,13 +1261,13 @@ ca58240b	バックアップから戻す	MainWindow.Integrations.cs:158
 0a066c64	{0} の設定に戻しました（「元に戻す」で取り消せます）。	MainWindow.Integrations.cs:166
 4a2fd247	このバックアップは読み込めませんでした。\n{0}	MainWindow.Integrations.cs:170
 1b7a6d56	設定を書き出す	MainWindow.Integrations.cs:179
-f48eb65b	Fanlume の設定 (*.fanlume.json)|*.fanlume.json	MainWindow.Integrations.cs:180
-f1a7dc7f	Fanlume設定_{0}_{1:yyyyMMdd}{2}	MainWindow.Integrations.cs:181
+5e2d8db8	Zeph-Iris の設定 (*.zeph-iris.json)|*.zeph-iris.json	MainWindow.Integrations.cs:180
+bf4b6694	Zeph-Iris設定_{0}_{1:yyyyMMdd}{2}	MainWindow.Integrations.cs:181
 dd581e02	{0} 個のプロファイルを書き出しました。このファイルを相手に送り、設定 →「安全・バックアップ」→「設定を読み込む」で読み込んでもらってください。	MainWindow.Integrations.cs:188
 25f3627c	書き出せませんでした。\n{0}	MainWindow.Integrations.cs:192
 e6cdafd7	ハードウェアの初期化が終わるまでお待ちください。	MainWindow.Integrations.cs:200
 de0ce3c8	設定を読み込む	MainWindow.Integrations.cs:206
-70585dc7	Fanlume の設定 (*.fanlume.json;*.json)|*.fanlume.json;*.json	MainWindow.Integrations.cs:207
+67578d3a	Zeph-Iris の設定 (*.zeph-iris.json;*.json)|*.zeph-iris.json;*.json	MainWindow.Integrations.cs:207
 49c7511d	このファイルは読み込めません。\n{0}	MainWindow.Integrations.cs:218
 d01ee250	。「元に戻す」で取り消せます。読み込んだファンは、カーブを確認してから使ってください。	MainWindow.Integrations.cs:232
 565076e7	カーブを確認	MainWindow.Integrations.cs:233
@@ -1519,34 +1519,35 @@ a94ca4e7	まだ確認していません。	MainWindow.Update.cs:34
 f2252901	前の版（{0}）に戻します。\n\nGitHub から前の版のインストーラーをダウンロードして確かめたあと、アプリが一度終了します。入れ替えが終わるまでの十数秒、ファンは BIOS の設定で回り、終わるとアプリが起動し直します。設定・ログ・記録はそのまま残ります。\n\n戻しますか？	MainWindow.Update.cs:53
 98b3be1a	ダウンロードしています… {0:P0}	MainWindow.Update.cs:60
 c1f570b8	\n\nリリースのページから、インストーラーを手で実行して更新することもできます。	MainWindow.Update.cs:70
-d24d8900	Fanlume {0} に更新します。\n\nインストーラー（{1:F0} MB）をダウンロードして確かめたあと、アプリが一度終了します。入れ替えが終わるまでの十数秒、ファンは BIOS の設定で回り、終わるとアプリが起動し直します。\n\n更新しますか？	MainWindow.Update.cs:106
+b6e4f6c5	Zeph-Iris {0} に更新します。\n\nインストーラー（{1:F0} MB）をダウンロードして確かめたあと、アプリが一度終了します。入れ替えが終わるまでの十数秒、ファンは BIOS の設定で回り、終わるとアプリが起動し直します。\n\n更新しますか？	MainWindow.Update.cs:106
 6451d704	ハードウェアアクセス: LibreHardwareMonitor + PawnIO\n	MainWindow.xaml.cs:99
 6c7b6a5b	設定ファイル: {0}	MainWindow.xaml.cs:100
-1ffe58b3	温度が上限に達しています	MainWindow.xaml.cs:404
-4eed19a9	ブースト中	MainWindow.xaml.cs:406
-8052eef4	ポンプ以外を 100% で回しています	MainWindow.xaml.cs:406
-732c5446	BIOS 制御（ポンプ監視は継続）	MainWindow.xaml.cs:408
-9903c467	計算だけで、ファンには書き込んでいません（ポンプ保護は働きます）。下のボタンで制御を始めます	MainWindow.xaml.cs:410
-138d15fc	制御中（要確認）	MainWindow.xaml.cs:412
-9a955596	見つからないセンサーがあります（部品の交換など）	MainWindow.xaml.cs:412
-cde39c73	値が固まっているセンサーがあります	MainWindow.xaml.cs:414
-c347c56a	{0} 個を制御中	MainWindow.xaml.cs:416
-cbfa5900	制御を開始する（DRY RUN を解除）	MainWindow.xaml.cs:419
-559e78f2	制御を再開する	MainWindow.xaml.cs:420
-f1198e29	警告	MainWindow.xaml.cs:440
-b47a04b8	お知らせ	MainWindow.xaml.cs:442
-d3ec144f	仮想（{0}）	MainWindow.xaml.cs:471
-f45a5a37	検出したハードウェアの一覧です。画像のボタンから、自分で撮った写真などに差し替えられます	MainWindow.xaml.cs:509
-31e94c42	ファンごとに温度と回転数の関係を設定します。変更はすぐに反映・保存されます	MainWindow.xaml.cs:510
-b5ccd0c3	記録からの自動診断と、ファンのホコリ・劣化のチェック（AI のアドバイスはオプション）	MainWindow.xaml.cs:511
-2efbce3f	負荷をかけて、カーブを自動で作ったり、今の設定でどこまで冷えるかを測ったりします	MainWindow.xaml.cs:512
-73339fb8	最大 24 時間分の温度と回転数（アプリを閉じていた間を除く。再起動前の分は 1 分ごとの平均）	MainWindow.xaml.cs:513
-389ce2cc	電気代の目安・異常の記録	MainWindow.xaml.cs:514
-4bd55735	OpenRGB 連携で、PC の LED を温度・レインボー・音楽などに合わせて光らせます	MainWindow.xaml.cs:515
-acea69f7	このPCで検出されたすべての温度・回転数・制御チャネルと、仮想センサー	MainWindow.xaml.cs:516
-7626e5f7	プロファイル・自動切り替え・起動方法・制御全体の動作	MainWindow.xaml.cs:517
-d3bf5d86	DRY RUN を解除しました。ファンの制御を始めています。	MainWindow.xaml.cs:554
-256148cd	Fanlume 見張り	Program.cs:31
+7f8ae76b	Zeph-Iris は、LibreHardwareMonitor・PawnIO・OpenRGB・NAudio・QRCoder・Montserrat・Zen Maru Gothic・Inno Setup などのオープンソースのおかげで動いています。作ってくださった皆さんに感謝します（ライセンスはアプリのフォルダーの licenses にあります）。	MainWindow.xaml.cs:101
+1ffe58b3	温度が上限に達しています	MainWindow.xaml.cs:405
+4eed19a9	ブースト中	MainWindow.xaml.cs:407
+8052eef4	ポンプ以外を 100% で回しています	MainWindow.xaml.cs:407
+732c5446	BIOS 制御（ポンプ監視は継続）	MainWindow.xaml.cs:409
+9903c467	計算だけで、ファンには書き込んでいません（ポンプ保護は働きます）。下のボタンで制御を始めます	MainWindow.xaml.cs:411
+138d15fc	制御中（要確認）	MainWindow.xaml.cs:413
+9a955596	見つからないセンサーがあります（部品の交換など）	MainWindow.xaml.cs:413
+cde39c73	値が固まっているセンサーがあります	MainWindow.xaml.cs:415
+c347c56a	{0} 個を制御中	MainWindow.xaml.cs:417
+cbfa5900	制御を開始する（DRY RUN を解除）	MainWindow.xaml.cs:420
+559e78f2	制御を再開する	MainWindow.xaml.cs:421
+f1198e29	警告	MainWindow.xaml.cs:441
+b47a04b8	お知らせ	MainWindow.xaml.cs:443
+d3ec144f	仮想（{0}）	MainWindow.xaml.cs:472
+f45a5a37	検出したハードウェアの一覧です。画像のボタンから、自分で撮った写真などに差し替えられます	MainWindow.xaml.cs:510
+31e94c42	ファンごとに温度と回転数の関係を設定します。変更はすぐに反映・保存されます	MainWindow.xaml.cs:511
+b5ccd0c3	記録からの自動診断と、ファンのホコリ・劣化のチェック（AI のアドバイスはオプション）	MainWindow.xaml.cs:512
+2efbce3f	負荷をかけて、カーブを自動で作ったり、今の設定でどこまで冷えるかを測ったりします	MainWindow.xaml.cs:513
+73339fb8	最大 24 時間分の温度と回転数（アプリを閉じていた間を除く。再起動前の分は 1 分ごとの平均）	MainWindow.xaml.cs:514
+389ce2cc	電気代の目安・異常の記録	MainWindow.xaml.cs:515
+4bd55735	OpenRGB 連携で、PC の LED を温度・レインボー・音楽などに合わせて光らせます	MainWindow.xaml.cs:516
+acea69f7	このPCで検出されたすべての温度・回転数・制御チャネルと、仮想センサー	MainWindow.xaml.cs:517
+7626e5f7	プロファイル・自動切り替え・起動方法・制御全体の動作	MainWindow.xaml.cs:518
+d3bf5d86	DRY RUN を解除しました。ファンの制御を始めています。	MainWindow.xaml.cs:555
+81d7e612	Zeph-Iris 見張り	Program.cs:31
 0788f8eb	背面	UI/Controls/CasePreview.cs:59
 c85ab318	前	UI/Controls/CasePreview.cs:60
 0f616edd	上	UI/Controls/CasePreview.cs:61
@@ -1570,11 +1571,11 @@ f0a541e0	まだ PawnIO が見つかりません。インストーラーを実行
 3699179e	使っている場所: {0}	UI/RemapDialog.xaml.cs:19
 841ef786	（使わない）	UI/RemapDialog.xaml.cs:54
 cbfdf76e	（このファンを削除する）	UI/RemapDialog.xaml.cs:56
-5dde97f8	ハードウェアの変更 - Fanlume	UI/RemapDialog.xaml.cs:71
+8098e34b	ハードウェアの変更 - Zeph-Iris	UI/RemapDialog.xaml.cs:71
 41580e6f	設定で使っていたセンサーや端子が見つかりません。新しいハードウェアで同じ役割のものを自動で選びました。	UI/RemapDialog.xaml.cs:73
 80403780	内容を確認して「置き換えて適用」を押してください（今の設定はバックアップしてから変更します。あとで「元に戻す」もできます）。\n	UI/RemapDialog.xaml.cs:74
 8f763b23	それまでの間、見つからないセンサーを使っているカーブは、安全のため一定の回転数（設定 →「安全・バックアップ」で変更可）で回しています。	UI/RemapDialog.xaml.cs:75
-d49f09aa	設定の読み込み - Fanlume	UI/RemapDialog.xaml.cs:89
+4adf0059	設定の読み込み - Zeph-Iris	UI/RemapDialog.xaml.cs:89
 63ed3acb	ファイルの中のファン端子・温度センサーを、この PC のどれに対応させるか確認してください。	UI/RemapDialog.xaml.cs:92
 65901272	名前が同じものを自動で選んでいます。「（このファンを削除する）」にしたファンは読み込みません。	UI/RemapDialog.xaml.cs:93
 ecf8e3b5	書き出した PC: {0}（{1:yyyy/MM/dd HH:mm}）	UI/RemapDialog.xaml.cs:94
@@ -1589,7 +1590,7 @@ fe5a2b13	固定 70% で制御	UI/SetupWizard.xaml.cs:172
 0c1d2ab2	BIOS 制御のまま監視	UI/SetupWizard.xaml.cs:172
 d6d4423a	・{0}（ファン）: {1} に連動	UI/SetupWizard.xaml.cs:173
 9833252d	作成するプロファイル: {0} ／ {1} ／ {2}\n普段使うプロファイル: {3}\n\n	UI/SetupWizard.xaml.cs:174
-12b1edf7	Fanlume を開く	UI/TrayIcon.cs:82
+892a3878	Zeph-Iris を開く	UI/TrayIcon.cs:82
 9a801bfe	ブースト（全開）15 分	UI/TrayIcon.cs:88
 46dbb6b6	静音 30 分	UI/TrayIcon.cs:89
 670ac712	静音 2 時間	UI/TrayIcon.cs:89

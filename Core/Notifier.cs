@@ -62,7 +62,7 @@ public sealed class Notifier
     {
         try
         {
-            await SendCoreAsync(cfg, L("Fanlume テスト通知"), L($"{Environment.MachineName} からのテスト通知です。この通知が届けば設定は完了です。"), AlertLevel.Info);
+            await SendCoreAsync(cfg, L("Zeph-Iris テスト通知"), L($"{Environment.MachineName} からのテスト通知です。この通知が届けば設定は完了です。"), AlertLevel.Info);
             return L("送信しました。スマホに届いたか確認してください");
         }
         catch (Exception ex)

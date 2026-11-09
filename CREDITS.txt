@@ -1,13 +1,18 @@
-﻿Fanlume
+﻿Zeph-Iris
 ================
 
-Fanlume 本体: MIT License（LICENSE）
-Copyright (c) 2026 Fanlume contributors
+Zeph-Iris 本体: MIT License（LICENSE）
+Copyright (c) 2026 Zeph-Iris contributors
+
+Zeph-Iris は、下のオープンソースのソフトウェア・ドライバー・フォントのおかげで動いています。
+とくに LibreHardwareMonitor（温度とファンの読み書き）、PawnIO（ファンを動かすドライバー）、
+OpenRGB（LED の制御）がなければ、このアプリは作れませんでした。作ってくださった皆さんに感謝します。
+Thanks to everyone behind these open-source projects; Zeph-Iris could not exist without them.
 
 このリポジトリのソースの先頭にある「See CREDITS.txt」は、このファイルのことです。
 使っている部品と、そのライセンスは次のとおりです（インストーラーは、アプリのフォルダーの licenses フォルダーに同じものを入れます）。
 
-Fanlume が使用しているソフトウェア
+Zeph-Iris が使用しているソフトウェア
 ============================================
 
 LibreHardwareMonitorLib 0.9.6

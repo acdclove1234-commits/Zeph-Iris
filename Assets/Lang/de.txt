@@ -1,4 +1,4 @@
-# Fanlume UI text (de). Each line: hash of the Japanese source text, TAB, translation. Line breaks: backslash + n.
+# Zeph-Iris UI text (de). Each line: hash of the Japanese source text, TAB, translation. Line breaks: backslash + n.
 9cefb48e	Wird gestartet…
 3c3d953a	Hardware wird erkannt
 68a076e4	Pause (zurück an BIOS)
@@ -469,7 +469,7 @@ db0f8cfc	Strompreis pro kWh
 b4d79a66	CPU und GPU verwenden ihre Sensorwerte. Monitore und Lautsprecher sind nicht enthalten. Es ist keine Messung an der Steckdose, nur eine Schätzung.
 69355ed4	Sicherheit
 619b1ea2	Watchdog-Prozess verwenden (empfohlen)
-615a97bc	Verhindert, dass die Lüfter auf niedriger Drehzahl hängen bleiben, wenn die App abgeschossen wird oder einfriert. Der Task-Manager zeigt zwei Fanlume-Prozesse; einer davon ist der Watchdog
+b686ae3d	Verhindert, dass die Lüfter auf niedriger Drehzahl hängen bleiben, wenn die App abgeschossen wird oder einfriert. Der Task-Manager zeigt zwei Zeph-Iris-Prozesse; einer davon ist der Watchdog
 f739cc9b	Drehzahl in diesem Fall
 43c454af	Pumpen laufen immer mit 100 %
 d063c0c0	App automatisch neu starten (bis zu 3-mal in 10 Minuten, danach erscheint eine Meldung)
@@ -515,12 +515,12 @@ cb0aedd5	Temperatursensoren
 772bcb56	Mit dem Einrichtungsassistenten neu einrichten
 1c166250	Später
 381b7b8a	Ersetzen und anwenden
-50ab5a2c	Einrichtung - Fanlume
+da0c276f	Einrichtung - Zeph-Iris
 f918c02e	1  Willkommen
 38684fb3	2  Anschlüsse erkennen
 76236dbf	3  Kühlstrategie
 b303c749	4  Fertig
-890d0c09	Willkommen bei Fanlume
+ab449e0a	Willkommen bei Zeph-Iris
 26578394	Dieser Assistent prüft, was an den Lüfteranschlüssen Ihres Mainboards hängt,\nund erstellt automatisch passende Lüfterkurven und Profile (Leise / Standard / Leistung) für Ihren PC.
 80f88c90	Vorbereitung
 b1838111	• Bleiben Sie neben dem Gehäuse, damit Sie die Lüfter hören und sehen.\n• Schließen Sie anspruchsvolle Programme (etwa Spiele).\n• Ihre aktuellen Einstellungen werden überschrieben, lassen sich danach aber mit „Rückgängig“ wiederherstellen.
@@ -549,8 +549,8 @@ b58afa04	Alles bereit
 aceb0a14	Abbrechen
 f193a383	Zurück
 303830fc	Weiter
-2a910283	Deinstallieren (aufräumen) - Fanlume
-caf7be2a	Bevor Sie Fanlume nicht mehr verwenden, wird Ihr PC in den Zustand vor der Installation zurückversetzt. „Aufräumen und beenden“ führt Folgendes von oben nach unten aus.
+a7710fc4	Deinstallieren (aufräumen) - Zeph-Iris
+7e52ad37	Bevor Sie Zeph-Iris nicht mehr verwenden, wird Ihr PC in den Zustand vor der Installation zurückversetzt. „Aufräumen und beenden“ führt Folgendes von oben nach unten aus.
 2ed98b28	Zusätzlich (beides nur, wenn Sie es auswählen)
 9dc58ae6	Auch Einstellungen, Protokolle und Aufzeichnungen löschen
 f6fb6e2a	Auch PawnIO (den Treiber für die Lüftersteuerung) deinstallieren
@@ -583,9 +583,9 @@ fe1e7d87	 (nach einem Neustart übernimmt wieder das BIOS).
 e39402e8	Lichtsteuerung beendet und Geräte freigegeben
 8008dbae	Die Lichtsteuerung wurde nicht verwendet (Verbindung geschlossen)
 775adf46	Handy-Ansicht
-63aa333a	Die Firewall-Regel konnte nicht entfernt werden. Löschen Sie „Fanlume Web“ unter „Windows-Sicherheit“ → „Firewall- & Netzwerkschutz“ → „Erweiterte Einstellungen“ → „Eingehende Regeln“.
+7a5758ef	Die Firewall-Regel konnte nicht entfernt werden. Löschen Sie „Zeph-Iris Web“ unter „Windows-Sicherheit“ → „Firewall- & Netzwerkschutz“ → „Erweiterte Einstellungen“ → „Eingehende Regeln“.
 629589af	Handy-Ansicht beendet und Firewall-Regel entfernt
-31af9d29	Der Autostart konnte nicht entfernt werden. Löschen Sie „Fanlume“ in der Aufgabenplanung (Aufgabenplanungsbibliothek).
+855084fc	Der Autostart konnte nicht entfernt werden. Löschen Sie „Zeph-Iris“ in der Aufgabenplanung (Aufgabenplanungsbibliothek).
 bc13583b	Der Start bei der Anmeldung wurde entfernt
 22c99fc8	Die Einstellung für Absturzabbilder konnte nicht entfernt werden (HKEY_LOCAL_MACHINE\\{0}). Sie schadet nicht, wenn sie bleibt.
 14dd713f	Die Einstellung für Absturzabbilder wurde entfernt
@@ -594,7 +594,7 @@ d66766d3	Hier nicht ausgeführt
 1e82ca4a	Der Pfad der ausführbaren Datei ist unbekannt.
 eb8f4a4f	Das Löschen von Einstellungen, Protokollen und Aufzeichnungen konnte nicht vorbereitet werden ({0}).\nLöschen Sie nach dem Beenden der App den ganzen Ordner:\n{1}
 8df0902c	Ordner öffnen
-fa3ff255	Fanlume läuft noch, daher wurden Einstellungen, Protokolle und Aufzeichnungen nicht gelöscht.\n
+94fb9fd8	Zeph-Iris läuft noch, daher wurden Einstellungen, Protokolle und Aufzeichnungen nicht gelöscht.\n
 32a27012	Beenden Sie die App und löschen Sie dann diesen ganzen Ordner:\n{0}
 ecdec9de	Gelöscht: {0}.\n\n
 a261a21a	Wenn Sie diese Meldung schließen, öffnet der Explorer den Ordner der App. Löschen Sie den ganzen Ordner, um das Aufräumen abzuschließen:\n{0}
@@ -602,18 +602,18 @@ a261a21a	Wenn Sie diese Meldung schließen, öffnet der Explorer den Ordner der 
 d6750fd2	\n•
 bf71d238	\n…und {0} weitere
 df6134ea	\n\nLöschen Sie nach dem Schließen dieser Meldung diesen ganzen Ordner:\n{0}
-766fce35	Fanlume aufräumen
-da630a7f	Fanlume läuft bereits.\nÖffnen Sie es über das Symbol im Infobereich.
+9c469322	Zeph-Iris aufräumen
+13b0e2e6	Zeph-Iris läuft bereits.\nÖffnen Sie es über das Symbol im Infobereich.
 ec6a9bb6	Aufzeichnungen speichern
 c0fd45c5	Läuft im Infobereich weiter. Zum Beenden mit der rechten Maustaste auf das Symbol klicken.
-0a3f2987	Fanlume: wiederhergestellt
+813ce530	Zeph-Iris: wiederhergestellt
 977b8544	Das Profil wurde automatisch gewechselt
 790c11cc	{0} erkannt → {1}
-a75f3e15	Fanlume: Wartung
+e586d56a	Zeph-Iris: Wartung
 5b860ae3	Läuft im DRY RUN (Testmodus). Es werden nur die Drehzahlen zu den Temperaturen berechnet; die Lüfter werden nicht angesteuert.
 874003cc	Steuerung starten
 812bba50	Die Einstellungsdatei war beschädigt und wurde aus einer Sicherung ({0:yyyy/MM/dd HH:mm}) wiederhergestellt. Die beschädigte Datei bleibt als config.broken_*.json erhalten.
-5b1e3ca8	Fanlume wurde unerwartet beendet, daher hat der Watchdog-Prozess es automatisch neu gestartet. Die Steuerung lief weiter, nachdem die Lüfter auf eine sichere Drehzahl gesetzt wurden. Die Ursache steht im Protokoll.
+47b4365f	Zeph-Iris wurde unerwartet beendet, daher hat der Watchdog-Prozess es automatisch neu gestartet. Die Steuerung lief weiter, nachdem die Lüfter auf eine sichere Drehzahl gesetzt wurden. Die Ursache steht im Protokoll.
 7b249720	Protokoll öffnen
 3a7e2e72	Die App wurde unerwartet beendet und automatisch neu gestartet.
 c51b6c55	Mit Windows startet automatisch eine App an einem anderen Ort ({0}). Möglicherweise startet eine alte Version.
@@ -630,15 +630,15 @@ f5c17fde	Der Autostart konnte nicht neu eingetragen werden (Protokoll prüfen).
 c08fb050	 / 
 48ccab47	Ein verwendeter Sensor wurde nicht gefunden
 9c32a53a	Hardwareänderungen erkannt
-6317f1df	Fanlume: Hardwareänderung
+c1f02356	Zeph-Iris: Hardwareänderung
 646e0b57	{0}. Bestätigen Sie den Wechsel zu den neuen Sensoren am PC-Bildschirm.
 9dddc76a	Problem mit der Lüftersteuerung
 8ad6890e	{0} (aus Sicherheitsgründen steuert das BIOS; die Wiederherstellung wird automatisch versucht)
-f8b8b77e	Fanlume: Problem mit der Lüftersteuerung
+2820bd11	Zeph-Iris: Problem mit der Lüftersteuerung
 30b6b07e	Einige Bauteile können nicht gelesen werden
 465384a0	Lüftersteuerung wiederhergestellt
 2a57fe9c	Wieder normale Steuerung.
-25db31e1	Fanlume: wiederhergestellt
+f1a9779a	Zeph-Iris: wiederhergestellt
 a8e2e175	Die Lüftersteuerung ist wieder normal.
 0d78d54c	config.json konnte nicht gelesen werden, da ein anderes Programm sie geöffnet hält (die Datei bleibt unverändert).
 9b03cdae	Die Originaldatei bleibt als config.broken_<Datum>.json erhalten.
@@ -742,8 +742,8 @@ e0f9ce74	Der Drehzahlsensor kann nicht gelesen werden.
 da1c2ba4	Gibt alle Lüfter an die automatische BIOS-(Mainboard-)Steuerung zurück und prüft, dass es geklappt hat (sonst wird hier abgebrochen und nichts geändert)
 cf1947e1	Beendet die Lüftersteuerung und schließt die Hardware (PawnIO-Treiber). Teilt auch dem Watchdog-Prozess mit, dass es ein ordnungsgemäßes Beenden ist, damit er ebenfalls endet (statt die gestoppte Steuerung als Fehler zu werten und neu zu starten)
 a1e35f8f	Beendet die Lichtsteuerung und gibt die LED-Geräte frei (OpenRGB u. a.) – mit demselben Effekt wie beim normalen Beenden
-1fdea37e	Beendet die Handy-Ansicht und entfernt die hinzugefügte Windows-Firewall-Regel (Fanlume Web)
-14f09703	Entfernt den Start bei der Anmeldung (Aufgabe „Fanlume“ in der Aufgabenplanung)
+153ed949	Beendet die Handy-Ansicht und entfernt die hinzugefügte Windows-Firewall-Regel (Zeph-Iris Web)
+d1b6444e	Entfernt den Start bei der Anmeldung (Aufgabe „Zeph-Iris“ in der Aufgabenplanung)
 aa1f9cbb	Entfernt die Einstellung für Absturzabbilder (Windows Error Reporting\\LocalDumps in der Registrierung)
 7ca65cf7	Deinstalliert PawnIO (den Treiber für die Lüftersteuerung) mit winget
 a6b6b0e5	Beendet die App (mit demselben Aufräumen wie beim normalen Beenden; kein automatischer Neustart)
@@ -761,7 +761,7 @@ c96515c1	• Nach einem Neustart des PCs ist alles wieder wie zuvor.
 7fadc402	Wenn Sie dies schließen, wird die App beendet (kein automatischer Neustart). Einstellungen, Protokolle und Aufzeichnungen bleiben im Ordner.
 2735adba	Die App selbst kann nicht gelöscht werden, solange sie läuft. Wenn Sie sie nicht mehr verwenden, löschen Sie nach dem Beenden diesen Ordner (der Explorer öffnet ihn):\n{0}
 47bb6afa	Die Datei ist leer.
-51d76551	Dies ist keine Einstellungsdatei von Fanlume.
+474014d2	Dies ist keine Einstellungsdatei von Zeph-Iris.
 59d09ada	Sie enthält keine Profile.
 8f6cc529	Kein passender Anschluss gefunden (nicht importiert)
 a63b0e26	Gleicher Anschluss
@@ -777,7 +777,7 @@ a63b0e26	Gleicher Anschluss
 1b6b7859	Gut
 0b497be2	Etwas hoch
 6eb7c426	Unzureichende Kühlung
-b6e52ff7	Fanlume-Kühltest  {0:yyyy/MM/dd HH:mm}
+cbe4aaa4	Zeph-Iris-Kühltest  {0:yyyy/MM/dd HH:mm}
 f18a2032	Profil: {0} / Lastdauer: {1:F0} Min. (alle CPU-Kerne)
 a659e995	Bewertung              : {0}
 67316e06	CPU-Leerlauftemperatur : {0:F1} °C
@@ -939,8 +939,8 @@ fcc150e0	 (verglichene Zeit: Basis {0} min, zuletzt {1} min; Unterschiede der Ra
 d9bee020	Downloads
 4a049af4	Desktop
 4033fb1e	Temporärer Ordner
-687bc2e0	Fanlume.exe konnte nicht kopiert werden
-2a3da751	Fanlume-Testbenachrichtigung
+d99e1723	Zeph-Iris.exe konnte nicht kopiert werden
+131a1082	Zeph-Iris-Testbenachrichtigung
 7be18f84	Dies ist eine Testbenachrichtigung von {0}. Wenn sie ankommt, ist die Einrichtung abgeschlossen.
 15278ea5	Gesendet. Prüfen Sie, ob sie auf dem Handy angekommen ist
 4ce2da04	Senden fehlgeschlagen: {0}
@@ -1108,8 +1108,8 @@ b599c0f6	Höhen (Hi-Hat)
 f898c734	Keine https-Adresse: {0}
 9181a7c0	Die App wurde in {0:F0} Minuten {1}-mal beendet, daher wird nicht mehr automatisch neu gestartet.
 abf150b9	Der automatische Neustart ist ausgeschaltet.
-50be9a1c	Fanlume wurde unerwartet beendet.\n\nDie Lüfter sind auf eine sichere Drehzahl festgelegt ({0:F0} %, Pumpen 100 %). {1}\n
-af5a88ef	Nach einem Neustart des PCs übernimmt wieder das BIOS (wenn Sie Fanlume neu starten, steuert wieder die App).\n\nProtokoll: 
+82655ed5	Zeph-Iris wurde unerwartet beendet.\n\nDie Lüfter sind auf eine sichere Drehzahl festgelegt ({0:F0} %, Pumpen 100 %). {1}\n
+91122f58	Nach einem Neustart des PCs übernimmt wieder das BIOS (wenn Sie Zeph-Iris neu starten, steuert wieder die App).\n\nProtokoll: 
 5e11c7bc	Aus diesem Netzwerk nicht nutzbar.
 3540eeb1	Zu viele falsche Schlüssel, daher vorübergehend gesperrt. Warten Sie etwa 1 Minute.
 aacf373e	Der Zugriffsschlüssel ist falsch. Verwenden Sie die URL, die in den Einstellungen am PC angezeigt wird.
@@ -1217,13 +1217,13 @@ ca58240b	Aus Sicherung wiederherstellen
 0a066c64	Die Einstellungen vom {0} wurden wiederhergestellt (mit „Rückgängig“ zurücknehmbar).
 4a2fd247	Diese Sicherung konnte nicht gelesen werden.\n{0}
 1b7a6d56	Einstellungen exportieren
-f48eb65b	Fanlume-Einstellungen (*.fanlume.json)|*.fanlume.json
-f1a7dc7f	Fanlume-Einstellungen_{0}_{1:yyyyMMdd}{2}
+5e2d8db8	Zeph-Iris-Einstellungen (*.zeph-iris.json)|*.zeph-iris.json
+bf4b6694	Zeph-Iris-Einstellungen_{0}_{1:yyyyMMdd}{2}
 dd581e02	{0} Profile exportiert. Senden Sie die Datei an die andere Person und lassen Sie sie über Einstellungen → „Sicherheit & Sicherung“ → „Einstellungen importieren“ laden.
 25f3627c	Export nicht möglich.\n{0}
 e6cdafd7	Bitte warten Sie, bis die Hardware initialisiert ist.
 de0ce3c8	Einstellungen importieren
-70585dc7	Fanlume-Einstellungen (*.fanlume.json;*.json)|*.fanlume.json;*.json
+67578d3a	Zeph-Iris-Einstellungen (*.zeph-iris.json;*.json)|*.zeph-iris.json;*.json
 49c7511d	Diese Datei kann nicht geladen werden.\n{0}
 d01ee250	. Mit „Rückgängig“ zurücknehmbar. Prüfen Sie die Kurven der importierten Lüfter, bevor Sie sie verwenden.
 565076e7	Kurven prüfen
@@ -1482,7 +1482,7 @@ b5ccd0c3	Automatische Diagnose aus den Aufzeichnungen und Prüfung der Lüfter a
 acea69f7	Alle auf diesem PC erkannten Temperaturen, Drehzahlen und Steuerkanäle sowie virtuelle Sensoren
 7626e5f7	Profile, automatischer Wechsel, Startart und Verhalten der gesamten Steuerung
 d3bf5d86	DRY RUN wurde beendet. Die Lüftersteuerung startet.
-256148cd	Fanlume-Wächter
+81d7e612	Zeph-Iris-Wächter
 0788f8eb	Hinten
 c85ab318	Vorn
 0f616edd	Oben
@@ -1506,11 +1506,11 @@ f0a541e0	PawnIO wurde noch nicht gefunden. Wenn Sie den Installer bereits ausgef
 3699179e	Verwendet in: {0}
 841ef786	(nicht verwenden)
 cbfdf76e	(diesen Lüfter löschen)
-5dde97f8	Hardwareänderung - Fanlume
+8098e34b	Hardwareänderung - Zeph-Iris
 41580e6f	In den Einstellungen verwendete Sensoren oder Anschlüsse wurden nicht gefunden. Auf der neuen Hardware wurden automatisch solche mit gleicher Rolle gewählt.
 80403780	 Prüfen Sie den Inhalt und klicken Sie auf „Ersetzen und anwenden“ (die aktuellen Einstellungen werden vorher gesichert; später ist auch „Rückgängig“ möglich).\n
 8f763b23	Bis dahin laufen Kurven mit nicht gefundenen Sensoren zur Sicherheit mit konstanter Drehzahl (änderbar unter Einstellungen → „Sicherheit & Sicherung“).
-d49f09aa	Einstellungen importieren - Fanlume
+4adf0059	Einstellungen importieren - Zeph-Iris
 63ed3acb	Prüfen Sie, welchen Lüfteranschlüssen und Temperatursensoren dieses PCs die Einträge der Datei entsprechen sollen.
 65901272	 Gleichnamige Einträge werden automatisch gewählt. Lüfter, die auf „(diesen Lüfter löschen)“ gesetzt sind, werden nicht importiert.
 ecf8e3b5	Exportiert von PC: {0} ({1:yyyy/MM/dd HH:mm})
@@ -1525,7 +1525,7 @@ fe5a2b13	Fest mit 70 % steuern
 0c1d2ab2	Unter BIOS-Steuerung überwachen
 d6d4423a	• {0} (Lüfter): folgt {1}
 9833252d	Zu erstellende Profile: {0} / {1} / {2}\nProfil für den Alltag: {3}\n\n
-12b1edf7	Fanlume öffnen
+892a3878	Zeph-Iris öffnen
 9a801bfe	Boost (volle Drehzahl) 15 Min.
 46dbb6b6	Leise 30 Min.
 670ac712	Leise 2 Std.
@@ -1604,11 +1604,9 @@ c8e0f349	Die Geräuschprüfung eines Lüfters läuft noch.
 69ade00e	Die Einrichtung läuft noch.
 82fa072a	Wählen Sie die Anzeigesprache erneut, wenn das abgeschlossen ist.
 31040161	Von {0} nach {1} installiert und von dort gestartet. Ab jetzt läuft die App in diesem Ordner (die heruntergeladenen Dateien können Sie löschen).
-4a3be0af	ProFanController (die frühere Version)
-67d28cec	Die Einstellungen und Aufzeichnungen der früheren Version (ProFanController) wurden aus {0} übernommen. Dieser Ordner wird nicht mehr verwendet; prüfen Sie den Inhalt, dann können Sie ihn löschen.
-82ee83eb	Das Deinstallationsprogramm konnte nicht gestartet werden ({0}).\nDeinstallieren Sie Fanlume nach dem Beenden der App unter Windows-Einstellungen → Apps → Installierte Apps.
-adc330eb	Wenn Sie dies schließen, wird die App beendet; danach entfernt das Deinstallationsprogramm die App und die {0}. Fanlume verschwindet auch aus „Installierte Apps“ in Windows.
-f10b7201	Wenn Sie dies schließen, wird die App beendet; danach entfernt das Deinstallationsprogramm die App. Fanlume verschwindet auch aus „Installierte Apps“ in Windows. Einstellungen, Protokolle und Aufzeichnungen bleiben im Ordner.
+0f9a00ea	Das Deinstallationsprogramm konnte nicht gestartet werden ({0}).\nDeinstallieren Sie Zeph-Iris nach dem Beenden der App unter Windows-Einstellungen → Apps → Installierte Apps.
+adc330eb	Wenn Sie dies schließen, wird die App beendet; danach entfernt das Deinstallationsprogramm die App und die {0}. Zeph-Iris verschwindet auch aus „Installierte Apps“ in Windows.
+f10b7201	Wenn Sie dies schließen, wird die App beendet; danach entfernt das Deinstallationsprogramm die App. Zeph-Iris verschwindet auch aus „Installierte Apps“ in Windows. Einstellungen, Protokolle und Aufzeichnungen bleiben im Ordner.
 6f13f8bc	Updates
 6e708964	Nach Updates suchen
 1c275381	Aktualisieren
@@ -1616,10 +1614,10 @@ f10b7201	Wenn Sie dies schließen, wird die App beendet; danach entfernt das Dei
 2420b253	Automatisch nach neuen Versionen suchen
 094990a5	Fragt höchstens einmal am Tag bei GitHub nach der neuesten Version und meldet sich, wenn es eine neue gibt (gesendet werden nur Name und Version der App)
 395b0a50	„Aktualisieren“ lädt das Installationsprogramm herunter, prüft, ob es mit der auf GitHub veröffentlichten Datei übereinstimmt, und ersetzt die App ohne weitere Fenster. Etwa 10–20 Sekunden lang ist die App beendet und die Lüfter laufen mit den BIOS-Einstellungen; danach startet sie wieder. Einstellungen, Protokolle und Aufzeichnungen bleiben erhalten.
-3ef4127e	Fanlume wurde von {0} auf {1} aktualisiert.
+9f2b9221	Zeph-Iris wurde von {0} auf {1} aktualisiert.
 d256382b	Auf {0} aktualisiert.
 042a94f0	Wird geprüft…
-42e9517b	Eine neue Version, Fanlume {0}, ist verfügbar. „Aktualisieren“ lädt sie herunter und ersetzt die App (etwa 10–20 Sekunden lang laufen die Lüfter mit den BIOS-Einstellungen).
+de427ef4	Eine neue Version, Zeph-Iris {0}, ist verfügbar. „Aktualisieren“ lädt sie herunter und ersetzt die App (etwa 10–20 Sekunden lang laufen die Lüfter mit den BIOS-Einstellungen).
 bb0f9e93	Version {0} ist verfügbar.
 ebc47f06	Sie haben die neueste Version ({0}).
 993c451d	Es konnte nicht nach einer neuen Version gesucht werden ({0}). Prüfen Sie die Internetverbindung.
@@ -1634,7 +1632,7 @@ cb8ee667	Aktuelle Version: {0}
 e1525ed0	Version {0} ist verfügbar (veröffentlicht am {1:yyyy/MM/dd}, {2:F0} MB).
 7d2bdd2c	Sie haben die neueste Version (geprüft am {0:M/d HH:mm}).
 a94ca4e7	Noch nicht geprüft.
-d24d8900	Auf Fanlume {0} aktualisieren.\n\nNachdem das Installationsprogramm ({1:F0} MB) heruntergeladen und geprüft wurde, wird die App beendet. Bis der Austausch fertig ist (etwa 10–20 Sekunden), laufen die Lüfter mit den BIOS-Einstellungen; danach startet die App wieder.\n\nJetzt aktualisieren?
+b6e4f6c5	Auf Zeph-Iris {0} aktualisieren.\n\nNachdem das Installationsprogramm ({1:F0} MB) heruntergeladen und geprüft wurde, wird die App beendet. Bis der Austausch fertig ist (etwa 10–20 Sekunden), laufen die Lüfter mit den BIOS-Einstellungen; danach startet die App wieder.\n\nJetzt aktualisieren?
 98b3be1a	Wird heruntergeladen… {0:P0}
 c1f570b8	\n\nSie können auch aktualisieren, indem Sie das Installationsprogramm selbst von der Release-Seite ausführen.
 d4af943f	Raumtemperatursensor
@@ -1645,9 +1643,12 @@ ee455e9f	Zur vorherigen Version zurück
 c1d1f65d	Die vorherige Version ist nicht bekannt, daher ist kein Zurückkehren möglich.
 a8c3ec6f	Die vorherige Version konnte nicht von GitHub gelesen werden ({0}). Prüfen Sie die Internetverbindung.
 87370a47	Das Installationsprogramm der vorherigen Version ({0}) wurde auf GitHub nicht gefunden.
-b635421a	Sie haben kürzlich auf diese Version aktualisiert. Wenn die neue Version immer wieder beendet wird, führen Sie das Installationsprogramm von {1} (Fanlume-{2}-setup.exe) von der Release-Seite ({0}) aus, um zur vorherigen Version zurückzukehren.
+874d775f	Sie haben kürzlich auf diese Version aktualisiert. Wenn die neue Version immer wieder beendet wird, führen Sie das Installationsprogramm von {1} (Zeph-Iris-{2}-setup.exe) von der Release-Seite ({0}) aus, um zur vorherigen Version zurückzukehren.
 dd7ad3b9	Automatisch (nicht gefunden)
 c4d4fe99	Automatisch ({0})
 096f8d69	Keinen verwenden (nur mit Leerlaufzeiten vergleichen)
 72959f2c	Zur vorherigen Version ({0}) zurück
 f2252901	Zur vorherigen Version ({0}) zurückkehren.\n\nNachdem das Installationsprogramm der vorherigen Version von GitHub heruntergeladen und geprüft wurde, wird die App beendet. Bis der Austausch fertig ist (etwa 10–20 Sekunden), laufen die Lüfter mit den BIOS-Einstellungen; danach startet die App wieder. Einstellungen, Protokolle und Aufzeichnungen bleiben erhalten.\n\nJetzt zurückkehren?
+6d39169b	Die Einstellungen und Aufzeichnungen der früheren Version wurden aus {0} übernommen. Dieser Ordner wird nicht mehr verwendet; prüfen Sie den Inhalt, dann können Sie ihn löschen.
+f66007ff	{0} (die frühere Version)
+7f8ae76b	Zeph-Iris funktioniert dank Open-Source-Software wie LibreHardwareMonitor, PawnIO, OpenRGB, NAudio, QRCoder, Montserrat, Zen Maru Gothic und Inno Setup. Vielen Dank an alle, die sie entwickeln (die Lizenzen liegen im Ordner „licenses“ der App).

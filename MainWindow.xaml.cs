@@ -95,9 +95,10 @@ public partial class MainWindow : Window
 
         var version = typeof(MainWindow).Assembly.GetName().Version;
         AboutText.Text =
-            $"Fanlume {version?.ToString(3)}\n" +
+            $"{AppIdentity.Name} {version?.ToString(3)}\n" +
             L("ハードウェアアクセス: LibreHardwareMonitor + PawnIO\n") +
-            L($"設定ファイル: {ConfigStore.FilePath}");
+            L($"設定ファイル: {ConfigStore.FilePath}") + "\n\n" +
+            L("Zeph-Iris は、LibreHardwareMonitor・PawnIO・OpenRGB・NAudio・QRCoder・Montserrat・Zen Maru Gothic・Inno Setup などのオープンソースのおかげで動いています。作ってくださった皆さんに感謝します（ライセンスはアプリのフォルダーの licenses にあります）。");
 
         SourceInitialized += (_, _) => ThemeManager.ApplyTitleBar(this);
         Loaded += async (_, _) =>
@@ -395,7 +396,7 @@ public partial class MainWindow : Window
 
         var cpuCard = _tempCards.FirstOrDefault();
         var gpuCard = _tempCards.Skip(1).FirstOrDefault();
-        TraySummary = $"Fanlume [{s.Profile}]\n{cpuCard?.Title ?? "CPU"} {cpuCard?.ValueText ?? "--"}°C / {gpuCard?.Title ?? "GPU"} {gpuCard?.ValueText ?? "--"}°C";
+        TraySummary = $"Zeph-Iris [{s.Profile}]\n{cpuCard?.Title ?? "CPU"} {cpuCard?.ValueText ?? "--"}°C / {gpuCard?.Title ?? "GPU"} {gpuCard?.ValueText ?? "--"}°C";
     }
 
     private void UpdateStatusPanel(EngineSnapshot s)

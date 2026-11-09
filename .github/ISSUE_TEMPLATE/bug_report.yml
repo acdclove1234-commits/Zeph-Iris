@@ -1,0 +1,61 @@
+name: 不具合の報告 / Bug report
+description: うまく動かないところを知らせる / Tell us about something that does not work
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        報告ありがとうございます。動作を確かめた PC はまだ少ないので、ほかの部品での報告はとても助かります。
+        Thanks for reporting. Zeph-Iris has been checked on very few PCs, so reports from other hardware help a lot.
+  - type: textarea
+    id: what
+    attributes:
+      label: 何が起きたか / What happened
+      description: 何をしたら、どうなったか。期待していた動きも書いてください / What you did, what happened, and what you expected
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Zeph-Iris の版 / Zeph-Iris version
+      description: 設定 →「一般」→「アップデート」の「いまの版」 / Settings → General → Updates → "Current version"
+      placeholder: "6.8.0"
+    validations:
+      required: true
+  - type: input
+    id: motherboard
+    attributes:
+      label: マザーボード / Motherboard
+      placeholder: "ASRock B860 Steel Legend WiFi"
+    validations:
+      required: true
+  - type: input
+    id: cpu
+    attributes:
+      label: CPU
+      placeholder: "Intel Core Ultra 5 245KF"
+  - type: input
+    id: gpu
+    attributes:
+      label: グラボ / Graphics card
+      placeholder: "PNY GeForce RTX 5070 Ti"
+  - type: input
+    id: windows
+    attributes:
+      label: Windows
+      placeholder: "Windows 11 Pro 24H2"
+  - type: textarea
+    id: logs
+    attributes:
+      label: ログ / Logs
+      description: |
+        アプリのフォルダー（C:\Program Files\Zeph-Iris）の logs フォルダーから、その日のログを添付してください。
+        ログに個人的な情報（PC の名前・フォルダーの名前など）があれば、消してからどうぞ。
+        Attach the day's log from the logs folder in the app folder (C:\Program Files\Zeph-Iris).
+        Remove anything personal (PC name, folder names) before posting.
+  - type: checkboxes
+    id: other-apps
+    attributes:
+      label: ほかのソフト / Other software
+      options:
+        - label: ほかのファン・LED のソフト（Armoury Crate・MSI Center・iCUE・FanControl など）は止めています / Other fan or LED software (Armoury Crate, MSI Center, iCUE, FanControl, …) is not running

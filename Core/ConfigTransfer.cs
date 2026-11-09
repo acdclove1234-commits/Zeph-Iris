@@ -10,13 +10,14 @@ using System.Text.Json;
 
 namespace ProFanController;
 
-/// <summary>書き出しファイル（*.fanlume.json）の中身</summary>
+/// <summary>書き出しファイル（*.zeph-iris.json）の中身</summary>
 public sealed class SettingsPackage
 {
-    public const string FormatName = "Fanlume.Settings";
+    public const string FormatName = "Zeph-Iris.Settings";
 
-    /// <summary>前の名前（6.6.1 まで）で書き出したファイルの印（*.profan.json。そのまま読み込める）</summary>
-    public const string LegacyFormatName = AppIdentity.LegacyName + ".Settings";
+    /// <summary>この印のファイルを読み込める（いまの名前と、前の名前〈Fanlume の *.fanlume.json・ProFanController の *.profan.json〉）</summary>
+    public static bool IsKnownFormat(string? format)
+        => format == FormatName || AppIdentity.LegacyApps.Any(a => a.SettingsFormat == format);
 
     public string Format { get; set; } = FormatName;
     public int Version { get; set; } = 1;
@@ -37,7 +38,7 @@ public sealed class SettingsPackage
 
 public static class ConfigTransfer
 {
-    public const string Extension = ".fanlume.json";
+    public const string Extension = ".zeph-iris.json";
 
     private static readonly JsonSerializerOptions Options = new()
     {
@@ -82,8 +83,8 @@ public static class ConfigTransfer
     {
         var pkg = JsonSerializer.Deserialize<SettingsPackage>(File.ReadAllText(path), Options)
                   ?? throw new InvalidDataException(L("ファイルが空です。"));
-        if (pkg.Format is not (SettingsPackage.FormatName or SettingsPackage.LegacyFormatName))
-            throw new InvalidDataException(L("Fanlume の設定ファイルではありません。"));
+        if (!SettingsPackage.IsKnownFormat(pkg.Format))
+            throw new InvalidDataException(L("Zeph-Iris の設定ファイルではありません。"));
         if (pkg.Profiles.Count == 0) throw new InvalidDataException(L("プロファイルが入っていません。"));
         foreach (var f in pkg.Profiles.SelectMany(p => p.Fans)) f.Normalize();
         return pkg;

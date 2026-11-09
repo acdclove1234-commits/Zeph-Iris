@@ -1,4 +1,4 @@
-# Fanlume UI text (tr). Each line: hash of the Japanese source text, TAB, translation. Line breaks: backslash + n.
+# Zeph-Iris UI text (tr). Each line: hash of the Japanese source text, TAB, translation. Line breaks: backslash + n.
 9cefb48e	Başlatılıyor…
 3c3d953a	Donanım algılanıyor
 68a076e4	Duraklat (BIOS'a bırak)
@@ -469,7 +469,7 @@ db0f8cfc	kWh başına elektrik fiyatı
 b4d79a66	CPU ve GPU sensör değerlerini kullanır. Monitörler ve hoparlörler dahil değildir. Prizden ölçülmediği için yalnızca bir tahmindir.
 69355ed4	Güvenlik
 619b1ea2	Gözetleyici işlemi kullan (önerilen)
-615a97bc	Uygulama zorla kapatıldığında veya donduğunda fanların düşük devirde takılı kalmasını önler. Görev Yöneticisi'nde iki Fanlume görünür; biri gözetleyicidir
+b686ae3d	Uygulama zorla kapatıldığında veya donduğunda fanların düşük devirde takılı kalmasını önler. Görev Yöneticisi'nde iki Zeph-Iris görünür; biri gözetleyicidir
 f739cc9b	O durumdaki devir
 43c454af	Pompalar her zaman %100'e çıkar
 d063c0c0	Uygulamayı otomatik yeniden başlat (10 dakikada en fazla 3 kez; sonra bir mesaj gösterilir)
@@ -515,12 +515,12 @@ cb0aedd5	Sıcaklık sensörleri
 772bcb56	Kurulum sihirbazıyla baştan ayarla
 1c166250	Sonra
 381b7b8a	Değiştir ve uygula
-50ab5a2c	Kurulum - Fanlume
+da0c276f	Kurulum - Zeph-Iris
 f918c02e	1  Hoş geldiniz
 38684fb3	2  Konnektörleri tanı
 76236dbf	3  Soğutma yaklaşımı
 b303c749	4  Bitti
-890d0c09	Fanlume'a hoş geldiniz
+ab449e0a	Zeph-Iris'e hoş geldiniz
 26578394	Bu sihirbaz anakartın fan konnektörlerine nelerin bağlı olduğunu kontrol eder\nve bilgisayarınıza uygun fan eğrilerini ve profilleri (Sessiz / Standart / Performans) otomatik oluşturur.
 80f88c90	Hazırlık
 b1838111	• Fanları duyup görebilmek için kasanın yanında durun.\n• Ağır programları (oyunlar gibi) kapatın.\n• Mevcut ayarlarınızın üzerine yazılır, ancak sonra "Geri al" ile dönebilirsiniz.
@@ -549,8 +549,8 @@ b58afa04	Hazır
 aceb0a14	İptal
 f193a383	Geri
 303830fc	İleri
-2a910283	Kaldır (temizlik) - Fanlume
-caf7be2a	Fanlume'ı kullanmayı bırakmadan önce bilgisayarı uygulama kurulmadan önceki hâline döndürür. "Temizle ve çık" aşağıdakileri yukarıdan aşağı yapar.
+a7710fc4	Kaldır (temizlik) - Zeph-Iris
+7e52ad37	Zeph-Iris'i kullanmayı bırakmadan önce bilgisayarı uygulama kurulmadan önceki hâline döndürür. "Temizle ve çık" aşağıdakileri yukarıdan aşağı yapar.
 2ed98b28	Ayrıca (seçmezseniz hiçbiri yapılmaz)
 9dc58ae6	Ayarları, günlükleri ve kayıtları da sil
 f6fb6e2a	PawnIO'yu (fan kontrol sürücüsü) da kaldır
@@ -583,9 +583,9 @@ fe1e7d87	 (bilgisayar yeniden başlatılınca kontrol BIOS'a döner).
 e39402e8	Aydınlatma kontrolü durduruldu ve cihazlar serbest bırakıldı
 8008dbae	Aydınlatma kontrolü kullanılmıyordu (bağlantı kapatıldı)
 775adf46	Telefon görünümü
-63aa333a	Güvenlik duvarı izni kaldırılamadı. "Windows Güvenliği" → "Güvenlik duvarı ve ağ koruması" → "Gelişmiş ayarlar" → "Gelen Kuralları" altından "Fanlume Web"i silin.
+7a5758ef	Güvenlik duvarı izni kaldırılamadı. "Windows Güvenliği" → "Güvenlik duvarı ve ağ koruması" → "Gelişmiş ayarlar" → "Gelen Kuralları" altından "Zeph-Iris Web"i silin.
 629589af	Telefon görünümü durduruldu ve güvenlik duvarı izni kaldırıldı
-31af9d29	Otomatik başlatma kaldırılamadı. Görev Zamanlayıcı'dan (Görev Zamanlayıcı Kitaplığı) "Fanlume"ı silin.
+855084fc	Otomatik başlatma kaldırılamadı. Görev Zamanlayıcı'dan (Görev Zamanlayıcı Kitaplığı) "Zeph-Iris"ı silin.
 bc13583b	Oturum açılışında başlatma kaldırıldı
 22c99fc8	Çökme dökümü ayarı kaldırılamadı (HKEY_LOCAL_MACHINE\\{0}). Bırakılması zarar vermez.
 14dd713f	Çökme dökümü ayarı kaldırıldı
@@ -594,7 +594,7 @@ d66766d3	Burada yapılmaz
 1e82ca4a	Yürütülebilir dosyanın yolu bilinmiyor.
 eb8f4a4f	Ayarların, günlüklerin ve kayıtların silinmesi hazırlanamadı ({0}).\nUygulama kapandıktan sonra klasörün tamamını silin:\n{1}
 8df0902c	Klasörü aç
-fa3ff255	Fanlume hâlâ çalıştığı için ayarlar, günlükler ve kayıtlar silinmedi.\n
+94fb9fd8	Zeph-Iris hâlâ çalıştığı için ayarlar, günlükler ve kayıtlar silinmedi.\n
 32a27012	Uygulamayı kapatın, ardından bu klasörün tamamını silin:\n{0}
 ecdec9de	Silindi: {0}.\n\n
 a261a21a	Bu mesajı kapatınca Dosya Gezgini uygulamanın klasörünü açar. Temizliği bitirmek için klasörün tamamını silin:\n{0}
@@ -602,18 +602,18 @@ a261a21a	Bu mesajı kapatınca Dosya Gezgini uygulamanın klasörünü açar. Te
 d6750fd2	\n•
 bf71d238	\n…ve {0} tane daha
 df6134ea	\n\nBu mesajı kapattıktan sonra bu klasörün tamamını silin:\n{0}
-766fce35	Fanlume temizliği
-da630a7f	Fanlume zaten çalışıyor.\nSistem tepsisindeki simgeden açın.
+9c469322	Zeph-Iris temizliği
+13b0e2e6	Zeph-Iris zaten çalışıyor.\nSistem tepsisindeki simgeden açın.
 ec6a9bb6	Kayıtları kaydetme
 c0fd45c5	Sistem tepsisinde çalışmaya devam ediyor. Çıkmak için simgeye sağ tıklayın.
-0a3f2987	Fanlume: düzeldi
+813ce530	Zeph-Iris: düzeldi
 977b8544	Profil otomatik olarak değiştirildi
 790c11cc	{0} algılandı → {1}
-a75f3e15	Fanlume: bakım
+e586d56a	Zeph-Iris: bakım
 5b860ae3	DRY RUN (test modu) ile çalışıyor. Yalnızca sıcaklıklara göre devirleri hesaplar; fanlar sürülmüyor.
 874003cc	Kontrole başla
 812bba50	Ayar dosyası bozuktu, bu yüzden bir yedekten ({0:yyyy/MM/dd HH:mm}) geri yüklendi. Bozuk dosya config.broken_*.json olarak saklandı.
-5b1e3ca8	Fanlume beklenmedik şekilde kapandı, gözetleyici işlem onu otomatik olarak yeniden başlattı. Fanlar güvenli bir devre alındıktan sonra kontrol sürdü. Nedeni günlükte görülebilir.
+47b4365f	Zeph-Iris beklenmedik şekilde kapandı, gözetleyici işlem onu otomatik olarak yeniden başlattı. Fanlar güvenli bir devre alındıktan sonra kontrol sürdü. Nedeni günlükte görülebilir.
 7b249720	Günlüğü aç
 3a7e2e72	Beklenmedik şekilde kapandı ve otomatik olarak yeniden başlatıldı.
 c51b6c55	Windows ile otomatik başlayan uygulama başka bir konumda ({0}). Eski bir sürüm başlıyor olabilir.
@@ -630,15 +630,15 @@ f5c17fde	Otomatik başlatma yeniden kaydedilemedi (günlüğe bakın).
 c08fb050	 / 
 48ccab47	Kullanılan bir sensör bulunamıyor
 9c32a53a	Donanım değişikliği algılandı
-6317f1df	Fanlume: donanım değişikliği
+c1f02356	Zeph-Iris: donanım değişikliği
 646e0b57	{0}. Yeni sensörlere geçişi bilgisayar ekranında onaylayın.
 9dddc76a	Fan kontrolünde bir sorun var
 8ad6890e	{0} (güvenlik için kontrol BIOS'ta; otomatik olarak düzeltme deneniyor)
-f8b8b77e	Fanlume: fan kontrolü sorunu
+2820bd11	Zeph-Iris: fan kontrolü sorunu
 30b6b07e	Bazı parçalar okunamıyor
 465384a0	Fan kontrolü düzeldi
 2a57fe9c	Normal kontrole dönüldü.
-25db31e1	Fanlume: düzeldi
+f1a9779a	Zeph-Iris: düzeldi
 a8e2e175	Fan kontrolü normale döndü.
 0d78d54c	Başka bir program config.json'u açık tuttuğu için okunamadı (dosyaya dokunulmadı).
 9b03cdae	Asıl dosya config.broken_<tarih>.json olarak saklandı.
@@ -742,8 +742,8 @@ e0f9ce74	Devir sensörü okunamıyor.
 da1c2ba4	Tüm fanları BIOS'un (anakart) otomatik kontrolüne döndürür ve döndüğünü doğrular (döndüremezse burada durur ve hiçbir şeyi değiştirmez)
 cf1947e1	Fan kontrolünü durdurur ve donanımı (PawnIO sürücüsü) kapatır. Gözetleyici işleme de "düzgün çıkış" olduğunu bildirerek onu da sonlandırır (durdurulan kontrolü arıza sayıp yeniden başlatmasın diye)
 a1e35f8f	Aydınlatma kontrolünü durdurur ve LED cihazlarını (OpenRGB vb.) serbest bırakır; normal çıkıştaki efektle durur
-1fdea37e	Telefon görünümünü durdurur ve Windows Güvenlik Duvarı'na eklenen izni (Fanlume Web) kaldırır
-14f09703	Oturum açılışında başlatmayı (Görev Zamanlayıcı'daki "Fanlume" görevi) kaldırır
+153ed949	Telefon görünümünü durdurur ve Windows Güvenlik Duvarı'na eklenen izni (Zeph-Iris Web) kaldırır
+d1b6444e	Oturum açılışında başlatmayı (Görev Zamanlayıcı'daki "Zeph-Iris" görevi) kaldırır
 aa1f9cbb	Çökme dökümü ayarını (kayıt defterindeki Windows Error Reporting\\LocalDumps) kaldırır
 7ca65cf7	PawnIO'yu (fan kontrol sürücüsü) winget ile kaldırır
 a6b6b0e5	Uygulamayı kapatır (normal çıkıştaki temizliği yapar; kendiliğinden yeniden başlamaz)
@@ -761,7 +761,7 @@ c96515c1	• Bilgisayarı yeniden başlatınca her şey eski hâline döner.
 7fadc402	Kapatınca uygulama sonlanır (kendiliğinden yeniden başlamaz). Ayarlar, günlükler ve kayıtlar klasörde kalır.
 2735adba	Uygulamanın kendisi çalışırken silinemez. Kullanmayı bırakacaksanız, kapandıktan sonra bu klasörü silin (Dosya Gezgini'nde açılır):\n{0}
 47bb6afa	Dosya boş.
-51d76551	Bu bir Fanlume ayar dosyası değil.
+474014d2	Bu bir Zeph-Iris ayar dosyası değil.
 59d09ada	Hiç profil içermiyor.
 8f6cc529	Eşleşen konnektör bulunamadı (içe aktarılmaz)
 a63b0e26	Aynı konnektör
@@ -777,7 +777,7 @@ a63b0e26	Aynı konnektör
 1b6b7859	İyi
 0b497be2	Biraz yüksek
 6eb7c426	Yetersiz soğutma
-b6e52ff7	Fanlume soğutma testi  {0:yyyy/MM/dd HH:mm}
+cbe4aaa4	Zeph-Iris soğutma testi  {0:yyyy/MM/dd HH:mm}
 f18a2032	Profil: {0} / yük süresi: {1:F0} dk (tüm CPU çekirdekleri)
 a659e995	Değerlendirme           : {0}
 67316e06	Boştaki CPU sıcaklığı  : {0:F1} °C
@@ -939,8 +939,8 @@ fcc150e0	 (karşılaştırılan süre: referans {0} dk, son {1} dk; oda sıcakl�
 d9bee020	İndirilenler
 4a049af4	Masaüstü
 4033fb1e	Geçici klasör
-687bc2e0	Fanlume.exe kopyalanamadı
-2a3da751	Fanlume test bildirimi
+d99e1723	Zeph-Iris.exe kopyalanamadı
+131a1082	Zeph-Iris test bildirimi
 7be18f84	Bu, {0} kaynaklı bir test bildirimidir. Bu bildirim geldiyse kurulum tamamdır.
 15278ea5	Gönderildi. Telefonunuza gelip gelmediğini kontrol edin
 4ce2da04	Gönderilemedi: {0}
@@ -1108,8 +1108,8 @@ b599c0f6	Tiz (hi-hat)
 f898c734	https adresi değil: {0}
 9181a7c0	{0:F0} dakikada {1} kez kapandığı için otomatik yeniden başlatma durduruldu.
 abf150b9	Otomatik yeniden başlatma kapalı.
-50be9a1c	Fanlume beklenmedik şekilde kapandı.\n\nFanlar güvenli bir devirde (%{0:F0}, pompalar %100) sabitlendi. {1}\n
-af5a88ef	Bilgisayarı yeniden başlatınca kontrol BIOS'a döner (Fanlume'ı yeniden başlatırsanız uygulama kontrol eder).\n\nGünlük: 
+82655ed5	Zeph-Iris beklenmedik şekilde kapandı.\n\nFanlar güvenli bir devirde (%{0:F0}, pompalar %100) sabitlendi. {1}\n
+91122f58	Bilgisayarı yeniden başlatınca kontrol BIOS'a döner (Zeph-Iris'i yeniden başlatırsanız uygulama kontrol eder).\n\nGünlük: 
 5e11c7bc	Bu ağdan kullanılamaz.
 3540eeb1	Çok fazla yanlış anahtar girildiği için bir süre kabul edilmiyor. Yaklaşık 1 dakika bekleyin.
 aacf373e	Erişim anahtarı yanlış. Bilgisayarın ayarlar ekranında görünen URL'yi kullanın.
@@ -1217,13 +1217,13 @@ ca58240b	Yedekten geri yükle
 0a066c64	{0} tarihli ayarlara dönüldü ("Geri al" ile geri alabilirsiniz).
 4a2fd247	Bu yedek okunamadı.\n{0}
 1b7a6d56	Ayarları dışa aktar
-f48eb65b	Fanlume ayarları (*.fanlume.json)|*.fanlume.json
-f1a7dc7f	Fanlume-ayarlari_{0}_{1:yyyyMMdd}{2}
+5e2d8db8	Zeph-Iris ayarları (*.zeph-iris.json)|*.zeph-iris.json
+bf4b6694	Zeph-Iris-ayarlari_{0}_{1:yyyyMMdd}{2}
 dd581e02	{0} profil dışa aktarıldı. Bu dosyayı karşı tarafa gönderin ve Ayarlar → "Güvenlik ve yedekleme" → "Ayarları içe aktar" ile yüklemesini isteyin.
 25f3627c	Dışa aktarılamadı.\n{0}
 e6cdafd7	Lütfen donanımın başlatılması bitene kadar bekleyin.
 de0ce3c8	Ayarları içe aktar
-70585dc7	Fanlume ayarları (*.fanlume.json;*.json)|*.fanlume.json;*.json
+67578d3a	Zeph-Iris ayarları (*.zeph-iris.json;*.json)|*.zeph-iris.json;*.json
 49c7511d	Bu dosya yüklenemiyor.\n{0}
 d01ee250	. "Geri al" ile geri alabilirsiniz. İçe aktarılan fanları kullanmadan önce eğrilerini kontrol edin.
 565076e7	Eğrileri kontrol et
@@ -1482,7 +1482,7 @@ b5ccd0c3	Kayıtlara dayalı otomatik tanılama ve fanlardaki toz ile yıpranma k
 acea69f7	Bu bilgisayarda algılanan tüm sıcaklıklar, devirler ve kontrol kanalları ile sanal sensörler
 7626e5f7	Profiller, otomatik geçiş, başlatma biçimi ve genel kontrol davranışı
 d3bf5d86	DRY RUN kapatıldı. Fan kontrolü başlıyor.
-256148cd	Fanlume gözetleyicisi
+81d7e612	Zeph-Iris gözetleyicisi
 0788f8eb	Arka
 c85ab318	Ön
 0f616edd	Üst
@@ -1506,11 +1506,11 @@ f0a541e0	PawnIO hâlâ bulunamadı. Kurulum programını çalıştırdıysanız 
 3699179e	Kullanıldığı yer: {0}
 841ef786	(kullanma)
 cbfdf76e	(bu fanı sil)
-5dde97f8	Donanım değişikliği - Fanlume
+8098e34b	Donanım değişikliği - Zeph-Iris
 41580e6f	Ayarlarda kullanılan sensörler veya konnektörler bulunamadı. Yeni donanımda aynı görevdekiler otomatik olarak seçildi.
 80403780	 İçeriği kontrol edip "Değiştir ve uygula"ya basın (mevcut ayarlar değişiklikten önce yedeklenir; daha sonra "Geri al" da yapabilirsiniz).\n
 8f763b23	O zamana kadar bulunamayan sensörleri kullanan eğriler güvenlik için sabit devirde döner (Ayarlar → "Güvenlik ve yedekleme" bölümünden değiştirilebilir).
-d49f09aa	Ayarları içe aktar - Fanlume
+4adf0059	Ayarları içe aktar - Zeph-Iris
 63ed3acb	Dosyadaki fan konnektörlerinin ve sıcaklık sensörlerinin bu bilgisayarda hangilerine karşılık geleceğini kontrol edin.
 65901272	 Aynı adlı olanlar otomatik olarak seçilir. "(bu fanı sil)" olarak ayarlanan fanlar içe aktarılmaz.
 ecf8e3b5	Dışa aktaran bilgisayar: {0} ({1:yyyy/MM/dd HH:mm})
@@ -1525,7 +1525,7 @@ fe5a2b13	Sabit %70 ile kontrol et
 0c1d2ab2	BIOS kontrolünde izle
 d6d4423a	• {0} (fan): {1} takibi
 9833252d	Oluşturulacak profiller: {0} / {1} / {2}\nGünlük kullanılacak profil: {3}\n\n
-12b1edf7	Fanlume'ı aç
+892a3878	Zeph-Iris'i aç
 9a801bfe	Güçlendirme (tam hız) 15 dk
 46dbb6b6	Sessiz 30 dk
 670ac712	Sessiz 2 saat
@@ -1604,11 +1604,9 @@ c8e0f349	Bir fanın sesi kontrol ediliyor.
 69ade00e	Kurulum sürüyor.
 82fa072a	Bittikten sonra görüntüleme dilini yeniden seçin.
 31040161	{0} konumundan {1} konumuna yüklendi ve oradan başlatıldı. Bundan sonra bu klasördeki uygulama çalışır (indirilen dosyaları silebilirsiniz).
-4a3be0af	ProFanController (önceki sürüm)
-67d28cec	Önceki sürümün (ProFanController) ayarları ve kayıtları {0} konumundan aktarıldı. Bu klasör artık kullanılmıyor; içeriğini kontrol ettikten sonra silebilirsiniz.
-82ee83eb	Kaldırma programı başlatılamadı ({0}).\nUygulama kapandıktan sonra Fanlume'u Windows Ayarları → Uygulamalar → Yüklü uygulamalar bölümünden kaldırın.
-adc330eb	Kapatınca uygulama sonlanır, ardından kaldırma programı uygulamayı ve {0} siler. Fanlume, Windows'taki "Yüklü uygulamalar" listesinden de çıkar.
-f10b7201	Kapatınca uygulama sonlanır, ardından kaldırma programı uygulamayı siler. Fanlume, Windows'taki "Yüklü uygulamalar" listesinden de çıkar. Ayarlar, günlükler ve kayıtlar klasörde kalır.
+0f9a00ea	Kaldırma programı başlatılamadı ({0}).\nUygulama kapandıktan sonra Zeph-Iris'i Windows Ayarları → Uygulamalar → Yüklü uygulamalar bölümünden kaldırın.
+adc330eb	Kapatınca uygulama sonlanır, ardından kaldırma programı uygulamayı ve {0} siler. Zeph-Iris, Windows'taki "Yüklü uygulamalar" listesinden de çıkar.
+f10b7201	Kapatınca uygulama sonlanır, ardından kaldırma programı uygulamayı siler. Zeph-Iris, Windows'taki "Yüklü uygulamalar" listesinden de çıkar. Ayarlar, günlükler ve kayıtlar klasörde kalır.
 6f13f8bc	Güncellemeler
 6e708964	Güncellemeleri denetle
 1c275381	Güncelle
@@ -1616,10 +1614,10 @@ f10b7201	Kapatınca uygulama sonlanır, ardından kaldırma programı uygulamay�
 2420b253	Yeni sürümleri otomatik denetle
 094990a5	GitHub'a en fazla günde bir kez en son sürümü sorar ve yeni bir sürüm çıktığında haber verir (yalnızca uygulamanın adı ve sürümü gönderilir)
 395b0a50	"Güncelle" yükleyiciyi indirir, GitHub'da yayımlanan dosyayla aynı olduğunu denetler ve uygulamayı pencere göstermeden değiştirir. Yaklaşık 10–20 saniye uygulama kapalı kalır ve fanlar BIOS ayarlarıyla çalışır; ardından yeniden başlar. Ayarlar, günlükler ve kayıtlar korunur.
-3ef4127e	Fanlume {0} sürümünden {1} sürümüne güncellendi.
+9f2b9221	Zeph-Iris {0} sürümünden {1} sürümüne güncellendi.
 d256382b	{0} sürümüne güncellendi.
 042a94f0	Denetleniyor…
-42e9517b	Yeni bir sürüm var: Fanlume {0}. "Güncelle" onu indirir ve uygulamayı değiştirir (yaklaşık 10–20 saniye fanlar BIOS ayarlarıyla çalışır).
+de427ef4	Yeni bir sürüm var: Zeph-Iris {0}. "Güncelle" onu indirir ve uygulamayı değiştirir (yaklaşık 10–20 saniye fanlar BIOS ayarlarıyla çalışır).
 bb0f9e93	{0} sürümü çıktı.
 ebc47f06	En son sürümü kullanıyorsunuz ({0}).
 993c451d	Yeni sürüm denetlenemedi ({0}). Bilgisayarın internete bağlı olduğunu denetleyin.
@@ -1634,7 +1632,7 @@ cb8ee667	Geçerli sürüm: {0}
 e1525ed0	{0} sürümü çıktı ({1:yyyy/MM/dd} tarihinde yayımlandı, {2:F0} MB).
 7d2bdd2c	En son sürümü kullanıyorsunuz ({0:M/d HH:mm} tarihinde denetlendi).
 a94ca4e7	Henüz denetlenmedi.
-d24d8900	Fanlume {0} sürümüne güncellenecek.\n\nYükleyici ({1:F0} MB) indirilip denetlendikten sonra uygulama kapanır. Değiştirme bitene kadar (yaklaşık 10–20 saniye) fanlar BIOS ayarlarıyla çalışır, ardından uygulama yeniden başlar.\n\nŞimdi güncellensin mi?
+b6e4f6c5	Zeph-Iris {0} sürümüne güncellenecek.\n\nYükleyici ({1:F0} MB) indirilip denetlendikten sonra uygulama kapanır. Değiştirme bitene kadar (yaklaşık 10–20 saniye) fanlar BIOS ayarlarıyla çalışır, ardından uygulama yeniden başlar.\n\nŞimdi güncellensin mi?
 98b3be1a	İndiriliyor… {0:P0}
 c1f570b8	\n\nYükleyiciyi sürümler sayfasından kendiniz çalıştırarak da güncelleyebilirsiniz.
 d4af943f	Oda sıcaklığı sensörü
@@ -1645,9 +1643,12 @@ ee455e9f	Önceki sürüme dön
 c1d1f65d	Önceki sürüm bilinmiyor, bu yüzden geri dönülemiyor.
 a8c3ec6f	Önceki sürüm GitHub'dan okunamadı ({0}). Bilgisayarın internete bağlı olduğunu denetleyin.
 87370a47	Önceki sürümün ({0}) yükleyicisi GitHub'da bulunamadı.
-b635421a	Bu sürüme yakın zamanda güncellediniz. Yeni sürüm kapanmaya devam ederse, önceki sürüme dönmek için sürümler sayfasından ({0}) {1} yükleyicisini (Fanlume-{2}-setup.exe) çalıştırın.
+874d775f	Bu sürüme yakın zamanda güncellediniz. Yeni sürüm kapanmaya devam ederse, önceki sürüme dönmek için sürümler sayfasından ({0}) {1} yükleyicisini (Zeph-Iris-{2}-setup.exe) çalıştırın.
 dd7ad3b9	Otomatik (bulunamadı)
 c4d4fe99	Otomatik ({0})
 096f8d69	Kullanma (yalnızca boşta zamanla karşılaştır)
 72959f2c	Önceki sürüme ({0}) dön
 f2252901	Önceki sürüme ({0}) dönülecek.\n\nÖnceki sürümün yükleyicisi GitHub'dan indirilip denetlendikten sonra uygulama kapanır. Değiştirme bitene kadar (yaklaşık 10–20 saniye) fanlar BIOS ayarlarıyla çalışır, ardından uygulama yeniden başlar. Ayarlar, günlükler ve kayıtlar korunur.\n\nŞimdi geri dönülsün mü?
+6d39169b	Önceki sürümün ayarları ve kayıtları {0} konumundan aktarıldı. Bu klasör artık kullanılmıyor; içeriğini kontrol ettikten sonra silebilirsiniz.
+f66007ff	{0} (önceki sürüm)
+7f8ae76b	Zeph-Iris; LibreHardwareMonitor, PawnIO, OpenRGB, NAudio, QRCoder, Montserrat, Zen Maru Gothic ve Inno Setup gibi açık kaynaklı yazılımlar sayesinde çalışır. Bunları geliştiren herkese teşekkürler (lisanslar uygulama klasöründeki "licenses" klasöründedir).

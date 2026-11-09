@@ -15,8 +15,8 @@ public static class UpdaterTests
 {
     private const string Sha = "76ef203faec4e6d309c2ccadc9fe8f1a71fe03336682a7bb1861e5537a623995";
 
-    private static string Release(string tag = "v6.7.1", string asset = "Fanlume-6.7.1-setup.exe", bool draft = false, bool prerelease = false,
-        string? digest = "sha256:" + Sha, string url = AppUpdater.DownloadPrefix + "v6.7.1/Fanlume-6.7.1-setup.exe", long size = 73791128)
+    private static string Release(string tag = "v6.7.1", string asset = "Zeph-Iris-6.7.1-setup.exe", bool draft = false, bool prerelease = false,
+        string? digest = "sha256:" + Sha, string url = AppUpdater.DownloadPrefix + "v6.7.1/Zeph-Iris-6.7.1-setup.exe", long size = 73791128)
     {
         string digestPart = digest is null ? "" : $"\"digest\": \"{digest}\",";
         return $$"""
@@ -45,30 +45,30 @@ public static class UpdaterTests
     public static void TestReleaseRead()
     {
         var info = AppUpdater.ParseRelease(Release());
-        T.Check(info is not null && info.Version == new Version(6, 7, 1) && info.AssetName == "Fanlume-6.7.1-setup.exe"
+        T.Check(info is not null && info.Version == new Version(6, 7, 1) && info.AssetName == "Zeph-Iris-6.7.1-setup.exe"
                 && info.Size == 73791128 && info.Sha256 == Sha && info.PublishedAt is not null, "setup asset, size, SHA-256 and date read");
         T.Check(AppUpdater.ParseRelease(Release(draft: true)) is null, "drafts are not offered");
         T.Check(AppUpdater.ParseRelease(Release(prerelease: true)) is null, "pre-releases are not offered");
         T.Check(AppUpdater.ParseRelease(Release(asset: "ProFanController-6.7.1-windows-x64.zip")) is null, "no setup.exe → nothing offered");
-        T.Check(AppUpdater.ParseRelease(Release(asset: "Fanlume-6.7.0-setup.exe")) is null, "setup of another version than the tag → nothing offered");
+        T.Check(AppUpdater.ParseRelease(Release(asset: "Zeph-Iris-6.7.0-setup.exe")) is null, "setup of another version than the tag → nothing offered");
         T.Check(AppUpdater.ParseRelease(Release(digest: null)) is null, "no SHA-256 from GitHub → not offered (cannot be checked)");
         T.Check(AppUpdater.ParseRelease(Release(digest: "sha256:1234")) is null, "broken SHA-256 → not offered");
-        T.Check(AppUpdater.ParseRelease(Release(url: "https://example.com/Fanlume-6.7.1-setup.exe")) is null, "download outside this repository → refused");
+        T.Check(AppUpdater.ParseRelease(Release(url: "https://example.com/Zeph-Iris-6.7.1-setup.exe")) is null, "download outside this repository → refused");
         T.Check(AppUpdater.ParseRelease(Release(size: 0)) is null, "no size → not offered");
     }
 
     public static void TestDownloadChecked()
     {
-        string dir = Path.Combine(Path.GetTempPath(), $"fanlume_upd_{Guid.NewGuid():N}");
+        string dir = Path.Combine(Path.GetTempPath(), $"zephiris_upd_{Guid.NewGuid():N}");
         Directory.CreateDirectory(dir);
         try
         {
             byte[] data = new byte[200_000];
             new Random(5).NextBytes(data);
             string sha = Convert.ToHexString(SHA256.HashData(data)).ToLowerInvariant();
-            string path = Path.Combine(dir, "Fanlume-6.7.1-setup.exe");
+            string path = Path.Combine(dir, "Zeph-Iris-6.7.1-setup.exe");
             File.WriteAllBytes(path, data);
-            var good = new UpdateInfo(new Version(6, 7, 1), "v6.7.1", "Fanlume-6.7.1-setup.exe", AppUpdater.DownloadPrefix + "x", data.Length, sha, null);
+            var good = new UpdateInfo(new Version(6, 7, 1), "v6.7.1", "Zeph-Iris-6.7.1-setup.exe", AppUpdater.DownloadPrefix + "x", data.Length, sha, null);
 
             using (var fs = File.OpenRead(path)) AppUpdater.Verify(fs, good);
             T.Check(true, "same size and SHA-256 → accepted");
@@ -92,7 +92,7 @@ public static class UpdaterTests
     /// <summary>確かめたファイルを書き換え・削除できないように開いたままでも、そのファイルを実行できる（すり替えを防ぐやり方が使える）</summary>
     public static void TestHeldFileStillRuns()
     {
-        string dir = Path.Combine(Path.GetTempPath(), $"fanlume_upd_{Guid.NewGuid():N}");
+        string dir = Path.Combine(Path.GetTempPath(), $"zephiris_upd_{Guid.NewGuid():N}");
         Directory.CreateDirectory(dir);
         try
         {
@@ -126,10 +126,10 @@ public static class UpdaterTests
         while (d is not null && !File.Exists(Path.Combine(d.FullName, "ProFanController.csproj"))) d = d.Parent;
         T.Check(d is not null, "repository found");
         if (d is null) return;
-        string iss = File.ReadAllText(Path.Combine(d.FullName, "Installer", "Fanlume.iss"));
+        string iss = File.ReadAllText(Path.Combine(d.FullName, "Installer", "Zeph-Iris.iss"));
         T.Check(iss.Contains(AppUpdater.ShowAppArgument, StringComparison.Ordinal) && iss.Contains("{code:RestartArguments}", StringComparison.Ordinal),
             "the installer reads the show-app switch and restarts the app");
-        // Fanlume.exe は管理者権限が必要。postinstall の項目は既定でダブルクリックした元の（管理者でない）ユーザーで
+        // Zeph-Iris.exe は管理者権限が必要。postinstall の項目は既定でダブルクリックした元の（管理者でない）ユーザーで
         // CreateProcess されてエラー 740 になる（2026-11 に実際に起きた）。起動する行は、どれもセットアップと同じ権限で
         var runLines = iss.Split('\n').SkipWhile(l => !l.StartsWith("[Run]")).Skip(1).TakeWhile(l => !l.StartsWith("["))
             .Where(l => l.StartsWith("Filename:")).ToList();
@@ -173,21 +173,25 @@ public static class UpdaterTests
 
     public static void TestOldDownloadsCleanedUp()
     {
-        string root = Path.Combine(Path.GetTempPath(), $"fanlume_clean_{Guid.NewGuid():N}");
+        string root = Path.Combine(Path.GetTempPath(), $"zephiris_clean_{Guid.NewGuid():N}");
         Directory.CreateDirectory(root);
         try
         {
             string a = Path.Combine(root, AppUpdater.DownloadFolderPrefix + "aaa"), b = Path.Combine(root, AppUpdater.DownloadFolderPrefix + "bbb");
             string other = Path.Combine(root, "SomethingElse");
             foreach (var d in new[] { a, b, other }) Directory.CreateDirectory(d);
-            File.WriteAllText(Path.Combine(a, "Fanlume-6.7.2-setup.exe"), "x");
-            string held = Path.Combine(b, "Fanlume-6.7.3-setup.exe");
+            File.WriteAllText(Path.Combine(a, "Zeph-Iris-6.7.2-setup.exe"), "x");
+            string held = Path.Combine(b, "Zeph-Iris-6.7.3-setup.exe");
             int removed;
             using (new FileStream(held, FileMode.Create, FileAccess.Write, FileShare.None))
                 removed = AppUpdater.CleanUpDownloads(root);
             T.Check(removed == 1 && !Directory.Exists(a) && Directory.Exists(other), "old downloads removed, other folders kept");
             T.Check(Directory.Exists(b), "a download still in use is left for the next start");
             T.Check(AppUpdater.CleanUpDownloads(root) == 1 && !Directory.Exists(b), "removed on the next try once free");
+            // 前の名前の版（Fanlume）が残したもの
+            string old = Path.Combine(root, "Fanlume-update-ccc");
+            Directory.CreateDirectory(old);
+            T.Check(AppUpdater.CleanUpDownloads(root) == 1 && !Directory.Exists(old), "downloads left by the old name (Fanlume) are removed too");
         }
         finally
         {

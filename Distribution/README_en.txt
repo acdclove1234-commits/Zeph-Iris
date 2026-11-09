@@ -1,9 +1,10 @@
-Fanlume (fan control tool, called ProFanController up to 6.6.1)
+Zeph-Iris (fan control tool, called ProFanController up to 6.6.1 and Fanlume from 6.7.0 to 6.7.3)
 ===================================
 
-Fanlume controls the motherboard's fan headers from temperatures.
+Zeph-Iris controls the motherboard's fan headers from temperatures.
 It also monitors temperatures and load, runs cooling tests, lights LEDs with OpenRGB,
-and can be checked from a phone.
+and can be checked from a phone. The name comes from Zephyr, the west wind (the fans),
+and Iris, the rainbow (the LEDs).
 
 * The user interface is available in 18 languages, including English. It follows the Windows
   display language; to choose another one, go to Settings [設定] -> Appearance [見た目] ->
@@ -11,6 +12,18 @@ and can be checked from a phone.
   Below, screen and button names are given in English with the Japanese label in brackets,
   for example: Settings [設定].
 
+
+■ What's new in v6.8.0
+  - New name: Fanlume is now called Zeph-Iris (another service already uses the name Fanlume).
+  - It installs to C:\Program Files\Zeph-Iris. When Zeph-Iris starts for the first time, it takes the settings and
+    records of Fanlume (or ProFanController), moves the start-at-logon entry and the firewall rule for the phone
+    view to the new name, and then uninstalls Fanlume while keeping its settings and records (so the old name
+    leaves Installed apps).
+  - The "Update" button in Fanlume 6.7.1-6.7.3 does not find the new name, so run the 6.8.0 installer yourself
+    once. From 6.8.0 on, "Update" works again.
+  - Exported settings files are now *.zeph-iris.json (older *.fanlume.json and *.profan.json files still load).
+  - Thanks: the About section in Settings and the licenses folder now thank the open-source projects Zeph-Iris
+    is built on.
 
 ■ What's new in v6.7.3
   - Installer: if PawnIO (the fan control driver) is missing, the installer installs it from the official winget
@@ -25,8 +38,8 @@ and can be checked from a phone.
   - The "Open the releases page" button now looks like the other buttons.
 
 ■ What's new in v6.7.2
-  - Installer: with "Launch Fanlume" ticked on the last page, the installer could show "CreateProcess error:
-    code 740" and Fanlume did not start (when the installer was started by double-clicking). It starts now.
+  - Installer: with "Launch Zeph-Iris" ticked on the last page, the installer could show "CreateProcess error:
+    code 740" and Zeph-Iris did not start (when the installer was started by double-clicking). It starts now.
 
 ■ What's new in v6.7.1
   - Updating from inside the app: Settings [設定] -> General [一般] -> Updates [アップデート] now has "Check for
@@ -38,17 +51,17 @@ and can be checked from a phone.
   - This works from 6.7.1 on. To go from 6.7.0 to 6.7.1, run the installer yourself.
   - Diagnostics (CPU / GPU cooling): days without idle time (CPU power high all day) were compared with values
     worked out a different way, so it could say cooling got worse when it had not. Only like is compared now.
-  - The Settings tabs stay at the top while you scroll. The sidebar and the mini widget show the name Fanlume,
-    and the history CSV and exported settings files are named Fanlume too.
+  - The Settings tabs stay at the top while you scroll. The sidebar and the mini widget show the name Zeph-Iris,
+    and the history CSV and exported settings files are named Zeph-Iris too.
 
 ■ What's new in v6.7.0
-  - New name: ProFanController is now called Fanlume. Settings and records are carried over.
+  - New name: ProFanController is now called Fanlume (now Zeph-Iris). Settings and records are carried over.
   - Installer: Fanlume now comes as an installer (Fanlume-6.7.0-setup.exe). It installs to
     C:\Program Files\Fanlume, adds a Start menu entry, and can be removed from Installed apps in Windows.
-    To update, run the newer installer: it closes the running Fanlume properly first and can start it again
+    To update, run the newer installer: it closes the running Zeph-Iris properly first and can start it again
     afterwards; settings, logs and records stay. 2_更新.bat (update) is gone.
   - Moving from ProFanController: the installer closes a running ProFanController properly (the fans go back
-    to the BIOS settings). When Fanlume starts for the first time, it takes the settings and records from
+    to the BIOS settings). When Zeph-Iris starts for the first time, it takes the settings and records from
     C:\Tools\ProFanController and moves the start-at-logon entry and the firewall rule for the phone view to
     the new name. You can delete C:\Tools\ProFanController afterwards.
   - Exported settings files are now *.fanlume.json (older *.profan.json files still load).
@@ -124,20 +137,20 @@ and can be checked from a phone.
 
 
 ■ First-time setup (once)
-  1. Double-click Fanlume-<version>-setup.exe (the installer) -> "Yes" (administrator confirmation).
+  1. Double-click Zeph-Iris-<version>-setup.exe (the installer) -> "Yes" (administrator confirmation).
      - If "Windows protected your PC" appears, press "More info" -> "Run anyway"
        (shown because this is a personal app without a code-signing certificate).
-     - "Next" -> "Install" installs it to C:\Program Files\Fanlume (with a Start menu entry).
-     - Leave "Launch Fanlume" ticked on the last page and press "Finish" to start it
+     - "Next" -> "Install" installs it to C:\Program Files\Zeph-Iris (with a Start menu entry).
+     - Leave "Launch Zeph-Iris" ticked on the last page and press "Finish" to start it
        (you can delete the installer afterwards).
 
   2. The first page of the setup wizard checks the fan control driver (PawnIO).
      - If PawnIO is missing, the installation starts by itself, and the app restarts when it is done
        (installed with winget, which comes with Windows; needs the internet and takes up to a few
        minutes; the wizard opens again after the restart).
-     - If a PC restart is required, restart the PC and start Fanlume from the Start menu.
+     - If a PC restart is required, restart the PC and start Zeph-Iris from the Start menu.
      - If it fails, right-click "1_PawnIO をインストール.bat" (= install PawnIO) in the app folder
-       (C:\Program Files\Fanlume) -> "Run as administrator", or get the installer from https://pawnio.eu/
+       (C:\Program Files\Zeph-Iris) -> "Run as administrator", or get the installer from https://pawnio.eu/
 
   3. Follow the wizard.
      - "Test" [テスト] on each fan header runs it at full speed for 8 seconds.
@@ -158,7 +171,7 @@ and can be checked from a phone.
   - One-off spikes (read errors) are ignored, and sensors that freeze are treated as faulty.
   - When the app exits or stops, the fans go back to the BIOS fan settings.
   - If the app is killed or freezes, the watchdog process sets the fans to a safe speed (70%) and restarts
-    the app. That is why Task Manager shows two Fanlume processes (one is the watchdog).
+    the app. That is why Task Manager shows two Zeph-Iris processes (one is the watchdog).
   - Before sleep the BIOS takes over; control resumes after waking up.
   - When a part such as the GPU is replaced and its sensors change, the app offers to map the old sensors to the
     new ones at start (until then, curves that use a missing sensor run at a safe 60%).
@@ -176,20 +189,20 @@ and can be checked from a phone.
     The installer is checked, the app is replaced without any screens, and it starts again after 10-20 seconds.
 
   By hand:
-  1. Download the newer Fanlume-<version>-setup.exe from the GitHub releases page:
-     https://github.com/acdclove1234-commits/Fanlume/releases
+  1. Download the newer Zeph-Iris-<version>-setup.exe from the GitHub releases page:
+     https://github.com/acdclove1234-commits/Zeph-Iris/releases
   2. Double-click it -> "Yes" -> "Next" -> "Install".
-     - The running Fanlume is closed properly first (fans back to BIOS), then the files are replaced.
-       Choose "Launch Fanlume" on the last page to start it again right away.
+     - The running Zeph-Iris is closed properly first (fans back to BIOS), then the files are replaced.
+       Choose "Launch Zeph-Iris" on the last page to start it again right away.
      - Settings (config.json), logs and records (data / records / backups folders) are kept.
-     - If Fanlume cannot be closed, the installer says so and stops. Right-click the tray icon ->
+     - If Zeph-Iris cannot be closed, the installer says so and stops. Right-click the tray icon ->
        "Exit (hand back to BIOS)", then run the installer again.
 
 
 ■ Uninstalling
   Use either of these:
-  A. Windows Settings -> Apps -> Installed apps -> "..." next to Fanlume -> Uninstall.
-     - If Fanlume is running, it is closed properly (fans back to BIOS control); the start-at-logon entry,
+  A. Windows Settings -> Apps -> Installed apps -> "..." next to Zeph-Iris -> Uninstall.
+     - If Zeph-Iris is running, it is closed properly (fans back to BIOS control); the start-at-logon entry,
        the firewall rule for the phone view and so on are removed, and then the app is deleted.
      - It asks whether to delete the settings, logs and records too ("No" keeps them in the app folder).
   B. Settings [設定] -> "Safety & backup" [安全・バックアップ] -> "Uninstall (clean up)" [アンインストール（お片付け）].
@@ -214,12 +227,12 @@ and can be checked from a phone.
     (The app then only monitors temperatures and load and writes nothing to the fans; the BIOS stays in control.)
   - With ASRock A-Tuning / ASUS Armoury Crate / MSI Center or another fan control program installed,
     the two fight and the speeds are unstable. Turn off its fan control or uninstall it.
-  - Logs: the logs folder in the app folder (C:\Program Files\Fanlume).
+  - Logs: the logs folder in the app folder (C:\Program Files\Zeph-Iris).
   - Settings got messed up -> Settings -> "Safety & backup" -> "Restore from backup" [バックアップから戻す].
   - To report a problem, include your motherboard, CPU and graphics card models and the logs folder.
 
 
-■ Files created in the app folder (C:\Program Files\Fanlume)
+■ Files created in the app folder (C:\Program Files\Zeph-Iris)
   config.json ... settings        backups ... automatic setting backups
   logs        ... logs            data    ... per-minute records and energy (up to 180 days)
   records     ... records around incidents (CSV)    reports ... AI advisor answers

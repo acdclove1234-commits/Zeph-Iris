@@ -103,7 +103,7 @@ public partial class MainWindow
         app.ShowMainWindow();
         OpenSettingsTab("general");
         var answer = MessageBox.Show(this,
-            L($"Fanlume {info.Version.ToString(3)} に更新します。\n\nインストーラー（{info.Size / 1048576.0:F0} MB）をダウンロードして確かめたあと、アプリが一度終了します。入れ替えが終わるまでの十数秒、ファンは BIOS の設定で回り、終わるとアプリが起動し直します。\n\n更新しますか？"),
+            L($"Zeph-Iris {info.Version.ToString(3)} に更新します。\n\nインストーラー（{info.Size / 1048576.0:F0} MB）をダウンロードして確かめたあと、アプリが一度終了します。入れ替えが終わるまでの十数秒、ファンは BIOS の設定で回り、終わるとアプリが起動し直します。\n\n更新しますか？"),
             AppIdentity.Name, MessageBoxButton.OKCancel, MessageBoxImage.Question, MessageBoxResult.OK);
         if (answer != MessageBoxResult.OK) return;
 

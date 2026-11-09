@@ -179,38 +179,38 @@ public static class ZoneAndSafetyTests
         T.Check(found.Contains("Lian Li L-Connect") && found.Contains("MSI Mystic Light") && found.Contains("MSI Center"), $"vendor apps found ({string.Join(", ", found)})");
         T.Check(found.Contains("FanControl"), "FanControl (exact name) found");
         T.Check(found.Contains("Corsair iCUE"), "iCUE found by part of the name");
-        T.Check(InstallCheck.FindConflicts(new[] { AppIdentity.Name, "Fanlume.Watchdog", "explorer" }).Count == 0, "this app itself is never a conflict");
+        T.Check(InstallCheck.FindConflicts(new[] { AppIdentity.Name, "Zeph-Iris.Watchdog", "explorer" }).Count == 0, "this app itself is never a conflict");
         T.Check(InstallCheck.FindConflicts(new[] { "MyFanControlHelper" }).Count == 0, "FanControl needs the exact name");
         T.Check(InstallCheck.FindConflicts(new[] { "LEDKeeper2", "LEDKeeper2" }).Count == 1, "each app listed once");
-        // 前の名前（ProFanController）の版が一緒に動いていると、同じファンを 2 つのアプリが制御する
-        T.Check(InstallCheck.FindConflicts(new[] { AppIdentity.LegacyName }).Count == 1, "the previous version (old name) running is a conflict");
+        // 前の名前（Fanlume・ProFanController）の版が一緒に動いていると、同じファンを 2 つのアプリが制御する
+        T.Check(InstallCheck.FindConflicts(new[] { "Fanlume", "ProFanController" }).Count == 2, "the previous versions (old names) running are conflicts");
     }
 
     public static void TestAutoStartLocation()
     {
-        string xml = "<Task><Actions Context=\"Author\"><Exec><Command>C:\\Users\\User\\Downloads\\Fanlume_配布用_v6.4.4\\Fanlume\\Fanlume.exe</Command><Arguments>--minimized</Arguments></Exec></Actions></Task>";
+        string xml = "<Task><Actions Context=\"Author\"><Exec><Command>C:\\Users\\User\\Downloads\\Zeph-Iris_配布用_v6.4.4\\Zeph-Iris\\Zeph-Iris.exe</Command><Arguments>--minimized</Arguments></Exec></Actions></Task>";
         string? cmd = InstallCheck.CommandFromTaskXml(xml);
-        T.Check(cmd == @"C:\Users\User\Downloads\Fanlume_配布用_v6.4.4\Fanlume\Fanlume.exe", $"command read from the task ({cmd})");
+        T.Check(cmd == @"C:\Users\User\Downloads\Zeph-Iris_配布用_v6.4.4\Zeph-Iris\Zeph-Iris.exe", $"command read from the task ({cmd})");
         T.Check(InstallCheck.CommandFromTaskXml("<Task></Task>") is null, "no command → null");
         T.Check(InstallCheck.CommandFromTaskXml("<Command>C:\\A &amp; B\\x.exe</Command>") == @"C:\A & B\x.exe", "XML entities decoded");
-        T.Check(InstallCheck.PointsElsewhere(@"C:\Tools\Old\Fanlume.exe", @"C:\Tools\Fanlume\Fanlume.exe"), "different folder → elsewhere");
-        T.Check(!InstallCheck.PointsElsewhere(@"c:\tools\fanlume\fanlume.exe", @"C:\Tools\Fanlume\Fanlume.exe"), "same path (case) → not elsewhere");
-        T.Check(!InstallCheck.PointsElsewhere(null, @"C:\Tools\Fanlume\Fanlume.exe"), "no auto-start → nothing to warn");
-        string downloads = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Downloads", "Fanlume_配布用_v6.4.4", AppIdentity.Name);
+        T.Check(InstallCheck.PointsElsewhere(@"C:\Tools\Old\Zeph-Iris.exe", @"C:\Tools\Zeph-Iris\Zeph-Iris.exe"), "different folder → elsewhere");
+        T.Check(!InstallCheck.PointsElsewhere(@"c:\tools\zeph-iris\zeph-iris.exe", @"C:\Tools\Zeph-Iris\Zeph-Iris.exe"), "same path (case) → not elsewhere");
+        T.Check(!InstallCheck.PointsElsewhere(null, @"C:\Tools\Zeph-Iris\Zeph-Iris.exe"), "no auto-start → nothing to warn");
+        string downloads = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Downloads", "Zeph-Iris_配布用_v6.4.4", AppIdentity.Name);
         T.Check(InstallCheck.UnstableFolderName(downloads) == "ダウンロード", "running from Downloads is flagged");
-        T.Check(InstallCheck.UnstableFolderName(@"C:\Tools\Fanlume") is null, "C:\\Tools is fine");
+        T.Check(InstallCheck.UnstableFolderName(@"C:\Tools\Zeph-Iris") is null, "C:\\Tools is fine");
     }
 
     public static void TestCopyInstall()
     {
         string root = Path.Combine(Path.GetTempPath(), "pfc-move-" + Guid.NewGuid().ToString("N"));
-        string from = Path.Combine(root, "Downloads", "Fanlume_配布用_v6.4.5", AppIdentity.Name);
+        string from = Path.Combine(root, "Downloads", "Zeph-Iris_配布用_v6.4.5", AppIdentity.Name);
         string to = Path.Combine(root, "Tools", AppIdentity.Name);
         try
         {
             Directory.CreateDirectory(Path.Combine(from, "logs"));
             Directory.CreateDirectory(Path.Combine(from, "data"));
-            File.WriteAllText(Path.Combine(from, "Fanlume.exe"), "new exe");
+            File.WriteAllText(Path.Combine(from, "Zeph-Iris.exe"), "new exe");
             File.WriteAllText(Path.Combine(from, "config.json"), "{\"new\":true}");
             File.WriteAllText(Path.Combine(from, "logs", "20261104.log"), "log");
             File.WriteAllText(Path.Combine(from, "data", "history.csv"), "1,2,3");
@@ -218,7 +218,7 @@ public static class ZoneAndSafetyTests
             File.WriteAllText(Path.Combine(to, "config.json"), "{\"old\":true}");
 
             string exe = InstallCheck.CopyInstall(from, to);
-            T.Check(exe == Path.Combine(to, "Fanlume.exe") && File.ReadAllText(exe) == "new exe", "exe copied to the new place");
+            T.Check(exe == Path.Combine(to, "Zeph-Iris.exe") && File.ReadAllText(exe) == "new exe", "exe copied to the new place");
             T.Check(File.ReadAllText(Path.Combine(to, "config.json")) == "{\"new\":true}", "the settings in use are carried over");
             T.Check(Directory.GetFiles(Path.Combine(to, "backups"), "config_*_before-move.json").Length == 1, "the old settings at the new place are kept in backups");
             T.Check(File.Exists(Path.Combine(to, "data", "history.csv")), "records are carried over");
@@ -245,14 +245,14 @@ public static class ZoneAndSafetyTests
         {
             // exe をダウンロードフォルダーにそのまま置いた（ほかのダウンロードと一緒）
             Directory.CreateDirectory(Path.Combine(from, "Other"));
-            File.WriteAllText(Path.Combine(from, "Fanlume.exe"), "new exe");
+            File.WriteAllText(Path.Combine(from, "Zeph-Iris.exe"), "new exe");
             File.WriteAllText(Path.Combine(from, "photo.jpg"), "not ours");
             File.WriteAllText(Path.Combine(from, "Other", "file.txt"), "not ours");
             Directory.CreateDirectory(Path.Combine(from, "licenses"));
             File.WriteAllText(Path.Combine(from, "licenses", "LICENSE.txt"), "MIT");
 
             var r = InstallCheck.InstallFrom(from, to, running);
-            T.Check(r.Exe == Path.Combine(to, "Fanlume.exe") && File.ReadAllText(r.Exe) == "new exe" && r.CopiedApp, "exe installed");
+            T.Check(r.Exe == Path.Combine(to, "Zeph-Iris.exe") && File.ReadAllText(r.Exe) == "new exe" && r.CopiedApp, "exe installed");
             T.Check(File.Exists(Path.Combine(to, "licenses", "LICENSE.txt")), "bundled licenses installed");
             T.Check(!File.Exists(Path.Combine(to, "photo.jpg")) && !Directory.Exists(Path.Combine(to, "Other")), "other downloads are not copied");
             T.Check(!r.MovedSettings && !File.Exists(Path.Combine(to, "config.json")), "no settings to carry over");
@@ -272,10 +272,10 @@ public static class ZoneAndSafetyTests
             T.Check(!r.MovedSettings && File.ReadAllText(Path.Combine(to, "config.json")) == "{\"installed\":true}", "newer settings at the install folder are kept");
 
             // 入れる先の exe のほうが新しい版なら、古い版で上書きしない（このテストの exe を「新しい版」として置く）
-            File.Copy(Environment.ProcessPath!, Path.Combine(to, "Fanlume.exe"), overwrite: true);
-            var installed = InstallCheck.FileVersion(Path.Combine(to, "Fanlume.exe"));
+            File.Copy(Environment.ProcessPath!, Path.Combine(to, "Zeph-Iris.exe"), overwrite: true);
+            var installed = InstallCheck.FileVersion(Path.Combine(to, "Zeph-Iris.exe"));
             r = InstallCheck.InstallFrom(from, to, new Version(0, 0, 1, 0));
-            T.Check(installed is not null && !r.CopiedApp && File.ReadAllText(Path.Combine(from, "Fanlume.exe")) == "new exe"
+            T.Check(installed is not null && !r.CopiedApp && File.ReadAllText(Path.Combine(from, "Zeph-Iris.exe")) == "new exe"
                     && new FileInfo(r.Exe).Length > 100, $"a newer installed version ({installed}) is not overwritten");
         }
         finally

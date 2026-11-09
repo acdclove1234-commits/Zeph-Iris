@@ -1,10 +1,10 @@
-# Fanlume
+# Zeph-Iris
 
 **English** | [日本語](README.ja.md)
 
-> Up to version 6.6.1 this app was called **ProFanController**. Settings and records carry over to Fanlume (see [Moving from ProFanController](#moving-from-profancontroller)).
+> This app was called **ProFanController** up to 6.6.1 and **Fanlume** from 6.7.0 to 6.7.3 (renamed because another service already uses that name). Settings and records carry over to Zeph-Iris (see [Moving from Fanlume or ProFanController](#moving-from-fanlume-or-profancontroller)).
 
-A fan control and monitoring tool for Windows. It drives the motherboard's fan headers from temperature curves and, together with OpenRGB, lights the PC's LEDs (temperature, rainbow, music sync and more).
+**Zeph-Iris** — after Zephyr, the west wind (the fans), and Iris, the rainbow (the LEDs). A fan control and monitoring tool for Windows. It drives the motherboard's fan headers from temperature curves and, together with OpenRGB, lights the PC's LEDs (temperature, rainbow, music sync and more).
 
 > **The user interface is available in 18 languages**: English, Japanese, Chinese (Simplified and Traditional), Korean, Russian, Ukrainian, German, French, Spanish, Italian, Portuguese (Brazil), Polish, Dutch, Turkish, Vietnamese, Thai and Indonesian. It follows the Windows display language; to choose another one, go to Settings → Appearance → Language (it switches right away, without restarting the app). The original text is Japanese and the other languages are new translations, so some wording may read unnaturally; corrections are welcome (see [Translations](#translations)).
 
@@ -53,18 +53,24 @@ What happens with unsupported or unchecked parts:
 
 ## Getting started (installer)
 
-1. Download `Fanlume-<version>-setup.exe` from [Releases](../../releases) and run it. It installs to `C:\Program Files\Fanlume` and adds a Start menu entry. The installer is not code-signed, so Windows may show "Windows protected your PC": press "More info" → "Run anyway"
-2. Leave "Launch Fanlume" ticked on the last page. If PawnIO is not installed, the first setup screen installs it (with winget) and restarts the app
-   (if that fails, right-click `1_PawnIO をインストール.bat` ("install PawnIO") in the app folder → Run as administrator, or use the installer from the [official site](https://pawnio.eu/))
+1. Download `Zeph-Iris-<version>-setup.exe` from [Releases](../../releases) and run it. It installs to `C:\Program Files\Zeph-Iris` and adds a Start menu entry. The installer is not code-signed, so Windows may show "Windows protected your PC": press "More info" → "Run anyway"
+2. Leave "Launch Zeph-Iris" ticked on the last page. If PawnIO (the fan control driver) is not installed, the installer installs it with winget; if that fails, the app's first setup screen tries again
+   (or right-click `1_PawnIO をインストール.bat` ("install PawnIO") in the app folder → Run as administrator, or use the installer from the [official site](https://pawnio.eu/))
 3. Follow the setup to name your fan headers
 
-See `README_en.txt` in the app folder (in this repository under `Distribution/`) for details. To update, use Settings → General → Updates → "Update" in the app (from 6.7.1 on): it downloads the new installer, checks it against the file published on GitHub (size and SHA-256), and replaces the app without any screens. You can also run the newer installer yourself. Either way the running Fanlume is closed properly (the fans go back to the BIOS settings for a moment) and settings and records are kept.
+See `README_en.txt` in the app folder (in this repository under `Distribution/`) for details. To update, use Settings → General → Updates → "Update" in the app (from 6.7.1 on): it downloads the new installer, checks it against the file published on GitHub (size and SHA-256), and replaces the app without any screens. You can also run the newer installer yourself. Either way the running Zeph-Iris is closed properly (the fans go back to the BIOS settings for a moment) and settings and records are kept.
 
-To stop using the app, uninstall it from Windows Settings → Apps → Installed apps (it closes Fanlume, removes the logon start and the firewall rule, and asks whether to delete settings and records), or use Settings → Safety & backup → Uninstall (clean up) in the app, which also offers to uninstall PawnIO and then runs the uninstaller.
+To stop using the app, uninstall it from Windows Settings → Apps → Installed apps (it closes Zeph-Iris, removes the logon start and the firewall rule, and asks whether to delete settings and records), or use Settings → Safety & backup → Uninstall (clean up) in the app, which also offers to uninstall PawnIO and then runs the uninstaller.
 
-### Moving from ProFanController
+### Moving from Fanlume or ProFanController
 
-Run the Fanlume installer. It closes a running ProFanController properly first. When Fanlume starts for the first time, it copies the settings and records from `C:\Tools\ProFanController`, and moves the logon start and the firewall rule for the phone view to the new name. The old folder is left as it is; delete it once you have checked Fanlume works. Settings files exported by ProFanController (`*.profan.json`) can still be imported.
+Run the Zeph-Iris installer once by hand (the "Update" button in Fanlume 6.7.1–6.7.3 does not find the new name). It closes a running Fanlume or ProFanController properly first. When Zeph-Iris starts for the first time, it:
+
+- copies the settings and records from `C:\Program Files\Fanlume` (or `C:\Tools\ProFanController`);
+- moves the logon start and the firewall rule for the phone view to the new name;
+- uninstalls Fanlume with its own uninstaller, keeping its settings and records, so the old name leaves Installed apps.
+
+The old folder keeps a copy of the settings; delete it once you have checked Zeph-Iris works. Settings files exported by the earlier versions (`*.fanlume.json`, `*.profan.json`) can still be imported.
 
 ## Building from source
 
@@ -75,7 +81,7 @@ Requires the .NET 8 SDK. Building the installer also needs [Inno Setup 6](https:
 dotnet build -c Release
 # Logic tests
 dotnet run -c Release --project Tests/LogicTests
-# Installer (publishes one exe including the .NET runtime, adds the contents of Distribution, and builds Installer/Fanlume.iss)
+# Installer (publishes one exe including the .NET runtime, adds the contents of Distribution, and builds Installer/Zeph-Iris.iss)
 powershell -ExecutionPolicy Bypass -File Distribution/make-dist.ps1
 ```
 
@@ -95,7 +101,7 @@ The `config.json` at the top is a development sample (copied to the build output
 | `UI/`, `MainWindow*` | user interface (WPF) |
 | `Tests/LogicTests/` | logic tests (run without the UI or hardware) |
 | `Distribution/` | guides (Japanese and English), a batch file and licences installed with the app, and the script that builds the installer |
-| `Installer/` | the Inno Setup script for the installer (`Fanlume.iss`) |
+| `Installer/` | the Inno Setup script for the installer (`Zeph-Iris.iss`) |
 | `Assets/Lang/` | translation tables for the user interface (one file per language) and the list of source texts (`keys.tsv`) |
 | `tools/` | development tools (for example `FontSubset`, which trims the bundled font, and `LocTool`, which lists the texts to translate; not part of the app) |
 
@@ -107,6 +113,23 @@ The texts on screen are written in Japanese in the source code and looked up in 
 - After changing texts in the code, run `dotnet run --project tools/LocTool -- extract` to update `keys.tsv`, and `-- missing <language>` to list what still needs translating.
 - Texts with no translation are shown in Japanese, so a missing line never breaks the app.
 
+## Reporting problems
+
+Please open an [issue](../../issues/new/choose) with your motherboard, CPU and graphics card models and the `logs` folder from the app folder. So far the app has been checked on one PC only, so reports from other hardware help a lot.
+
+## Thanks
+
+Zeph-Iris stands on the shoulders of these open-source projects. Many thanks to everyone who builds and maintains them:
+
+- [LibreHardwareMonitor](https://github.com/LibreHardwareMonitor/LibreHardwareMonitor) — reads the temperatures and drives the fan headers
+- [PawnIO](https://pawnio.eu/) — the driver that gives LibreHardwareMonitor access to the hardware
+- [OpenRGB](https://openrgb.org/) — lights the LEDs; its research on the PNY Epic-X graphics card also showed where to write that card's colours (Zeph-Iris talks to OpenRGB over its SDK protocol and contains no OpenRGB code)
+- [NAudio](https://github.com/naudio/NAudio) — captures the sound for music sync
+- [QRCoder](https://github.com/codebude/QRCoder) — the QR code for the phone view
+- [Montserrat](https://github.com/JulietaUla/Montserrat) and [Zen Maru Gothic](https://github.com/googlefonts/zen-marugothic) — the fonts
+- [Inno Setup](https://jrsoftware.org/isinfo.php) — the installer
+- [.NET](https://github.com/dotnet) and WPF
+
 ## License
 
-Fanlume is under the [MIT License](LICENSE). Licences of the components it uses (LibreHardwareMonitorLib: MPL-2.0; NAudio, QRCoder, .NET: MIT; fonts: SIL Open Font License 1.1; and others) are listed in [CREDITS.txt](CREDITS.txt). The installer is built with Inno Setup. OpenRGB, PawnIO and Ollama are not included in this repository; install them separately.
+Zeph-Iris is under the [MIT License](LICENSE). Licences of the components it uses (LibreHardwareMonitorLib: MPL-2.0; NAudio, QRCoder, .NET: MIT; fonts: SIL Open Font License 1.1; and others) are listed in [CREDITS.txt](CREDITS.txt). The installer is built with Inno Setup. OpenRGB, PawnIO and Ollama are not included in this repository; install them separately.

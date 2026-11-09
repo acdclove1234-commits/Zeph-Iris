@@ -50,7 +50,7 @@ public partial class App : Application
     private bool _firstCatalog = true;
     private string _rgbJson = "";
 
-    /// <summary>インストーラー（Installer/Fanlume.iss）や更新スクリプトがこのイベントをセットすると、アプリが正しく終了する</summary>
+    /// <summary>インストーラー（Installer/Zeph-Iris.iss）や更新スクリプトがこのイベントをセットすると、アプリが正しく終了する</summary>
     private const string ExitSignalName = AppIdentity.ExitSignal;
     private EventWaitHandle? _exitSignal;
     /// <summary>メモリの使い方を 10 分ごとにログに書くタイマー（常駐の重さの内訳を見るため）</summary>
@@ -99,7 +99,7 @@ public partial class App : Application
         {
             // 自動起動（--minimized）で二重に起動したときは、何も出さずに終わる
             if (!e.Args.Contains("--minimized", StringComparer.OrdinalIgnoreCase))
-                MessageBox.Show(L("Fanlume はすでに起動しています。\nタスクトレイのアイコンから開いてください。"),
+                MessageBox.Show(L("Zeph-Iris はすでに起動しています。\nタスクトレイのアイコンから開いてください。"),
                     AppIdentity.Name, MessageBoxButton.OK, MessageBoxImage.Information);
             _mutex.Dispose();
             _mutex = null;
@@ -107,7 +107,7 @@ public partial class App : Application
             return;
         }
 
-        // ダウンロード・デスクトップ・一時フォルダー（zip の中から開いた）で起動したら、C:\Program Files\Fanlume に入れて、そこから起動し直す
+        // ダウンロード・デスクトップ・一時フォルダー（zip の中から開いた）で起動したら、C:\Program Files\Zeph-Iris に入れて、そこから起動し直す
         if (RelocateFromUnstableFolder(e.Args))
         {
             _exiting = true; // 何も始めていないので、終了の処理（BIOS への切り替えなど）はしない
@@ -248,7 +248,7 @@ public partial class App : Application
         {
             _window?.ShowAlert(message, level);
             _window?.OnEngineAlert(message, level);
-            Notifier.Notify(level == AlertLevel.Info ? L("Fanlume: 回復しました") : AppIdentity.Name, message, level, isRecovery: level == AlertLevel.Info);
+            Notifier.Notify(level == AlertLevel.Info ? L("Zeph-Iris: 回復しました") : AppIdentity.Name, message, level, isRecovery: level == AlertLevel.Info);
             // 同じ通知は 5 分間出さない（温度が境目を行き来したときの連発防止。画面のバナーとログには毎回残す）
             if (_lastBalloon.TryGetValue(message, out var last) && DateTime.Now - last < TimeSpan.FromMinutes(5)) return;
             _lastBalloon[message] = DateTime.Now;
@@ -322,15 +322,21 @@ public partial class App : Application
         }
         if (recovered)
         {
-            string msg = L("Fanlume が予期せず終了したため、見張りプロセスが自動で起動し直しました。ファンは安全な回転数にしてから制御を再開しています。原因はログで確認できます。");
+            string msg = L("Zeph-Iris が予期せず終了したため、見張りプロセスが自動で起動し直しました。ファンは安全な回転数にしてから制御を再開しています。原因はログで確認できます。");
             window.ShowAlert(msg, AlertLevel.Warning, L("ログを開く"), () => SystemTool.Open(Logger.Directory));
             tray.ShowBalloon(AppIdentity.Name, L("予期せず終了したため、自動で起動し直しました。"), AlertLevel.Warning);
             Notifier.Notify(AppIdentity.Name, msg, AlertLevel.Warning);
         }
         if (InstalledFrom(e.Args) is { } installedFrom) AfterRelocation(window, installedFrom);
         if (migratedFrom is not null) AfterLegacyMigration(window, migratedFrom);
-        // 前の名前で登録した自動起動・ファイアウォールの許可などを片付ける（自動起動を使っていたら、新しい名前で登録し直す）
-        _ = Task.Run(() => LegacyMigration.RemoveLegacyRegistrations(() => AutoStart.Enable()));
+        // 前の名前で登録した自動起動・ファイアウォールの許可などを片付け（自動起動を使っていたら、新しい名前で登録し直す）、
+        // そのあとで、インストーラーで入れていた前の版（Fanlume）を、設定・記録を残してアンインストールする
+        // （先にアンインストールすると、前の版の後片付けが自動起動のタスクを消してしまい、使っていたかが分からなくなる）
+        _ = Task.Run(() =>
+        {
+            LegacyMigration.RemoveLegacyRegistrations(() => AutoStart.Enable());
+            LegacyMigration.UninstallLegacyInstall(AppContext.BaseDirectory);
+        });
         _ = CheckInstallAsync();
         // 更新したあとなら知らせ、新しい版を定期的に確かめる（App.Update.cs）
         StartUpdateChecks(controller, recovered);
@@ -351,7 +357,7 @@ public partial class App : Application
             _tray?.ShowBalloon(AppIdentity.Name, L("タスクトレイで動作を続けています。終了するにはアイコンを右クリックしてください。"), AlertLevel.Info);
         };
         window.WidgetToggleRequested += ToggleWidget;
-        window.MaintenanceNotice += (msg, level) => Notifier.Notify(L("Fanlume: メンテナンス"), msg, level);
+        window.MaintenanceNotice += (msg, level) => Notifier.Notify(L("Zeph-Iris: メンテナンス"), msg, level);
         window.RecordSaved += r => Logger.Info($"異常の記録: {r.CsvPath}");
         return window;
     }
@@ -411,7 +417,7 @@ public partial class App : Application
     }
 
     /// <summary>
-    /// いまのフォルダーの中身を C:\Program Files\Fanlume へ写し、（自動起動を使っていたなら）自動起動をそこに登録し直して、
+    /// いまのフォルダーの中身を C:\Program Files\Zeph-Iris へ写し、（自動起動を使っていたなら）自動起動をそこに登録し直して、
     /// 写した先のアプリで起動し直す。このアプリは正しく終了する（ファンは BIOS 制御に戻る）
     /// </summary>
     private void MoveToRecommended(bool registerAutoStart)
@@ -650,7 +656,7 @@ public partial class App : Application
                 string what = report.DeviceChanges.Count > 0 ? string.Join(L(" ／ "), report.DeviceChanges) : L("使っていたセンサーが見つかりません");
                 Logger.Warn($"ハードウェアの変更を検出: {what}");
                 _tray.ShowBalloon(L("ハードウェアの変更を検出しました"), what, AlertLevel.Warning);
-                Notifier.Notify(L("Fanlume: ハードウェアの変更"), L($"{what}。PC の画面で、新しいセンサーへの置き換えを確認してください。"), AlertLevel.Warning);
+                Notifier.Notify(L("Zeph-Iris: ハードウェアの変更"), L($"{what}。PC の画面で、新しいセンサーへの置き換えを確認してください。"), AlertLevel.Warning);
                 ShowMainWindow();
                 _window.ShowHardwareChange(report);
                 return;
@@ -681,14 +687,14 @@ public partial class App : Application
             // Recovering（探し直し・復帰直後の再試行）は、エンジン自身が必要なときだけ警告を出すので、ここでは知らせない
             case EngineHealth.Failed:
                 _tray?.ShowBalloon(L("ファン制御に問題があります"), L($"{reason}（安全のため BIOS の制御にしています。自動で復旧を試みます）"), AlertLevel.Danger);
-                Notifier.Notify(L("Fanlume: ファン制御の問題"), reason, AlertLevel.Danger);
+                Notifier.Notify(L("Zeph-Iris: ファン制御の問題"), reason, AlertLevel.Danger);
                 break;
             case EngineHealth.Degraded when before is EngineHealth.Ok:
                 _tray?.ShowBalloon(L("一部の部品を読み取れません"), reason, AlertLevel.Warning);
                 break;
             case EngineHealth.Ok when before is EngineHealth.Failed or EngineHealth.Degraded:
                 _tray?.ShowBalloon(L("ファン制御が復旧しました"), L("通常の制御に戻りました。"), AlertLevel.Info);
-                Notifier.Notify(L("Fanlume: 復旧"), L("ファン制御が通常に戻りました。"), AlertLevel.Info, isRecovery: true);
+                Notifier.Notify(L("Zeph-Iris: 復旧"), L("ファン制御が通常に戻りました。"), AlertLevel.Info, isRecovery: true);
                 break;
         }
     }

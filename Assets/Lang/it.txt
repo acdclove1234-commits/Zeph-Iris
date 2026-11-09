@@ -1,4 +1,4 @@
-# Fanlume UI text (it). Each line: hash of the Japanese source text, TAB, translation. Line breaks: backslash + n.
+# Zeph-Iris UI text (it). Each line: hash of the Japanese source text, TAB, translation. Line breaks: backslash + n.
 9cefb48e	Avvio…
 3c3d953a	Rilevamento dell'hardware
 68a076e4	Pausa (ritorno al BIOS)
@@ -469,7 +469,7 @@ db0f8cfc	Prezzo dell'elettricità per kWh
 b4d79a66	CPU e GPU usano i valori dei loro sensori. Monitor e altoparlanti non sono inclusi. Non è misurato alla presa, quindi è solo una stima.
 69355ed4	Sicurezza
 619b1ea2	Usa il processo watchdog (consigliato)
-615a97bc	Evita che le ventole restino a bassa velocità se l'app viene chiusa a forza o si blocca. Il Gestione attività mostra due Fanlume; uno dei due è il watchdog
+b686ae3d	Evita che le ventole restino a bassa velocità se l'app viene chiusa a forza o si blocca. Il Gestione attività mostra due Zeph-Iris; uno dei due è il watchdog
 f739cc9b	Velocità in quel caso
 43c454af	Le pompe vanno sempre al 100%
 d063c0c0	Riavvia l'app automaticamente (fino a 3 volte in 10 minuti; poi viene mostrato un avviso)
@@ -515,12 +515,12 @@ cb0aedd5	Sensori di temperatura
 772bcb56	Configura da zero con la procedura guidata
 1c166250	Più tardi
 381b7b8a	Sostituisci e applica
-50ab5a2c	Configurazione - Fanlume
+da0c276f	Configurazione - Zeph-Iris
 f918c02e	1  Benvenuto
 38684fb3	2  Identifica i connettori
 76236dbf	3  Strategia di raffreddamento
 b303c749	4  Fine
-890d0c09	Benvenuto in Fanlume
+ab449e0a	Benvenuto in Zeph-Iris
 26578394	Questa procedura verifica cosa è collegato ai connettori delle ventole della scheda madre\ne crea automaticamente curve e profili (Silenzioso / Standard / Prestazioni) adatti al tuo PC.
 80f88c90	Preparazione
 b1838111	• Resta vicino al case per sentire e vedere le ventole.\n• Chiudi i programmi pesanti (come i giochi).\n• Le impostazioni attuali verranno sovrascritte, ma al termine puoi tornare indietro con «Annulla».
@@ -549,8 +549,8 @@ b58afa04	Tutto pronto
 aceb0a14	Annulla
 f193a383	Indietro
 303830fc	Avanti
-2a910283	Disinstalla (pulizia) - Fanlume
-caf7be2a	Prima di smettere di usare Fanlume, il PC torna allo stato precedente all'installazione. «Pulisci ed esci» esegue quanto segue, dall'alto in basso.
+a7710fc4	Disinstalla (pulizia) - Zeph-Iris
+7e52ad37	Prima di smettere di usare Zeph-Iris, il PC torna allo stato precedente all'installazione. «Pulisci ed esci» esegue quanto segue, dall'alto in basso.
 2ed98b28	In più (nulla di questo senza la tua scelta)
 9dc58ae6	Elimina anche impostazioni, log e registrazioni
 f6fb6e2a	Disinstalla anche PawnIO (il driver per il controllo delle ventole)
@@ -583,9 +583,9 @@ fe1e7d87	 (dopo il riavvio del PC il controllo torna al BIOS).
 e39402e8	Controllo dell'illuminazione fermato e dispositivi rilasciati
 8008dbae	Il controllo dell'illuminazione non era in uso (connessione chiusa)
 775adf46	Vista dal telefono
-63aa333a	Impossibile rimuovere la regola del firewall. Elimina «Fanlume Web» in «Sicurezza di Windows» → «Firewall e protezione della rete» → «Impostazioni avanzate» → «Regole connessioni in entrata».
+7a5758ef	Impossibile rimuovere la regola del firewall. Elimina «Zeph-Iris Web» in «Sicurezza di Windows» → «Firewall e protezione della rete» → «Impostazioni avanzate» → «Regole connessioni in entrata».
 629589af	Vista dal telefono fermata e regola del firewall rimossa
-31af9d29	Impossibile rimuovere l'avvio automatico. Elimina «Fanlume» dall'Utilità di pianificazione (Libreria Utilità di pianificazione).
+855084fc	Impossibile rimuovere l'avvio automatico. Elimina «Zeph-Iris» dall'Utilità di pianificazione (Libreria Utilità di pianificazione).
 bc13583b	L'avvio all'accesso è stato rimosso
 22c99fc8	Impossibile rimuovere l'impostazione dei dump di arresto anomalo (HKEY_LOCAL_MACHINE\\{0}). Lasciarla non causa problemi.
 14dd713f	L'impostazione dei dump di arresto anomalo è stata rimossa
@@ -594,7 +594,7 @@ d66766d3	Non eseguito qui
 1e82ca4a	Il percorso dell'eseguibile è sconosciuto.
 eb8f4a4f	Impossibile preparare l'eliminazione di impostazioni, log e registrazioni ({0}).\nDopo la chiusura dell'app, elimina l'intera cartella:\n{1}
 8df0902c	Apri cartella
-fa3ff255	Fanlume è ancora in esecuzione, quindi impostazioni, log e registrazioni non sono stati eliminati.\n
+94fb9fd8	Zeph-Iris è ancora in esecuzione, quindi impostazioni, log e registrazioni non sono stati eliminati.\n
 32a27012	Chiudi l'app, poi elimina l'intera cartella:\n{0}
 ecdec9de	Eliminato: {0}.\n\n
 a261a21a	Chiudendo questo messaggio, Esplora file aprirà la cartella dell'app. Elimina l'intera cartella per completare la pulizia:\n{0}
@@ -602,18 +602,18 @@ a261a21a	Chiudendo questo messaggio, Esplora file aprirà la cartella dell'app. 
 d6750fd2	\n•
 bf71d238	\n…e altri {0}
 df6134ea	\n\nDopo aver chiuso questo messaggio, elimina l'intera cartella:\n{0}
-766fce35	Pulizia di Fanlume
-da630a7f	Fanlume è già in esecuzione.\nAprilo dall'icona nell'area di notifica.
+9c469322	Pulizia di Zeph-Iris
+13b0e2e6	Zeph-Iris è già in esecuzione.\nAprilo dall'icona nell'area di notifica.
 ec6a9bb6	Salvataggio delle registrazioni
 c0fd45c5	Continua a funzionare nell'area di notifica. Per uscire, fai clic destro sull'icona.
-0a3f2987	Fanlume: ripristinato
+813ce530	Zeph-Iris: ripristinato
 977b8544	Il profilo è stato cambiato automaticamente
 790c11cc	{0} rilevato → {1}
-a75f3e15	Fanlume: manutenzione
+e586d56a	Zeph-Iris: manutenzione
 5b860ae3	In esecuzione in DRY RUN (modalità di prova). Calcola solo le velocità in base alle temperature; le ventole non vengono comandate.
 874003cc	Avvia il controllo
 812bba50	Il file delle impostazioni era danneggiato ed è stato ripristinato da un backup ({0:yyyy/MM/dd HH:mm}). Il file danneggiato è conservato come config.broken_*.json.
-5b1e3ca8	Fanlume si è chiuso in modo inatteso, quindi il processo watchdog lo ha riavviato automaticamente. Il controllo è ripreso dopo aver portato le ventole a una velocità sicura. La causa è nel log.
+47b4365f	Zeph-Iris si è chiuso in modo inatteso, quindi il processo watchdog lo ha riavviato automaticamente. Il controllo è ripreso dopo aver portato le ventole a una velocità sicura. La causa è nel log.
 7b249720	Apri log
 3a7e2e72	Si è chiuso in modo inatteso ed è stato riavviato automaticamente.
 c51b6c55	L'app che si avvia automaticamente con Windows si trova in un altro percorso ({0}). Potrebbe avviarsi una versione vecchia.
@@ -630,15 +630,15 @@ f5c17fde	Impossibile registrare di nuovo l'avvio automatico (controlla il log).
 c08fb050	 / 
 48ccab47	Un sensore in uso non si trova
 9c32a53a	Rilevate modifiche all'hardware
-6317f1df	Fanlume: modifica all'hardware
+c1f02356	Zeph-Iris: modifica all'hardware
 646e0b57	{0}. Conferma il passaggio ai nuovi sensori sullo schermo del PC.
 9dddc76a	C'è un problema con il controllo delle ventole
 8ad6890e	{0} (per sicurezza il controllo è del BIOS; il ripristino viene tentato automaticamente)
-f8b8b77e	Fanlume: problema di controllo delle ventole
+2820bd11	Zeph-Iris: problema di controllo delle ventole
 30b6b07e	Alcuni componenti non si possono leggere
 465384a0	Il controllo delle ventole è stato ripristinato
 2a57fe9c	Tornato al controllo normale.
-25db31e1	Fanlume: ripristinato
+f1a9779a	Zeph-Iris: ripristinato
 a8e2e175	Il controllo delle ventole è tornato normale.
 0d78d54c	Impossibile leggere config.json perché un altro programma lo tiene aperto (il file non è stato toccato).
 9b03cdae	Il file originale è conservato come config.broken_<data>.json.
@@ -742,8 +742,8 @@ e0f9ce74	Il sensore di velocità non si legge.
 da1c2ba4	Riporta tutte le ventole al controllo automatico del BIOS (scheda madre) e verifica che sia andato a buon fine (altrimenti si ferma qui e non cambia nulla)
 cf1947e1	Ferma il controllo delle ventole e chiude l'hardware (driver PawnIO). Comunica anche al processo watchdog che si tratta di un'uscita regolare, così si chiude anche lui (invece di considerare l'arresto un guasto e riavviare)
 a1e35f8f	Ferma il controllo dell'illuminazione e rilascia i dispositivi LED (OpenRGB e altri), chiudendo con lo stesso effetto di un'uscita normale
-1fdea37e	Ferma la vista dal telefono e rimuove la regola aggiunta a Windows Firewall (Fanlume Web)
-14f09703	Rimuove l'avvio all'accesso (l'attività «Fanlume» nell'Utilità di pianificazione)
+153ed949	Ferma la vista dal telefono e rimuove la regola aggiunta a Windows Firewall (Zeph-Iris Web)
+d1b6444e	Rimuove l'avvio all'accesso (l'attività «Zeph-Iris» nell'Utilità di pianificazione)
 aa1f9cbb	Rimuove l'impostazione dei dump di arresto anomalo (Windows Error Reporting\\LocalDumps nel registro)
 7ca65cf7	Disinstalla PawnIO (il driver per il controllo delle ventole) con winget
 a6b6b0e5	Chiude l'app (con la stessa pulizia di un'uscita normale; non si riavvia da sola)
@@ -761,7 +761,7 @@ c96515c1	• Riavviando il PC tutto torna com'era.
 7fadc402	Chiudendo, l'app termina (non si riavvia da sola). Impostazioni, log e registrazioni restano nella cartella.
 2735adba	L'app non può essere eliminata mentre è in esecuzione. Se smetti di usarla, elimina questa cartella dopo averla chiusa (si apre in Esplora file):\n{0}
 47bb6afa	Il file è vuoto.
-51d76551	Non è un file di impostazioni di Fanlume.
+474014d2	Non è un file di impostazioni di Zeph-Iris.
 59d09ada	Non contiene profili.
 8f6cc529	Nessun connettore corrispondente trovato (non importato)
 a63b0e26	Stesso connettore
@@ -777,7 +777,7 @@ a63b0e26	Stesso connettore
 1b6b7859	Buono
 0b497be2	Un po' alto
 6eb7c426	Raffreddamento insufficiente
-b6e52ff7	Test di raffreddamento Fanlume  {0:yyyy/MM/dd HH:mm}
+cbe4aaa4	Test di raffreddamento Zeph-Iris  {0:yyyy/MM/dd HH:mm}
 f18a2032	Profilo: {0} / durata del carico: {1:F0} min (tutti i core della CPU)
 a659e995	Giudizio                  : {0}
 67316e06	Temperatura CPU a riposo  : {0:F1} °C
@@ -939,8 +939,8 @@ fcc150e0	 (tempo confrontato: riferimento {0} min, recente {1} min; le differenz
 d9bee020	Download
 4a049af4	Desktop
 4033fb1e	Cartella temporanea
-687bc2e0	Impossibile copiare Fanlume.exe
-2a3da751	Notifica di prova di Fanlume
+d99e1723	Impossibile copiare Zeph-Iris.exe
+131a1082	Notifica di prova di Zeph-Iris
 7be18f84	Questa è una notifica di prova da {0}. Se ti arriva, la configurazione è completa.
 15278ea5	Inviata. Controlla che sia arrivata sul telefono
 4ce2da04	Invio non riuscito: {0}
@@ -1108,8 +1108,8 @@ b599c0f6	Alti (hi-hat)
 f898c734	Non è un indirizzo https: {0}
 9181a7c0	L'app si è chiusa {1} volte in {0:F0} minuti, quindi il riavvio automatico è stato interrotto.
 abf150b9	Il riavvio automatico è disattivato.
-50be9a1c	Fanlume si è chiuso inaspettatamente.\n\nLe ventole sono bloccate a una velocità sicura ({0:F0}%, pompe al 100%). {1}\n
-af5a88ef	Riavviando il PC il controllo torna al BIOS (riavviando Fanlume, il controllo torna all'app).\n\nLog: 
+82655ed5	Zeph-Iris si è chiuso inaspettatamente.\n\nLe ventole sono bloccate a una velocità sicura ({0:F0}%, pompe al 100%). {1}\n
+91122f58	Riavviando il PC il controllo torna al BIOS (riavviando Zeph-Iris, il controllo torna all'app).\n\nLog: 
 5e11c7bc	Non utilizzabile da questa rete.
 3540eeb1	Troppe chiavi errate: l'accesso è sospeso per un po'. Attendi circa 1 minuto.
 aacf373e	La chiave di accesso è errata. Usa l'URL mostrato nelle impostazioni sul PC.
@@ -1217,13 +1217,13 @@ ca58240b	Ripristina da backup
 0a066c64	Impostazioni del {0} ripristinate (annullabile con «Annulla»).
 4a2fd247	Impossibile leggere questo backup.\n{0}
 1b7a6d56	Esporta impostazioni
-f48eb65b	Impostazioni di Fanlume (*.fanlume.json)|*.fanlume.json
-f1a7dc7f	Fanlume-impostazioni_{0}_{1:yyyyMMdd}{2}
+5e2d8db8	Impostazioni di Zeph-Iris (*.zeph-iris.json)|*.zeph-iris.json
+bf4b6694	Zeph-Iris-impostazioni_{0}_{1:yyyyMMdd}{2}
 dd581e02	Esportati {0} profili. Invia questo file all'altra persona e chiedile di caricarlo da Impostazioni → «Sicurezza e backup» → «Importa impostazioni».
 25f3627c	Impossibile esportare.\n{0}
 e6cdafd7	Attendi il termine dell'inizializzazione dell'hardware.
 de0ce3c8	Importa impostazioni
-70585dc7	Impostazioni di Fanlume (*.fanlume.json;*.json)|*.fanlume.json;*.json
+67578d3a	Impostazioni di Zeph-Iris (*.zeph-iris.json;*.json)|*.zeph-iris.json;*.json
 49c7511d	Impossibile caricare questo file.\n{0}
 d01ee250	. Annullabile con «Annulla». Controlla le curve delle ventole importate prima di usarle.
 565076e7	Controlla curve
@@ -1482,7 +1482,7 @@ b5ccd0c3	Diagnosi automatica dalle registrazioni e controllo di polvere e usura 
 acea69f7	Tutte le temperature, velocità e canali di controllo rilevati su questo PC, più i sensori virtuali
 7626e5f7	Profili, cambio automatico, modalità di avvio e comportamento generale del controllo
 d3bf5d86	DRY RUN disattivato. Inizia il controllo delle ventole.
-256148cd	Sorveglianza Fanlume
+81d7e612	Sorveglianza Zeph-Iris
 0788f8eb	Retro
 c85ab318	Fronte
 0f616edd	Sopra
@@ -1506,11 +1506,11 @@ f0a541e0	PawnIO non è ancora stato trovato. Se hai già eseguito il programma d
 3699179e	Usato in: {0}
 841ef786	(non usare)
 cbfdf76e	(elimina questa ventola)
-5dde97f8	Modifica dell'hardware - Fanlume
+8098e34b	Modifica dell'hardware - Zeph-Iris
 41580e6f	Non si trovano sensori o connettori usati nelle impostazioni. Sul nuovo hardware sono stati scelti automaticamente quelli con lo stesso ruolo.
 80403780	 Controlla il contenuto e premi «Sostituisci e applica» (le impostazioni attuali vengono salvate prima della modifica; in seguito puoi anche «Annulla»).\n
 8f763b23	Nel frattempo, le curve che usano sensori non trovati girano a velocità costante per sicurezza (modificabile in Impostazioni → «Sicurezza e backup»).
-d49f09aa	Importa impostazioni - Fanlume
+4adf0059	Importa impostazioni - Zeph-Iris
 63ed3acb	Controlla a quali connettori ventola e sensori di temperatura di questo PC corrispondono quelli del file.
 65901272	 Gli elementi con lo stesso nome vengono scelti automaticamente. Le ventole impostate su «(elimina questa ventola)» non vengono importate.
 ecf8e3b5	PC di origine: {0} ({1:yyyy/MM/dd HH:mm})
@@ -1525,7 +1525,7 @@ fe5a2b13	Controlla al 70% fisso
 0c1d2ab2	Monitora sotto controllo del BIOS
 d6d4423a	• {0} (ventola): segue {1}
 9833252d	Profili da creare: {0} / {1} / {2}\nProfilo per l'uso quotidiano: {3}\n\n
-12b1edf7	Apri Fanlume
+892a3878	Apri Zeph-Iris
 9a801bfe	Boost (massima velocità) 15 min
 46dbb6b6	Silenzioso 30 min
 670ac712	Silenzioso 2 ore
@@ -1604,11 +1604,9 @@ c8e0f349	È in corso il controllo del rumore di una ventola.
 69ade00e	È in corso la configurazione.
 82fa072a	Scegli di nuovo la lingua quando sarà terminato.
 31040161	Installata da {0} in {1} e avviata da lì. D'ora in poi funziona l'app in questa cartella (puoi eliminare i file scaricati).
-4a3be0af	ProFanController (la versione precedente)
-67d28cec	Impostazioni e registrazioni della versione precedente (ProFanController) sono state riprese da {0}. Quella cartella non viene più usata: controllane il contenuto, poi puoi eliminarla.
-82ee83eb	Impossibile avviare il programma di disinstallazione ({0}).\nDopo la chiusura dell'app, disinstalla Fanlume da Impostazioni di Windows → App → App installate.
-adc330eb	Chiudendo, l'app termina e poi il programma di disinstallazione elimina l'app e {0}. Fanlume sparisce anche da «App installate» di Windows.
-f10b7201	Chiudendo, l'app termina e poi il programma di disinstallazione la elimina. Fanlume sparisce anche da «App installate» di Windows. Impostazioni, log e registrazioni restano nella cartella.
+0f9a00ea	Impossibile avviare il programma di disinstallazione ({0}).\nDopo la chiusura dell'app, disinstalla Zeph-Iris da Impostazioni di Windows → App → App installate.
+adc330eb	Chiudendo, l'app termina e poi il programma di disinstallazione elimina l'app e {0}. Zeph-Iris sparisce anche da «App installate» di Windows.
+f10b7201	Chiudendo, l'app termina e poi il programma di disinstallazione la elimina. Zeph-Iris sparisce anche da «App installate» di Windows. Impostazioni, log e registrazioni restano nella cartella.
 6f13f8bc	Aggiornamenti
 6e708964	Cerca aggiornamenti
 1c275381	Aggiorna
@@ -1616,10 +1614,10 @@ f10b7201	Chiudendo, l'app termina e poi il programma di disinstallazione la elim
 2420b253	Cerca automaticamente nuove versioni
 094990a5	Chiede a GitHub l'ultima versione al massimo una volta al giorno e ti avvisa quando ne esce una nuova (vengono inviati solo il nome e la versione dell'app)
 395b0a50	«Aggiorna» scarica il programma di installazione, verifica che corrisponda al file pubblicato su GitHub e sostituisce l'app senza mostrare finestre. Per circa 10–20 secondi l'app è chiusa e le ventole seguono le impostazioni del BIOS; poi si riavvia. Impostazioni, log e registrazioni restano.
-3ef4127e	Fanlume è stato aggiornato da {0} a {1}.
+9f2b9221	Zeph-Iris è stato aggiornato da {0} a {1}.
 d256382b	Aggiornato a {0}.
 042a94f0	Verifica in corso…
-42e9517b	È disponibile una nuova versione, Fanlume {0}. «Aggiorna» la scarica e sostituisce l'app (per circa 10–20 secondi le ventole seguono le impostazioni del BIOS).
+de427ef4	È disponibile una nuova versione, Zeph-Iris {0}. «Aggiorna» la scarica e sostituisce l'app (per circa 10–20 secondi le ventole seguono le impostazioni del BIOS).
 bb0f9e93	È disponibile la versione {0}.
 ebc47f06	Hai l'ultima versione ({0}).
 993c451d	Impossibile cercare una nuova versione ({0}). Controlla che il PC sia connesso a Internet.
@@ -1634,7 +1632,7 @@ cb8ee667	Versione attuale: {0}
 e1525ed0	È disponibile la versione {0} (pubblicata il {1:yyyy/MM/dd}, {2:F0} MB).
 7d2bdd2c	Hai l'ultima versione (verificato il {0:M/d HH:mm}).
 a94ca4e7	Non ancora verificato.
-d24d8900	Aggiornamento a Fanlume {0}.\n\nDopo aver scaricato e verificato il programma di installazione ({1:F0} MB), l'app si chiude. Fino alla fine della sostituzione (circa 10–20 secondi) le ventole seguono le impostazioni del BIOS, poi l'app si riavvia.\n\nAggiornare ora?
+b6e4f6c5	Aggiornamento a Zeph-Iris {0}.\n\nDopo aver scaricato e verificato il programma di installazione ({1:F0} MB), l'app si chiude. Fino alla fine della sostituzione (circa 10–20 secondi) le ventole seguono le impostazioni del BIOS, poi l'app si riavvia.\n\nAggiornare ora?
 98b3be1a	Download in corso… {0:P0}
 c1f570b8	\n\nPuoi anche aggiornare eseguendo tu stesso il programma di installazione dalla pagina delle versioni.
 d4af943f	Sensore della temperatura ambiente
@@ -1645,9 +1643,12 @@ ee455e9f	Torna alla versione precedente
 c1d1f65d	La versione precedente non è nota, quindi non è possibile tornare indietro.
 a8c3ec6f	Impossibile leggere la versione precedente da GitHub ({0}). Controlla che il PC sia connesso a Internet.
 87370a47	Il programma di installazione della versione precedente ({0}) non è stato trovato su GitHub.
-b635421a	Hai aggiornato a questa versione da poco. Se la nuova versione continua a chiudersi, esegui il programma di installazione di {1} (Fanlume-{2}-setup.exe) dalla pagina delle versioni ({0}) per tornare alla versione precedente.
+874d775f	Hai aggiornato a questa versione da poco. Se la nuova versione continua a chiudersi, esegui il programma di installazione di {1} (Zeph-Iris-{2}-setup.exe) dalla pagina delle versioni ({0}) per tornare alla versione precedente.
 dd7ad3b9	Automatico (non trovato)
 c4d4fe99	Automatico ({0})
 096f8d69	Non usare (confronta solo con i momenti di riposo)
 72959f2c	Torna alla versione precedente ({0})
 f2252901	Ritorno alla versione precedente ({0}).\n\nDopo aver scaricato da GitHub e verificato il programma di installazione della versione precedente, l'app si chiude. Fino alla fine della sostituzione (circa 10–20 secondi) le ventole seguono le impostazioni del BIOS, poi l'app si riavvia. Impostazioni, log e registrazioni restano.\n\nTornare indietro ora?
+6d39169b	Impostazioni e registrazioni della versione precedente sono state riprese da {0}. Quella cartella non viene più usata: controllane il contenuto, poi puoi eliminarla.
+f66007ff	{0} (la versione precedente)
+7f8ae76b	Zeph-Iris funziona grazie a software open source come LibreHardwareMonitor, PawnIO, OpenRGB, NAudio, QRCoder, Montserrat, Zen Maru Gothic e Inno Setup. Grazie a tutte le persone che li realizzano (le licenze sono nella cartella «licenses» dell'app).

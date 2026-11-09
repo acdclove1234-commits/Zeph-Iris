@@ -1,0 +1,5 @@
+blank_issues_enabled: true
+contact_links:
+  - name: 説明書 / Guide
+    url: https://github.com/acdclove1234-commits/Zeph-Iris#readme
+    about: 使い方・うまく動かないときの対処は README にあります / How to use it and what to do when it does not work

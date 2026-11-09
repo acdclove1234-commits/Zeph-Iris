@@ -177,8 +177,8 @@ public partial class MainWindow
         var dialog = new SaveFileDialog
         {
             Title = L("設定を書き出す"),
-            Filter = L("Fanlume の設定 (*.fanlume.json)|*.fanlume.json"),
-            FileName = L($"Fanlume設定_{Environment.MachineName}_{DateTime.Now:yyyyMMdd}{ConfigTransfer.Extension}"),
+            Filter = L("Zeph-Iris の設定 (*.zeph-iris.json)|*.zeph-iris.json"),
+            FileName = L($"Zeph-Iris設定_{Environment.MachineName}_{DateTime.Now:yyyyMMdd}{ConfigTransfer.Extension}"),
         };
         if (dialog.ShowDialog(this) != true) return;
         try
@@ -204,7 +204,7 @@ public partial class MainWindow
         var dialog = new OpenFileDialog
         {
             Title = L("設定を読み込む"),
-            Filter = L("Fanlume の設定 (*.fanlume.json;*.json)|*.fanlume.json;*.json"),
+            Filter = L("Zeph-Iris の設定 (*.zeph-iris.json;*.json)|*.zeph-iris.json;*.json"),
         };
         if (dialog.ShowDialog(this) != true) return;
 

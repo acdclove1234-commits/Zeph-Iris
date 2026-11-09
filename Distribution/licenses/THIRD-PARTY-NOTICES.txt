@@ -1,5 +1,9 @@
-﻿Fanlume が使用しているソフトウェア
+﻿Zeph-Iris が使用しているソフトウェア
 ============================================
+
+Zeph-Iris は、下のオープンソースのソフトウェア・ドライバー・フォントのおかげで動いています。
+作ってくださった皆さんに感謝します。
+Thanks to everyone behind these open-source projects; Zeph-Iris could not exist without them.
 
 LibreHardwareMonitorLib 0.9.6
   License: Mozilla Public License 2.0（MPL-2.0）

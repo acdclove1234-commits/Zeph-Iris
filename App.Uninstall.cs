@@ -175,14 +175,14 @@ public partial class App
                 Try(L("スマホ監視"), () => _web?.Stop());
                 await Task.Run(WebServer.RemoveFirewall);
                 return await Task.Run(WebServer.FirewallRuleExists)
-                    ? Fail(L("ファイアウォールの許可を消せませんでした。「Windows セキュリティ」→「ファイアウォールとネットワーク保護」→「詳細設定」→「受信の規則」から「Fanlume Web」を削除してください。"))
+                    ? Fail(L("ファイアウォールの許可を消せませんでした。「Windows セキュリティ」→「ファイアウォールとネットワーク保護」→「詳細設定」→「受信の規則」から「Zeph-Iris Web」を削除してください。"))
                     : Done(L("スマホ監視を止めて、ファイアウォールの許可を消しました"));
             }
             case CleanupStep.RemoveAutoStart:
             {
                 await Task.Run(AutoStart.Disable);
                 return await Task.Run(AutoStart.IsEnabled)
-                    ? Fail(L("自動起動を消せませんでした。タスクスケジューラ（タスク スケジューラ ライブラリ）から「Fanlume」を削除してください。"))
+                    ? Fail(L("自動起動を消せませんでした。タスクスケジューラ（タスク スケジューラ ライブラリ）から「Zeph-Iris」を削除してください。"))
                     : Done(L("ログオン時の自動起動を消しました"));
             }
             case CleanupStep.RemoveCrashDumpSetting:
@@ -234,7 +234,7 @@ public partial class App
             catch (Exception ex)
             {
                 Logger.Error($"アンインストーラーを起動できません: {ex.Message}");
-                MessageBox.Show(L($"アンインストーラーを起動できませんでした（{ex.Message}）。\nアプリが終了したあとに、Windows の「設定」→「アプリ」→「インストールされているアプリ」から Fanlume をアンインストールしてください。"),
+                MessageBox.Show(L($"アンインストーラーを起動できませんでした（{ex.Message}）。\nアプリが終了したあとに、Windows の「設定」→「アプリ」→「インストールされているアプリ」から Zeph-Iris をアンインストールしてください。"),
                     AppIdentity.Name, MessageBoxButton.OK, MessageBoxImage.Warning);
             }
         }
@@ -280,7 +280,7 @@ public partial class App
         var icon = MessageBoxImage.Information;
         if (!WaitForExit(parentPid, TimeSpan.FromSeconds(60)) || !WaitForOtherInstances(TimeSpan.FromSeconds(30)))
         {
-            message = L("Fanlume がまだ動いているため、設定・ログ・記録は消しませんでした。\n")
+            message = L("Zeph-Iris がまだ動いているため、設定・ログ・記録は消しませんでした。\n")
                       + L($"アプリを終了してから、次のフォルダーをフォルダーごと削除してください:\n{folder}");
             icon = MessageBoxImage.Warning;
         }
@@ -301,7 +301,7 @@ public partial class App
             }
         }
         // 本体の画面はもうないので、ほかのウィンドウの後ろに隠れないように出す（閉じるまでフォルダーを消せないため）
-        MessageBox.Show(message, L("Fanlume のお片付け"), MessageBoxButton.OK, icon, MessageBoxResult.OK, MessageBoxOptions.DefaultDesktopOnly);
+        MessageBox.Show(message, L("Zeph-Iris のお片付け"), MessageBoxButton.OK, icon, MessageBoxResult.OK, MessageBoxOptions.DefaultDesktopOnly);
         try { SystemTool.Reveal(folder); } catch { /* 開けなくても、お知らせで場所は伝えてある */ }
         return true;
     }

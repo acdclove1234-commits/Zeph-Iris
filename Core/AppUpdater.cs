@@ -1,6 +1,6 @@
 // ==================================================
 // AppUpdater.cs - アプリの中からの更新 (GitHub の最新のリリースを確かめ、インストーラーをダウンロードして実行する)
-//   1. https://api.github.com/repos/<リポジトリ>/releases/latest を読み、いまより新しい版の Fanlume-<版>-setup.exe があるかを見る
+//   1. https://api.github.com/repos/<リポジトリ>/releases/latest を読み、いまより新しい版の Zeph-Iris-<版>-setup.exe があるかを見る
 //      （下書き・プレリリースは使わない。送るのはアプリの名前と版だけ）
 //   2. ダウンロードしたら、大きさ・GitHub が出している SHA-256・インストーラーの版を確かめる
 //   3. 確かめたファイルを、書き換え・削除できないように開いたまま実行する（このアプリは管理者権限で動くので、
@@ -23,14 +23,14 @@ public sealed record UpdateInfo(Version Version, string Tag, string AssetName, s
 public static class AppUpdater
 {
     /// <summary>リリースを置いている GitHub のリポジトリ</summary>
-    public const string Repository = "acdclove1234-commits/Fanlume";
+    public const string Repository = "acdclove1234-commits/Zeph-Iris";
     public const string LatestReleaseApi = "https://api.github.com/repos/" + Repository + "/releases/latest";
     public const string ReleasesPage = "https://github.com/" + Repository + "/releases";
     /// <summary>ダウンロードしてよい場所（このリポジトリのリリースの添付ファイルだけ）</summary>
     public const string DownloadPrefix = "https://github.com/" + Repository + "/releases/download/";
 
-    /// <summary>インストーラーに、更新のあとアプリの画面を出してほしいと伝える引数（Installer/Fanlume.iss が読む）</summary>
-    public const string ShowAppArgument = "/FANLUMESHOW";
+    /// <summary>インストーラーに、更新のあとアプリの画面を出してほしいと伝える引数（Installer/Zeph-Iris.iss が読む）</summary>
+    public const string ShowAppArgument = "/ZEPHIRISSHOW";
 
     // 使うときに初めて作る（見張りプロセスが CanRollBack などを呼んでも、通信の部品を読み込まないように）
     private static HttpClient? _http;
@@ -68,7 +68,7 @@ public static class AppUpdater
 
     /// <summary>
     /// GitHub の releases/latest の JSON から、更新に使うインストーラーを取り出す。
-    /// 下書き・プレリリース・版が読めない・Fanlume-<版>-setup.exe がない・SHA-256 がない・このリポジトリ以外の URL なら null
+    /// 下書き・プレリリース・版が読めない・Zeph-Iris-<版>-setup.exe がない・SHA-256 がない・このリポジトリ以外の URL なら null
     /// </summary>
     public static UpdateInfo? ParseRelease(string json)
     {
@@ -132,7 +132,7 @@ public static class AppUpdater
     public const string DownloadFolderPrefix = AppIdentity.Name + "-update-";
 
     /// <summary>
-    /// 前の更新でダウンロードしたインストーラー（一時フォルダーの Fanlume-update-*）を消す。消したフォルダーの数を返す。
+    /// 前の更新でダウンロードしたインストーラー（一時フォルダーの Zeph-Iris-update-*）を消す。消したフォルダーの数を返す。
     /// 使用中で消せないもの（まだ動いているインストーラーなど）は、次に起動したときにもう一度消す
     /// </summary>
     public static int CleanUpDownloads(string? tempDirectory = null)
@@ -140,7 +140,10 @@ public static class AppUpdater
         int removed = 0;
         try
         {
-            foreach (var dir in Directory.EnumerateDirectories(tempDirectory ?? System.IO.Path.GetTempPath(), DownloadFolderPrefix + "*"))
+            string temp = tempDirectory ?? System.IO.Path.GetTempPath();
+            // 前の名前の版（Fanlume）がダウンロードしたものも消す
+            var prefixes = new[] { DownloadFolderPrefix }.Concat(AppIdentity.LegacyApps.Select(a => a.Name + "-update-"));
+            foreach (var dir in prefixes.SelectMany(p => Directory.EnumerateDirectories(temp, p + "*")).ToList())
             {
                 try
                 {

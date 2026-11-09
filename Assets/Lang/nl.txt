@@ -1,4 +1,4 @@
-# Fanlume UI text (nl). Each line: hash of the Japanese source text, TAB, translation. Line breaks: backslash + n.
+# Zeph-Iris UI text (nl). Each line: hash of the Japanese source text, TAB, translation. Line breaks: backslash + n.
 9cefb48e	Bezig met starten…
 3c3d953a	Hardware wordt gedetecteerd
 68a076e4	Pauze (terug naar BIOS)
@@ -469,7 +469,7 @@ db0f8cfc	Stroomprijs per kWh
 b4d79a66	CPU en GPU gebruiken hun sensorwaarden. Monitoren en luidsprekers tellen niet mee. Dit is niet aan het stopcontact gemeten, dus alleen een schatting.
 69355ed4	Veiligheid
 619b1ea2	Watchdog-proces gebruiken (aanbevolen)
-615a97bc	Voorkomt dat de ventilatoren op een laag toerental blijven hangen als de app wordt afgesloten of vastloopt. Taakbeheer toont twee Fanlume-processen; één daarvan is de watchdog
+b686ae3d	Voorkomt dat de ventilatoren op een laag toerental blijven hangen als de app wordt afgesloten of vastloopt. Taakbeheer toont twee Zeph-Iris-processen; één daarvan is de watchdog
 f739cc9b	Toerental in dat geval
 43c454af	Pompen altijd op 100%
 d063c0c0	App automatisch herstarten (maximaal 3 keer in 10 minuten, daarna verschijnt een melding)
@@ -515,12 +515,12 @@ cb0aedd5	Temperatuursensoren
 772bcb56	Opnieuw instellen met de installatiewizard
 1c166250	Later
 381b7b8a	Vervangen en toepassen
-50ab5a2c	Installatie - Fanlume
+da0c276f	Installatie - Zeph-Iris
 f918c02e	1  Welkom
 38684fb3	2  Aansluitingen herkennen
 76236dbf	3  Koelbeleid
 b303c749	4  Klaar
-890d0c09	Welkom bij Fanlume
+ab449e0a	Welkom bij Zeph-Iris
 26578394	Deze wizard controleert wat er op de ventilatoraansluitingen van je moederbord zit\nen maakt automatisch ventilatorcurves en profielen (Stil / Standaard / Prestaties) voor je pc.
 80f88c90	Voorbereiding
 b1838111	• Blijf bij de kast zodat je de ventilatoren hoort en ziet.\n• Sluit zware programma's (zoals games).\n• Je huidige instellingen worden overschreven, maar met "Ongedaan maken" kun je daarna terug.
@@ -549,8 +549,8 @@ b58afa04	Alles klaar
 aceb0a14	Annuleren
 f193a383	Terug
 303830fc	Volgende
-2a910283	Verwijderen (opruimen) - Fanlume
-caf7be2a	Voordat je stopt met Fanlume, wordt je pc teruggezet naar de toestand van vóór de app. "Opruimen en afsluiten" doet het volgende, van boven naar beneden.
+a7710fc4	Verwijderen (opruimen) - Zeph-Iris
+7e52ad37	Voordat je stopt met Zeph-Iris, wordt je pc teruggezet naar de toestand van vóór de app. "Opruimen en afsluiten" doet het volgende, van boven naar beneden.
 2ed98b28	Daarnaast (geen van beide zonder jouw keuze)
 9dc58ae6	Ook instellingen, logs en metingen wissen
 f6fb6e2a	Ook PawnIO (het stuurprogramma voor ventilatorregeling) verwijderen
@@ -583,9 +583,9 @@ fe1e7d87	 (na een herstart van de pc neemt het BIOS de regeling weer over).
 e39402e8	Lichtregeling gestopt en apparaten vrijgegeven
 8008dbae	Lichtregeling werd niet gebruikt (verbinding gesloten)
 775adf46	Telefoonweergave
-63aa333a	De firewallregel kon niet worden verwijderd. Verwijder "Fanlume Web" via "Windows-beveiliging" → "Firewall- en netwerkbeveiliging" → "Geavanceerde instellingen" → "Binnenkomende regels".
+7a5758ef	De firewallregel kon niet worden verwijderd. Verwijder "Zeph-Iris Web" via "Windows-beveiliging" → "Firewall- en netwerkbeveiliging" → "Geavanceerde instellingen" → "Binnenkomende regels".
 629589af	Telefoonweergave gestopt en firewallregel verwijderd
-31af9d29	Het automatisch opstarten kon niet worden verwijderd. Verwijder "Fanlume" uit Taakplanner (Taakplanner-bibliotheek).
+855084fc	Het automatisch opstarten kon niet worden verwijderd. Verwijder "Zeph-Iris" uit Taakplanner (Taakplanner-bibliotheek).
 bc13583b	Het opstarten bij aanmelden is verwijderd
 22c99fc8	De instelling voor crashdumps kon niet worden verwijderd (HKEY_LOCAL_MACHINE\\{0}). Laten staan kan geen kwaad.
 14dd713f	De instelling voor crashdumps is verwijderd
@@ -594,7 +594,7 @@ d66766d3	Hier niet uitgevoerd
 1e82ca4a	Het pad van het uitvoerbare bestand is onbekend.
 eb8f4a4f	Kon het wissen van instellingen, logs en metingen niet voorbereiden ({0}).\nVerwijder na het afsluiten van de app de hele map:\n{1}
 8df0902c	Map openen
-fa3ff255	Fanlume draait nog, dus instellingen, logs en metingen zijn niet gewist.\n
+94fb9fd8	Zeph-Iris draait nog, dus instellingen, logs en metingen zijn niet gewist.\n
 32a27012	Sluit de app af en verwijder daarna deze hele map:\n{0}
 ecdec9de	Gewist: {0}.\n\n
 a261a21a	Als je deze melding sluit, opent Verkenner de map van de app. Verwijder de hele map om het opruimen af te ronden:\n{0}
@@ -602,18 +602,18 @@ a261a21a	Als je deze melding sluit, opent Verkenner de map van de app. Verwijder
 d6750fd2	\n•
 bf71d238	\n…en nog {0}
 df6134ea	\n\nVerwijder na het sluiten van deze melding deze hele map:\n{0}
-766fce35	Fanlume opruimen
-da630a7f	Fanlume draait al.\nOpen het via het pictogram in het systeemvak.
+9c469322	Zeph-Iris opruimen
+13b0e2e6	Zeph-Iris draait al.\nOpen het via het pictogram in het systeemvak.
 ec6a9bb6	Metingen opslaan
 c0fd45c5	Draait verder in het systeemvak. Klik met de rechtermuisknop op het pictogram om af te sluiten.
-0a3f2987	Fanlume: hersteld
+813ce530	Zeph-Iris: hersteld
 977b8544	Het profiel is automatisch gewisseld
 790c11cc	{0} gedetecteerd → {1}
-a75f3e15	Fanlume: onderhoud
+e586d56a	Zeph-Iris: onderhoud
 5b860ae3	Draait in DRY RUN (testmodus). Berekent alleen de toerentallen bij de temperaturen; de ventilatoren worden niet aangestuurd.
 874003cc	Beginnen met regelen
 812bba50	Het instellingenbestand was beschadigd en is hersteld uit een back-up ({0:yyyy/MM/dd HH:mm}). Het beschadigde bestand is bewaard als config.broken_*.json.
-5b1e3ca8	Fanlume stopte onverwacht, dus het watchdog-proces heeft het automatisch herstart. De regeling ging verder nadat de ventilatoren op een veilig toerental zijn gezet. De oorzaak staat in de log.
+47b4365f	Zeph-Iris stopte onverwacht, dus het watchdog-proces heeft het automatisch herstart. De regeling ging verder nadat de ventilatoren op een veilig toerental zijn gezet. De oorzaak staat in de log.
 7b249720	Log openen
 3a7e2e72	De app stopte onverwacht en is automatisch herstart.
 c51b6c55	De app die automatisch met Windows start, staat op een andere plek ({0}). Mogelijk start er een oude versie.
@@ -630,15 +630,15 @@ f5c17fde	Kon het automatisch opstarten niet opnieuw instellen (controleer de log
 c08fb050	 / 
 48ccab47	Een gebruikte sensor is niet gevonden
 9c32a53a	Hardwarewijzigingen gedetecteerd
-6317f1df	Fanlume: hardwarewijziging
+c1f02356	Zeph-Iris: hardwarewijziging
 646e0b57	{0}. Bevestig de overstap naar de nieuwe sensoren op het pc-scherm.
 9dddc76a	Er is een probleem met de ventilatorregeling
 8ad6890e	{0} (voor de veiligheid regelt het BIOS; herstel wordt automatisch geprobeerd)
-f8b8b77e	Fanlume: probleem met ventilatorregeling
+2820bd11	Zeph-Iris: probleem met ventilatorregeling
 30b6b07e	Sommige onderdelen kunnen niet worden gelezen
 465384a0	Ventilatorregeling hersteld
 2a57fe9c	Terug naar normale regeling.
-25db31e1	Fanlume: hersteld
+f1a9779a	Zeph-Iris: hersteld
 a8e2e175	De ventilatorregeling is weer normaal.
 0d78d54c	config.json kon niet worden gelezen omdat een ander programma hem open houdt (het bestand is niet gewijzigd).
 9b03cdae	Het oorspronkelijke bestand is bewaard als config.broken_<datum>.json.
@@ -742,8 +742,8 @@ e0f9ce74	De toerentalsensor kan niet worden gelezen.
 da1c2ba4	Geeft alle ventilatoren terug aan de automatische BIOS-regeling (moederbord) en controleert dat dat gelukt is (zo niet, dan stopt het hier en verandert niets)
 cf1947e1	Stopt de ventilatorregeling en sluit de hardware (PawnIO-stuurprogramma). Meldt het watchdog-proces ook dat het een correcte afsluiting is, zodat het ook stopt (in plaats van de stop als storing te zien en te herstarten)
 a1e35f8f	Stopt de lichtregeling en geeft de ledapparaten vrij (OpenRGB e.a.), met hetzelfde effect als bij normaal afsluiten
-1fdea37e	Stopt de telefoonweergave en verwijdert de toegevoegde Windows Firewall-regel (Fanlume Web)
-14f09703	Verwijdert het opstarten bij aanmelden (de taak "Fanlume" in Taakplanner)
+153ed949	Stopt de telefoonweergave en verwijdert de toegevoegde Windows Firewall-regel (Zeph-Iris Web)
+d1b6444e	Verwijdert het opstarten bij aanmelden (de taak "Zeph-Iris" in Taakplanner)
 aa1f9cbb	Verwijdert de instelling voor crashdumps (Windows Error Reporting\\LocalDumps in het register)
 7ca65cf7	Verwijdert PawnIO (het stuurprogramma voor ventilatorregeling) met winget
 a6b6b0e5	Sluit de app af (met dezelfde opruiming als bij normaal afsluiten; start niet vanzelf opnieuw)
@@ -761,7 +761,7 @@ c96515c1	• Na een herstart van de pc is alles weer zoals voorheen.
 7fadc402	Als je dit sluit, stopt de app (start niet vanzelf opnieuw). Instellingen, logs en metingen blijven in de map.
 2735adba	De app zelf kan niet worden gewist terwijl hij draait. Stop je ermee, verwijder dan na het afsluiten deze map (Verkenner opent hem):\n{0}
 47bb6afa	Het bestand is leeg.
-51d76551	Dit is geen instellingenbestand van Fanlume.
+474014d2	Dit is geen instellingenbestand van Zeph-Iris.
 59d09ada	Er staan geen profielen in.
 8f6cc529	Geen passende aansluiting gevonden (niet geïmporteerd)
 a63b0e26	Zelfde aansluiting
@@ -777,7 +777,7 @@ a63b0e26	Zelfde aansluiting
 1b6b7859	Goed
 0b497be2	Wat hoog
 6eb7c426	Onvoldoende koeling
-b6e52ff7	Fanlume-koeltest  {0:yyyy/MM/dd HH:mm}
+cbe4aaa4	Zeph-Iris-koeltest  {0:yyyy/MM/dd HH:mm}
 f18a2032	Profiel: {0} / belastingstijd: {1:F0} min (alle CPU-kernen)
 a659e995	Oordeel                  : {0}
 67316e06	CPU-temperatuur in rust  : {0:F1} °C
@@ -939,8 +939,8 @@ fcc150e0	 (vergeleken tijd: basis {0} min, recent {1} min; verschillen in kamert
 d9bee020	Downloads
 4a049af4	Bureaublad
 4033fb1e	Tijdelijke map
-687bc2e0	Kan Fanlume.exe niet kopiëren
-2a3da751	Testmelding van Fanlume
+d99e1723	Kan Zeph-Iris.exe niet kopiëren
+131a1082	Testmelding van Zeph-Iris
 7be18f84	Dit is een testmelding van {0}. Als je deze ontvangt, is de installatie klaar.
 15278ea5	Verzonden. Controleer of hij op je telefoon is aangekomen
 4ce2da04	Verzenden mislukt: {0}
@@ -1108,8 +1108,8 @@ b599c0f6	Hoog (hi-hat)
 f898c734	Geen https-adres: {0}
 9181a7c0	De app is in {0:F0} minuten {1} keer gestopt, dus automatisch herstarten is gestaakt.
 abf150b9	Automatisch herstarten staat uit.
-50be9a1c	Fanlume is onverwacht gestopt.\n\nDe ventilatoren staan vast op een veilig toerental ({0:F0}%, pompen op 100%). {1}\n
-af5a88ef	Na een herstart van de pc neemt het BIOS de regeling weer over (start je Fanlume opnieuw, dan regelt de app weer).\n\nLogboek: 
+82655ed5	Zeph-Iris is onverwacht gestopt.\n\nDe ventilatoren staan vast op een veilig toerental ({0:F0}%, pompen op 100%). {1}\n
+91122f58	Na een herstart van de pc neemt het BIOS de regeling weer over (start je Zeph-Iris opnieuw, dan regelt de app weer).\n\nLogboek: 
 5e11c7bc	Niet bruikbaar vanaf dit netwerk.
 3540eeb1	Te vaak een verkeerde sleutel; toegang is even geblokkeerd. Wacht ongeveer 1 minuut.
 aacf373e	De toegangssleutel klopt niet. Gebruik de URL die in de instellingen op de pc wordt getoond.
@@ -1217,13 +1217,13 @@ ca58240b	Terugzetten uit back-up
 0a066c64	De instellingen van {0} zijn teruggezet (ongedaan te maken met "Ongedaan maken").
 4a2fd247	Deze back-up kan niet worden gelezen.\n{0}
 1b7a6d56	Instellingen exporteren
-f48eb65b	Fanlume-instellingen (*.fanlume.json)|*.fanlume.json
-f1a7dc7f	Fanlume-instellingen_{0}_{1:yyyyMMdd}{2}
+5e2d8db8	Zeph-Iris-instellingen (*.zeph-iris.json)|*.zeph-iris.json
+bf4b6694	Zeph-Iris-instellingen_{0}_{1:yyyyMMdd}{2}
 dd581e02	{0} profielen geëxporteerd. Stuur dit bestand naar de ander en laat het laden via Instellingen → "Veiligheid & back-up" → "Instellingen importeren".
 25f3627c	Exporteren is niet gelukt.\n{0}
 e6cdafd7	Wacht tot de hardware is geïnitialiseerd.
 de0ce3c8	Instellingen importeren
-70585dc7	Fanlume-instellingen (*.fanlume.json;*.json)|*.fanlume.json;*.json
+67578d3a	Zeph-Iris-instellingen (*.zeph-iris.json;*.json)|*.zeph-iris.json;*.json
 49c7511d	Dit bestand kan niet worden geladen.\n{0}
 d01ee250	. Ongedaan te maken met "Ongedaan maken". Controleer de curves van de geïmporteerde ventilatoren voordat je ze gebruikt.
 565076e7	Curves controleren
@@ -1482,7 +1482,7 @@ b5ccd0c3	Automatische diagnose op basis van de metingen en controle op stof en s
 acea69f7	Alle temperaturen, toerentallen en regelkanalen die op deze pc zijn gedetecteerd, plus virtuele sensoren
 7626e5f7	Profielen, automatisch wisselen, opstartwijze en het gedrag van de hele regeling
 d3bf5d86	DRY RUN is uitgezet. De ventilatorregeling start.
-256148cd	Fanlume-bewaker
+81d7e612	Zeph-Iris-bewaker
 0788f8eb	Achter
 c85ab318	Voor
 0f616edd	Boven
@@ -1506,11 +1506,11 @@ f0a541e0	PawnIO is nog steeds niet gevonden. Heb je het installatieprogramma al 
 3699179e	Gebruikt in: {0}
 841ef786	(niet gebruiken)
 cbfdf76e	(deze ventilator verwijderen)
-5dde97f8	Hardwarewijziging - Fanlume
+8098e34b	Hardwarewijziging - Zeph-Iris
 41580e6f	Sensoren of aansluitingen uit de instellingen zijn niet gevonden. Op de nieuwe hardware zijn automatisch onderdelen met dezelfde rol gekozen.
 80403780	 Controleer de inhoud en klik op "Vervangen en toepassen" (de huidige instellingen worden vóór de wijziging geback-upt; later kan ook "Ongedaan maken").\n
 8f763b23	Tot die tijd draaien curves die niet gevonden sensoren gebruiken voor de veiligheid op een constant toerental (te wijzigen bij Instellingen → "Veiligheid & back-up").
-d49f09aa	Instellingen importeren - Fanlume
+4adf0059	Instellingen importeren - Zeph-Iris
 63ed3acb	Controleer met welke ventilatoraansluitingen en temperatuursensoren van deze pc die uit het bestand overeenkomen.
 65901272	 Items met dezelfde naam worden automatisch gekozen. Ventilatoren die op "(deze ventilator verwijderen)" staan, worden niet geïmporteerd.
 ecf8e3b5	Geëxporteerd vanaf pc: {0} ({1:yyyy/MM/dd HH:mm})
@@ -1525,7 +1525,7 @@ fe5a2b13	Regelen op vaste 70%
 0c1d2ab2	Bewaken onder BIOS-regeling
 d6d4423a	• {0} (ventilator): volgt {1}
 9833252d	Profielen die worden gemaakt: {0} / {1} / {2}\nProfiel voor dagelijks gebruik: {3}\n\n
-12b1edf7	Fanlume openen
+892a3878	Zeph-Iris openen
 9a801bfe	Boost (volle snelheid) 15 min
 46dbb6b6	Stil 30 min
 670ac712	Stil 2 uur
@@ -1604,11 +1604,9 @@ c8e0f349	Er loopt een geluidscontrole van een ventilator.
 69ade00e	De installatie is nog bezig.
 82fa072a	Kies de weergavetaal opnieuw wanneer dit klaar is.
 31040161	Geïnstalleerd van {0} naar {1} en vanaf daar gestart. Vanaf nu draait de app in deze map (de gedownloade bestanden kun je verwijderen).
-4a3be0af	ProFanController (de vorige versie)
-67d28cec	De instellingen en metingen van de vorige versie (ProFanController) zijn overgenomen uit {0}. Die map wordt niet meer gebruikt; controleer de inhoud en daarna kun je hem verwijderen.
-82ee83eb	Het verwijderprogramma kon niet worden gestart ({0}).\nVerwijder Fanlume nadat de app is gestopt via Windows-instellingen → Apps → Geïnstalleerde apps.
-adc330eb	Als je dit sluit, stopt de app en verwijdert het verwijderprogramma daarna de app en de {0}. Fanlume verdwijnt ook uit "Geïnstalleerde apps" in Windows.
-f10b7201	Als je dit sluit, stopt de app en verwijdert het verwijderprogramma daarna de app. Fanlume verdwijnt ook uit "Geïnstalleerde apps" in Windows. Instellingen, logs en metingen blijven in de map.
+0f9a00ea	Het verwijderprogramma kon niet worden gestart ({0}).\nVerwijder Zeph-Iris nadat de app is gestopt via Windows-instellingen → Apps → Geïnstalleerde apps.
+adc330eb	Als je dit sluit, stopt de app en verwijdert het verwijderprogramma daarna de app en de {0}. Zeph-Iris verdwijnt ook uit "Geïnstalleerde apps" in Windows.
+f10b7201	Als je dit sluit, stopt de app en verwijdert het verwijderprogramma daarna de app. Zeph-Iris verdwijnt ook uit "Geïnstalleerde apps" in Windows. Instellingen, logs en metingen blijven in de map.
 6f13f8bc	Updates
 6e708964	Controleren op updates
 1c275381	Bijwerken
@@ -1616,10 +1614,10 @@ f10b7201	Als je dit sluit, stopt de app en verwijdert het verwijderprogramma daa
 2420b253	Automatisch naar nieuwe versies zoeken
 094990a5	Vraagt hoogstens één keer per dag bij GitHub naar de nieuwste versie en meldt het als er een nieuwe is (alleen de naam en versie van de app worden verzonden)
 395b0a50	"Bijwerken" downloadt het installatieprogramma, controleert of het overeenkomt met het bestand op GitHub en vervangt de app zonder vensters te tonen. Ongeveer 10–20 seconden is de app gesloten en draaien de ventilatoren op de BIOS-instellingen; daarna start hij opnieuw. Instellingen, logs en metingen blijven bewaard.
-3ef4127e	Fanlume is bijgewerkt van {0} naar {1}.
+9f2b9221	Zeph-Iris is bijgewerkt van {0} naar {1}.
 d256382b	Bijgewerkt naar {0}.
 042a94f0	Bezig met controleren…
-42e9517b	Er is een nieuwe versie, Fanlume {0}. "Bijwerken" downloadt hem en vervangt de app (ongeveer 10–20 seconden draaien de ventilatoren op de BIOS-instellingen).
+de427ef4	Er is een nieuwe versie, Zeph-Iris {0}. "Bijwerken" downloadt hem en vervangt de app (ongeveer 10–20 seconden draaien de ventilatoren op de BIOS-instellingen).
 bb0f9e93	Versie {0} is beschikbaar.
 ebc47f06	Je hebt de nieuwste versie ({0}).
 993c451d	Kon niet naar een nieuwe versie zoeken ({0}). Controleer of de pc met internet is verbonden.
@@ -1634,7 +1632,7 @@ cb8ee667	Huidige versie: {0}
 e1525ed0	Versie {0} is beschikbaar (uitgebracht op {1:yyyy/MM/dd}, {2:F0} MB).
 7d2bdd2c	Je hebt de nieuwste versie (gecontroleerd op {0:M/d HH:mm}).
 a94ca4e7	Nog niet gecontroleerd.
-d24d8900	Bijwerken naar Fanlume {0}.\n\nNadat het installatieprogramma ({1:F0} MB) is gedownload en gecontroleerd, sluit de app af. Tot het vervangen klaar is (ongeveer 10–20 seconden) draaien de ventilatoren op de BIOS-instellingen; daarna start de app opnieuw.\n\nNu bijwerken?
+b6e4f6c5	Bijwerken naar Zeph-Iris {0}.\n\nNadat het installatieprogramma ({1:F0} MB) is gedownload en gecontroleerd, sluit de app af. Tot het vervangen klaar is (ongeveer 10–20 seconden) draaien de ventilatoren op de BIOS-instellingen; daarna start de app opnieuw.\n\nNu bijwerken?
 98b3be1a	Bezig met downloaden… {0:P0}
 c1f570b8	\n\nJe kunt ook bijwerken door het installatieprogramma zelf vanaf de releasepagina uit te voeren.
 d4af943f	Sensor voor kamertemperatuur
@@ -1645,9 +1643,12 @@ ee455e9f	Terug naar de vorige versie
 c1d1f65d	De vorige versie is onbekend, dus teruggaan kan niet.
 a8c3ec6f	Kon de vorige versie niet van GitHub lezen ({0}). Controleer of de pc met internet is verbonden.
 87370a47	Het installatieprogramma van de vorige versie ({0}) is niet gevonden op GitHub.
-b635421a	Je hebt onlangs naar deze versie bijgewerkt. Blijft de nieuwe versie afsluiten, voer dan het installatieprogramma van {1} (Fanlume-{2}-setup.exe) uit vanaf de releasepagina ({0}) om terug te gaan naar de vorige versie.
+874d775f	Je hebt onlangs naar deze versie bijgewerkt. Blijft de nieuwe versie afsluiten, voer dan het installatieprogramma van {1} (Zeph-Iris-{2}-setup.exe) uit vanaf de releasepagina ({0}) om terug te gaan naar de vorige versie.
 dd7ad3b9	Automatisch (niet gevonden)
 c4d4fe99	Automatisch ({0})
 096f8d69	Geen gebruiken (alleen met rustmomenten vergelijken)
 72959f2c	Terug naar de vorige versie ({0})
 f2252901	Terug naar de vorige versie ({0}).\n\nNadat het installatieprogramma van de vorige versie van GitHub is gedownload en gecontroleerd, sluit de app af. Tot het vervangen klaar is (ongeveer 10–20 seconden) draaien de ventilatoren op de BIOS-instellingen; daarna start de app opnieuw. Instellingen, logs en metingen blijven bewaard.\n\nNu teruggaan?
+6d39169b	De instellingen en metingen van de vorige versie zijn overgenomen uit {0}. Die map wordt niet meer gebruikt; controleer de inhoud en daarna kun je hem verwijderen.
+f66007ff	{0} (de vorige versie)
+7f8ae76b	Zeph-Iris werkt dankzij opensourcesoftware zoals LibreHardwareMonitor, PawnIO, OpenRGB, NAudio, QRCoder, Montserrat, Zen Maru Gothic en Inno Setup. Dank aan iedereen die ze maakt (de licenties staan in de map "licenses" van de app).

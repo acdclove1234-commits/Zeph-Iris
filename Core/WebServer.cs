@@ -14,7 +14,7 @@ namespace ProFanController;
 
 public sealed class WebServer : IDisposable
 {
-    private const string FirewallRuleName = "Fanlume Web";
+    private const string FirewallRuleName = "Zeph-Iris Web";
 
     private readonly Func<string> _statusJson;
     private readonly Func<string, bool> _command;
@@ -212,19 +212,14 @@ public sealed class WebServer : IDisposable
 
     public static void RemoveFirewall() => Netsh($"advfirewall firewall delete rule name=\"{FirewallRuleName}\"");
 
-    /// <summary>前の名前（6.6.1 まで）で追加したファイアウォールの許可</summary>
-    private const string LegacyFirewallRuleName = AppIdentity.LegacyName + " Web";
-
-    /// <summary>前の名前で追加したファイアウォールの許可を消す（新しい名前の許可は、スマホ監視を始めるときに作る）</summary>
-    public static void RemoveLegacyFirewall() => Netsh($"advfirewall firewall delete rule name=\"{LegacyFirewallRuleName}\"");
+    /// <summary>名前を指定してファイアウォールの許可を消す（前の名前の版が追加したもの。新しい名前の許可は、スマホ監視を始めるときに作る）</summary>
+    public static void RemoveFirewallRule(string name) => Netsh($"advfirewall firewall delete rule name=\"{name}\"");
 
     /// <summary>このアプリが追加したファイアウォールの許可が残っているか（netsh は、その名前の規則がないと 0 以外で終わる）</summary>
-    public static bool FirewallRuleExists() => RuleExists(FirewallRuleName);
+    public static bool FirewallRuleExists() => FirewallRuleExists(FirewallRuleName);
 
-    /// <summary>前の名前で追加したファイアウォールの許可が残っているか</summary>
-    public static bool LegacyFirewallRuleExists() => RuleExists(LegacyFirewallRuleName);
-
-    private static bool RuleExists(string name)
+    /// <summary>その名前のファイアウォールの許可があるか</summary>
+    public static bool FirewallRuleExists(string name)
     {
         try
         {
@@ -290,7 +285,7 @@ internal static class WebPage
 <!doctype html>
 <html lang="ja"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Fanlume</title>
+<title>Zeph-Iris</title>
 <style>
 :root{--bg:#0b0c12;--card:#161824;--line:#252838;--text:#eceef6;--sub:#8b91a8;--ok:#34d399;--warn:#fbbf24;--danger:#f87171;--a1:#7c5cff;--a2:#22c7ff}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,"Hiragino Sans","Yu Gothic UI",sans-serif;padding:16px}
@@ -305,7 +300,7 @@ button.accent{background:linear-gradient(135deg,var(--a1),var(--a2));border:0;fo
 .actions{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
 .banner{margin-top:12px;padding:10px 12px;border-radius:10px;background:#22c7ff22;border:1px solid #22c7ff66;display:none}
 </style></head><body>
-<h1>Fanlume</h1><div class="sub" id="time">接続中…</div>
+<h1>Zeph-Iris</h1><div class="sub" id="time">接続中…</div>
 <div class="banner" id="banner"></div>
 <div class="grid" id="temps"></div>
 <div class="card" style="margin-top:10px"><div class="sub">ファン</div><div id="fans"></div></div>

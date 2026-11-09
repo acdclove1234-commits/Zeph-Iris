@@ -1,6 +1,6 @@
 // ==================================================
 // App.SelfInstall.cs - ダウンロードから起動したときの自動のインストール
-//   ダウンロード・デスクトップ・一時フォルダー（zip の中から開いたとき）で起動したら、アプリを C:\Program Files\Fanlume に入れて
+//   ダウンロード・デスクトップ・一時フォルダー（zip の中から開いたとき）で起動したら、アプリを C:\Program Files\Zeph-Iris に入れて
 //   そこから起動し直す。そこに置いたままだと、整理したときに消える・zip の一時フォルダーが消えて自動起動が壊れる・
 //   別の版が増える、などで正しく動かなくなるため。入れる先のほうが新しい版なら、そちらを起動するだけ
 // Dependencies: WPF / .NET 8 (MIT License)
@@ -57,10 +57,10 @@ public partial class App
         return i >= 0 && i + 1 < args.Length ? args[i + 1] : null;
     }
 
-    /// <summary>前の名前（ProFanController）の版から設定を引き継いだあと: 前の版のフォルダーは消してよいことを伝える</summary>
+    /// <summary>前の名前（Fanlume・ProFanController）の版から設定を引き継いだあと: 前の版のフォルダーは消してよいことを伝える</summary>
     private static void AfterLegacyMigration(MainWindow window, string from)
     {
-        window.ShowAlert(L($"前の版（ProFanController）の設定と記録を {from} から引き継ぎました。前の版のフォルダーはもう使わないので、中身を確かめてから消してかまいません。"),
+        window.ShowAlert(L($"前の版の設定と記録を {from} から引き継ぎました。前の版のフォルダーはもう使わないので、中身を確かめてから消してかまいません。"),
             AlertLevel.Info, L("フォルダーを開く"), () => SystemTool.Open(from));
     }
 

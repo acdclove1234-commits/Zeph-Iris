@@ -28,7 +28,7 @@ internal static class Program
                 Logger.Error($"見張りで致命的な例外: {a.ExceptionObject}");
                 Logger.Flush();
             };
-            Watchdog.ShowMessage = msg => NativeMessageBox.Warn(msg, L("Fanlume 見張り"));
+            Watchdog.ShowMessage = msg => NativeMessageBox.Warn(msg, L("Zeph-Iris 見張り"));
             Watchdog.Run(parentPid);
             Logger.Flush();
             return 0;
