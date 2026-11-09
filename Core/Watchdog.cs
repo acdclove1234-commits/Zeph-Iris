@@ -135,6 +135,7 @@ public static class Watchdog
         using var heartbeat = new EventWaitHandle(false, EventResetMode.AutoReset, FanEngine.HeartbeatName);
         using var parentHandle = new ManualResetEvent(false) { SafeWaitHandle = new SafeWaitHandle(parent.Handle, ownsHandle: false) };
         Logger.Info($"見張り開始（本体 PID {parentPid}）");
+        Preload();
 
         bool seenBeat = false;
         var lastBeat = Stopwatch.StartNew();
@@ -200,34 +201,87 @@ public static class Watchdog
         int code = -1;
         try { code = parent.ExitCode; } catch { /* 取得できないこともある */ }
         Logger.Error($"見張り: 本体が予期せず終了しました（終了コード {code}）。ファンを安全な回転数にします");
-        if (!alreadySafe) ApplySafeDuties();
+        Recover(alreadySafe ? null : ApplySafeDuties, LoadConfig, RecordCrash, RestartApp, ShowStopped);
+    }
 
-        var cfg = LoadConfig();
-        int recent = RecordCrash();
+    /// <summary>
+    /// 本体が落ちたあとの手順: 安全な回転数にする → 設定を読む → 落ちた回数を記録 → 本体を起動し直す（または案内を出す）。
+    /// どの手順が失敗しても次へ進み、例外は外へ出さない。とくに本体の起動し直しは必ず試す
+    /// （本体が動き出せば、ファンはすぐにアプリの制御に戻る。見張りまで落ちると、ファンは最後の値のまま誰も触らなくなる）。
+    /// 起動し直したら true
+    /// </summary>
+    internal static bool Recover(Action? applySafe, Func<AppConfig> loadConfig, Func<int> recordCrash,
+                                 Action restart, Action<AppConfig, int> showStopped)
+    {
+        if (applySafe is not null)
+        {
+            try { applySafe(); }
+            catch (Exception ex) { Logger.Error($"見張り: 安全な回転数を設定できません: {ex.Message}"); }
+        }
+
+        AppConfig cfg;
+        try { cfg = loadConfig(); }
+        catch (Exception ex)
+        {
+            Logger.Error($"見張り: 設定を読めません。初期の設定で続けます: {ex.Message}");
+            cfg = new AppConfig();
+        }
+
+        int recent = 1;
+        try { recent = recordCrash(); }
+        catch (Exception ex) { Logger.Warn($"見張り: 終了の回数を記録できません: {ex.Message}"); }
+
         if (cfg.Safety.WatchdogRestart && recent <= MaxCrashesInWindow)
         {
             try
             {
-                string exe = Environment.ProcessPath!;
-                Process.Start(new ProcessStartInfo(exe, $"--minimized {RecoveredArgument}") { UseShellExecute = false, WorkingDirectory = AppContext.BaseDirectory });
+                restart();
                 Logger.Info("見張り: 本体を再起動しました");
+                return true;
             }
             catch (Exception ex)
             {
                 Logger.Error($"見張り: 本体を再起動できません: {ex.Message}");
+                return false;
             }
         }
-        else
-        {
-            // 見張りが起動したあとに表示言語を選び直していることがあるので、案内を出す前に設定の言語を読み直す
-            Localization.Init(cfg.Language);
-            string why = cfg.Safety.WatchdogRestart
-                ? L($"{CrashWindow.TotalMinutes:F0} 分間に {recent} 回終了したため、自動での再起動はやめました。")
-                : L("自動での再起動はオフになっています。");
-            ShowMessage?.Invoke(
-                L($"ProFanController が予期せず終了しました。\n\nファンは安全な回転数（{cfg.Safety.WatchdogSafeDuty:F0}%、ポンプは 100%）に固定しています。{why}\n") +
-                L("PC を再起動すると BIOS の制御に戻ります（ProFanController を起動し直すと、アプリの制御で動きます）。\n\nログ: ") + Logger.Directory);
-        }
+
+        try { showStopped(cfg, recent); }
+        catch (Exception ex) { Logger.Error($"見張り: 案内を出せません: {ex.Message}"); }
+        return false;
+    }
+
+    private static void RestartApp()
+    {
+        string exe = Environment.ProcessPath ?? throw new InvalidOperationException("Environment.ProcessPath is null"); // no-loc
+        Process.Start(new ProcessStartInfo(exe, $"--minimized {RecoveredArgument}") { UseShellExecute = false, WorkingDirectory = AppContext.BaseDirectory })?.Dispose();
+    }
+
+    private static void ShowStopped(AppConfig cfg, int recent)
+    {
+        // 見張りが起動したあとに表示言語を選び直していることがあるので、案内を出す前に設定の言語を読み直す
+        Localization.Init(cfg.Language);
+        string why = cfg.Safety.WatchdogRestart
+            ? L($"{CrashWindow.TotalMinutes:F0} 分間に {recent} 回終了したため、自動での再起動はやめました。")
+            : L("自動での再起動はオフになっています。");
+        ShowMessage?.Invoke(
+            L($"ProFanController が予期せず終了しました。\n\nファンは安全な回転数（{cfg.Safety.WatchdogSafeDuty:F0}%、ポンプは 100%）に固定しています。{why}\n") +
+            L("PC を再起動すると BIOS の制御に戻ります（ProFanController を起動し直すと、アプリの制御で動きます）。\n\nログ: ") + Logger.Directory);
+    }
+
+    /// <summary>見張りの始めに読めた設定（落ちたときに設定を読めなくても、どの端子をどうするか分かるように）</summary>
+    private static AppConfig? _lastGoodConfig;
+
+    /// <summary>
+    /// 落ちたときに使う部品を、見張りの始めに読み込んでおく。1 つの exe にまとめたアプリは、部品を初めて使うときに
+    /// exe から取り出すので、動いている途中で exe が差し替わると（更新の途中など）、後片付けで部品を読めずに失敗する
+    /// </summary>
+    private static void Preload()
+    {
+        try { LoadConfig(); }
+        catch (Exception ex) { Logger.Warn($"見張り: 始めに設定を読めません: {ex.Message}"); }
+        try { _ = typeof(Computer).Assembly.GetName(); }
+        catch (Exception ex) { Logger.Warn($"見張り: ハードウェアの部品を読み込めません: {ex.Message}"); }
     }
 
     /// <summary>直近の異常終了の回数（今回を含む）</summary>
@@ -255,13 +309,33 @@ public static class Watchdog
     /// </summary>
     private static AppConfig LoadConfig()
     {
-        try { return AppConfig.FromJson(File.ReadAllText(ConfigStore.FilePath)); }
-        catch
+        var cfg = ReadConfig(() => File.ReadAllText(ConfigStore.FilePath), _lastGoodConfig, out bool fresh);
+        if (fresh) _lastGoodConfig = cfg;
+        return cfg;
+    }
+
+    /// <summary>
+    /// 設定を読む。読めない・壊れているときは、前に読めた設定（なければ初期の設定）を返す。例外は外へ出さない。
+    /// fresh = いま読めた設定
+    /// </summary>
+    internal static AppConfig ReadConfig(Func<string> read, AppConfig? lastGood, out bool fresh)
+    {
+        fresh = false;
+        try
         {
-            var cfg = new AppConfig();
-            cfg.Normalize();
+            var cfg = AppConfig.FromJson(read());
+            fresh = true;
             return cfg;
         }
+        catch (Exception ex)
+        {
+            Logger.Warn($"見張り: 設定を読めません（{(lastGood is null ? "初期の設定" : "前に読めた設定")}を使います）: {ex.Message}");
+        }
+        if (lastGood is not null) return lastGood;
+        var def = new AppConfig();
+        try { def.Normalize(); }
+        catch (Exception ex) { Logger.Warn($"見張り: 初期の設定を整えられません: {ex.Message}"); }
+        return def;
     }
 
     /// <summary>安全な回転数を書くための Computer（何度も作ると、そのたびにドライバーの資源を使うので 1 つを使い回す）</summary>

@@ -1116,10 +1116,10 @@ b599c0f6	高音（ハイハット）	Core/Rgb/MusicTuning.cs:353
 34c5e8d2	音全体（音量）	Core/Rgb/MusicTuning.cs:354
 1e73f52b	使用率が {0:F0}〜{1:F0}% と変わっているのに、{2:F0} 分以上 {3:F1}°C のまま変化していません	Core/SensorGuard.cs:98
 f898c734	https のアドレスではありません: {0}	Core/SystemTool.cs:50
-9181a7c0	{0:F0} 分間に {1} 回終了したため、自動での再起動はやめました。	Core/Watchdog.cs:225
-abf150b9	自動での再起動はオフになっています。	Core/Watchdog.cs:226
-08738032	ProFanController が予期せず終了しました。\n\nファンは安全な回転数（{0:F0}%、ポンプは 100%）に固定しています。{1}\n	Core/Watchdog.cs:228
-a506afc7	PC を再起動すると BIOS の制御に戻ります（ProFanController を起動し直すと、アプリの制御で動きます）。\n\nログ: 	Core/Watchdog.cs:229
+9181a7c0	{0:F0} 分間に {1} 回終了したため、自動での再起動はやめました。	Core/Watchdog.cs:265
+abf150b9	自動での再起動はオフになっています。	Core/Watchdog.cs:266
+08738032	ProFanController が予期せず終了しました。\n\nファンは安全な回転数（{0:F0}%、ポンプは 100%）に固定しています。{1}\n	Core/Watchdog.cs:268
+a506afc7	PC を再起動すると BIOS の制御に戻ります（ProFanController を起動し直すと、アプリの制御で動きます）。\n\nログ: 	Core/Watchdog.cs:269
 5e11c7bc	このネットワークからは使えません。	Core/WebServer.cs:78
 3540eeb1	鍵の間違いが続いたため、しばらく受け付けません。1 分ほど待ってください。	Core/WebServer.cs:91
 aacf373e	アクセス用の鍵が違います。PC の設定画面に表示されている URL を使ってください。	Core/WebServer.cs:99
