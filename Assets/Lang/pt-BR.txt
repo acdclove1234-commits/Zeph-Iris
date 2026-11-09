@@ -1609,3 +1609,31 @@ c8e0f349	Há uma verificação do som de uma ventoinha em andamento.
 82ee83eb	Não foi possível iniciar o desinstalador ({0}).\nDepois que o app terminar, desinstale o Fanlume em Configurações do Windows → Aplicativos → Aplicativos instalados.
 adc330eb	Ao fechar, o app termina e depois o desinstalador apaga o app e {0}. O Fanlume também sai de "Aplicativos instalados" do Windows.
 f10b7201	Ao fechar, o app termina e depois o desinstalador o apaga. O Fanlume também sai de "Aplicativos instalados" do Windows. Configurações, logs e registros ficam na pasta.
+6f13f8bc	Atualizações
+6e708964	Procurar atualizações
+1c275381	Atualizar
+44cc4c9a	Abrir a página de versões
+2420b253	Procurar novas versões automaticamente
+094990a5	Consulta o GitHub sobre a versão mais recente no máximo uma vez por dia e avisa quando houver uma nova (só o nome e a versão do app são enviados)
+395b0a50	"Atualizar" baixa o instalador, confere se ele é igual ao arquivo publicado no GitHub e substitui o app sem mostrar janelas. Por cerca de 10–20 segundos o app fica fechado e as ventoinhas seguem as configurações da BIOS; depois ele inicia de novo. Configurações, logs e registros são mantidos.
+3ef4127e	O Fanlume foi atualizado de {0} para {1}.
+d256382b	Atualizado para {0}.
+042a94f0	Verificando…
+42e9517b	Há uma nova versão, Fanlume {0}. "Atualizar" baixa e substitui o app (por cerca de 10–20 segundos as ventoinhas seguem as configurações da BIOS).
+bb0f9e93	A versão {0} está disponível.
+ebc47f06	Você está com a versão mais recente ({0}).
+993c451d	Não foi possível procurar uma nova versão ({0}). Confira se o PC está conectado à internet.
+31eb4f99	O app está sendo fechado, então não será atualizado.
+b79b5ccf	Não foi possível atualizar ({0}).
+ddecc240	O arquivo baixado ficou maior que o tamanho informado no GitHub.
+74c1cfd5	A versão do instalador ({0}) é diferente da versão publicada ({1}).
+e3910d2d	O tamanho do arquivo baixado ({0} bytes) é diferente do informado no GitHub ({1} bytes).
+6a1c29a5	O arquivo baixado não é igual ao publicado no GitHub (o SHA-256 é diferente). A atualização foi cancelada.
+cb8ee667	Versão atual: {0}
+5b6c7a62	O instalador foi iniciado. O app vai fechar em instantes e iniciar de novo depois da atualização.
+e1525ed0	A versão {0} está disponível (publicada em {1:yyyy/MM/dd}, {2:F0} MB).
+7d2bdd2c	Você está com a versão mais recente (verificado em {0:M/d HH:mm}).
+a94ca4e7	Ainda não verificado.
+d24d8900	Atualizar para o Fanlume {0}.\n\nDepois de baixar e conferir o instalador ({1:F0} MB), o app fecha. Até terminar a substituição (cerca de 10–20 segundos) as ventoinhas seguem as configurações da BIOS, e então o app inicia de novo.\n\nAtualizar agora?
+98b3be1a	Baixando… {0:P0}
+c1f570b8	\n\nVocê também pode atualizar executando o instalador da página de versões por conta própria.

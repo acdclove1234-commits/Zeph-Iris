@@ -2383,14 +2383,20 @@
             </ScrollViewer>
 
             <!-- ================= 設定 ================= -->
-            <ScrollViewer x:Name="SettingsPage" Grid.Row="2" VerticalScrollBarVisibility="Auto" Padding="36,0,36,30" Visibility="Collapsed">
+            <!-- タブはスクロールの外に置き、下の中身をスクロールしても上に残す -->
+            <Grid x:Name="SettingsPage" Grid.Row="2" Visibility="Collapsed">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <StackPanel Orientation="Horizontal" Margin="36,0,36,16">
+                    <RadioButton x:Name="SetTabGeneral" Style="{StaticResource Segment}" Content="一般" GroupName="SettingsTab" IsChecked="True" Checked="OnSettingsTabChanged"/>
+                    <RadioButton x:Name="SetTabAuto" Style="{StaticResource Segment}" Content="プロファイル・自動化" GroupName="SettingsTab" Checked="OnSettingsTabChanged"/>
+                    <RadioButton x:Name="SetTabLink" Style="{StaticResource Segment}" Content="通知・連携" GroupName="SettingsTab" Checked="OnSettingsTabChanged"/>
+                    <RadioButton x:Name="SetTabSafety" Style="{StaticResource Segment}" Content="安全・バックアップ" GroupName="SettingsTab" Checked="OnSettingsTabChanged"/>
+                </StackPanel>
+            <ScrollViewer x:Name="SettingsScroller" Grid.Row="1" VerticalScrollBarVisibility="Auto" Padding="36,0,36,30">
                 <StackPanel>
-                    <StackPanel Orientation="Horizontal" Margin="0,0,0,16">
-                        <RadioButton x:Name="SetTabGeneral" Style="{StaticResource Segment}" Content="一般" GroupName="SettingsTab" IsChecked="True" Checked="OnSettingsTabChanged"/>
-                        <RadioButton x:Name="SetTabAuto" Style="{StaticResource Segment}" Content="プロファイル・自動化" GroupName="SettingsTab" Checked="OnSettingsTabChanged"/>
-                        <RadioButton x:Name="SetTabLink" Style="{StaticResource Segment}" Content="通知・連携" GroupName="SettingsTab" Checked="OnSettingsTabChanged"/>
-                        <RadioButton x:Name="SetTabSafety" Style="{StaticResource Segment}" Content="安全・バックアップ" GroupName="SettingsTab" Checked="OnSettingsTabChanged"/>
-                    </StackPanel>
 
                     <StackPanel x:Name="SettingsGeneral">
                         <!-- 起動 -->
@@ -2415,6 +2421,28 @@
                                         <TextBlock Text="常に最前面に温度と回転数を表示します。ドラッグで移動、右クリックで不透明度を変更できます" Style="{StaticResource Caption}"/>
                                     </StackPanel>
                                 </CheckBox>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- アップデート（MainWindow.Update.cs・App.Update.cs） -->
+                        <Border Style="{StaticResource Card}" Margin="0,0,0,14">
+                            <StackPanel>
+                                <TextBlock Text="アップデート" Style="{StaticResource H2}"/>
+                                <TextBlock x:Name="UpdateVersionText" Style="{StaticResource Caption}" Margin="0,4,0,0"/>
+                                <TextBlock x:Name="UpdateStatusText" TextWrapping="Wrap" Margin="0,10,0,0"/>
+                                <WrapPanel Margin="0,12,0,0">
+                                    <Button x:Name="UpdateCheckButton" Style="{StaticResource AccentButton}" Content="更新を確認" Click="OnCheckUpdateClick" Margin="0,0,8,8" Padding="14,7"/>
+                                    <Button x:Name="UpdateInstallButton" Style="{StaticResource AccentButton}" Content="更新する" Click="OnInstallUpdateClick" Margin="0,0,8,8" Padding="14,7" Visibility="Collapsed"/>
+                                    <Button Content="リリースのページを開く" Click="OnOpenReleasesClick" Margin="0,0,8,8" Padding="14,7"/>
+                                </WrapPanel>
+                                <CheckBox Style="{StaticResource Switch}" IsChecked="{Binding Update.AutoCheck}" Margin="0,8,0,0">
+                                    <StackPanel>
+                                        <TextBlock Text="新しい版を自動で確かめる" FontWeight="SemiBold"/>
+                                        <TextBlock Text="1 日 1 回まで GitHub に最新の版を問い合わせ、新しい版があればお知らせします（送るのはアプリの名前と版だけです）" Style="{StaticResource Caption}" TextWrapping="Wrap"/>
+                                    </StackPanel>
+                                </CheckBox>
+                                <TextBlock Style="{StaticResource Caption}" TextWrapping="Wrap" Margin="0,12,0,0"
+                                           Text="「更新する」を押すと、インストーラーをダウンロードして GitHub に公開されたものと同じかを確かめてから、画面を出さずに入れ替えます。そのあいだ十数秒、アプリが終了してファンは BIOS の設定で回り、終わると起動し直します。設定・ログ・記録はそのまま残ります"/>
                             </StackPanel>
                         </Border>
 
@@ -2994,6 +3022,7 @@
                     </StackPanel>
                 </StackPanel>
             </ScrollViewer>
+            </Grid>
         </Grid>
     </Grid>
 </Window>

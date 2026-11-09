@@ -66,6 +66,33 @@ public static class HealthAnalyzerTests
         T.Check(cool.Level == HealthLevel.Warning && cool.Detail.Contains("ホコリ"), $"cooling slowly 50% worse over 20 days → warning about dust ({cool.Level}, {cool.Change:P0})");
     }
 
+    public static void TestCoolingDoesNotMixMethods()
+    {
+        // 2026-11 に実際に起きた形: 最初の 13 日は一日中 CPU が 25 W 以上で、休んでいる時間がない（室温のセンサーとの差で求める）。
+        // その「室温」はマザーボードの上の温度で、負荷と一緒に上がる。後半は休む時間がある。冷え方（0.4°C/W）はずっと同じ
+        var roles = new Dictionary<string, string> { [StatRoles.CpuTemp] = "cpuT", [StatRoles.CpuPower] = "cpuP", [StatRoles.Ambient] = "amb" };
+        var rows = new List<MinuteRow>();
+        var start = DateTime.Today.AddDays(-20);
+        var rnd = new Random(11);
+        for (int d = 0; d < 20; d++)
+            for (int m = 0; m < 240; m++)
+            {
+                bool noIdleDay = d < 13;
+                double p = m >= 120 ? 50 : noIdleDay ? 25 : 10;
+                var row = new MinuteRow { Time = start.AddDays(d).AddHours(10).AddMinutes(m), Roles = roles };
+                row.Values["cpuT"] = (float)(24 + 8 + 0.4 * p + rnd.NextDouble() * 0.5);
+                row.Values["amb"] = (float)(24 + 8 + 0.15 * p);
+                row.Values["cpuP"] = (float)p;
+                row.Values[HistoryStore.DutyKey(Fan)] = 50f;
+                row.Values[HistoryStore.RpmKey(Fan)] = (float)(1050 + rnd.Next(-8, 8));
+                row.DutySpread[HistoryStore.DutyKey(Fan)] = 0;
+                rows.Add(row);
+            }
+        var cool = Get(HealthAnalyzer.Analyze(rows, Cfg(), DateTime.Today), "CPU の冷え方");
+        T.Check(cool.Level is not (HealthLevel.Warning or HealthLevel.Info),
+            $"baseline only by the board sensor, recent only by idle → not compared, no false warning ({cool.Level}, {cool.Metric})");
+    }
+
     public static void TestCoolingSeesAFanCurveChange()
     {
         // 12 日目から静かなカーブ（負荷のときの指示 70% → 55%）。そのぶん温度も上がる

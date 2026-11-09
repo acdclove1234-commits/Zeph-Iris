@@ -1609,3 +1609,31 @@ c8e0f349	A fan sound check is in progress.
 82ee83eb	Could not start the uninstaller ({0}).\nAfter the app exits, uninstall Fanlume from Windows Settings → Apps → Installed apps.
 adc330eb	When you close this, the app exits, and then the uninstaller removes the app and the {0}. Fanlume also disappears from Installed apps in Windows.
 f10b7201	When you close this, the app exits, and then the uninstaller removes the app. Fanlume also disappears from Installed apps in Windows. Settings, logs and records stay in the folder.
+6f13f8bc	Updates
+6e708964	Check for updates
+1c275381	Update
+44cc4c9a	Open the releases page
+2420b253	Check for new versions automatically
+094990a5	Asks GitHub for the latest version at most once a day and tells you when a new one is out (only the app's name and version are sent)
+395b0a50	"Update" downloads the installer, checks that it matches the file published on GitHub, and replaces the app without showing any screens. For about 10–20 seconds the app is closed and the fans run on the BIOS settings; then it starts again. Settings, logs and records are kept.
+3ef4127e	Fanlume was updated from {0} to {1}.
+d256382b	Updated to {0}.
+042a94f0	Checking…
+42e9517b	A new version, Fanlume {0}, is available. "Update" downloads it and replaces the app (for about 10–20 seconds the fans run on the BIOS settings).
+bb0f9e93	Version {0} is available.
+ebc47f06	You have the latest version ({0}).
+993c451d	Could not check for a new version ({0}). Check that the PC is connected to the internet.
+31eb4f99	The app is closing, so it will not update.
+b79b5ccf	Could not update ({0}).
+ddecc240	The downloaded file grew larger than the size listed on GitHub.
+74c1cfd5	The installer's version ({0}) differs from the release version ({1}).
+e3910d2d	The downloaded file's size ({0} bytes) differs from the size listed on GitHub ({1} bytes).
+6a1c29a5	The downloaded file does not match the one published on GitHub (the SHA-256 differs). The update was stopped.
+cb8ee667	Current version: {0}
+5b6c7a62	The installer has started. The app will close shortly and start again after the update.
+e1525ed0	Version {0} is available (released {1:yyyy/MM/dd}, {2:F0} MB).
+7d2bdd2c	You have the latest version (checked {0:M/d HH:mm}).
+a94ca4e7	Not checked yet.
+d24d8900	Update to Fanlume {0}.\n\nAfter the installer ({1:F0} MB) is downloaded and checked, the app closes. Until the replacement is done (about 10–20 seconds) the fans run on the BIOS settings, and then the app starts again.\n\nUpdate now?
+98b3be1a	Downloading… {0:P0}
+c1f570b8	\n\nYou can also update by running the installer from the releases page yourself.

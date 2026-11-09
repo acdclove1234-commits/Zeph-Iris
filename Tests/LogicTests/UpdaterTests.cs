@@ -1,0 +1,142 @@
+// ==================================================
+// UpdaterTests.cs - アプリの中からの更新のロジックテスト
+//   (GitHub の返事の読み方・版の比べ方・ダウンロードしたファイルの確かめ方・開いたまま実行できること・インストーラーとの引数)
+// Dependencies: .NET 8 (MIT License)
+// See CREDITS.txt for full license details.
+// ==================================================
+
+using System.Diagnostics;
+using System.Security.Cryptography;
+using ProFanController;
+
+namespace LogicTests;
+
+public static class UpdaterTests
+{
+    private const string Sha = "76ef203faec4e6d309c2ccadc9fe8f1a71fe03336682a7bb1861e5537a623995";
+
+    private static string Release(string tag = "v6.7.1", string asset = "Fanlume-6.7.1-setup.exe", bool draft = false, bool prerelease = false,
+        string? digest = "sha256:" + Sha, string url = AppUpdater.DownloadPrefix + "v6.7.1/Fanlume-6.7.1-setup.exe", long size = 73791128)
+    {
+        string digestPart = digest is null ? "" : $"\"digest\": \"{digest}\",";
+        return $$"""
+            { "tag_name": "{{tag}}", "draft": {{(draft ? "true" : "false")}}, "prerelease": {{(prerelease ? "true" : "false")}},
+              "published_at": "2026-11-10T03:00:00Z",
+              "assets": [
+                { "name": "notes.txt", "state": "uploaded", "size": 10, "browser_download_url": "{{AppUpdater.DownloadPrefix}}x/notes.txt" },
+                { "name": "{{asset}}", "state": "uploaded", "size": {{size}}, {{digestPart}} "browser_download_url": "{{url}}" }
+              ] }
+            """;
+    }
+
+    public static void TestVersionsCompared()
+    {
+        T.Check(AppUpdater.ParseTag("v6.7.1") == new Version(6, 7, 1) && AppUpdater.ParseTag("6.10.0") == new Version(6, 10, 0), "tags read with or without v");
+        T.Check(AppUpdater.ParseTag("latest") is null && AppUpdater.ParseTag("v6.7") is null && AppUpdater.ParseTag("") is null, "unreadable tags ignored");
+        T.Check(AppUpdater.IsNewer(new Version(6, 7, 1), new Version(6, 7, 0)), "6.7.1 is newer than 6.7.0");
+        T.Check(AppUpdater.IsNewer(new Version(6, 10, 0), new Version(6, 9, 9)), "6.10.0 is newer than 6.9.9 (numbers, not text)");
+        T.Check(!AppUpdater.IsNewer(new Version(6, 7, 0), new Version(6, 7, 0, 5)) && !AppUpdater.IsNewer(new Version(6, 6, 1), new Version(6, 7, 0)),
+            "same or older is not offered");
+        var now = AppUpdater.CurrentVersion;
+        // テストは Core のソースを自分の中に取り込んで動くので、版はテストのもの（アプリでは csproj の <Version>）
+        T.Check(now.Build >= 0 && now.Revision == -1, $"current version has three parts ({now})");
+    }
+
+    public static void TestReleaseRead()
+    {
+        var info = AppUpdater.ParseRelease(Release());
+        T.Check(info is not null && info.Version == new Version(6, 7, 1) && info.AssetName == "Fanlume-6.7.1-setup.exe"
+                && info.Size == 73791128 && info.Sha256 == Sha && info.PublishedAt is not null, "setup asset, size, SHA-256 and date read");
+        T.Check(AppUpdater.ParseRelease(Release(draft: true)) is null, "drafts are not offered");
+        T.Check(AppUpdater.ParseRelease(Release(prerelease: true)) is null, "pre-releases are not offered");
+        T.Check(AppUpdater.ParseRelease(Release(asset: "ProFanController-6.7.1-windows-x64.zip")) is null, "no setup.exe → nothing offered");
+        T.Check(AppUpdater.ParseRelease(Release(asset: "Fanlume-6.7.0-setup.exe")) is null, "setup of another version than the tag → nothing offered");
+        T.Check(AppUpdater.ParseRelease(Release(digest: null)) is null, "no SHA-256 from GitHub → not offered (cannot be checked)");
+        T.Check(AppUpdater.ParseRelease(Release(digest: "sha256:1234")) is null, "broken SHA-256 → not offered");
+        T.Check(AppUpdater.ParseRelease(Release(url: "https://example.com/Fanlume-6.7.1-setup.exe")) is null, "download outside this repository → refused");
+        T.Check(AppUpdater.ParseRelease(Release(size: 0)) is null, "no size → not offered");
+    }
+
+    public static void TestDownloadChecked()
+    {
+        string dir = Path.Combine(Path.GetTempPath(), $"fanlume_upd_{Guid.NewGuid():N}");
+        Directory.CreateDirectory(dir);
+        try
+        {
+            byte[] data = new byte[200_000];
+            new Random(5).NextBytes(data);
+            string sha = Convert.ToHexString(SHA256.HashData(data)).ToLowerInvariant();
+            string path = Path.Combine(dir, "Fanlume-6.7.1-setup.exe");
+            File.WriteAllBytes(path, data);
+            var good = new UpdateInfo(new Version(6, 7, 1), "v6.7.1", "Fanlume-6.7.1-setup.exe", AppUpdater.DownloadPrefix + "x", data.Length, sha, null);
+
+            using (var fs = File.OpenRead(path)) AppUpdater.Verify(fs, good);
+            T.Check(true, "same size and SHA-256 → accepted");
+
+            bool badHash = false;
+            using (var fs = File.OpenRead(path))
+                try { AppUpdater.Verify(fs, good with { Sha256 = Sha }); } catch (InvalidDataException) { badHash = true; }
+            T.Check(badHash, "different SHA-256 → refused");
+
+            bool badSize = false;
+            using (var fs = File.OpenRead(path))
+                try { AppUpdater.Verify(fs, good with { Size = data.Length + 1 }); } catch (InvalidDataException) { badSize = true; }
+            T.Check(badSize, "different size → refused");
+        }
+        finally
+        {
+            try { Directory.Delete(dir, true); } catch { /* 一時フォルダー */ }
+        }
+    }
+
+    /// <summary>確かめたファイルを書き換え・削除できないように開いたままでも、そのファイルを実行できる（すり替えを防ぐやり方が使える）</summary>
+    public static void TestHeldFileStillRuns()
+    {
+        string dir = Path.Combine(Path.GetTempPath(), $"fanlume_upd_{Guid.NewGuid():N}");
+        Directory.CreateDirectory(dir);
+        try
+        {
+            string exe = Path.Combine(dir, "probe.exe");
+            File.Copy(Path.Combine(Environment.SystemDirectory, "whoami.exe"), exe);
+            using var held = new FileStream(exe, FileMode.Open, FileAccess.Read, FileShare.Read);
+            bool writeBlocked = false, deleteBlocked = false;
+            try { using var w = new FileStream(exe, FileMode.Open, FileAccess.Write, FileShare.ReadWrite); } catch (IOException) { writeBlocked = true; }
+            try { File.Delete(exe); } catch (Exception ex) when (ex is IOException or UnauthorizedAccessException) { deleteBlocked = true; }
+            T.Check(writeBlocked && deleteBlocked && File.Exists(exe), "while held: cannot be rewritten or deleted");
+
+            using var p = Process.Start(new ProcessStartInfo(exe) { UseShellExecute = false, RedirectStandardOutput = true, CreateNoWindow = true })!;
+            p.StandardOutput.ReadToEnd();
+            bool exited = p.WaitForExit(10_000);
+            T.Check(exited && p.ExitCode == 0, $"while held: it still runs (exit code {(exited ? p.ExitCode : -1)})");
+        }
+        finally
+        {
+            try { Directory.Delete(dir, true); } catch { /* 一時フォルダー */ }
+        }
+    }
+
+    public static void TestInstallerHandOff()
+    {
+        T.Check(AppUpdater.InstallerArguments(false) == "/SILENT /SUPPRESSMSGBOXES /NORESTART", "silent install, no screens");
+        T.Check(AppUpdater.InstallerArguments(true).EndsWith(" " + AppUpdater.ShowAppArgument), "window was open → asks to show the app again");
+        T.Check(AppUpdater.ReleasesPage.EndsWith("/" + AppIdentity.Name + "/releases") && AppUpdater.DownloadPrefix.StartsWith("https://github.com/"),
+            "points at this app's GitHub releases");
+
+        var d = new DirectoryInfo(AppContext.BaseDirectory);
+        while (d is not null && !File.Exists(Path.Combine(d.FullName, "ProFanController.csproj"))) d = d.Parent;
+        T.Check(d is not null, "repository found");
+        if (d is null) return;
+        string iss = File.ReadAllText(Path.Combine(d.FullName, "Installer", "Fanlume.iss"));
+        T.Check(iss.Contains(AppUpdater.ShowAppArgument, StringComparison.Ordinal) && iss.Contains("{code:RestartArguments}", StringComparison.Ordinal),
+            "the installer reads the show-app switch and restarts the app");
+
+        var cfg = new AppConfig();
+        T.Check(cfg.Update.AutoCheck, "automatic check is on by default");
+        cfg.Update.LastRunVersion = "6.7.0";
+        cfg.Update.LastChecked = new DateTime(2026, 11, 9, 20, 0, 0);
+        var back = AppConfig.FromJson(cfg.ToJson());
+        T.Check(back.Update.LastRunVersion == "6.7.0" && back.Update.LastChecked == cfg.Update.LastChecked, "update state saved in config.json");
+        var old = AppConfig.FromJson("{ }");
+        T.Check(old.Update is not null && old.Update.AutoCheck, "settings from before this feature → defaults");
+    }
+}

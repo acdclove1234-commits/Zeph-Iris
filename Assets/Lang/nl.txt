@@ -1609,3 +1609,31 @@ c8e0f349	Er loopt een geluidscontrole van een ventilator.
 82ee83eb	Het verwijderprogramma kon niet worden gestart ({0}).\nVerwijder Fanlume nadat de app is gestopt via Windows-instellingen → Apps → Geïnstalleerde apps.
 adc330eb	Als je dit sluit, stopt de app en verwijdert het verwijderprogramma daarna de app en de {0}. Fanlume verdwijnt ook uit "Geïnstalleerde apps" in Windows.
 f10b7201	Als je dit sluit, stopt de app en verwijdert het verwijderprogramma daarna de app. Fanlume verdwijnt ook uit "Geïnstalleerde apps" in Windows. Instellingen, logs en metingen blijven in de map.
+6f13f8bc	Updates
+6e708964	Controleren op updates
+1c275381	Bijwerken
+44cc4c9a	Releasepagina openen
+2420b253	Automatisch naar nieuwe versies zoeken
+094990a5	Vraagt hoogstens één keer per dag bij GitHub naar de nieuwste versie en meldt het als er een nieuwe is (alleen de naam en versie van de app worden verzonden)
+395b0a50	"Bijwerken" downloadt het installatieprogramma, controleert of het overeenkomt met het bestand op GitHub en vervangt de app zonder vensters te tonen. Ongeveer 10–20 seconden is de app gesloten en draaien de ventilatoren op de BIOS-instellingen; daarna start hij opnieuw. Instellingen, logs en metingen blijven bewaard.
+3ef4127e	Fanlume is bijgewerkt van {0} naar {1}.
+d256382b	Bijgewerkt naar {0}.
+042a94f0	Bezig met controleren…
+42e9517b	Er is een nieuwe versie, Fanlume {0}. "Bijwerken" downloadt hem en vervangt de app (ongeveer 10–20 seconden draaien de ventilatoren op de BIOS-instellingen).
+bb0f9e93	Versie {0} is beschikbaar.
+ebc47f06	Je hebt de nieuwste versie ({0}).
+993c451d	Kon niet naar een nieuwe versie zoeken ({0}). Controleer of de pc met internet is verbonden.
+31eb4f99	De app wordt afgesloten, dus er wordt niet bijgewerkt.
+b79b5ccf	Bijwerken is mislukt ({0}).
+ddecc240	Het gedownloade bestand is groter dan de grootte die op GitHub staat.
+74c1cfd5	De versie van het installatieprogramma ({0}) wijkt af van de releaseversie ({1}).
+e3910d2d	De grootte van het gedownloade bestand ({0} bytes) wijkt af van de grootte op GitHub ({1} bytes).
+6a1c29a5	Het gedownloade bestand komt niet overeen met het bestand op GitHub (SHA-256 wijkt af). Het bijwerken is gestopt.
+cb8ee667	Huidige versie: {0}
+5b6c7a62	Het installatieprogramma is gestart. De app sluit zo meteen af en start na het bijwerken opnieuw.
+e1525ed0	Versie {0} is beschikbaar (uitgebracht op {1:yyyy/MM/dd}, {2:F0} MB).
+7d2bdd2c	Je hebt de nieuwste versie (gecontroleerd op {0:M/d HH:mm}).
+a94ca4e7	Nog niet gecontroleerd.
+d24d8900	Bijwerken naar Fanlume {0}.\n\nNadat het installatieprogramma ({1:F0} MB) is gedownload en gecontroleerd, sluit de app af. Tot het vervangen klaar is (ongeveer 10–20 seconden) draaien de ventilatoren op de BIOS-instellingen; daarna start de app opnieuw.\n\nNu bijwerken?
+98b3be1a	Bezig met downloaden… {0:P0}
+c1f570b8	\n\nJe kunt ook bijwerken door het installatieprogramma zelf vanaf de releasepagina uit te voeren.

@@ -1609,3 +1609,31 @@ c8e0f349	Trwa sprawdzanie dźwięku wentylatora.
 82ee83eb	Nie udało się uruchomić deinstalatora ({0}).\nPo zakończeniu aplikacji odinstaluj Fanlume w Ustawieniach Windows → Aplikacje → Zainstalowane aplikacje.
 adc330eb	Po zamknięciu aplikacja się zakończy, a potem deinstalator usunie aplikację i {0}. Fanlume zniknie też z „Zainstalowanych aplikacji” w Windows.
 f10b7201	Po zamknięciu aplikacja się zakończy, a potem deinstalator ją usunie. Fanlume zniknie też z „Zainstalowanych aplikacji” w Windows. Ustawienia, dzienniki i zapisy zostają w folderze.
+6f13f8bc	Aktualizacje
+6e708964	Sprawdź aktualizacje
+1c275381	Zaktualizuj
+44cc4c9a	Otwórz stronę wydań
+2420b253	Automatycznie sprawdzaj nowe wersje
+094990a5	Najwyżej raz dziennie pyta GitHub o najnowszą wersję i informuje, gdy pojawi się nowa (wysyłane są tylko nazwa i wersja aplikacji)
+395b0a50	„Zaktualizuj” pobiera instalator, sprawdza, czy zgadza się z plikiem opublikowanym na GitHubie, i podmienia aplikację bez pokazywania okien. Przez ok. 10–20 sekund aplikacja jest zamknięta, a wentylatory działają według ustawień BIOS; potem uruchamia się ponownie. Ustawienia, dzienniki i zapisy zostają.
+3ef4127e	Fanlume zaktualizowano z {0} do {1}.
+d256382b	Zaktualizowano do {0}.
+042a94f0	Sprawdzanie…
+42e9517b	Dostępna jest nowa wersja Fanlume {0}. „Zaktualizuj” pobierze ją i podmieni aplikację (przez ok. 10–20 sekund wentylatory działają według ustawień BIOS).
+bb0f9e93	Dostępna jest wersja {0}.
+ebc47f06	Masz najnowszą wersję ({0}).
+993c451d	Nie udało się sprawdzić nowej wersji ({0}). Sprawdź, czy komputer ma połączenie z internetem.
+31eb4f99	Aplikacja się zamyka, więc nie zostanie zaktualizowana.
+b79b5ccf	Nie udało się zaktualizować ({0}).
+ddecc240	Pobrany plik jest większy niż rozmiar podany na GitHubie.
+74c1cfd5	Wersja instalatora ({0}) różni się od wersji wydania ({1}).
+e3910d2d	Rozmiar pobranego pliku ({0} B) różni się od rozmiaru podanego na GitHubie ({1} B).
+6a1c29a5	Pobrany plik nie zgadza się z opublikowanym na GitHubie (inny SHA-256). Aktualizację przerwano.
+cb8ee667	Bieżąca wersja: {0}
+5b6c7a62	Instalator został uruchomiony. Aplikacja zaraz się zamknie i uruchomi ponownie po aktualizacji.
+e1525ed0	Dostępna jest wersja {0} (wydana {1:yyyy/MM/dd}, {2:F0} MB).
+7d2bdd2c	Masz najnowszą wersję (sprawdzono {0:M/d HH:mm}).
+a94ca4e7	Jeszcze nie sprawdzono.
+d24d8900	Aktualizacja do Fanlume {0}.\n\nPo pobraniu i sprawdzeniu instalatora ({1:F0} MB) aplikacja się zamknie. Do końca podmiany (ok. 10–20 sekund) wentylatory działają według ustawień BIOS, a potem aplikacja uruchomi się ponownie.\n\nZaktualizować teraz?
+98b3be1a	Pobieranie… {0:P0}
+c1f570b8	\n\nMożesz też zaktualizować, uruchamiając samodzielnie instalator ze strony wydań.

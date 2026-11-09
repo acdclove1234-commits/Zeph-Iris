@@ -1609,3 +1609,31 @@ c8e0f349	Đang nghe thử tiếng quạt.
 82ee83eb	Không thể khởi động trình gỡ cài đặt ({0}).\nSau khi ứng dụng thoát, hãy gỡ Fanlume trong Cài đặt Windows → Ứng dụng → Ứng dụng đã cài đặt.
 adc330eb	Đóng lại thì ứng dụng sẽ thoát, sau đó trình gỡ cài đặt xóa ứng dụng và {0}. Fanlume cũng biến mất khỏi "Ứng dụng đã cài đặt" của Windows.
 f10b7201	Đóng lại thì ứng dụng sẽ thoát, sau đó trình gỡ cài đặt xóa ứng dụng. Fanlume cũng biến mất khỏi "Ứng dụng đã cài đặt" của Windows. Cài đặt, nhật ký và bản ghi vẫn ở trong thư mục.
+6f13f8bc	Cập nhật
+6e708964	Kiểm tra cập nhật
+1c275381	Cập nhật ngay
+44cc4c9a	Mở trang phát hành
+2420b253	Tự động kiểm tra phiên bản mới
+094990a5	Hỏi GitHub phiên bản mới nhất tối đa mỗi ngày một lần và báo khi có bản mới (chỉ gửi tên và phiên bản của ứng dụng)
+395b0a50	"Cập nhật ngay" sẽ tải trình cài đặt, kiểm tra xem có khớp với tệp đã phát hành trên GitHub không, rồi thay ứng dụng mà không hiện cửa sổ. Trong khoảng 10–20 giây, ứng dụng thoát và quạt chạy theo cài đặt BIOS; xong thì ứng dụng khởi động lại. Cài đặt, nhật ký và bản ghi được giữ nguyên.
+3ef4127e	Đã cập nhật Fanlume từ {0} lên {1}.
+d256382b	Đã cập nhật lên {0}.
+042a94f0	Đang kiểm tra…
+42e9517b	Có phiên bản mới Fanlume {0}. Nhấn "Cập nhật ngay" để tải về và thay ứng dụng (trong khoảng 10–20 giây quạt chạy theo cài đặt BIOS).
+bb0f9e93	Có phiên bản mới {0}.
+ebc47f06	Bạn đang dùng phiên bản mới nhất ({0}).
+993c451d	Không thể kiểm tra phiên bản mới ({0}). Hãy kiểm tra kết nối Internet.
+31eb4f99	Ứng dụng đang thoát nên sẽ không cập nhật.
+b79b5ccf	Không thể cập nhật ({0}).
+ddecc240	Tệp đã tải lớn hơn kích thước ghi trên GitHub.
+74c1cfd5	Phiên bản của trình cài đặt ({0}) khác với phiên bản phát hành ({1}).
+e3910d2d	Kích thước tệp đã tải ({0} byte) khác với kích thước ghi trên GitHub ({1} byte).
+6a1c29a5	Tệp đã tải không khớp với tệp phát hành trên GitHub (SHA-256 khác). Đã dừng cập nhật.
+cb8ee667	Phiên bản hiện tại: {0}
+5b6c7a62	Trình cài đặt đã khởi động. Ứng dụng sẽ sớm thoát và khởi động lại sau khi cập nhật.
+e1525ed0	Có phiên bản mới {0} (phát hành {1:yyyy/MM/dd}, {2:F0} MB).
+7d2bdd2c	Bạn đang dùng phiên bản mới nhất (kiểm tra lúc {0:M/d HH:mm}).
+a94ca4e7	Chưa kiểm tra.
+d24d8900	Cập nhật lên Fanlume {0}.\n\nSau khi tải và kiểm tra trình cài đặt ({1:F0} MB), ứng dụng sẽ thoát một lần. Cho đến khi thay xong (khoảng 10–20 giây), quạt chạy theo cài đặt BIOS, rồi ứng dụng khởi động lại.\n\nCập nhật ngay?
+98b3be1a	Đang tải… {0:P0}
+c1f570b8	\n\nBạn cũng có thể tự chạy trình cài đặt từ trang phát hành để cập nhật.

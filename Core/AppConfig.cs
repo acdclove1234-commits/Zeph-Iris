@@ -74,6 +74,8 @@ public sealed class AppConfig : ObservableObject
     public EnergyConfig Energy { get; set; } = new();
     public RgbConfig Rgb { get; set; } = new();
     public MaintenanceConfig Maintenance { get; set; } = new();
+    /// <summary>アプリの中からの更新（新しい版の確認）</summary>
+    public UpdateConfig Update { get; set; } = new();
     /// <summary>前回起動時に見つかったハードウェア（部品の交換を検知するため）</summary>
     public List<KnownDevice> KnownDevices { get; set; } = new();
     /// <summary>設定で使っているセンサーの名前（部品交換・設定の読み込みで、新しいセンサーに対応付けるため）</summary>
@@ -133,6 +135,7 @@ public sealed class AppConfig : ObservableObject
         Energy ??= new();
         Rgb ??= new();
         Maintenance ??= new();
+        Update ??= new();
         KnownDevices ??= new();
         SensorLabels ??= new(StringComparer.OrdinalIgnoreCase);
         foreach (var r in AutoSwitchRules.Where(r => r is null).ToList()) AutoSwitchRules.Remove(r);
@@ -1088,6 +1091,21 @@ public sealed class MaintenanceConfig
     public DateTime? LastCleaned { get; set; }
     /// <summary>最後にメンテナンスの通知を出した日時（同じ通知を毎日出さない）</summary>
     public DateTime? LastNotified { get; set; }
+}
+
+/// <summary>アプリの中からの更新</summary>
+public sealed class UpdateConfig : ObservableObject
+{
+    private bool _autoCheck = true;
+
+    /// <summary>起動したとき（と 6 時間ごと）に、1 日 1 回まで GitHub に新しい版を問い合わせる</summary>
+    public bool AutoCheck { get => _autoCheck; set => Set(ref _autoCheck, value); }
+    /// <summary>最後に新しい版を確かめた日時</summary>
+    public DateTime? LastChecked { get; set; }
+    /// <summary>お知らせを出した新しい版（同じ版のお知らせは 1 回だけ）</summary>
+    public string? NotifiedVersion { get; set; }
+    /// <summary>前回起動したときの版（変わっていたら「更新しました」と知らせる）</summary>
+    public string? LastRunVersion { get; set; }
 }
 
 /// <summary>前回起動時にあったハードウェア</summary>

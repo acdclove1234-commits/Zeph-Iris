@@ -12,6 +12,19 @@ and can be checked from a phone.
   for example: Settings [設定].
 
 
+■ What's new in v6.7.1
+  - Updating from inside the app: Settings [設定] -> General [一般] -> Updates [アップデート] now has "Check for
+    updates" and "Update". "Update" downloads the new installer, checks that it matches the file published on
+    GitHub (size, SHA-256 and version), and replaces the app without showing any screens, then starts it again
+    (the fans run on the BIOS settings for about 10-20 seconds).
+  - With "Check for new versions automatically" on, the app asks GitHub at most once a day and tells you when a
+    new version is out (only the app's name and version are sent; you can turn it off).
+  - This works from 6.7.1 on. To go from 6.7.0 to 6.7.1, run the installer yourself.
+  - Diagnostics (CPU / GPU cooling): days without idle time (CPU power high all day) were compared with values
+    worked out a different way, so it could say cooling got worse when it had not. Only like is compared now.
+  - The Settings tabs stay at the top while you scroll. The sidebar and the mini widget show the name Fanlume,
+    and the history CSV and exported settings files are named Fanlume too.
+
 ■ What's new in v6.7.0
   - New name: ProFanController is now called Fanlume. Settings and records are carried over.
   - Installer: Fanlume now comes as an installer (Fanlume-6.7.0-setup.exe). It installs to
@@ -141,6 +154,12 @@ and can be checked from a phone.
 
 
 ■ Updating to a new version
+  The easy way (from 6.7.1 on):
+    Settings [設定] -> General [一般] -> Updates [アップデート] -> "Check for updates" -> "Update".
+    When a new version is out, the notice bar also shows an "Update" button.
+    The installer is checked, the app is replaced without any screens, and it starts again after 10-20 seconds.
+
+  By hand:
   1. Download the newer Fanlume-<version>-setup.exe from the GitHub releases page:
      https://github.com/acdclove1234-commits/Fanlume/releases
   2. Double-click it -> "Yes" -> "Next" -> "Install".

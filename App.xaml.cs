@@ -332,6 +332,8 @@ public partial class App : Application
         // 前の名前で登録した自動起動・ファイアウォールの許可などを片付ける（自動起動を使っていたら、新しい名前で登録し直す）
         _ = Task.Run(() => LegacyMigration.RemoveLegacyRegistrations(() => AutoStart.Enable()));
         _ = CheckInstallAsync();
+        // 更新したあとなら知らせ、新しい版を定期的に確かめる（App.Update.cs）
+        StartUpdateChecks(controller);
     }
 
     private System.Windows.Media.ImageSource? _windowIcon;

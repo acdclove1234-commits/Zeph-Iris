@@ -58,7 +58,7 @@ What happens with unsupported or unchecked parts:
    (if that fails, right-click `1_PawnIO をインストール.bat` ("install PawnIO") in the app folder → Run as administrator, or use the installer from the [official site](https://pawnio.eu/))
 3. Follow the setup to name your fan headers
 
-See `README_en.txt` in the app folder (in this repository under `Distribution/`) for details. To update, run the newer installer: it closes the running Fanlume properly (the fans go back to the BIOS settings), replaces the files and can start it again; settings and records are kept.
+See `README_en.txt` in the app folder (in this repository under `Distribution/`) for details. To update, use Settings → General → Updates → "Update" in the app (from 6.7.1 on): it downloads the new installer, checks it against the file published on GitHub (size and SHA-256), and replaces the app without any screens. You can also run the newer installer yourself. Either way the running Fanlume is closed properly (the fans go back to the BIOS settings for a moment) and settings and records are kept.
 
 To stop using the app, uninstall it from Windows Settings → Apps → Installed apps (it closes Fanlume, removes the logon start and the firewall rule, and asks whether to delete settings and records), or use Settings → Safety & backup → Uninstall (clean up) in the app, which also offers to uninstall PawnIO and then runs the uninstaller.
 

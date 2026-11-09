@@ -28,7 +28,8 @@ public sealed class HealthItem
 ///   ・ファン … 同じ Duty（5% ごと）で回転が安定していた分の回転数。基準・最近の両方に 20 分以上ある Duty だけ
 ///   ・冷え方 … 同じ日の「休んでいるとき」と「負荷をかけているとき」の温度差 ÷ 消費電力の差（°C/W）。
 ///              室温は両方に同じだけ入るので打ち消し合い、季節（夏・冬）で判定が変わらない。
-///              休んでいる時間のない日は、室温のセンサーがあればそれとの差を使う（なければその日は使わない）
+///              休んでいる時間のない日は、室温のセンサーがあればそれとの差を使う（なければその日は使わない）。
+///              2 つの求め方は値の大きさが違うので、基準と最近は同じ求め方どうしで比べる（混ぜると、変わっていないのに悪化して見える）
 /// 変わり方も見る: 日ごとの値の並びから、ある日を境に急に変わった（交換・つなぎ替え・何かが当たった）のか、
 /// じわじわ変わった（劣化・ホコリ）のかを見分けて、原因の候補を書き分ける。
 /// 冷え方は、比べる時間のファンの回転の指示が基準と大きく違えば（ファンカーブを変えた）、ホコリとは判定しない
@@ -196,14 +197,15 @@ public static class HealthAnalyzer
             return;
         }
 
-        var b = Resistance(baseRows, tempRole, powerRole, minPower, idleMax, fanDutyKeys);
-        var r = Resistance(recentRows, tempRole, powerRole, minPower, idleMax, fanDutyKeys);
-        int bMin = b.Values.Sum(v => v.Count), rMin = r.Values.Sum(v => v.Count);
-        var compare = r.Where(x => x.Value.Count >= MinSamples && b.TryGetValue(x.Key, out var bl) && bl.Count >= MinSamples)
-            .Select(x => (Power: x.Key, Recent: Median(x.Value.Select(s => s.R).ToList()), Base: Median(b[x.Key].Select(s => s.R).ToList()),
-                RecentDuty: AverageOrNaN(x.Value.Select(s => s.Duty)), BaseDuty: AverageOrNaN(b[x.Key].Select(s => s.Duty)),
-                Weight: Math.Min(x.Value.Count, b[x.Key].Count)))
-            .ToList();
+        // 基準と最近は、同じ求め方どうしで比べる。「休んでいるときとの差」と「室温のセンサーとの差」は値の大きさが違い
+        // （室温のセンサーは、マザーボードの上の温度で室温より高いことがある）、混ぜると冷え方が変わったように見えるため。
+        // 休んでいるときとの差で比べられればそれを使い、だめなら室温のセンサーとの差どうしで比べる
+        var (compare, bMin, rMin) = CompareCooling(baseRows, recentRows, tempRole, powerRole, minPower, idleMax, fanDutyKeys, useIdle: true);
+        if (compare.Count == 0 || bMin < MinLoadMinutes || rMin < MinLoadMinutes)
+        {
+            var (byAmbient, bA, rA) = CompareCooling(baseRows, recentRows, tempRole, powerRole, minPower, idleMax, fanDutyKeys, useIdle: false);
+            if (byAmbient.Count > 0 && bA >= MinLoadMinutes && rA >= MinLoadMinutes) (compare, bMin, rMin) = (byAmbient, bA, rA);
+        }
         if (compare.Count == 0 || bMin < MinLoadMinutes || rMin < MinLoadMinutes)
         {
             list.Add(Collecting(title, L($"負荷をかけた時間（ゲームなど）と、休んでいる時間の記録がまだ少ないため、比べられません（基準 {bMin} 分・最近 {rMin} 分。それぞれ {MinLoadMinutes} 分以上必要）。")));
@@ -241,12 +243,28 @@ public static class HealthAnalyzer
         list.Add(new HealthItem { Title = title, Level = level, Detail = detail, Metric = metric, Change = change });
     }
 
+    /// <summary>基準と最近の冷えにくさを、同じ求め方（useIdle）で電力の区切りごとに並べる。比べた分数（基準・最近）も返す</summary>
+    private static (List<(int Power, double Recent, double Base, double RecentDuty, double BaseDuty, int Weight)> Compare, int BaseMinutes, int RecentMinutes)
+        CompareCooling(List<MinuteRow> baseRows, List<MinuteRow> recentRows, string tempRole, string powerRole, double minPower, double idleMax,
+            List<string> fanDutyKeys, bool useIdle)
+    {
+        var b = Resistance(baseRows, tempRole, powerRole, minPower, idleMax, fanDutyKeys, useIdle);
+        var r = Resistance(recentRows, tempRole, powerRole, minPower, idleMax, fanDutyKeys, useIdle);
+        var compare = r.Where(x => x.Value.Count >= MinSamples && b.TryGetValue(x.Key, out var bl) && bl.Count >= MinSamples)
+            .Select(x => (Power: x.Key, Recent: Median(x.Value.Select(s => s.R).ToList()), Base: Median(b[x.Key].Select(s => s.R).ToList()),
+                RecentDuty: AverageOrNaN(x.Value.Select(s => s.Duty)), BaseDuty: AverageOrNaN(b[x.Key].Select(s => s.Duty)),
+                Weight: Math.Min(x.Value.Count, b[x.Key].Count)))
+            .ToList();
+        return (compare, b.Values.Sum(v => v.Count), r.Values.Sum(v => v.Count));
+    }
+
     /// <summary>
     /// 電力の差（20 W ごと）ごとの、温度の上がり方 ÷ 電力の差（°C/W）と、そのときのファンの Duty の平均。
-    /// 日ごとに「休んでいるとき」の温度・電力を求め、そこからの差を使う。休んでいる時間のない日は、室温のセンサーとの差（電力そのもので割る）
+    /// useIdle = true: 休んでいる時間のある日だけ。その日の「休んでいるとき」の温度・電力からの差を使う。
+    /// useIdle = false: 休んでいる時間のない日だけ。室温のセンサーとの差（電力そのもので割る）を使う
     /// </summary>
     private static Dictionary<int, List<(double R, double Duty)>> Resistance(IEnumerable<MinuteRow> rows, string tempRole, string powerRole,
-        double minPower, double idleMax, List<string> fanDutyKeys)
+        double minPower, double idleMax, List<string> fanDutyKeys, bool useIdle)
     {
         var map = new Dictionary<int, List<(double, double)>>();
         foreach (var day in rows.GroupBy(r => r.Time.Date))
@@ -258,6 +276,7 @@ public static class HealthAnalyzer
                 tIdle = Median(idle.Select(r => (double)r.Role(tempRole)!.Value).ToList());
                 pIdle = Median(idle.Select(r => (double)r.Role(powerRole)!.Value).ToList());
             }
+            if (useIdle != tIdle.HasValue) continue; // 求め方の違う日は混ぜない
             foreach (var r in day)
             {
                 if (r.Role(tempRole) is not float t || r.Role(powerRole) is not float p || p < minPower) continue;

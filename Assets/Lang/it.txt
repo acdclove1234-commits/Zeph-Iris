@@ -1609,3 +1609,31 @@ c8e0f349	È in corso il controllo del rumore di una ventola.
 82ee83eb	Impossibile avviare il programma di disinstallazione ({0}).\nDopo la chiusura dell'app, disinstalla Fanlume da Impostazioni di Windows → App → App installate.
 adc330eb	Chiudendo, l'app termina e poi il programma di disinstallazione elimina l'app e {0}. Fanlume sparisce anche da «App installate» di Windows.
 f10b7201	Chiudendo, l'app termina e poi il programma di disinstallazione la elimina. Fanlume sparisce anche da «App installate» di Windows. Impostazioni, log e registrazioni restano nella cartella.
+6f13f8bc	Aggiornamenti
+6e708964	Cerca aggiornamenti
+1c275381	Aggiorna
+44cc4c9a	Apri la pagina delle versioni
+2420b253	Cerca automaticamente nuove versioni
+094990a5	Chiede a GitHub l'ultima versione al massimo una volta al giorno e ti avvisa quando ne esce una nuova (vengono inviati solo il nome e la versione dell'app)
+395b0a50	«Aggiorna» scarica il programma di installazione, verifica che corrisponda al file pubblicato su GitHub e sostituisce l'app senza mostrare finestre. Per circa 10–20 secondi l'app è chiusa e le ventole seguono le impostazioni del BIOS; poi si riavvia. Impostazioni, log e registrazioni restano.
+3ef4127e	Fanlume è stato aggiornato da {0} a {1}.
+d256382b	Aggiornato a {0}.
+042a94f0	Verifica in corso…
+42e9517b	È disponibile una nuova versione, Fanlume {0}. «Aggiorna» la scarica e sostituisce l'app (per circa 10–20 secondi le ventole seguono le impostazioni del BIOS).
+bb0f9e93	È disponibile la versione {0}.
+ebc47f06	Hai l'ultima versione ({0}).
+993c451d	Impossibile cercare una nuova versione ({0}). Controlla che il PC sia connesso a Internet.
+31eb4f99	L'app si sta chiudendo, quindi non verrà aggiornata.
+b79b5ccf	Impossibile aggiornare ({0}).
+ddecc240	Il file scaricato supera la dimensione indicata su GitHub.
+74c1cfd5	La versione del programma di installazione ({0}) è diversa da quella della release ({1}).
+e3910d2d	La dimensione del file scaricato ({0} byte) è diversa da quella indicata su GitHub ({1} byte).
+6a1c29a5	Il file scaricato non corrisponde a quello pubblicato su GitHub (SHA-256 diverso). L'aggiornamento è stato annullato.
+cb8ee667	Versione attuale: {0}
+5b6c7a62	Il programma di installazione è partito. L'app si chiuderà a breve e si riavvierà dopo l'aggiornamento.
+e1525ed0	È disponibile la versione {0} (pubblicata il {1:yyyy/MM/dd}, {2:F0} MB).
+7d2bdd2c	Hai l'ultima versione (verificato il {0:M/d HH:mm}).
+a94ca4e7	Non ancora verificato.
+d24d8900	Aggiornamento a Fanlume {0}.\n\nDopo aver scaricato e verificato il programma di installazione ({1:F0} MB), l'app si chiude. Fino alla fine della sostituzione (circa 10–20 secondi) le ventole seguono le impostazioni del BIOS, poi l'app si riavvia.\n\nAggiornare ora?
+98b3be1a	Download in corso… {0:P0}
+c1f570b8	\n\nPuoi anche aggiornare eseguendo tu stesso il programma di installazione dalla pagina delle versioni.

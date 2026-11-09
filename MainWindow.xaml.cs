@@ -176,6 +176,7 @@ public partial class MainWindow : Window
         Watch(Config.Rgb);
         Watch(Config.Rgb.Music);
         Watch(Config.Appearance);
+        Watch(Config.Update);
         foreach (var profile in Config.Profiles)
         {
             Watch(profile);
@@ -532,7 +533,7 @@ public partial class MainWindow : Window
         SettingsAuto.Visibility = SetTabAuto.IsChecked == true ? Visibility.Visible : Visibility.Collapsed;
         SettingsLink.Visibility = SetTabLink.IsChecked == true ? Visibility.Visible : Visibility.Collapsed;
         SettingsSafety.Visibility = SetTabSafety.IsChecked == true ? Visibility.Visible : Visibility.Collapsed;
-        SettingsPage.ScrollToTop();
+        SettingsScroller.ScrollToTop();
         RefreshSettingsInfo();
     }
 

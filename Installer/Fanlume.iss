@@ -173,8 +173,9 @@ Name: "{autodesktop}\{#AppName}"; Filename: "{app}\{#AppExe}"; Tasks: desktopico
 [Run]
 ; ふつうに入れたとき: 最後の画面で「Fanlume を起動する」（はじめての起動では、アプリのセットアップの画面が出る）
 Filename: "{app}\{#AppExe}"; Description: "{cm:LaunchProgram,{#AppName}}"; Flags: nowait postinstall skipifsilent
-; 画面を出さずに更新したとき: 動いていたなら、タスクトレイで起動し直す
-Filename: "{app}\{#AppExe}"; Parameters: "--minimized"; Flags: nowait skipifnotsilent; Check: AppWasRunning
+; 画面を出さずに更新したとき（アプリの「更新する」から）: 動いていたなら起動し直す。
+; アプリが画面を出していたとき（/FANLUMESHOW）は画面を出し、そうでなければタスクトレイで
+Filename: "{app}\{#AppExe}"; Parameters: "{code:RestartArguments}"; Flags: nowait skipifnotsilent; Check: AppWasRunning
 
 [Code]
 const
@@ -196,6 +197,29 @@ function CloseHandle(hObject: THandle): BOOL;
 function AppWasRunning(): Boolean;
 begin
   Result := WasRunning;
+end;
+
+{ コマンドラインに Name（/FANLUMESHOW など）があるか }
+function HasCommandLineSwitch(const Name: String): Boolean;
+var
+  I: Integer;
+begin
+  Result := False;
+  for I := 1 to ParamCount do
+    if CompareText(ParamStr(I), Name) = 0 then
+    begin
+      Result := True;
+      Exit;
+    end;
+end;
+
+{ 更新のあとに起動し直すときの引数 }
+function RestartArguments(Param: String): String;
+begin
+  if HasCommandLineSwitch('/FANLUMESHOW') then
+    Result := ''
+  else
+    Result := '--minimized';
 end;
 
 { Fanlume（または前の名前の ProFanController）が動いているか: 二重起動を防ぐ印で調べる }

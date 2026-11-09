@@ -36,6 +36,7 @@ public partial class MainWindow
         if (CurrentApp.Notifier.LastResult.Length > 0) NotifyStatus.Text = CurrentApp.Notifier.LastResult;
         UpdateRgbStatus();
         UpdateNtfyQr();
+        RefreshUpdateCard();
     }
 
     // =====================================================================

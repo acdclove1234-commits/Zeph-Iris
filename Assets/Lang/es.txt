@@ -1609,3 +1609,31 @@ c8e0f349	Se está comprobando el sonido de un ventilador.
 82ee83eb	No se pudo iniciar el desinstalador ({0}).\nCuando la aplicación se cierre, desinstala Fanlume desde Configuración de Windows → Aplicaciones → Aplicaciones instaladas.
 adc330eb	Al cerrar esto, la aplicación se cierra y luego el desinstalador borra la aplicación y los {0}. Fanlume también desaparece de «Aplicaciones instaladas» en Windows.
 f10b7201	Al cerrar esto, la aplicación se cierra y luego el desinstalador la borra. Fanlume también desaparece de «Aplicaciones instaladas» en Windows. Ajustes, registros y grabaciones se quedan en la carpeta.
+6f13f8bc	Actualizaciones
+6e708964	Buscar actualizaciones
+1c275381	Actualizar
+44cc4c9a	Abrir la página de versiones
+2420b253	Buscar nuevas versiones automáticamente
+094990a5	Consulta a GitHub la última versión como máximo una vez al día y te avisa cuando hay una nueva (solo se envían el nombre y la versión de la aplicación)
+395b0a50	«Actualizar» descarga el instalador, comprueba que coincide con el archivo publicado en GitHub y reemplaza la aplicación sin mostrar ventanas. Durante unos 10–20 segundos la aplicación está cerrada y los ventiladores siguen la configuración de la BIOS; después se vuelve a iniciar. Los ajustes, registros y grabaciones se conservan.
+3ef4127e	Fanlume se actualizó de {0} a {1}.
+d256382b	Actualizado a {0}.
+042a94f0	Comprobando…
+42e9517b	Hay una nueva versión, Fanlume {0}. «Actualizar» la descarga y reemplaza la aplicación (durante unos 10–20 segundos los ventiladores siguen la configuración de la BIOS).
+bb0f9e93	La versión {0} está disponible.
+ebc47f06	Tienes la última versión ({0}).
+993c451d	No se pudo buscar una nueva versión ({0}). Comprueba que el PC está conectado a Internet.
+31eb4f99	La aplicación se está cerrando, así que no se actualizará.
+b79b5ccf	No se pudo actualizar ({0}).
+ddecc240	El archivo descargado supera el tamaño indicado en GitHub.
+74c1cfd5	La versión del instalador ({0}) no coincide con la de la publicación ({1}).
+e3910d2d	El tamaño del archivo descargado ({0} bytes) no coincide con el indicado en GitHub ({1} bytes).
+6a1c29a5	El archivo descargado no coincide con el publicado en GitHub (el SHA-256 es distinto). Se canceló la actualización.
+cb8ee667	Versión actual: {0}
+5b6c7a62	El instalador se ha iniciado. La aplicación se cerrará en breve y volverá a iniciarse tras la actualización.
+e1525ed0	La versión {0} está disponible (publicada el {1:yyyy/MM/dd}, {2:F0} MB).
+7d2bdd2c	Tienes la última versión (comprobado el {0:M/d HH:mm}).
+a94ca4e7	Aún no se ha comprobado.
+d24d8900	Actualizar a Fanlume {0}.\n\nDespués de descargar y comprobar el instalador ({1:F0} MB), la aplicación se cierra. Hasta que termine el reemplazo (unos 10–20 segundos) los ventiladores siguen la configuración de la BIOS, y luego la aplicación se vuelve a iniciar.\n\n¿Actualizar ahora?
+98b3be1a	Descargando… {0:P0}
+c1f570b8	\n\nTambién puedes actualizar ejecutando tú mismo el instalador desde la página de versiones.

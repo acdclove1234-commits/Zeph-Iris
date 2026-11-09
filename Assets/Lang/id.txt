@@ -1609,3 +1609,31 @@ c8e0f349	Pemeriksaan suara kipas sedang berjalan.
 82ee83eb	Tidak dapat menjalankan penghapus instalasi ({0}).\nSetelah aplikasi berhenti, hapus instalasi Fanlume dari Pengaturan Windows → Aplikasi → Aplikasi terinstal.
 adc330eb	Saat ditutup, aplikasi berhenti lalu penghapus instalasi menghapus aplikasi dan {0}. Fanlume juga hilang dari "Aplikasi terinstal" di Windows.
 f10b7201	Saat ditutup, aplikasi berhenti lalu penghapus instalasi menghapus aplikasi. Fanlume juga hilang dari "Aplikasi terinstal" di Windows. Pengaturan, log, dan rekaman tetap di folder.
+6f13f8bc	Pembaruan
+6e708964	Periksa pembaruan
+1c275381	Perbarui
+44cc4c9a	Buka halaman rilis
+2420b253	Periksa versi baru secara otomatis
+094990a5	Menanyakan versi terbaru ke GitHub paling banyak sekali sehari dan memberi tahu jika ada versi baru (hanya nama dan versi aplikasi yang dikirim)
+395b0a50	"Perbarui" mengunduh penginstal, memeriksa apakah sama dengan berkas yang dirilis di GitHub, lalu mengganti aplikasi tanpa menampilkan jendela. Selama sekitar 10–20 detik aplikasi tertutup dan kipas mengikuti pengaturan BIOS; setelah itu aplikasi mulai lagi. Pengaturan, log, dan rekaman tetap tersimpan.
+3ef4127e	Fanlume telah diperbarui dari {0} ke {1}.
+d256382b	Diperbarui ke {0}.
+042a94f0	Memeriksa…
+42e9517b	Ada versi baru, Fanlume {0}. "Perbarui" akan mengunduhnya dan mengganti aplikasi (selama sekitar 10–20 detik kipas mengikuti pengaturan BIOS).
+bb0f9e93	Versi {0} tersedia.
+ebc47f06	Anda memakai versi terbaru ({0}).
+993c451d	Tidak dapat memeriksa versi baru ({0}). Pastikan PC terhubung ke internet.
+31eb4f99	Aplikasi sedang ditutup, jadi tidak diperbarui.
+b79b5ccf	Tidak dapat memperbarui ({0}).
+ddecc240	Berkas yang diunduh lebih besar dari ukuran yang tertera di GitHub.
+74c1cfd5	Versi penginstal ({0}) berbeda dengan versi rilis ({1}).
+e3910d2d	Ukuran berkas yang diunduh ({0} byte) berbeda dengan ukuran di GitHub ({1} byte).
+6a1c29a5	Berkas yang diunduh tidak sama dengan yang dirilis di GitHub (SHA-256 berbeda). Pembaruan dihentikan.
+cb8ee667	Versi saat ini: {0}
+5b6c7a62	Penginstal sudah dijalankan. Aplikasi akan segera tertutup dan mulai lagi setelah diperbarui.
+e1525ed0	Versi {0} tersedia (dirilis {1:yyyy/MM/dd}, {2:F0} MB).
+7d2bdd2c	Anda memakai versi terbaru (diperiksa {0:M/d HH:mm}).
+a94ca4e7	Belum diperiksa.
+d24d8900	Memperbarui ke Fanlume {0}.\n\nSetelah penginstal ({1:F0} MB) diunduh dan diperiksa, aplikasi akan tertutup. Sampai penggantian selesai (sekitar 10–20 detik) kipas mengikuti pengaturan BIOS, lalu aplikasi mulai lagi.\n\nPerbarui sekarang?
+98b3be1a	Mengunduh… {0:P0}
+c1f570b8	\n\nAnda juga bisa memperbarui dengan menjalankan sendiri penginstal dari halaman rilis.

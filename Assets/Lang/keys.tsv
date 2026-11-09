@@ -371,137 +371,144 @@ a64d70bc	グラボやメモリは 1 秒に 4〜8 回しか色を変えられな�
 7b9813d5	止めるときの LED	MainWindow.xaml:2374
 74ebaadf	連携をオフにしたとき・アプリを終了するとき・スリープするときに、LED をどうするか	MainWindow.xaml:2375
 4ba5fb63	連携をオフにしたとき・アプリを終了するとき・スリープするときに、LED をどうするか。「そのまま」は最後の色のまま止まります	MainWindow.xaml:2378
-ac0f3749	一般	MainWindow.xaml:2389
-69af1b60	プロファイル・自動化	MainWindow.xaml:2390
-86406a7c	通知・連携	MainWindow.xaml:2391
-0dee4b23	安全・バックアップ	MainWindow.xaml:2392
-ddd59eb1	起動と表示	MainWindow.xaml:2399
-bf6cf977	Windows ログオン時に自動で起動する	MainWindow.xaml:2402
-5699c4fc	タスクスケジューラに「最上位の特権」で登録します（UAC の確認なしで起動）	MainWindow.xaml:2403
-5d0a76ce	手動で起動したときもタスクトレイに格納する	MainWindow.xaml:2408
-aefcd37e	自動起動のときは常にタスクトレイで起動します。ウィンドウの × で閉じてもトレイで動き続けます	MainWindow.xaml:2409
-e162bf76	ミニウィジェットを表示する	MainWindow.xaml:2414
-1b093ce9	常に最前面に温度と回転数を表示します。ドラッグで移動、右クリックで不透明度を変更できます	MainWindow.xaml:2415
-1483f6b3	見た目	MainWindow.xaml:2424
-d6776d41	表示言語・テーマ・アクセント色・背景色・文字色・フォント・文字の大きさを変えられます。変えるとすぐに反映されます	MainWindow.xaml:2426
-b8eab0de	表示言語 · Language	MainWindow.xaml:2429
-e0480009	画面の言葉の言語。「自動」なら Windows の表示言語に合わせます（対応していない言語なら英語）。選ぶとすぐに切り替わります	MainWindow.xaml:2432
-9bb17d53	テーマ	MainWindow.xaml:2435
-ae52556f	「Windows に合わせる」なら、Windows の設定（個人用設定 → 色 → アプリ モード）のダーク／ライトに合わせます	MainWindow.xaml:2438
-aab63522	アクセント色	MainWindow.xaml:2440
-d95f93ef	既定（紫）	MainWindow.xaml:2442
-2a8cd564	Windows の色に合わせる	MainWindow.xaml:2443
-ea89f663	Windows の設定（個人用設定 → 色 → アクセント カラー）の色を使います	MainWindow.xaml:2444
-3170685a	背景色	MainWindow.xaml:2453
-14c3e93f	背景・サイドバー・カードをまとめて染めます。ダークでは暗い色、ライトでは明るい色になり、テーマを替えても色合いは同じです	MainWindow.xaml:2455
-17ff6b6d	既定	MainWindow.xaml:2457
-da6bf903	文字色	MainWindow.xaml:2466
-793df94e	画面のすべての文字の色です（補足の文字やグラフの目盛りも、同じ色合いで少し薄くなります）。ダークでは明るい色、ライトでは暗い色になり、どの背景でも読めます	MainWindow.xaml:2468
-1843d590	フォント	MainWindow.xaml:2480
-05dc00d5	画面の文字のフォント。日本語の文字がないフォントでは、日本語は Yu Gothic UI で表示します	MainWindow.xaml:2483
-bfea4384	あいうえお 温度とファン ABC 123 °C	MainWindow.xaml:2485
-982d7356	文字の大きさ	MainWindow.xaml:2488
-2b8e9d8c	画面全体（文字・ボタン・グラフ）を拡大・縮小します	MainWindow.xaml:2491
-00478af8	制御	MainWindow.xaml:2499
-13f4a528	DRY RUN（テストモード）	MainWindow.xaml:2502
-db8eea4d	計算結果を表示するだけで、ファンには書き込みません（ポンプの回転が落ちたときの保護運転と、自分で始めた識別・測定・一時指定だけは書き込みます）	MainWindow.xaml:2503
-b373eaee	更新間隔	MainWindow.xaml:2518
-14e1cbc6	緊急全開（CPU・その他）	MainWindow.xaml:2522
-35593dc1	カーブで使っているどれかのセンサーがこの温度に達すると、全ファンを 100% にします	MainWindow.xaml:2523
-53ef686b	緊急全開（GPU Hot Spot）	MainWindow.xaml:2527
-279d8c16	Hot Spot は GPU 内でいちばん熱い点で、Edge より 10〜20°C 高く出ます	MainWindow.xaml:2528
-9bcc9b8c	Radeon RX 7000 シリーズは Hot Spot 110°C で自動的に性能を下げます。全開の解除は、しきい値より 5°C 下がってからです。	MainWindow.xaml:2532
-1ac4b576	このアプリについて	MainWindow.xaml:2539
-81d90dca	＋ 新しいプロファイル	MainWindow.xaml:2550
-4cdf9ede	ファンカーブの組み合わせを名前を付けて保存し、切り替えられます	MainWindow.xaml:2553
-774923ad	このプロファイルの役割。名前を変えても、おまかせ調整（静音は目標温度 +5°C・冷却重視は −5°C）・新しいファンのカーブ・ワンタッチの「静音」が、この役割で正しく動きます	MainWindow.xaml:2569
-82ac5e85	このプロファイルのときに使う Windows の電源プラン	MainWindow.xaml:2572
-d663551d	普段使う	MainWindow.xaml:2575
-80173301	複製	MainWindow.xaml:2576
-1aafcfce	終了時に元の電源プランに戻す	MainWindow.xaml:2585
-935428de	電源プランは、プロファイルが切り替わったときに自動で変わります（「変えない」を選ぶとそのまま）	MainWindow.xaml:2586
-02bd77a9	＋ ルールを追加	MainWindow.xaml:2596
-95dbf04d	スケジュール	MainWindow.xaml:2598
-c6ae093f	時間帯でプロファイルを切り替えます（例: 毎日 23:00〜7:00 は静音）。アプリの自動切り替えのほうが優先されます	MainWindow.xaml:2599
-b30b1d5c	毎日	MainWindow.xaml:2616
-1b0c1825	平日	MainWindow.xaml:2617
-c16e0695	週末	MainWindow.xaml:2618
-9b7e9425	開始時刻（例: 23:00）	MainWindow.xaml:2620
-1925ac9b	〜	MainWindow.xaml:2621
-a297edb9	終了時刻（例: 7:00）。開始より前なら翌日の時刻	MainWindow.xaml:2622
-8d3afa5f	プロファイルの自動切り替え	MainWindow.xaml:2638
-a6a78db0	指定したアプリが起動している間、プロファイルを自動で切り替えます。上にあるルールほど優先されます。終了すると「普段使う」プロファイルに戻ります。	MainWindow.xaml:2640
-235c5be1	プロセス名（例: eldenring）。.exe は付けても付けなくても構いません	MainWindow.xaml:2676
-92b89c34	実行中のアプリから選ぶ ▾	MainWindow.xaml:2677
-850bfcd1	ワンタッチ操作	MainWindow.xaml:2689
-b7230497	ダッシュボード・タスクトレイ・ミニウィジェット・スマホから、一時的にブースト（全開）や静音にできます	MainWindow.xaml:2690
-37cd5718	ホットキーを使う（ゲーム中でも操作できます）	MainWindow.xaml:2693
-18d0cc13	Ctrl+Alt+B: 5 分ブースト ／ Ctrl+Alt+Q: 1 時間静音 ／ Ctrl+Alt+N: 解除	MainWindow.xaml:2694
-7ae7ed01	「静音」で使うプロファイル	MainWindow.xaml:2702
-77a57db6	スマホから監視	MainWindow.xaml:2713
-fe9fdb92	スマホのブラウザから見られるようにする	MainWindow.xaml:2716
-49d300c9	同じ Wi-Fi のスマホから温度・回転数の確認とプロファイルの切り替えができます。Windows ファイアウォールに、プライベートネットワーク（自宅など）だけの許可を追加します	MainWindow.xaml:2717
-6ac0a5cf	ポート番号	MainWindow.xaml:2726
-cf308cb2	アクセス用の鍵を作り直す	MainWindow.xaml:2728
-389a7b03	今までの URL では開けなくなります	MainWindow.xaml:2729
-ac3a6f94	スマホのカメラで QR コードを読むか、次の URL を開いてください	MainWindow.xaml:2740
-12e17da1	URL にはアクセス用の鍵が含まれています。他の人に教えないでください	MainWindow.xaml:2743
-967f26f5	スマホに通知	MainWindow.xaml:2752
-9fcdd35a	緊急全開・ポンプ異常・ファンの停止などをスマホに通知する	MainWindow.xaml:2755
-1fe03718	外出中やゲーム中でも気づけます。同じ内容の通知は 10 分間は送りません	MainWindow.xaml:2756
-5bd9ee6f	ntfy（アプリを入れるだけ・おすすめ）	MainWindow.xaml:2760
-a643ae88	1. スマホに「ntfy」アプリを入れる（App Store / Google Play・無料・登録不要）\n2. アプリの「＋」から、下のトピック名を購読する（左の QR コードをカメラで読んでも OK）	MainWindow.xaml:2776
-6ced87ba	トピック名	MainWindow.xaml:2787
-19b272e4	作り直す	MainWindow.xaml:2789
-084d7180	サーバー	MainWindow.xaml:2790
-172228d8	トピック名を知っている人は誰でも通知を読めます。推測されにくい今の名前のまま使ってください	MainWindow.xaml:2794
-88a4ad91	Discord のサーバー設定 →「連携サービス」→「ウェブフック」→「新しいウェブフック」→「ウェブフック URL をコピー」で取得できます	MainWindow.xaml:2802
-cb5c4d63	「注意」も通知する（ファンの停止・センサーの異常など）	MainWindow.xaml:2807
-a000b788	回復したときも通知する	MainWindow.xaml:2809
-a15f890e	テスト送信	MainWindow.xaml:2812
-c114b738	ライティングを開く	MainWindow.xaml:2821
-3f597f38	LED のライティング（OpenRGB 連携）の画面を開きます	MainWindow.xaml:2822
-c0c9a6ba	LED のライティング（OpenRGB 連携）	MainWindow.xaml:2824
-158ada0f	LED の設定は、左のメニューの「ライティング」に移りました。接続・光り方・音楽連動・デバイスごとの設定をまとめて変えられます。	MainWindow.xaml:2826
-c1eb5397	電気代の計算	MainWindow.xaml:2834
-6da48835	ダッシュボードとレポート画面に、消費電力量と電気代の目安を表示します	MainWindow.xaml:2835
-db0f8cfc	1 kWh あたりの電気代	MainWindow.xaml:2846
-306750cc	円（検針票の単価。分からなければ目安の 31 円のまま）	MainWindow.xaml:2849
-1405c464	CPU・GPU 以外の消費電力	MainWindow.xaml:2850
-665cef72	W（マザーボード・メモリ・SSD・ファン・電源の損失など。一般的に 40〜80 W）	MainWindow.xaml:2853
-b4d79a66	CPU と GPU はセンサーの値を使います。モニターやスピーカーは含みません。コンセントで測った値ではないので、あくまで目安です。	MainWindow.xaml:2856
-69355ed4	安全機能	MainWindow.xaml:2865
-619b1ea2	見張りプロセスを使う（おすすめ）	MainWindow.xaml:2868
-615a97bc	アプリが強制終了・フリーズしたとき、ファンが低い回転のまま止まってしまうのを防ぎます。タスクマネージャーに Fanlume が 2 つ表示されますが、片方は見張り役です	MainWindow.xaml:2870
-f739cc9b	そのときの回転数	MainWindow.xaml:2883
-43c454af	ポンプは常に 100% にします	MainWindow.xaml:2883
-d063c0c0	アプリを自動で起動し直す（10 分間に 3 回までで、それ以上はお知らせを表示）	MainWindow.xaml:2887
-f2eae029	異常なセンサーの値を無視する	MainWindow.xaml:2892
-2487009f	一瞬だけ跳ねた値（読み取りエラー）で全開にならないようにします。負荷が変わっても値が動かない「固まった」センサーは、異常として扱います	MainWindow.xaml:2894
-3616d69f	起動時に部品の交換を確認する	MainWindow.xaml:2900
-f47011bb	GPU などを交換してセンサーが変わったときに、新しいセンサーへの置き換えを案内します	MainWindow.xaml:2902
-35eb3141	センサーがないときの回転数	MainWindow.xaml:2915
-90554019	部品を外した・交換したなどで、センサーそのものが見つからないカーブはこの回転数にします（センサーはあるのに値がおかしいときは、安全のため 100%）	MainWindow.xaml:2919
-963fb48e	異常の前後を自動で記録する	MainWindow.xaml:2924
-e424608f	緊急全開・ポンプ異常などのとき、前後 10 分の記録を保存します（レポート画面で確認できます）	MainWindow.xaml:2925
-f4e32f07	GPU のファンも制御できるようにする（試験的）	MainWindow.xaml:2931
-f73d1f9b	ファンカーブ画面の「端子を追加」に GPU のファンが表示されます。制御中は GPU ドライバーの自動制御（0 RPM モードなど）が止まるので、GPU の温度を使ったカーブで使ってください	MainWindow.xaml:2933
-f04fb800	メモリの温度を読む	MainWindow.xaml:2939
-5ac1bfd9	メモリの温度は、メモリの LED と同じ配線（SMBus）で読みます。OpenRGB などがこの配線を順番待ちせずに使っていると、ぶつかってメモリの温度が読めなくなることがあります。そのときはオフにしてください（メモリの温度を使うカーブは、センサーが見つからないときの回転数で回ります）	MainWindow.xaml:2941
-8154441c	設定のバックアップと共有	MainWindow.xaml:2950
-894c08f0	設定は変更のたびに自動でバックアップしています（10 分に 1 回まで・最大 30 個）。config.json が壊れても、起動時に自動で復旧します。プロファイルをファイルに書き出せば、別の PC で読み込めます（端子やセンサーは名前で対応付けます）	MainWindow.xaml:2952
-b187e750	設定を書き出す…	MainWindow.xaml:2954
-7c186faa	設定を読み込む…	MainWindow.xaml:2955
-077e159d	バックアップから戻す ▾	MainWindow.xaml:2956
-4222af0e	今すぐバックアップ	MainWindow.xaml:2957
-8d711ab6	セットアップとファイル	MainWindow.xaml:2966
-f8cfb37f	セットアップウィザードを開く	MainWindow.xaml:2968
-0cdb9795	設定フォルダを開く	MainWindow.xaml:2969
-e252e493	ログフォルダを開く	MainWindow.xaml:2970
-c7cbd09a	ファン制御用のドライバー（PawnIO）	MainWindow.xaml:2978
-6234a43c	アンインストール（お片付け）	MainWindow.xaml:2986
-29c38de6	このアプリを使うのをやめるときに使います。ファンを BIOS の自動制御に戻したことを確かめてから、ライティングの制御・ログオン時の自動起動・ファイアウォールの許可などを片付けて終了します。何を行うかは、次の画面で確かめてから始められます（設定・記録を消すか、PawnIO もアンインストールするかも選べます）	MainWindow.xaml:2988
-b2abf4ee	アンインストール（お片付け）…	MainWindow.xaml:2990
+ac0f3749	一般	MainWindow.xaml:2393
+69af1b60	プロファイル・自動化	MainWindow.xaml:2394
+86406a7c	通知・連携	MainWindow.xaml:2395
+0dee4b23	安全・バックアップ	MainWindow.xaml:2396
+ddd59eb1	起動と表示	MainWindow.xaml:2405
+bf6cf977	Windows ログオン時に自動で起動する	MainWindow.xaml:2408
+5699c4fc	タスクスケジューラに「最上位の特権」で登録します（UAC の確認なしで起動）	MainWindow.xaml:2409
+5d0a76ce	手動で起動したときもタスクトレイに格納する	MainWindow.xaml:2414
+aefcd37e	自動起動のときは常にタスクトレイで起動します。ウィンドウの × で閉じてもトレイで動き続けます	MainWindow.xaml:2415
+e162bf76	ミニウィジェットを表示する	MainWindow.xaml:2420
+1b093ce9	常に最前面に温度と回転数を表示します。ドラッグで移動、右クリックで不透明度を変更できます	MainWindow.xaml:2421
+6f13f8bc	アップデート	MainWindow.xaml:2430
+6e708964	更新を確認	MainWindow.xaml:2434
+1c275381	更新する	MainWindow.xaml:2435
+44cc4c9a	リリースのページを開く	MainWindow.xaml:2436
+2420b253	新しい版を自動で確かめる	MainWindow.xaml:2440
+094990a5	1 日 1 回まで GitHub に最新の版を問い合わせ、新しい版があればお知らせします（送るのはアプリの名前と版だけです）	MainWindow.xaml:2441
+395b0a50	「更新する」を押すと、インストーラーをダウンロードして GitHub に公開されたものと同じかを確かめてから、画面を出さずに入れ替えます。そのあいだ十数秒、アプリが終了してファンは BIOS の設定で回り、終わると起動し直します。設定・ログ・記録はそのまま残ります	MainWindow.xaml:2445
+1483f6b3	見た目	MainWindow.xaml:2452
+d6776d41	表示言語・テーマ・アクセント色・背景色・文字色・フォント・文字の大きさを変えられます。変えるとすぐに反映されます	MainWindow.xaml:2454
+b8eab0de	表示言語 · Language	MainWindow.xaml:2457
+e0480009	画面の言葉の言語。「自動」なら Windows の表示言語に合わせます（対応していない言語なら英語）。選ぶとすぐに切り替わります	MainWindow.xaml:2460
+9bb17d53	テーマ	MainWindow.xaml:2463
+ae52556f	「Windows に合わせる」なら、Windows の設定（個人用設定 → 色 → アプリ モード）のダーク／ライトに合わせます	MainWindow.xaml:2466
+aab63522	アクセント色	MainWindow.xaml:2468
+d95f93ef	既定（紫）	MainWindow.xaml:2470
+2a8cd564	Windows の色に合わせる	MainWindow.xaml:2471
+ea89f663	Windows の設定（個人用設定 → 色 → アクセント カラー）の色を使います	MainWindow.xaml:2472
+3170685a	背景色	MainWindow.xaml:2481
+14c3e93f	背景・サイドバー・カードをまとめて染めます。ダークでは暗い色、ライトでは明るい色になり、テーマを替えても色合いは同じです	MainWindow.xaml:2483
+17ff6b6d	既定	MainWindow.xaml:2485
+da6bf903	文字色	MainWindow.xaml:2494
+793df94e	画面のすべての文字の色です（補足の文字やグラフの目盛りも、同じ色合いで少し薄くなります）。ダークでは明るい色、ライトでは暗い色になり、どの背景でも読めます	MainWindow.xaml:2496
+1843d590	フォント	MainWindow.xaml:2508
+05dc00d5	画面の文字のフォント。日本語の文字がないフォントでは、日本語は Yu Gothic UI で表示します	MainWindow.xaml:2511
+bfea4384	あいうえお 温度とファン ABC 123 °C	MainWindow.xaml:2513
+982d7356	文字の大きさ	MainWindow.xaml:2516
+2b8e9d8c	画面全体（文字・ボタン・グラフ）を拡大・縮小します	MainWindow.xaml:2519
+00478af8	制御	MainWindow.xaml:2527
+13f4a528	DRY RUN（テストモード）	MainWindow.xaml:2530
+db8eea4d	計算結果を表示するだけで、ファンには書き込みません（ポンプの回転が落ちたときの保護運転と、自分で始めた識別・測定・一時指定だけは書き込みます）	MainWindow.xaml:2531
+b373eaee	更新間隔	MainWindow.xaml:2546
+14e1cbc6	緊急全開（CPU・その他）	MainWindow.xaml:2550
+35593dc1	カーブで使っているどれかのセンサーがこの温度に達すると、全ファンを 100% にします	MainWindow.xaml:2551
+53ef686b	緊急全開（GPU Hot Spot）	MainWindow.xaml:2555
+279d8c16	Hot Spot は GPU 内でいちばん熱い点で、Edge より 10〜20°C 高く出ます	MainWindow.xaml:2556
+9bcc9b8c	Radeon RX 7000 シリーズは Hot Spot 110°C で自動的に性能を下げます。全開の解除は、しきい値より 5°C 下がってからです。	MainWindow.xaml:2560
+1ac4b576	このアプリについて	MainWindow.xaml:2567
+81d90dca	＋ 新しいプロファイル	MainWindow.xaml:2578
+4cdf9ede	ファンカーブの組み合わせを名前を付けて保存し、切り替えられます	MainWindow.xaml:2581
+774923ad	このプロファイルの役割。名前を変えても、おまかせ調整（静音は目標温度 +5°C・冷却重視は −5°C）・新しいファンのカーブ・ワンタッチの「静音」が、この役割で正しく動きます	MainWindow.xaml:2597
+82ac5e85	このプロファイルのときに使う Windows の電源プラン	MainWindow.xaml:2600
+d663551d	普段使う	MainWindow.xaml:2603
+80173301	複製	MainWindow.xaml:2604
+1aafcfce	終了時に元の電源プランに戻す	MainWindow.xaml:2613
+935428de	電源プランは、プロファイルが切り替わったときに自動で変わります（「変えない」を選ぶとそのまま）	MainWindow.xaml:2614
+02bd77a9	＋ ルールを追加	MainWindow.xaml:2624
+95dbf04d	スケジュール	MainWindow.xaml:2626
+c6ae093f	時間帯でプロファイルを切り替えます（例: 毎日 23:00〜7:00 は静音）。アプリの自動切り替えのほうが優先されます	MainWindow.xaml:2627
+b30b1d5c	毎日	MainWindow.xaml:2644
+1b0c1825	平日	MainWindow.xaml:2645
+c16e0695	週末	MainWindow.xaml:2646
+9b7e9425	開始時刻（例: 23:00）	MainWindow.xaml:2648
+1925ac9b	〜	MainWindow.xaml:2649
+a297edb9	終了時刻（例: 7:00）。開始より前なら翌日の時刻	MainWindow.xaml:2650
+8d3afa5f	プロファイルの自動切り替え	MainWindow.xaml:2666
+a6a78db0	指定したアプリが起動している間、プロファイルを自動で切り替えます。上にあるルールほど優先されます。終了すると「普段使う」プロファイルに戻ります。	MainWindow.xaml:2668
+235c5be1	プロセス名（例: eldenring）。.exe は付けても付けなくても構いません	MainWindow.xaml:2704
+92b89c34	実行中のアプリから選ぶ ▾	MainWindow.xaml:2705
+850bfcd1	ワンタッチ操作	MainWindow.xaml:2717
+b7230497	ダッシュボード・タスクトレイ・ミニウィジェット・スマホから、一時的にブースト（全開）や静音にできます	MainWindow.xaml:2718
+37cd5718	ホットキーを使う（ゲーム中でも操作できます）	MainWindow.xaml:2721
+18d0cc13	Ctrl+Alt+B: 5 分ブースト ／ Ctrl+Alt+Q: 1 時間静音 ／ Ctrl+Alt+N: 解除	MainWindow.xaml:2722
+7ae7ed01	「静音」で使うプロファイル	MainWindow.xaml:2730
+77a57db6	スマホから監視	MainWindow.xaml:2741
+fe9fdb92	スマホのブラウザから見られるようにする	MainWindow.xaml:2744
+49d300c9	同じ Wi-Fi のスマホから温度・回転数の確認とプロファイルの切り替えができます。Windows ファイアウォールに、プライベートネットワーク（自宅など）だけの許可を追加します	MainWindow.xaml:2745
+6ac0a5cf	ポート番号	MainWindow.xaml:2754
+cf308cb2	アクセス用の鍵を作り直す	MainWindow.xaml:2756
+389a7b03	今までの URL では開けなくなります	MainWindow.xaml:2757
+ac3a6f94	スマホのカメラで QR コードを読むか、次の URL を開いてください	MainWindow.xaml:2768
+12e17da1	URL にはアクセス用の鍵が含まれています。他の人に教えないでください	MainWindow.xaml:2771
+967f26f5	スマホに通知	MainWindow.xaml:2780
+9fcdd35a	緊急全開・ポンプ異常・ファンの停止などをスマホに通知する	MainWindow.xaml:2783
+1fe03718	外出中やゲーム中でも気づけます。同じ内容の通知は 10 分間は送りません	MainWindow.xaml:2784
+5bd9ee6f	ntfy（アプリを入れるだけ・おすすめ）	MainWindow.xaml:2788
+a643ae88	1. スマホに「ntfy」アプリを入れる（App Store / Google Play・無料・登録不要）\n2. アプリの「＋」から、下のトピック名を購読する（左の QR コードをカメラで読んでも OK）	MainWindow.xaml:2804
+6ced87ba	トピック名	MainWindow.xaml:2815
+19b272e4	作り直す	MainWindow.xaml:2817
+084d7180	サーバー	MainWindow.xaml:2818
+172228d8	トピック名を知っている人は誰でも通知を読めます。推測されにくい今の名前のまま使ってください	MainWindow.xaml:2822
+88a4ad91	Discord のサーバー設定 →「連携サービス」→「ウェブフック」→「新しいウェブフック」→「ウェブフック URL をコピー」で取得できます	MainWindow.xaml:2830
+cb5c4d63	「注意」も通知する（ファンの停止・センサーの異常など）	MainWindow.xaml:2835
+a000b788	回復したときも通知する	MainWindow.xaml:2837
+a15f890e	テスト送信	MainWindow.xaml:2840
+c114b738	ライティングを開く	MainWindow.xaml:2849
+3f597f38	LED のライティング（OpenRGB 連携）の画面を開きます	MainWindow.xaml:2850
+c0c9a6ba	LED のライティング（OpenRGB 連携）	MainWindow.xaml:2852
+158ada0f	LED の設定は、左のメニューの「ライティング」に移りました。接続・光り方・音楽連動・デバイスごとの設定をまとめて変えられます。	MainWindow.xaml:2854
+c1eb5397	電気代の計算	MainWindow.xaml:2862
+6da48835	ダッシュボードとレポート画面に、消費電力量と電気代の目安を表示します	MainWindow.xaml:2863
+db0f8cfc	1 kWh あたりの電気代	MainWindow.xaml:2874
+306750cc	円（検針票の単価。分からなければ目安の 31 円のまま）	MainWindow.xaml:2877
+1405c464	CPU・GPU 以外の消費電力	MainWindow.xaml:2878
+665cef72	W（マザーボード・メモリ・SSD・ファン・電源の損失など。一般的に 40〜80 W）	MainWindow.xaml:2881
+b4d79a66	CPU と GPU はセンサーの値を使います。モニターやスピーカーは含みません。コンセントで測った値ではないので、あくまで目安です。	MainWindow.xaml:2884
+69355ed4	安全機能	MainWindow.xaml:2893
+619b1ea2	見張りプロセスを使う（おすすめ）	MainWindow.xaml:2896
+615a97bc	アプリが強制終了・フリーズしたとき、ファンが低い回転のまま止まってしまうのを防ぎます。タスクマネージャーに Fanlume が 2 つ表示されますが、片方は見張り役です	MainWindow.xaml:2898
+f739cc9b	そのときの回転数	MainWindow.xaml:2911
+43c454af	ポンプは常に 100% にします	MainWindow.xaml:2911
+d063c0c0	アプリを自動で起動し直す（10 分間に 3 回までで、それ以上はお知らせを表示）	MainWindow.xaml:2915
+f2eae029	異常なセンサーの値を無視する	MainWindow.xaml:2920
+2487009f	一瞬だけ跳ねた値（読み取りエラー）で全開にならないようにします。負荷が変わっても値が動かない「固まった」センサーは、異常として扱います	MainWindow.xaml:2922
+3616d69f	起動時に部品の交換を確認する	MainWindow.xaml:2928
+f47011bb	GPU などを交換してセンサーが変わったときに、新しいセンサーへの置き換えを案内します	MainWindow.xaml:2930
+35eb3141	センサーがないときの回転数	MainWindow.xaml:2943
+90554019	部品を外した・交換したなどで、センサーそのものが見つからないカーブはこの回転数にします（センサーはあるのに値がおかしいときは、安全のため 100%）	MainWindow.xaml:2947
+963fb48e	異常の前後を自動で記録する	MainWindow.xaml:2952
+e424608f	緊急全開・ポンプ異常などのとき、前後 10 分の記録を保存します（レポート画面で確認できます）	MainWindow.xaml:2953
+f4e32f07	GPU のファンも制御できるようにする（試験的）	MainWindow.xaml:2959
+f73d1f9b	ファンカーブ画面の「端子を追加」に GPU のファンが表示されます。制御中は GPU ドライバーの自動制御（0 RPM モードなど）が止まるので、GPU の温度を使ったカーブで使ってください	MainWindow.xaml:2961
+f04fb800	メモリの温度を読む	MainWindow.xaml:2967
+5ac1bfd9	メモリの温度は、メモリの LED と同じ配線（SMBus）で読みます。OpenRGB などがこの配線を順番待ちせずに使っていると、ぶつかってメモリの温度が読めなくなることがあります。そのときはオフにしてください（メモリの温度を使うカーブは、センサーが見つからないときの回転数で回ります）	MainWindow.xaml:2969
+8154441c	設定のバックアップと共有	MainWindow.xaml:2978
+894c08f0	設定は変更のたびに自動でバックアップしています（10 分に 1 回まで・最大 30 個）。config.json が壊れても、起動時に自動で復旧します。プロファイルをファイルに書き出せば、別の PC で読み込めます（端子やセンサーは名前で対応付けます）	MainWindow.xaml:2980
+b187e750	設定を書き出す…	MainWindow.xaml:2982
+7c186faa	設定を読み込む…	MainWindow.xaml:2983
+077e159d	バックアップから戻す ▾	MainWindow.xaml:2984
+4222af0e	今すぐバックアップ	MainWindow.xaml:2985
+8d711ab6	セットアップとファイル	MainWindow.xaml:2994
+f8cfb37f	セットアップウィザードを開く	MainWindow.xaml:2996
+0cdb9795	設定フォルダを開く	MainWindow.xaml:2997
+e252e493	ログフォルダを開く	MainWindow.xaml:2998
+c7cbd09a	ファン制御用のドライバー（PawnIO）	MainWindow.xaml:3006
+6234a43c	アンインストール（お片付け）	MainWindow.xaml:3014
+29c38de6	このアプリを使うのをやめるときに使います。ファンを BIOS の自動制御に戻したことを確かめてから、ライティングの制御・ログオン時の自動起動・ファイアウォールの許可などを片付けて終了します。何を行うかは、次の画面で確かめてから始められます（設定・記録を消すか、PawnIO もアンインストールするかも選べます）	MainWindow.xaml:3016
+b2abf4ee	アンインストール（お片付け）…	MainWindow.xaml:3018
 276c23be	ファンの回転数を変えるには、マザーボードのファン制御チップを読み書きするドライバー PawnIO（無料・LibreHardwareMonitor などでも使われています）が必要です。\n「PawnIO をインストール」を押すと、Windows に付属の winget で公式のパッケージ（namazso.PawnIO）を入れます。インターネットにつながっている必要があり、数十秒〜数分かかります。終わったら、アプリを起動し直すと使えるようになります。	UI/PawnIoInstallPanel.xaml:13
 32818dc0	PawnIO をインストール	UI/PawnIoInstallPanel.xaml:15
 8d7b411c	アプリを起動し直す	UI/PawnIoInstallPanel.xaml:16
@@ -609,6 +616,15 @@ d6750fd2	\n・	App.Uninstall.cs:298
 bf71d238	\n…ほか {0} 個	App.Uninstall.cs:298
 df6134ea	\n\nこのお知らせを閉じたあと、次のフォルダーをフォルダーごと削除してください:\n{0}	App.Uninstall.cs:299
 766fce35	Fanlume のお片付け	App.Uninstall.cs:304
+3ef4127e	Fanlume を {0} から {1} に更新しました。	App.Update.cs:39
+d256382b	{0} に更新しました。	App.Update.cs:40
+042a94f0	確認しています…	App.Update.cs:65
+42e9517b	新しい版 Fanlume {0} があります。「更新する」を押すと、ダウンロードして入れ替えます（そのあいだ十数秒、ファンは BIOS の設定で回ります）。	App.Update.cs:79
+bb0f9e93	新しい版 {0} があります。	App.Update.cs:81
+ebc47f06	最新の版です（{0}）。	App.Update.cs:87
+993c451d	新しい版を確かめられませんでした（{0}）。インターネットにつながっているか確かめてください。	App.Update.cs:92
+31eb4f99	アプリを終了しているところなので、更新しません。	App.Update.cs:107
+b79b5ccf	更新できませんでした（{0}）。	App.Update.cs:125
 da630a7f	Fanlume はすでに起動しています。\nタスクトレイのアイコンから開いてください。	App.xaml.cs:102
 ec6a9bb6	記録の保存	App.xaml.cs:188
 0a3f2987	Fanlume: 回復しました	App.xaml.cs:251
@@ -620,44 +636,44 @@ ec6a9bb6	記録の保存	App.xaml.cs:188
 5b1e3ca8	Fanlume が予期せず終了したため、見張りプロセスが自動で起動し直しました。ファンは安全な回転数にしてから制御を再開しています。原因はログで確認できます。	App.xaml.cs:325
 7b249720	ログを開く	App.xaml.cs:326
 3a7e2e72	予期せず終了したため、自動で起動し直しました。	App.xaml.cs:327
-c0fd45c5	タスクトレイで動作を続けています。終了するにはアイコンを右クリックしてください。	App.xaml.cs:349
-a75f3e15	Fanlume: メンテナンス	App.xaml.cs:352
-c51b6c55	Windows の起動時に自動で立ち上がるのは、別の場所のアプリです（{0}）。古い版が立ち上がっているかもしれません。	App.xaml.cs:374
-268b2432	このアプリは「{0}」フォルダーの中から動いています。整理したときに消えたり、別の版が増えたりしないよう、	App.xaml.cs:379
-80df7870	下のボタンで {0} に移してください（設定はそのまま持っていき、自動起動も移した先に登録し直して、起動し直します）。	App.xaml.cs:380
-8d7ede7f	{0} が動いています。同じ LED やファンを操作するので、色が勝手に戻る・ちらつく・回転数が反映されない原因になります。そのソフトの LED・ファンの制御を止めるか、終了してください。	App.xaml.cs:385
-0cac6658	{0} に移す	App.xaml.cs:392
-f8529664	自動起動をこの場所にする	App.xaml.cs:396
-c674f1d5	自動起動を、いま動いているこのアプリに登録し直しました。	App.xaml.cs:401
-f5c17fde	自動起動を登録し直せませんでした（ログを確認してください）。	App.xaml.cs:401
-467c4a19	{0} へ移せませんでした: {1}	App.xaml.cs:436
-14d2e005	音の取り込み	App.xaml.cs:469
-c08fb050	 ／ 	App.xaml.cs:648
-48ccab47	使っていたセンサーが見つかりません	App.xaml.cs:648
-9c32a53a	ハードウェアの変更を検出しました	App.xaml.cs:650
-6317f1df	Fanlume: ハードウェアの変更	App.xaml.cs:651
-646e0b57	{0}。PC の画面で、新しいセンサーへの置き換えを確認してください。	App.xaml.cs:651
-9dddc76a	ファン制御に問題があります	App.xaml.cs:681
-8ad6890e	{0}（安全のため BIOS の制御にしています。自動で復旧を試みます）	App.xaml.cs:681
-f8b8b77e	Fanlume: ファン制御の問題	App.xaml.cs:682
-30b6b07e	一部の部品を読み取れません	App.xaml.cs:685
-465384a0	ファン制御が復旧しました	App.xaml.cs:688
-2a57fe9c	通常の制御に戻りました。	App.xaml.cs:688
-25db31e1	Fanlume: 復旧	App.xaml.cs:689
-a8e2e175	ファン制御が通常に戻りました。	App.xaml.cs:689
-0d78d54c	ほかのプログラムが config.json を開いたままにしているため読めませんでした（ファイルはそのままです）。	App.xaml.cs:705
-9b03cdae	元のファイルは config.broken_日時.json として残しました。	App.xaml.cs:706
-b07af289	config.json を読み込めず、バックアップからも復旧できませんでした。\n{0}\n\n{1}\n空の設定で起動します。	App.xaml.cs:707
-645b237e	ブースト	App.xaml.cs:761
-169abc6e	ポンプ以外の全ファンを {0} 分間 100% にします。	App.xaml.cs:761
-c342d519	「静音」で使うプロファイルが見つかりません。設定画面の「ワンタッチ操作」で選んでください。	App.xaml.cs:765
-77a0d0ea	スマホ用の Web サーバーを開始できませんでした（ポート {0}）: {1}	App.xaml.cs:891
-eec05191	緊急全開	App.xaml.cs:901
-0413f77c	一時停止中	App.xaml.cs:901
-45fadb4f	制御中	App.xaml.cs:901
-404e2134	ウィジェット	App.xaml.cs:979
-1f2511a8	画面	App.xaml.cs:983
-0f13893a	タスクトレイ	App.xaml.cs:1035
+c0fd45c5	タスクトレイで動作を続けています。終了するにはアイコンを右クリックしてください。	App.xaml.cs:351
+a75f3e15	Fanlume: メンテナンス	App.xaml.cs:354
+c51b6c55	Windows の起動時に自動で立ち上がるのは、別の場所のアプリです（{0}）。古い版が立ち上がっているかもしれません。	App.xaml.cs:376
+268b2432	このアプリは「{0}」フォルダーの中から動いています。整理したときに消えたり、別の版が増えたりしないよう、	App.xaml.cs:381
+80df7870	下のボタンで {0} に移してください（設定はそのまま持っていき、自動起動も移した先に登録し直して、起動し直します）。	App.xaml.cs:382
+8d7ede7f	{0} が動いています。同じ LED やファンを操作するので、色が勝手に戻る・ちらつく・回転数が反映されない原因になります。そのソフトの LED・ファンの制御を止めるか、終了してください。	App.xaml.cs:387
+0cac6658	{0} に移す	App.xaml.cs:394
+f8529664	自動起動をこの場所にする	App.xaml.cs:398
+c674f1d5	自動起動を、いま動いているこのアプリに登録し直しました。	App.xaml.cs:403
+f5c17fde	自動起動を登録し直せませんでした（ログを確認してください）。	App.xaml.cs:403
+467c4a19	{0} へ移せませんでした: {1}	App.xaml.cs:438
+14d2e005	音の取り込み	App.xaml.cs:471
+c08fb050	 ／ 	App.xaml.cs:650
+48ccab47	使っていたセンサーが見つかりません	App.xaml.cs:650
+9c32a53a	ハードウェアの変更を検出しました	App.xaml.cs:652
+6317f1df	Fanlume: ハードウェアの変更	App.xaml.cs:653
+646e0b57	{0}。PC の画面で、新しいセンサーへの置き換えを確認してください。	App.xaml.cs:653
+9dddc76a	ファン制御に問題があります	App.xaml.cs:683
+8ad6890e	{0}（安全のため BIOS の制御にしています。自動で復旧を試みます）	App.xaml.cs:683
+f8b8b77e	Fanlume: ファン制御の問題	App.xaml.cs:684
+30b6b07e	一部の部品を読み取れません	App.xaml.cs:687
+465384a0	ファン制御が復旧しました	App.xaml.cs:690
+2a57fe9c	通常の制御に戻りました。	App.xaml.cs:690
+25db31e1	Fanlume: 復旧	App.xaml.cs:691
+a8e2e175	ファン制御が通常に戻りました。	App.xaml.cs:691
+0d78d54c	ほかのプログラムが config.json を開いたままにしているため読めませんでした（ファイルはそのままです）。	App.xaml.cs:707
+9b03cdae	元のファイルは config.broken_日時.json として残しました。	App.xaml.cs:708
+b07af289	config.json を読み込めず、バックアップからも復旧できませんでした。\n{0}\n\n{1}\n空の設定で起動します。	App.xaml.cs:709
+645b237e	ブースト	App.xaml.cs:763
+169abc6e	ポンプ以外の全ファンを {0} 分間 100% にします。	App.xaml.cs:763
+c342d519	「静音」で使うプロファイルが見つかりません。設定画面の「ワンタッチ操作」で選んでください。	App.xaml.cs:767
+77a0d0ea	スマホ用の Web サーバーを開始できませんでした（ポート {0}）: {1}	App.xaml.cs:893
+eec05191	緊急全開	App.xaml.cs:903
+0413f77c	一時停止中	App.xaml.cs:903
+45fadb4f	制御中	App.xaml.cs:903
+404e2134	ウィジェット	App.xaml.cs:981
+1f2511a8	画面	App.xaml.cs:985
+0f13893a	タスクトレイ	App.xaml.cs:1037
 e6a34da2	停止中	Audio/AudioCapture.cs:76
 652c7b75	音を取り込めません（{0} 秒後に再試行）: {1}	Audio/AudioCapture.cs:173
 2674d6a9	音の出力先（スピーカー・ヘッドホン）が見つかりません	Audio/AudioCapture.cs:200
@@ -702,21 +718,25 @@ fec5f212	## 直近の冷却テスト	Core/Advisor.cs:179
 b0bc7eac	目標温度 {0:F0}°C	Core/Advisor.cs:202
 7d5e41f2	固定 {0:F0}%	Core/Advisor.cs:203
 f87c3ac9	他のファンに連動	Core/Advisor.cs:204
-1b56d605	config.json が空です。	Core/AppConfig.cs:98
-c8d58466	標準	Core/AppConfig.cs:150
-52ed0fe4	最大値	Core/AppConfig.cs:583
-91302315	差分	Core/AppConfig.cs:586
-8e4f9981	起動時	Core/AppConfig.cs:1340
-b6d7dbf8	自動	Core/AppConfig.cs:1341
-ae81cf8d	手動	Core/AppConfig.cs:1342
-7aebcb13	読み込み前	Core/AppConfig.cs:1343
-44fc16c5	部品交換の対応付け前	Core/AppConfig.cs:1344
-f32b8618	復元前	Core/AppConfig.cs:1345
-4db25563	{0:yyyy/MM/dd HH:mm}（{1}）	Core/AppConfig.cs:1353
+1b56d605	config.json が空です。	Core/AppConfig.cs:100
+c8d58466	標準	Core/AppConfig.cs:153
+52ed0fe4	最大値	Core/AppConfig.cs:586
+91302315	差分	Core/AppConfig.cs:589
+8e4f9981	起動時	Core/AppConfig.cs:1358
+b6d7dbf8	自動	Core/AppConfig.cs:1359
+ae81cf8d	手動	Core/AppConfig.cs:1360
+7aebcb13	読み込み前	Core/AppConfig.cs:1361
+44fc16c5	部品交換の対応付け前	Core/AppConfig.cs:1362
+f32b8618	復元前	Core/AppConfig.cs:1363
+4db25563	{0:yyyy/MM/dd HH:mm}（{1}）	Core/AppConfig.cs:1371
 7dc6c4d8	ワンタッチ静音	Core/AppController.cs:97
 c7f7bdf4	自動: {0}	Core/AppController.cs:98
 ab7eac67	ブースト中（残り {0}）	Core/AppController.cs:120
 9134a95f	静音モード中（残り {0}）	Core/AppController.cs:121
+ddecc240	ダウンロードしたファイルが、GitHub に書かれた大きさより大きくなりました。	Core/AppUpdater.cs:140
+74c1cfd5	インストーラーの版（{0}）が、リリースの版（{1}）と違います。	Core/AppUpdater.cs:155
+e3910d2d	ダウンロードしたファイルの大きさ（{0} バイト）が、GitHub に書かれた大きさ（{1} バイト）と違います。	Core/AppUpdater.cs:175
+6a1c29a5	ダウンロードしたファイルが、GitHub に公開されたものと一致しません（SHA-256 が違います）。更新を中止しました。	Core/AppUpdater.cs:180
 ad045555	FFT の大きさは 2 のべき乗にする	Core/Audio/Fft.cs:23
 86b7be3f	マザーボードの端子	Core/Audio/OutputPath.cs:148
 29ea7bfd	HDMI・DisplayPort	Core/Audio/OutputPath.cs:150
@@ -919,36 +939,36 @@ a028762c	{0}（目標温度）	Core/HardwareChange.cs:346
 bb74ce90	ダッシュボード「{0}」	Core/HardwareChange.cs:352
 5dbc40a6	LED の色	Core/HardwareChange.cs:353
 7bd6fc4c	{0}  ·  {1}（GPU・試験的）	Core/HardwareHub.cs:19
-b961088b	CPU の冷え方	Core/HealthAnalyzer.cs:69
-a9a03eaf	GPU の冷え方	Core/HealthAnalyzer.cs:70
-9aa1d93f	データを集めています（比べられるまで あと {0:F0} 日）。キャリブレーション済みなら、その 7 日後から判定できます。	Core/HealthAnalyzer.cs:85
-ad82ee64	{0:M/d} のキャリブレーション	Core/HealthAnalyzer.cs:93
-171d15ba	{0:M/d} ごろ	Core/HealthAnalyzer.cs:98
-74443afa	同じ回転の指示（Duty）で回っていた時間が、基準と最近の両方でまだ少ないため、比べられません。	Core/HealthAnalyzer.cs:105
-6c1cd333	{0}% 時 {1:N0} rpm（{2} {3:N0} rpm）	Core/HealthAnalyzer.cs:109
-3b9d1efe	{0:M/d} ごろから急に	Core/HealthAnalyzer.cs:115
-eff7a5cf	少しずつ	Core/HealthAnalyzer.cs:115
-5b34a396	ポンプの回転数が{0}下がっています。ポンプの劣化や、冷却液の減少が考えられます。	Core/HealthAnalyzer.cs:123
-31b87b50	早めに点検してください。	Core/HealthAnalyzer.cs:123
-78cee055	さらに下がるようなら点検してください。	Core/HealthAnalyzer.cs:123
-6e637e2e	回転数が{0}下がっています。羽根にケーブルなどが当たっていないか、配線がゆるんでいないか確認してください。直らなければファンの不調が考えられます。	Core/HealthAnalyzer.cs:125
-736c890f	回転数が少しずつ下がっています。羽根やフィルターのホコリを掃除してください。掃除しても戻らなければ、軸受けの劣化が考えられるので交換を検討してください。	Core/HealthAnalyzer.cs:126
-0dd5ebcf	ポンプが{0}速く回るようになっています。ポンプを交換した・つなぎ替えた場合は問題ありません。そうでなければ、冷却液の減少（空回り）を確認してください。	Core/HealthAnalyzer.cs:133
-66fc95af	{0}速く回るようになっています。ファンを交換した・つなぎ替えた場合は問題ありません。そうでなければ、吸気のフィルターがふさがっていないか確認してください（空気が流れにくいと、ファンは軽く回って速くなります）。	Core/HealthAnalyzer.cs:135
-64e8b9f9	少しずつ速く回るようになっています。吸気のフィルターやラジエーターが目詰まりして、空気が流れにくくなっている可能性があります（空気が流れにくいと、ファンは軽く回って速くなります）。掃除してください。	Core/HealthAnalyzer.cs:136
-063b56cb	回転数は以前と変わらず、正常です。	Core/HealthAnalyzer.cs:141
-e3a78dee	（比べた時間: 最近 {0} 分）	Core/HealthAnalyzer.cs:143
-d8fb178b	データを集めています（あと {0:F0} 日）。	Core/HealthAnalyzer.cs:195
-0d593e94	負荷をかけた時間（ゲームなど）と、休んでいる時間の記録がまだ少ないため、比べられません（基準 {0} 分・最近 {1} 分。それぞれ {2} 分以上必要）。	Core/HealthAnalyzer.cs:209
-b09085c8	負荷をかけたときのファンの回転の指示が、以前と変わっています（{0:F0}% → {1:F0}%）。ファンカーブを変えたなら、冷え方の違いはその影響なので、	Core/HealthAnalyzer.cs:222
-2ddc0b27	ホコリかどうかは判定していません。新しい設定で比べ直すには「掃除した（ここを新しい基準にする）」を押してください。	Core/HealthAnalyzer.cs:223
-ccf3a760	ファンの指示 {0:F0}% → {1:F0}%	Core/HealthAnalyzer.cs:224
-0090bb82	{0} W 分の温度上昇 {1:F0}°C（以前 {2:F0}°C）	Core/HealthAnalyzer.cs:232
-0449b7df	以前より明らかに冷えにくくなっています。フィルター・ラジエーター・ヒートシンクのホコリを掃除してください。改善しなければグリスの劣化も考えられます。	Core/HealthAnalyzer.cs:235
-f91be135	以前より少し冷えにくくなっています。そろそろフィルターやラジエーターの掃除をおすすめします。	Core/HealthAnalyzer.cs:236
-7ed2ece5	以前よりよく冷えるようになっています。掃除・部品の交換・ファンの追加などをした場合は問題ありません。	Core/HealthAnalyzer.cs:237
-58d9c8ca	以前と同じように冷えています。	Core/HealthAnalyzer.cs:238
-fcc150e0	（比べた時間: 基準 {0} 分・最近 {1} 分。室温の違いは差し引いています）	Core/HealthAnalyzer.cs:240
+b961088b	CPU の冷え方	Core/HealthAnalyzer.cs:70
+a9a03eaf	GPU の冷え方	Core/HealthAnalyzer.cs:71
+9aa1d93f	データを集めています（比べられるまで あと {0:F0} 日）。キャリブレーション済みなら、その 7 日後から判定できます。	Core/HealthAnalyzer.cs:86
+ad82ee64	{0:M/d} のキャリブレーション	Core/HealthAnalyzer.cs:94
+171d15ba	{0:M/d} ごろ	Core/HealthAnalyzer.cs:99
+74443afa	同じ回転の指示（Duty）で回っていた時間が、基準と最近の両方でまだ少ないため、比べられません。	Core/HealthAnalyzer.cs:106
+6c1cd333	{0}% 時 {1:N0} rpm（{2} {3:N0} rpm）	Core/HealthAnalyzer.cs:110
+3b9d1efe	{0:M/d} ごろから急に	Core/HealthAnalyzer.cs:116
+eff7a5cf	少しずつ	Core/HealthAnalyzer.cs:116
+5b34a396	ポンプの回転数が{0}下がっています。ポンプの劣化や、冷却液の減少が考えられます。	Core/HealthAnalyzer.cs:124
+31b87b50	早めに点検してください。	Core/HealthAnalyzer.cs:124
+78cee055	さらに下がるようなら点検してください。	Core/HealthAnalyzer.cs:124
+6e637e2e	回転数が{0}下がっています。羽根にケーブルなどが当たっていないか、配線がゆるんでいないか確認してください。直らなければファンの不調が考えられます。	Core/HealthAnalyzer.cs:126
+736c890f	回転数が少しずつ下がっています。羽根やフィルターのホコリを掃除してください。掃除しても戻らなければ、軸受けの劣化が考えられるので交換を検討してください。	Core/HealthAnalyzer.cs:127
+0dd5ebcf	ポンプが{0}速く回るようになっています。ポンプを交換した・つなぎ替えた場合は問題ありません。そうでなければ、冷却液の減少（空回り）を確認してください。	Core/HealthAnalyzer.cs:134
+66fc95af	{0}速く回るようになっています。ファンを交換した・つなぎ替えた場合は問題ありません。そうでなければ、吸気のフィルターがふさがっていないか確認してください（空気が流れにくいと、ファンは軽く回って速くなります）。	Core/HealthAnalyzer.cs:136
+64e8b9f9	少しずつ速く回るようになっています。吸気のフィルターやラジエーターが目詰まりして、空気が流れにくくなっている可能性があります（空気が流れにくいと、ファンは軽く回って速くなります）。掃除してください。	Core/HealthAnalyzer.cs:137
+063b56cb	回転数は以前と変わらず、正常です。	Core/HealthAnalyzer.cs:142
+e3a78dee	（比べた時間: 最近 {0} 分）	Core/HealthAnalyzer.cs:144
+d8fb178b	データを集めています（あと {0:F0} 日）。	Core/HealthAnalyzer.cs:196
+0d593e94	負荷をかけた時間（ゲームなど）と、休んでいる時間の記録がまだ少ないため、比べられません（基準 {0} 分・最近 {1} 分。それぞれ {2} 分以上必要）。	Core/HealthAnalyzer.cs:211
+b09085c8	負荷をかけたときのファンの回転の指示が、以前と変わっています（{0:F0}% → {1:F0}%）。ファンカーブを変えたなら、冷え方の違いはその影響なので、	Core/HealthAnalyzer.cs:224
+2ddc0b27	ホコリかどうかは判定していません。新しい設定で比べ直すには「掃除した（ここを新しい基準にする）」を押してください。	Core/HealthAnalyzer.cs:225
+ccf3a760	ファンの指示 {0:F0}% → {1:F0}%	Core/HealthAnalyzer.cs:226
+0090bb82	{0} W 分の温度上昇 {1:F0}°C（以前 {2:F0}°C）	Core/HealthAnalyzer.cs:234
+0449b7df	以前より明らかに冷えにくくなっています。フィルター・ラジエーター・ヒートシンクのホコリを掃除してください。改善しなければグリスの劣化も考えられます。	Core/HealthAnalyzer.cs:237
+f91be135	以前より少し冷えにくくなっています。そろそろフィルターやラジエーターの掃除をおすすめします。	Core/HealthAnalyzer.cs:238
+7ed2ece5	以前よりよく冷えるようになっています。掃除・部品の交換・ファンの追加などをした場合は問題ありません。	Core/HealthAnalyzer.cs:239
+58d9c8ca	以前と同じように冷えています。	Core/HealthAnalyzer.cs:240
+fcc150e0	（比べた時間: 基準 {0} 分・最近 {1} 分。室温の違いは差し引いています）	Core/HealthAnalyzer.cs:242
 5ba2a332	ASUS Aura（Armoury Crate の LED）	Core/InstallCheck.cs:24
 4a3be0af	ProFanController（前の版）	Core/InstallCheck.cs:39
 d9bee020	ダウンロード	Core/InstallCheck.cs:83
@@ -1221,30 +1241,30 @@ aa2f7c05	画像を選ぶ…	MainWindow.Devices.cs:67
 4c897111	書き出しに失敗しました。\n{0}	MainWindow.History.cs:87
 f6719722	まだバックアップはありません	MainWindow.Integrations.cs:29
 41c3b6de	最新のバックアップ: {0} ・ 全部で {1} 個（{2}）	MainWindow.Integrations.cs:30
-157c5131	トピック名を作り直しますか？\n\nスマホの ntfy アプリでは、新しいトピック名を購読し直す必要があります。	MainWindow.Integrations.cs:65
-a09fc803	送信しています…	MainWindow.Integrations.cs:75
-0d845e4d	送れませんでした: {0}	MainWindow.Integrations.cs:80
-7e4e7bd2	自動（CPU と GPU の高いほう）	MainWindow.Integrations.cs:91
-97682f4b	設定をバックアップしました: {0}	MainWindow.Integrations.cs:138
-51e56e6f	バックアップがありません	MainWindow.Integrations.cs:150
-5cb6d892	{0} の設定に戻しますか？\n\n今の設定もバックアップしてから戻すので、あとで元に戻せます。	MainWindow.Integrations.cs:156
-ca58240b	バックアップから戻す	MainWindow.Integrations.cs:157
-0a066c64	{0} の設定に戻しました（「元に戻す」で取り消せます）。	MainWindow.Integrations.cs:165
-4a2fd247	このバックアップは読み込めませんでした。\n{0}	MainWindow.Integrations.cs:169
-1b7a6d56	設定を書き出す	MainWindow.Integrations.cs:178
-f48eb65b	Fanlume の設定 (*.fanlume.json)|*.fanlume.json	MainWindow.Integrations.cs:179
-f1a7dc7f	Fanlume設定_{0}_{1:yyyyMMdd}{2}	MainWindow.Integrations.cs:180
-dd581e02	{0} 個のプロファイルを書き出しました。このファイルを相手に送り、設定 →「安全・バックアップ」→「設定を読み込む」で読み込んでもらってください。	MainWindow.Integrations.cs:187
-25f3627c	書き出せませんでした。\n{0}	MainWindow.Integrations.cs:191
-e6cdafd7	ハードウェアの初期化が終わるまでお待ちください。	MainWindow.Integrations.cs:199
-de0ce3c8	設定を読み込む	MainWindow.Integrations.cs:205
-70585dc7	Fanlume の設定 (*.fanlume.json;*.json)|*.fanlume.json;*.json	MainWindow.Integrations.cs:206
-49c7511d	このファイルは読み込めません。\n{0}	MainWindow.Integrations.cs:217
-d01ee250	。「元に戻す」で取り消せます。読み込んだファンは、カーブを確認してから使ってください。	MainWindow.Integrations.cs:231
-565076e7	カーブを確認	MainWindow.Integrations.cs:232
-e5decd8b	新しいハードウェアに合わせて設定を置き換えました（「元に戻す」で戻せます）。念のため、ファンカーブを確認してください。	MainWindow.Integrations.cs:255
-49a0ae7a	ハードウェアの変更があります。見つからないセンサーを使っているカーブは、安全のため一定の回転数で回しています。	MainWindow.Integrations.cs:264
-dff7789c	対応付けを開く	MainWindow.Integrations.cs:265
+157c5131	トピック名を作り直しますか？\n\nスマホの ntfy アプリでは、新しいトピック名を購読し直す必要があります。	MainWindow.Integrations.cs:66
+a09fc803	送信しています…	MainWindow.Integrations.cs:76
+0d845e4d	送れませんでした: {0}	MainWindow.Integrations.cs:81
+7e4e7bd2	自動（CPU と GPU の高いほう）	MainWindow.Integrations.cs:92
+97682f4b	設定をバックアップしました: {0}	MainWindow.Integrations.cs:139
+51e56e6f	バックアップがありません	MainWindow.Integrations.cs:151
+5cb6d892	{0} の設定に戻しますか？\n\n今の設定もバックアップしてから戻すので、あとで元に戻せます。	MainWindow.Integrations.cs:157
+ca58240b	バックアップから戻す	MainWindow.Integrations.cs:158
+0a066c64	{0} の設定に戻しました（「元に戻す」で取り消せます）。	MainWindow.Integrations.cs:166
+4a2fd247	このバックアップは読み込めませんでした。\n{0}	MainWindow.Integrations.cs:170
+1b7a6d56	設定を書き出す	MainWindow.Integrations.cs:179
+f48eb65b	Fanlume の設定 (*.fanlume.json)|*.fanlume.json	MainWindow.Integrations.cs:180
+f1a7dc7f	Fanlume設定_{0}_{1:yyyyMMdd}{2}	MainWindow.Integrations.cs:181
+dd581e02	{0} 個のプロファイルを書き出しました。このファイルを相手に送り、設定 →「安全・バックアップ」→「設定を読み込む」で読み込んでもらってください。	MainWindow.Integrations.cs:188
+25f3627c	書き出せませんでした。\n{0}	MainWindow.Integrations.cs:192
+e6cdafd7	ハードウェアの初期化が終わるまでお待ちください。	MainWindow.Integrations.cs:200
+de0ce3c8	設定を読み込む	MainWindow.Integrations.cs:206
+70585dc7	Fanlume の設定 (*.fanlume.json;*.json)|*.fanlume.json;*.json	MainWindow.Integrations.cs:207
+49c7511d	このファイルは読み込めません。\n{0}	MainWindow.Integrations.cs:218
+d01ee250	。「元に戻す」で取り消せます。読み込んだファンは、カーブを確認してから使ってください。	MainWindow.Integrations.cs:232
+565076e7	カーブを確認	MainWindow.Integrations.cs:233
+e5decd8b	新しいハードウェアに合わせて設定を置き換えました（「元に戻す」で戻せます）。念のため、ファンカーブを確認してください。	MainWindow.Integrations.cs:256
+49a0ae7a	ハードウェアの変更があります。見つからないセンサーを使っているカーブは、安全のため一定の回転数で回しています。	MainWindow.Integrations.cs:265
+dff7789c	対応付けを開く	MainWindow.Integrations.cs:266
 e45b0531	おまかせ調整の途中です。	MainWindow.Language.cs:55
 e955d878	冷却テストの途中です。	MainWindow.Language.cs:56
 afb9660d	キャリブレーションの途中です。	MainWindow.Language.cs:57
@@ -1478,32 +1498,40 @@ e8547f63	現在 {0:F0}°C ／ 最高 {1:F0}°C	MainWindow.Tools.cs:285
 8c1ed861	冷却テストのレポートを保存	MainWindow.Tools.cs:323
 73ba74aa	テキスト (*.txt)|*.txt	MainWindow.Tools.cs:324
 dab5f292	直近の冷却テストの結果を評価して、ファン設定の改善案を教えてください。	MainWindow.Tools.cs:334
+cb8ee667	いまの版: {0}	MainWindow.Update.cs:28
+5b6c7a62	インストーラーを起動しました。まもなくアプリが終了し、入れ替えたあとに起動し直します。	MainWindow.Update.cs:30
+e1525ed0	新しい版 {0} があります（{1:yyyy/MM/dd} 公開・{2:F0} MB）。	MainWindow.Update.cs:32
+7d2bdd2c	最新の版です（{0:M/d HH:mm} に確認）。	MainWindow.Update.cs:33
+a94ca4e7	まだ確認していません。	MainWindow.Update.cs:34
+d24d8900	Fanlume {0} に更新します。\n\nインストーラー（{1:F0} MB）をダウンロードして確かめたあと、アプリが一度終了します。入れ替えが終わるまでの十数秒、ファンは BIOS の設定で回り、終わるとアプリが起動し直します。\n\n更新しますか？	MainWindow.Update.cs:71
+98b3be1a	ダウンロードしています… {0:P0}	MainWindow.Update.cs:77
+c1f570b8	\n\nリリースのページから、インストーラーを手で実行して更新することもできます。	MainWindow.Update.cs:86
 6451d704	ハードウェアアクセス: LibreHardwareMonitor + PawnIO\n	MainWindow.xaml.cs:99
 6c7b6a5b	設定ファイル: {0}	MainWindow.xaml.cs:100
-1ffe58b3	温度が上限に達しています	MainWindow.xaml.cs:403
-4eed19a9	ブースト中	MainWindow.xaml.cs:405
-8052eef4	ポンプ以外を 100% で回しています	MainWindow.xaml.cs:405
-732c5446	BIOS 制御（ポンプ監視は継続）	MainWindow.xaml.cs:407
-9903c467	計算だけで、ファンには書き込んでいません（ポンプ保護は働きます）。下のボタンで制御を始めます	MainWindow.xaml.cs:409
-138d15fc	制御中（要確認）	MainWindow.xaml.cs:411
-9a955596	見つからないセンサーがあります（部品の交換など）	MainWindow.xaml.cs:411
-cde39c73	値が固まっているセンサーがあります	MainWindow.xaml.cs:413
-c347c56a	{0} 個を制御中	MainWindow.xaml.cs:415
-cbfa5900	制御を開始する（DRY RUN を解除）	MainWindow.xaml.cs:418
-559e78f2	制御を再開する	MainWindow.xaml.cs:419
-f1198e29	警告	MainWindow.xaml.cs:439
-b47a04b8	お知らせ	MainWindow.xaml.cs:441
-d3ec144f	仮想（{0}）	MainWindow.xaml.cs:470
-f45a5a37	検出したハードウェアの一覧です。画像のボタンから、自分で撮った写真などに差し替えられます	MainWindow.xaml.cs:508
-31e94c42	ファンごとに温度と回転数の関係を設定します。変更はすぐに反映・保存されます	MainWindow.xaml.cs:509
-b5ccd0c3	記録からの自動診断と、ファンのホコリ・劣化のチェック（AI のアドバイスはオプション）	MainWindow.xaml.cs:510
-2efbce3f	負荷をかけて、カーブを自動で作ったり、今の設定でどこまで冷えるかを測ったりします	MainWindow.xaml.cs:511
-73339fb8	最大 24 時間分の温度と回転数（アプリを閉じていた間を除く。再起動前の分は 1 分ごとの平均）	MainWindow.xaml.cs:512
-389ce2cc	電気代の目安・異常の記録	MainWindow.xaml.cs:513
-4bd55735	OpenRGB 連携で、PC の LED を温度・レインボー・音楽などに合わせて光らせます	MainWindow.xaml.cs:514
-acea69f7	このPCで検出されたすべての温度・回転数・制御チャネルと、仮想センサー	MainWindow.xaml.cs:515
-7626e5f7	プロファイル・自動切り替え・起動方法・制御全体の動作	MainWindow.xaml.cs:516
-d3bf5d86	DRY RUN を解除しました。ファンの制御を始めています。	MainWindow.xaml.cs:553
+1ffe58b3	温度が上限に達しています	MainWindow.xaml.cs:404
+4eed19a9	ブースト中	MainWindow.xaml.cs:406
+8052eef4	ポンプ以外を 100% で回しています	MainWindow.xaml.cs:406
+732c5446	BIOS 制御（ポンプ監視は継続）	MainWindow.xaml.cs:408
+9903c467	計算だけで、ファンには書き込んでいません（ポンプ保護は働きます）。下のボタンで制御を始めます	MainWindow.xaml.cs:410
+138d15fc	制御中（要確認）	MainWindow.xaml.cs:412
+9a955596	見つからないセンサーがあります（部品の交換など）	MainWindow.xaml.cs:412
+cde39c73	値が固まっているセンサーがあります	MainWindow.xaml.cs:414
+c347c56a	{0} 個を制御中	MainWindow.xaml.cs:416
+cbfa5900	制御を開始する（DRY RUN を解除）	MainWindow.xaml.cs:419
+559e78f2	制御を再開する	MainWindow.xaml.cs:420
+f1198e29	警告	MainWindow.xaml.cs:440
+b47a04b8	お知らせ	MainWindow.xaml.cs:442
+d3ec144f	仮想（{0}）	MainWindow.xaml.cs:471
+f45a5a37	検出したハードウェアの一覧です。画像のボタンから、自分で撮った写真などに差し替えられます	MainWindow.xaml.cs:509
+31e94c42	ファンごとに温度と回転数の関係を設定します。変更はすぐに反映・保存されます	MainWindow.xaml.cs:510
+b5ccd0c3	記録からの自動診断と、ファンのホコリ・劣化のチェック（AI のアドバイスはオプション）	MainWindow.xaml.cs:511
+2efbce3f	負荷をかけて、カーブを自動で作ったり、今の設定でどこまで冷えるかを測ったりします	MainWindow.xaml.cs:512
+73339fb8	最大 24 時間分の温度と回転数（アプリを閉じていた間を除く。再起動前の分は 1 分ごとの平均）	MainWindow.xaml.cs:513
+389ce2cc	電気代の目安・異常の記録	MainWindow.xaml.cs:514
+4bd55735	OpenRGB 連携で、PC の LED を温度・レインボー・音楽などに合わせて光らせます	MainWindow.xaml.cs:515
+acea69f7	このPCで検出されたすべての温度・回転数・制御チャネルと、仮想センサー	MainWindow.xaml.cs:516
+7626e5f7	プロファイル・自動切り替え・起動方法・制御全体の動作	MainWindow.xaml.cs:517
+d3bf5d86	DRY RUN を解除しました。ファンの制御を始めています。	MainWindow.xaml.cs:554
 256148cd	Fanlume 見張り	Program.cs:31
 0788f8eb	背面	UI/Controls/CasePreview.cs:59
 c85ab318	前	UI/Controls/CasePreview.cs:60

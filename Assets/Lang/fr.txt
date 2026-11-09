@@ -1609,3 +1609,31 @@ c8e0f349	Une vérification du bruit d'un ventilateur est en cours.
 82ee83eb	Impossible de lancer le programme de désinstallation ({0}).\nUne fois l'application fermée, désinstallez Fanlume depuis Paramètres Windows → Applications → Applications installées.
 adc330eb	À la fermeture, l'application se termine, puis le programme de désinstallation supprime l'application et les {0}. Fanlume disparaît aussi des « Applications installées » de Windows.
 f10b7201	À la fermeture, l'application se termine, puis le programme de désinstallation la supprime. Fanlume disparaît aussi des « Applications installées » de Windows. Réglages, journaux et enregistrements restent dans le dossier.
+6f13f8bc	Mises à jour
+6e708964	Rechercher des mises à jour
+1c275381	Mettre à jour
+44cc4c9a	Ouvrir la page des versions
+2420b253	Rechercher automatiquement les nouvelles versions
+094990a5	Demande la dernière version à GitHub au plus une fois par jour et vous prévient quand une nouvelle est disponible (seuls le nom et la version de l'application sont envoyés)
+395b0a50	« Mettre à jour » télécharge le programme d'installation, vérifie qu'il correspond au fichier publié sur GitHub, puis remplace l'application sans afficher de fenêtre. Pendant 10 à 20 secondes environ, l'application est fermée et les ventilateurs suivent les réglages du BIOS ; elle redémarre ensuite. Réglages, journaux et enregistrements sont conservés.
+3ef4127e	Fanlume a été mis à jour de {0} vers {1}.
+d256382b	Mis à jour vers {0}.
+042a94f0	Vérification…
+42e9517b	Une nouvelle version, Fanlume {0}, est disponible. « Mettre à jour » la télécharge et remplace l'application (pendant 10 à 20 secondes environ, les ventilateurs suivent les réglages du BIOS).
+bb0f9e93	La version {0} est disponible.
+ebc47f06	Vous avez la dernière version ({0}).
+993c451d	Impossible de rechercher une nouvelle version ({0}). Vérifiez que le PC est connecté à Internet.
+31eb4f99	L'application est en train de se fermer, la mise à jour n'aura pas lieu.
+b79b5ccf	Impossible de mettre à jour ({0}).
+ddecc240	Le fichier téléchargé dépasse la taille indiquée sur GitHub.
+74c1cfd5	La version du programme d'installation ({0}) diffère de celle de la publication ({1}).
+e3910d2d	La taille du fichier téléchargé ({0} octets) diffère de celle indiquée sur GitHub ({1} octets).
+6a1c29a5	Le fichier téléchargé ne correspond pas à celui publié sur GitHub (SHA-256 différent). La mise à jour a été annulée.
+cb8ee667	Version actuelle : {0}
+5b6c7a62	Le programme d'installation a démarré. L'application va se fermer puis redémarrer après la mise à jour.
+e1525ed0	La version {0} est disponible (publiée le {1:yyyy/MM/dd}, {2:F0} Mo).
+7d2bdd2c	Vous avez la dernière version (vérifié le {0:M/d HH:mm}).
+a94ca4e7	Pas encore vérifié.
+d24d8900	Mise à jour vers Fanlume {0}.\n\nUne fois le programme d'installation ({1:F0} Mo) téléchargé et vérifié, l'application se ferme. Jusqu'à la fin du remplacement (10 à 20 secondes environ), les ventilateurs suivent les réglages du BIOS, puis l'application redémarre.\n\nMettre à jour maintenant ?
+98b3be1a	Téléchargement… {0:P0}
+c1f570b8	\n\nVous pouvez aussi mettre à jour en lançant vous-même le programme d'installation depuis la page des versions.

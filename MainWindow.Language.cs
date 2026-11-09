@@ -83,7 +83,7 @@ public partial class MainWindow
             LastSnapshot = _lastSnapshot,
             Page = page,
             SettingsTab = tab,
-            SettingsScroll = SettingsPage.VerticalOffset,
+            SettingsScroll = SettingsScroller.VerticalOffset,
             Bounds = WindowState == WindowState.Normal ? new Rect(Left, Top, Width, Height) : RestoreBounds,
             State = WindowState == WindowState.Minimized ? WindowState.Normal : WindowState,
             Visible = IsVisible,
@@ -133,6 +133,6 @@ public partial class MainWindow
         WindowState = c.State;
         if (c.Active) Activate();
         // 設定画面のスクロール位置は、中身の大きさが決まってから戻す
-        Dispatcher.BeginInvoke(DispatcherPriority.Loaded, () => SettingsPage.ScrollToVerticalOffset(c.SettingsScroll));
+        Dispatcher.BeginInvoke(DispatcherPriority.Loaded, () => SettingsScroller.ScrollToVerticalOffset(c.SettingsScroll));
     }
 }

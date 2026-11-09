@@ -1609,3 +1609,31 @@ c8e0f349	Die Geräuschprüfung eines Lüfters läuft noch.
 82ee83eb	Das Deinstallationsprogramm konnte nicht gestartet werden ({0}).\nDeinstallieren Sie Fanlume nach dem Beenden der App unter Windows-Einstellungen → Apps → Installierte Apps.
 adc330eb	Wenn Sie dies schließen, wird die App beendet; danach entfernt das Deinstallationsprogramm die App und die {0}. Fanlume verschwindet auch aus „Installierte Apps“ in Windows.
 f10b7201	Wenn Sie dies schließen, wird die App beendet; danach entfernt das Deinstallationsprogramm die App. Fanlume verschwindet auch aus „Installierte Apps“ in Windows. Einstellungen, Protokolle und Aufzeichnungen bleiben im Ordner.
+6f13f8bc	Updates
+6e708964	Nach Updates suchen
+1c275381	Aktualisieren
+44cc4c9a	Release-Seite öffnen
+2420b253	Automatisch nach neuen Versionen suchen
+094990a5	Fragt höchstens einmal am Tag bei GitHub nach der neuesten Version und meldet sich, wenn es eine neue gibt (gesendet werden nur Name und Version der App)
+395b0a50	„Aktualisieren“ lädt das Installationsprogramm herunter, prüft, ob es mit der auf GitHub veröffentlichten Datei übereinstimmt, und ersetzt die App ohne weitere Fenster. Etwa 10–20 Sekunden lang ist die App beendet und die Lüfter laufen mit den BIOS-Einstellungen; danach startet sie wieder. Einstellungen, Protokolle und Aufzeichnungen bleiben erhalten.
+3ef4127e	Fanlume wurde von {0} auf {1} aktualisiert.
+d256382b	Auf {0} aktualisiert.
+042a94f0	Wird geprüft…
+42e9517b	Eine neue Version, Fanlume {0}, ist verfügbar. „Aktualisieren“ lädt sie herunter und ersetzt die App (etwa 10–20 Sekunden lang laufen die Lüfter mit den BIOS-Einstellungen).
+bb0f9e93	Version {0} ist verfügbar.
+ebc47f06	Sie haben die neueste Version ({0}).
+993c451d	Es konnte nicht nach einer neuen Version gesucht werden ({0}). Prüfen Sie die Internetverbindung.
+31eb4f99	Die App wird gerade beendet, daher wird nicht aktualisiert.
+b79b5ccf	Aktualisierung fehlgeschlagen ({0}).
+ddecc240	Die heruntergeladene Datei ist größer als die auf GitHub angegebene Größe.
+74c1cfd5	Die Version des Installationsprogramms ({0}) weicht von der Release-Version ({1}) ab.
+e3910d2d	Die Größe der heruntergeladenen Datei ({0} Byte) weicht von der auf GitHub angegebenen Größe ({1} Byte) ab.
+6a1c29a5	Die heruntergeladene Datei stimmt nicht mit der auf GitHub veröffentlichten überein (SHA-256 weicht ab). Die Aktualisierung wurde abgebrochen.
+cb8ee667	Aktuelle Version: {0}
+5b6c7a62	Das Installationsprogramm wurde gestartet. Die App wird gleich beendet und nach der Aktualisierung neu gestartet.
+e1525ed0	Version {0} ist verfügbar (veröffentlicht am {1:yyyy/MM/dd}, {2:F0} MB).
+7d2bdd2c	Sie haben die neueste Version (geprüft am {0:M/d HH:mm}).
+a94ca4e7	Noch nicht geprüft.
+d24d8900	Auf Fanlume {0} aktualisieren.\n\nNachdem das Installationsprogramm ({1:F0} MB) heruntergeladen und geprüft wurde, wird die App beendet. Bis der Austausch fertig ist (etwa 10–20 Sekunden), laufen die Lüfter mit den BIOS-Einstellungen; danach startet die App wieder.\n\nJetzt aktualisieren?
+98b3be1a	Wird heruntergeladen… {0:P0}
+c1f570b8	\n\nSie können auch aktualisieren, indem Sie das Installationsprogramm selbst von der Release-Seite ausführen.
