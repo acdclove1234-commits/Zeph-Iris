@@ -31,6 +31,8 @@ public sealed class SpectrumView : FrameworkElement
     private const double PeakHoldSec = 0.35;
     /// <summary>下の目盛りの文字のための余白（ピクセル）</summary>
     private const double LabelHeight = 14;
+    /// <summary>目盛りで高さを何等分するか（横線はこれより 1 本少ない）</summary>
+    private const int GridSteps = 8;
 
     // 背景・目盛り・文字・ピークの線は、いまのテーマの色（ThemePalette）を使う
     private static Brush BgBrush => ThemePalette.ChartBg;
@@ -116,10 +118,10 @@ public sealed class SpectrumView : FrameworkElement
         double plotW = Math.Max(1, w - padX * 2);
         double baseY = padTop + plotH;
 
-        // 目盛りの横線（25%・50%・75%）
-        for (int k = 1; k <= 3; k++)
+        // 目盛りの横線（12.5% ごとに 7 本。表示だけで、音の拾い方には関係しない）
+        for (int k = 1; k < GridSteps; k++)
         {
-            double y = Math.Round(baseY - plotH * k / 4) + 0.5;
+            double y = Math.Round(baseY - plotH * k / GridSteps) + 0.5;
             dc.DrawLine(GridPen, new Point(padX, y), new Point(padX + plotW, y));
         }
 

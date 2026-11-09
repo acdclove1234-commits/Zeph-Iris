@@ -69,7 +69,7 @@ internal interface IFanHardware : IDisposable
     string? NameOf(string? id);
     /// <summary>制御端子（見つからなければ null）。同じ端子には毎回同じオブジェクトを返す</summary>
     IFanControl? FindControl(string? id);
-    /// <summary>センサーと同じ部品の使用率（CPU 温度なら CPU 使用率）。固着の判定に使う</summary>
+    /// <summary>センサーと同じ部品の使用率（CPU 温度なら CPU 使用率）。固着の判定に使う。CPU・GPU 以外（SSD など）は null</summary>
     float? LoadFor(string? sensorId);
     /// <summary>GPU ファンの端子と同じ GPU の温度（Core と Hot Spot。読めないものは null）</summary>
     void GpuTemps(string controlId, out float? core, out float? hotSpot);
@@ -191,8 +191,10 @@ public sealed class HardwareHub : IFanHardware
             _sensors[id] = s;
             if (failed) _stale.Add(id);
         }
-        var load = SensorNames.Pick(hw.Sensors.Where(s => s.SensorType == SensorType.Load).ToList(), s => s.Name, SensorNames.CpuLoad.Concat(SensorNames.GpuLoad).ToArray())
-                   ?? hw.Sensors.FirstOrDefault(s => s.SensorType == SensorType.Load);
+        var load = LoadMovesTemperature(hw.HardwareType)
+            ? SensorNames.Pick(hw.Sensors.Where(s => s.SensorType == SensorType.Load).ToList(), s => s.Name, SensorNames.CpuLoad.Concat(SensorNames.GpuLoad).ToArray())
+              ?? hw.Sensors.FirstOrDefault(s => s.SensorType == SensorType.Load)
+            : null;
         if (load is not null && !failed) _loads[hwId] = load;
         foreach (var sub in hw.SubHardware)
         {
@@ -222,6 +224,14 @@ public sealed class HardwareHub : IFanHardware
         _controls[identifier!] = w;
         return w;
     }
+
+    /// <summary>
+    /// その部品の使用率が、数分のうちに温度をはっきり動かすか（固着の判定に使ってよいか）。CPU と GPU だけ。
+    /// SSD の「使用率」は読み書きの量で、短い読み書きでは温度がほとんど変わらず、温度も 1°C 刻みなので、
+    /// 何分も同じ値なのは普通（固着と判定すると、音楽を流しているだけでファンが全開になってしまう）
+    /// </summary>
+    internal static bool LoadMovesTemperature(HardwareType type)
+        => type is HardwareType.Cpu or HardwareType.GpuNvidia or HardwareType.GpuAmd or HardwareType.GpuIntel;
 
     public float? LoadFor(string? sensorId)
         => FindSensor(sensorId)?.Hardware is { } hw && _loads.TryGetValue(hw.Identifier.ToString(), out var l) ? Value(l.Identifier.ToString()) : null;

@@ -405,6 +405,26 @@ public static class FanSafetyTests
         T.Check(v is null && g2.IsStuck("cpu"), "constant 52°C under changing load is still declared stuck");
     }
 
+    /// <summary>
+    /// S7b: 固着の判定に使う使用率は CPU と GPU だけ。SSD の「使用率」（読み書きの量）は、温度が 1°C 刻みで何分も同じでも普通なので使わない
+    /// （SSD の温度を使うカーブで、音楽を流しているだけでファンが全開になった）
+    /// </summary>
+    public static void TestStuckLoadOnlyCpuAndGpu()
+    {
+        foreach (var t in new[] { LibreHardwareMonitor.Hardware.HardwareType.Cpu, LibreHardwareMonitor.Hardware.HardwareType.GpuNvidia,
+                                  LibreHardwareMonitor.Hardware.HardwareType.GpuAmd, LibreHardwareMonitor.Hardware.HardwareType.GpuIntel })
+            T.Check(HardwareHub.LoadMovesTemperature(t), $"{t}: load is used for the stuck check");
+        foreach (var t in new[] { LibreHardwareMonitor.Hardware.HardwareType.Storage, LibreHardwareMonitor.Hardware.HardwareType.Motherboard,
+                                  LibreHardwareMonitor.Hardware.HardwareType.Memory, LibreHardwareMonitor.Hardware.HardwareType.Network })
+            T.Check(!HardwareHub.LoadMovesTemperature(t), $"{t}: load is NOT used for the stuck check");
+        // 使用率がない（null）ときは、同じ値が何分続いても固着にしない
+        var t0 = new DateTime(2026, 11, 10, 6, 30, 0);
+        var g = new SensorGuard { NoStuckAbove = 85 };
+        double? v = null;
+        for (int i = 0; i < 600; i++) v = g.Filter("ssd", 41, null, t0.AddSeconds(i));
+        T.Check(v == 41 && !g.IsStuck("ssd"), "constant 41°C with no load reading for 10 min is not stuck");
+    }
+
     /// <summary>S8: 端子が見つからないリーダーに連動するファンは、最低回転ではなく全開</summary>
     public static void TestFollowerOfMissingLeader()
     {

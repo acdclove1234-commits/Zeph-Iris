@@ -174,7 +174,7 @@ public static class OctaveDiagTests
                     }
                     int nn = Math.Max(1, n);
                     int fn = Math.Max(1, flashes - f0);
-                    per.Add($"{name}:{100 * s / nn}/{100 * d / nn}/{100 * h / nn}:{ev.SyncedFrac * 100:F0}:w{ev.WrongFrac * 100:F0}:on{100 * (onReal - on0) / fn}:bt{100 * (between - bt0) / fn}");
+                    per.Add($"{name}@{refBpm:F0}:{100 * s / nn}/{100 * d / nn}/{100 * h / nn}:{ev.SyncedFrac * 100:F0}:w{ev.WrongFrac * 100:F0}:on{100 * (onReal - on0) / fn}:bt{100 * (between - bt0) / fn}");
                 }
                 var bench = MusicBench.Cases().Select(MusicBench.Measure).ToList();
                 T.Info($"{label}: synced {evals.Average(x => x.SyncedFrac):P0} on-beat {evals.Average(x => x.OnFrac):P0} on real beats {onReal / (double)Math.Max(1, flashes):P1} between beats {between / (double)Math.Max(1, flashes):P1} " +
