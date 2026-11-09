@@ -12,6 +12,24 @@ and can be checked from a phone.
   for example: Settings [設定].
 
 
+■ What's new in v6.6.1
+  - First run: started from Downloads, the Desktop or inside the zip, the app now copies itself to
+    C:\Tools\ProFanController and starts again from there (before, it only showed a "move it" notice
+    and might not work properly). Settings used at the old place are carried over. Placed anywhere
+    else, it runs in place as before. The setup wizard installs PawnIO by itself when it is missing
+    (once; if that fails, the buttons and the official-site link are shown as before).
+  - Languages: the chosen language now reaches every part of the screen (the sidebar, page headers
+    and many buttons stayed Japanese before), and it switches right away, without restarting the app.
+    Fan control, LEDs and music sync keep running.
+  - Music sync: very quiet sounds (for example faint highs in a bass-heavy song) no longer flash as
+    hi-hats or snares. A higher Beat sensitivity [反応の感度] brings the detail back.
+  - Music sync: the spectrum and the "Spectrum" style use the 10 bands of a common graphic equalizer
+    (31 Hz-16 kHz), with the frequency under each bar. The other styles flash at the same moments as
+    before.
+  - Safety: if the app ends unexpectedly and the watchdog fails to set the safe fan speed (for example
+    when the exe was replaced while running), it still restarts the app. Before, the watchdog could stop
+    too and leave the fans at their last speed.
+
 ■ What's new in v6.6.0
   - Languages: the user interface is now available in 18 languages (English, Japanese, Chinese
     Simplified and Traditional, Korean, Russian, Ukrainian, German, French, Spanish, Italian,
