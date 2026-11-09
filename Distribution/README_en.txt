@@ -12,6 +12,10 @@ and can be checked from a phone.
   for example: Settings [設定].
 
 
+■ What's new in v6.7.2
+  - Installer: with "Launch Fanlume" ticked on the last page, the installer could show "CreateProcess error:
+    code 740" and Fanlume did not start (when the installer was started by double-clicking). It starts now.
+
 ■ What's new in v6.7.1
   - Updating from inside the app: Settings [設定] -> General [一般] -> Updates [アップデート] now has "Check for
     updates" and "Update". "Update" downloads the new installer, checks that it matches the file published on

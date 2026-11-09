@@ -171,11 +171,14 @@ Name: "{autoprograms}\{#AppName}"; Filename: "{app}\{#AppExe}"
 Name: "{autodesktop}\{#AppName}"; Filename: "{app}\{#AppExe}"; Tasks: desktopicon
 
 [Run]
+; Fanlume.exe は管理者権限が必要（app.manifest の requireAdministrator）。postinstall の項目は、何も付けないと
+; ダブルクリックで起動した元の（管理者でない）ユーザーとして CreateProcess で起動され、エラー 740 で起動できない。
+; そのため runascurrentuser で、管理者になったセットアップと同じ権限で起動する（UAC の確認はもう出ない）
 ; ふつうに入れたとき: 最後の画面で「Fanlume を起動する」（はじめての起動では、アプリのセットアップの画面が出る）
-Filename: "{app}\{#AppExe}"; Description: "{cm:LaunchProgram,{#AppName}}"; Flags: nowait postinstall skipifsilent
+Filename: "{app}\{#AppExe}"; Description: "{cm:LaunchProgram,{#AppName}}"; Flags: nowait postinstall skipifsilent runascurrentuser
 ; 画面を出さずに更新したとき（アプリの「更新する」から）: 動いていたなら起動し直す。
 ; アプリが画面を出していたとき（/FANLUMESHOW）は画面を出し、そうでなければタスクトレイで
-Filename: "{app}\{#AppExe}"; Parameters: "{code:RestartArguments}"; Flags: nowait skipifnotsilent; Check: AppWasRunning
+Filename: "{app}\{#AppExe}"; Parameters: "{code:RestartArguments}"; Flags: nowait skipifnotsilent runascurrentuser; Check: AppWasRunning
 
 [Code]
 const

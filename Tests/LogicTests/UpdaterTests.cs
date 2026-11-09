@@ -129,6 +129,12 @@ public static class UpdaterTests
         string iss = File.ReadAllText(Path.Combine(d.FullName, "Installer", "Fanlume.iss"));
         T.Check(iss.Contains(AppUpdater.ShowAppArgument, StringComparison.Ordinal) && iss.Contains("{code:RestartArguments}", StringComparison.Ordinal),
             "the installer reads the show-app switch and restarts the app");
+        // Fanlume.exe は管理者権限が必要。postinstall の項目は既定でダブルクリックした元の（管理者でない）ユーザーで
+        // CreateProcess されてエラー 740 になる（2026-11 に実際に起きた）。起動する行は、どれもセットアップと同じ権限で
+        var runLines = iss.Split('\n').SkipWhile(l => !l.StartsWith("[Run]")).Skip(1).TakeWhile(l => !l.StartsWith("["))
+            .Where(l => l.StartsWith("Filename:")).ToList();
+        T.Check(runLines.Count == 2 && runLines.All(l => l.Contains("runascurrentuser")),
+            $"every app launch after install runs with the installer's admin rights ({runLines.Count} lines)");
 
         var cfg = new AppConfig();
         T.Check(cfg.Update.AutoCheck, "automatic check is on by default");
