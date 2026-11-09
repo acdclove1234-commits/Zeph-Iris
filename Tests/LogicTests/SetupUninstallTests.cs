@@ -172,7 +172,7 @@ public static class SetupUninstallTests
         T.Check(CleanUninstall.Aborted(failed), "fan restore failure aborts");
         T.Check(CleanUninstall.SkipReason(CleanupStep.RemoveAutoStart, failed) is not null, "nothing else runs after the abort");
         T.Check(CleanUninstall.SkipReason(CleanupStep.ExitApp, failed) is not null, "the app does not exit after the abort (it keeps controlling the fans)");
-        string summary = CleanUninstall.Summary(failed, CleanUninstall.Plan(new CleanupOptions(), AllFacts), @"C:\Tools\ProFanController");
+        string summary = CleanUninstall.Summary(failed, CleanUninstall.Plan(new CleanupOptions(), AllFacts), @"C:\Tools\Fanlume");
         T.Check(summary.Contains("中止") && summary.Contains("何も変えていません"), "abort summary says nothing changed");
         T.Check(CleanUninstall.AbortsOnFailure(CleanupStep.RestoreFans) && !CleanUninstall.AbortsOnFailure(CleanupStep.RemoveAutoStart)
                 && !CleanUninstall.AbortsOnFailure(CleanupStep.StopLighting), "only the fan restore aborts");
@@ -201,9 +201,9 @@ public static class SetupUninstallTests
             new(CleanupStep.StopLighting, StepStatus.Done, ""),
             new(CleanupStep.RemoveAutoStart, StepStatus.Failed, "自動起動を消せませんでした"),
         };
-        string s = CleanUninstall.Summary(results, plan, @"C:\Tools\ProFanController");
+        string s = CleanUninstall.Summary(results, plan, @"C:\Tools\Fanlume");
         T.Check(s.Contains("自動起動を消せませんでした"), "failed step listed");
-        T.Check(s.Contains(@"C:\Tools\ProFanController"), "folder to delete named");
+        T.Check(s.Contains(@"C:\Tools\Fanlume"), "folder to delete named");
         T.Check(s.Contains("消します"), "data deletion after exit announced");
         var clean = CleanUninstall.Summary(results.Take(3).ToList(), CleanUninstall.Plan(new CleanupOptions(), AllFacts), @"D:\PFC");
         T.Check(clean.Contains("BIOS") && clean.Contains("残します"), "clean summary: BIOS + data kept");
@@ -222,8 +222,8 @@ public static class SetupUninstallTests
                 File.WriteAllText(p, "x");
             }
             // アプリ本体（残す）
-            Touch("ProFanController.exe");
-            Touch("ProFanController.dll");
+            Touch("Fanlume.exe");
+            Touch("Fanlume.dll");
             Touch("LibreHardwareMonitorLib.dll");
             Touch("はじめにお読みください.txt");
             Touch("my-notes.txt");                 // 利用者が置いたもの（残す）
@@ -233,7 +233,7 @@ public static class SetupUninstallTests
             Touch("config.json.tmp");
             Touch("config.broken_20260101_120000.json");
             Touch(@"logs\20261107.log");
-            Touch(@"logs\dumps\ProFanController.exe.1234.dmp");
+            Touch(@"logs\dumps\Fanlume.exe.1234.dmp");
             Touch(@"data\minutes_20261107.csv");
             Touch(@"data\energy.json");
             Touch(@"backups\config_20261107_120000_startup.json");
@@ -248,7 +248,7 @@ public static class SetupUninstallTests
 
             var failed = CleanUninstall.DeleteData(root);
             T.Check(failed.Count == 0, $"all deleted ({string.Join(", ", failed)})");
-            T.Check(File.Exists(Path.Combine(root, "ProFanController.exe")) && File.Exists(Path.Combine(root, "ProFanController.dll"))
+            T.Check(File.Exists(Path.Combine(root, "Fanlume.exe")) && File.Exists(Path.Combine(root, "Fanlume.dll"))
                     && File.Exists(Path.Combine(root, "LibreHardwareMonitorLib.dll")), "app binaries kept");
             T.Check(File.Exists(Path.Combine(root, "my-notes.txt")) && File.Exists(Path.Combine(root, "はじめにお読みください.txt"))
                     && File.Exists(Path.Combine(root, @"licenses\LICENSE.txt")), "unrelated files kept");

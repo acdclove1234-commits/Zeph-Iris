@@ -68,7 +68,7 @@ public partial class RemapDialog : Window
     public static RemapDialog ForHardwareChange(HardwareChangeReport report, HardwareCatalog catalog)
     {
         var d = new RemapDialog(report.Items, catalog);
-        d.Title = L("ハードウェアの変更 - ProFanController");
+        d.Title = L("ハードウェアの変更 - Fanlume");
         d.TitleText.Text = L("ハードウェアの変更を検出しました");
         d.SubText.Text = L("設定で使っていたセンサーや端子が見つかりません。新しいハードウェアで同じ役割のものを自動で選びました。") +
                          L("内容を確認して「置き換えて適用」を押してください（今の設定はバックアップしてから変更します。あとで「元に戻す」もできます）。\n") +
@@ -86,7 +86,7 @@ public partial class RemapDialog : Window
     public static RemapDialog ForImport(SettingsPackage pkg, IReadOnlyList<RemapItem> items, HardwareCatalog catalog)
     {
         var d = new RemapDialog(items, catalog);
-        d.Title = L("設定の読み込み - ProFanController");
+        d.Title = L("設定の読み込み - Fanlume");
         d.HeaderIcon.Text = "";
         d.TitleText.Text = L("設定を読み込む");
         d.SubText.Text = L("ファイルの中のファン端子・温度センサーを、この PC のどれに対応させるか確認してください。") +

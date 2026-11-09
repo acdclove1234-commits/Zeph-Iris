@@ -233,14 +233,14 @@ public partial class MainWindow
         if (_catalog is null || _test is not null) return;
         if (_tuner is not null)
         {
-            MessageBox.Show(this, L("おまかせ調整が実行中です。終わってから始めてください。"), "ProFanController", MessageBoxButton.OK, MessageBoxImage.Information);
+            MessageBox.Show(this, L("おまかせ調整が実行中です。終わってから始めてください。"), AppIdentity.Name, MessageBoxButton.OK, MessageBoxImage.Information);
             return;
         }
         var cpuTemp = SensorNames.CpuTemperature(_catalog.Temperatures)
                       ?? _catalog.Temperatures.FirstOrDefault(t => t.HardwareType.StartsWith("Cpu"));
         if (cpuTemp is null)
         {
-            MessageBox.Show(this, L("CPU の温度センサーが見つかりません。"), "ProFanController", MessageBoxButton.OK, MessageBoxImage.Warning);
+            MessageBox.Show(this, L("CPU の温度センサーが見つかりません。"), AppIdentity.Name, MessageBoxButton.OK, MessageBoxImage.Warning);
             return;
         }
         int minutes = Test5.IsChecked == true ? 5 : Test15.IsChecked == true ? 15 : 10;

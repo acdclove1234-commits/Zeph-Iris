@@ -1,4 +1,4 @@
-# ProFanController UI text (id). Each line: hash of the Japanese source text, TAB, translation. Line breaks: backslash + n.
+# Fanlume UI text (id). Each line: hash of the Japanese source text, TAB, translation. Line breaks: backslash + n.
 9cefb48e	Memulai…
 3c3d953a	Mendeteksi perangkat keras
 68a076e4	Jeda (kembalikan ke BIOS)
@@ -469,7 +469,7 @@ db0f8cfc	Harga listrik per kWh
 b4d79a66	CPU dan GPU memakai nilai sensornya. Monitor dan speaker tidak termasuk. Ini bukan hasil ukur di stopkontak, jadi hanya perkiraan.
 69355ed4	Keamanan
 619b1ea2	Gunakan proses pengawas (disarankan)
-d1086ffa	Mencegah kipas tertahan di putaran rendah jika aplikasi dihentikan paksa atau macet. Task Manager menampilkan dua ProFanController; salah satunya pengawas
+615a97bc	Mencegah kipas tertahan di putaran rendah jika aplikasi dihentikan paksa atau macet. Task Manager menampilkan dua Fanlume; salah satunya pengawas
 f739cc9b	Putaran pada saat itu
 43c454af	Pompa selalu 100%
 d063c0c0	Mulai ulang aplikasi otomatis (maks. 3 kali dalam 10 menit; lebih dari itu ditampilkan pemberitahuan)
@@ -515,12 +515,12 @@ cb0aedd5	Sensor suhu
 772bcb56	Siapkan dari awal dengan wizard penyiapan
 1c166250	Nanti
 381b7b8a	Ganti dan terapkan
-65d960e8	Penyiapan - ProFanController
+50ab5a2c	Penyiapan - Fanlume
 f918c02e	1  Selamat datang
 38684fb3	2  Kenali konektor
 76236dbf	3  Kebijakan pendinginan
 b303c749	4  Selesai
-99a4e0cb	Selamat datang di ProFanController
+890d0c09	Selamat datang di Fanlume
 26578394	Wizard ini memeriksa apa yang tersambung ke konektor kipas motherboard\ndan otomatis membuat kurva kipas serta profil (Senyap / Standar / Performa) yang cocok untuk PC Anda.
 80f88c90	Persiapan
 b1838111	• Tetaplah di dekat casing agar bisa mendengar dan melihat kipas.\n• Tutup program berat (seperti gim).\n• Pengaturan saat ini akan ditimpa, tetapi setelah selesai bisa dikembalikan dengan "Urungkan".
@@ -549,8 +549,8 @@ b58afa04	Siap
 aceb0a14	Batal
 f193a383	Kembali
 303830fc	Berikutnya
-7b1ba115	Copot (bersihkan) - ProFanController
-a4fe8394	Sebelum berhenti memakai ProFanController, PC dikembalikan ke keadaan sebelum aplikasi dipasang. "Bersihkan dan keluar" menjalankan langkah berikut dari atas ke bawah.
+2a910283	Copot (bersihkan) - Fanlume
+caf7be2a	Sebelum berhenti memakai Fanlume, PC dikembalikan ke keadaan sebelum aplikasi dipasang. "Bersihkan dan keluar" menjalankan langkah berikut dari atas ke bawah.
 2ed98b28	Tambahan (tidak dilakukan jika tidak dipilih)
 9dc58ae6	Hapus juga pengaturan, log, dan rekaman
 f6fb6e2a	Copot juga PawnIO (driver kendali kipas)
@@ -583,9 +583,9 @@ fe1e7d87	 (setelah PC dimulai ulang, kendali kembali ke BIOS).
 e39402e8	Kendali pencahayaan dihentikan dan perangkat dilepas
 8008dbae	Kendali pencahayaan tidak dipakai (koneksi ditutup)
 775adf46	Tampilan ponsel
-817c491e	Izin firewall tidak bisa dihapus. Hapus "ProFanController Web" di "Keamanan Windows" → "Firewall & perlindungan jaringan" → "Pengaturan lanjutan" → "Aturan Masuk".
+63aa333a	Izin firewall tidak bisa dihapus. Hapus "Fanlume Web" di "Keamanan Windows" → "Firewall & perlindungan jaringan" → "Pengaturan lanjutan" → "Aturan Masuk".
 629589af	Tampilan ponsel dihentikan dan izin firewall dihapus
-1d979f07	Mulai otomatis tidak bisa dihapus. Hapus "ProFanController" dari Task Scheduler (Task Scheduler Library).
+31af9d29	Mulai otomatis tidak bisa dihapus. Hapus "Fanlume" dari Task Scheduler (Task Scheduler Library).
 bc13583b	Mulai otomatis saat masuk sudah dihapus
 22c99fc8	Pengaturan rekaman saat crash tidak bisa dihapus (HKEY_LOCAL_MACHINE\\{0}). Dibiarkan pun tidak berbahaya.
 14dd713f	Pengaturan rekaman saat crash sudah dihapus
@@ -594,7 +594,7 @@ d66766d3	Tidak dilakukan di sini
 1e82ca4a	Jalur file program tidak diketahui.
 eb8f4a4f	Tidak bisa menyiapkan penghapusan pengaturan, log, dan rekaman ({0}).\nSetelah aplikasi ditutup, hapus seluruh foldernya:\n{1}
 8df0902c	Buka folder
-c5234463	ProFanController masih berjalan, jadi pengaturan, log, dan rekaman tidak dihapus.\n
+fa3ff255	Fanlume masih berjalan, jadi pengaturan, log, dan rekaman tidak dihapus.\n
 32a27012	Tutup aplikasi, lalu hapus seluruh folder berikut:\n{0}
 ecdec9de	{0} sudah dihapus.\n\n
 a261a21a	Saat pemberitahuan ini ditutup, File Explorer akan membuka folder aplikasi. Hapus seluruh foldernya untuk menyelesaikan pembersihan:\n{0}
@@ -602,18 +602,18 @@ a261a21a	Saat pemberitahuan ini ditutup, File Explorer akan membuka folder aplik
 d6750fd2	\n•
 bf71d238	\n…dan {0} lainnya
 df6134ea	\n\nSetelah menutup pemberitahuan ini, hapus seluruh folder berikut:\n{0}
-10d89683	Pembersihan ProFanController
-2d7f91ad	ProFanController sudah berjalan.\nBuka dari ikon di baki sistem.
+766fce35	Pembersihan Fanlume
+da630a7f	Fanlume sudah berjalan.\nBuka dari ikon di baki sistem.
 ec6a9bb6	Menyimpan rekaman
 c0fd45c5	Tetap berjalan di baki sistem. Untuk keluar, klik kanan ikonnya.
-77d62ee9	ProFanController: pulih
+0a3f2987	Fanlume: pulih
 977b8544	Profil diganti otomatis
 790c11cc	{0} terdeteksi → {1}
-fa5d05c3	ProFanController: pemeliharaan
+a75f3e15	Fanlume: pemeliharaan
 5b860ae3	Berjalan dalam DRY RUN (mode uji). Hanya menghitung putaran berdasarkan suhu; kipas tidak dikendalikan.
 874003cc	Mulai kendali
 812bba50	File pengaturan rusak, jadi dipulihkan dari cadangan ({0:yyyy/MM/dd HH:mm}). File yang rusak disimpan sebagai config.broken_*.json.
-9ca7b4fa	ProFanController berhenti tiba-tiba, jadi proses pengawas memulainya ulang secara otomatis. Kendali dilanjutkan setelah kipas disetel ke putaran aman. Penyebabnya bisa dilihat di log.
+5b1e3ca8	Fanlume berhenti tiba-tiba, jadi proses pengawas memulainya ulang secara otomatis. Kendali dilanjutkan setelah kipas disetel ke putaran aman. Penyebabnya bisa dilihat di log.
 7b249720	Buka log
 3a7e2e72	Berhenti tiba-tiba dan dimulai ulang secara otomatis.
 c51b6c55	Aplikasi yang mulai otomatis bersama Windows ada di lokasi lain ({0}). Mungkin versi lama yang berjalan.
@@ -630,15 +630,15 @@ f5c17fde	Mulai otomatis tidak bisa didaftarkan ulang (periksa log).
 c08fb050	 / 
 48ccab47	Sensor yang dipakai tidak ditemukan
 9c32a53a	Perubahan perangkat keras terdeteksi
-58f4eb35	ProFanController: perubahan perangkat keras
+6317f1df	Fanlume: perubahan perangkat keras
 646e0b57	{0}. Konfirmasikan penggantian ke sensor baru di layar PC.
 9dddc76a	Ada masalah pada kendali kipas
 8ad6890e	{0} (demi keamanan dikendalikan BIOS; pemulihan dicoba otomatis)
-cdfd31fc	ProFanController: masalah kendali kipas
+f8b8b77e	Fanlume: masalah kendali kipas
 30b6b07e	Beberapa komponen tidak bisa dibaca
 465384a0	Kendali kipas pulih
 2a57fe9c	Kembali ke kendali normal.
-96429453	ProFanController: pulih
+25db31e1	Fanlume: pulih
 a8e2e175	Kendali kipas kembali normal.
 0d78d54c	config.json tidak bisa dibaca karena program lain terus membukanya (file tidak diubah).
 9b03cdae	File asli disimpan sebagai config.broken_<tanggal>.json.
@@ -742,8 +742,8 @@ e0f9ce74	Sensor putaran tidak bisa dibaca.
 da1c2ba4	Mengembalikan semua kipas ke kendali otomatis BIOS (motherboard) dan memastikan sudah kembali (jika gagal, berhenti di sini dan tidak mengubah apa pun)
 cf1947e1	Menghentikan kendali kipas dan menutup perangkat keras (driver PawnIO). Juga memberi tahu proses pengawas bahwa ini keluar dengan benar agar ikut berhenti (supaya penghentian kendali tidak dianggap gangguan lalu dimulai ulang)
 a1e35f8f	Menghentikan kendali pencahayaan dan melepas perangkat LED (OpenRGB, dll.), berhenti dengan efek yang sama seperti keluar biasa
-3958581c	Menghentikan tampilan ponsel dan menghapus izin yang ditambahkan ke Windows Firewall (ProFanController Web)
-62d5ef69	Menghapus mulai otomatis saat masuk (tugas "ProFanController" di Task Scheduler)
+1fdea37e	Menghentikan tampilan ponsel dan menghapus izin yang ditambahkan ke Windows Firewall (Fanlume Web)
+14f09703	Menghapus mulai otomatis saat masuk (tugas "Fanlume" di Task Scheduler)
 aa1f9cbb	Menghapus pengaturan rekaman saat crash (Windows Error Reporting\\LocalDumps di registri)
 7ca65cf7	Mencopot PawnIO (driver kendali kipas) dengan winget
 a6b6b0e5	Menutup aplikasi (dengan pembersihan yang sama seperti keluar biasa; tidak memulai ulang sendiri)
@@ -761,7 +761,7 @@ c96515c1	• Memulai ulang PC akan mengembalikan semuanya seperti semula.
 7fadc402	Saat ditutup, aplikasi berhenti (tidak memulai ulang sendiri). Pengaturan, log, dan rekaman tetap di folder.
 2735adba	Aplikasi tidak bisa dihapus selagi berjalan. Jika berhenti memakainya, hapus folder berikut setelah keluar (dibuka di File Explorer):\n{0}
 47bb6afa	File kosong.
-c7d09b2f	Ini bukan file pengaturan ProFanController.
+51d76551	Ini bukan file pengaturan Fanlume.
 59d09ada	Tidak berisi profil.
 8f6cc529	Konektor yang cocok tidak ditemukan (tidak diimpor)
 a63b0e26	Konektor yang sama
@@ -777,7 +777,7 @@ a63b0e26	Konektor yang sama
 1b6b7859	Baik
 0b497be2	Agak tinggi
 6eb7c426	Pendinginan kurang
-0e60185d	Uji pendinginan ProFanController  {0:yyyy/MM/dd HH:mm}
+b6e52ff7	Uji pendinginan Fanlume  {0:yyyy/MM/dd HH:mm}
 f18a2032	Profil: {0} / lama beban: {1:F0} mnt (semua inti CPU)
 a659e995	Penilaian              : {0}
 67316e06	Suhu CPU saat diam     : {0:F1} °C
@@ -939,8 +939,8 @@ fcc150e0	 (waktu yang dibandingkan: acuan {0} mnt, terbaru {1} mnt; perbedaan su
 d9bee020	Unduhan
 4a049af4	Desktop
 4033fb1e	Folder sementara
-e39c4b26	Tidak bisa menyalin ProFanController.exe
-d6132623	Notifikasi uji ProFanController
+687bc2e0	Tidak bisa menyalin Fanlume.exe
+2a3da751	Notifikasi uji Fanlume
 7be18f84	Ini notifikasi uji dari {0}. Jika notifikasi ini sampai, pengaturan sudah selesai.
 15278ea5	Terkirim. Periksa apakah sudah sampai di ponsel
 4ce2da04	Tidak bisa mengirim: {0}
@@ -1108,8 +1108,8 @@ b599c0f6	Nada tinggi (hi-hat)
 f898c734	Bukan alamat https: {0}
 9181a7c0	Aplikasi tertutup {1} kali dalam {0:F0} menit, jadi mulai ulang otomatis dihentikan.
 abf150b9	Mulai ulang otomatis dimatikan.
-08738032	ProFanController tertutup secara tak terduga.\n\nKipas ditetapkan pada putaran aman ({0:F0}%, pompa 100%). {1}\n
-a506afc7	Memulai ulang PC mengembalikan kendali ke BIOS (jika ProFanController dijalankan lagi, aplikasi yang mengendalikan).\n\nLog: 
+50be9a1c	Fanlume tertutup secara tak terduga.\n\nKipas ditetapkan pada putaran aman ({0:F0}%, pompa 100%). {1}\n
+af5a88ef	Memulai ulang PC mengembalikan kendali ke BIOS (jika Fanlume dijalankan lagi, aplikasi yang mengendalikan).\n\nLog: 
 5e11c7bc	Tidak bisa dipakai dari jaringan ini.
 3540eeb1	Terlalu banyak kunci yang salah, jadi untuk sementara tidak diterima. Tunggu sekitar 1 menit.
 aacf373e	Kunci akses salah. Gunakan URL yang tampil di layar pengaturan PC.
@@ -1217,13 +1217,13 @@ ca58240b	Pulihkan dari cadangan
 0a066c64	Pengaturan dari {0} dipulihkan (bisa dibatalkan dengan "Urungkan").
 4a2fd247	Cadangan ini tidak bisa dibaca.\n{0}
 1b7a6d56	Ekspor pengaturan
-d3b9501f	Pengaturan ProFanController (*.profan.json)|*.profan.json
-8c168c4d	ProFan-pengaturan_{0}_{1:yyyyMMdd}{2}
+f48eb65b	Pengaturan Fanlume (*.fanlume.json)|*.fanlume.json
+f1a7dc7f	Fanlume-pengaturan_{0}_{1:yyyyMMdd}{2}
 dd581e02	{0} profil diekspor. Kirim file ini ke orang lain dan minta mereka memuatnya lewat Pengaturan → "Keamanan & cadangan" → "Impor pengaturan".
 25f3627c	Tidak bisa mengekspor.\n{0}
 e6cdafd7	Tunggu sampai inisialisasi perangkat keras selesai.
 de0ce3c8	Impor pengaturan
-e259cc0d	Pengaturan ProFanController (*.profan.json;*.json)|*.profan.json;*.json
+70585dc7	Pengaturan Fanlume (*.fanlume.json;*.json)|*.fanlume.json;*.json
 49c7511d	File ini tidak bisa dimuat.\n{0}
 d01ee250	. Bisa dibatalkan dengan "Urungkan". Periksa kurva kipas yang diimpor sebelum memakainya.
 565076e7	Periksa kurva
@@ -1482,7 +1482,7 @@ b5ccd0c3	Diagnosis otomatis dari rekaman serta pemeriksaan debu dan keausan kipa
 acea69f7	Semua suhu, putaran, dan saluran kendali yang terdeteksi di PC ini, serta sensor virtual
 7626e5f7	Profil, peralihan otomatis, cara memulai, dan perilaku kendali secara keseluruhan
 d3bf5d86	DRY RUN dimatikan. Kendali kipas dimulai.
-7f6b69df	Pengawas ProFanController
+256148cd	Pengawas Fanlume
 0788f8eb	Belakang
 c85ab318	Depan
 0f616edd	Atas
@@ -1506,11 +1506,11 @@ f0a541e0	PawnIO masih belum ditemukan. Jika penginstal sudah dijalankan, mulai u
 3699179e	Dipakai di: {0}
 841ef786	(tidak dipakai)
 cbfdf76e	(hapus kipas ini)
-ad4fff7c	Perubahan perangkat keras - ProFanController
+5dde97f8	Perubahan perangkat keras - Fanlume
 41580e6f	Sensor atau konektor yang dipakai di pengaturan tidak ditemukan. Yang berperan sama di perangkat keras baru sudah dipilih otomatis.
 80403780	 Periksa isinya lalu tekan "Ganti dan terapkan" (pengaturan saat ini dicadangkan sebelum diubah; nanti juga bisa "Urungkan").\n
 8f763b23	Sampai saat itu, kurva yang memakai sensor yang tidak ditemukan berputar dengan putaran tetap demi keamanan (bisa diubah di Pengaturan → "Keamanan & cadangan").
-6dc976fa	Impor pengaturan - ProFanController
+d49f09aa	Impor pengaturan - Fanlume
 63ed3acb	Periksa konektor kipas dan sensor suhu di file ini akan dicocokkan ke yang mana di PC ini.
 65901272	 Yang bernama sama dipilih otomatis. Kipas yang diatur ke "(hapus kipas ini)" tidak diimpor.
 ecf8e3b5	PC asal ekspor: {0} ({1:yyyy/MM/dd HH:mm})
@@ -1525,7 +1525,7 @@ fe5a2b13	Kendalikan tetap 70%
 0c1d2ab2	Pantau dengan kendali BIOS
 d6d4423a	• {0} (kipas): mengikuti {1}
 9833252d	Profil yang dibuat: {0} / {1} / {2}\nProfil untuk sehari-hari: {3}\n\n
-0c5502cd	Buka ProFanController
+12b1edf7	Buka Fanlume
 9a801bfe	Boost (kecepatan penuh) 15 menit
 46dbb6b6	Senyap 30 menit
 670ac712	Senyap 2 jam
@@ -1604,3 +1604,8 @@ c8e0f349	Pemeriksaan suara kipas sedang berjalan.
 69ade00e	Penyiapan sedang berjalan.
 82fa072a	Pilih lagi bahasa tampilan setelah selesai.
 31040161	Dipasang dari {0} ke {1} dan dijalankan dari sana. Mulai sekarang aplikasi di folder ini yang berjalan (file unduhan boleh dihapus).
+4a3be0af	ProFanController (versi sebelumnya)
+67d28cec	Pengaturan dan rekaman versi sebelumnya (ProFanController) sudah dipindahkan dari {0}. Folder itu tidak dipakai lagi; periksa isinya, lalu boleh dihapus.
+82ee83eb	Tidak dapat menjalankan penghapus instalasi ({0}).\nSetelah aplikasi berhenti, hapus instalasi Fanlume dari Pengaturan Windows → Aplikasi → Aplikasi terinstal.
+adc330eb	Saat ditutup, aplikasi berhenti lalu penghapus instalasi menghapus aplikasi dan {0}. Fanlume juga hilang dari "Aplikasi terinstal" di Windows.
+f10b7201	Saat ditutup, aplikasi berhenti lalu penghapus instalasi menghapus aplikasi. Fanlume juga hilang dari "Aplikasi terinstal" di Windows. Pengaturan, log, dan rekaman tetap di folder.

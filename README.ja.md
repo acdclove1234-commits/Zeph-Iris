@@ -1,6 +1,8 @@
-# ProFanController
+# Fanlume
 
 [English](README.md) | **日本語**
+
+> 6.6.1 までの名前は **ProFanController** です。設定と記録は Fanlume にそのまま引き継げます（「[ProFanController から移るとき](#profancontroller-から移るとき)」を見てください）。
 
 Windows 用のファン制御・監視ツールです。マザーボードのファン端子を温度に合わせて制御し、OpenRGB と連携して PC の LED も光らせます（温度・レインボー・音楽連動など）。
 
@@ -48,27 +50,31 @@ Windows 用のファン制御・監視ツールです。マザーボードのフ
 - **グラボの LED の直接書き込み**: 上の型番だけです。ほかのグラボは OpenRGB を通して光らせます（ライティング →「詳細」で、確かめていない型番でも試せます）
 - **グラボのファンの制御**: 既定ではオフです（設定でオンにしたときだけ）
 
-## 使い方（配布用の zip）
+## 使い方（インストーラー）
 
-1. [Releases](../../releases) から `ProFanController-<版>-windows-x64.zip` をダウンロードして展開する
-2. `ProFanController.exe` を起動する。ダウンロード・デスクトップ・zip の中から開いたときは、自分で `C:\Tools\ProFanController` に入って、そこから起動し直します（ほかの場所なら、その場所のまま動きます）。PawnIO が入っていなければ、セットアップの最初の画面が自動で入れて（winget を使います）、アプリを起動し直します
-   （うまくいかないときは「1_PawnIO をインストール.bat」を右クリック →「管理者として実行」するか、[公式サイト](https://pawnio.eu/)のインストーラーを使う）
+1. [Releases](../../releases) から `Fanlume-<版>-setup.exe` をダウンロードして実行する。`C:\Program Files\Fanlume` に入り、スタートメニューにも登録されます。コード署名をしていないため「Windows によって PC が保護されました」と出たら、「詳細情報」→「実行」を押してください
+2. 最後の画面の「Fanlume を実行する」はチェックしたままにする。PawnIO が入っていなければ、セットアップの最初の画面が自動で入れて（winget を使います）、アプリを起動し直します
+   （うまくいかないときは、アプリのフォルダーの「1_PawnIO をインストール.bat」を右クリック →「管理者として実行」するか、[公式サイト](https://pawnio.eu/)のインストーラーを使う）
 3. セットアップの案内に沿って、ファン端子に名前を付ける
 
-詳しくは、zip に入っている「はじめにお読みください.txt」（英語は `README_en.txt`。このリポジトリでは `Distribution/` の中）を見てください。新しい版への更新は、新しい zip を展開せずにダウンロードフォルダーに置いて「2_更新.bat」を実行します（設定・記録はそのまま）。
+詳しくは、アプリのフォルダーにある「はじめにお読みください.txt」（英語は `README_en.txt`。このリポジトリでは `Distribution/` の中）を見てください。新しい版への更新は、新しいインストーラーを実行するだけです。動いている Fanlume を正しく終了してから（ファンは BIOS の設定に戻ります）入れ替え、そのまま起動し直せます（設定・記録はそのまま）。
 
-使うのをやめるときは、設定 →「安全・バックアップ」→「アンインストール（お片付け）」を使います。ファンを BIOS の自動制御に戻したことを確かめてから、ライティングの制御・ログオン時の自動起動・ファイアウォールの許可などを片付けて終了します（設定・記録の削除と PawnIO のアンインストールは、選んだときだけ）。最後に、アプリのフォルダーを自分で削除します。
+使うのをやめるときは、Windows の「設定」→「アプリ」→「インストールされているアプリ」からアンインストールします（Fanlume を終了し、ログオン時の自動起動・ファイアウォールの許可などを消して、設定・記録も消すかを尋ねます）。アプリの設定 →「安全・バックアップ」→「アンインストール（お片付け）」からも行えます。こちらは PawnIO のアンインストールも選べ、最後にアンインストーラーを実行します。
+
+### ProFanController から移るとき
+
+Fanlume のインストーラーを実行します。動いている ProFanController は、先に正しく終了させます。Fanlume をはじめて起動すると、`C:\Tools\ProFanController` の設定と記録を写し、ログオン時の自動起動とスマホ監視用のファイアウォールの許可を新しい名前に切り替えます。前のフォルダーはそのまま残すので、Fanlume が動くのを確かめてから削除してください。ProFanController で書き出した設定ファイル（`*.profan.json`）も読み込めます。
 
 ## ソースからのビルド
 
-.NET 8 SDK が必要です。
+.NET 8 SDK が必要です。インストーラーを作るには [Inno Setup 6](https://jrsoftware.org/isinfo.php) も必要です（`winget install JRSoftware.InnoSetup`）。
 
 ```powershell
 # 動作確認（Release でビルドして起動）
 dotnet build -c Release
 # ロジックのテスト
 dotnet run -c Release --project Tests/LogicTests
-# 配布用の zip を作る（.NET ランタイムごと exe 1 つに発行し、Distribution の中身と一緒にまとめる）
+# インストーラーを作る（.NET ランタイムごと exe 1 つに発行し、Distribution の中身と一緒に Installer/Fanlume.iss でまとめる）
 powershell -ExecutionPolicy Bypass -File Distribution/make-dist.ps1
 ```
 
@@ -87,7 +93,8 @@ powershell -ExecutionPolicy Bypass -File Distribution/make-dist.ps1
 | `Audio/`・`Core/Audio/` | 音楽連動の音の取り込みと分析（帯域・キック・テンポ） |
 | `UI/`・`MainWindow*` | 画面（WPF） |
 | `Tests/LogicTests/` | ロジックのテスト（画面・実機なしで動く） |
-| `Distribution/` | 配布用の zip に入れる説明書（日本語・英語）・バッチ・ライセンスと、zip を作るスクリプト |
+| `Distribution/` | アプリと一緒に入れる説明書（日本語・英語）・バッチ・ライセンスと、インストーラーを作るスクリプト |
+| `Installer/` | インストーラーの Inno Setup のスクリプト（`Fanlume.iss`） |
 | `Assets/Lang/` | 画面の言葉の翻訳表（言語ごとに 1 ファイル）と、元の文の一覧（`keys.tsv`） |
 | `tools/` | 開発用の道具（同梱フォントの文字を絞る `FontSubset`、訳す文を一覧にする `LocTool` など。アプリには入らない） |
 
@@ -101,4 +108,4 @@ powershell -ExecutionPolicy Bypass -File Distribution/make-dist.ps1
 
 ## ライセンス
 
-ProFanController は [MIT License](LICENSE) です。使っている部品（LibreHardwareMonitorLib は MPL-2.0、NAudio・QRCoder・.NET は MIT、フォントは SIL Open Font License 1.1 など）のライセンスは [CREDITS.txt](CREDITS.txt) にまとめています。OpenRGB・PawnIO・Ollama はこのリポジトリに含まず、別に入れて使います。
+Fanlume は [MIT License](LICENSE) です。使っている部品（LibreHardwareMonitorLib は MPL-2.0、NAudio・QRCoder・.NET は MIT、フォントは SIL Open Font License 1.1 など）のライセンスは [CREDITS.txt](CREDITS.txt) にまとめています。インストーラーは Inno Setup で作っています。OpenRGB・PawnIO・Ollama はこのリポジトリに含まず、別に入れて使います。

@@ -1,4 +1,4 @@
-# ProFanController UI text (vi). Each line: hash of the Japanese source text, TAB, translation. Line breaks: backslash + n.
+# Fanlume UI text (vi). Each line: hash of the Japanese source text, TAB, translation. Line breaks: backslash + n.
 9cefb48e	Đang khởi động…
 3c3d953a	Đang dò tìm phần cứng
 68a076e4	Tạm dừng (trả về BIOS)
@@ -469,7 +469,7 @@ db0f8cfc	Giá điện mỗi kWh
 b4d79a66	CPU và GPU dùng giá trị cảm biến. Không tính màn hình và loa. Không phải đo tại ổ cắm nên chỉ là ước tính.
 69355ed4	Tính năng an toàn
 619b1ea2	Dùng tiến trình giám sát (khuyên dùng)
-d1086ffa	Tránh để quạt bị kẹt ở tốc độ thấp khi ứng dụng bị buộc tắt hoặc bị treo. Task Manager sẽ hiện 2 ProFanController, một trong số đó là tiến trình giám sát
+615a97bc	Tránh để quạt bị kẹt ở tốc độ thấp khi ứng dụng bị buộc tắt hoặc bị treo. Task Manager sẽ hiện 2 Fanlume, một trong số đó là tiến trình giám sát
 f739cc9b	Tốc độ quay lúc đó
 43c454af	Bơm luôn ở 100%
 d063c0c0	Tự khởi động lại ứng dụng (tối đa 3 lần trong 10 phút, quá mức sẽ hiện thông báo)
@@ -515,12 +515,12 @@ cb0aedd5	Cảm biến nhiệt độ
 772bcb56	Thiết lập lại từ đầu bằng trình hướng dẫn
 1c166250	Để sau
 381b7b8a	Thay thế và áp dụng
-65d960e8	Thiết lập - ProFanController
+50ab5a2c	Thiết lập - Fanlume
 f918c02e	1  Chào mừng
 38684fb3	2  Nhận diện cổng
 76236dbf	3  Phương án làm mát
 b303c749	4  Hoàn tất
-99a4e0cb	Chào mừng đến với ProFanController
+890d0c09	Chào mừng đến với Fanlume
 26578394	Trình hướng dẫn này kiểm tra những gì được cắm vào các cổng quạt trên bo mạch chủ,\nrồi tự tạo đường cong quạt và các cấu hình (Yên tĩnh / Tiêu chuẩn / Hiệu năng) phù hợp với PC của bạn.
 80f88c90	Chuẩn bị
 b1838111	• Hãy ở cạnh thùng máy để nghe và thấy quạt quay.\n• Hãy tắt các tác vụ nặng (như game).\n• Cài đặt hiện tại sẽ bị ghi đè, nhưng sau khi xong có thể quay lại bằng "Hoàn tác".
@@ -549,8 +549,8 @@ b58afa04	Đã sẵn sàng
 aceb0a14	Hủy
 f193a383	Quay lại
 303830fc	Tiếp
-7b1ba115	Gỡ cài đặt (dọn dẹp) - ProFanController
-a4fe8394	Trước khi ngừng dùng ProFanController, đưa PC về trạng thái trước khi cài ứng dụng. Nhấn "Dọn dẹp và thoát" sẽ lần lượt làm các việc sau từ trên xuống.
+2a910283	Gỡ cài đặt (dọn dẹp) - Fanlume
+caf7be2a	Trước khi ngừng dùng Fanlume, đưa PC về trạng thái trước khi cài ứng dụng. Nhấn "Dọn dẹp và thoát" sẽ lần lượt làm các việc sau từ trên xuống.
 2ed98b28	Làm thêm (không chọn thì không làm)
 9dc58ae6	Xóa cả cài đặt, nhật ký và bản ghi
 f6fb6e2a	Gỡ cả PawnIO (driver điều khiển quạt)
@@ -583,9 +583,9 @@ fe1e7d87	 (khởi động lại PC sẽ trả quyền điều khiển cho BIOS).
 e39402e8	Đã dừng điều khiển đèn và giải phóng thiết bị
 8008dbae	Không dùng điều khiển đèn (đã đóng kết nối)
 775adf46	Xem trên điện thoại
-817c491e	Không xóa được quy tắc tường lửa. Hãy xóa "ProFanController Web" trong "Bảo mật Windows" → "Tường lửa và bảo vệ mạng" → "Cài đặt nâng cao" → "Quy tắc Đến".
+63aa333a	Không xóa được quy tắc tường lửa. Hãy xóa "Fanlume Web" trong "Bảo mật Windows" → "Tường lửa và bảo vệ mạng" → "Cài đặt nâng cao" → "Quy tắc Đến".
 629589af	Đã dừng xem trên điện thoại và xóa quy tắc tường lửa
-1d979f07	Không xóa được tự khởi động. Hãy xóa "ProFanController" trong Task Scheduler (Task Scheduler Library).
+31af9d29	Không xóa được tự khởi động. Hãy xóa "Fanlume" trong Task Scheduler (Task Scheduler Library).
 bc13583b	Đã xóa tự khởi động khi đăng nhập
 22c99fc8	Không xóa được cài đặt ghi lại khi bị lỗi (HKEY_LOCAL_MACHINE\\{0}). Để nguyên cũng không hại gì.
 14dd713f	Đã xóa cài đặt ghi lại khi bị lỗi
@@ -594,7 +594,7 @@ d66766d3	Không làm ở đây
 1e82ca4a	Không biết đường dẫn của tệp thực thi.
 eb8f4a4f	Không chuẩn bị được việc xóa cài đặt, nhật ký và bản ghi ({0}).\nSau khi ứng dụng thoát, hãy xóa cả thư mục:\n{1}
 8df0902c	Mở thư mục
-c5234463	ProFanController vẫn đang chạy nên chưa xóa cài đặt, nhật ký và bản ghi.\n
+fa3ff255	Fanlume vẫn đang chạy nên chưa xóa cài đặt, nhật ký và bản ghi.\n
 32a27012	Hãy thoát ứng dụng rồi xóa cả thư mục sau:\n{0}
 ecdec9de	Đã xóa {0}.\n\n
 a261a21a	Khi đóng thông báo này, Explorer sẽ mở thư mục ứng dụng. Xóa cả thư mục là xong việc dọn dẹp:\n{0}
@@ -602,18 +602,18 @@ a261a21a	Khi đóng thông báo này, Explorer sẽ mở thư mục ứng dụng
 d6750fd2	\n•
 bf71d238	\n…và {0} mục khác
 df6134ea	\n\nSau khi đóng thông báo này, hãy xóa cả thư mục sau:\n{0}
-10d89683	Dọn dẹp ProFanController
-2d7f91ad	ProFanController đã đang chạy.\nHãy mở từ biểu tượng ở khay hệ thống.
+766fce35	Dọn dẹp Fanlume
+da630a7f	Fanlume đã đang chạy.\nHãy mở từ biểu tượng ở khay hệ thống.
 ec6a9bb6	Lưu bản ghi
 c0fd45c5	Vẫn đang chạy trong khay hệ thống. Để thoát, hãy nhấp phải vào biểu tượng.
-77d62ee9	ProFanController: đã phục hồi
+0a3f2987	Fanlume: đã phục hồi
 977b8544	Đã tự động chuyển cấu hình
 790c11cc	Phát hiện {0} → {1}
-fa5d05c3	ProFanController: bảo trì
+a75f3e15	Fanlume: bảo trì
 5b860ae3	Đang chạy ở chế độ DRY RUN (chế độ thử). Chỉ tính tốc độ theo nhiệt độ, không điều khiển quạt.
 874003cc	Bắt đầu điều khiển
 812bba50	Tệp cài đặt bị hỏng nên đã khôi phục từ bản sao lưu ({0:yyyy/MM/dd HH:mm}). Tệp hỏng được giữ lại dưới tên config.broken_*.json.
-9ca7b4fa	ProFanController đã thoát bất ngờ nên tiến trình giám sát đã tự khởi động lại. Đã đặt quạt về tốc độ an toàn rồi tiếp tục điều khiển. Có thể xem nguyên nhân trong nhật ký.
+5b1e3ca8	Fanlume đã thoát bất ngờ nên tiến trình giám sát đã tự khởi động lại. Đã đặt quạt về tốc độ an toàn rồi tiếp tục điều khiển. Có thể xem nguyên nhân trong nhật ký.
 7b249720	Mở nhật ký
 3a7e2e72	Đã thoát bất ngờ nên được tự khởi động lại.
 c51b6c55	Ứng dụng tự chạy cùng Windows là ứng dụng ở vị trí khác ({0}). Có thể một phiên bản cũ đang chạy.
@@ -630,15 +630,15 @@ f5c17fde	Không đăng ký lại được tự khởi động (hãy xem nhật k
 c08fb050	 / 
 48ccab47	Không tìm thấy cảm biến đang dùng
 9c32a53a	Phát hiện thay đổi phần cứng
-58f4eb35	ProFanController: thay đổi phần cứng
+6317f1df	Fanlume: thay đổi phần cứng
 646e0b57	{0}. Hãy xác nhận việc chuyển sang cảm biến mới trên màn hình PC.
 9dddc76a	Việc điều khiển quạt có vấn đề
 8ad6890e	{0} (để an toàn đã giao cho BIOS điều khiển; sẽ tự thử khôi phục)
-cdfd31fc	ProFanController: sự cố điều khiển quạt
+f8b8b77e	Fanlume: sự cố điều khiển quạt
 30b6b07e	Không đọc được một số linh kiện
 465384a0	Đã khôi phục điều khiển quạt
 2a57fe9c	Đã quay lại điều khiển bình thường.
-96429453	ProFanController: đã khôi phục
+25db31e1	Fanlume: đã khôi phục
 a8e2e175	Việc điều khiển quạt đã bình thường trở lại.
 0d78d54c	Không đọc được config.json vì một chương trình khác đang mở nó (tệp vẫn nguyên).
 9b03cdae	Tệp gốc được giữ lại dưới tên config.broken_<thời gian>.json.
@@ -742,8 +742,8 @@ e0f9ce74	Không đọc được cảm biến tốc độ quay.
 da1c2ba4	Trả mọi quạt về chế độ tự điều khiển của BIOS (bo mạch chủ) và kiểm tra đã trả về (nếu không được sẽ dừng ở đây và không thay đổi gì)
 cf1947e1	Dừng điều khiển quạt và đóng phần cứng (driver PawnIO). Cũng báo cho tiến trình giám sát rằng đây là "thoát đúng cách" để nó kết thúc (tránh coi việc dừng là bất thường rồi khởi động lại)
 a1e35f8f	Dừng điều khiển đèn và giải phóng thiết bị LED (OpenRGB…), kết thúc bằng hiệu ứng giống như khi thoát bình thường
-3958581c	Dừng xem trên điện thoại và xóa quy tắc đã thêm vào Tường lửa Windows (ProFanController Web)
-62d5ef69	Xóa tự khởi động khi đăng nhập (tác vụ "ProFanController" trong Task Scheduler)
+1fdea37e	Dừng xem trên điện thoại và xóa quy tắc đã thêm vào Tường lửa Windows (Fanlume Web)
+14f09703	Xóa tự khởi động khi đăng nhập (tác vụ "Fanlume" trong Task Scheduler)
 aa1f9cbb	Xóa cài đặt ghi lại khi bị lỗi (Windows Error Reporting\\LocalDumps trong registry)
 7ca65cf7	Gỡ PawnIO (driver điều khiển quạt) bằng winget
 a6b6b0e5	Thoát ứng dụng (dọn dẹp như khi thoát bình thường; không tự khởi động lại)
@@ -761,7 +761,7 @@ c96515c1	• Khởi động lại PC sẽ đưa mọi thứ về như cũ.
 7fadc402	Đóng lại thì ứng dụng sẽ thoát (không tự khởi động lại). Cài đặt, nhật ký và bản ghi vẫn ở trong thư mục.
 2735adba	Không thể xóa ứng dụng khi đang chạy. Nếu ngừng dùng, hãy xóa thư mục sau sau khi thoát (sẽ mở bằng Explorer):\n{0}
 47bb6afa	Tệp trống.
-c7d09b2f	Đây không phải tệp cài đặt của ProFanController.
+51d76551	Đây không phải tệp cài đặt của Fanlume.
 59d09ada	Không có cấu hình nào.
 8f6cc529	Không tìm thấy cổng tương ứng (không nhập)
 a63b0e26	Cùng cổng
@@ -777,7 +777,7 @@ a63b0e26	Cùng cổng
 1b6b7859	Tốt
 0b497be2	Hơi cao
 6eb7c426	Làm mát chưa đủ
-0e60185d	Kiểm tra làm mát ProFanController  {0:yyyy/MM/dd HH:mm}
+b6e52ff7	Kiểm tra làm mát Fanlume  {0:yyyy/MM/dd HH:mm}
 f18a2032	Cấu hình: {0} / thời gian tải: {1:F0} phút (toàn bộ nhân CPU)
 a659e995	Đánh giá                : {0}
 67316e06	Nhiệt độ CPU khi nghỉ  : {0:F1} °C
@@ -939,8 +939,8 @@ fcc150e0	 (thời gian so sánh: mốc {0} phút, gần đây {1} phút; đã tr
 d9bee020	Tải xuống
 4a049af4	Màn hình nền
 4033fb1e	Thư mục tạm
-e39c4b26	Không sao chép được ProFanController.exe
-d6132623	Thông báo thử của ProFanController
+687bc2e0	Không sao chép được Fanlume.exe
+2a3da751	Thông báo thử của Fanlume
 7be18f84	Đây là thông báo thử từ {0}. Nếu nhận được thông báo này là đã cài đặt xong.
 15278ea5	Đã gửi. Hãy kiểm tra xem điện thoại đã nhận được chưa
 4ce2da04	Không gửi được: {0}
@@ -1108,8 +1108,8 @@ b599c0f6	Âm cao (hi-hat)
 f898c734	Không phải địa chỉ https: {0}
 9181a7c0	Ứng dụng đã thoát {1} lần trong {0:F0} phút nên đã ngừng tự khởi động lại.
 abf150b9	Tự khởi động lại đang tắt.
-08738032	ProFanController đã thoát bất ngờ.\n\nQuạt đã được cố định ở tốc độ an toàn ({0:F0}%, bơm 100%). {1}\n
-a506afc7	Khởi động lại PC sẽ trả quyền điều khiển về BIOS (nếu mở lại ProFanController, ứng dụng sẽ điều khiển).\n\nNhật ký: 
+50be9a1c	Fanlume đã thoát bất ngờ.\n\nQuạt đã được cố định ở tốc độ an toàn ({0:F0}%, bơm 100%). {1}\n
+af5a88ef	Khởi động lại PC sẽ trả quyền điều khiển về BIOS (nếu mở lại Fanlume, ứng dụng sẽ điều khiển).\n\nNhật ký: 
 5e11c7bc	Không thể dùng từ mạng này.
 3540eeb1	Nhập sai khóa quá nhiều lần nên tạm thời không nhận. Hãy đợi khoảng 1 phút.
 aacf373e	Khóa truy cập không đúng. Hãy dùng URL hiển thị trên màn hình cài đặt của PC.
@@ -1217,13 +1217,13 @@ ca58240b	Khôi phục từ bản sao lưu
 0a066c64	Đã trở về cài đặt lúc {0} (có thể hủy bằng "Hoàn tác").
 4a2fd247	Không đọc được bản sao lưu này.\n{0}
 1b7a6d56	Xuất cài đặt
-d3b9501f	Cài đặt ProFanController (*.profan.json)|*.profan.json
-8c168c4d	ProFan-caidat_{0}_{1:yyyyMMdd}{2}
+f48eb65b	Cài đặt Fanlume (*.fanlume.json)|*.fanlume.json
+f1a7dc7f	Fanlume-caidat_{0}_{1:yyyyMMdd}{2}
 dd581e02	Đã xuất {0} cấu hình. Hãy gửi tệp này cho người kia và nhờ họ nhập bằng Cài đặt → "An toàn & sao lưu" → "Nhập cài đặt".
 25f3627c	Không xuất được.\n{0}
 e6cdafd7	Hãy đợi đến khi khởi tạo phần cứng xong.
 de0ce3c8	Nhập cài đặt
-e259cc0d	Cài đặt ProFanController (*.profan.json;*.json)|*.profan.json;*.json
+70585dc7	Cài đặt Fanlume (*.fanlume.json;*.json)|*.fanlume.json;*.json
 49c7511d	Không nhập được tệp này.\n{0}
 d01ee250	. Có thể hủy bằng "Hoàn tác". Hãy xem đường cong của các quạt đã nhập trước khi dùng.
 565076e7	Xem đường cong
@@ -1482,7 +1482,7 @@ b5ccd0c3	Tự chẩn đoán từ bản ghi và kiểm tra bụi, độ xuống c
 acea69f7	Mọi nhiệt độ, tốc độ, kênh điều khiển phát hiện trên PC này và cảm biến ảo
 7626e5f7	Cấu hình, tự động chuyển, cách khởi động và hoạt động chung của việc điều khiển
 d3bf5d86	Đã tắt DRY RUN. Đang bắt đầu điều khiển quạt.
-7f6b69df	Trình giám sát ProFanController
+256148cd	Trình giám sát Fanlume
 0788f8eb	Mặt lưng
 c85ab318	Trước
 0f616edd	Trên
@@ -1506,11 +1506,11 @@ f0a541e0	Vẫn chưa tìm thấy PawnIO. Nếu đã chạy trình cài đặt, h
 3699179e	Nơi sử dụng: {0}
 841ef786	(không dùng)
 cbfdf76e	(xóa quạt này)
-ad4fff7c	Thay đổi phần cứng - ProFanController
+5dde97f8	Thay đổi phần cứng - Fanlume
 41580e6f	Không tìm thấy cảm biến hoặc cổng dùng trong cài đặt. Đã tự chọn các mục có cùng vai trò trên phần cứng mới.
 80403780	 Hãy kiểm tra nội dung rồi nhấn "Thay thế và áp dụng" (cài đặt hiện tại sẽ được sao lưu trước khi thay đổi; sau này cũng có thể "Hoàn tác").\n
 8f763b23	Trong lúc đó, các đường cong dùng cảm biến không tìm thấy chạy ở tốc độ cố định để an toàn (có thể đổi trong Cài đặt → "An toàn & sao lưu").
-6dc976fa	Nhập cài đặt - ProFanController
+d49f09aa	Nhập cài đặt - Fanlume
 63ed3acb	Hãy kiểm tra cổng quạt và cảm biến nhiệt độ trong tệp sẽ ứng với mục nào trên PC này.
 65901272	 Các mục cùng tên được tự động chọn. Quạt đặt là "(xóa quạt này)" sẽ không được nhập.
 ecf8e3b5	PC đã xuất: {0} ({1:yyyy/MM/dd HH:mm})
@@ -1525,7 +1525,7 @@ fe5a2b13	Điều khiển cố định 70%
 0c1d2ab2	Giữ BIOS điều khiển và giám sát
 d6d4423a	• {0} (quạt): theo {1}
 9833252d	Các cấu hình sẽ tạo: {0} / {1} / {2}\nCấu hình dùng thường ngày: {3}\n\n
-0c5502cd	Mở ProFanController
+12b1edf7	Mở Fanlume
 9a801bfe	Tăng tốc (tối đa) 15 phút
 46dbb6b6	Yên tĩnh 30 phút
 670ac712	Yên tĩnh 2 giờ
@@ -1604,3 +1604,8 @@ c8e0f349	Đang nghe thử tiếng quạt.
 69ade00e	Đang thiết lập.
 82fa072a	Hãy chọn lại ngôn ngữ hiển thị sau khi xong.
 31040161	Đã cài từ {0} vào {1} và khởi động từ đó. Từ nay ứng dụng trong thư mục này sẽ chạy (có thể xóa các tệp đã tải về).
+4a3be0af	ProFanController (phiên bản trước)
+67d28cec	Đã chuyển cài đặt và bản ghi của phiên bản trước (ProFanController) từ {0}. Thư mục đó không còn được dùng nữa; hãy kiểm tra nội dung rồi có thể xóa.
+82ee83eb	Không thể khởi động trình gỡ cài đặt ({0}).\nSau khi ứng dụng thoát, hãy gỡ Fanlume trong Cài đặt Windows → Ứng dụng → Ứng dụng đã cài đặt.
+adc330eb	Đóng lại thì ứng dụng sẽ thoát, sau đó trình gỡ cài đặt xóa ứng dụng và {0}. Fanlume cũng biến mất khỏi "Ứng dụng đã cài đặt" của Windows.
+f10b7201	Đóng lại thì ứng dụng sẽ thoát, sau đó trình gỡ cài đặt xóa ứng dụng. Fanlume cũng biến mất khỏi "Ứng dụng đã cài đặt" của Windows. Cài đặt, nhật ký và bản ghi vẫn ở trong thư mục.

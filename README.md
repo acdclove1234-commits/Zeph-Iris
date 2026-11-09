@@ -1,6 +1,8 @@
-# ProFanController
+# Fanlume
 
 **English** | [日本語](README.ja.md)
+
+> Up to version 6.6.1 this app was called **ProFanController**. Settings and records carry over to Fanlume (see [Moving from ProFanController](#moving-from-profancontroller)).
 
 A fan control and monitoring tool for Windows. It drives the motherboard's fan headers from temperature curves and, together with OpenRGB, lights the PC's LEDs (temperature, rainbow, music sync and more).
 
@@ -49,27 +51,31 @@ What happens with unsupported or unchecked parts:
 - **Direct LED writes to graphics cards**: only for the model above. Other cards are lit through OpenRGB (you can try unchecked models under Lighting → Advanced)
 - **Graphics card fan control**: off by default (only when you turn it on in Settings)
 
-## Getting started (release zip)
+## Getting started (installer)
 
-1. Download `ProFanController-<version>-windows-x64.zip` from [Releases](../../releases) and extract it
-2. Start `ProFanController.exe`. Opened from Downloads, the Desktop or inside the zip, it installs itself to `C:\Tools\ProFanController` and starts again from there (anywhere else, it runs where it is). If PawnIO is not installed, the first setup screen installs it (with winget) and restarts the app
-   (if that fails, right-click `1_PawnIO をインストール.bat` ("install PawnIO") → Run as administrator, or use the installer from the [official site](https://pawnio.eu/))
+1. Download `Fanlume-<version>-setup.exe` from [Releases](../../releases) and run it. It installs to `C:\Program Files\Fanlume` and adds a Start menu entry. The installer is not code-signed, so Windows may show "Windows protected your PC": press "More info" → "Run anyway"
+2. Leave "Launch Fanlume" ticked on the last page. If PawnIO is not installed, the first setup screen installs it (with winget) and restarts the app
+   (if that fails, right-click `1_PawnIO をインストール.bat` ("install PawnIO") in the app folder → Run as administrator, or use the installer from the [official site](https://pawnio.eu/))
 3. Follow the setup to name your fan headers
 
-See `README_en.txt` in the zip (in this repository under `Distribution/`) for details. To update, put the new zip — still zipped — in your Downloads folder and run `2_更新.bat` ("update"); settings and records are kept.
+See `README_en.txt` in the app folder (in this repository under `Distribution/`) for details. To update, run the newer installer: it closes the running Fanlume properly (the fans go back to the BIOS settings), replaces the files and can start it again; settings and records are kept.
 
-To stop using the app, use Settings → Safety & backup → Uninstall (clean up). It checks that the fans are back under BIOS control, then removes the lighting control, the logon start, the firewall rule and so on (deleting settings and records, and uninstalling PawnIO, only if you choose). Finally, delete the app folder yourself.
+To stop using the app, uninstall it from Windows Settings → Apps → Installed apps (it closes Fanlume, removes the logon start and the firewall rule, and asks whether to delete settings and records), or use Settings → Safety & backup → Uninstall (clean up) in the app, which also offers to uninstall PawnIO and then runs the uninstaller.
+
+### Moving from ProFanController
+
+Run the Fanlume installer. It closes a running ProFanController properly first. When Fanlume starts for the first time, it copies the settings and records from `C:\Tools\ProFanController`, and moves the logon start and the firewall rule for the phone view to the new name. The old folder is left as it is; delete it once you have checked Fanlume works. Settings files exported by ProFanController (`*.profan.json`) can still be imported.
 
 ## Building from source
 
-Requires the .NET 8 SDK.
+Requires the .NET 8 SDK. Building the installer also needs [Inno Setup 6](https://jrsoftware.org/isinfo.php) (`winget install JRSoftware.InnoSetup`).
 
 ```powershell
 # Build and run (Release)
 dotnet build -c Release
 # Logic tests
 dotnet run -c Release --project Tests/LogicTests
-# Release zip (publishes one exe including the .NET runtime, packed with the contents of Distribution)
+# Installer (publishes one exe including the .NET runtime, adds the contents of Distribution, and builds Installer/Fanlume.iss)
 powershell -ExecutionPolicy Bypass -File Distribution/make-dist.ps1
 ```
 
@@ -88,7 +94,8 @@ The `config.json` at the top is a development sample (copied to the build output
 | `Audio/`, `Core/Audio/` | music sync: audio capture and analysis (bands, kicks, tempo) |
 | `UI/`, `MainWindow*` | user interface (WPF) |
 | `Tests/LogicTests/` | logic tests (run without the UI or hardware) |
-| `Distribution/` | guides (Japanese and English), batch files and licences for the release zip, and the script that builds it |
+| `Distribution/` | guides (Japanese and English), a batch file and licences installed with the app, and the script that builds the installer |
+| `Installer/` | the Inno Setup script for the installer (`Fanlume.iss`) |
 | `Assets/Lang/` | translation tables for the user interface (one file per language) and the list of source texts (`keys.tsv`) |
 | `tools/` | development tools (for example `FontSubset`, which trims the bundled font, and `LocTool`, which lists the texts to translate; not part of the app) |
 
@@ -102,4 +109,4 @@ The texts on screen are written in Japanese in the source code and looked up in 
 
 ## License
 
-ProFanController is under the [MIT License](LICENSE). Licences of the components it uses (LibreHardwareMonitorLib: MPL-2.0; NAudio, QRCoder, .NET: MIT; fonts: SIL Open Font License 1.1; and others) are listed in [CREDITS.txt](CREDITS.txt). OpenRGB, PawnIO and Ollama are not included in this repository; install them separately.
+Fanlume is under the [MIT License](LICENSE). Licences of the components it uses (LibreHardwareMonitorLib: MPL-2.0; NAudio, QRCoder, .NET: MIT; fonts: SIL Open Font License 1.1; and others) are listed in [CREDITS.txt](CREDITS.txt). The installer is built with Inno Setup. OpenRGB, PawnIO and Ollama are not included in this repository; install them separately.

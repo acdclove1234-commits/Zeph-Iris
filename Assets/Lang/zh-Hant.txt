@@ -1,4 +1,4 @@
-# ProFanController UI text (zh-Hant). Each line: hash of the Japanese source text, TAB, translation. Line breaks: backslash + n.
+# Fanlume UI text (zh-Hant). Each line: hash of the Japanese source text, TAB, translation. Line breaks: backslash + n.
 9cefb48e	正在初始化…
 3c3d953a	正在偵測硬體
 68a076e4	暫停（交還 BIOS）
@@ -469,7 +469,7 @@ db0f8cfc	每 kWh 電價
 b4d79a66	CPU 與 GPU 使用感測器的值。不包含螢幕與喇叭。並非在插座量測的值，僅供參考。
 69355ed4	安全功能
 619b1ea2	使用看門狗程序（推薦）
-d1086ffa	防止應用程式被強制結束或當機時風扇停在低轉速。工作管理員中會顯示兩個 ProFanController，其中一個是看門狗
+615a97bc	防止應用程式被強制結束或當機時風扇停在低轉速。工作管理員中會顯示兩個 Fanlume，其中一個是看門狗
 f739cc9b	此時的轉速
 43c454af	水泵一律為 100%
 d063c0c0	自動重新啟動應用程式（10 分鐘內最多 3 次，超過則顯示提示）
@@ -515,12 +515,12 @@ cb0aedd5	溫度感測器
 772bcb56	用設定精靈從頭設定
 1c166250	稍後
 381b7b8a	取代並套用
-65d960e8	設定 - ProFanController
+50ab5a2c	設定 - Fanlume
 f918c02e	1  歡迎
 38684fb3	2  識別插座
 76236dbf	3  散熱方針
 b303c749	4  完成
-99a4e0cb	歡迎使用 ProFanController
+890d0c09	歡迎使用 Fanlume
 26578394	此精靈會確認主機板的風扇插座上接了什麼，\n並自動建立適合您電腦的風扇曲線與設定檔（靜音／標準／效能）。
 80f88c90	準備
 b1838111	・請待在機殼旁，以便聽到風扇聲音、看到轉動。\n・請關閉吃資源的程式（例如遊戲）。\n・目前的設定會被覆寫，但完成後可以用「復原」還原。
@@ -549,8 +549,8 @@ b58afa04	準備就緒
 aceb0a14	取消
 f193a383	上一步
 303830fc	下一步
-7b1ba115	解除安裝（清理） - ProFanController
-a4fe8394	停止使用 ProFanController 之前，把電腦恢復到安裝本應用程式之前的狀態。按「清理並結束」後，會從上到下依序執行以下操作。
+2a910283	解除安裝（清理） - Fanlume
+caf7be2a	停止使用 Fanlume 之前，把電腦恢復到安裝本應用程式之前的狀態。按「清理並結束」後，會從上到下依序執行以下操作。
 2ed98b28	一併執行（不勾選則都不執行）
 9dc58ae6	同時刪除設定、記錄檔與記錄
 f6fb6e2a	同時解除安裝 PawnIO（風扇控制驅動程式）
@@ -583,9 +583,9 @@ fe1e7d87	（重新啟動電腦後會恢復 BIOS 控制）。
 e39402e8	已停止燈光控制並釋放裝置
 8008dbae	沒有在使用燈光控制（已關閉連線）
 775adf46	手機查看
-817c491e	無法刪除防火牆允許。請在「Windows 安全性」→「防火牆與網路保護」→「進階設定」→「輸入規則」中刪除「ProFanController Web」。
+63aa333a	無法刪除防火牆允許。請在「Windows 安全性」→「防火牆與網路保護」→「進階設定」→「輸入規則」中刪除「Fanlume Web」。
 629589af	已停止手機查看並刪除防火牆允許
-1d979f07	無法刪除自動啟動。請在工作排程器（工作排程器程式庫）中刪除「ProFanController」。
+31af9d29	無法刪除自動啟動。請在工作排程器（工作排程器程式庫）中刪除「Fanlume」。
 bc13583b	已刪除登入時的自動啟動
 22c99fc8	無法刪除當機時的記錄設定（HKEY_LOCAL_MACHINE\\{0}）。保留也沒有危害。
 14dd713f	已刪除當機時的記錄設定
@@ -594,7 +594,7 @@ d66766d3	此處不執行
 1e82ca4a	不知道執行檔的路徑。
 eb8f4a4f	未能準備刪除設定、記錄檔與記錄（{0}）。\n應用程式結束後，請刪除整個資料夾：\n{1}
 8df0902c	開啟資料夾
-c5234463	ProFanController 仍在執行，因此沒有刪除設定、記錄檔與記錄。\n
+fa3ff255	Fanlume 仍在執行，因此沒有刪除設定、記錄檔與記錄。\n
 32a27012	請結束應用程式，然後刪除整個資料夾：\n{0}
 ecdec9de	已刪除{0}。\n\n
 a261a21a	關閉此提示後，會在檔案總管中開啟應用程式的資料夾。刪除整個資料夾即完成清理：\n{0}
@@ -602,18 +602,18 @@ a261a21a	關閉此提示後，會在檔案總管中開啟應用程式的資料�
 d6750fd2	\n・
 bf71d238	\n…另外 {0} 個
 df6134ea	\n\n關閉此提示後，請刪除整個資料夾：\n{0}
-10d89683	ProFanController 清理
-2d7f91ad	ProFanController 已經在執行。\n請從通知區域的圖示開啟。
+766fce35	Fanlume 清理
+da630a7f	Fanlume 已經在執行。\n請從通知區域的圖示開啟。
 ec6a9bb6	儲存記錄
 c0fd45c5	正在通知區域中繼續執行。要結束，請在圖示上按右鍵。
-77d62ee9	ProFanController：已恢復
+0a3f2987	Fanlume：已恢復
 977b8544	已自動切換設定檔
 790c11cc	偵測到 {0} → {1}
-fa5d05c3	ProFanController：維護
+a75f3e15	Fanlume：維護
 5b860ae3	正在以 DRY RUN（測試模式）執行。只依溫度計算轉速，並沒有驅動風扇。
 874003cc	開始控制
 812bba50	設定檔已損毀，已從備份（{0:yyyy/MM/dd HH:mm}）復原。損毀的檔案保留為 config.broken_*.json。
-9ca7b4fa	ProFanController 意外結束，看門狗程序已自動重新啟動它。已先將風扇設為安全轉速再恢復控制。原因可在記錄檔中查看。
+5b1e3ca8	Fanlume 意外結束，看門狗程序已自動重新啟動它。已先將風扇設為安全轉速再恢復控制。原因可在記錄檔中查看。
 7b249720	開啟記錄檔
 3a7e2e72	因意外結束，已自動重新啟動。
 c51b6c55	隨 Windows 自動啟動的是另一個位置的應用程式（{0}）。可能啟動的是舊版本。
@@ -630,15 +630,15 @@ f5c17fde	無法重新登錄自動啟動（請查看記錄檔）。
 c08fb050	 ／
 48ccab47	找不到正在使用的感測器
 9c32a53a	偵測到硬體變更
-58f4eb35	ProFanController：硬體變更
+6317f1df	Fanlume：硬體變更
 646e0b57	{0}。請在電腦畫面上確認替換為新的感測器。
 9dddc76a	風扇控制發生問題
 8ad6890e	{0}（為安全起見已交由 BIOS 控制，會自動嘗試復原）
-cdfd31fc	ProFanController：風扇控制問題
+f8b8b77e	Fanlume：風扇控制問題
 30b6b07e	無法讀取部分零件
 465384a0	風扇控制已復原
 2a57fe9c	已恢復正常控制。
-96429453	ProFanController：已復原
+25db31e1	Fanlume：已復原
 a8e2e175	風扇控制已恢復正常。
 0d78d54c	其他程式一直開著 config.json，無法讀取（檔案維持不變）。
 9b03cdae	原檔案已保留為 config.broken_日期時間.json。
@@ -742,8 +742,8 @@ e0f9ce74	無法讀取轉速感測器。
 da1c2ba4	將所有風扇交還 BIOS（主機板）自動控制，並確認已交還（無法交還時會在此中止，不做任何變更）
 cf1947e1	停止風扇控制並關閉硬體（PawnIO 驅動程式）。也會告知看門狗程序「正常結束」並將其結束（以免把停止的控制視為異常而重新啟動）
 a1e35f8f	停止燈光控制並釋放 LED 裝置（OpenRGB 等）（以與平常結束相同的燈效停止）
-3958581c	停止手機查看，並刪除新增到 Windows 防火牆的允許（ProFanController Web）
-62d5ef69	刪除登入時的自動啟動（工作排程器中的「ProFanController」）
+1fdea37e	停止手機查看，並刪除新增到 Windows 防火牆的允許（Fanlume Web）
+14f09703	刪除登入時的自動啟動（工作排程器中的「Fanlume」）
 aa1f9cbb	刪除當機時的記錄設定（登錄檔中的 Windows Error Reporting\\LocalDumps）
 7ca65cf7	用 winget 解除安裝 PawnIO（風扇控制驅動程式）
 a6b6b0e5	結束應用程式（進行與平常結束相同的收尾，不會自動重新啟動）
@@ -761,7 +761,7 @@ c96515c1	・重新啟動電腦後，一切都會恢復原狀。
 7fadc402	關閉後應用程式會結束（不會自動重新啟動）。設定、記錄檔與記錄會留在資料夾中。
 2735adba	應用程式本體在執行期間無法刪除。如果不再使用，請在結束後刪除以下資料夾（會在檔案總管中開啟）：\n{0}
 47bb6afa	檔案是空的。
-c7d09b2f	這不是 ProFanController 的設定檔案。
+51d76551	這不是 Fanlume 的設定檔案。
 59d09ada	不包含設定檔。
 8f6cc529	找不到對應的插座（不匯入）
 a63b0e26	相同插座
@@ -777,7 +777,7 @@ a63b0e26	相同插座
 1b6b7859	良好
 0b497be2	稍高
 6eb7c426	散熱不足
-0e60185d	ProFanController 散熱測試  {0:yyyy/MM/dd HH:mm}
+b6e52ff7	Fanlume 散熱測試  {0:yyyy/MM/dd HH:mm}
 f18a2032	設定檔：{0} ／ 負載時間：{1:F0} 分鐘（CPU 全核心）
 a659e995	判定              ：{0}
 67316e06	待機時 CPU 溫度   ：{0:F1} °C
@@ -939,8 +939,8 @@ fcc150e0	（比較時長：基準 {0} 分鐘・最近 {1} 分鐘。已扣除室�
 d9bee020	下載
 4a049af4	桌面
 4033fb1e	暫存資料夾
-e39c4b26	無法複製 ProFanController.exe
-d6132623	ProFanController 測試通知
+687bc2e0	無法複製 Fanlume.exe
+2a3da751	Fanlume 測試通知
 7be18f84	這是來自 {0} 的測試通知。收到此通知即表示設定完成。
 15278ea5	已傳送。請確認手機是否收到
 4ce2da04	無法傳送：{0}
@@ -1108,8 +1108,8 @@ b599c0f6	高音（腳踏鈸）
 f898c734	不是 https 位址：{0}
 9181a7c0	{0:F0} 分鐘內結束了 {1} 次，因此已停止自動重新啟動。
 abf150b9	自動重新啟動已關閉。
-08738032	ProFanController 意外結束。\n\n風扇已固定在安全轉速（{0:F0}%，水泵 100%）。{1}\n
-a506afc7	重新啟動電腦後將交還 BIOS 控制（重新啟動 ProFanController 後，將由本工具控制）。\n\n記錄檔：
+50be9a1c	Fanlume 意外結束。\n\n風扇已固定在安全轉速（{0:F0}%，水泵 100%）。{1}\n
+af5a88ef	重新啟動電腦後將交還 BIOS 控制（重新啟動 Fanlume 後，將由本工具控制）。\n\n記錄檔：
 5e11c7bc	無法從此網路使用。
 3540eeb1	存取金鑰連續錯誤，暫時不再受理。請等待約 1 分鐘。
 aacf373e	存取金鑰不正確。請使用電腦設定畫面上顯示的 URL。
@@ -1217,13 +1217,13 @@ ca58240b	從備份還原
 0a066c64	已還原到 {0} 的設定（可用「復原」取消）。
 4a2fd247	無法讀取此備份。\n{0}
 1b7a6d56	匯出設定
-d3b9501f	ProFanController 設定 (*.profan.json)|*.profan.json
-8c168c4d	ProFan設定_{0}_{1:yyyyMMdd}{2}
+f48eb65b	Fanlume 設定 (*.fanlume.json)|*.fanlume.json
+f1a7dc7f	Fanlume設定_{0}_{1:yyyyMMdd}{2}
 dd581e02	已匯出 {0} 個設定檔。請把此檔案傳給對方，讓對方在 設定 →「安全與備份」→「匯入設定」中匯入。
 25f3627c	無法匯出。\n{0}
 e6cdafd7	請等待硬體初始化完成。
 de0ce3c8	匯入設定
-e259cc0d	ProFanController 設定 (*.profan.json;*.json)|*.profan.json;*.json
+70585dc7	Fanlume 設定 (*.fanlume.json;*.json)|*.fanlume.json;*.json
 49c7511d	無法讀取此檔案。\n{0}
 d01ee250	。可用「復原」取消。匯入的風扇請先確認曲線再使用。
 565076e7	確認曲線
@@ -1482,7 +1482,7 @@ b5ccd0c3	依記錄自動診斷，並檢查風扇的灰塵和老化（AI 建議�
 acea69f7	此電腦偵測到的所有溫度、轉速、控制通道以及虛擬感測器
 7626e5f7	設定檔、自動切換、啟動方式和整體控制行為
 d3bf5d86	已解除 DRY RUN。正在開始控制風扇。
-7f6b69df	ProFanController 看門狗
+256148cd	Fanlume 看門狗
 0788f8eb	背面
 c85ab318	前
 0f616edd	上
@@ -1506,11 +1506,11 @@ f0a541e0	仍然找不到 PawnIO。如果已執行安裝程式，請重新啟動�
 3699179e	使用位置：{0}
 841ef786	（不使用）
 cbfdf76e	（刪除此風扇）
-ad4fff7c	硬體變化 - ProFanController
+5dde97f8	硬體變化 - Fanlume
 41580e6f	找不到設定中使用的感測器或插座。已在新硬體中自動選擇相同用途的項目。
 80403780	請確認內容後按「取代並套用」（會先備份目前的設定再變更，之後也可以「復原」）。\n
 8f763b23	在此之前，使用找不到的感測器的曲線為安全起見以固定轉速運轉（可在 設定 →「安全與備份」中變更）。
-6dc976fa	匯入設定 - ProFanController
+d49f09aa	匯入設定 - Fanlume
 63ed3acb	請確認檔案中的風扇插座和溫度感測器要對應到此電腦的哪一個。
 65901272	已自動選擇名稱相同的項目。設為「（刪除此風扇）」的風扇不會匯入。
 ecf8e3b5	匯出的電腦：{0}（{1:yyyy/MM/dd HH:mm}）
@@ -1525,7 +1525,7 @@ fe5a2b13	以固定 70% 控制
 0c1d2ab2	維持 BIOS 控制並監視
 d6d4423a	・{0}（風扇）：跟隨 {1}
 9833252d	要建立的設定檔：{0} ／ {1} ／ {2}\n平時使用的設定檔：{3}\n\n
-0c5502cd	開啟 ProFanController
+12b1edf7	開啟 Fanlume
 9a801bfe	加速（全速）15 分鐘
 46dbb6b6	靜音 30 分鐘
 670ac712	靜音 2 小時
@@ -1604,3 +1604,8 @@ c8e0f349	正在試聽風扇的聲音。
 69ade00e	正在進行初始設定。
 82fa072a	請在結束後重新選擇顯示語言。
 31040161	已從 {0} 安裝到 {1}，並從那裡啟動。今後將執行此資料夾中的應用程式（下載的檔案可以刪除）。
+4a3be0af	ProFanController（舊版本）
+67d28cec	已從 {0} 繼承舊版本（ProFanController）的設定與記錄。舊版本的資料夾不再使用，確認其中內容後即可刪除。
+82ee83eb	無法啟動解除安裝程式（{0}）。\n應用程式結束後，請在 Windows 的「設定」→「應用程式」→「已安裝的應用程式」中解除安裝 Fanlume。
+adc330eb	關閉後應用程式會結束，接著解除安裝程式會刪除應用程式本體與{0}。Fanlume 也會從 Windows 的「已安裝的應用程式」中移除。
+f10b7201	關閉後應用程式會結束，接著解除安裝程式會刪除應用程式本體。Fanlume 也會從 Windows 的「已安裝的應用程式」中移除。設定、記錄檔與記錄會留在資料夾中。

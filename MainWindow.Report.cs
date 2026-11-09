@@ -307,7 +307,7 @@ public partial class MainWindow
     {
         if (sender is not Button { Tag: FlightRecord r } || !File.Exists(r.CsvPath)) return;
         try { SystemTool.Open(r.CsvPath); }
-        catch (Exception ex) { MessageBox.Show(this, L($"開けませんでした: {ex.Message}"), "ProFanController", MessageBoxButton.OK, MessageBoxImage.Warning); }
+        catch (Exception ex) { MessageBox.Show(this, L($"開けませんでした: {ex.Message}"), AppIdentity.Name, MessageBoxButton.OK, MessageBoxImage.Warning); }
     }
 
     private void OnOpenRecordsClick(object sender, RoutedEventArgs e)

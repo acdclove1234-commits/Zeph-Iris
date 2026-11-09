@@ -169,7 +169,7 @@ public sealed class OpenRgbClient : IDisposable
             ServerProtocol = 0;
         }
         Protocol = Math.Min(ServerProtocol, MaxProtocolVersion);
-        Send(0, SetClientName, "ProFanController\0"u8);
+        Send(0, SetClientName, "Fanlume\0"u8);
     }
 
     /// <summary>

@@ -108,26 +108,26 @@ public partial class MainWindow
         if (_catalog is null || _tuner is not null) return;
         if (_test is not null || _calibratingId is not null)
         {
-            MessageBox.Show(this, L("冷却テストかキャリブレーションが実行中です。終わってから始めてください。"), "ProFanController", MessageBoxButton.OK, MessageBoxImage.Information);
+            MessageBox.Show(this, L("冷却テストかキャリブレーションが実行中です。終わってから始めてください。"), AppIdentity.Name, MessageBoxButton.OK, MessageBoxImage.Information);
             return;
         }
         var fans = _tuneFans.Where(f => f.Selected).ToList();
         if (fans.Count == 0)
         {
-            MessageBox.Show(this, L("調整するファンを 1 つ以上選んでください。"), "ProFanController", MessageBoxButton.OK, MessageBoxImage.Information);
+            MessageBox.Show(this, L("調整するファンを 1 つ以上選んでください。"), AppIdentity.Name, MessageBoxButton.OK, MessageBoxImage.Information);
             return;
         }
         _roles = ResolveRoles();
         string role = TuneIsGpu ? StatRoles.GpuTemp : StatRoles.CpuTemp;
         if (!_roles.TryGetValue(role, out var sensorId))
         {
-            MessageBox.Show(this, TuneIsGpu ? L("GPU の温度センサーが見つかりません。") : L("CPU の温度センサーが見つかりません。"), "ProFanController", MessageBoxButton.OK, MessageBoxImage.Warning);
+            MessageBox.Show(this, TuneIsGpu ? L("GPU の温度センサーが見つかりません。") : L("CPU の温度センサーが見つかりません。"), AppIdentity.Name, MessageBoxButton.OK, MessageBoxImage.Warning);
             return;
         }
         string? loadId = null;
         if (TuneIsGpu && !_roles.TryGetValue(StatRoles.GpuLoad, out loadId))
         {
-            MessageBox.Show(this, L("GPU の使用率センサーが見つからないため、GPU の調整はできません。"), "ProFanController", MessageBoxButton.OK, MessageBoxImage.Warning);
+            MessageBox.Show(this, L("GPU の使用率センサーが見つからないため、GPU の調整はできません。"), AppIdentity.Name, MessageBoxButton.OK, MessageBoxImage.Warning);
             return;
         }
 

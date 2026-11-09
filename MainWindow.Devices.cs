@@ -96,7 +96,7 @@ public partial class MainWindow
         catch (Exception ex)
         {
             Logger.Error($"画像のコピーに失敗: {ex}");
-            MessageBox.Show(this, L($"画像を設定できませんでした。\n{ex.Message}"), "ProFanController", MessageBoxButton.OK, MessageBoxImage.Warning);
+            MessageBox.Show(this, L($"画像を設定できませんでした。\n{ex.Message}"), AppIdentity.Name, MessageBoxButton.OK, MessageBoxImage.Warning);
         }
     }
 

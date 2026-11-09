@@ -1,13 +1,13 @@
-﻿ProFanController
+﻿Fanlume
 ================
 
-ProFanController 本体: MIT License（LICENSE）
-Copyright (c) 2026 ProFanController contributors
+Fanlume 本体: MIT License（LICENSE）
+Copyright (c) 2026 Fanlume contributors
 
 このリポジトリのソースの先頭にある「See CREDITS.txt」は、このファイルのことです。
-使っている部品と、そのライセンスは次のとおりです（配布用の zip には licenses フォルダーに同じものを入れています）。
+使っている部品と、そのライセンスは次のとおりです（インストーラーは、アプリのフォルダーの licenses フォルダーに同じものを入れます）。
 
-ProFanController が使用しているソフトウェア
+Fanlume が使用しているソフトウェア
 ============================================
 
 LibreHardwareMonitorLib 0.9.6
@@ -40,6 +40,11 @@ ProFan Maru（フォント・Zen Maru Gothic の改変版）
   License: SIL Open Font License 1.1（ZenMaruGothic-OFL.txt / ProFanMaru-README.txt）
   Source : https://github.com/googlefonts/zen-marugothic
   Copyright 2021 The Zen Maru Gothic Project Authors
+
+Inno Setup 6（インストーラーを作るのに使用。アプリには含まない）
+  License: Inno Setup License  https://jrsoftware.org/files/is/license.txt
+  Source : https://github.com/jrsoftware/issrc
+  Copyright (C) 1997-2026 Jordan Russell, Portions Copyright (C) 2000-2026 Martijn Laan
 
 PawnIO（ドライバ・別途インストール）
   https://pawnio.eu/

@@ -90,7 +90,7 @@ public partial class MainWindow
         if (sender is not Button { Tag: ProfileConfig p }) return;
         if (Config.Profiles.Count <= 1)
         {
-            MessageBox.Show(this, L("プロファイルは最低 1 つ必要です。"), "ProFanController", MessageBoxButton.OK, MessageBoxImage.Information);
+            MessageBox.Show(this, L("プロファイルは最低 1 つ必要です。"), AppIdentity.Name, MessageBoxButton.OK, MessageBoxImage.Information);
             return;
         }
         // このプロファイルを使っているルールも一緒に消える（スケジュールは残りのプロファイルに切り替える）ことを、先に伝える
@@ -103,7 +103,7 @@ public partial class MainWindow
         if (schedules > 0) notes.Add(L($"・スケジュール {schedules} 件は「{fallback}」に切り替えます"));
         if (quiet) notes.Add(L($"・ワンタッチ操作の「静音」は「{fallback}」を使うようにします"));
         string detail = notes.Count > 0 ? "\n\n" + string.Join("\n", notes) + L("\n\n（「元に戻す」で取り消せます）") : "";
-        if (MessageBox.Show(this, L($"プロファイル「{p.Name}」を削除しますか？{detail}"), "ProFanController", MessageBoxButton.OKCancel, MessageBoxImage.Question) != MessageBoxResult.OK)
+        if (MessageBox.Show(this, L($"プロファイル「{p.Name}」を削除しますか？{detail}"), AppIdentity.Name, MessageBoxButton.OKCancel, MessageBoxImage.Question) != MessageBoxResult.OK)
             return;
 
         Config.Profiles.Remove(p);
@@ -140,7 +140,7 @@ public partial class MainWindow
         string process = ProfileSwitcher.Normalize(NewRuleProcess.Text);
         if (process.Length == 0 || NewRuleProfile.SelectedItem is not ProfileConfig p)
         {
-            MessageBox.Show(this, L("アプリ名とプロファイルを指定してください。"), "ProFanController", MessageBoxButton.OK, MessageBoxImage.Information);
+            MessageBox.Show(this, L("アプリ名とプロファイルを指定してください。"), AppIdentity.Name, MessageBoxButton.OK, MessageBoxImage.Information);
             return;
         }
         Config.AutoSwitchRules.Add(new AutoSwitchRule { ProcessName = process, ProfileName = p.Name });
@@ -212,7 +212,7 @@ public partial class MainWindow
         {
             if (DeltaA.SelectedItem is not SensorOption a || DeltaB.SelectedItem is not SensorOption b || a.Id == b.Id)
             {
-                MessageBox.Show(this, L("A と B に別々のセンサーを選んでください。"), "ProFanController", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show(this, L("A と B に別々のセンサーを選んでください。"), AppIdentity.Name, MessageBoxButton.OK, MessageBoxImage.Information);
                 return;
             }
             sources = new() { a.Id, b.Id };
@@ -223,7 +223,7 @@ public partial class MainWindow
                 .Where(s => s.Selected).Select(s => s.Option.Id).ToList();
             if (sources.Count < 2)
             {
-                MessageBox.Show(this, L("2 つ以上のセンサーを選んでください。"), "ProFanController", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show(this, L("2 つ以上のセンサーを選んでください。"), AppIdentity.Name, MessageBoxButton.OK, MessageBoxImage.Information);
                 return;
             }
         }
@@ -248,7 +248,7 @@ public partial class MainWindow
         string msg = used
             ? L($"「{vs.Name}」はファンカーブで使われています。削除すると、そのカーブはセンサー異常（全開）になります。削除しますか？")
             : L($"「{vs.Name}」を削除しますか？");
-        if (MessageBox.Show(this, msg, "ProFanController", MessageBoxButton.OKCancel, used ? MessageBoxImage.Warning : MessageBoxImage.Question) != MessageBoxResult.OK)
+        if (MessageBox.Show(this, msg, AppIdentity.Name, MessageBoxButton.OKCancel, used ? MessageBoxImage.Warning : MessageBoxImage.Question) != MessageBoxResult.OK)
             return;
         Config.VirtualSensors.Remove(vs);
         foreach (var c in Config.DashboardCards.Where(c => c.SensorId == vs.Id).ToList()) Config.DashboardCards.Remove(c);
@@ -292,7 +292,7 @@ public partial class MainWindow
 
         if (!ok)
         {
-            MessageBox.Show(this, L("タスクスケジューラへの登録に失敗しました。ログを確認してください。"), "ProFanController",
+            MessageBox.Show(this, L("タスクスケジューラへの登録に失敗しました。ログを確認してください。"), AppIdentity.Name,
                 MessageBoxButton.OK, MessageBoxImage.Warning);
         }
         else if (want && AppContext.BaseDirectory.Contains(@"\bin\Debug\", StringComparison.OrdinalIgnoreCase))
@@ -300,7 +300,7 @@ public partial class MainWindow
             MessageBox.Show(this,
                 L("開発用フォルダ（bin\\Debug）の exe を登録しました。\n") +
                 L("ビルドし直すと場所が変わることがあるため、「発行」した exe から登録し直すことをおすすめします。"),
-                "ProFanController", MessageBoxButton.OK, MessageBoxImage.Information);
+                AppIdentity.Name, MessageBoxButton.OK, MessageBoxImage.Information);
         }
     }
 
@@ -314,7 +314,7 @@ public partial class MainWindow
     {
         if (_catalog is null)
         {
-            MessageBox.Show(this, L("ハードウェアの初期化が終わるまでお待ちください。"), "ProFanController", MessageBoxButton.OK, MessageBoxImage.Information);
+            MessageBox.Show(this, L("ハードウェアの初期化が終わるまでお待ちください。"), AppIdentity.Name, MessageBoxButton.OK, MessageBoxImage.Information);
             return;
         }
         FlushCommit();
@@ -514,7 +514,7 @@ public partial class MainWindow
             LanguageCombo.SelectedValue = Localization.Languages.Any(l => l.Code == Config.Language) ? Config.Language : "";
             _languageSyncing = false;
             MessageBox.Show(this, Localization.JoinSentences(busy, L("終わってから、表示言語を選び直してください。")),
-                "ProFanController", MessageBoxButton.OK, MessageBoxImage.Information);
+                AppIdentity.Name, MessageBoxButton.OK, MessageBoxImage.Information);
             return;
         }
         Config.Language = code;

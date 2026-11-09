@@ -39,7 +39,7 @@ public partial class MainWindow
     {
         if (PawnIoInstallPanel.Busy)
         {
-            MessageBox.Show(this, L("PawnIO のインストールが終わってから、もう一度押してください。"), "ProFanController",
+            MessageBox.Show(this, L("PawnIO のインストールが終わってから、もう一度押してください。"), AppIdentity.Name,
                 MessageBoxButton.OK, MessageBoxImage.Information);
             return;
         }

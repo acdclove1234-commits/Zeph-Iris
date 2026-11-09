@@ -51,7 +51,7 @@ public sealed class TrayIcon : IDisposable
         _icon = new WinForms.NotifyIcon
         {
             Icon = _appIcon,
-            Text = "ProFanController",
+            Text = AppIdentity.Name,
             ContextMenuStrip = BuildMenu(),
             Visible = true,
         };
@@ -79,7 +79,7 @@ public sealed class TrayIcon : IDisposable
         Action open = _open, togglePause = _togglePause, toggleWidget = _toggleWidget, exit = _exit;
         Action<string> command = _command;
         var menu = new WinForms.ContextMenuStrip();
-        menu.Items.Add(new WinForms.ToolStripMenuItem(L("ProFanController を開く"), null, (_, _) => open()) { Font = new Drawing.Font(menu.Font, Drawing.FontStyle.Bold) });
+        menu.Items.Add(new WinForms.ToolStripMenuItem(L("Fanlume を開く"), null, (_, _) => open()) { Font = new Drawing.Font(menu.Font, Drawing.FontStyle.Bold) });
         _profileMenu = new WinForms.ToolStripMenuItem(L("プロファイル"));
         menu.Items.Add(_profileMenu);
         var quick = new WinForms.ToolStripMenuItem(L("ワンタッチ操作"));

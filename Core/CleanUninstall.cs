@@ -76,8 +76,8 @@ public static class CleanUninstall
         CleanupStep.RestoreFans => L("すべてのファンを BIOS（マザーボード）の自動制御に戻し、戻ったことを確かめます（戻せなかったときは、ここで中止して何も変えません）"),
         CleanupStep.StopFanControl => L("ファンの制御を止めて、ハードウェア（PawnIO ドライバー）を閉じます。見張りプロセスにも「正しい終了」を伝えて終わらせます（止めたファンの制御を異常と見なして、起動し直さないように）"),
         CleanupStep.StopLighting => L("ライティングの制御を止めて、LED のデバイス（OpenRGB など）を離します（ふだんの終了と同じ光り方で止めます）"),
-        CleanupStep.RemoveFirewallRule => L("スマホ監視を止めて、Windows ファイアウォールに追加した許可（ProFanController Web）を消します"),
-        CleanupStep.RemoveAutoStart => L("ログオン時の自動起動（タスクスケジューラの「ProFanController」）を消します"),
+        CleanupStep.RemoveFirewallRule => L("スマホ監視を止めて、Windows ファイアウォールに追加した許可（Fanlume Web）を消します"),
+        CleanupStep.RemoveAutoStart => L("ログオン時の自動起動（タスクスケジューラの「Fanlume」）を消します"),
         CleanupStep.RemoveCrashDumpSetting => L("クラッシュしたときの記録の設定（レジストリの Windows Error Reporting\\LocalDumps）を消します"),
         CleanupStep.UninstallPawnIo => L($"PawnIO（ファン制御用のドライバー）を winget でアンインストールします"),
         CleanupStep.ExitApp => L("アプリを終了します（ふだんの終了と同じ後片付けをします。自動で起動し直しません）"),
@@ -107,9 +107,10 @@ public static class CleanUninstall
 
     /// <summary>
     /// 終わったあとのまとめ（終了する前に画面に出す）。
-    /// appFolder: アプリのフォルダー（終わったあとに、自分で消してもらう）
+    /// appFolder: アプリのフォルダー（終わったあとに、自分で消してもらう）。
+    /// byUninstaller: インストーラーで入れた（終わったあと、アンインストーラーがアプリ本体を消す）
     /// </summary>
-    public static string Summary(IReadOnlyList<StepResult> results, IReadOnlyList<CleanupStep> plan, string appFolder)
+    public static string Summary(IReadOnlyList<StepResult> results, IReadOnlyList<CleanupStep> plan, string appFolder, bool byUninstaller = false)
     {
         var lines = new List<string>();
         if (Aborted(results))
@@ -129,6 +130,13 @@ public static class CleanUninstall
         if (results.Any(r => r.PcRestart || r.Message.Contains("PC を再起動", StringComparison.Ordinal)))
             lines.Add(L("・PC を再起動すると、すべてが元どおりになります。"));
         lines.Add("");
+        if (byUninstaller)
+        {
+            lines.Add(plan.Contains(CleanupStep.DeleteData)
+                ? L($"閉じるとアプリが終了し、続けてアンインストーラーがアプリ本体と{DataDescription}を消します（Windows の「インストールされているアプリ」からも外れます）。")
+                : L("閉じるとアプリが終了し、続けてアンインストーラーがアプリ本体を消します（Windows の「インストールされているアプリ」からも外れます）。設定・ログ・記録はフォルダーに残します。"));
+            return string.Join("\n", lines);
+        }
         lines.Add(plan.Contains(CleanupStep.DeleteData)
             ? L($"閉じるとアプリが終了し、そのあとで{DataDescription}を消します。")
             : L("閉じるとアプリが終了します（自動では起動し直しません）。設定・ログ・記録はフォルダーに残します。"));

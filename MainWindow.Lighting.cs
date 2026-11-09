@@ -1178,7 +1178,7 @@ public partial class MainWindow
         var answer = MessageBox.Show(this,
             L("激しい点滅を許可しますか？\n\n強い光の点滅は、光に敏感な方の体調（光過敏性発作など）に影響することがあります。") +
             L("気分が悪くなったら、すぐに「激しい点滅を抑える」をオンに戻してください。"),
-            "ProFanController", MessageBoxButton.OKCancel, MessageBoxImage.Warning, MessageBoxResult.Cancel);
+            AppIdentity.Name, MessageBoxButton.OKCancel, MessageBoxImage.Warning, MessageBoxResult.Cancel);
         if (answer == MessageBoxResult.OK) m.ReduceFlashing = false;
         else box.SetCurrentValue(ToggleButton.IsCheckedProperty, true); // 結び付けを残したまま元に戻す
     }

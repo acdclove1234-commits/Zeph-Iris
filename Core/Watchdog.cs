@@ -26,9 +26,9 @@ namespace ProFanController;
 public static class Watchdog
 {
     /// <summary>本体が正しく終了するときにセットする（見張りも終了する）</summary>
-    public const string StopEventName = @"Global\ProFanController.WatchdogStop";
+    public const string StopEventName = @"Global\Fanlume.WatchdogStop";
     /// <summary>本体が正しく終了するが、BIOS 制御に戻せたか確認できなかったとき（見張りは安全な回転数にして終わる。再起動はしない）</summary>
-    public const string StopUnsafeEventName = @"Global\ProFanController.WatchdogStopUnsafe";
+    public const string StopUnsafeEventName = @"Global\Fanlume.WatchdogStopUnsafe";
     public const string Argument = "--watchdog";
     public const string RecoveredArgument = "--recovered";
 
@@ -265,8 +265,8 @@ public static class Watchdog
             ? L($"{CrashWindow.TotalMinutes:F0} 分間に {recent} 回終了したため、自動での再起動はやめました。")
             : L("自動での再起動はオフになっています。");
         ShowMessage?.Invoke(
-            L($"ProFanController が予期せず終了しました。\n\nファンは安全な回転数（{cfg.Safety.WatchdogSafeDuty:F0}%、ポンプは 100%）に固定しています。{why}\n") +
-            L("PC を再起動すると BIOS の制御に戻ります（ProFanController を起動し直すと、アプリの制御で動きます）。\n\nログ: ") + Logger.Directory);
+            L($"Fanlume が予期せず終了しました。\n\nファンは安全な回転数（{cfg.Safety.WatchdogSafeDuty:F0}%、ポンプは 100%）に固定しています。{why}\n") +
+            L("PC を再起動すると BIOS の制御に戻ります（Fanlume を起動し直すと、アプリの制御で動きます）。\n\nログ: ") + Logger.Directory);
     }
 
     /// <summary>見張りの始めに読めた設定（落ちたときに設定を読めなくても、どの端子をどうするか分かるように）</summary>

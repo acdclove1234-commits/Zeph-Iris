@@ -1,4 +1,4 @@
-# ProFanController UI text (pl). Each line: hash of the Japanese source text, TAB, translation. Line breaks: backslash + n.
+# Fanlume UI text (pl). Each line: hash of the Japanese source text, TAB, translation. Line breaks: backslash + n.
 9cefb48e	Uruchamianie…
 3c3d953a	Wykrywanie sprzętu
 68a076e4	Pauza (oddaj sterowanie BIOS)
@@ -469,7 +469,7 @@ db0f8cfc	Cena prądu za kWh
 b4d79a66	Dla CPU i GPU używane są odczyty czujników. Monitory i głośniki nie są uwzględnione. To nie pomiar z gniazdka, tylko szacunek.
 69355ed4	Bezpieczeństwo
 619b1ea2	Używaj procesu nadzorczego (zalecane)
-d1086ffa	Zapobiega pozostaniu wentylatorów na niskich obrotach, gdy aplikacja zostanie zabita lub się zawiesi. Menedżer zadań pokazuje dwa ProFanController — jeden z nich to proces nadzorczy
+615a97bc	Zapobiega pozostaniu wentylatorów na niskich obrotach, gdy aplikacja zostanie zabita lub się zawiesi. Menedżer zadań pokazuje dwa Fanlume — jeden z nich to proces nadzorczy
 f739cc9b	Obroty w takim przypadku
 43c454af	Pompy zawsze na 100%
 d063c0c0	Automatycznie uruchamiaj aplikację ponownie (do 3 razy w 10 minut, potem wyświetla komunikat)
@@ -515,12 +515,12 @@ cb0aedd5	Czujniki temperatury
 772bcb56	Skonfiguruj od nowa kreatorem
 1c166250	Później
 381b7b8a	Zastąp i zastosuj
-65d960e8	Konfiguracja - ProFanController
+50ab5a2c	Konfiguracja - Fanlume
 f918c02e	1  Witamy
 38684fb3	2  Rozpoznanie złączy
 76236dbf	3  Strategia chłodzenia
 b303c749	4  Gotowe
-99a4e0cb	Witamy w ProFanController
+890d0c09	Witamy w Fanlume
 26578394	Kreator sprawdzi, co jest podłączone do złączy wentylatorów płyty głównej,\ni automatycznie utworzy krzywe oraz profile (Cichy / Standardowy / Wydajność) dla twojego komputera.
 80f88c90	Przygotowanie
 b1838111	• Bądź przy obudowie, żeby słyszeć i widzieć wentylatory.\n• Zamknij ciężkie programy (np. gry).\n• Obecne ustawienia zostaną nadpisane, ale potem możesz do nich wrócić przyciskiem „Cofnij”.
@@ -549,8 +549,8 @@ b58afa04	Wszystko gotowe
 aceb0a14	Anuluj
 f193a383	Wstecz
 303830fc	Dalej
-7b1ba115	Odinstaluj (porządki) - ProFanController
-a4fe8394	Zanim przestaniesz używać ProFanController, komputer wraca do stanu sprzed instalacji aplikacji. „Posprzątaj i zakończ” wykonuje poniższe kroki od góry do dołu.
+2a910283	Odinstaluj (porządki) - Fanlume
+caf7be2a	Zanim przestaniesz używać Fanlume, komputer wraca do stanu sprzed instalacji aplikacji. „Posprzątaj i zakończ” wykonuje poniższe kroki od góry do dołu.
 2ed98b28	Dodatkowo (żadne z tych bez twojego wyboru)
 9dc58ae6	Usuń także ustawienia, dzienniki i zapisy
 f6fb6e2a	Odinstaluj także PawnIO (sterownik wentylatorów)
@@ -583,9 +583,9 @@ fe1e7d87	 (po ponownym uruchomieniu komputera sterowanie wraca do BIOS).
 e39402e8	Sterowanie podświetleniem zatrzymane, urządzenia zwolnione
 8008dbae	Sterowanie podświetleniem nie było używane (połączenie zamknięte)
 775adf46	Podgląd w telefonie
-817c491e	Nie udało się usunąć reguły zapory. Usuń „ProFanController Web” w „Zabezpieczenia Windows” → „Zapora i ochrona sieci” → „Ustawienia zaawansowane” → „Reguły przychodzące”.
+63aa333a	Nie udało się usunąć reguły zapory. Usuń „Fanlume Web” w „Zabezpieczenia Windows” → „Zapora i ochrona sieci” → „Ustawienia zaawansowane” → „Reguły przychodzące”.
 629589af	Podgląd w telefonie zatrzymany, reguła zapory usunięta
-1d979f07	Nie udało się usunąć autostartu. Usuń „ProFanController” w Harmonogramie zadań (Biblioteka Harmonogramu zadań).
+31af9d29	Nie udało się usunąć autostartu. Usuń „Fanlume” w Harmonogramie zadań (Biblioteka Harmonogramu zadań).
 bc13583b	Autostart przy logowaniu usunięty
 22c99fc8	Nie udało się usunąć ustawienia zrzutów awaryjnych (HKEY_LOCAL_MACHINE\\{0}). Pozostawienie go nie szkodzi.
 14dd713f	Ustawienie zrzutów awaryjnych usunięte
@@ -594,7 +594,7 @@ d66766d3	Nie wykonywane tutaj
 1e82ca4a	Ścieżka pliku wykonywalnego jest nieznana.
 eb8f4a4f	Nie udało się przygotować usunięcia ustawień, dzienników i zapisów ({0}).\nPo zamknięciu aplikacji usuń cały folder:\n{1}
 8df0902c	Otwórz folder
-c5234463	ProFanController nadal działa, więc ustawienia, dzienniki i zapisy nie zostały usunięte.\n
+fa3ff255	Fanlume nadal działa, więc ustawienia, dzienniki i zapisy nie zostały usunięte.\n
 32a27012	Zamknij aplikację, a potem usuń cały ten folder:\n{0}
 ecdec9de	Usunięto: {0}.\n\n
 a261a21a	Po zamknięciu tego komunikatu Eksplorator otworzy folder aplikacji. Usuń cały folder, aby zakończyć porządki:\n{0}
@@ -602,18 +602,18 @@ a261a21a	Po zamknięciu tego komunikatu Eksplorator otworzy folder aplikacji. Us
 d6750fd2	\n•
 bf71d238	\n…i jeszcze {0}
 df6134ea	\n\nPo zamknięciu tego komunikatu usuń cały ten folder:\n{0}
-10d89683	Porządki ProFanController
-2d7f91ad	ProFanController już działa.\nOtwórz go ikoną w zasobniku.
+766fce35	Porządki Fanlume
+da630a7f	Fanlume już działa.\nOtwórz go ikoną w zasobniku.
 ec6a9bb6	Zapisywanie zapisów
 c0fd45c5	Nadal działa w zasobniku. Aby zakończyć, kliknij ikonę prawym przyciskiem.
-77d62ee9	ProFanController: przywrócono
+0a3f2987	Fanlume: przywrócono
 977b8544	Profil został przełączony automatycznie
 790c11cc	Wykryto {0} → {1}
-fa5d05c3	ProFanController: konserwacja
+a75f3e15	Fanlume: konserwacja
 5b860ae3	Działa w trybie DRY RUN (tryb testowy). Tylko oblicza obroty dla temperatur; wentylatory nie są sterowane.
 874003cc	Rozpocznij sterowanie
 812bba50	Plik ustawień był uszkodzony, więc przywrócono go z kopii ({0:yyyy/MM/dd HH:mm}). Uszkodzony plik zachowano jako config.broken_*.json.
-9ca7b4fa	ProFanController nieoczekiwanie się zamknął, więc proces nadzorczy automatycznie uruchomił go ponownie. Sterowanie wznowiono po ustawieniu bezpiecznych obrotów. Przyczynę znajdziesz w dzienniku.
+5b1e3ca8	Fanlume nieoczekiwanie się zamknął, więc proces nadzorczy automatycznie uruchomił go ponownie. Sterowanie wznowiono po ustawieniu bezpiecznych obrotów. Przyczynę znajdziesz w dzienniku.
 7b249720	Otwórz dziennik
 3a7e2e72	Aplikacja nieoczekiwanie się zamknęła i została automatycznie uruchomiona ponownie.
 c51b6c55	Z Windows automatycznie uruchamia się aplikacja z innego miejsca ({0}). Może uruchamia się stara wersja.
@@ -630,15 +630,15 @@ f5c17fde	Nie udało się ponownie zarejestrować autostartu (sprawdź dziennik).
 c08fb050	 / 
 48ccab47	Nie znaleziono używanego czujnika
 9c32a53a	Wykryto zmiany sprzętu
-58f4eb35	ProFanController: zmiana sprzętu
+6317f1df	Fanlume: zmiana sprzętu
 646e0b57	{0}. Potwierdź przejście na nowe czujniki na ekranie komputera.
 9dddc76a	Problem ze sterowaniem wentylatorami
 8ad6890e	{0} (dla bezpieczeństwa steruje BIOS; przywracanie jest próbowane automatycznie)
-cdfd31fc	ProFanController: problem ze sterowaniem wentylatorami
+f8b8b77e	Fanlume: problem ze sterowaniem wentylatorami
 30b6b07e	Nie można odczytać niektórych podzespołów
 465384a0	Sterowanie wentylatorami przywrócone
 2a57fe9c	Powrót do normalnego sterowania.
-96429453	ProFanController: przywrócono
+25db31e1	Fanlume: przywrócono
 a8e2e175	Sterowanie wentylatorami wróciło do normy.
 0d78d54c	Nie udało się odczytać config.json, bo inny program trzyma go otwartego (plik pozostał bez zmian).
 9b03cdae	Oryginalny plik zachowano jako config.broken_<data>.json.
@@ -742,8 +742,8 @@ e0f9ce74	Nie można odczytać czujnika obrotów.
 da1c2ba4	Oddaje wszystkie wentylatory pod automatyczne sterowanie BIOS (płyty głównej) i sprawdza, czy się udało (jeśli nie, tu się zatrzymuje i niczego nie zmienia)
 cf1947e1	Zatrzymuje sterowanie wentylatorami i zamyka sprzęt (sterownik PawnIO). Informuje też proces nadzorczy o poprawnym zakończeniu, żeby również się zamknął (zamiast uznać zatrzymanie za awarię i uruchomić ponownie)
 a1e35f8f	Zatrzymuje sterowanie podświetleniem i zwalnia urządzenia LED (OpenRGB i inne), kończąc tym samym efektem co przy zwykłym zamknięciu
-3958581c	Zatrzymuje podgląd w telefonie i usuwa dodaną regułę Zapory Windows (ProFanController Web)
-62d5ef69	Usuwa autostart przy logowaniu (zadanie „ProFanController” w Harmonogramie zadań)
+1fdea37e	Zatrzymuje podgląd w telefonie i usuwa dodaną regułę Zapory Windows (Fanlume Web)
+14f09703	Usuwa autostart przy logowaniu (zadanie „Fanlume” w Harmonogramie zadań)
 aa1f9cbb	Usuwa ustawienie zrzutów awaryjnych (Windows Error Reporting\\LocalDumps w rejestrze)
 7ca65cf7	Odinstalowuje PawnIO (sterownik wentylatorów) przez winget
 a6b6b0e5	Zamyka aplikację (z tymi samymi porządkami co przy zwykłym zamknięciu; nie uruchamia się ponownie sama)
@@ -761,7 +761,7 @@ c96515c1	• Ponowne uruchomienie komputera przywraca wszystko do poprzedniego s
 7fadc402	Po zamknięciu aplikacja się zakończy (nie uruchomi się sama ponownie). Ustawienia, dzienniki i zapisy zostają w folderze.
 2735adba	Samej aplikacji nie można usunąć, gdy działa. Jeśli przestajesz jej używać, po zamknięciu usuń ten folder (otworzy się w Eksploratorze):\n{0}
 47bb6afa	Plik jest pusty.
-c7d09b2f	To nie jest plik ustawień ProFanController.
+51d76551	To nie jest plik ustawień Fanlume.
 59d09ada	Nie zawiera profili.
 8f6cc529	Nie znaleziono pasującego złącza (nie importowane)
 a63b0e26	To samo złącze
@@ -777,7 +777,7 @@ a63b0e26	To samo złącze
 1b6b7859	Dobrze
 0b497be2	Nieco wysoko
 6eb7c426	Niewystarczające chłodzenie
-0e60185d	Test chłodzenia ProFanController  {0:yyyy/MM/dd HH:mm}
+b6e52ff7	Test chłodzenia Fanlume  {0:yyyy/MM/dd HH:mm}
 f18a2032	Profil: {0} / czas obciążenia: {1:F0} min (wszystkie rdzenie CPU)
 a659e995	Ocena                    : {0}
 67316e06	Temp. CPU w spoczynku   : {0:F1} °C
@@ -939,8 +939,8 @@ fcc150e0	 (porównywany czas: baza {0} min, ostatnie {1} min; różnice temperat
 d9bee020	Pobrane
 4a049af4	Pulpit
 4033fb1e	Folder tymczasowy
-e39c4b26	Nie udało się skopiować ProFanController.exe
-d6132623	Powiadomienie testowe ProFanController
+687bc2e0	Nie udało się skopiować Fanlume.exe
+2a3da751	Powiadomienie testowe Fanlume
 7be18f84	To jest powiadomienie testowe z {0}. Jeśli dotarło, konfiguracja jest zakończona.
 15278ea5	Wysłano. Sprawdź, czy dotarło na telefon
 4ce2da04	Nie udało się wysłać: {0}
@@ -1108,8 +1108,8 @@ b599c0f6	Wysokie (hi-hat)
 f898c734	To nie jest adres https: {0}
 9181a7c0	Aplikacja zakończyła się {1} razy w ciągu {0:F0} min, więc automatyczne ponowne uruchamianie zostało wstrzymane.
 abf150b9	Automatyczne ponowne uruchamianie jest wyłączone.
-08738032	ProFanController nieoczekiwanie się zakończył.\n\nWentylatory ustawiono na bezpieczne obroty ({0:F0}%, pompy 100%). {1}\n
-a506afc7	Po restarcie komputera sterowanie wraca do BIOS (po ponownym uruchomieniu ProFanController steruje znów aplikacja).\n\nDziennik: 
+50be9a1c	Fanlume nieoczekiwanie się zakończył.\n\nWentylatory ustawiono na bezpieczne obroty ({0:F0}%, pompy 100%). {1}\n
+af5a88ef	Po restarcie komputera sterowanie wraca do BIOS (po ponownym uruchomieniu Fanlume steruje znów aplikacja).\n\nDziennik: 
 5e11c7bc	Nie można korzystać z tej sieci.
 3540eeb1	Zbyt wiele błędnych kluczy, dostęp chwilowo wstrzymany. Odczekaj około minuty.
 aacf373e	Nieprawidłowy klucz dostępu. Użyj adresu URL pokazanego w ustawieniach na komputerze.
@@ -1217,13 +1217,13 @@ ca58240b	Przywróć z kopii
 0a066c64	Przywrócono ustawienia z {0} (można cofnąć przyciskiem „Cofnij”).
 4a2fd247	Nie udało się odczytać tej kopii.\n{0}
 1b7a6d56	Eksportuj ustawienia
-d3b9501f	Ustawienia ProFanController (*.profan.json)|*.profan.json
-8c168c4d	ProFan-ustawienia_{0}_{1:yyyyMMdd}{2}
+f48eb65b	Ustawienia Fanlume (*.fanlume.json)|*.fanlume.json
+f1a7dc7f	Fanlume-ustawienia_{0}_{1:yyyyMMdd}{2}
 dd581e02	Wyeksportowano profile ({0}). Wyślij ten plik drugiej osobie i poproś, by wczytała go w Ustawienia → „Bezpieczeństwo i kopie zapasowe” → „Importuj ustawienia”.
 25f3627c	Nie udało się wyeksportować.\n{0}
 e6cdafd7	Poczekaj na zakończenie inicjalizacji sprzętu.
 de0ce3c8	Importuj ustawienia
-e259cc0d	Ustawienia ProFanController (*.profan.json;*.json)|*.profan.json;*.json
+70585dc7	Ustawienia Fanlume (*.fanlume.json;*.json)|*.fanlume.json;*.json
 49c7511d	Nie można wczytać tego pliku.\n{0}
 d01ee250	. Można to cofnąć przyciskiem „Cofnij”. Przed użyciem zaimportowanych wentylatorów sprawdź ich krzywe.
 565076e7	Sprawdź krzywe
@@ -1482,7 +1482,7 @@ b5ccd0c3	Automatyczna diagnoza z zapisów i kontrola kurzu oraz zużycia wentyla
 acea69f7	Wszystkie temperatury, obroty i kanały sterowania wykryte na tym komputerze oraz czujniki wirtualne
 7626e5f7	Profile, automatyczne przełączanie, sposób uruchamiania i ogólne działanie sterowania
 d3bf5d86	Wyłączono DRY RUN. Rozpoczyna się sterowanie wentylatorami.
-7f6b69df	Strażnik ProFanController
+256148cd	Strażnik Fanlume
 0788f8eb	Tył
 c85ab318	Przód
 0f616edd	Góra
@@ -1506,11 +1506,11 @@ f0a541e0	Nadal nie znaleziono PawnIO. Jeśli instalator został już uruchomiony
 3699179e	Używane w: {0}
 841ef786	(nie używaj)
 cbfdf76e	(usuń ten wentylator)
-ad4fff7c	Zmiana sprzętu - ProFanController
+5dde97f8	Zmiana sprzętu - Fanlume
 41580e6f	Nie znaleziono czujników lub złączy używanych w ustawieniach. Na nowym sprzęcie automatycznie wybrano te o tej samej roli.
 80403780	 Sprawdź zawartość i naciśnij „Zastąp i zastosuj” (przed zmianą zostanie zrobiona kopia bieżących ustawień; później można też „Cofnij”).\n
 8f763b23	Do tego czasu krzywe korzystające z nieznalezionych czujników dla bezpieczeństwa pracują na stałych obrotach (zmienisz to w Ustawienia → „Bezpieczeństwo i kopie zapasowe”).
-6dc976fa	Import ustawień - ProFanController
+d49f09aa	Import ustawień - Fanlume
 63ed3acb	Sprawdź, którym złączom wentylatorów i czujnikom temperatury tego komputera odpowiadają te z pliku.
 65901272	 Elementy o tej samej nazwie są wybierane automatycznie. Wentylatory ustawione na „(usuń ten wentylator)” nie są importowane.
 ecf8e3b5	Wyeksportowano z komputera: {0} ({1:yyyy/MM/dd HH:mm})
@@ -1525,7 +1525,7 @@ fe5a2b13	Steruj na stałych 70%
 0c1d2ab2	Monitoruj pod sterowaniem BIOS
 d6d4423a	• {0} (wentylator): podąża za {1}
 9833252d	Tworzone profile: {0} / {1} / {2}\nProfil na co dzień: {3}\n\n
-0c5502cd	Otwórz ProFanController
+12b1edf7	Otwórz Fanlume
 9a801bfe	Boost (pełna prędkość) 15 min
 46dbb6b6	Cichy 30 min
 670ac712	Cichy 2 godz.
@@ -1604,3 +1604,8 @@ c8e0f349	Trwa sprawdzanie dźwięku wentylatora.
 69ade00e	Trwa konfiguracja.
 82fa072a	Wybierz język ponownie, gdy to się zakończy.
 31040161	Zainstalowano z {0} do {1} i uruchomiono stamtąd. Od teraz działa aplikacja z tego folderu (pobrane pliki można usunąć).
+4a3be0af	ProFanController (poprzednia wersja)
+67d28cec	Przeniesiono ustawienia i zapisy poprzedniej wersji (ProFanController) z {0}. Ten folder nie jest już używany; sprawdź jego zawartość, a potem możesz go usunąć.
+82ee83eb	Nie udało się uruchomić deinstalatora ({0}).\nPo zakończeniu aplikacji odinstaluj Fanlume w Ustawieniach Windows → Aplikacje → Zainstalowane aplikacje.
+adc330eb	Po zamknięciu aplikacja się zakończy, a potem deinstalator usunie aplikację i {0}. Fanlume zniknie też z „Zainstalowanych aplikacji” w Windows.
+f10b7201	Po zamknięciu aplikacja się zakończy, a potem deinstalator ją usunie. Fanlume zniknie też z „Zainstalowanych aplikacji” w Windows. Ustawienia, dzienniki i zapisy zostają w folderze.

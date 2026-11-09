@@ -104,7 +104,7 @@ public partial class UninstallDialog : Window
         }
         ShowFinished(exit: !aborted, deleteData: !aborted && Plan.Contains(CleanupStep.DeleteData),
             intro: aborted ? L("お片付けを中止しました。") : L("お片付けが終わりました。内容を確かめてから、閉じてください。"),
-            summary: CleanUninstall.Summary(results, Plan, _appFolder));
+            summary: CleanUninstall.Summary(results, Plan, _appFolder, byUninstaller: InstallerCleanup.UninstallerPath(_appFolder) is not null));
     }
 
     /// <summary>閉じたあとに、設定・ログ・記録を消す</summary>

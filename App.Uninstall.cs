@@ -28,8 +28,7 @@ public partial class App
     private const string CleanupDataArgument = "--cleanup-data";
 
     /// <summary>クラッシュしたときの記録（ミニダンプ）を残すよう Windows に頼むレジストリのキー（HKLM の下）</summary>
-    private static string CrashDumpKey =>
-        $@"SOFTWARE\Microsoft\Windows\Windows Error Reporting\LocalDumps\{Path.GetFileName(Environment.ProcessPath ?? "ProFanController.exe")}";
+    private static string CrashDumpKey => InstallerCleanup.CrashDumpKey(Path.GetFileName(Environment.ProcessPath ?? AppIdentity.ExeName));
 
     // ----- PawnIO を入れたあとの起動し直し -----
 
@@ -176,14 +175,14 @@ public partial class App
                 Try(L("スマホ監視"), () => _web?.Stop());
                 await Task.Run(WebServer.RemoveFirewall);
                 return await Task.Run(WebServer.FirewallRuleExists)
-                    ? Fail(L("ファイアウォールの許可を消せませんでした。「Windows セキュリティ」→「ファイアウォールとネットワーク保護」→「詳細設定」→「受信の規則」から「ProFanController Web」を削除してください。"))
+                    ? Fail(L("ファイアウォールの許可を消せませんでした。「Windows セキュリティ」→「ファイアウォールとネットワーク保護」→「詳細設定」→「受信の規則」から「Fanlume Web」を削除してください。"))
                     : Done(L("スマホ監視を止めて、ファイアウォールの許可を消しました"));
             }
             case CleanupStep.RemoveAutoStart:
             {
                 await Task.Run(AutoStart.Disable);
                 return await Task.Run(AutoStart.IsEnabled)
-                    ? Fail(L("自動起動を消せませんでした。タスクスケジューラ（タスク スケジューラ ライブラリ）から「ProFanController」を削除してください。"))
+                    ? Fail(L("自動起動を消せませんでした。タスクスケジューラ（タスク スケジューラ ライブラリ）から「Fanlume」を削除してください。"))
                     : Done(L("ログオン時の自動起動を消しました"));
             }
             case CleanupStep.RemoveCrashDumpSetting:
@@ -217,6 +216,28 @@ public partial class App
     public void FinishCleanUninstall(bool deleteData)
     {
         string folder = AppContext.BaseDirectory.TrimEnd(Path.DirectorySeparatorChar);
+        // インストーラーで入れたとき: アンインストーラーに続きを任せる。アンインストーラーは、このアプリが終わるのを待ってから、
+        // アプリ本体を消し、Windows の「インストールされているアプリ」からも外す（選んでいれば設定・ログ・記録も消す）
+        if (InstallerCleanup.UninstallerPath(folder) is { } uninstaller)
+        {
+            try
+            {
+                Process.Start(new ProcessStartInfo(uninstaller, InstallerCleanup.UninstallerArguments(deleteData))
+                {
+                    UseShellExecute = false,
+                    WorkingDirectory = Environment.SystemDirectory,
+                })?.Dispose();
+                Logger.Info($"お片付け: アンインストーラーを起動して、アプリを終了します（設定・記録を消す: {(deleteData ? "はい" : "いいえ")}）");
+                ExitApplication();
+                return;
+            }
+            catch (Exception ex)
+            {
+                Logger.Error($"アンインストーラーを起動できません: {ex.Message}");
+                MessageBox.Show(L($"アンインストーラーを起動できませんでした（{ex.Message}）。\nアプリが終了したあとに、Windows の「設定」→「アプリ」→「インストールされているアプリ」から Fanlume をアンインストールしてください。"),
+                    AppIdentity.Name, MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+        }
         bool helperStarted = false;
         if (deleteData)
         {
@@ -235,7 +256,7 @@ public partial class App
             {
                 Logger.Error($"設定・記録を消すプロセスを起動できません: {ex.Message}");
                 MessageBox.Show(L($"設定・ログ・記録を消す準備ができませんでした（{ex.Message}）。\nアプリが終了したあとに、フォルダーごと削除してください:\n{folder}"),
-                    "ProFanController", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    AppIdentity.Name, MessageBoxButton.OK, MessageBoxImage.Warning);
             }
         }
         if (!helperStarted) Try(L("フォルダーを開く"), () => SystemTool.Reveal(folder));
@@ -259,7 +280,7 @@ public partial class App
         var icon = MessageBoxImage.Information;
         if (!WaitForExit(parentPid, TimeSpan.FromSeconds(60)) || !WaitForOtherInstances(TimeSpan.FromSeconds(30)))
         {
-            message = L("ProFanController がまだ動いているため、設定・ログ・記録は消しませんでした。\n")
+            message = L("Fanlume がまだ動いているため、設定・ログ・記録は消しませんでした。\n")
                       + L($"アプリを終了してから、次のフォルダーをフォルダーごと削除してください:\n{folder}");
             icon = MessageBoxImage.Warning;
         }
@@ -280,7 +301,7 @@ public partial class App
             }
         }
         // 本体の画面はもうないので、ほかのウィンドウの後ろに隠れないように出す（閉じるまでフォルダーを消せないため）
-        MessageBox.Show(message, L("ProFanController のお片付け"), MessageBoxButton.OK, icon, MessageBoxResult.OK, MessageBoxOptions.DefaultDesktopOnly);
+        MessageBox.Show(message, L("Fanlume のお片付け"), MessageBoxButton.OK, icon, MessageBoxResult.OK, MessageBoxOptions.DefaultDesktopOnly);
         try { SystemTool.Reveal(folder); } catch { /* 開けなくても、お知らせで場所は伝えてある */ }
         return true;
     }

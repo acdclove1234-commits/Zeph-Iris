@@ -62,7 +62,7 @@ public sealed class Notifier
     {
         try
         {
-            await SendCoreAsync(cfg, L("ProFanController テスト通知"), L($"{Environment.MachineName} からのテスト通知です。この通知が届けば設定は完了です。"), AlertLevel.Info);
+            await SendCoreAsync(cfg, L("Fanlume テスト通知"), L($"{Environment.MachineName} からのテスト通知です。この通知が届けば設定は完了です。"), AlertLevel.Info);
             return L("送信しました。スマホに届いたか確認してください");
         }
         catch (Exception ex)
@@ -106,7 +106,7 @@ public sealed class Notifier
             int color = level switch { AlertLevel.Danger => 0xF87171, AlertLevel.Warning => 0xFBBF24, _ => 0x22C7FF };
             var json = new JsonObject
             {
-                ["username"] = "ProFanController",
+                ["username"] = AppIdentity.Name,
                 ["embeds"] = new JsonArray { new JsonObject { ["title"] = title, ["description"] = body, ["color"] = color } },
             };
             using var content = new StringContent(json.ToJsonString(), Encoding.UTF8, "application/json");

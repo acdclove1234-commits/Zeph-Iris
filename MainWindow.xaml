@@ -9,7 +9,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:ctl="clr-namespace:ProFanController.UI.Controls"
         xmlns:ui="clr-namespace:ProFanController.UI"
-        Title="ProFanController" Width="1360" Height="900" MinWidth="1120" MinHeight="700"
+        Title="Fanlume" Width="1360" Height="900" MinWidth="1120" MinHeight="700"
         WindowStartupLocation="CenterScreen"
         Background="{DynamicResource BgBrush}" Foreground="{DynamicResource TextBrush}"
         FontFamily="{DynamicResource UiFont}" FontSize="14"
@@ -330,8 +330,8 @@
                 <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="24,28,0,30">
                     <Image x:Name="LogoImage" Width="34" Height="34"/>
                     <StackPanel Margin="12,0,0,0" VerticalAlignment="Center">
-                        <TextBlock Text="ProFan" FontSize="18" FontWeight="Bold"/>
-                        <TextBlock Text="CONTROLLER" FontSize="11" Foreground="{DynamicResource SubTextBrush}" Margin="1,-2,0,0"/>
+                        <TextBlock Text="Fanlume" FontSize="18" FontWeight="Bold"/>
+                        <TextBlock Text="FAN &amp; LIGHT" FontSize="11" Foreground="{DynamicResource SubTextBrush}" Margin="1,-2,0,0"/>
                     </StackPanel>
                 </StackPanel>
 
@@ -2867,7 +2867,7 @@
                                     <StackPanel>
                                         <TextBlock Text="見張りプロセスを使う（おすすめ）" FontWeight="SemiBold"/>
                                         <TextBlock Style="{StaticResource Caption}" TextWrapping="Wrap"
-                                                   Text="アプリが強制終了・フリーズしたとき、ファンが低い回転のまま止まってしまうのを防ぎます。タスクマネージャーに ProFanController が 2 つ表示されますが、片方は見張り役です"/>
+                                                   Text="アプリが強制終了・フリーズしたとき、ファンが低い回転のまま止まってしまうのを防ぎます。タスクマネージャーに Fanlume が 2 つ表示されますが、片方は見張り役です"/>
                                     </StackPanel>
                                 </CheckBox>
                                 <Grid Margin="52,12,0,0" IsEnabled="{Binding Safety.WatchdogEnabled}">

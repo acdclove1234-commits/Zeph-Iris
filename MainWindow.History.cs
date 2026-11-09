@@ -58,7 +58,7 @@ public partial class MainWindow
     {
         if (_history.Count == 0)
         {
-            MessageBox.Show(this, L("まだ記録がありません。"), "ProFanController", MessageBoxButton.OK, MessageBoxImage.Information);
+            MessageBox.Show(this, L("まだ記録がありません。"), AppIdentity.Name, MessageBoxButton.OK, MessageBoxImage.Information);
             return;
         }
 
@@ -66,7 +66,7 @@ public partial class MainWindow
         {
             Title = L("履歴を CSV に書き出す"),
             Filter = L("CSV ファイル (*.csv)|*.csv"),
-            FileName = $"ProFan_{DateTime.Now:yyyyMMdd_HHmm}.csv",
+            FileName = $"{AppIdentity.Name}_{DateTime.Now:yyyyMMdd_HHmm}.csv",
         };
         if (dialog.ShowDialog(this) != true) return;
 
@@ -84,7 +84,7 @@ public partial class MainWindow
         catch (Exception ex)
         {
             Logger.Error($"CSV 出力に失敗: {ex}");
-            MessageBox.Show(this, L($"書き出しに失敗しました。\n{ex.Message}"), "ProFanController", MessageBoxButton.OK, MessageBoxImage.Warning);
+            MessageBox.Show(this, L($"書き出しに失敗しました。\n{ex.Message}"), AppIdentity.Name, MessageBoxButton.OK, MessageBoxImage.Warning);
         }
     }
 }

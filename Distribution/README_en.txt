@@ -1,7 +1,7 @@
-ProFanController (fan control tool)
+Fanlume (fan control tool, called ProFanController up to 6.6.1)
 ===================================
 
-ProFanController controls the motherboard's fan headers from temperatures.
+Fanlume controls the motherboard's fan headers from temperatures.
 It also monitors temperatures and load, runs cooling tests, lights LEDs with OpenRGB,
 and can be checked from a phone.
 
@@ -11,6 +11,18 @@ and can be checked from a phone.
   Below, screen and button names are given in English with the Japanese label in brackets,
   for example: Settings [設定].
 
+
+■ What's new in v6.7.0
+  - New name: ProFanController is now called Fanlume. Settings and records are carried over.
+  - Installer: Fanlume now comes as an installer (Fanlume-6.7.0-setup.exe). It installs to
+    C:\Program Files\Fanlume, adds a Start menu entry, and can be removed from Installed apps in Windows.
+    To update, run the newer installer: it closes the running Fanlume properly first and can start it again
+    afterwards; settings, logs and records stay. 2_更新.bat (update) is gone.
+  - Moving from ProFanController: the installer closes a running ProFanController properly (the fans go back
+    to the BIOS settings). When Fanlume starts for the first time, it takes the settings and records from
+    C:\Tools\ProFanController and moves the start-at-logon entry and the firewall rule for the phone view to
+    the new name. You can delete C:\Tools\ProFanController afterwards.
+  - Exported settings files are now *.fanlume.json (older *.profan.json files still load).
 
 ■ What's new in v6.6.1
   - First run: started from Downloads, the Desktop or inside the zip, the app now copies itself to
@@ -83,20 +95,20 @@ and can be checked from a phone.
 
 
 ■ First-time setup (once)
-  1. Double-click ProFanController.exe -> "Yes" (administrator confirmation).
+  1. Double-click Fanlume-<version>-setup.exe (the installer) -> "Yes" (administrator confirmation).
      - If "Windows protected your PC" appears, press "More info" -> "Run anyway"
        (shown because this is a personal app without a code-signing certificate).
-     - When opened from Downloads, the Desktop or inside the zip, the app installs itself to
-       C:\Tools\ProFanController and starts again from there (you can delete the downloaded files
-       afterwards). Placed anywhere else (for example D:\Apps), it runs where it is.
+     - "Next" -> "Install" installs it to C:\Program Files\Fanlume (with a Start menu entry).
+     - Leave "Launch Fanlume" ticked on the last page and press "Finish" to start it
+       (you can delete the installer afterwards).
 
   2. The first page of the setup wizard checks the fan control driver (PawnIO).
      - If PawnIO is missing, the installation starts by itself, and the app restarts when it is done
        (installed with winget, which comes with Windows; needs the internet and takes up to a few
        minutes; the wizard opens again after the restart).
-     - If a PC restart is required, restart the PC and start ProFanController.exe.
-     - If it fails, right-click "1_PawnIO をインストール.bat" (= install PawnIO) in this folder ->
-       "Run as administrator", or get the installer from https://pawnio.eu/
+     - If a PC restart is required, restart the PC and start Fanlume from the Start menu.
+     - If it fails, right-click "1_PawnIO をインストール.bat" (= install PawnIO) in the app folder
+       (C:\Program Files\Fanlume) -> "Run as administrator", or get the installer from https://pawnio.eu/
 
   3. Follow the wizard.
      - "Test" [テスト] on each fan header runs it at full speed for 8 seconds.
@@ -117,7 +129,7 @@ and can be checked from a phone.
   - One-off spikes (read errors) are ignored, and sensors that freeze are treated as faulty.
   - When the app exits or stops, the fans go back to the BIOS fan settings.
   - If the app is killed or freezes, the watchdog process sets the fans to a safe speed (70%) and restarts
-    the app. That is why Task Manager shows two ProFanController processes (one is the watchdog).
+    the app. That is why Task Manager shows two Fanlume processes (one is the watchdog).
   - Before sleep the BIOS takes over; control resumes after waking up.
   - When a part such as the GPU is replaced and its sensors change, the app offers to map the old sensors to the
     new ones at start (until then, curves that use a missing sensor run at a safe 60%).
@@ -129,28 +141,33 @@ and can be checked from a phone.
 
 
 ■ Updating to a new version
-  1. Save the new zip, still zipped, to your Downloads folder.
-  2. Double-click "2_更新.bat" (= update) in this folder -> "Yes".
-     - The running app is closed (fans back to BIOS), the files are replaced, and the app starts again.
+  1. Download the newer Fanlume-<version>-setup.exe from the GitHub releases page:
+     https://github.com/acdclove1234-commits/Fanlume/releases
+  2. Double-click it -> "Yes" -> "Next" -> "Install".
+     - The running Fanlume is closed properly first (fans back to BIOS), then the files are replaced.
+       Choose "Launch Fanlume" on the last page to start it again right away.
      - Settings (config.json), logs and records (data / records / backups folders) are kept.
-     - Before replacing, it shows the version in the zip. With an internet connection it also checks that
-       the zip is identical to the official GitHub release (if not, it asks whether to continue).
-     - The previous files are kept in the backups folder. If replacing fails, or the new version exits right
-       away, the previous version is restored automatically.
+     - If Fanlume cannot be closed, the installer says so and stops. Right-click the tray icon ->
+       "Exit (hand back to BIOS)", then run the installer again.
 
 
 ■ Uninstalling
-  1. Settings [設定] -> "Safety & backup" [安全・バックアップ] -> "Uninstall (clean up)" [アンインストール（お片付け）].
+  Use either of these:
+  A. Windows Settings -> Apps -> Installed apps -> "..." next to Fanlume -> Uninstall.
+     - If Fanlume is running, it is closed properly (fans back to BIOS control); the start-at-logon entry,
+       the firewall rule for the phone view and so on are removed, and then the app is deleted.
+     - It asks whether to delete the settings, logs and records too ("No" keeps them in the app folder).
+  B. Settings [設定] -> "Safety & backup" [安全・バックアップ] -> "Uninstall (clean up)" [アンインストール（お片付け）].
      - The steps are listed first. Check them, then press the button to clean up and exit:
        - It checks that the fans are back under BIOS control (if not, it stops and changes nothing).
        - It stops the lighting control and removes the start-at-logon entry, the firewall rule for the
          phone view, and so on.
        - Only if you choose: delete settings, logs and records / uninstall PawnIO
          (both are kept otherwise; other programs such as FanControl may use PawnIO).
-     - The app then exits (the watchdog exits too and does not restart it).
-  2. Explorer opens this folder; delete the whole folder
-     (the app cannot delete itself while running, so this last step is manual).
+     - When you close it, the app exits and the uninstaller then removes the app (it also leaves
+       Installed apps).
   * "Exit" from the tray alone leaves the start-at-logon entry in place.
+  * Only B can uninstall PawnIO.
 
 
 ■ Troubleshooting
@@ -162,12 +179,12 @@ and can be checked from a phone.
     (The app then only monitors temperatures and load and writes nothing to the fans; the BIOS stays in control.)
   - With ASRock A-Tuning / ASUS Armoury Crate / MSI Center or another fan control program installed,
     the two fight and the speeds are unstable. Turn off its fan control or uninstall it.
-  - Logs: the logs folder in this folder.
+  - Logs: the logs folder in the app folder (C:\Program Files\Fanlume).
   - Settings got messed up -> Settings -> "Safety & backup" -> "Restore from backup" [バックアップから戻す].
   - To report a problem, include your motherboard, CPU and graphics card models and the logs folder.
 
 
-■ Files created in this folder
+■ Files created in the app folder (C:\Program Files\Fanlume)
   config.json ... settings        backups ... automatic setting backups
   logs        ... logs            data    ... per-minute records and energy (up to 180 days)
   records     ... records around incidents (CSV)    reports ... AI advisor answers

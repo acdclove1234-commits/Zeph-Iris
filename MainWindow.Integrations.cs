@@ -63,7 +63,7 @@ public partial class MainWindow
     private void OnNewTopicClick(object sender, RoutedEventArgs e)
     {
         var answer = MessageBox.Show(this, L("トピック名を作り直しますか？\n\nスマホの ntfy アプリでは、新しいトピック名を購読し直す必要があります。"),
-            "ProFanController", MessageBoxButton.OKCancel, MessageBoxImage.Question);
+            AppIdentity.Name, MessageBoxButton.OKCancel, MessageBoxImage.Question);
         if (answer != MessageBoxResult.OK) return;
         Config.Notify.NtfyTopic = NotifyConfig.NewTopic();
         UpdateNtfyQr();
@@ -166,7 +166,7 @@ public partial class MainWindow
         }
         catch (Exception ex)
         {
-            MessageBox.Show(this, L($"このバックアップは読み込めませんでした。\n{ex.Message}"), "ProFanController", MessageBoxButton.OK, MessageBoxImage.Warning);
+            MessageBox.Show(this, L($"このバックアップは読み込めませんでした。\n{ex.Message}"), AppIdentity.Name, MessageBoxButton.OK, MessageBoxImage.Warning);
         }
     }
 
@@ -176,8 +176,8 @@ public partial class MainWindow
         var dialog = new SaveFileDialog
         {
             Title = L("設定を書き出す"),
-            Filter = L("ProFanController の設定 (*.profan.json)|*.profan.json"),
-            FileName = L($"ProFan設定_{Environment.MachineName}_{DateTime.Now:yyyyMMdd}{ConfigTransfer.Extension}"),
+            Filter = L("Fanlume の設定 (*.fanlume.json)|*.fanlume.json"),
+            FileName = L($"Fanlume設定_{Environment.MachineName}_{DateTime.Now:yyyyMMdd}{ConfigTransfer.Extension}"),
         };
         if (dialog.ShowDialog(this) != true) return;
         try
@@ -188,7 +188,7 @@ public partial class MainWindow
         }
         catch (Exception ex)
         {
-            MessageBox.Show(this, L($"書き出せませんでした。\n{ex.Message}"), "ProFanController", MessageBoxButton.OK, MessageBoxImage.Warning);
+            MessageBox.Show(this, L($"書き出せませんでした。\n{ex.Message}"), AppIdentity.Name, MessageBoxButton.OK, MessageBoxImage.Warning);
         }
     }
 
@@ -196,14 +196,14 @@ public partial class MainWindow
     {
         if (_catalog is null)
         {
-            MessageBox.Show(this, L("ハードウェアの初期化が終わるまでお待ちください。"), "ProFanController", MessageBoxButton.OK, MessageBoxImage.Information);
+            MessageBox.Show(this, L("ハードウェアの初期化が終わるまでお待ちください。"), AppIdentity.Name, MessageBoxButton.OK, MessageBoxImage.Information);
             return;
         }
         FlushCommit();
         var dialog = new OpenFileDialog
         {
             Title = L("設定を読み込む"),
-            Filter = L("ProFanController の設定 (*.profan.json;*.json)|*.profan.json;*.json"),
+            Filter = L("Fanlume の設定 (*.fanlume.json;*.json)|*.fanlume.json;*.json"),
         };
         if (dialog.ShowDialog(this) != true) return;
 
@@ -214,7 +214,7 @@ public partial class MainWindow
         }
         catch (Exception ex)
         {
-            MessageBox.Show(this, L($"このファイルは読み込めません。\n{ex.Message}"), "ProFanController", MessageBoxButton.OK, MessageBoxImage.Warning);
+            MessageBox.Show(this, L($"このファイルは読み込めません。\n{ex.Message}"), AppIdentity.Name, MessageBoxButton.OK, MessageBoxImage.Warning);
             return;
         }
 

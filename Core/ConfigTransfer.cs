@@ -10,10 +10,13 @@ using System.Text.Json;
 
 namespace ProFanController;
 
-/// <summary>書き出しファイル（*.profan.json）の中身</summary>
+/// <summary>書き出しファイル（*.fanlume.json）の中身</summary>
 public sealed class SettingsPackage
 {
-    public const string FormatName = "ProFanController.Settings";
+    public const string FormatName = "Fanlume.Settings";
+
+    /// <summary>前の名前（6.6.1 まで）で書き出したファイルの印（*.profan.json。そのまま読み込める）</summary>
+    public const string LegacyFormatName = AppIdentity.LegacyName + ".Settings";
 
     public string Format { get; set; } = FormatName;
     public int Version { get; set; } = 1;
@@ -34,7 +37,7 @@ public sealed class SettingsPackage
 
 public static class ConfigTransfer
 {
-    public const string Extension = ".profan.json";
+    public const string Extension = ".fanlume.json";
 
     private static readonly JsonSerializerOptions Options = new()
     {
@@ -79,7 +82,8 @@ public static class ConfigTransfer
     {
         var pkg = JsonSerializer.Deserialize<SettingsPackage>(File.ReadAllText(path), Options)
                   ?? throw new InvalidDataException(L("ファイルが空です。"));
-        if (pkg.Format != SettingsPackage.FormatName) throw new InvalidDataException(L("ProFanController の設定ファイルではありません。"));
+        if (pkg.Format is not (SettingsPackage.FormatName or SettingsPackage.LegacyFormatName))
+            throw new InvalidDataException(L("Fanlume の設定ファイルではありません。"));
         if (pkg.Profiles.Count == 0) throw new InvalidDataException(L("プロファイルが入っていません。"));
         foreach (var f in pkg.Profiles.SelectMany(p => p.Fans)) f.Normalize();
         return pkg;

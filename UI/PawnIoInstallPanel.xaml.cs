@@ -220,7 +220,7 @@ public partial class PawnIoInstallPanel : UserControl
         catch (Exception ex)
         {
             Logger.Warn($"公式サイトを開けません: {ex.Message}");
-            MessageBox.Show(L($"ブラウザーを開けませんでした。{PawnIoSetup.OfficialSite} を開いてください。"), "ProFanController",
+            MessageBox.Show(L($"ブラウザーを開けませんでした。{PawnIoSetup.OfficialSite} を開いてください。"), AppIdentity.Name,
                 MessageBoxButton.OK, MessageBoxImage.Information);
         }
     }

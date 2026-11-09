@@ -37,7 +37,7 @@ public partial class MainWindow : Window
     public bool AllowClose { get; set; }
 
     /// <summary>タスクトレイのツールチップ用の短い要約</summary>
-    public string TraySummary { get; private set; } = "ProFanController";
+    public string TraySummary { get; private set; } = AppIdentity.Name;
 
     /// <summary>ミニウィジェットと共有する表示データ</summary>
     public ObservableCollection<TempCardVm> TempCardItems => _tempCards;
@@ -95,7 +95,7 @@ public partial class MainWindow : Window
 
         var version = typeof(MainWindow).Assembly.GetName().Version;
         AboutText.Text =
-            $"ProFanController {version?.ToString(3)}\n" +
+            $"Fanlume {version?.ToString(3)}\n" +
             L("ハードウェアアクセス: LibreHardwareMonitor + PawnIO\n") +
             L($"設定ファイル: {ConfigStore.FilePath}");
 
@@ -394,7 +394,7 @@ public partial class MainWindow : Window
 
         var cpuCard = _tempCards.FirstOrDefault();
         var gpuCard = _tempCards.Skip(1).FirstOrDefault();
-        TraySummary = $"ProFanController [{s.Profile}]\n{cpuCard?.Title ?? "CPU"} {cpuCard?.ValueText ?? "--"}°C / {gpuCard?.Title ?? "GPU"} {gpuCard?.ValueText ?? "--"}°C";
+        TraySummary = $"Fanlume [{s.Profile}]\n{cpuCard?.Title ?? "CPU"} {cpuCard?.ValueText ?? "--"}°C / {gpuCard?.Title ?? "GPU"} {gpuCard?.ValueText ?? "--"}°C";
     }
 
     private void UpdateStatusPanel(EngineSnapshot s)

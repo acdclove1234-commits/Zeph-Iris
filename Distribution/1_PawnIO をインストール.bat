@@ -19,7 +19,7 @@ if errorlevel 1 (
   start https://pawnio.eu/
 ) else (
   echo.
-  echo Installed. Start ProFanController.exe.
-  echo インストールが完了しました。ProFanController.exe を起動してください。
+  echo Installed. Start Fanlume.
+  echo インストールが完了しました。Fanlume を起動してください。
 )
 pause

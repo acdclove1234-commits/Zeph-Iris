@@ -5,6 +5,7 @@
 //   dotnet run --project tools/LocTool -- wrap           … 訳す文字列を L(…) で包む（--dry で数えるだけ）
 //   dotnet run --project tools/LocTool -- missing en     … en.txt にない見出しを「ハッシュ TAB 見出し」で出す
 //   dotnet run --project tools/LocTool -- stats          … 言語ごとに、訳してある割合
+//   dotnet run --project tools/LocTool -- rename 古 新   … ソースの言葉を変えたあと（extract の前）、訳を新しい見出しへ付け替える
 //   見出しの作り方は実行時（Core/Loc.cs・UI/XamlLocalizer.cs）と同じ:
 //     XAML: Text / Content / ToolTip / Header / Title の値（{} で始まる値はそれを除く）、TextBox の Tag、Binding の StringFormat
 //     C#: L("…") / LF("…", …) の文字列、L($"…") は穴を {0} {1:F1} にし、文字の { } を {{ }} にしたもの
@@ -94,8 +95,60 @@ switch (cmd)
         }
         return 0;
     }
+    case "rename":
+    {
+        // ソースの文字列の中の言葉を変えたあと（extract の前）に、訳を新しい見出しへ付け替え、訳の中の同じ言葉も置き換える。
+        // 見出しは日本語の文のハッシュなので、アプリ名のような言葉を変えると、そのままでは訳が見つからなくなるため
+        if (args.Length < 3 || args.Length % 2 == 0)
+        {
+            Console.Error.WriteLine("使い方: rename <古い言葉> <新しい言葉> [<古い言葉> <新しい言葉> …]");
+            return 2;
+        }
+        var pairs = new List<(string Old, string New)>();
+        for (int i = 1; i + 1 < args.Length; i += 2) pairs.Add((args[i], args[i + 1]));
+        string Apply(string s)
+        {
+            foreach (var (o, n) in pairs) s = s.Replace(o, n, StringComparison.Ordinal);
+            return s;
+        }
+        var moves = new Dictionary<uint, uint>();
+        foreach (var (h, key) in ReadKeys(langDir))
+        {
+            string source = Unescape(key);
+            string renamed = Apply(source);
+            if (renamed != source) moves[h] = Hash(renamed);
+        }
+        int files = 0, lines = 0;
+        foreach (var f in Directory.GetFiles(langDir, "*.txt"))
+        {
+            var text = File.ReadAllLines(f);
+            bool changed = false;
+            for (int i = 0; i < text.Length; i++)
+            {
+                string line = text[i];
+                if (line.StartsWith('#'))
+                {
+                    string header = Apply(line);
+                    changed |= header != line;
+                    text[i] = header;
+                    continue;
+                }
+                if (line.Length < 10 || line[8] != '\t'
+                    || !uint.TryParse(line.AsSpan(0, 8), NumberStyles.HexNumber, CultureInfo.InvariantCulture, out uint h)
+                    || !moves.TryGetValue(h, out uint moved)) continue;
+                text[i] = moved.ToString("x8", CultureInfo.InvariantCulture) + "\t" + Apply(line[9..]);
+                changed = true;
+                lines++;
+            }
+            if (!changed) continue;
+            File.WriteAllText(f, string.Join("\n", text) + "\n", new UTF8Encoding(false));
+            files++;
+        }
+        Console.WriteLine($"付け替えた見出し {moves.Count} 件・訳 {lines} 行（{files} ファイル）。続けて extract を実行してください");
+        return 0;
+    }
     default:
-        Console.Error.WriteLine("使い方: extract | lint | missing <言語> | stats");
+        Console.Error.WriteLine("使い方: extract | lint | missing <言語> | stats | rename <古い言葉> <新しい言葉> …");
         return 2;
 }
 
@@ -383,6 +436,19 @@ static uint Hash(string s)
 }
 
 static string Escape(string s) => s.Replace("\\", "\\\\").Replace("\r", "\\r").Replace("\n", "\\n").Replace("\t", "\\t");
+
+/// <summary>Escape の逆（\\ \r \n \t を元の文字に戻す）</summary>
+static string Unescape(string s)
+{
+    var sb = new StringBuilder(s.Length);
+    for (int i = 0; i < s.Length; i++)
+    {
+        if (s[i] != '\\' || i + 1 >= s.Length) { sb.Append(s[i]); continue; }
+        char c = s[++i];
+        sb.Append(c switch { 'n' => '\n', 'r' => '\r', 't' => '\t', _ => c });
+    }
+    return sb.ToString();
+}
 
 static IEnumerable<(uint Hash, string Key)> ReadKeys(string langDir)
 {

@@ -193,7 +193,7 @@ public partial class MainWindow
         if (AddControlCombo.SelectedItem is not ControlInfo ci) return;
         if (Config.Profiles.SelectMany(p => p.Fans).Any(f => string.Equals(f.ControlId, ci.Id, StringComparison.OrdinalIgnoreCase)))
         {
-            MessageBox.Show(this, L("この端子はすでに追加されています。"), "ProFanController", MessageBoxButton.OK, MessageBoxImage.Information);
+            MessageBox.Show(this, L("この端子はすでに追加されています。"), AppIdentity.Name, MessageBoxButton.OK, MessageBoxImage.Information);
             return;
         }
 
@@ -229,7 +229,7 @@ public partial class MainWindow
     private void OnRemoveFanClick(object sender, RoutedEventArgs e)
     {
         if (SelectedFan is not { } fan) return;
-        var answer = MessageBox.Show(this, L($"「{fan.Name}」をすべてのプロファイルから削除しますか？\n削除した端子は BIOS 制御に戻ります。"), "ProFanController",
+        var answer = MessageBox.Show(this, L($"「{fan.Name}」をすべてのプロファイルから削除しますか？\n削除した端子は BIOS 制御に戻ります。"), AppIdentity.Name,
             MessageBoxButton.OKCancel, MessageBoxImage.Question);
         if (answer != MessageBoxResult.OK) return;
 
@@ -264,7 +264,7 @@ public partial class MainWindow
         if (fan.Curves.Count <= 1)
         {
             MessageBox.Show(this, L("カーブは最低 1 つ必要です。一定の回転にしたい場合は「固定回転にする」を使ってください。"),
-                "ProFanController", MessageBoxButton.OK, MessageBoxImage.Information);
+                AppIdentity.Name, MessageBoxButton.OK, MessageBoxImage.Information);
             return;
         }
         fan.Curves.Remove(curve);
@@ -290,18 +290,18 @@ public partial class MainWindow
         if (SelectedFan is not { } fan) return;
         if (_calibratingId is not null)
         {
-            MessageBox.Show(this, L("ほかのファンのキャリブレーションが実行中です。終わってから始めてください。"), "ProFanController", MessageBoxButton.OK, MessageBoxImage.Information);
+            MessageBox.Show(this, L("ほかのファンのキャリブレーションが実行中です。終わってから始めてください。"), AppIdentity.Name, MessageBoxButton.OK, MessageBoxImage.Information);
             return;
         }
         if (_tuner is not null || _test is not null)
         {
-            MessageBox.Show(this, L("おまかせ調整か冷却テストが実行中です。終わってから始めてください。"), "ProFanController", MessageBoxButton.OK, MessageBoxImage.Information);
+            MessageBox.Show(this, L("おまかせ調整か冷却テストが実行中です。終わってから始めてください。"), AppIdentity.Name, MessageBoxButton.OK, MessageBoxImage.Information);
             return;
         }
         // エンジンは実行中のプロファイルのファンしか扱わないため（結果は全プロファイル共通で使える）
         if (Config.FindProfile(_controller.EffectiveProfile)?.Fans.Any(f => f.ControlId == fan.ControlId) != true)
         {
-            MessageBox.Show(this, L("このファンは実行中のプロファイルに含まれていません。"), "ProFanController", MessageBoxButton.OK, MessageBoxImage.Information);
+            MessageBox.Show(this, L("このファンは実行中のプロファイルに含まれていません。"), AppIdentity.Name, MessageBoxButton.OK, MessageBoxImage.Information);
             return;
         }
         var answer = MessageBox.Show(this,
@@ -485,7 +485,7 @@ public partial class MainWindow
     {
         if (fan.AvoidBands.Count >= 4)
         {
-            MessageBox.Show(this, L("共振回避帯は 1 つのファンに 4 つまでです。"), "ProFanController", MessageBoxButton.OK, MessageBoxImage.Information);
+            MessageBox.Show(this, L("共振回避帯は 1 つのファンに 4 つまでです。"), AppIdentity.Name, MessageBoxButton.OK, MessageBoxImage.Information);
             return;
         }
         var overlap = fan.AvoidBands.FirstOrDefault(b => from <= b.To && to >= b.From);

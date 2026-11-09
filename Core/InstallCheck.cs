@@ -35,6 +35,8 @@ public static class InstallCheck
         new("FanControl", "FanControl", Exact: true),
         new("SpeedFan", "SpeedFan", Exact: true),
         new("ArgusMonitor", "Argus Monitor"),
+        // 6.6.1 までの名前のこのアプリ。新しい版と一緒に動くと、同じファンを 2 つのアプリが制御してしまう
+        new(AppIdentity.LegacyName, L("ProFanController（前の版）"), Exact: true),
     });
 
     /// <summary>プロセス名の一覧から、取り合いになるソフトを探す（同じソフトは 1 回だけ。このアプリ自身は除く）</summary>
@@ -43,7 +45,7 @@ public static class InstallCheck
         var found = new List<string>();
         foreach (var name in processNames)
         {
-            if (string.IsNullOrEmpty(name) || name.Contains("ProFanController", StringComparison.OrdinalIgnoreCase)) continue;
+            if (string.IsNullOrEmpty(name) || name.Contains(AppIdentity.Name, StringComparison.OrdinalIgnoreCase)) continue;
             foreach (var app in KnownConflicts)
             {
                 bool hit = app.Exact
@@ -91,15 +93,19 @@ public static class InstallCheck
         return null;
     }
 
-    /// <summary>移すときのおすすめの場所（ダウンロードなどから起動したときは、ここへ自動で入れる）</summary>
-    public const string RecommendedFolder = @"C:\Tools\ProFanController";
+    /// <summary>
+    /// 移すときのおすすめの場所（ダウンロードなどから起動したときは、ここへ自動で入れる）。
+    /// インストーラーが入れる場所（C:\Program Files\Fanlume）と同じにして、置き場所が 1 つにまとまるようにする
+    /// </summary>
+    public static string RecommendedFolder { get; } = Path.Combine(
+        Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles) is { Length: > 0 } pf ? pf : @"C:\Program Files", AppIdentity.Name);
 
     /// <summary>
-    /// 写すアプリのファイル（exe と、配布の zip に入っている説明書・バッチ・ライセンス）。
+    /// 写すアプリのファイル（exe と、インストーラーが入れる説明書・バッチ・ライセンス）。
     /// これ以外は写さない（exe をダウンロードフォルダーにそのまま置いたとき、ダウンロードの中身を丸ごと写さないため）
     /// </summary>
     private static readonly string[] AppFiles =
-        { "ProFanController.exe", "README_en.txt", "はじめにお読みください.txt", "1_PawnIO をインストール.bat", "2_更新.bat", "update.ps1" }; // no-loc
+        { AppIdentity.ExeName, "README_en.txt", "はじめにお読みください.txt", "1_PawnIO をインストール.bat" }; // no-loc
     private static readonly string[] AppFolders = { "licenses" };
     /// <summary>設定と記録（設定を引き継ぐときだけ写す。ログは書き込み中で写せないことがあり、写した先で新しく作られる）</summary>
     private static readonly string[] DataFolders = { "data", "backups", "records", "reports", "images" };
@@ -114,13 +120,13 @@ public static class InstallCheck
     {
         string from = Path.GetFullPath(fromDirectory).TrimEnd(Path.DirectorySeparatorChar);
         string to = Path.GetFullPath(toDirectory).TrimEnd(Path.DirectorySeparatorChar);
-        string exe = Path.Combine(to, "ProFanController.exe");
+        string exe = Path.Combine(to, AppIdentity.ExeName);
         if (string.Equals(from, to, StringComparison.OrdinalIgnoreCase)) return exe;
         Directory.CreateDirectory(to);
         BackUpConfig(to, "before-move");
         CopyApp(from, to);
         CopyData(from, to);
-        if (!File.Exists(exe)) throw new IOException(L("ProFanController.exe を写せませんでした"));
+        if (!File.Exists(exe)) throw new IOException(L("Fanlume.exe を写せませんでした"));
         return exe;
     }
 
@@ -137,7 +143,7 @@ public static class InstallCheck
     {
         string from = Path.GetFullPath(fromDirectory).TrimEnd(Path.DirectorySeparatorChar);
         string to = Path.GetFullPath(toDirectory).TrimEnd(Path.DirectorySeparatorChar);
-        string exe = Path.Combine(to, "ProFanController.exe");
+        string exe = Path.Combine(to, AppIdentity.ExeName);
         if (string.Equals(from, to, StringComparison.OrdinalIgnoreCase)) return new InstallResult(exe, false, false);
         Directory.CreateDirectory(to);
 
@@ -152,8 +158,17 @@ public static class InstallCheck
             BackUpConfig(to, "before-install");
             CopyData(from, to);
         }
-        if (!File.Exists(exe)) throw new IOException(L("ProFanController.exe を写せませんでした"));
+        if (!File.Exists(exe)) throw new IOException(L("Fanlume.exe を写せませんでした"));
         return new InstallResult(exe, copyApp, moveSettings);
+    }
+
+    /// <summary>設定と記録を、別のフォルダーへ写す（写す先の設定は、上書きする前に backups に控える。前の版から引き継ぐとき）</summary>
+    public static void CopySettings(string fromDirectory, string toDirectory)
+    {
+        string to = Path.GetFullPath(toDirectory).TrimEnd(Path.DirectorySeparatorChar);
+        Directory.CreateDirectory(to);
+        BackUpConfig(to, "before-migration");
+        CopyData(Path.GetFullPath(fromDirectory).TrimEnd(Path.DirectorySeparatorChar), to);
     }
 
     /// <summary>exe の版（読めなければ null）</summary>

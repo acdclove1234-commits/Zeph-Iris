@@ -1,4 +1,4 @@
-# ProFanController UI text (it). Each line: hash of the Japanese source text, TAB, translation. Line breaks: backslash + n.
+# Fanlume UI text (it). Each line: hash of the Japanese source text, TAB, translation. Line breaks: backslash + n.
 9cefb48e	Avvio…
 3c3d953a	Rilevamento dell'hardware
 68a076e4	Pausa (ritorno al BIOS)
@@ -469,7 +469,7 @@ db0f8cfc	Prezzo dell'elettricità per kWh
 b4d79a66	CPU e GPU usano i valori dei loro sensori. Monitor e altoparlanti non sono inclusi. Non è misurato alla presa, quindi è solo una stima.
 69355ed4	Sicurezza
 619b1ea2	Usa il processo watchdog (consigliato)
-d1086ffa	Evita che le ventole restino a bassa velocità se l'app viene chiusa a forza o si blocca. Il Gestione attività mostra due ProFanController; uno dei due è il watchdog
+615a97bc	Evita che le ventole restino a bassa velocità se l'app viene chiusa a forza o si blocca. Il Gestione attività mostra due Fanlume; uno dei due è il watchdog
 f739cc9b	Velocità in quel caso
 43c454af	Le pompe vanno sempre al 100%
 d063c0c0	Riavvia l'app automaticamente (fino a 3 volte in 10 minuti; poi viene mostrato un avviso)
@@ -515,12 +515,12 @@ cb0aedd5	Sensori di temperatura
 772bcb56	Configura da zero con la procedura guidata
 1c166250	Più tardi
 381b7b8a	Sostituisci e applica
-65d960e8	Configurazione - ProFanController
+50ab5a2c	Configurazione - Fanlume
 f918c02e	1  Benvenuto
 38684fb3	2  Identifica i connettori
 76236dbf	3  Strategia di raffreddamento
 b303c749	4  Fine
-99a4e0cb	Benvenuto in ProFanController
+890d0c09	Benvenuto in Fanlume
 26578394	Questa procedura verifica cosa è collegato ai connettori delle ventole della scheda madre\ne crea automaticamente curve e profili (Silenzioso / Standard / Prestazioni) adatti al tuo PC.
 80f88c90	Preparazione
 b1838111	• Resta vicino al case per sentire e vedere le ventole.\n• Chiudi i programmi pesanti (come i giochi).\n• Le impostazioni attuali verranno sovrascritte, ma al termine puoi tornare indietro con «Annulla».
@@ -549,8 +549,8 @@ b58afa04	Tutto pronto
 aceb0a14	Annulla
 f193a383	Indietro
 303830fc	Avanti
-7b1ba115	Disinstalla (pulizia) - ProFanController
-a4fe8394	Prima di smettere di usare ProFanController, il PC torna allo stato precedente all'installazione. «Pulisci ed esci» esegue quanto segue, dall'alto in basso.
+2a910283	Disinstalla (pulizia) - Fanlume
+caf7be2a	Prima di smettere di usare Fanlume, il PC torna allo stato precedente all'installazione. «Pulisci ed esci» esegue quanto segue, dall'alto in basso.
 2ed98b28	In più (nulla di questo senza la tua scelta)
 9dc58ae6	Elimina anche impostazioni, log e registrazioni
 f6fb6e2a	Disinstalla anche PawnIO (il driver per il controllo delle ventole)
@@ -583,9 +583,9 @@ fe1e7d87	 (dopo il riavvio del PC il controllo torna al BIOS).
 e39402e8	Controllo dell'illuminazione fermato e dispositivi rilasciati
 8008dbae	Il controllo dell'illuminazione non era in uso (connessione chiusa)
 775adf46	Vista dal telefono
-817c491e	Impossibile rimuovere la regola del firewall. Elimina «ProFanController Web» in «Sicurezza di Windows» → «Firewall e protezione della rete» → «Impostazioni avanzate» → «Regole connessioni in entrata».
+63aa333a	Impossibile rimuovere la regola del firewall. Elimina «Fanlume Web» in «Sicurezza di Windows» → «Firewall e protezione della rete» → «Impostazioni avanzate» → «Regole connessioni in entrata».
 629589af	Vista dal telefono fermata e regola del firewall rimossa
-1d979f07	Impossibile rimuovere l'avvio automatico. Elimina «ProFanController» dall'Utilità di pianificazione (Libreria Utilità di pianificazione).
+31af9d29	Impossibile rimuovere l'avvio automatico. Elimina «Fanlume» dall'Utilità di pianificazione (Libreria Utilità di pianificazione).
 bc13583b	L'avvio all'accesso è stato rimosso
 22c99fc8	Impossibile rimuovere l'impostazione dei dump di arresto anomalo (HKEY_LOCAL_MACHINE\\{0}). Lasciarla non causa problemi.
 14dd713f	L'impostazione dei dump di arresto anomalo è stata rimossa
@@ -594,7 +594,7 @@ d66766d3	Non eseguito qui
 1e82ca4a	Il percorso dell'eseguibile è sconosciuto.
 eb8f4a4f	Impossibile preparare l'eliminazione di impostazioni, log e registrazioni ({0}).\nDopo la chiusura dell'app, elimina l'intera cartella:\n{1}
 8df0902c	Apri cartella
-c5234463	ProFanController è ancora in esecuzione, quindi impostazioni, log e registrazioni non sono stati eliminati.\n
+fa3ff255	Fanlume è ancora in esecuzione, quindi impostazioni, log e registrazioni non sono stati eliminati.\n
 32a27012	Chiudi l'app, poi elimina l'intera cartella:\n{0}
 ecdec9de	Eliminato: {0}.\n\n
 a261a21a	Chiudendo questo messaggio, Esplora file aprirà la cartella dell'app. Elimina l'intera cartella per completare la pulizia:\n{0}
@@ -602,18 +602,18 @@ a261a21a	Chiudendo questo messaggio, Esplora file aprirà la cartella dell'app. 
 d6750fd2	\n•
 bf71d238	\n…e altri {0}
 df6134ea	\n\nDopo aver chiuso questo messaggio, elimina l'intera cartella:\n{0}
-10d89683	Pulizia di ProFanController
-2d7f91ad	ProFanController è già in esecuzione.\nAprilo dall'icona nell'area di notifica.
+766fce35	Pulizia di Fanlume
+da630a7f	Fanlume è già in esecuzione.\nAprilo dall'icona nell'area di notifica.
 ec6a9bb6	Salvataggio delle registrazioni
 c0fd45c5	Continua a funzionare nell'area di notifica. Per uscire, fai clic destro sull'icona.
-77d62ee9	ProFanController: ripristinato
+0a3f2987	Fanlume: ripristinato
 977b8544	Il profilo è stato cambiato automaticamente
 790c11cc	{0} rilevato → {1}
-fa5d05c3	ProFanController: manutenzione
+a75f3e15	Fanlume: manutenzione
 5b860ae3	In esecuzione in DRY RUN (modalità di prova). Calcola solo le velocità in base alle temperature; le ventole non vengono comandate.
 874003cc	Avvia il controllo
 812bba50	Il file delle impostazioni era danneggiato ed è stato ripristinato da un backup ({0:yyyy/MM/dd HH:mm}). Il file danneggiato è conservato come config.broken_*.json.
-9ca7b4fa	ProFanController si è chiuso in modo inatteso, quindi il processo watchdog lo ha riavviato automaticamente. Il controllo è ripreso dopo aver portato le ventole a una velocità sicura. La causa è nel log.
+5b1e3ca8	Fanlume si è chiuso in modo inatteso, quindi il processo watchdog lo ha riavviato automaticamente. Il controllo è ripreso dopo aver portato le ventole a una velocità sicura. La causa è nel log.
 7b249720	Apri log
 3a7e2e72	Si è chiuso in modo inatteso ed è stato riavviato automaticamente.
 c51b6c55	L'app che si avvia automaticamente con Windows si trova in un altro percorso ({0}). Potrebbe avviarsi una versione vecchia.
@@ -630,15 +630,15 @@ f5c17fde	Impossibile registrare di nuovo l'avvio automatico (controlla il log).
 c08fb050	 / 
 48ccab47	Un sensore in uso non si trova
 9c32a53a	Rilevate modifiche all'hardware
-58f4eb35	ProFanController: modifica all'hardware
+6317f1df	Fanlume: modifica all'hardware
 646e0b57	{0}. Conferma il passaggio ai nuovi sensori sullo schermo del PC.
 9dddc76a	C'è un problema con il controllo delle ventole
 8ad6890e	{0} (per sicurezza il controllo è del BIOS; il ripristino viene tentato automaticamente)
-cdfd31fc	ProFanController: problema di controllo delle ventole
+f8b8b77e	Fanlume: problema di controllo delle ventole
 30b6b07e	Alcuni componenti non si possono leggere
 465384a0	Il controllo delle ventole è stato ripristinato
 2a57fe9c	Tornato al controllo normale.
-96429453	ProFanController: ripristinato
+25db31e1	Fanlume: ripristinato
 a8e2e175	Il controllo delle ventole è tornato normale.
 0d78d54c	Impossibile leggere config.json perché un altro programma lo tiene aperto (il file non è stato toccato).
 9b03cdae	Il file originale è conservato come config.broken_<data>.json.
@@ -742,8 +742,8 @@ e0f9ce74	Il sensore di velocità non si legge.
 da1c2ba4	Riporta tutte le ventole al controllo automatico del BIOS (scheda madre) e verifica che sia andato a buon fine (altrimenti si ferma qui e non cambia nulla)
 cf1947e1	Ferma il controllo delle ventole e chiude l'hardware (driver PawnIO). Comunica anche al processo watchdog che si tratta di un'uscita regolare, così si chiude anche lui (invece di considerare l'arresto un guasto e riavviare)
 a1e35f8f	Ferma il controllo dell'illuminazione e rilascia i dispositivi LED (OpenRGB e altri), chiudendo con lo stesso effetto di un'uscita normale
-3958581c	Ferma la vista dal telefono e rimuove la regola aggiunta a Windows Firewall (ProFanController Web)
-62d5ef69	Rimuove l'avvio all'accesso (l'attività «ProFanController» nell'Utilità di pianificazione)
+1fdea37e	Ferma la vista dal telefono e rimuove la regola aggiunta a Windows Firewall (Fanlume Web)
+14f09703	Rimuove l'avvio all'accesso (l'attività «Fanlume» nell'Utilità di pianificazione)
 aa1f9cbb	Rimuove l'impostazione dei dump di arresto anomalo (Windows Error Reporting\\LocalDumps nel registro)
 7ca65cf7	Disinstalla PawnIO (il driver per il controllo delle ventole) con winget
 a6b6b0e5	Chiude l'app (con la stessa pulizia di un'uscita normale; non si riavvia da sola)
@@ -761,7 +761,7 @@ c96515c1	• Riavviando il PC tutto torna com'era.
 7fadc402	Chiudendo, l'app termina (non si riavvia da sola). Impostazioni, log e registrazioni restano nella cartella.
 2735adba	L'app non può essere eliminata mentre è in esecuzione. Se smetti di usarla, elimina questa cartella dopo averla chiusa (si apre in Esplora file):\n{0}
 47bb6afa	Il file è vuoto.
-c7d09b2f	Non è un file di impostazioni di ProFanController.
+51d76551	Non è un file di impostazioni di Fanlume.
 59d09ada	Non contiene profili.
 8f6cc529	Nessun connettore corrispondente trovato (non importato)
 a63b0e26	Stesso connettore
@@ -777,7 +777,7 @@ a63b0e26	Stesso connettore
 1b6b7859	Buono
 0b497be2	Un po' alto
 6eb7c426	Raffreddamento insufficiente
-0e60185d	Test di raffreddamento ProFanController  {0:yyyy/MM/dd HH:mm}
+b6e52ff7	Test di raffreddamento Fanlume  {0:yyyy/MM/dd HH:mm}
 f18a2032	Profilo: {0} / durata del carico: {1:F0} min (tutti i core della CPU)
 a659e995	Giudizio                  : {0}
 67316e06	Temperatura CPU a riposo  : {0:F1} °C
@@ -939,8 +939,8 @@ fcc150e0	 (tempo confrontato: riferimento {0} min, recente {1} min; le differenz
 d9bee020	Download
 4a049af4	Desktop
 4033fb1e	Cartella temporanea
-e39c4b26	Impossibile copiare ProFanController.exe
-d6132623	Notifica di prova di ProFanController
+687bc2e0	Impossibile copiare Fanlume.exe
+2a3da751	Notifica di prova di Fanlume
 7be18f84	Questa è una notifica di prova da {0}. Se ti arriva, la configurazione è completa.
 15278ea5	Inviata. Controlla che sia arrivata sul telefono
 4ce2da04	Invio non riuscito: {0}
@@ -1108,8 +1108,8 @@ b599c0f6	Alti (hi-hat)
 f898c734	Non è un indirizzo https: {0}
 9181a7c0	L'app si è chiusa {1} volte in {0:F0} minuti, quindi il riavvio automatico è stato interrotto.
 abf150b9	Il riavvio automatico è disattivato.
-08738032	ProFanController si è chiuso inaspettatamente.\n\nLe ventole sono bloccate a una velocità sicura ({0:F0}%, pompe al 100%). {1}\n
-a506afc7	Riavviando il PC il controllo torna al BIOS (riavviando ProFanController, il controllo torna all'app).\n\nLog: 
+50be9a1c	Fanlume si è chiuso inaspettatamente.\n\nLe ventole sono bloccate a una velocità sicura ({0:F0}%, pompe al 100%). {1}\n
+af5a88ef	Riavviando il PC il controllo torna al BIOS (riavviando Fanlume, il controllo torna all'app).\n\nLog: 
 5e11c7bc	Non utilizzabile da questa rete.
 3540eeb1	Troppe chiavi errate: l'accesso è sospeso per un po'. Attendi circa 1 minuto.
 aacf373e	La chiave di accesso è errata. Usa l'URL mostrato nelle impostazioni sul PC.
@@ -1217,13 +1217,13 @@ ca58240b	Ripristina da backup
 0a066c64	Impostazioni del {0} ripristinate (annullabile con «Annulla»).
 4a2fd247	Impossibile leggere questo backup.\n{0}
 1b7a6d56	Esporta impostazioni
-d3b9501f	Impostazioni di ProFanController (*.profan.json)|*.profan.json
-8c168c4d	ProFan-impostazioni_{0}_{1:yyyyMMdd}{2}
+f48eb65b	Impostazioni di Fanlume (*.fanlume.json)|*.fanlume.json
+f1a7dc7f	Fanlume-impostazioni_{0}_{1:yyyyMMdd}{2}
 dd581e02	Esportati {0} profili. Invia questo file all'altra persona e chiedile di caricarlo da Impostazioni → «Sicurezza e backup» → «Importa impostazioni».
 25f3627c	Impossibile esportare.\n{0}
 e6cdafd7	Attendi il termine dell'inizializzazione dell'hardware.
 de0ce3c8	Importa impostazioni
-e259cc0d	Impostazioni di ProFanController (*.profan.json;*.json)|*.profan.json;*.json
+70585dc7	Impostazioni di Fanlume (*.fanlume.json;*.json)|*.fanlume.json;*.json
 49c7511d	Impossibile caricare questo file.\n{0}
 d01ee250	. Annullabile con «Annulla». Controlla le curve delle ventole importate prima di usarle.
 565076e7	Controlla curve
@@ -1482,7 +1482,7 @@ b5ccd0c3	Diagnosi automatica dalle registrazioni e controllo di polvere e usura 
 acea69f7	Tutte le temperature, velocità e canali di controllo rilevati su questo PC, più i sensori virtuali
 7626e5f7	Profili, cambio automatico, modalità di avvio e comportamento generale del controllo
 d3bf5d86	DRY RUN disattivato. Inizia il controllo delle ventole.
-7f6b69df	Sorveglianza ProFanController
+256148cd	Sorveglianza Fanlume
 0788f8eb	Retro
 c85ab318	Fronte
 0f616edd	Sopra
@@ -1506,11 +1506,11 @@ f0a541e0	PawnIO non è ancora stato trovato. Se hai già eseguito il programma d
 3699179e	Usato in: {0}
 841ef786	(non usare)
 cbfdf76e	(elimina questa ventola)
-ad4fff7c	Modifica dell'hardware - ProFanController
+5dde97f8	Modifica dell'hardware - Fanlume
 41580e6f	Non si trovano sensori o connettori usati nelle impostazioni. Sul nuovo hardware sono stati scelti automaticamente quelli con lo stesso ruolo.
 80403780	 Controlla il contenuto e premi «Sostituisci e applica» (le impostazioni attuali vengono salvate prima della modifica; in seguito puoi anche «Annulla»).\n
 8f763b23	Nel frattempo, le curve che usano sensori non trovati girano a velocità costante per sicurezza (modificabile in Impostazioni → «Sicurezza e backup»).
-6dc976fa	Importa impostazioni - ProFanController
+d49f09aa	Importa impostazioni - Fanlume
 63ed3acb	Controlla a quali connettori ventola e sensori di temperatura di questo PC corrispondono quelli del file.
 65901272	 Gli elementi con lo stesso nome vengono scelti automaticamente. Le ventole impostate su «(elimina questa ventola)» non vengono importate.
 ecf8e3b5	PC di origine: {0} ({1:yyyy/MM/dd HH:mm})
@@ -1525,7 +1525,7 @@ fe5a2b13	Controlla al 70% fisso
 0c1d2ab2	Monitora sotto controllo del BIOS
 d6d4423a	• {0} (ventola): segue {1}
 9833252d	Profili da creare: {0} / {1} / {2}\nProfilo per l'uso quotidiano: {3}\n\n
-0c5502cd	Apri ProFanController
+12b1edf7	Apri Fanlume
 9a801bfe	Boost (massima velocità) 15 min
 46dbb6b6	Silenzioso 30 min
 670ac712	Silenzioso 2 ore
@@ -1604,3 +1604,8 @@ c8e0f349	È in corso il controllo del rumore di una ventola.
 69ade00e	È in corso la configurazione.
 82fa072a	Scegli di nuovo la lingua quando sarà terminato.
 31040161	Installata da {0} in {1} e avviata da lì. D'ora in poi funziona l'app in questa cartella (puoi eliminare i file scaricati).
+4a3be0af	ProFanController (la versione precedente)
+67d28cec	Impostazioni e registrazioni della versione precedente (ProFanController) sono state riprese da {0}. Quella cartella non viene più usata: controllane il contenuto, poi puoi eliminarla.
+82ee83eb	Impossibile avviare il programma di disinstallazione ({0}).\nDopo la chiusura dell'app, disinstalla Fanlume da Impostazioni di Windows → App → App installate.
+adc330eb	Chiudendo, l'app termina e poi il programma di disinstallazione elimina l'app e {0}. Fanlume sparisce anche da «App installate» di Windows.
+f10b7201	Chiudendo, l'app termina e poi il programma di disinstallazione la elimina. Fanlume sparisce anche da «App installate» di Windows. Impostazioni, log e registrazioni restano nella cartella.

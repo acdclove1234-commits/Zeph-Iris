@@ -12,7 +12,7 @@ namespace ProFanController;
 
 public static class AutoStart
 {
-    private const string TaskName = "ProFanController";
+    private const string TaskName = AppIdentity.Name;
 
     public static bool IsEnabled() => RunSchtasks($"/Query /TN \"{TaskName}\"") == 0;
 
@@ -32,7 +32,7 @@ public static class AutoStart
             <?xml version="1.0" encoding="UTF-16"?>
             <Task version="1.2" xmlns="http://schemas.microsoft.com/windows/2004/02/mit/task">
               <RegistrationInfo>
-                <Description>ProFanController をログオン時にタスクトレイで起動します。</Description>
+                <Description>Fanlume をログオン時にタスクトレイで起動します。</Description>
               </RegistrationInfo>
               <Triggers>
                 <LogonTrigger>
@@ -80,7 +80,7 @@ public static class AutoStart
         // 一時フォルダーはふだんの権限のプログラムからも書き込めるので、
         //   ・名前は毎回ランダムにする（新しく作れなければ失敗にする＝前もって置かれたファイルは使わない）
         //   ・schtasks が読み終わるまで、読み取り以外（書き換え・削除・名前の変更）をさせないように開いたままにする
-        string tmp = Path.Combine(Path.GetTempPath(), $"ProFanController_task_{Path.GetRandomFileName()}.xml");
+        string tmp = Path.Combine(Path.GetTempPath(), $"Fanlume_task_{Path.GetRandomFileName()}.xml");
         try
         {
             var bytes = Encoding.Unicode.GetPreamble().Concat(Encoding.Unicode.GetBytes(xml)).ToArray(); // schtasks は UTF-16 の XML を要求する
@@ -111,6 +111,16 @@ public static class AutoStart
     }
 
     public static bool Disable() => RunSchtasks($"/Delete /TN \"{TaskName}\" /F") == 0;
+
+    /// <summary>前の名前（6.6.1 まで）で登録した自動起動のタスクがあるか（タスクの定義ファイルがあるかを見る）</summary>
+    public static bool LegacyTaskExists()
+    {
+        try { return File.Exists(Path.Combine(Environment.SystemDirectory, "Tasks", AppIdentity.LegacyName)); }
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException) { return false; }
+    }
+
+    /// <summary>前の名前で登録した自動起動のタスクを消す</summary>
+    public static bool RemoveLegacyTask() => RunSchtasks($"/Delete /TN \"{AppIdentity.LegacyName}\" /F") == 0;
 
     /// <summary>
     /// 自動起動で起動する exe の場所（登録していない・読めなければ null）。

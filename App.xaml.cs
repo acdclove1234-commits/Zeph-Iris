@@ -50,8 +50,8 @@ public partial class App : Application
     private bool _firstCatalog = true;
     private string _rgbJson = "";
 
-    /// <summary>update.ps1 がこのイベントをセットすると、アプリが正しく終了する</summary>
-    private const string ExitSignalName = @"Global\ProFanController.Exit";
+    /// <summary>インストーラー（Installer/Fanlume.iss）や更新スクリプトがこのイベントをセットすると、アプリが正しく終了する</summary>
+    private const string ExitSignalName = AppIdentity.ExitSignal;
     private EventWaitHandle? _exitSignal;
     /// <summary>メモリの使い方を 10 分ごとにログに書くタイマー（常駐の重さの内訳を見るため）</summary>
     private System.Threading.Timer? _memoryLog;
@@ -88,7 +88,7 @@ public partial class App : Application
         bool recovered = e.Args.Contains(Watchdog.RecoveredArgument, StringComparer.OrdinalIgnoreCase);
         bool restarting = e.Args.Contains(RestartArgument, StringComparer.OrdinalIgnoreCase);
 
-        _mutex = new Mutex(true, @"Global\ProFanController.SingleInstance", out bool isFirst);
+        _mutex = new Mutex(true, AppIdentity.SingleInstance, out bool isFirst);
         if (!isFirst && (recovered || restarting))
         {
             // 見張りプロセスが起動し直したとき: 前のプロセスが終わりきるまで少し待つ
@@ -99,15 +99,15 @@ public partial class App : Application
         {
             // 自動起動（--minimized）で二重に起動したときは、何も出さずに終わる
             if (!e.Args.Contains("--minimized", StringComparer.OrdinalIgnoreCase))
-                MessageBox.Show(L("ProFanController はすでに起動しています。\nタスクトレイのアイコンから開いてください。"),
-                    "ProFanController", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show(L("Fanlume はすでに起動しています。\nタスクトレイのアイコンから開いてください。"),
+                    AppIdentity.Name, MessageBoxButton.OK, MessageBoxImage.Information);
             _mutex.Dispose();
             _mutex = null;
             Shutdown();
             return;
         }
 
-        // ダウンロード・デスクトップ・一時フォルダー（zip の中から開いた）で起動したら、C:\Tools\ProFanController に入れて、そこから起動し直す
+        // ダウンロード・デスクトップ・一時フォルダー（zip の中から開いた）で起動したら、C:\Program Files\Fanlume に入れて、そこから起動し直す
         if (RelocateFromUnstableFolder(e.Args))
         {
             _exiting = true; // 何も始めていないので、終了の処理（BIOS への切り替えなど）はしない
@@ -119,7 +119,21 @@ public partial class App : Application
             return;
         }
 
-        // 更新スクリプトからの「終了して」の合図を待つ（強制終了だとファンが BIOS 制御に戻らないため、正規の終了処理を通す）
+        // 前の名前（ProFanController）の版が動いていたら、正しく終了してもらってから（終了するときに設定も書き出される）、
+        // ここに設定がなければ、前の版の設定と記録を引き継ぐ（Core/LegacyMigration.cs）
+        string? migratedFrom = null;
+        try
+        {
+            LegacyMigration.StopLegacyApp(TimeSpan.FromSeconds(20));
+            migratedFrom = LegacyMigration.CopySettingsIfNeeded(AppContext.BaseDirectory);
+            if (migratedFrom is not null) Logger.Info($"前の版の設定と記録を引き継ぎました: {migratedFrom}");
+        }
+        catch (Exception ex)
+        {
+            Logger.Warn($"前の版の設定を引き継げませんでした: {ex}");
+        }
+
+        // インストーラー・更新スクリプトからの「終了して」の合図を待つ（強制終了だとファンが BIOS 制御に戻らないため、正規の終了処理を通す）
         _exitSignal = new EventWaitHandle(false, EventResetMode.AutoReset, ExitSignalName);
         ThreadPool.RegisterWaitForSingleObject(_exitSignal, (_, _) => Dispatcher.InvokeAsync(ExitApplication), null, Timeout.Infinite, true);
 
@@ -234,11 +248,11 @@ public partial class App : Application
         {
             _window?.ShowAlert(message, level);
             _window?.OnEngineAlert(message, level);
-            Notifier.Notify(level == AlertLevel.Info ? L("ProFanController: 回復しました") : "ProFanController", message, level, isRecovery: level == AlertLevel.Info);
+            Notifier.Notify(level == AlertLevel.Info ? L("Fanlume: 回復しました") : AppIdentity.Name, message, level, isRecovery: level == AlertLevel.Info);
             // 同じ通知は 5 分間出さない（温度が境目を行き来したときの連発防止。画面のバナーとログには毎回残す）
             if (_lastBalloon.TryGetValue(message, out var last) && DateTime.Now - last < TimeSpan.FromMinutes(5)) return;
             _lastBalloon[message] = DateTime.Now;
-            tray.ShowBalloon("ProFanController", message, level);
+            tray.ShowBalloon(AppIdentity.Name, message, level);
         });
         engine.CalibrationProgressChanged += p => Dispatcher.InvokeAsync(() => _window?.OnCalibrationProgress(p));
         engine.CalibrationFinished += (id, result, message) => Dispatcher.InvokeAsync(() => _window?.OnCalibrationFinished(id, result, message));
@@ -308,12 +322,15 @@ public partial class App : Application
         }
         if (recovered)
         {
-            string msg = L("ProFanController が予期せず終了したため、見張りプロセスが自動で起動し直しました。ファンは安全な回転数にしてから制御を再開しています。原因はログで確認できます。");
+            string msg = L("Fanlume が予期せず終了したため、見張りプロセスが自動で起動し直しました。ファンは安全な回転数にしてから制御を再開しています。原因はログで確認できます。");
             window.ShowAlert(msg, AlertLevel.Warning, L("ログを開く"), () => SystemTool.Open(Logger.Directory));
-            tray.ShowBalloon("ProFanController", L("予期せず終了したため、自動で起動し直しました。"), AlertLevel.Warning);
-            Notifier.Notify("ProFanController", msg, AlertLevel.Warning);
+            tray.ShowBalloon(AppIdentity.Name, L("予期せず終了したため、自動で起動し直しました。"), AlertLevel.Warning);
+            Notifier.Notify(AppIdentity.Name, msg, AlertLevel.Warning);
         }
         if (InstalledFrom(e.Args) is { } installedFrom) AfterRelocation(window, installedFrom);
+        if (migratedFrom is not null) AfterLegacyMigration(window, migratedFrom);
+        // 前の名前で登録した自動起動・ファイアウォールの許可などを片付ける（自動起動を使っていたら、新しい名前で登録し直す）
+        _ = Task.Run(() => LegacyMigration.RemoveLegacyRegistrations(() => AutoStart.Enable()));
         _ = CheckInstallAsync();
     }
 
@@ -329,10 +346,10 @@ public partial class App : Application
         {
             if (_trayHintShown) return;
             _trayHintShown = true;
-            _tray?.ShowBalloon("ProFanController", L("タスクトレイで動作を続けています。終了するにはアイコンを右クリックしてください。"), AlertLevel.Info);
+            _tray?.ShowBalloon(AppIdentity.Name, L("タスクトレイで動作を続けています。終了するにはアイコンを右クリックしてください。"), AlertLevel.Info);
         };
         window.WidgetToggleRequested += ToggleWidget;
-        window.MaintenanceNotice += (msg, level) => Notifier.Notify(L("ProFanController: メンテナンス"), msg, level);
+        window.MaintenanceNotice += (msg, level) => Notifier.Notify(L("Fanlume: メンテナンス"), msg, level);
         window.RecordSaved += r => Logger.Info($"異常の記録: {r.CsvPath}");
         return window;
     }
@@ -392,7 +409,7 @@ public partial class App : Application
     }
 
     /// <summary>
-    /// いまのフォルダーの中身を C:\Tools\ProFanController へ写し、（自動起動を使っていたなら）自動起動をそこに登録し直して、
+    /// いまのフォルダーの中身を C:\Program Files\Fanlume へ写し、（自動起動を使っていたなら）自動起動をそこに登録し直して、
     /// 写した先のアプリで起動し直す。このアプリは正しく終了する（ファンは BIOS 制御に戻る）
     /// </summary>
     private void MoveToRecommended(bool registerAutoStart)
@@ -631,7 +648,7 @@ public partial class App : Application
                 string what = report.DeviceChanges.Count > 0 ? string.Join(L(" ／ "), report.DeviceChanges) : L("使っていたセンサーが見つかりません");
                 Logger.Warn($"ハードウェアの変更を検出: {what}");
                 _tray.ShowBalloon(L("ハードウェアの変更を検出しました"), what, AlertLevel.Warning);
-                Notifier.Notify(L("ProFanController: ハードウェアの変更"), L($"{what}。PC の画面で、新しいセンサーへの置き換えを確認してください。"), AlertLevel.Warning);
+                Notifier.Notify(L("Fanlume: ハードウェアの変更"), L($"{what}。PC の画面で、新しいセンサーへの置き換えを確認してください。"), AlertLevel.Warning);
                 ShowMainWindow();
                 _window.ShowHardwareChange(report);
                 return;
@@ -662,14 +679,14 @@ public partial class App : Application
             // Recovering（探し直し・復帰直後の再試行）は、エンジン自身が必要なときだけ警告を出すので、ここでは知らせない
             case EngineHealth.Failed:
                 _tray?.ShowBalloon(L("ファン制御に問題があります"), L($"{reason}（安全のため BIOS の制御にしています。自動で復旧を試みます）"), AlertLevel.Danger);
-                Notifier.Notify(L("ProFanController: ファン制御の問題"), reason, AlertLevel.Danger);
+                Notifier.Notify(L("Fanlume: ファン制御の問題"), reason, AlertLevel.Danger);
                 break;
             case EngineHealth.Degraded when before is EngineHealth.Ok:
                 _tray?.ShowBalloon(L("一部の部品を読み取れません"), reason, AlertLevel.Warning);
                 break;
             case EngineHealth.Ok when before is EngineHealth.Failed or EngineHealth.Degraded:
                 _tray?.ShowBalloon(L("ファン制御が復旧しました"), L("通常の制御に戻りました。"), AlertLevel.Info);
-                Notifier.Notify(L("ProFanController: 復旧"), L("ファン制御が通常に戻りました。"), AlertLevel.Info, isRecovery: true);
+                Notifier.Notify(L("Fanlume: 復旧"), L("ファン制御が通常に戻りました。"), AlertLevel.Info, isRecovery: true);
                 break;
         }
     }
@@ -688,7 +705,7 @@ public partial class App : Application
                 ? L("ほかのプログラムが config.json を開いたままにしているため読めませんでした（ファイルはそのままです）。")
                 : L("元のファイルは config.broken_日時.json として残しました。");
             MessageBox.Show(L($"config.json を読み込めず、バックアップからも復旧できませんでした。\n{ex.Message}\n\n{why}\n空の設定で起動します。"),
-                "ProFanController", MessageBoxButton.OK, MessageBoxImage.Warning);
+                AppIdentity.Name, MessageBoxButton.OK, MessageBoxImage.Warning);
             var fresh = new AppConfig();
             fresh.Normalize();
             return fresh;

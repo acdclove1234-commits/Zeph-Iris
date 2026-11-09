@@ -28,11 +28,14 @@ internal static class Program
                 Logger.Error($"見張りで致命的な例外: {a.ExceptionObject}");
                 Logger.Flush();
             };
-            Watchdog.ShowMessage = msg => NativeMessageBox.Warn(msg, L("ProFanController 見張り"));
+            Watchdog.ShowMessage = msg => NativeMessageBox.Warn(msg, L("Fanlume 見張り"));
             Watchdog.Run(parentPid);
             Logger.Flush();
             return 0;
         }
+
+        // アンインストーラー（Inno Setup）から: Windows に登録したものを消す（選んだときは設定・ログ・記録も）。画面は出さない
+        if (args.Contains(InstallerCleanup.Argument, StringComparer.OrdinalIgnoreCase)) return InstallerCleanup.Run(args);
 
         var app = new App();
         app.InitializeComponent();

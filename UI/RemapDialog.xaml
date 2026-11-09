@@ -6,7 +6,7 @@
 <Window x:Class="ProFanController.UI.RemapDialog"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="ProFanController" Width="860" Height="680" MinWidth="760" MinHeight="520"
+        Title="Fanlume" Width="860" Height="680" MinWidth="760" MinHeight="520"
         WindowStartupLocation="CenterOwner" ShowInTaskbar="False"
         Background="{DynamicResource BgBrush}" Foreground="{DynamicResource TextBrush}"
         FontFamily="{DynamicResource UiFont}" FontSize="14" UseLayoutRounding="True"

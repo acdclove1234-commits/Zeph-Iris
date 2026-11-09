@@ -185,7 +185,7 @@ public partial class MainWindow
         if (card is null) return;
         if (Config.DashboardCards.Count <= 1)
         {
-            MessageBox.Show(this, L("カードは最低 1 枚必要です。"), "ProFanController", MessageBoxButton.OK, MessageBoxImage.Information);
+            MessageBox.Show(this, L("カードは最低 1 枚必要です。"), AppIdentity.Name, MessageBoxButton.OK, MessageBoxImage.Information);
             return;
         }
         Config.DashboardCards.Remove(card);
