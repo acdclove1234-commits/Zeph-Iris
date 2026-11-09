@@ -235,7 +235,7 @@ a08b7324	Bu sıcaklıkta ve altında renk açık mavidir (serin)
 6f30cf75	Gökkuşağı 1× hızda bir turu 30 sn'de (3× hızda 10 sn, 10× hızda 3 sn), nefes 1× hızda bir nefesi 6 sn'de tamamlar. Müzikteki "akan dalga"da akış hızıdır
 36bcf3d7	{0:F1}×
 f9dafe1e	Bilgisayardan gelen sesi analiz eder ve davul vuruşlarına, tempoya ve perdeye göre yanar. Önce bir hazır ayar seçin, sonra aşağıda yalnızca rahatsız edeni ayarlayın.
-581f0311	Mevcut ses, bastan (sol) tize (sağ) 24 banda bölünmüş olarak gösterilir. İçerideki parlak çubuklar davul gibi "atak"lar, beyaz çizgi yakın zamandaki tepe değeridir
+5414b5c1	Mevcut ses, yaygın bir ekolayzırdaki gibi 10 banda (31 Hz ile 16 kHz arası) bölünerek bastan (sol) tize (sağ) gösterilir. İçerideki parlak çubuklar davul gibi "atak"lar, beyaz çizgi yakın zamandaki tepe değeridir
 a8d258f0	Her kick (bas davul) bulunduğunda yanar. Senkron testi sırasında tıklamalarla beyaz yanıp söner
 9aa04ac9	Şarkının temposu (dakikadaki vuruş). Tempoyu yakaladığında vuruşları önceden tahmin eder ve gecikmeden yanar
 8d97f850	Seviye = şu anki ses yüksekliği. Referans = otomatik seviye ayarının "en parlak" saydığı yükseklik (dBFS: 0 en yüksektir, ne kadar negatifse o kadar kısık)

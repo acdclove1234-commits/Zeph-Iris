@@ -46,8 +46,8 @@ public readonly record struct AudioEvent(long Id, AudioEventKind Kind, double T,
 /// </summary>
 public sealed class AudioFrame
 {
-    /// <summary>周波数の帯の数（40 Hz〜16 kHz を対数で 24 等分）</summary>
-    public const int BandCount = 24;
+    /// <summary>周波数の帯の数（一般的な 10 バンドのグラフィックイコライザーと同じ、1 オクターブごとの 10 帯: 31・63・125・250・500 Hz・1・2・4・8・16 kHz）</summary>
+    public const int BandCount = 10;
 
     /// <summary>このコマのいちばん新しい音の時刻（AudioClock の秒）</summary>
     public double T;
@@ -55,7 +55,10 @@ public sealed class AudioFrame
     public readonly float[] Band = new float[BandCount];
     /// <summary>帯ごとの「立ち上がりを強調した大きさ」（LED 用。ドラムの瞬間に強く出る）</summary>
     public readonly float[] Punch = new float[BandCount];
-    /// <summary>まとめた帯の大きさ: 超低音 40〜85 Hz・低音 40〜230 Hz・中音 230〜2,200 Hz・高音 2.2〜16 kHz</summary>
+    /// <summary>
+    /// まとめた帯の大きさ: 超低音 40〜85 Hz・低音 40〜230 Hz・中音 230〜2,200 Hz・高音 2.2〜16 kHz
+    /// （判定用の細かい 24 帯から求める。10 帯からまとめると、低音の中でベースの音がキックを埋もれさせるため。BandAnalyzer を参照）
+    /// </summary>
     public float Sub, Bass, Mid, Treble;
     /// <summary>まとめた帯の「立ち上がりを強調した大きさ」。BassE はキックの検出（遅れがほぼない）も含む</summary>
     public float SubE, BassE, MidE, TrebleE;

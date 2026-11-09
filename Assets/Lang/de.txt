@@ -235,7 +235,7 @@ a08b7324	Bei dieser Temperatur und darunter ist die Farbe hellblau (kühl)
 6f30cf75	Regenbogen bei 1× braucht 30 s pro Runde (10 s bei 3×, 3 s bei 10×); Atmen bei 1× 6 s pro Atemzug. Bei der Musik-„Welle“ ist es die Fließgeschwindigkeit
 36bcf3d7	{0:F1}×
 f9dafe1e	Analysiert den Ton vom PC und leuchtet zu Schlagzeug, Tempo und Tonhöhe. Wählen Sie zuerst eine Vorlage und passen Sie unten nur an, was stört.
-581f0311	Der aktuelle Ton in 24 Bändern von Bass (links) bis Höhen (rechts). Die hellen Balken innen sind „Anschläge“ wie Schlagzeug, die weiße Linie ist der Spitzenwert der letzten Zeit
+5414b5c1	Der aktuelle Ton in den 10 Bändern eines üblichen Equalizers (31 Hz bis 16 kHz), von Bass (links) bis Höhen (rechts). Die hellen Balken innen sind „Anschläge“ wie Schlagzeug, die weiße Linie ist der Spitzenwert der letzten Zeit
 a8d258f0	Leuchtet bei jeder erkannten Kick (Bassdrum) auf. Beim Synchronisationstest blitzt es weiß zu den Klicks
 9aa04ac9	Das Tempo des Songs (Schläge pro Minute). Sobald das Tempo erfasst ist, werden die Schläge vorhergesagt und ohne Verzögerung angezeigt
 8d97f850	Pegel = aktuelle Lautstärke. Referenz = die Lautstärke, die die automatische Pegelregelung als „am hellsten“ ansieht (dBFS: 0 ist das Maximum, je negativer, desto leiser)

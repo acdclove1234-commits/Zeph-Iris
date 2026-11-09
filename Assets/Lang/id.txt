@@ -235,7 +235,7 @@ a08b7324	Pada suhu ini atau di bawahnya, warnanya biru muda (dingin)
 6f30cf75	Pelangi pada 1× butuh 30 dtk per putaran (10 dtk pada 3×, 3 dtk pada 10×); napas pada 1× butuh 6 dtk per tarikan. Untuk "gelombang mengalir" musik, ini kecepatan alirnya
 36bcf3d7	{0:F1}×
 f9dafe1e	Menganalisis suara dari PC dan menyala mengikuti pukulan drum, tempo, dan tinggi nada. Pilih preset dulu, lalu sesuaikan di bawah hanya bagian yang mengganggu.
-581f0311	Suara saat ini dibagi menjadi 24 pita dari bas (kiri) ke treble (kanan). Batang terang di dalamnya adalah "serangan" seperti drum; garis putih adalah puncak terkini
+5414b5c1	Suara saat ini dibagi menjadi 10 pita seperti equalizer pada umumnya (31 Hz hingga 16 kHz), dari bas (kiri) ke treble (kanan). Batang terang di dalamnya adalah "serangan" seperti drum; garis putih adalah puncak terkini
 a8d258f0	Menyala setiap kali kick (bass drum) terdeteksi. Saat uji sinkron, berkedip putih mengikuti klik
 9aa04ac9	Tempo lagu (ketukan per menit). Setelah tempo tertangkap, ketukan diprediksi dan lampu menyala tanpa jeda
 8d97f850	Level = kerasnya suara saat ini. Acuan = kekerasan yang dianggap "paling terang" oleh pengatur level otomatis (dBFS: 0 maksimum, makin negatif makin pelan)

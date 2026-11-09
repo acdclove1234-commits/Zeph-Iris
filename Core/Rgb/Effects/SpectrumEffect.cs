@@ -1,5 +1,5 @@
 // ==================================================
-// SpectrumEffect.cs - 光り方 E3「スペクトラム」 (LED の並びに低音〜高音の 24 帯を並べ、それぞれの強さで光る)
+// SpectrumEffect.cs - 光り方 E3「スペクトラム」 (LED の並びに低音〜高音の 10 帯（31 Hz〜16 kHz）を並べ、それぞれの強さで光る)
 // Dependencies: .NET 8 (MIT License)
 // See CREDITS.txt for full license details.
 // ==================================================
@@ -7,8 +7,8 @@
 namespace ProFanController;
 
 /// <summary>
-/// スペクトラム: 「始まり」側が低音、端が高音。LED の位置 x（0〜1）の強さは 24 帯の間を直線で補う:
-///   B(x) = lerp(e_k, e_k+1, u − k)、u = x × 23、k = ⌊u⌋（e = 立ち上がりを強調した帯の強さ Punch）
+/// スペクトラム: 「始まり」側が低音、端が高音。LED の位置 x（0〜1）の強さは 10 帯の間を直線で補う:
+///   B(x) = lerp(e_k, e_k+1, u − k)、u = x × 9、k = ⌊u⌋（e = 立ち上がりを強調した帯の強さ Punch）
 ///   ピークの保持: h = 最大値を 0.4 秒保ち、その後 1 秒に 1.5 ずつ下げる（ゴーストとして 0.35 倍で見せる）
 ///   LED の色 = P(x + 少しずつ回る量) × Ilin(max(B(x), 0.35 × h))
 /// 24 個以上のゾーンは、隣どうしを [0.25, 0.5, 0.25] で 1 回ぼかす（帯の境目のカクカクを消す）。
@@ -61,7 +61,7 @@ public sealed class SpectrumEffect : IMusicEffect
         if (c.HasSmallSegment) _small.Update(c);
     }
 
-    /// <summary>位置 x（0〜1）の帯の強さ。band は 24 帯</summary>
+    /// <summary>位置 x（0〜1）の帯の強さ。band は 10 帯（AudioFrame.BandCount）</summary>
     public static float BandCurve(float[] band, float x)
     {
         float u = Math.Clamp(x, 0f, 1f) * (AudioFrame.BandCount - 1);

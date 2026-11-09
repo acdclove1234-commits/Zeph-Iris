@@ -235,7 +235,7 @@ a08b7324	A esta temperatura o por debajo, el color es celeste (fresco)
 6f30cf75	El arcoíris a 1× tarda 30 s por vuelta (10 s a 3×, 3 s a 10×); la respiración a 1× tarda 6 s. En la «ola» musical es la velocidad de avance
 36bcf3d7	{0:F1}×
 f9dafe1e	Analiza el sonido del PC y se ilumina con los golpes de batería, el tempo y el tono. Elige primero un preajuste y luego ajusta abajo solo lo que te moleste.
-581f0311	El sonido actual dividido en 24 bandas de graves (izquierda) a agudos (derecha). Las barras brillantes de dentro son «ataques» como la batería; la línea blanca es el pico reciente
+5414b5c1	El sonido actual dividido en las 10 bandas de un ecualizador habitual (de 31 Hz a 16 kHz), de graves (izquierda) a agudos (derecha). Las barras brillantes de dentro son «ataques» como la batería; la línea blanca es el pico reciente
 a8d258f0	Se ilumina cada vez que detecta un bombo. Durante la prueba de sincronización destella en blanco con los clics
 9aa04ac9	El tempo de la canción (pulsos por minuto). Al captarlo, anticipa los pulsos y se ilumina sin retraso
 8d97f850	Nivel = volumen actual. Referencia = el volumen que el control automático considera «el más brillante» (dBFS: 0 es el máximo, cuanto más negativo, más bajo)

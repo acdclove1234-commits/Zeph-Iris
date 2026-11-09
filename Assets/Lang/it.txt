@@ -235,7 +235,7 @@ a08b7324	A questa temperatura o sotto, il colore è azzurro (fresco)
 6f30cf75	L'arcobaleno a 1× fa un giro in 30 s (10 s a 3×, 3 s a 10×); il respiro a 1× dura 6 s. Per l'«onda» musicale è la velocità di scorrimento
 36bcf3d7	{0:F1}×
 f9dafe1e	Analizza il suono del PC e si illumina con i colpi di batteria, il tempo e l'altezza dei suoni. Scegli prima una preimpostazione, poi regola qui sotto solo ciò che ti disturba.
-581f0311	Il suono attuale diviso in 24 bande dai bassi (sinistra) agli acuti (destra). Le barre luminose interne sono gli «attacchi» come la batteria; la linea bianca è il picco recente
+5414b5c1	Il suono attuale diviso nelle 10 bande di un normale equalizzatore (da 31 Hz a 16 kHz), dai bassi (sinistra) agli acuti (destra). Le barre luminose interne sono gli «attacchi» come la batteria; la linea bianca è il picco recente
 a8d258f0	Si illumina ogni volta che rileva una cassa (grancassa). Durante il test di sincronizzazione lampeggia in bianco con i clic
 9aa04ac9	Il tempo del brano (battiti al minuto). Una volta trovato, anticipa i battiti e si illumina senza ritardo
 8d97f850	Livello = volume attuale. Riferimento = il volume che la regolazione automatica considera «il più luminoso» (dBFS: 0 è il massimo, più è negativo, più è basso)

@@ -124,13 +124,28 @@ public static class AudioEngineTests
 
     public static void TestBandLayoutAndPowerScale()
     {
-        T.Near(BandAnalyzer.Edge(0), 40, 1e-9, "edge 0 = 40 Hz");
-        T.Near(BandAnalyzer.Edge(12), 800, 1e-6, "edge 12 = 800 Hz");
-        T.Near(BandAnalyzer.Edge(24), 16000, 1e-6, "edge 24 = 16 kHz");
-        T.Near(BandAnalyzer.Centre(0), 45.3, 0.2, "centre 0 ≈ 45 Hz");
-        T.Near(BandAnalyzer.Centre(23), 14123, 5, "centre 23 ≈ 14.1 kHz");
+        // 一般的な 10 バンドのイコライザーと同じ 1 オクターブごとの 10 帯（31 Hz〜16 kHz）
+        T.Check(AudioFrame.BandCount == 10, "10 bands, like a standard 10-band graphic equalizer");
+        var names = Enumerable.Range(0, AudioFrame.BandCount).Select(BandAnalyzer.Label).ToArray();
+        T.Check(string.Join(" ", names) == "31 63 125 250 500 1k 2k 4k 8k 16k", $"band names are the usual equalizer names ({string.Join(" ", names)})");
+        T.Near(BandAnalyzer.Centre(0), 31.25, 1e-9, "centre 0 = 31.25 Hz (\"31\")");
+        T.Near(BandAnalyzer.Centre(5), 1000, 1e-9, "centre 5 = 1 kHz");
+        T.Near(BandAnalyzer.Centre(9), 16000, 1e-9, "centre 9 = 16 kHz");
+        T.Near(BandAnalyzer.Edge(0), 20, 1e-9, "lowest band starts at 20 Hz");
+        T.Near(BandAnalyzer.Edge(1), 44.19, 0.01, "edge 1 = 31.25·√2 ≈ 44 Hz");
+        T.Near(BandAnalyzer.Edge(6), 1414.2, 0.1, "edge 6 = 1 kHz·√2 ≈ 1,414 Hz");
+        T.Near(BandAnalyzer.Edge(10), 20000, 1e-9, "highest band ends at 20 kHz");
+        T.Check(BandAnalyzer.SplitBand == 7 && BandAnalyzer.Edge(BandAnalyzer.SplitBand) > 2172, "up to the 2 kHz band on the large FFT, 4 kHz and up on the small one (the mid and treble bands each keep one delay)");
+        for (int k = 1; k < AudioFrame.BandCount; k++)
+            T.Check(BandAnalyzer.Edge(k) > BandAnalyzer.Centre(k - 1) && BandAnalyzer.Edge(k) < BandAnalyzer.Centre(k), $"edge {k} lies between centres {k - 1} and {k}");
+        // 判定に使う細かい帯（まとめた帯・基準・音量・重心）は前と同じ 40 Hz〜16 kHz の 24 帯
+        T.Near(BandAnalyzer.FineEdge(0), 40, 1e-9, "fine edge 0 = 40 Hz");
+        T.Near(BandAnalyzer.FineEdge(12), 800, 1e-6, "fine edge 12 = 800 Hz");
+        T.Near(BandAnalyzer.FineEdge(24), 16000, 1e-6, "fine edge 24 = 16 kHz");
+        T.Near(BandAnalyzer.FineCentre(0), 45.3, 0.2, "fine centre 0 ≈ 45 Hz");
+        T.Near(BandAnalyzer.FineCentre(23), 14123, 5, "fine centre 23 ≈ 14.1 kHz");
 
-        // 白色ノイズ: 帯のパワーは帯の幅に比例 → 隣の帯との比は 1.2836（+1.08 dB）。合計は 40 Hz〜16 kHz の分の 2 乗平均
+        // 白色ノイズ: 帯のパワーは帯の幅に比例 → 1 オクターブの帯どうしの比は 2（+3.01 dB）。合計は 20 Hz〜20 kHz の分の 2 乗平均
         int fs = 48000;
         var ba = new BandAnalyzer(fs, 2048, 1024, 512.0 / fs);
         var fl = new Fft(2048);
@@ -139,7 +154,7 @@ public static class AudioEngineTests
         var wh = Fft.PeriodicHann(1024);
         var rng = new Random(5);
         double sigma = 0.1;
-        var acc = new double[24];
+        var acc = new double[AudioFrame.BandCount];
         int frames = 400;
         var reL = new double[2048]; var imL = new double[2048]; var reH = new double[1024]; var imH = new double[1024];
         var pL = new double[1025]; var pH = new double[513];
@@ -154,16 +169,18 @@ public static class AudioEngineTests
             for (int b = 0; b <= 1024; b++) pL[b] = reL[b] * reL[b] + imL[b] * imL[b];
             for (int b = 0; b <= 512; b++) pH[b] = reH[b] * reH[b] + imH[b] * imH[b];
             ba.Process(pL, pH, AudioEngineSettings.Default, true, 1);
-            for (int k = 0; k < 24; k++) acc[k] += ba.Power[k] / frames;
+            for (int k = 0; k < AudioFrame.BandCount; k++) acc[k] += ba.Power[k] / frames;
         }
         double total = acc.Sum();
-        double expected = sigma * sigma * (16000 - 40) / 24000.0;
+        double expected = sigma * sigma * (BandAnalyzer.HighHz - BandAnalyzer.LowHz) / 24000.0;
         T.Info($"white noise σ² = {sigma * sigma}: Σ band power = {total:G4} (expected {expected:G4})");
         T.Near(10 * Math.Log10(total / expected), 0, 0.3, "white noise: total band power matches mean square (dB)");
         var slopes = new List<double>();
-        for (int k = 4; k < 23; k++) slopes.Add(10 * Math.Log10(acc[k + 1] / acc[k]));
+        // 両端の帯（20 Hz・20 kHz で切った帯）を除いた、1 オクターブちょうどの帯どうし
+        for (int k = 1; k < AudioFrame.BandCount - 2; k++) slopes.Add(10 * Math.Log10(acc[k + 1] / acc[k]));
         T.Info("band dB: " + string.Join(" ", acc.Select(p => (10 * Math.Log10(p)).ToString("F1"))));
-        T.Near(slopes.Average(), 10 * Math.Log10(Math.Pow(400, 1 / 24.0)), 0.2, "white noise: +1.08 dB per band (fractional weights)");
+        T.Near(slopes.Average(), 10 * Math.Log10(2), 0.2, "white noise: +3.01 dB per octave band (fractional weights)");
+        T.Check(slopes.All(s => Math.Abs(s - 10 * Math.Log10(2)) < 0.5), $"white noise: every octave band doubles ({string.Join(" ", slopes.Select(s => s.ToString("F2")))} dB)");
 
         // サイン波（振幅 0.5）: 帯のパワーの合計 = 0.5²/2 = 0.125
         var ba2 = new BandAnalyzer(fs, 2048, 1024, 512.0 / fs);
@@ -607,7 +624,7 @@ public static class AudioEngineTests
         double w = AudioEngineSettings.Default.Punch;
         double maxStart = start.Max(f => f.BassE);
         double bassE = end.Average(f => f.BassE), bass = end.Average(f => f.Bass);
-        int k = 4; // 100 Hz は帯 4 付近
+        int k = 2; // 100 Hz は帯 2（125 Hz の帯: 88〜177 Hz）
         double punchK = end.Average(f => f.Punch[k]), bandK = end.Average(f => f.Band[k]);
         T.Info($"steady 100 Hz: BassE at onset {maxStart:F2}, after 3 s {mid.Average(f => f.BassE):F2}, after 8.5 s BassE {bassE:F2} (Bass {bass:F2}), band {k}: punch {punchK:F2} vs (1−w)·band {(1 - w) * bandK:F2}");
         T.Check(maxStart > 0.8, "tone onset gives a punch");
@@ -626,7 +643,7 @@ public static class AudioEngineTests
         double maxRise = 0, maxDrop = 0;
         for (int i = 1; i < after.Count; i++)
         {
-            foreach (var (a, b) in new[] { (after[i - 1].Bass, after[i].Bass), (after[i - 1].Mid, after[i].Mid), (after[i - 1].LoudVU, after[i].LoudVU), (after[i - 1].Band[8], after[i].Band[8]) })
+            foreach (var (a, b) in new[] { (after[i - 1].Bass, after[i].Bass), (after[i - 1].Mid, after[i].Mid), (after[i - 1].LoudVU, after[i].LoudVU), (after[i - 1].Band[3], after[i].Band[3]) })
             {
                 maxRise = Math.Max(maxRise, b - a);
                 maxDrop = Math.Max(maxDrop, a - b);

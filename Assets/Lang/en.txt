@@ -235,7 +235,7 @@ a08b7324	At or below this temperature the color is light blue (cool)
 6f30cf75	Rainbow at 1× takes 30 s per cycle (10 s at 3×, 3 s at 10×); breathing at 1× takes 6 s per breath. For the music "flowing wave" it is the flow speed
 36bcf3d7	{0:F1}×
 f9dafe1e	Analyzes the sound coming from the PC and lights up with the drum hits, the tempo and the pitch. Start by choosing a preset, then adjust only what bothers you below.
-581f0311	The current sound split into 24 bands from bass (left) to treble (right). The bright bars inside are "attacks" such as drums; the white line is the recent peak
+5414b5c1	The current sound split into the 10 bands of a standard equalizer (31 Hz to 16 kHz), from bass (left) to treble (right). The bright bars inside are "attacks" such as drums; the white line is the recent peak
 a8d258f0	Lights up whenever a kick (bass drum) is found. During the sync test it flashes white with the clicks
 9aa04ac9	The song's tempo (beats per minute). Once it has the tempo, it predicts the beats and lights up without delay
 8d97f850	Level = how loud the sound is now. Reference = the loudness that the automatic level control treats as "brightest" (dBFS: 0 is the maximum, the more negative the quieter)

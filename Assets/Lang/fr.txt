@@ -235,7 +235,7 @@ a08b7324	À cette température ou en dessous, la couleur est bleu clair (froid)
 6f30cf75	L'arc-en-ciel à 1× fait un tour en 30 s (10 s à 3×, 3 s à 10×) ; la respiration à 1× dure 6 s. Pour la « vague » musicale, c'est la vitesse de défilement
 36bcf3d7	{0:F1}×
 f9dafe1e	Analyse le son du PC et s'allume avec les frappes de batterie, le tempo et la hauteur. Choisissez d'abord un préréglage, puis ajustez ci-dessous seulement ce qui vous gêne.
-581f0311	Le son actuel découpé en 24 bandes, des graves (gauche) aux aigus (droite). Les barres claires à l'intérieur sont les « attaques » comme la batterie ; la ligne blanche est le pic récent
+5414b5c1	Le son actuel découpé selon les 10 bandes d'un égaliseur classique (de 31 Hz à 16 kHz), des graves (gauche) aux aigus (droite). Les barres claires à l'intérieur sont les « attaques » comme la batterie ; la ligne blanche est le pic récent
 a8d258f0	S'allume à chaque grosse caisse détectée. Pendant le test de synchro, clignote en blanc avec les clics
 9aa04ac9	Le tempo du morceau (battements par minute). Une fois le tempo trouvé, les temps sont anticipés et s'allument sans retard
 8d97f850	Niveau = volume actuel. Référence = le volume que le réglage automatique considère comme « le plus lumineux » (dBFS : 0 est le maximum, plus c'est négatif, plus c'est faible)

@@ -235,7 +235,7 @@ a08b7324	Bằng hoặc dưới nhiệt độ này, màu là xanh nhạt (mát)
 6f30cf75	Cầu vồng ở 1× mất 30 giây một vòng (3× là 10 giây, 10× là 3 giây); nhịp thở ở 1× mất 6 giây một lần. Với "sóng chảy" khi đồng bộ nhạc thì đây là tốc độ chảy
 36bcf3d7	{0:F1}×
 f9dafe1e	Phân tích âm thanh phát ra từ PC và phát sáng theo nhịp trống, tiết tấu và cao độ. Hãy chọn cấu hình sẵn trước, rồi chỉ chỉnh bên dưới những chỗ bạn thấy chưa ưng.
-581f0311	Âm thanh hiện tại chia thành 24 dải từ trầm (trái) đến cao (phải). Các thanh sáng bên trong là "tiếng đánh" như trống, đường trắng là đỉnh gần đây
+5414b5c1	Âm thanh hiện tại chia thành 10 dải như bộ chỉnh âm (equalizer) thông thường (31 Hz đến 16 kHz), từ trầm (trái) đến cao (phải). Các thanh sáng bên trong là "tiếng đánh" như trống, đường trắng là đỉnh gần đây
 a8d258f0	Sáng lên mỗi khi phát hiện tiếng kick (trống bass). Trong lúc kiểm tra đồng bộ, đèn nháy trắng theo tiếng click
 9aa04ac9	Tiết tấu của bài (số nhịp mỗi phút). Khi bắt được tiết tấu, đèn dự đoán trước nhịp và sáng không bị trễ
 8d97f850	Âm lượng = độ lớn hiện tại. Mốc = độ lớn mà bộ chỉnh âm lượng tự động coi là "sáng nhất" (dBFS: 0 là tối đa, càng âm càng nhỏ)

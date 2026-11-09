@@ -235,7 +235,7 @@ a08b7324	Nesta temperatura ou abaixo, a cor é azul-claro (frio)
 6f30cf75	O arco-íris em 1× leva 30 s por volta (10 s em 3×, 3 s em 10×); a respiração em 1× leva 6 s. Na "onda" musical é a velocidade do fluxo
 36bcf3d7	{0:F1}×
 f9dafe1e	Analisa o som do PC e acende com as batidas da bateria, o andamento e a altura do som. Escolha primeiro uma predefinição e depois ajuste abaixo só o que incomodar.
-581f0311	O som atual dividido em 24 faixas, dos graves (esquerda) aos agudos (direita). As barras claras de dentro são os "ataques" como a bateria; a linha branca é o pico recente
+5414b5c1	O som atual dividido nas 10 faixas de um equalizador comum (de 31 Hz a 16 kHz), dos graves (esquerda) aos agudos (direita). As barras claras de dentro são os "ataques" como a bateria; a linha branca é o pico recente
 a8d258f0	Acende sempre que detecta um bumbo. Durante o teste de sincronia, pisca em branco com os cliques
 9aa04ac9	O andamento da música (batidas por minuto). Quando o capta, antecipa as batidas e acende sem atraso
 8d97f850	Nível = volume atual. Referência = o volume que o ajuste automático considera "o mais claro" (dBFS: 0 é o máximo; quanto mais negativo, mais baixo)

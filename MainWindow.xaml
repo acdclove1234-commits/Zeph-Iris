@@ -1818,7 +1818,7 @@
                                             <ColumnDefinition Width="210"/>
                                         </Grid.ColumnDefinitions>
                                         <ctl:SpectrumView x:Name="LiveSpectrum" Height="104"
-                                                          ToolTip="いまの音を、低音（左）から高音（右）まで 24 本に分けて表示しています。中の明るい棒はドラムなどの「立ち上がり」、白い線は少し前までのいちばん高いところです"/>
+                                                          ToolTip="いまの音を、一般的なイコライザーと同じ 10 の帯（31 Hz〜16 kHz）に分けて、低音（左）から高音（右）まで表示しています。中の明るい棒はドラムなどの「立ち上がり」、白い線は少し前までのいちばん高いところです"/>
                                         <StackPanel Grid.Column="1" Margin="16,0,0,0" VerticalAlignment="Center">
                                             <StackPanel Orientation="Horizontal">
                                                 <ctl:BeatLamp x:Name="BeatLampView" Width="22" Height="22" VerticalAlignment="Center"

@@ -1,5 +1,5 @@
 // ==================================================
-// SpectrumView.cs - ライティング画面の「いまの音」の表示 (24 本の帯のスペクトラムと、キックで光るランプ)
+// SpectrumView.cs - ライティング画面の「いまの音」の表示 (10 バンドのイコライザーと同じ帯のスペクトラムと、キックで光るランプ)
 // Dependencies: WPF / .NET 8 (MIT License)
 // See CREDITS.txt for full license details.
 // ==================================================
@@ -11,7 +11,8 @@ using System.Windows.Media;
 namespace ProFanController.UI.Controls;
 
 /// <summary>
-/// 音の分析結果（AudioFrame）の 24 本の帯を、低音（左）〜高音（右）の棒グラフで描く。
+/// 音の分析結果（AudioFrame）の 10 本の帯（31 Hz〜16 kHz）を、低音（左）〜高音（右）の棒グラフで描く。
+/// 棒の下に、イコライザーと同じ帯の名前（31・63・…・16k）を出す。
 ///   ・太い棒 = その帯の「鳴っている大きさ」（Band。滑らか）
 ///   ・中の細い明るい棒 = 「立ち上がりを強調した大きさ」（Punch。ドラムの瞬間に伸びる）
 ///   ・白い線 = 少し前までのいちばん高い位置（ゆっくり落ちてくる）
@@ -20,8 +21,10 @@ namespace ProFanController.UI.Controls;
 /// </summary>
 public sealed class SpectrumView : FrameworkElement
 {
-    /// <summary>帯の数（AudioFrame.BandCount と同じ）</summary>
-    private const int Bands = 24;
+    /// <summary>帯の数</summary>
+    private const int Bands = AudioFrame.BandCount;
+    /// <summary>棒と棒の間のすき間（帯の幅に対する割合。最小 2 ピクセル）</summary>
+    private const double GapShare = 0.22;
     /// <summary>白い線（ピーク）が落ちる速さ（グラフの高さ全体を 1 として、1 秒あたり）</summary>
     private const double PeakFallPerSec = 0.6;
     /// <summary>白い線が落ち始めるまで待つ時間（秒）</summary>
@@ -46,8 +49,8 @@ public sealed class SpectrumView : FrameworkElement
     private bool _gateOpen;
     private double _lastT = double.NaN;
 
-    // 目盛りの文字（作るのに手間がかかるので、DPI が変わったときだけ作り直す）
-    private FormattedText? _labelLow, _labelMid, _labelHigh;
+    // 帯の名前の文字（作るのに手間がかかるので、DPI が変わったときだけ作り直す）
+    private readonly FormattedText?[] _labels = new FormattedText?[Bands];
     private double _labelDpi;
 
     public SpectrumView()
@@ -56,7 +59,7 @@ public sealed class SpectrumView : FrameworkElement
     }
 
     /// <summary>
-    /// 新しい値を渡して描き直す。band・punch は 0〜1 の 24 個の値（中身をコピーするので、呼んだ側は配列を使い回してよい）。
+    /// 新しい値を渡して描き直す。band・punch は 0〜1 の 10 個の値（中身をコピーするので、呼んだ側は配列を使い回してよい）。
     /// t は今の時刻（秒。ピークの線を落とす速さの計算に使う）
     /// </summary>
     public void SetFrame(float[] band, float[] punch, bool gateOpen, double t)
@@ -121,13 +124,14 @@ public sealed class SpectrumView : FrameworkElement
         }
 
         double slot = plotW / Bands;
-        double barW = Math.Max(1, slot - 2);
+        double gap = Math.Max(2, Math.Round(slot * GapShare));
+        double barW = Math.Max(1, slot - gap);
         double punchW = Math.Max(1, barW * 0.4);
         // 無音のときは全体を薄くして「待機中」が分かるようにする
         if (!_gateOpen) dc.PushOpacity(0.45);
         for (int i = 0; i < Bands; i++)
         {
-            double x = padX + i * slot + 1;
+            double x = padX + i * slot + gap / 2;
             double bh = _band[i] * plotH;
             if (bh >= 0.5) dc.DrawRectangle(BarBrushes[i], null, new Rect(x, baseY - bh, barW, bh));
             double ph = _punch[i] * plotH;
@@ -137,32 +141,34 @@ public sealed class SpectrumView : FrameworkElement
         }
         if (!_gateOpen) dc.Pop();
 
-        // 下の目盛り: 左端 40 Hz・真ん中あたり 1 kHz・右端 16 kHz
+        // 下の目盛り: 棒ごとに帯の名前（31・63・…・16k）。狭くて重なるときは 1 つおき（31・125・500・2k・8k）
         EnsureLabels();
         double ly = baseY + 3;
-        if (_labelLow is not null) dc.DrawText(_labelLow, new Point(padX, ly));
-        // 1 kHz は 13 本目（800〜1,027 Hz）の右端あたり
-        if (_labelMid is not null) dc.DrawText(_labelMid, new Point(padX + slot * 13 - _labelMid.Width / 2, ly));
-        if (_labelHigh is not null) dc.DrawText(_labelHigh, new Point(padX + plotW - _labelHigh.Width, ly));
+        double widest = _labels.Max(l => l?.Width ?? 0);
+        int every = widest + 4 <= slot ? 1 : 2;
+        for (int i = 0; i < Bands; i += every)
+        {
+            if (_labels[i] is not { } label) continue;
+            double lx = Math.Clamp(padX + i * slot + slot / 2 - label.Width / 2, padX, padX + plotW - label.Width);
+            dc.DrawText(label, new Point(lx, ly));
+        }
     }
 
     private void EnsureLabels()
     {
         double dpi = VisualTreeHelper.GetDpi(this).PixelsPerDip;
-        if (_labelLow is not null && dpi == _labelDpi) return;
+        if (_labels[0] is not null && dpi == _labelDpi) return;
         _labelDpi = dpi;
         var face = new Typeface(TextElementFont(), FontStyles.Normal, FontWeights.Medium, FontStretches.Normal);
-        FormattedText Make(string s) => new(s, CultureInfo.InvariantCulture, FlowDirection.LeftToRight, face, 10, LabelBrush, dpi);
-        _labelLow = Make("40 Hz");
-        _labelMid = Make("1 kHz");
-        _labelHigh = Make("16 kHz");
+        for (int i = 0; i < Bands; i++)
+            _labels[i] = new FormattedText(BandAnalyzer.Label(i), CultureInfo.InvariantCulture, FlowDirection.LeftToRight, face, 10, LabelBrush, dpi);
     }
 
     /// <summary>画面全体と同じ文字の種類（見つからなければ Segoe UI）</summary>
     private FontFamily TextElementFont()
         => System.Windows.Documents.TextElement.GetFontFamily(this) ?? new FontFamily("Segoe UI");
 
-    /// <summary>低音 → 高音で、ピンク → 紫 → 水色に変わる 24 色を作る</summary>
+    /// <summary>低音 → 高音で、ピンク → 紫 → 水色に変わる帯の数だけの色を作る</summary>
     private static Brush[] CreateBandBrushes(byte alpha)
     {
         var low = Color.FromRgb(0xF4, 0x72, 0xB6);

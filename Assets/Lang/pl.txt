@@ -235,7 +235,7 @@ a08b7324	W tej temperaturze i niżej kolor jest jasnoniebieski (chłodno)
 6f30cf75	Tęcza przy 1× robi jedno okrążenie w 30 s (10 s przy 3×, 3 s przy 10×); oddychanie przy 1× trwa 6 s. Dla muzycznej „fali” to prędkość przepływu
 36bcf3d7	{0:F1}×
 f9dafe1e	Analizuje dźwięk z komputera i świeci w rytm uderzeń perkusji, tempa i wysokości dźwięku. Najpierw wybierz ustawienie wstępne, a poniżej popraw tylko to, co przeszkadza.
-581f0311	Bieżący dźwięk podzielony na 24 pasma od basów (lewo) do sopranów (prawo). Jasne słupki w środku to „ataki” np. perkusji, biała linia to niedawny szczyt
+5414b5c1	Bieżący dźwięk podzielony na 10 pasm typowego korektora (od 31 Hz do 16 kHz), od basów (lewo) do sopranów (prawo). Jasne słupki w środku to „ataki” np. perkusji, biała linia to niedawny szczyt
 a8d258f0	Zapala się przy każdym wykrytym kicku (stopie). Podczas testu synchronizacji błyska na biało z kliknięciami
 9aa04ac9	Tempo utworu (uderzenia na minutę). Po uchwyceniu tempa przewiduje uderzenia i świeci bez opóźnienia
 8d97f850	Poziom = bieżąca głośność. Odniesienie = głośność, którą automatyczna regulacja uznaje za „najjaśniejszą” (dBFS: 0 to maksimum, im bardziej ujemne, tym ciszej)

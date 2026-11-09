@@ -55,7 +55,7 @@ public static class MusicFeel
             input.Frame.TrebleE = (float)(0.3 + 0.3 * Math.Exp(-(beat * 2 - Math.Floor(beat * 2)) * 8));
             input.Frame.Treble = 0.35f;
             input.Frame.LoudVU = (float)(0.55 + 0.25 * Math.Exp(-ph * 4));
-            for (int k = 0; k < AudioFrame.BandCount; k++) input.Frame.Band[k] = k < 6 ? input.Frame.Bass : k < 16 ? 0.4f : 0.35f;
+            for (int k = 0; k < AudioFrame.BandCount; k++) input.Frame.Band[k] = k < 3 ? input.Frame.Bass : k < 7 ? 0.4f : 0.35f;
             input.T = input.TEval = input.Frame.T = t;
             input.TPrevEval = double.IsNaN(last) ? t : last;
             input.Dt = double.IsNaN(last) ? 0 : t - last;

@@ -235,7 +235,7 @@ a08b7324	Bij deze temperatuur of lager is de kleur lichtblauw (koel)
 6f30cf75	Regenboog op 1× doet 30 s per ronde (10 s op 3×, 3 s op 10×); ademen op 1× duurt 6 s per ademhaling. Bij de muzikale "golf" is het de stroomsnelheid
 36bcf3d7	{0:F1}×
 f9dafe1e	Analyseert het geluid van de pc en licht op met drumslagen, tempo en toonhoogte. Kies eerst een voorinstelling en pas daarna hieronder alleen aan wat stoort.
-581f0311	Het huidige geluid verdeeld in 24 banden van bas (links) tot hoog (rechts). De heldere balkjes binnenin zijn "aanslagen" zoals drums; de witte lijn is de recente piek
+5414b5c1	Het huidige geluid verdeeld in de 10 banden van een gewone equalizer (31 Hz tot 16 kHz), van bas (links) tot hoog (rechts). De heldere balkjes binnenin zijn "aanslagen" zoals drums; de witte lijn is de recente piek
 a8d258f0	Licht op bij elke gevonden kick (basdrum). Tijdens de synchronisatietest flitst hij wit op de klikken
 9aa04ac9	Het tempo van het nummer (slagen per minuut). Zodra het tempo bekend is, worden de slagen voorspeld en licht hij zonder vertraging op
 8d97f850	Niveau = huidige luidheid. Referentie = de luidheid die de automatische niveauregeling als "het helderst" ziet (dBFS: 0 is het maximum, hoe negatiever hoe zachter)

@@ -450,7 +450,7 @@ public static class EffectsTests
         var x = new Manual(Strip(48), cfg, m, new RgbDeviceSettings { Mirror = false });
         void Bands(bool bass)
         {
-            for (int k = 0; k < AudioFrame.BandCount; k++) x.In.Frame.Punch[k] = (bass ? k < 6 : k >= 18) ? 1f : 0f;
+            for (int k = 0; k < AudioFrame.BandCount; k++) x.In.Frame.Punch[k] = (bass ? k < 3 : k >= 7) ? 1f : 0f; // 低音 = 31〜125 Hz、高音 = 4〜16 kHz
         }
         double t = 0;
         Bands(true);
@@ -465,7 +465,7 @@ public static class EffectsTests
 
         // 30 個以上のゾーンは自動で左右対称（中央が低音）
         var y = new Manual(Strip(60), cfg, m);
-        for (int k = 0; k < AudioFrame.BandCount; k++) y.In.Frame.Punch[k] = k < 6 ? 1f : 0f;
+        for (int k = 0; k < AudioFrame.BandCount; k++) y.In.Frame.Punch[k] = k < 3 ? 1f : 0f;
         for (t = 0; t < 1; t += 1 / 60.0) y.Step(t);
         T.Check(Max(y.R.LastLight, 30) > 0.6f && Max(y.R.LastLight, 0) < 0.15f && Max(y.R.LastLight, 59) < 0.15f,
             "Spectrum on a 60-LED strip: auto mirror puts the bass in the centre");
