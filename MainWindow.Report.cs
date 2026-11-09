@@ -91,7 +91,7 @@ public partial class MainWindow
         Add(StatRoles.CpuTemp, SensorNames.CpuTemperature(t)
                                ?? t.FirstOrDefault(x => x.HardwareType.StartsWith("Cpu")));
         Add(StatRoles.GpuTemp, SensorNames.GpuCoreTemperature(t));
-        Add(StatRoles.Ambient, t.FirstOrDefault(x => x.HardwareType == "SuperIO" && x.Name is "System" or "Motherboard"));
+        Add(StatRoles.Ambient, AmbientSensor(t));
         Add(StatRoles.CpuPower, SensorNames.Find(all, "Cpu", "Power", SensorNames.CpuPower));
         Add(StatRoles.GpuPower, all.FirstOrDefault(x => x.HardwareType.StartsWith("Gpu") && x.SensorType == "Power" && x.Name.Contains("Package"))
                                 ?? all.FirstOrDefault(x => x.HardwareType.StartsWith("Gpu") && x.SensorType == "Power"));
@@ -100,10 +100,55 @@ public partial class MainWindow
         return roles;
     }
 
-    /// <summary>1 分ごとに保存するセンサーを決め、初回は保存してある記録から起動前 24 時間の履歴を復元する</summary>
-    private void ConfigureLongTerm()
+    /// <summary>
+    /// 冷え方の判定で「室温」として使うセンサー（設定の AmbientSensorId）。自動ならマザーボードの System・Motherboard、
+    /// 「使わない」なら null（休んでいるときとの差だけで比べる）
+    /// </summary>
+    private SensorInfo? AmbientSensor(IEnumerable<SensorInfo> temperatures)
+    {
+        string? chosen = Config.Maintenance.AmbientSensorId;
+        if (chosen == MaintenanceConfig.NoAmbientSensor) return null;
+        if (!string.IsNullOrEmpty(chosen) && temperatures.FirstOrDefault(x => x.Id == chosen) is { } picked) return picked;
+        return temperatures.FirstOrDefault(x => x.HardwareType == "SuperIO" && x.Name is "System" or "Motherboard");
+    }
+
+    /// <summary>「室温のセンサー」の選択肢を作る（自動・使わない・温度センサーの一覧）</summary>
+    private void RebuildAmbientOptions()
     {
         if (_catalog is null) return;
+        var auto = _catalog.Temperatures.FirstOrDefault(x => x.HardwareType == "SuperIO" && x.Name is "System" or "Motherboard");
+        var options = new List<KeyValuePair<string, string>>
+        {
+            new("", auto is null ? L("自動（見つかりません）") : L($"自動（{auto.Display}）")),
+            new(MaintenanceConfig.NoAmbientSensor, L("使わない（休んでいるときとの差だけで比べる）")),
+        };
+        options.AddRange(_catalog.Temperatures.Select(s => new KeyValuePair<string, string>(s.Id, s.Display)));
+        _ambientUpdating = true;
+        AmbientSensorBox.ItemsSource = options;
+        string current = Config.Maintenance.AmbientSensorId ?? "";
+        AmbientSensorBox.SelectedValue = options.Any(o => o.Key == current) ? current : "";
+        _ambientUpdating = false;
+    }
+
+    private bool _ambientUpdating;
+
+    private void OnAmbientSensorChanged(object sender, SelectionChangedEventArgs e)
+    {
+        if (_ambientUpdating || AmbientSensorBox.SelectedValue is not string id) return;
+        string? value = id.Length == 0 ? null : id;
+        if (value == Config.Maintenance.AmbientSensorId) return;
+        Config.Maintenance.AmbientSensorId = value;
+        _controller.Commit(recordUndo: false);
+        Logger.Info($"冷え方の判定の室温のセンサー: {(value is null ? "自動" : value)}");
+        ConfigureLongTerm(rebuildOptions: false); // これからの記録の「室温」を、選んだセンサーにする
+        _ = AnalyzeHealthAsync(automatic: false);
+    }
+
+    /// <summary>1 分ごとに保存するセンサーを決め、初回は保存してある記録から起動前 24 時間の履歴を復元する</summary>
+    private void ConfigureLongTerm(bool rebuildOptions = true)
+    {
+        if (_catalog is null) return;
+        if (rebuildOptions) RebuildAmbientOptions();
         _roles = ResolveRoles();
         var keys = _roles.Values
             .Concat(_tempCards.Select(c => c.SensorId))

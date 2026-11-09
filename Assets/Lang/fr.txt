@@ -1637,3 +1637,17 @@ a94ca4e7	Pas encore vérifié.
 d24d8900	Mise à jour vers Fanlume {0}.\n\nUne fois le programme d'installation ({1:F0} Mo) téléchargé et vérifié, l'application se ferme. Jusqu'à la fin du remplacement (10 à 20 secondes environ), les ventilateurs suivent les réglages du BIOS, puis l'application redémarre.\n\nMettre à jour maintenant ?
 98b3be1a	Téléchargement… {0:P0}
 c1f570b8	\n\nVous pouvez aussi mettre à jour en lançant vous-même le programme d'installation depuis la page des versions.
+d4af943f	Capteur de température ambiante
+c7b80b29	La température servant de référence pour le refroidissement les jours sans repos. Le capteur « System » de la carte mère peut mesurer la carte plutôt que la pièce (il monte quand le PC travaille)
+7f2a592a	Si la nouvelle version pose problème, pendant 14 jours après la mise à jour vous pouvez revenir en arrière en récupérant le programme d'installation de la version précédente sur GitHub
+1f0a60f2	La version tout juste installée ({0}) s'est fermée de façon inattendue. Si cela se répète, vous pouvez revenir à la version précédente ({1}).
+ee455e9f	Revenir à la version précédente
+c1d1f65d	La version précédente est inconnue, impossible de revenir en arrière.
+a8c3ec6f	Impossible de lire la version précédente sur GitHub ({0}). Vérifiez que le PC est connecté à Internet.
+87370a47	Le programme d'installation de la version précédente ({0}) est introuvable sur GitHub.
+b635421a	Vous avez récemment mis à jour vers cette version. Si la nouvelle version continue de se fermer, lancez le programme d'installation de {1} (Fanlume-{2}-setup.exe) depuis la page des versions ({0}) pour revenir à la version précédente.
+dd7ad3b9	Automatique (introuvable)
+c4d4fe99	Automatique ({0})
+096f8d69	Aucun (comparer seulement avec les périodes de repos)
+72959f2c	Revenir à la version précédente ({0})
+f2252901	Retour à la version précédente ({0}).\n\nUne fois le programme d'installation de la version précédente téléchargé depuis GitHub et vérifié, l'application se ferme. Jusqu'à la fin du remplacement (10 à 20 secondes environ), les ventilateurs suivent les réglages du BIOS, puis l'application redémarre. Réglages, journaux et enregistrements sont conservés.\n\nRevenir maintenant ?

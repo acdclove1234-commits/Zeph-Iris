@@ -1637,3 +1637,17 @@ a94ca4e7	Non ancora verificato.
 d24d8900	Aggiornamento a Fanlume {0}.\n\nDopo aver scaricato e verificato il programma di installazione ({1:F0} MB), l'app si chiude. Fino alla fine della sostituzione (circa 10–20 secondi) le ventole seguono le impostazioni del BIOS, poi l'app si riavvia.\n\nAggiornare ora?
 98b3be1a	Download in corso… {0:P0}
 c1f570b8	\n\nPuoi anche aggiornare eseguendo tu stesso il programma di installazione dalla pagina delle versioni.
+d4af943f	Sensore della temperatura ambiente
+c7b80b29	La temperatura usata come riferimento per il raffreddamento nei giorni senza riposo. Il sensore «System» della scheda madre può misurare la scheda invece della stanza (sale quando il PC lavora)
+7f2a592a	Se la nuova versione dà problemi, per 14 giorni dopo l'aggiornamento puoi tornare indietro scaricando da GitHub il programma di installazione della versione precedente
+1f0a60f2	La versione appena aggiornata ({0}) si è chiusa in modo imprevisto. Se continua a succedere, puoi tornare alla versione precedente ({1}).
+ee455e9f	Torna alla versione precedente
+c1d1f65d	La versione precedente non è nota, quindi non è possibile tornare indietro.
+a8c3ec6f	Impossibile leggere la versione precedente da GitHub ({0}). Controlla che il PC sia connesso a Internet.
+87370a47	Il programma di installazione della versione precedente ({0}) non è stato trovato su GitHub.
+b635421a	Hai aggiornato a questa versione da poco. Se la nuova versione continua a chiudersi, esegui il programma di installazione di {1} (Fanlume-{2}-setup.exe) dalla pagina delle versioni ({0}) per tornare alla versione precedente.
+dd7ad3b9	Automatico (non trovato)
+c4d4fe99	Automatico ({0})
+096f8d69	Non usare (confronta solo con i momenti di riposo)
+72959f2c	Torna alla versione precedente ({0})
+f2252901	Ritorno alla versione precedente ({0}).\n\nDopo aver scaricato da GitHub e verificato il programma di installazione della versione precedente, l'app si chiude. Fino alla fine della sostituzione (circa 10–20 secondi) le ventole seguono le impostazioni del BIOS, poi l'app si riavvia. Impostazioni, log e registrazioni restano.\n\nTornare indietro ora?

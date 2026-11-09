@@ -12,6 +12,18 @@ and can be checked from a phone.
   for example: Settings [設定].
 
 
+■ What's new in v6.7.3
+  - Installer: if PawnIO (the fan control driver) is missing, the installer installs it from the official winget
+    source (needs the internet; if that fails, the app's setup can still install it as before).
+  - Updating from inside the app: the installer left in the temp folder by each update (about 74 MB) is deleted
+    on the next start. For 14 days after an update, Settings [設定] -> General [一般] -> Updates [アップデート] ->
+    "Go back to the previous version" fetches the previous installer from GitHub, checks it the same way and
+    goes back. If a just-updated version closes unexpectedly, the notice bar offers this too.
+  - Diagnostics (cooling): the "Room temperature sensor" can be chosen (automatic, none, or any temperature
+    sensor). If the motherboard's "System" sensor measures the board rather than the room, choose none or a
+    sensor closer to the room for a better check on days without idle time.
+  - The "Open the releases page" button now looks like the other buttons.
+
 ■ What's new in v6.7.2
   - Installer: with "Launch Fanlume" ticked on the last page, the installer could show "CreateProcess error:
     code 740" and Fanlume did not start (when the installer was started by double-clicking). It starts now.

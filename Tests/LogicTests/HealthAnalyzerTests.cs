@@ -93,6 +93,40 @@ public static class HealthAnalyzerTests
             $"baseline only by the board sensor, recent only by idle → not compared, no false warning ({cool.Level}, {cool.Metric})");
     }
 
+    public static void TestRoomSensorChoice()
+    {
+        var roles = new Dictionary<string, string> { [StatRoles.Ambient] = "amb" };
+        var row = new MinuteRow { Time = DateTime.Today, Roles = roles };
+        row.Values["amb"] = 36f;
+        row.Values["room"] = 22f;
+        T.Check(HealthAnalyzer.AmbientReader(null)(row) == 36f && HealthAnalyzer.AmbientReader("")(row) == 36f, "automatic → the sensor recorded as room temperature");
+        T.Check(HealthAnalyzer.AmbientReader("room")(row) == 22f, "a chosen sensor → that sensor's value");
+        T.Check(HealthAnalyzer.AmbientReader(MaintenanceConfig.NoAmbientSensor)(row) is null, "don't use one → no room temperature");
+        T.Check(HealthAnalyzer.AmbientReader("missing")(row) is null, "chosen sensor not in the record → no room temperature");
+
+        // 休む時間のない日だけの記録で、後半に 30% 冷えにくくなる。室温のセンサーを使えば見つけ、「使わない」なら比べない
+        var rows = new List<MinuteRow>();
+        var start = DateTime.Today.AddDays(-20);
+        var rnd = new Random(3);
+        var rowRoles = new Dictionary<string, string> { [StatRoles.CpuTemp] = "cpuT", [StatRoles.CpuPower] = "cpuP", [StatRoles.Ambient] = "amb" };
+        for (int d = 0; d < 20; d++)
+            for (int m = 0; m < 240; m++)
+            {
+                double p = m % 2 == 0 ? 100 : 40;
+                var r = new MinuteRow { Time = start.AddDays(d).AddHours(10).AddMinutes(m), Roles = rowRoles };
+                r.Values["cpuT"] = (float)(25 + p * 0.4 * (d >= 13 ? 1.3 : 1.0) + rnd.NextDouble());
+                r.Values["cpuP"] = (float)p;
+                r.Values["amb"] = 25f;
+                rows.Add(r);
+            }
+        var cfg = Cfg();
+        var auto = Get(HealthAnalyzer.Analyze(rows, cfg, DateTime.Today), "CPU の冷え方");
+        T.Check(auto.Level == HealthLevel.Warning, $"room sensor used → worse cooling found ({auto.Level})");
+        cfg.Maintenance.AmbientSensorId = MaintenanceConfig.NoAmbientSensor;
+        var none = Get(HealthAnalyzer.Analyze(rows, cfg, DateTime.Today), "CPU の冷え方");
+        T.Check(none.Level == HealthLevel.Collecting, $"room sensor not used and no idle time → not compared ({none.Level})");
+    }
+
     public static void TestCoolingSeesAFanCurveChange()
     {
         // 12 日目から静かなカーブ（負荷のときの指示 70% → 55%）。そのぶん温度も上がる

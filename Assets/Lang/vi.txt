@@ -1637,3 +1637,17 @@ a94ca4e7	Chưa kiểm tra.
 d24d8900	Cập nhật lên Fanlume {0}.\n\nSau khi tải và kiểm tra trình cài đặt ({1:F0} MB), ứng dụng sẽ thoát một lần. Cho đến khi thay xong (khoảng 10–20 giây), quạt chạy theo cài đặt BIOS, rồi ứng dụng khởi động lại.\n\nCập nhật ngay?
 98b3be1a	Đang tải… {0:P0}
 c1f570b8	\n\nBạn cũng có thể tự chạy trình cài đặt từ trang phát hành để cập nhật.
+d4af943f	Cảm biến nhiệt độ phòng
+c7b80b29	Nhiệt độ dùng làm mốc so sánh khả năng làm mát vào những ngày không có lúc nghỉ. Cảm biến "System" của bo mạch chủ có thể đo bo mạch thay vì căn phòng (nó tăng khi PC làm việc)
+7f2a592a	Nếu phiên bản mới gặp sự cố, trong 14 ngày sau khi cập nhật bạn có thể quay lại bằng cách lấy trình cài đặt của phiên bản trước từ GitHub
+1f0a60f2	Phiên bản vừa cập nhật ({0}) đã thoát bất ngờ. Nếu cứ lặp lại, bạn có thể quay về phiên bản trước ({1}).
+ee455e9f	Quay về phiên bản trước
+c1d1f65d	Không biết phiên bản trước nên không thể quay lại.
+a8c3ec6f	Không đọc được phiên bản trước từ GitHub ({0}). Hãy kiểm tra kết nối Internet.
+87370a47	Không tìm thấy trình cài đặt của phiên bản trước ({0}) trên GitHub.
+b635421a	Bạn vừa cập nhật lên phiên bản này. Nếu phiên bản mới cứ thoát, hãy chạy trình cài đặt của {1} (Fanlume-{2}-setup.exe) từ trang phát hành ({0}) để quay về phiên bản trước.
+dd7ad3b9	Tự động (không tìm thấy)
+c4d4fe99	Tự động ({0})
+096f8d69	Không dùng (chỉ so với lúc nghỉ)
+72959f2c	Quay về phiên bản trước ({0})
+f2252901	Quay về phiên bản trước ({0}).\n\nSau khi tải từ GitHub và kiểm tra trình cài đặt của phiên bản trước, ứng dụng sẽ thoát một lần. Cho đến khi thay xong (khoảng 10–20 giây), quạt chạy theo cài đặt BIOS, rồi ứng dụng khởi động lại. Cài đặt, nhật ký và bản ghi được giữ nguyên.\n\nQuay lại ngay?

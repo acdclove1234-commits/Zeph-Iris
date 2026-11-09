@@ -1637,3 +1637,17 @@ a94ca4e7	Jeszcze nie sprawdzono.
 d24d8900	Aktualizacja do Fanlume {0}.\n\nPo pobraniu i sprawdzeniu instalatora ({1:F0} MB) aplikacja się zamknie. Do końca podmiany (ok. 10–20 sekund) wentylatory działają według ustawień BIOS, a potem aplikacja uruchomi się ponownie.\n\nZaktualizować teraz?
 98b3be1a	Pobieranie… {0:P0}
 c1f570b8	\n\nMożesz też zaktualizować, uruchamiając samodzielnie instalator ze strony wydań.
+d4af943f	Czujnik temperatury otoczenia
+c7b80b29	Temperatura, względem której ocenia się chłodzenie w dni bez bezczynności. Czujnik „System” płyty głównej może mierzyć płytę zamiast pokoju (rośnie, gdy komputer pracuje)
+7f2a592a	Jeśli nowa wersja sprawia kłopoty, przez 14 dni od aktualizacji możesz wrócić, pobierając z GitHuba instalator poprzedniej wersji
+1f0a60f2	Właśnie zaktualizowana wersja ({0}) nieoczekiwanie się zamknęła. Jeśli to się powtarza, możesz wrócić do poprzedniej wersji ({1}).
+ee455e9f	Wróć do poprzedniej wersji
+c1d1f65d	Poprzednia wersja jest nieznana, więc nie można wrócić.
+a8c3ec6f	Nie udało się odczytać poprzedniej wersji z GitHuba ({0}). Sprawdź, czy komputer ma połączenie z internetem.
+87370a47	Nie znaleziono na GitHubie instalatora poprzedniej wersji ({0}).
+b635421a	Niedawno zaktualizowano do tej wersji. Jeśli nowa wersja wciąż się zamyka, uruchom instalator {1} (Fanlume-{2}-setup.exe) ze strony wydań ({0}), aby wrócić do poprzedniej wersji.
+dd7ad3b9	Automatycznie (nie znaleziono)
+c4d4fe99	Automatycznie ({0})
+096f8d69	Nie używaj (porównuj tylko z bezczynnością)
+72959f2c	Wróć do poprzedniej wersji ({0})
+f2252901	Powrót do poprzedniej wersji ({0}).\n\nPo pobraniu z GitHuba i sprawdzeniu instalatora poprzedniej wersji aplikacja się zamknie. Do końca podmiany (ok. 10–20 sekund) wentylatory działają według ustawień BIOS, a potem aplikacja uruchomi się ponownie. Ustawienia, dzienniki i zapisy zostają.\n\nWrócić teraz?

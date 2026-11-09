@@ -266,7 +266,23 @@ public static class Watchdog
             : L("自動での再起動はオフになっています。");
         ShowMessage?.Invoke(
             L($"Fanlume が予期せず終了しました。\n\nファンは安全な回転数（{cfg.Safety.WatchdogSafeDuty:F0}%、ポンプは 100%）に固定しています。{why}\n") +
-            L("PC を再起動すると BIOS の制御に戻ります（Fanlume を起動し直すと、アプリの制御で動きます）。\n\nログ: ") + Logger.Directory);
+            L("PC を再起動すると BIOS の制御に戻ります（Fanlume を起動し直すと、アプリの制御で動きます）。\n\nログ: ") + Logger.Directory +
+            RollbackHint(cfg, DateTime.Now));
+    }
+
+    /// <summary>更新したばかりの版で落ち続けたときの、前の版に戻す方法（更新したばかりでなければ空）</summary>
+    internal static string RollbackHint(AppConfig cfg, DateTime now, Version? current = null)
+    {
+        try
+        {
+            if (!AppUpdater.CanRollBack(cfg.Update, current ?? AppUpdater.CurrentVersion, now)) return "";
+            string previous = cfg.Update.PreviousVersion ?? "";
+            return "\n\n" + L($"この版には最近更新したばかりです。新しい版で落ち続けるときは、リリースのページ（{AppUpdater.ReleasesPage}）から {previous} のインストーラー（Fanlume-{previous}-setup.exe）を実行すると、前の版に戻せます。");
+        }
+        catch
+        {
+            return ""; // 案内が作れなくても、止まったことは必ず伝える
+        }
     }
 
     /// <summary>見張りの始めに読めた設定（落ちたときに設定を読めなくても、どの端子をどうするか分かるように）</summary>

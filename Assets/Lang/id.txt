@@ -1637,3 +1637,17 @@ a94ca4e7	Belum diperiksa.
 d24d8900	Memperbarui ke Fanlume {0}.\n\nSetelah penginstal ({1:F0} MB) diunduh dan diperiksa, aplikasi akan tertutup. Sampai penggantian selesai (sekitar 10–20 detik) kipas mengikuti pengaturan BIOS, lalu aplikasi mulai lagi.\n\nPerbarui sekarang?
 98b3be1a	Mengunduh… {0:P0}
 c1f570b8	\n\nAnda juga bisa memperbarui dengan menjalankan sendiri penginstal dari halaman rilis.
+d4af943f	Sensor suhu ruangan
+c7b80b29	Suhu yang dipakai sebagai acuan pendinginan pada hari tanpa waktu istirahat. Sensor "System" motherboard bisa jadi mengukur papan, bukan ruangan (naik saat PC bekerja)
+7f2a592a	Jika versi baru bermasalah, selama 14 hari setelah memperbarui Anda bisa kembali dengan mengambil penginstal versi sebelumnya dari GitHub
+1f0a60f2	Versi yang baru diperbarui ({0}) tertutup tiba-tiba. Jika terus terjadi, Anda bisa kembali ke versi sebelumnya ({1}).
+ee455e9f	Kembali ke versi sebelumnya
+c1d1f65d	Versi sebelumnya tidak diketahui, jadi tidak bisa kembali.
+a8c3ec6f	Tidak dapat membaca versi sebelumnya dari GitHub ({0}). Pastikan PC terhubung ke internet.
+87370a47	Penginstal versi sebelumnya ({0}) tidak ditemukan di GitHub.
+b635421a	Anda baru saja memperbarui ke versi ini. Jika versi baru terus tertutup, jalankan penginstal {1} (Fanlume-{2}-setup.exe) dari halaman rilis ({0}) untuk kembali ke versi sebelumnya.
+dd7ad3b9	Otomatis (tidak ditemukan)
+c4d4fe99	Otomatis ({0})
+096f8d69	Jangan pakai (bandingkan dengan waktu istirahat saja)
+72959f2c	Kembali ke versi sebelumnya ({0})
+f2252901	Kembali ke versi sebelumnya ({0}).\n\nSetelah penginstal versi sebelumnya diunduh dari GitHub dan diperiksa, aplikasi akan tertutup. Sampai penggantian selesai (sekitar 10–20 detik) kipas mengikuti pengaturan BIOS, lalu aplikasi mulai lagi. Pengaturan, log, dan rekaman tetap tersimpan.\n\nKembali sekarang?

@@ -1091,6 +1091,14 @@ public sealed class MaintenanceConfig
     public DateTime? LastCleaned { get; set; }
     /// <summary>最後にメンテナンスの通知を出した日時（同じ通知を毎日出さない）</summary>
     public DateTime? LastNotified { get; set; }
+    /// <summary>
+    /// 冷え方の判定で「室温」として使うセンサー。空 = 自動（マザーボードの System・Motherboard）、
+    /// "none" = 使わない（休んでいるときとの差だけで比べる）、それ以外 = そのセンサーの ID
+    /// </summary>
+    public string? AmbientSensorId { get; set; }
+
+    /// <summary>室温のセンサーを使わないときの AmbientSensorId</summary>
+    public const string NoAmbientSensor = "none";
 }
 
 /// <summary>アプリの中からの更新</summary>
@@ -1106,6 +1114,10 @@ public sealed class UpdateConfig : ObservableObject
     public string? NotifiedVersion { get; set; }
     /// <summary>前回起動したときの版（変わっていたら「更新しました」と知らせる）</summary>
     public string? LastRunVersion { get; set; }
+    /// <summary>いまの版の前に使っていた版（新しい版で困ったときに戻すため）</summary>
+    public string? PreviousVersion { get; set; }
+    /// <summary>いまの版に変わった日時</summary>
+    public DateTime? UpdatedAt { get; set; }
 }
 
 /// <summary>前回起動時にあったハードウェア</summary>

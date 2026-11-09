@@ -29,7 +29,7 @@ public partial class App
     private static readonly TimeSpan UpdateCheckInterval = TimeSpan.FromHours(20);
 
     /// <summary>起動したとき: 更新したあとなら知らせ、1 分後から 6 時間ごとに新しい版を確かめる（設定でオフにできる）</summary>
-    private void StartUpdateChecks(AppController controller)
+    private void StartUpdateChecks(AppController controller, bool recovered)
     {
         var cfg = controller.Config.Update;
         string now = AppUpdater.CurrentVersion.ToString(3);
@@ -38,13 +38,50 @@ public partial class App
             Logger.Info($"更新されました: {before} → {now}");
             _window?.ShowAlert(L($"Fanlume を {before} から {now} に更新しました。"), AlertLevel.Info);
             _tray?.ShowBalloon(AppIdentity.Name, L($"{now} に更新しました。"), AlertLevel.Info);
+            // 新しい版で困ったときに戻せるよう、前の版を覚えておく
+            cfg.PreviousVersion = before;
+            cfg.UpdatedAt = DateTime.Now;
         }
         if (cfg.LastRunVersion != now)
         {
             cfg.LastRunVersion = now;
             controller.Commit(recordUndo: false);
         }
+        // 更新したばかりの版が予期せず終了して、見張りプロセスが起動し直したとき: 前の版に戻せることを知らせる
+        if (recovered && CanRollBack)
+        {
+            Logger.Warn($"更新したばかりの版（{now}）が予期せず終了しました（前の版 {cfg.PreviousVersion}）");
+            _window?.ShowAlert(L($"更新したばかりの版（{now}）が予期せず終了しました。何度も続くときは、前の版（{cfg.PreviousVersion}）に戻せます。"),
+                AlertLevel.Warning, L("前の版に戻す"), () => _window?.BeginRollback());
+        }
+        // 前の更新でダウンロードしたインストーラーを消す（インストーラーが終わりきるのを待ってから）
+        _ = Task.Run(async () =>
+        {
+            await Task.Delay(TimeSpan.FromMinutes(2));
+            int removed = AppUpdater.CleanUpDownloads();
+            if (removed > 0) Logger.Info($"前の更新でダウンロードしたインストーラーを片付けました（{removed} 個）");
+        });
         _updateTimer = new System.Threading.Timer(_ => Dispatcher.InvokeAsync(AutoCheckForUpdateAsync), null, TimeSpan.FromMinutes(1), TimeSpan.FromHours(6));
+    }
+
+    /// <summary>前の版に戻せる（前の版が分かっていて、更新してから 14 日以内）</summary>
+    public bool CanRollBack => _controller is { } c && AppUpdater.CanRollBack(c.Config.Update, AppUpdater.CurrentVersion, DateTime.Now);
+
+    /// <summary>前の版（UpdateConfig.PreviousVersion）のインストーラーを GitHub から取ってきて実行する。うまくいけば null、だめなら理由の文</summary>
+    public async Task<string?> RollBackAsync(IProgress<double>? progress)
+    {
+        if (_controller is null || !CanRollBack || AppUpdater.ParseTag(_controller.Config.Update.PreviousVersion) is not { } previous)
+            return L("前の版が分からないため、戻せません。");
+        UpdateInfo? info;
+        try { info = await AppUpdater.FindReleaseAsync(previous, CancellationToken.None); }
+        catch (Exception ex)
+        {
+            Logger.Warn($"前の版のリリースを読めませんでした: {ex.Message}");
+            return L($"前の版を GitHub から読めませんでした（{ex.Message}）。インターネットにつながっているか確かめてください。");
+        }
+        if (info is null) return L($"前の版（{previous.ToString(3)}）のインストーラーが GitHub に見つかりませんでした。");
+        Logger.Info($"前の版に戻します: {AppUpdater.CurrentVersion.ToString(3)} → {previous.ToString(3)}");
+        return await InstallUpdateAsync(info, progress);
     }
 
     private async Task AutoCheckForUpdateAsync()

@@ -333,7 +333,7 @@ public partial class App : Application
         _ = Task.Run(() => LegacyMigration.RemoveLegacyRegistrations(() => AutoStart.Enable()));
         _ = CheckInstallAsync();
         // 更新したあとなら知らせ、新しい版を定期的に確かめる（App.Update.cs）
-        StartUpdateChecks(controller);
+        StartUpdateChecks(controller, recovered);
     }
 
     private System.Windows.Media.ImageSource? _windowIcon;

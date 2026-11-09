@@ -1637,3 +1637,17 @@ a94ca4e7	Nog niet gecontroleerd.
 d24d8900	Bijwerken naar Fanlume {0}.\n\nNadat het installatieprogramma ({1:F0} MB) is gedownload en gecontroleerd, sluit de app af. Tot het vervangen klaar is (ongeveer 10–20 seconden) draaien de ventilatoren op de BIOS-instellingen; daarna start de app opnieuw.\n\nNu bijwerken?
 98b3be1a	Bezig met downloaden… {0:P0}
 c1f570b8	\n\nJe kunt ook bijwerken door het installatieprogramma zelf vanaf de releasepagina uit te voeren.
+d4af943f	Sensor voor kamertemperatuur
+c7b80b29	De temperatuur die als basis dient voor de koeling op dagen zonder rust. De "System"-sensor van het moederbord meet soms het bord in plaats van de kamer (hij stijgt als de pc werkt)
+7f2a592a	Geeft de nieuwe versie problemen, dan kun je tot 14 dagen na het bijwerken terug door het installatieprogramma van de vorige versie van GitHub te halen
+1f0a60f2	De zojuist bijgewerkte versie ({0}) is onverwacht afgesloten. Blijft dat gebeuren, dan kun je terug naar de vorige versie ({1}).
+ee455e9f	Terug naar de vorige versie
+c1d1f65d	De vorige versie is onbekend, dus teruggaan kan niet.
+a8c3ec6f	Kon de vorige versie niet van GitHub lezen ({0}). Controleer of de pc met internet is verbonden.
+87370a47	Het installatieprogramma van de vorige versie ({0}) is niet gevonden op GitHub.
+b635421a	Je hebt onlangs naar deze versie bijgewerkt. Blijft de nieuwe versie afsluiten, voer dan het installatieprogramma van {1} (Fanlume-{2}-setup.exe) uit vanaf de releasepagina ({0}) om terug te gaan naar de vorige versie.
+dd7ad3b9	Automatisch (niet gevonden)
+c4d4fe99	Automatisch ({0})
+096f8d69	Geen gebruiken (alleen met rustmomenten vergelijken)
+72959f2c	Terug naar de vorige versie ({0})
+f2252901	Terug naar de vorige versie ({0}).\n\nNadat het installatieprogramma van de vorige versie van GitHub is gedownload en gecontroleerd, sluit de app af. Tot het vervangen klaar is (ongeveer 10–20 seconden) draaien de ventilatoren op de BIOS-instellingen; daarna start de app opnieuw. Instellingen, logs en metingen blijven bewaard.\n\nNu teruggaan?

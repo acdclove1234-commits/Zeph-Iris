@@ -1637,3 +1637,17 @@ a94ca4e7	Aún no se ha comprobado.
 d24d8900	Actualizar a Fanlume {0}.\n\nDespués de descargar y comprobar el instalador ({1:F0} MB), la aplicación se cierra. Hasta que termine el reemplazo (unos 10–20 segundos) los ventiladores siguen la configuración de la BIOS, y luego la aplicación se vuelve a iniciar.\n\n¿Actualizar ahora?
 98b3be1a	Descargando… {0:P0}
 c1f570b8	\n\nTambién puedes actualizar ejecutando tú mismo el instalador desde la página de versiones.
+d4af943f	Sensor de temperatura ambiente
+c7b80b29	La temperatura que sirve de referencia para la refrigeración en los días sin reposo. El sensor «System» de la placa base puede medir la placa en vez de la habitación (sube cuando el PC trabaja)
+7f2a592a	Si la nueva versión da problemas, durante 14 días tras actualizar puedes volver atrás descargando de GitHub el instalador de la versión anterior
+1f0a60f2	La versión recién actualizada ({0}) se cerró de forma inesperada. Si vuelve a pasar, puedes volver a la versión anterior ({1}).
+ee455e9f	Volver a la versión anterior
+c1d1f65d	No se conoce la versión anterior, así que no se puede volver atrás.
+a8c3ec6f	No se pudo leer la versión anterior desde GitHub ({0}). Comprueba que el PC está conectado a Internet.
+87370a47	No se encontró en GitHub el instalador de la versión anterior ({0}).
+b635421a	Actualizaste a esta versión hace poco. Si la nueva versión sigue cerrándose, ejecuta el instalador de {1} (Fanlume-{2}-setup.exe) desde la página de versiones ({0}) para volver a la versión anterior.
+dd7ad3b9	Automático (no encontrado)
+c4d4fe99	Automático ({0})
+096f8d69	No usar (comparar solo con el reposo)
+72959f2c	Volver a la versión anterior ({0})
+f2252901	Volver a la versión anterior ({0}).\n\nDespués de descargar de GitHub y comprobar el instalador de la versión anterior, la aplicación se cierra. Hasta que termine el reemplazo (unos 10–20 segundos) los ventiladores siguen la configuración de la BIOS, y luego la aplicación se vuelve a iniciar. Los ajustes, registros y grabaciones se conservan.\n\n¿Volver ahora?

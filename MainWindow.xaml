@@ -1303,6 +1303,14 @@
                                     <TextBlock x:Name="HealthInfo" Style="{StaticResource Caption}" Foreground="{DynamicResource Accent2Brush}" Margin="0,6,0,0"/>
                                 </StackPanel>
                             </DockPanel>
+                            <!-- 冷え方の判定で「室温」として使うセンサー（MainWindow.Report.cs） -->
+                            <DockPanel Margin="0,12,0,0">
+                                <TextBlock Text="室温のセンサー" FontWeight="SemiBold" VerticalAlignment="Center" Margin="0,0,12,0"
+                                           ToolTip="休む時間のない日に、冷え方を比べる基準にする温度。マザーボードの「System」は、部屋ではなく基板の上の温度のことがあります（PC が動くと一緒に上がる）"/>
+                                <ComboBox x:Name="AmbientSensorBox" DisplayMemberPath="Value" SelectedValuePath="Key" MinWidth="320" HorizontalAlignment="Left"
+                                          SelectionChanged="OnAmbientSensorChanged"
+                                          ToolTip="休む時間のない日に、冷え方を比べる基準にする温度。マザーボードの「System」は、部屋ではなく基板の上の温度のことがあります（PC が動くと一緒に上がる）"/>
+                            </DockPanel>
                             <ItemsControl x:Name="HealthList" Margin="0,14,0,0">
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate>
@@ -2433,7 +2441,9 @@
                                 <WrapPanel Margin="0,12,0,0">
                                     <Button x:Name="UpdateCheckButton" Style="{StaticResource AccentButton}" Content="更新を確認" Click="OnCheckUpdateClick" Margin="0,0,8,8" Padding="14,7"/>
                                     <Button x:Name="UpdateInstallButton" Style="{StaticResource AccentButton}" Content="更新する" Click="OnInstallUpdateClick" Margin="0,0,8,8" Padding="14,7" Visibility="Collapsed"/>
-                                    <Button Content="リリースのページを開く" Click="OnOpenReleasesClick" Margin="0,0,8,8" Padding="14,7"/>
+                                    <Button x:Name="RollbackButton" Style="{StaticResource GhostButton}" Click="OnRollbackClick" Margin="0,0,8,8" Padding="14,7" Visibility="Collapsed"
+                                            ToolTip="新しい版で困ったとき、更新してから 14 日のあいだは、前の版のインストーラーを GitHub から取ってきて戻せます"/>
+                                    <Button Style="{StaticResource GhostButton}" Content="リリースのページを開く" Click="OnOpenReleasesClick" Margin="0,0,8,8" Padding="14,7"/>
                                 </WrapPanel>
                                 <CheckBox Style="{StaticResource Switch}" IsChecked="{Binding Update.AutoCheck}" Margin="0,8,0,0">
                                     <StackPanel>

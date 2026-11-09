@@ -144,5 +144,54 @@ public static class UpdaterTests
         T.Check(back.Update.LastRunVersion == "6.7.0" && back.Update.LastChecked == cfg.Update.LastChecked, "update state saved in config.json");
         var old = AppConfig.FromJson("{ }");
         T.Check(old.Update is not null && old.Update.AutoCheck, "settings from before this feature → defaults");
+
+        // インストーラーが PawnIO を入れるときの引数は、アプリが入れるときと同じ（取得元・画面なし・同意）
+        T.Check(iss.Contains(PawnIoSetup.InstallArguments, StringComparison.Ordinal), "installer installs PawnIO with the app's own winget arguments");
+        T.Check(iss.Contains("ssPostInstall") && iss.Contains("InstallPawnIo()"), "PawnIO is installed after the files are in place");
+    }
+
+    public static void TestRollBackOffered()
+    {
+        var now = new DateTime(2026, 11, 20, 12, 0, 0);
+        var cur = new Version(6, 7, 3);
+        var cfg = new UpdateConfig { PreviousVersion = "6.7.2", UpdatedAt = now.AddDays(-1) };
+        T.Check(AppUpdater.CanRollBack(cfg, cur, now), "updated yesterday from 6.7.2 → can go back");
+        T.Check(!AppUpdater.CanRollBack(with_updated(now.AddDays(-15)), cur, now), "more than 14 days ago → not offered");
+        T.Check(!AppUpdater.CanRollBack(new UpdateConfig { PreviousVersion = null, UpdatedAt = now }, cur, now), "previous version unknown → not offered");
+        T.Check(!AppUpdater.CanRollBack(new UpdateConfig { PreviousVersion = "6.7.4", UpdatedAt = now }, cur, now), "previous is newer (already went back) → not offered");
+        T.Check(AppUpdater.ReleaseByTagApi(new Version(6, 7, 2)).EndsWith("/releases/tags/v6.7.2"), "the previous version's release is looked up by its tag");
+
+        var app = new AppConfig();
+        T.Check(Watchdog.RollbackHint(app, now, cur) == "", "watchdog notice: no hint when not just updated");
+        app.Update.PreviousVersion = "6.7.2";
+        app.Update.UpdatedAt = now.AddHours(-2);
+        string hint = Watchdog.RollbackHint(app, now, cur);
+        T.Check(hint.Contains("6.7.2") && hint.Contains(AppUpdater.ReleasesPage), $"watchdog notice: says how to go back when just updated");
+
+        static UpdateConfig with_updated(DateTime at) => new() { PreviousVersion = "6.7.2", UpdatedAt = at };
+    }
+
+    public static void TestOldDownloadsCleanedUp()
+    {
+        string root = Path.Combine(Path.GetTempPath(), $"fanlume_clean_{Guid.NewGuid():N}");
+        Directory.CreateDirectory(root);
+        try
+        {
+            string a = Path.Combine(root, AppUpdater.DownloadFolderPrefix + "aaa"), b = Path.Combine(root, AppUpdater.DownloadFolderPrefix + "bbb");
+            string other = Path.Combine(root, "SomethingElse");
+            foreach (var d in new[] { a, b, other }) Directory.CreateDirectory(d);
+            File.WriteAllText(Path.Combine(a, "Fanlume-6.7.2-setup.exe"), "x");
+            string held = Path.Combine(b, "Fanlume-6.7.3-setup.exe");
+            int removed;
+            using (new FileStream(held, FileMode.Create, FileAccess.Write, FileShare.None))
+                removed = AppUpdater.CleanUpDownloads(root);
+            T.Check(removed == 1 && !Directory.Exists(a) && Directory.Exists(other), "old downloads removed, other folders kept");
+            T.Check(Directory.Exists(b), "a download still in use is left for the next start");
+            T.Check(AppUpdater.CleanUpDownloads(root) == 1 && !Directory.Exists(b), "removed on the next try once free");
+        }
+        finally
+        {
+            try { Directory.Delete(root, true); } catch { /* 一時フォルダー */ }
+        }
     }
 }

@@ -1637,3 +1637,17 @@ a94ca4e7	Not checked yet.
 d24d8900	Update to Fanlume {0}.\n\nAfter the installer ({1:F0} MB) is downloaded and checked, the app closes. Until the replacement is done (about 10–20 seconds) the fans run on the BIOS settings, and then the app starts again.\n\nUpdate now?
 98b3be1a	Downloading… {0:P0}
 c1f570b8	\n\nYou can also update by running the installer from the releases page yourself.
+d4af943f	Room temperature sensor
+c7b80b29	The temperature used as the reference for cooling on days without idle time. The motherboard's "System" sensor may measure the board rather than the room (it rises while the PC works)
+7f2a592a	If the new version gives you trouble, for 14 days after updating you can go back by fetching the previous version's installer from GitHub
+1f0a60f2	The version you just updated to ({0}) closed unexpectedly. If it keeps happening, you can go back to the previous version ({1}).
+ee455e9f	Go back to the previous version
+c1d1f65d	The previous version is not known, so the app cannot go back.
+a8c3ec6f	Could not read the previous version from GitHub ({0}). Check that the PC is connected to the internet.
+87370a47	The installer for the previous version ({0}) was not found on GitHub.
+b635421a	You updated to this version recently. If the new version keeps closing, run the {1} installer (Fanlume-{2}-setup.exe) from the releases page ({0}) to go back to the previous version.
+dd7ad3b9	Automatic (not found)
+c4d4fe99	Automatic ({0})
+096f8d69	Don't use one (compare with idle time only)
+72959f2c	Go back to the previous version ({0})
+f2252901	Go back to the previous version ({0}).\n\nAfter the previous version's installer is downloaded from GitHub and checked, the app closes. Until the replacement is done (about 10–20 seconds) the fans run on the BIOS settings, and then the app starts again. Settings, logs and records are kept.\n\nGo back now?

@@ -1637,3 +1637,17 @@ a94ca4e7	Henüz denetlenmedi.
 d24d8900	Fanlume {0} sürümüne güncellenecek.\n\nYükleyici ({1:F0} MB) indirilip denetlendikten sonra uygulama kapanır. Değiştirme bitene kadar (yaklaşık 10–20 saniye) fanlar BIOS ayarlarıyla çalışır, ardından uygulama yeniden başlar.\n\nŞimdi güncellensin mi?
 98b3be1a	İndiriliyor… {0:P0}
 c1f570b8	\n\nYükleyiciyi sürümler sayfasından kendiniz çalıştırarak da güncelleyebilirsiniz.
+d4af943f	Oda sıcaklığı sensörü
+c7b80b29	Boşta zaman olmayan günlerde soğutmanın karşılaştırılacağı sıcaklık. Anakartın "System" sensörü odayı değil kartı ölçebilir (bilgisayar çalışırken yükselir)
+7f2a592a	Yeni sürüm sorun çıkarırsa, güncellemeden sonraki 14 gün boyunca önceki sürümün yükleyicisini GitHub'dan alarak geri dönebilirsiniz
+1f0a60f2	Yeni güncellenen sürüm ({0}) beklenmedik şekilde kapandı. Tekrarlanırsa önceki sürüme ({1}) dönebilirsiniz.
+ee455e9f	Önceki sürüme dön
+c1d1f65d	Önceki sürüm bilinmiyor, bu yüzden geri dönülemiyor.
+a8c3ec6f	Önceki sürüm GitHub'dan okunamadı ({0}). Bilgisayarın internete bağlı olduğunu denetleyin.
+87370a47	Önceki sürümün ({0}) yükleyicisi GitHub'da bulunamadı.
+b635421a	Bu sürüme yakın zamanda güncellediniz. Yeni sürüm kapanmaya devam ederse, önceki sürüme dönmek için sürümler sayfasından ({0}) {1} yükleyicisini (Fanlume-{2}-setup.exe) çalıştırın.
+dd7ad3b9	Otomatik (bulunamadı)
+c4d4fe99	Otomatik ({0})
+096f8d69	Kullanma (yalnızca boşta zamanla karşılaştır)
+72959f2c	Önceki sürüme ({0}) dön
+f2252901	Önceki sürüme ({0}) dönülecek.\n\nÖnceki sürümün yükleyicisi GitHub'dan indirilip denetlendikten sonra uygulama kapanır. Değiştirme bitene kadar (yaklaşık 10–20 saniye) fanlar BIOS ayarlarıyla çalışır, ardından uygulama yeniden başlar. Ayarlar, günlükler ve kayıtlar korunur.\n\nŞimdi geri dönülsün mü?

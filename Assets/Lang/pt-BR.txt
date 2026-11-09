@@ -1637,3 +1637,17 @@ a94ca4e7	Ainda não verificado.
 d24d8900	Atualizar para o Fanlume {0}.\n\nDepois de baixar e conferir o instalador ({1:F0} MB), o app fecha. Até terminar a substituição (cerca de 10–20 segundos) as ventoinhas seguem as configurações da BIOS, e então o app inicia de novo.\n\nAtualizar agora?
 98b3be1a	Baixando… {0:P0}
 c1f570b8	\n\nVocê também pode atualizar executando o instalador da página de versões por conta própria.
+d4af943f	Sensor de temperatura ambiente
+c7b80b29	A temperatura usada como referência para o resfriamento nos dias sem repouso. O sensor "System" da placa-mãe pode medir a placa em vez do ambiente (ele sobe quando o PC trabalha)
+7f2a592a	Se a nova versão der problema, por 14 dias depois de atualizar você pode voltar baixando do GitHub o instalador da versão anterior
+1f0a60f2	A versão recém-atualizada ({0}) fechou inesperadamente. Se continuar acontecendo, você pode voltar para a versão anterior ({1}).
+ee455e9f	Voltar para a versão anterior
+c1d1f65d	A versão anterior não é conhecida, então não é possível voltar.
+a8c3ec6f	Não foi possível ler a versão anterior no GitHub ({0}). Confira se o PC está conectado à internet.
+87370a47	O instalador da versão anterior ({0}) não foi encontrado no GitHub.
+b635421a	Você atualizou para esta versão há pouco. Se a nova versão continuar fechando, execute o instalador da {1} (Fanlume-{2}-setup.exe) pela página de versões ({0}) para voltar à versão anterior.
+dd7ad3b9	Automático (não encontrado)
+c4d4fe99	Automático ({0})
+096f8d69	Não usar (comparar só com o repouso)
+72959f2c	Voltar para a versão anterior ({0})
+f2252901	Voltar para a versão anterior ({0}).\n\nDepois de baixar do GitHub e conferir o instalador da versão anterior, o app fecha. Até terminar a substituição (cerca de 10–20 segundos) as ventoinhas seguem as configurações da BIOS, e então o app inicia de novo. Configurações, logs e registros são mantidos.\n\nVoltar agora?

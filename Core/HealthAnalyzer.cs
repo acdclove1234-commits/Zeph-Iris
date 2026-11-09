@@ -67,10 +67,22 @@ public static class HealthAnalyzer
 
         var fanDutyKeys = cfg.Profiles.SelectMany(p => p.Fans).Where(f => !f.IsPump && !f.IsGpuFan)
             .Select(f => HistoryStore.DutyKey(f.ControlId)).Distinct(StringComparer.OrdinalIgnoreCase).ToList();
-        AddCooling(list, L("CPU の冷え方"), StatRoles.CpuTemp, StatRoles.CpuPower, 30, 20, data, baseRows, recentRows, enough, days, fanDutyKeys);
-        AddCooling(list, L("GPU の冷え方"), StatRoles.GpuTemp, StatRoles.GpuPower, 60, 35, data, baseRows, recentRows, enough, days, fanDutyKeys);
+        var ambient = AmbientReader(cfg.Maintenance.AmbientSensorId);
+        AddCooling(list, L("CPU の冷え方"), StatRoles.CpuTemp, StatRoles.CpuPower, 30, 20, data, baseRows, recentRows, enough, days, fanDutyKeys, ambient);
+        AddCooling(list, L("GPU の冷え方"), StatRoles.GpuTemp, StatRoles.GpuPower, 60, 35, data, baseRows, recentRows, enough, days, fanDutyKeys, ambient);
         return list;
     }
+
+    /// <summary>
+    /// 記録の 1 行から「室温」を読む方法（設定の AmbientSensorId）。空 = 記録したときの「室温」の役割のセンサー、
+    /// "none" = 使わない（休む時間のない日は比べない）、それ以外 = そのセンサー（記録に残っていれば）
+    /// </summary>
+    public static Func<MinuteRow, float?> AmbientReader(string? ambientSensorId) => ambientSensorId switch
+    {
+        null or "" => r => r.Role(StatRoles.Ambient),
+        MaintenanceConfig.NoAmbientSensor => _ => null,
+        var id => r => r.Get(id),
+    };
 
     // =====================================================================
     // ファン・ポンプ
@@ -188,7 +200,8 @@ public static class HealthAnalyzer
     /// 同じ日の休んでいるとき（消費電力 idleMax 未満の中央値）との差で求めるので、室温が変わっても判定が変わらない
     /// </summary>
     private static void AddCooling(List<HealthItem> list, string title, string tempRole, string powerRole, double minPower, double idleMax,
-        List<MinuteRow> data, List<MinuteRow> baseRows, List<MinuteRow> recentRows, bool enough, double days, List<string> fanDutyKeys)
+        List<MinuteRow> data, List<MinuteRow> baseRows, List<MinuteRow> recentRows, bool enough, double days, List<string> fanDutyKeys,
+        Func<MinuteRow, float?> ambient)
     {
         if (data.Count > 0 && !data.Any(r => r.Role(tempRole) is not null && r.Role(powerRole) is not null)) return;
         if (!enough)
@@ -200,10 +213,10 @@ public static class HealthAnalyzer
         // 基準と最近は、同じ求め方どうしで比べる。「休んでいるときとの差」と「室温のセンサーとの差」は値の大きさが違い
         // （室温のセンサーは、マザーボードの上の温度で室温より高いことがある）、混ぜると冷え方が変わったように見えるため。
         // 休んでいるときとの差で比べられればそれを使い、だめなら室温のセンサーとの差どうしで比べる
-        var (compare, bMin, rMin) = CompareCooling(baseRows, recentRows, tempRole, powerRole, minPower, idleMax, fanDutyKeys, useIdle: true);
+        var (compare, bMin, rMin) = CompareCooling(baseRows, recentRows, tempRole, powerRole, minPower, idleMax, fanDutyKeys, ambient, useIdle: true);
         if (compare.Count == 0 || bMin < MinLoadMinutes || rMin < MinLoadMinutes)
         {
-            var (byAmbient, bA, rA) = CompareCooling(baseRows, recentRows, tempRole, powerRole, minPower, idleMax, fanDutyKeys, useIdle: false);
+            var (byAmbient, bA, rA) = CompareCooling(baseRows, recentRows, tempRole, powerRole, minPower, idleMax, fanDutyKeys, ambient, useIdle: false);
             if (byAmbient.Count > 0 && bA >= MinLoadMinutes && rA >= MinLoadMinutes) (compare, bMin, rMin) = (byAmbient, bA, rA);
         }
         if (compare.Count == 0 || bMin < MinLoadMinutes || rMin < MinLoadMinutes)
@@ -246,10 +259,10 @@ public static class HealthAnalyzer
     /// <summary>基準と最近の冷えにくさを、同じ求め方（useIdle）で電力の区切りごとに並べる。比べた分数（基準・最近）も返す</summary>
     private static (List<(int Power, double Recent, double Base, double RecentDuty, double BaseDuty, int Weight)> Compare, int BaseMinutes, int RecentMinutes)
         CompareCooling(List<MinuteRow> baseRows, List<MinuteRow> recentRows, string tempRole, string powerRole, double minPower, double idleMax,
-            List<string> fanDutyKeys, bool useIdle)
+            List<string> fanDutyKeys, Func<MinuteRow, float?> ambient, bool useIdle)
     {
-        var b = Resistance(baseRows, tempRole, powerRole, minPower, idleMax, fanDutyKeys, useIdle);
-        var r = Resistance(recentRows, tempRole, powerRole, minPower, idleMax, fanDutyKeys, useIdle);
+        var b = Resistance(baseRows, tempRole, powerRole, minPower, idleMax, fanDutyKeys, ambient, useIdle);
+        var r = Resistance(recentRows, tempRole, powerRole, minPower, idleMax, fanDutyKeys, ambient, useIdle);
         var compare = r.Where(x => x.Value.Count >= MinSamples && b.TryGetValue(x.Key, out var bl) && bl.Count >= MinSamples)
             .Select(x => (Power: x.Key, Recent: Median(x.Value.Select(s => s.R).ToList()), Base: Median(b[x.Key].Select(s => s.R).ToList()),
                 RecentDuty: AverageOrNaN(x.Value.Select(s => s.Duty)), BaseDuty: AverageOrNaN(b[x.Key].Select(s => s.Duty)),
@@ -264,7 +277,7 @@ public static class HealthAnalyzer
     /// useIdle = false: 休んでいる時間のない日だけ。室温のセンサーとの差（電力そのもので割る）を使う
     /// </summary>
     private static Dictionary<int, List<(double R, double Duty)>> Resistance(IEnumerable<MinuteRow> rows, string tempRole, string powerRole,
-        double minPower, double idleMax, List<string> fanDutyKeys, bool useIdle)
+        double minPower, double idleMax, List<string> fanDutyKeys, Func<MinuteRow, float?> ambient, bool useIdle)
     {
         var map = new Dictionary<int, List<(double, double)>>();
         foreach (var day in rows.GroupBy(r => r.Time.Date))
@@ -286,7 +299,7 @@ public static class HealthAnalyzer
                     rise = t - ti;
                     dp = p - pi;
                 }
-                else if (r.Role(StatRoles.Ambient) is float a and > 10 and < 60)
+                else if (ambient(r) is float a and > 10 and < 60)
                 {
                     rise = t - a;
                     dp = p;

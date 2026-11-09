@@ -34,6 +34,41 @@ public partial class MainWindow
         else UpdateStatusText.Text = L("まだ確認していません。");
         UpdateInstallButton.Visibility = u is not null && !CurrentApp.UpdateStarted ? Visibility.Visible : Visibility.Collapsed;
         UpdateCheckButton.IsEnabled = !CurrentApp.UpdateStarted;
+        bool canRollBack = CurrentApp.CanRollBack && !CurrentApp.UpdateStarted;
+        RollbackButton.Visibility = canRollBack ? Visibility.Visible : Visibility.Collapsed;
+        if (canRollBack) RollbackButton.Content = L($"前の版（{Config.Update.PreviousVersion}）に戻す");
+    }
+
+    private void OnRollbackClick(object sender, RoutedEventArgs e) => BeginRollback();
+
+    /// <summary>前の版に戻す（お知らせの「前の版に戻す」からも呼ぶ）。確かめてから、前の版のインストーラーを取ってきて実行する</summary>
+    public async void BeginRollback()
+    {
+        var app = CurrentApp;
+        if (app.UpdateStarted || !app.CanRollBack) return;
+        app.ShowMainWindow();
+        OpenSettingsTab("general");
+        string previous = Config.Update.PreviousVersion ?? "";
+        var answer = MessageBox.Show(this,
+            L($"前の版（{previous}）に戻します。\n\nGitHub から前の版のインストーラーをダウンロードして確かめたあと、アプリが一度終了します。入れ替えが終わるまでの十数秒、ファンは BIOS の設定で回り、終わるとアプリが起動し直します。設定・ログ・記録はそのまま残ります。\n\n戻しますか？"),
+            AppIdentity.Name, MessageBoxButton.OKCancel, MessageBoxImage.Question, MessageBoxResult.Cancel);
+        if (answer != MessageBoxResult.OK) return;
+
+        RollbackButton.IsEnabled = false;
+        UpdateCheckButton.IsEnabled = false;
+        UpdateInstallButton.IsEnabled = false;
+        var progress = new Progress<double>(p => UpdateStatusText.Text = L($"ダウンロードしています… {p:P0}"));
+        string? error = await app.RollBackAsync(progress);
+        RollbackButton.IsEnabled = true;
+        UpdateInstallButton.IsEnabled = true;
+        if (error is null)
+        {
+            RefreshUpdateCard();
+            return;
+        }
+        RefreshUpdateCard(error);
+        MessageBox.Show(this, error + L("\n\nリリースのページから、インストーラーを手で実行して更新することもできます。"),
+            AppIdentity.Name, MessageBoxButton.OK, MessageBoxImage.Warning);
     }
 
     private async void OnCheckUpdateClick(object sender, RoutedEventArgs e)

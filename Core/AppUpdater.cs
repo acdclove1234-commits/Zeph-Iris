@@ -32,7 +32,9 @@ public static class AppUpdater
     /// <summary>インストーラーに、更新のあとアプリの画面を出してほしいと伝える引数（Installer/Fanlume.iss が読む）</summary>
     public const string ShowAppArgument = "/FANLUMESHOW";
 
-    private static readonly HttpClient Http = CreateClient();
+    // 使うときに初めて作る（見張りプロセスが CanRollBack などを呼んでも、通信の部品を読み込まないように）
+    private static HttpClient? _http;
+    private static HttpClient Http => _http ??= CreateClient();
 
     private static HttpClient CreateClient()
     {
@@ -101,14 +103,55 @@ public static class AppUpdater
         => e.TryGetProperty(name, out var v) && v.ValueKind == JsonValueKind.True;
 
     /// <summary>GitHub に最新のリリースを問い合わせる（使えるインストーラーがなければ null。通信の失敗は例外）</summary>
-    public static async Task<UpdateInfo?> CheckAsync(CancellationToken ct)
+    public static Task<UpdateInfo?> CheckAsync(CancellationToken ct) => GetReleaseAsync(LatestReleaseApi, ct);
+
+    /// <summary>決まった版のリリース（前の版に戻すとき）。なければ null</summary>
+    public static Task<UpdateInfo?> FindReleaseAsync(Version version, CancellationToken ct) => GetReleaseAsync(ReleaseByTagApi(version), ct);
+
+    /// <summary>決まった版のリリースを読む API の場所</summary>
+    public static string ReleaseByTagApi(Version version) => $"https://api.github.com/repos/{Repository}/releases/tags/v{version.ToString(3)}";
+
+    private static async Task<UpdateInfo?> GetReleaseAsync(string url, CancellationToken ct)
     {
         using var cts = CancellationTokenSource.CreateLinkedTokenSource(ct);
         cts.CancelAfter(TimeSpan.FromSeconds(20));
-        using var res = await Http.GetAsync(LatestReleaseApi, cts.Token);
-        if (res.StatusCode == System.Net.HttpStatusCode.NotFound) return null; // まだリリースがない
+        using var res = await Http.GetAsync(url, cts.Token);
+        if (res.StatusCode == System.Net.HttpStatusCode.NotFound) return null; // まだリリースがない・その版はない
         res.EnsureSuccessStatusCode();
         return ParseRelease(await res.Content.ReadAsStringAsync(cts.Token));
+    }
+
+    /// <summary>
+    /// 前の版に戻せるか: 前の版が分かっていて、いまより古く、更新してから keepDays 日以内（古い版に戻し続けないように）
+    /// </summary>
+    public static bool CanRollBack(UpdateConfig cfg, Version current, DateTime now, double keepDays = 14)
+        => ParseTag(cfg.PreviousVersion) is { } previous && IsNewer(current, previous)
+           && cfg.UpdatedAt is DateTime at && now - at <= TimeSpan.FromDays(keepDays) && at <= now + TimeSpan.FromMinutes(5);
+
+    /// <summary>ダウンロードしたインストーラーを置くフォルダーの名前の始まり（一時フォルダーの中）</summary>
+    public const string DownloadFolderPrefix = AppIdentity.Name + "-update-";
+
+    /// <summary>
+    /// 前の更新でダウンロードしたインストーラー（一時フォルダーの Fanlume-update-*）を消す。消したフォルダーの数を返す。
+    /// 使用中で消せないもの（まだ動いているインストーラーなど）は、次に起動したときにもう一度消す
+    /// </summary>
+    public static int CleanUpDownloads(string? tempDirectory = null)
+    {
+        int removed = 0;
+        try
+        {
+            foreach (var dir in Directory.EnumerateDirectories(tempDirectory ?? System.IO.Path.GetTempPath(), DownloadFolderPrefix + "*"))
+            {
+                try
+                {
+                    Directory.Delete(dir, recursive: true);
+                    removed++;
+                }
+                catch (Exception ex) when (ex is IOException or UnauthorizedAccessException) { /* 使用中。次の起動で */ }
+            }
+        }
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException) { /* 一時フォルダーを読めない */ }
+        return removed;
     }
 
     /// <summary>ダウンロードして確かめたインストーラー。Stream は、書き換え・削除させないために開いたまま持つ（アプリが終わるまで）</summary>
@@ -120,7 +163,7 @@ public static class AppUpdater
     /// </summary>
     public static async Task<VerifiedInstaller> DownloadAsync(UpdateInfo info, IProgress<double>? progress, CancellationToken ct)
     {
-        string dir = System.IO.Path.Combine(System.IO.Path.GetTempPath(), $"{AppIdentity.Name}-update-{Guid.NewGuid():N}");
+        string dir = System.IO.Path.Combine(System.IO.Path.GetTempPath(), $"{DownloadFolderPrefix}{Guid.NewGuid():N}");
         Directory.CreateDirectory(dir);
         string path = System.IO.Path.Combine(dir, info.AssetName);
         using var cts = CancellationTokenSource.CreateLinkedTokenSource(ct);

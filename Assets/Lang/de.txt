@@ -1637,3 +1637,17 @@ a94ca4e7	Noch nicht geprüft.
 d24d8900	Auf Fanlume {0} aktualisieren.\n\nNachdem das Installationsprogramm ({1:F0} MB) heruntergeladen und geprüft wurde, wird die App beendet. Bis der Austausch fertig ist (etwa 10–20 Sekunden), laufen die Lüfter mit den BIOS-Einstellungen; danach startet die App wieder.\n\nJetzt aktualisieren?
 98b3be1a	Wird heruntergeladen… {0:P0}
 c1f570b8	\n\nSie können auch aktualisieren, indem Sie das Installationsprogramm selbst von der Release-Seite ausführen.
+d4af943f	Raumtemperatursensor
+c7b80b29	Die Temperatur, an der die Kühlung an Tagen ohne Leerlauf gemessen wird. Der „System“-Sensor des Mainboards misst eventuell die Platine statt des Raums (er steigt, wenn der PC arbeitet)
+7f2a592a	Wenn die neue Version Probleme macht, können Sie bis 14 Tage nach der Aktualisierung zurück, indem das Installationsprogramm der vorherigen Version von GitHub geholt wird
+1f0a60f2	Die gerade installierte Version ({0}) wurde unerwartet beendet. Wenn das öfter passiert, können Sie zur vorherigen Version ({1}) zurückkehren.
+ee455e9f	Zur vorherigen Version zurück
+c1d1f65d	Die vorherige Version ist nicht bekannt, daher ist kein Zurückkehren möglich.
+a8c3ec6f	Die vorherige Version konnte nicht von GitHub gelesen werden ({0}). Prüfen Sie die Internetverbindung.
+87370a47	Das Installationsprogramm der vorherigen Version ({0}) wurde auf GitHub nicht gefunden.
+b635421a	Sie haben kürzlich auf diese Version aktualisiert. Wenn die neue Version immer wieder beendet wird, führen Sie das Installationsprogramm von {1} (Fanlume-{2}-setup.exe) von der Release-Seite ({0}) aus, um zur vorherigen Version zurückzukehren.
+dd7ad3b9	Automatisch (nicht gefunden)
+c4d4fe99	Automatisch ({0})
+096f8d69	Keinen verwenden (nur mit Leerlaufzeiten vergleichen)
+72959f2c	Zur vorherigen Version ({0}) zurück
+f2252901	Zur vorherigen Version ({0}) zurückkehren.\n\nNachdem das Installationsprogramm der vorherigen Version von GitHub heruntergeladen und geprüft wurde, wird die App beendet. Bis der Austausch fertig ist (etwa 10–20 Sekunden), laufen die Lüfter mit den BIOS-Einstellungen; danach startet die App wieder. Einstellungen, Protokolle und Aufzeichnungen bleiben erhalten.\n\nJetzt zurückkehren?

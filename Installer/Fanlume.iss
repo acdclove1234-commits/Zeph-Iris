@@ -80,6 +80,34 @@ WillMigrate=The settings and records of ProFanController (the previous name of t
 CloseFailed=Fanlume could not be closed. Right-click the Fanlume icon in the notification area of the taskbar, choose "Exit (hand back to BIOS)", and try again.
 UninstallCloseAsk=Fanlume is running. Exit it and uninstall?%nThe fans go back to the BIOS settings.
 DeleteDataAsk=Also delete the settings, logs and records of Fanlume?%n%nChoose No to keep them in the app folder, for example to install Fanlume again later.
+WillInstallPawnIO=PawnIO, the driver Fanlume uses for fan control, is not installed. Setup installs it from the official winget source (needs the internet).
+InstallingPawnIO=Installing PawnIO, the driver for fan control (needs the internet; this can take a few minutes)...
+japanese.WillInstallPawnIO=ファン制御に使うドライバー（PawnIO）が入っていないので、winget の公式の取得元からインストールします（インターネットが必要です）。
+japanese.InstallingPawnIO=ファン制御に使うドライバー（PawnIO）をインストールしています（インターネットが必要です。数分かかることがあります）…
+german.WillInstallPawnIO=PawnIO, der Treiber, den Fanlume für die Lüftersteuerung nutzt, ist nicht installiert. Das Setup installiert ihn aus der offiziellen winget-Quelle (Internet nötig).
+german.InstallingPawnIO=PawnIO, der Treiber für die Lüftersteuerung, wird installiert (Internet nötig, kann einige Minuten dauern)…
+french.WillInstallPawnIO=PawnIO, le pilote utilisé par Fanlume pour contrôler les ventilateurs, n'est pas installé. L'installation l'ajoute depuis la source officielle winget (Internet requis).
+french.InstallingPawnIO=Installation de PawnIO, le pilote de contrôle des ventilateurs (Internet requis, peut prendre quelques minutes)…
+spanish.WillInstallPawnIO=PawnIO, el controlador que Fanlume usa para los ventiladores, no está instalado. El instalador lo instalará desde la fuente oficial de winget (requiere Internet).
+spanish.InstallingPawnIO=Instalando PawnIO, el controlador para los ventiladores (requiere Internet; puede tardar unos minutos)…
+italian.WillInstallPawnIO=PawnIO, il driver che Fanlume usa per le ventole, non è installato. L'installazione lo aggiunge dalla fonte ufficiale di winget (serve Internet).
+italian.InstallingPawnIO=Installazione di PawnIO, il driver per le ventole (serve Internet; può richiedere qualche minuto)…
+brazilianportuguese.WillInstallPawnIO=O PawnIO, driver que o Fanlume usa para controlar as ventoinhas, não está instalado. O instalador vai instalá-lo pela fonte oficial do winget (precisa de internet).
+brazilianportuguese.InstallingPawnIO=Instalando o PawnIO, o driver de controle das ventoinhas (precisa de internet; pode levar alguns minutos)…
+polish.WillInstallPawnIO=PawnIO, sterownik używany przez Fanlume do sterowania wentylatorami, nie jest zainstalowany. Instalator zainstaluje go z oficjalnego źródła winget (wymaga internetu).
+polish.InstallingPawnIO=Instalowanie PawnIO, sterownika do sterowania wentylatorami (wymaga internetu; może potrwać kilka minut)…
+dutch.WillInstallPawnIO=PawnIO, het stuurprogramma dat Fanlume voor de ventilatoren gebruikt, is niet geïnstalleerd. Setup installeert het vanuit de officiële winget-bron (internet nodig).
+dutch.InstallingPawnIO=PawnIO, het stuurprogramma voor de ventilatorregeling, wordt geïnstalleerd (internet nodig; kan enkele minuten duren)…
+turkish.WillInstallPawnIO=Fanlume'un fan denetimi için kullandığı PawnIO sürücüsü yüklü değil. Kurulum onu resmi winget kaynağından yükleyecek (internet gerekir).
+turkish.InstallingPawnIO=Fan denetimi sürücüsü PawnIO yükleniyor (internet gerekir; birkaç dakika sürebilir)…
+russian.WillInstallPawnIO=PawnIO — драйвер, который Fanlume использует для управления вентиляторами, — не установлен. Программа установки установит его из официального источника winget (нужен интернет).
+russian.InstallingPawnIO=Установка PawnIO — драйвера для управления вентиляторами (нужен интернет; может занять несколько минут)…
+ukrainian.WillInstallPawnIO=PawnIO — драйвер, який Fanlume використовує для керування вентиляторами, — не встановлено. Програма встановлення встановить його з офіційного джерела winget (потрібен інтернет).
+ukrainian.InstallingPawnIO=Встановлення PawnIO — драйвера для керування вентиляторами (потрібен інтернет; може тривати кілька хвилин)…
+korean.WillInstallPawnIO=Fanlume이 팬 제어에 쓰는 드라이버 PawnIO가 설치되어 있지 않습니다. 설치 프로그램이 winget 공식 원본에서 설치합니다(인터넷 필요).
+korean.InstallingPawnIO=팬 제어용 드라이버 PawnIO를 설치하는 중입니다(인터넷이 필요하며 몇 분 걸릴 수 있습니다)…
+thai.WillInstallPawnIO=ยังไม่ได้ติดตั้ง PawnIO ไดรเวอร์ที่ Fanlume ใช้ควบคุมพัดลม ตัวติดตั้งจะติดตั้งจากแหล่ง winget อย่างเป็นทางการ (ต้องใช้อินเทอร์เน็ต)
+thai.InstallingPawnIO=กำลังติดตั้ง PawnIO ไดรเวอร์สำหรับควบคุมพัดลม (ต้องใช้อินเทอร์เน็ต อาจใช้เวลาหลายนาที)…
 
 japanese.WillClose=Fanlume が動いています。セットアップは、入れる前に Fanlume を終了します。Fanlume がまた起動するまで、ファンは BIOS の設定で回ります。
 japanese.WillMigrate=前の名前（ProFanController）で C:\Tools\ProFanController に入れていた設定と記録は、Fanlume が起動するときに引き継ぎます。
@@ -289,6 +317,19 @@ begin
   Result := (not AppRunning()) and (ProcessCount('{#AppExe}') = 0);
 end;
 
+{ ----- PawnIO（ファン制御に使うドライバー） -----
+  入っていなければ、アプリと同じやり方（Core/PawnIoSetup.cs の InstallArguments）で winget から入れる。
+  うまくいかなくても止めない（アプリのはじめの設定の画面が、もう一度入れるか、公式サイトを案内する） }
+
+const
+  PawnIoUninstallKey = 'SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\PawnIO';
+  PawnIoWingetArguments = 'install --id namazso.PawnIO -e --source winget --silent --accept-source-agreements --accept-package-agreements';
+
+function PawnIoInstalled(): Boolean;
+begin
+  Result := RegKeyExists(HKLM64, PawnIoUninstallKey) or RegKeyExists(HKLM32, PawnIoUninstallKey);
+end;
+
 { ----- 入れる・更新する ----- }
 
 function UpdateReadyMemo(Space, NewLine, MemoUserInfoInfo, MemoDirInfo, MemoTypeInfo, MemoComponentsInfo, MemoGroupInfo, MemoTasksInfo: String): String;
@@ -300,6 +341,8 @@ begin
     Result := Result + NewLine + NewLine + CustomMessage('WillClose');
   if FileExists(LegacyConfig) and not FileExists(ExpandConstant('{app}\config.json')) then
     Result := Result + NewLine + NewLine + CustomMessage('WillMigrate');
+  if not PawnIoInstalled() then
+    Result := Result + NewLine + NewLine + CustomMessage('WillInstallPawnIO');
 end;
 
 function PrepareToInstall(var NeedsRestart: Boolean): String;
@@ -308,6 +351,47 @@ begin
   WasRunning := AppRunning();
   if not CloseApp() then
     Result := CustomMessage('CloseFailed');
+end;
+
+{ ----- PawnIO（ファン制御に使うドライバー）を入れる ----- }
+
+{ winget.exe は %LOCALAPPDATA%\Microsoft\WindowsApps にある（なければ PATH から探してもらう） }
+function WingetPath(): String;
+begin
+  Result := ExpandConstant('{localappdata}\Microsoft\WindowsApps\winget.exe');
+  if not FileExists(Result) then
+    Result := 'winget.exe';
+end;
+
+procedure InstallPawnIo();
+var
+  ResultCode: Integer;
+begin
+  if PawnIoInstalled() then
+  begin
+    Log('PawnIO is already installed');
+    Exit;
+  end;
+  WizardForm.StatusLabel.Caption := CustomMessage('InstallingPawnIO');
+  WizardForm.ProgressGauge.Style := npbstMarquee;
+  try
+    if Exec(WingetPath(), PawnIoWingetArguments, '', SW_HIDE, ewWaitUntilTerminated, ResultCode) then
+      Log(Format('winget install PawnIO: exit code %d', [ResultCode]))
+    else
+      Log(Format('winget could not be started (error %d)', [ResultCode]));
+  finally
+    WizardForm.ProgressGauge.Style := npbstNormal;
+  end;
+  if PawnIoInstalled() then
+    Log('PawnIO is installed now')
+  else
+    Log('PawnIO is still missing; the app setup offers it again');
+end;
+
+procedure CurStepChanged(CurStep: TSetupStep);
+begin
+  if CurStep = ssPostInstall then
+    InstallPawnIo();
 end;
 
 { ----- アンインストール ----- }
