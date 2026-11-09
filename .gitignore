@@ -1,6 +1,7 @@
 bin/
 obj/
 *.zip
+Zeph-Iris-*-setup.exe
 Fanlume-*-setup.exe
 *.user
 .vs/
