@@ -13,6 +13,20 @@ and Iris, the rainbow (the LEDs).
   for example: Settings [設定].
 
 
+■ What's new in v6.9.0
+  - Lighting: each device and each zone (motherboard header) can have its own colour and light mode (solid,
+    rainbow, breathing, temperature, off). Example: graphics card solid red, motherboard white, only the radiator
+    fans in rainbow, everything else in music sync. Lighting [ライティング] -> Devices: "This device's colour"; zones
+    under "Open color matching and per-zone settings".
+  - Fixed: the sync test's LEDs could stay dark when the audio source was set to one app (such as Spotify),
+    because the app's own click was not captured. During the test the whole output is captured.
+  - Devices page: devices without a photo are looked up by model on Wikimedia Commons (freely licensed photos),
+    and only photos that clearly show the same product are used automatically, with the author and licence shown.
+    Only the device names are sent; it can be turned off at the top of the page.
+  - The image button can now find a photo online or paste a copied image: right-click an image in your browser ->
+    "Copy image", then paste.
+  - Illustrations of devices without a photo show the maker's colour and name.
+
 ■ What's new in v6.8.2
   - Electricity cost: the power supply's losses are now included (Settings: "Power supply efficiency", 88% by
     default). Before, they were left out, so the estimate read 10-20% below a wall-outlet measurement; with the
