@@ -13,6 +13,17 @@ and Iris, the rainbow (the LEDs).
   for example: Settings [設定].
 
 
+■ What's new in v6.10.0
+  - Lighting: seven new effects: Lightning, Waves, Birdsong, Fire, Aurora, Meteor and Heartbeat. All follow the
+    speed setting; Waves and Heartbeat use the chosen colour. They can also be chosen per device and per zone (for
+    example, only the keyboard as Meteor). Lightning and meteors strike on every device at the same moment.
+    Graphics cards show a still picture, as with the rainbow (turn on "Animate rainbow and breathing too" to let
+    them move).
+  - Safety: re-asserting full speed wrote a value just over 100% (100.001%); it now stays within 100% (fan speed
+    was not affected).
+  - Quality: tests now run automatically on GitHub (build, over 2,000 tests, the translation check and a check
+    that opens every page), plus a six-hour fan control run and a long run of every effect.
+
 ■ What's new in v6.9.1
   - Music sync: "Sparkle" no longer over-reacts to hi-hats. The brightness, number and spacing of hi-hat sparkles
     follow the intensity (moderate: 55% brightness, at least 0.16 s apart; calmer still with "Reduce flashing").
