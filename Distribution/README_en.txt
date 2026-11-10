@@ -13,6 +13,13 @@ and Iris, the rainbow (the LEDs).
   for example: Settings [設定].
 
 
+■ What's new in v6.8.1
+  - Safety: with a fan curve on an SSD temperature, playing music or copying files could make the app report
+    "the temperature sensor is stuck" and run every fan at 100%. The "load changed but the temperature did not"
+    check now only uses CPU and GPU load, where load moves the temperature within minutes (an SSD's load is
+    read/write activity, and its temperature moves in 1 °C steps).
+  - Lighting: the live spectrum shows 7 gridlines instead of 3 (display only; audio analysis is unchanged).
+
 ■ What's new in v6.8.0
   - New name: Fanlume is now called Zeph-Iris (another service already uses the name Fanlume).
   - It installs to C:\Program Files\Zeph-Iris. When Zeph-Iris starts for the first time, it takes the settings and
