@@ -1189,7 +1189,6 @@ d4ae40d7	Eine automatische Abstimmung oder ein Kühltest läuft. Starten Sie, we
 d66864fa	Gehäuseinneres
 1eef08cf	Bearbeiten beenden
 653d9443	Mindestens eine Karte ist nötig.
-aa2f7c05	Bild auswählen…
 44dceb5c	Zurück zur Illustration
 30ef4ec2	Bild für „{0}“ auswählen
 3d493cb5	Bilddateien (*.png;*.jpg;*.jpeg;*.bmp;*.webp)|*.png;*.jpg;*.jpeg;*.bmp;*.webp
@@ -1686,3 +1685,23 @@ ab10ab7f	Gleiche Farbe wie das Gerät
 bf2c93a8	Wie insgesamt
 c7218a33	Gelb
 cc601a2e	Gleiche Farbe wie insgesamt
+2a367162	Bilder im Browser suchen
+3ca8869d	Auf Wikimedia Commons wurde kein Foto dieses Modells gefunden. Kopieren Sie ein Bild über „Bilder im Browser suchen“ und setzen Sie es mit „Kopiertes Bild einfügen“ (Fotos von Herstellerseiten u. Ä. bitte nur für sich selbst verwenden).
+3d18f014	Wählen Sie ein Foto (Fotos von Wikimedia Commons; Urheber und Lizenz werden auf der Karte angezeigt). Passt keines, können Sie auch im Browser suchen und einfügen.
+55bd56ad	Wenn an, werden Geräte ohne Foto anhand des Modells auf Wikimedia Commons (einer Seite mit frei nutzbaren Fotos) gesucht, und nur Fotos, die eindeutig dasselbe Produkt zeigen, werden automatisch verwendet. Gesendet werden nur die Gerätenamen
+6124e108	Für Geräte ohne Treffer können Sie über die Bildschaltfläche der Karte ein im Browser gefundenes Bild einfügen
+693c6982	Fotos dieses Modells werden auf Wikimedia Commons (einer Seite mit frei nutzbaren Fotos) gesucht…
+6d191ffc	Foto von „{0}“
+6db944ec	Öffnet eine Bildersuche nach dem Modell. Klicken Sie mit der rechten Maustaste auf ein passendes Bild → „Bild kopieren“ und drücken Sie unten „Kopiertes Bild einfügen“
+7c80ba3a	Das Bild konnte nicht eingefügt werden.\n{0}
+8b4ed662	Urheber und Lizenz des Wikimedia-Commons-Fotos
+a55323f3	Das Foto konnte nicht heruntergeladen werden. Wählen Sie ein anderes oder fügen Sie ein Bild ein.
+aeaca01b	Gerätefotos automatisch online suchen
+b0dd9531	In der Zwischenablage ist kein Bild. Klicken Sie im Browser mit der rechten Maustaste auf ein Bild, wählen Sie „Bild kopieren“ und drücken Sie dann erneut.
+b3cec96e	Aus einer Datei wählen…
+b45d8636	Foto wird heruntergeladen…
+d57e0ef7	Foto: {0} ({1})
+e2890741	Urheber unbekannt
+e29499f3	Foto online suchen…
+ec74b9eb	Fotos konnten nicht gesucht werden ({0}). Sie können auch über „Bilder im Browser suchen“ suchen und einfügen.
+ed0f43c5	Kopiertes Bild einfügen

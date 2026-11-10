@@ -1189,7 +1189,6 @@ d4ae40d7	Auto tuning or a cooling test is running. Start after it finishes.
 d66864fa	Inside the case
 1eef08cf	Finish editing
 653d9443	At least one card is needed.
-aa2f7c05	Choose image…
 44dceb5c	Back to illustration
 30ef4ec2	Choose an image for "{0}"
 3d493cb5	Image files (*.png;*.jpg;*.jpeg;*.bmp;*.webp)|*.png;*.jpg;*.jpeg;*.bmp;*.webp
@@ -1686,3 +1685,23 @@ ab10ab7f	Same colour as device
 bf2c93a8	Same as overall
 c7218a33	Yellow
 cc601a2e	Same colour as overall
+2a367162	Search images in the browser
+3ca8869d	No photo of this model was found on Wikimedia Commons. Copy an image with "Search images in the browser" and set it with "Paste copied image" (use photos from manufacturers' sites and the like only for yourself).
+3d18f014	Choose a photo (these are Wikimedia Commons photos; the author and licence are shown on the card). If none fits, you can also search in the browser and paste.
+55bd56ad	When on, devices without a photo are looked up by model on Wikimedia Commons (a site of freely usable photos), and only photos that clearly show the same product are used automatically. Only the device names are sent
+6124e108	For devices without a match, use the image button on the card to paste an image you found in your browser
+693c6982	Looking for photos of this model on Wikimedia Commons (a site of freely usable photos)…
+6d191ffc	Photo of "{0}"
+6db944ec	Opens an image search for the model. Right-click an image you like → "Copy image", then press "Paste copied image" below
+7c80ba3a	Couldn't paste the image.\n{0}
+8b4ed662	Author and licence of the Wikimedia Commons photo
+a55323f3	Couldn't download the photo. Choose another one or paste an image.
+aeaca01b	Find device photos online automatically
+b0dd9531	There is no image on the clipboard. In your browser, right-click an image, choose "Copy image", then press this again.
+b3cec96e	Choose from a file…
+b45d8636	Downloading the photo…
+d57e0ef7	Photo: {0} ({1})
+e2890741	Unknown author
+e29499f3	Find a photo online…
+ec74b9eb	Couldn't search for photos ({0}). You can also search with "Search images in the browser" and paste.
+ed0f43c5	Paste copied image

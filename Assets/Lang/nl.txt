@@ -1189,7 +1189,6 @@ d4ae40d7	Er loopt een automatische afstemming of koeltest. Begin als die klaar i
 d66864fa	Binnen in de behuizing
 1eef08cf	Bewerken afronden
 653d9443	Er is minstens één kaart nodig.
-aa2f7c05	Afbeelding kiezen…
 44dceb5c	Terug naar illustratie
 30ef4ec2	Afbeelding kiezen voor "{0}"
 3d493cb5	Afbeeldingsbestanden (*.png;*.jpg;*.jpeg;*.bmp;*.webp)|*.png;*.jpg;*.jpeg;*.bmp;*.webp
@@ -1686,3 +1685,23 @@ ab10ab7f	Zelfde kleur als apparaat
 bf2c93a8	Zelfde als geheel
 c7218a33	Geel
 cc601a2e	Zelfde kleur als geheel
+2a367162	Afbeeldingen zoeken in de browser
+3ca8869d	Er is geen foto van dit model gevonden op Wikimedia Commons. Kopieer een afbeelding via ‘Afbeeldingen zoeken in de browser’ en stel die in met ‘Gekopieerde afbeelding plakken’ (gebruik foto's van sites van fabrikanten en dergelijke alleen voor uzelf).
+3d18f014	Kies een foto (foto's van Wikimedia Commons; maker en licentie staan op de kaart). Past er geen, dan kunt u ook in de browser zoeken en plakken.
+55bd56ad	Indien aan, worden apparaten zonder foto op model gezocht op Wikimedia Commons (een site met vrij te gebruiken foto's), en worden alleen foto's die duidelijk hetzelfde product tonen automatisch gebruikt. Alleen de apparaatnamen worden verstuurd
+6124e108	Voor apparaten zonder resultaat kunt u via de afbeeldingsknop op de kaart een afbeelding plakken die u in de browser vond
+693c6982	Foto's van dit model zoeken op Wikimedia Commons (een site met vrij te gebruiken foto's)…
+6d191ffc	Foto van ‘{0}’
+6db944ec	Opent een afbeeldingenzoekopdracht voor het model. Klik met rechts op een afbeelding die u bevalt → ‘Afbeelding kopiëren’ en druk hieronder op ‘Gekopieerde afbeelding plakken’
+7c80ba3a	De afbeelding kon niet worden geplakt.\n{0}
+8b4ed662	Maker en licentie van de Wikimedia Commons-foto
+a55323f3	De foto kon niet worden gedownload. Kies een andere of plak een afbeelding.
+aeaca01b	Apparaatfoto's automatisch online zoeken
+b0dd9531	Er staat geen afbeelding op het klembord. Klik in de browser met rechts op een afbeelding, kies ‘Afbeelding kopiëren’ en druk opnieuw.
+b3cec96e	Uit een bestand kiezen…
+b45d8636	Foto downloaden…
+d57e0ef7	Foto: {0} ({1})
+e2890741	Maker onbekend
+e29499f3	Online een foto zoeken…
+ec74b9eb	Er kon niet naar foto's worden gezocht ({0}). U kunt ook zoeken via ‘Afbeeldingen zoeken in de browser’ en plakken.
+ed0f43c5	Gekopieerde afbeelding plakken

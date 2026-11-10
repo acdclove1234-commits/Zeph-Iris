@@ -1189,7 +1189,6 @@ d4ae40d7	Un réglage automatique ou un test de refroidissement est en cours. Com
 d66864fa	Intérieur du boîtier
 1eef08cf	Terminer la modification
 653d9443	Au moins une carte est nécessaire.
-aa2f7c05	Choisir une image…
 44dceb5c	Revenir à l'illustration
 30ef4ec2	Choisir une image pour « {0} »
 3d493cb5	Images (*.png;*.jpg;*.jpeg;*.bmp;*.webp)|*.png;*.jpg;*.jpeg;*.bmp;*.webp
@@ -1686,3 +1685,23 @@ ab10ab7f	Même couleur que l'appareil
 bf2c93a8	Comme l'ensemble
 c7218a33	Jaune
 cc601a2e	Même couleur que l'ensemble
+2a367162	Chercher des images dans le navigateur
+3ca8869d	Aucune photo de ce modèle n'a été trouvée sur Wikimedia Commons. Copiez une image avec « Chercher des images dans le navigateur » et définissez-la avec « Coller l'image copiée » (n'utilisez les photos des sites des fabricants et autres que pour vous-même).
+3d18f014	Choisissez une photo (photos de Wikimedia Commons ; l'auteur et la licence sont affichés sur la carte). Si aucune ne convient, vous pouvez aussi chercher dans le navigateur et coller.
+55bd56ad	Si activé, les appareils sans photo sont recherchés par modèle sur Wikimedia Commons (un site de photos libres d'utilisation), et seules les photos qui montrent clairement le même produit sont utilisées automatiquement. Seuls les noms des appareils sont envoyés
+6124e108	Pour les appareils sans résultat, utilisez le bouton d'image de la carte pour coller une image trouvée dans le navigateur
+693c6982	Recherche de photos de ce modèle sur Wikimedia Commons (un site de photos libres d'utilisation)…
+6d191ffc	Photo de « {0} »
+6db944ec	Ouvre une recherche d'images du modèle. Faites un clic droit sur une image qui vous plaît → « Copier l'image », puis appuyez sur « Coller l'image copiée » ci-dessous
+7c80ba3a	Impossible de coller l'image.\n{0}
+8b4ed662	Auteur et licence de la photo Wikimedia Commons
+a55323f3	Impossible de télécharger la photo. Choisissez-en une autre ou collez une image.
+aeaca01b	Chercher automatiquement les photos des appareils en ligne
+b0dd9531	Il n'y a pas d'image dans le presse-papiers. Dans le navigateur, faites un clic droit sur une image, choisissez « Copier l'image », puis appuyez de nouveau.
+b3cec96e	Choisir dans un fichier…
+b45d8636	Téléchargement de la photo…
+d57e0ef7	Photo : {0} ({1})
+e2890741	Auteur inconnu
+e29499f3	Chercher une photo en ligne…
+ec74b9eb	Impossible de chercher des photos ({0}). Vous pouvez aussi chercher avec « Chercher des images dans le navigateur » et coller.
+ed0f43c5	Coller l'image copiée

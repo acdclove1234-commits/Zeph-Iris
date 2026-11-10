@@ -1189,7 +1189,6 @@ d4ae40d7	Há um ajuste automático ou teste de resfriamento em andamento. Comece
 d66864fa	Interior do gabinete
 1eef08cf	Concluir edição
 653d9443	É preciso pelo menos um cartão.
-aa2f7c05	Escolher imagem…
 44dceb5c	Voltar à ilustração
 30ef4ec2	Escolher imagem para "{0}"
 3d493cb5	Arquivos de imagem (*.png;*.jpg;*.jpeg;*.bmp;*.webp)|*.png;*.jpg;*.jpeg;*.bmp;*.webp
@@ -1686,3 +1685,23 @@ ab10ab7f	Mesma cor do dispositivo
 bf2c93a8	Igual ao geral
 c7218a33	Amarelo
 cc601a2e	Mesma cor do geral
+2a367162	Procurar imagens no navegador
+3ca8869d	Nenhuma foto deste modelo foi encontrada no Wikimedia Commons. Copie uma imagem com "Procurar imagens no navegador" e defina-a com "Colar imagem copiada" (use fotos de sites de fabricantes e afins só para você).
+3d18f014	Escolha uma foto (fotos do Wikimedia Commons; o autor e a licença aparecem no cartão). Se nenhuma servir, você também pode procurar no navegador e colar.
+55bd56ad	Se ativado, os dispositivos sem foto são procurados pelo modelo no Wikimedia Commons (um site de fotos de uso livre), e só as fotos que mostram claramente o mesmo produto são usadas automaticamente. Só os nomes dos dispositivos são enviados
+6124e108	Para dispositivos sem resultado, use o botão de imagem do cartão para colar uma imagem que você encontrou no navegador
+693c6982	Procurando fotos deste modelo no Wikimedia Commons (um site de fotos de uso livre)…
+6d191ffc	Foto de "{0}"
+6db944ec	Abre uma busca de imagens do modelo. Clique com o botão direito em uma imagem de que gostar → "Copiar imagem" e pressione "Colar imagem copiada" abaixo
+7c80ba3a	Não foi possível colar a imagem.\n{0}
+8b4ed662	Autor e licença da foto do Wikimedia Commons
+a55323f3	Não foi possível baixar a foto. Escolha outra ou cole uma imagem.
+aeaca01b	Procurar fotos dos dispositivos na internet automaticamente
+b0dd9531	Não há imagem na área de transferência. No navegador, clique com o botão direito em uma imagem, escolha "Copiar imagem" e pressione de novo.
+b3cec96e	Escolher de um arquivo…
+b45d8636	Baixando a foto…
+d57e0ef7	Foto: {0} ({1})
+e2890741	Autor desconhecido
+e29499f3	Procurar uma foto na internet…
+ec74b9eb	Não foi possível procurar fotos ({0}). Você também pode procurar com "Procurar imagens no navegador" e colar.
+ed0f43c5	Colar imagem copiada

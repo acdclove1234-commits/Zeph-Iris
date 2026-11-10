@@ -1189,7 +1189,6 @@ d4ae40d7	Penyetelan otomatis atau uji pendinginan sedang berjalan. Mulai setelah
 d66864fa	Di dalam casing
 1eef08cf	Selesai mengedit
 653d9443	Minimal perlu satu kartu.
-aa2f7c05	Pilih gambar…
 44dceb5c	Kembali ke ilustrasi
 30ef4ec2	Pilih gambar untuk "{0}"
 3d493cb5	File gambar (*.png;*.jpg;*.jpeg;*.bmp;*.webp)|*.png;*.jpg;*.jpeg;*.bmp;*.webp
@@ -1686,3 +1685,23 @@ ab10ab7f	Warna sama dengan perangkat
 bf2c93a8	Sama dengan keseluruhan
 c7218a33	Kuning
 cc601a2e	Warna sama dengan keseluruhan
+2a367162	Cari gambar di browser
+3ca8869d	Tidak ada foto model ini di Wikimedia Commons. Salin gambar lewat "Cari gambar di browser" dan atur dengan "Tempel gambar yang disalin" (gunakan foto dari situs produsen dan sejenisnya hanya untuk Anda sendiri).
+3d18f014	Pilih foto (foto dari Wikimedia Commons; pembuat dan lisensi ditampilkan di kartu). Jika tidak ada yang cocok, Anda juga bisa mencari di browser lalu menempel.
+55bd56ad	Jika aktif, perangkat tanpa foto dicari berdasarkan model di Wikimedia Commons (situs foto yang bebas dipakai), dan hanya foto yang jelas menunjukkan produk yang sama dipakai secara otomatis. Yang dikirim hanya nama perangkat
+6124e108	Untuk perangkat tanpa hasil, gunakan tombol gambar di kartu untuk menempelkan gambar yang Anda temukan di browser
+693c6982	Mencari foto model ini di Wikimedia Commons (situs foto yang bebas dipakai)…
+6d191ffc	Foto "{0}"
+6db944ec	Membuka pencarian gambar untuk model ini. Klik kanan gambar yang Anda suka → "Salin gambar", lalu tekan "Tempel gambar yang disalin" di bawah
+7c80ba3a	Gambar tidak dapat ditempel.\n{0}
+8b4ed662	Pembuat dan lisensi foto Wikimedia Commons
+a55323f3	Foto tidak dapat diunduh. Pilih foto lain atau tempel gambar.
+aeaca01b	Cari foto perangkat di internet secara otomatis
+b0dd9531	Tidak ada gambar di papan klip. Di browser, klik kanan gambar, pilih "Salin gambar", lalu tekan lagi.
+b3cec96e	Pilih dari file…
+b45d8636	Mengunduh foto…
+d57e0ef7	Foto: {0} ({1})
+e2890741	Pembuat tidak diketahui
+e29499f3	Cari foto di internet…
+ec74b9eb	Foto tidak dapat dicari ({0}). Anda juga bisa mencari lewat "Cari gambar di browser" lalu menempel.
+ed0f43c5	Tempel gambar yang disalin

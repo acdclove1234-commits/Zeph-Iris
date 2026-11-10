@@ -1189,7 +1189,6 @@ d4ae40d7	È in corso una regolazione automatica o un test di raffreddamento. Ini
 d66864fa	Interno del case
 1eef08cf	Termina modifica
 653d9443	Serve almeno una scheda.
-aa2f7c05	Scegli immagine…
 44dceb5c	Torna all'illustrazione
 30ef4ec2	Scegli un'immagine per «{0}»
 3d493cb5	File immagine (*.png;*.jpg;*.jpeg;*.bmp;*.webp)|*.png;*.jpg;*.jpeg;*.bmp;*.webp
@@ -1686,3 +1685,23 @@ ab10ab7f	Stesso colore del dispositivo
 bf2c93a8	Come in generale
 c7218a33	Giallo
 cc601a2e	Stesso colore generale
+2a367162	Cerca immagini nel browser
+3ca8869d	Su Wikimedia Commons non è stata trovata nessuna foto di questo modello. Copia un'immagine con «Cerca immagini nel browser» e impostala con «Incolla immagine copiata» (usa le foto dei siti dei produttori e simili solo per te).
+3d18f014	Scegli una foto (foto di Wikimedia Commons; autore e licenza sono mostrati sulla scheda). Se nessuna va bene, puoi anche cercare nel browser e incollare.
+55bd56ad	Se attivo, i dispositivi senza foto vengono cercati per modello su Wikimedia Commons (un sito di foto di libero utilizzo) e vengono usate automaticamente solo le foto che mostrano chiaramente lo stesso prodotto. Vengono inviati solo i nomi dei dispositivi
+6124e108	Per i dispositivi senza risultato, usa il pulsante immagine della scheda per incollare un'immagine trovata nel browser
+693c6982	Ricerca di foto di questo modello su Wikimedia Commons (un sito di foto di libero utilizzo)…
+6d191ffc	Foto di «{0}»
+6db944ec	Apre una ricerca di immagini del modello. Fai clic destro su un'immagine che ti piace → «Copia immagine», poi premi «Incolla immagine copiata» qui sotto
+7c80ba3a	Impossibile incollare l'immagine.\n{0}
+8b4ed662	Autore e licenza della foto di Wikimedia Commons
+a55323f3	Impossibile scaricare la foto. Scegline un'altra o incolla un'immagine.
+aeaca01b	Cerca automaticamente online le foto dei dispositivi
+b0dd9531	Negli appunti non c'è nessuna immagine. Nel browser fai clic destro su un'immagine, scegli «Copia immagine» e premi di nuovo.
+b3cec96e	Scegli da un file…
+b45d8636	Download della foto…
+d57e0ef7	Foto: {0} ({1})
+e2890741	Autore sconosciuto
+e29499f3	Cerca una foto online…
+ec74b9eb	Impossibile cercare le foto ({0}). Puoi anche cercare con «Cerca immagini nel browser» e incollare.
+ed0f43c5	Incolla immagine copiata

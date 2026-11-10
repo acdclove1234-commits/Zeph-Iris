@@ -1189,7 +1189,6 @@ d4ae40d7	Hay un ajuste automático o una prueba de refrigeración en curso. Empi
 d66864fa	Interior de la caja
 1eef08cf	Terminar de editar
 653d9443	Se necesita al menos una tarjeta.
-aa2f7c05	Elegir imagen…
 44dceb5c	Volver a la ilustración
 30ef4ec2	Elegir imagen para «{0}»
 3d493cb5	Archivos de imagen (*.png;*.jpg;*.jpeg;*.bmp;*.webp)|*.png;*.jpg;*.jpeg;*.bmp;*.webp
@@ -1686,3 +1685,23 @@ ab10ab7f	Mismo color que el dispositivo
 bf2c93a8	Igual que el general
 c7218a33	Amarillo
 cc601a2e	Mismo color que el general
+2a367162	Buscar imágenes en el navegador
+3ca8869d	No se encontró ninguna foto de este modelo en Wikimedia Commons. Copia una imagen con «Buscar imágenes en el navegador» y ponla con «Pegar imagen copiada» (usa las fotos de sitios de fabricantes y similares solo para ti).
+3d18f014	Elige una foto (son fotos de Wikimedia Commons; el autor y la licencia se muestran en la tarjeta). Si ninguna sirve, también puedes buscar en el navegador y pegar.
+55bd56ad	Si está activado, los dispositivos sin foto se buscan por modelo en Wikimedia Commons (un sitio de fotos de uso libre) y solo se usan automáticamente las fotos que muestran claramente el mismo producto. Solo se envían los nombres de los dispositivos
+6124e108	Para los dispositivos sin resultado, usa el botón de imagen de la tarjeta para pegar una imagen que encuentres en el navegador
+693c6982	Buscando fotos de este modelo en Wikimedia Commons (un sitio de fotos de uso libre)…
+6d191ffc	Foto de «{0}»
+6db944ec	Abre una búsqueda de imágenes del modelo. Haz clic derecho en una imagen que te guste → «Copiar imagen» y pulsa «Pegar imagen copiada» abajo
+7c80ba3a	No se pudo pegar la imagen.\n{0}
+8b4ed662	Autor y licencia de la foto de Wikimedia Commons
+a55323f3	No se pudo descargar la foto. Elige otra o pega una imagen.
+aeaca01b	Buscar fotos de dispositivos en internet automáticamente
+b0dd9531	No hay ninguna imagen en el portapapeles. En el navegador, haz clic derecho en una imagen, elige «Copiar imagen» y vuelve a pulsar.
+b3cec96e	Elegir de un archivo…
+b45d8636	Descargando la foto…
+d57e0ef7	Foto: {0} ({1})
+e2890741	Autor desconocido
+e29499f3	Buscar una foto en internet…
+ec74b9eb	No se pudieron buscar fotos ({0}). También puedes buscar con «Buscar imágenes en el navegador» y pegar.
+ed0f43c5	Pegar imagen copiada

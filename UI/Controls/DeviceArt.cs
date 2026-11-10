@@ -19,6 +19,17 @@ public sealed class DeviceArt : FrameworkElement
         nameof(Kind), typeof(string), typeof(DeviceArt),
         new FrameworkPropertyMetadata("Other", FrameworkPropertyMetadataOptions.AffectsRender));
 
+    public static readonly DependencyProperty DeviceNameProperty = DependencyProperty.Register(
+        nameof(DeviceName), typeof(string), typeof(DeviceArt),
+        new FrameworkPropertyMetadata("", FrameworkPropertyMetadataOptions.AffectsRender));
+
+    /// <summary>デバイスの名前（メーカーの色の帯と名前を、イラストの下に描く: NVIDIA は緑・AMD は赤・Intel は青など）</summary>
+    public string DeviceName
+    {
+        get => (string)GetValue(DeviceNameProperty);
+        set => SetValue(DeviceNameProperty, value);
+    }
+
     public static readonly DependencyProperty SourceProperty = DependencyProperty.Register(
         nameof(Source), typeof(ImageSource), typeof(DeviceArt),
         new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.AffectsRender));
@@ -66,8 +77,35 @@ public sealed class DeviceArt : FrameworkElement
             case "Cpu": DrawCpu(dc); break;
             default: DrawChip(dc); break;
         }
+        if (Brand(DeviceName) is { } brand) DrawBrand(dc, brand.Name, brand.Color);
         dc.Pop();
         dc.Pop();
+    }
+
+    /// <summary>名前からメーカーと、そのメーカーの色を決める（分からなければ null）</summary>
+    public static (string Name, Color Color)? Brand(string? deviceName)
+    {
+        string n = deviceName ?? "";
+        bool Has(string w) => n.Contains(w, StringComparison.OrdinalIgnoreCase);
+        if (Has("NVIDIA") || Has("GeForce") || Has("RTX ")) return ("NVIDIA", Color.FromRgb(0x76, 0xB9, 0x00));
+        if (Has("Radeon") || Has("AMD") || Has("Ryzen")) return ("AMD", Color.FromRgb(0xED, 0x1C, 0x24));
+        if (Has("Intel")) return ("Intel", Color.FromRgb(0x00, 0x71, 0xC5));
+        if (Has("ASRock")) return ("ASRock", Color.FromRgb(0x00, 0xA0, 0xE9));
+        if (Has("ASUS") || Has("ROG")) return ("ASUS", Color.FromRgb(0xE6, 0x00, 0x12));
+        if (Has("MSI") || Has("Micro-Star")) return ("MSI", Color.FromRgb(0xE4, 0x00, 0x2B));
+        if (Has("Gigabyte") || Has("AORUS")) return ("GIGABYTE", Color.FromRgb(0xF2, 0x8C, 0x00));
+        return null;
+    }
+
+    /// <summary>イラストの下に、メーカーの色の帯と名前を描く（100×100 の座標）</summary>
+    private void DrawBrand(DrawingContext dc, string name, Color color)
+    {
+        var brush = Freeze(new SolidColorBrush(color));
+        dc.DrawRoundedRectangle(brush, null, new Rect(4, 92, 26, 4), 2, 2);
+        var text = new FormattedText(name, System.Globalization.CultureInfo.InvariantCulture, FlowDirection.LeftToRight,
+            new Typeface(new FontFamily("Segoe UI"), FontStyles.Normal, FontWeights.Bold, FontStretches.Normal), 7, brush,
+            VisualTreeHelper.GetDpi(this).PixelsPerDip);
+        dc.DrawText(text, new Point(33, 89.5));
     }
 
     private static Brush Solid(byte r, byte g, byte b, byte a = 255) => Freeze(new SolidColorBrush(Color.FromArgb(a, r, g, b)));

@@ -69,6 +69,10 @@ public sealed class AppConfig : ObservableObject
     public bool RestorePowerPlanOnExit { get; set; } = true;
     /// <summary>デバイス画面で使う自分で用意した画像（exe と同じフォルダの images\ にコピーして保存）</summary>
     public ObservableCollection<DeviceImageConfig> DeviceImages { get; set; } = new();
+    /// <summary>デバイスの写真を、型番で Wikimedia Commons から自動で探す（確かに同じ製品と分かる写真だけ自動で使う）</summary>
+    public bool AutoDevicePhotos { get; set; } = true;
+    /// <summary>写真を自動で探し終えたデバイスのキー（毎回ネットに問い合わせないため）</summary>
+    public List<string> DevicePhotoSearched { get; set; } = new();
     public SafetyConfig Safety { get; set; } = new();
     public NotifyConfig Notify { get; set; } = new();
     public EnergyConfig Energy { get; set; } = new();
@@ -124,6 +128,7 @@ public sealed class AppConfig : ObservableObject
         Calibrations ??= new();
         DashboardCards ??= new();
         DeviceImages ??= new();
+        DevicePhotoSearched ??= new();
         Widget ??= new();
         Appearance ??= new();
         Appearance.Normalize();
@@ -663,6 +668,10 @@ public sealed class DeviceImageConfig
 {
     public string DeviceKey { get; set; } = "";
     public string FileName { get; set; } = "";
+    /// <summary>ネットの写真なら、元のページ・作者・ライセンス（表示する。自分で用意した画像は空）</summary>
+    public string SourceUrl { get; set; } = "";
+    public string Author { get; set; } = "";
+    public string License { get; set; } = "";
 }
 
 public sealed class QuickConfig

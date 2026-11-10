@@ -1189,7 +1189,6 @@ d4ae40d7	Đang chạy tự tinh chỉnh hoặc kiểm tra làm mát. Hãy bắt 
 d66864fa	Trong thùng máy
 1eef08cf	Kết thúc chỉnh sửa
 653d9443	Cần ít nhất một thẻ.
-aa2f7c05	Chọn hình…
 44dceb5c	Trở về hình minh họa
 30ef4ec2	Chọn hình cho "{0}"
 3d493cb5	Tệp hình ảnh (*.png;*.jpg;*.jpeg;*.bmp;*.webp)|*.png;*.jpg;*.jpeg;*.bmp;*.webp
@@ -1686,3 +1685,23 @@ ab10ab7f	Cùng màu với thiết bị
 bf2c93a8	Giống toàn bộ
 c7218a33	Vàng
 cc601a2e	Cùng màu với toàn bộ
+2a367162	Tìm ảnh trong trình duyệt
+3ca8869d	Không tìm thấy ảnh của mẫu này trên Wikimedia Commons. Sao chép ảnh qua "Tìm ảnh trong trình duyệt" và đặt bằng "Dán ảnh đã sao chép" (ảnh từ trang của nhà sản xuất và tương tự chỉ dùng để tự xem).
+3d18f014	Chọn ảnh (ảnh từ Wikimedia Commons; tác giả và giấy phép hiển thị trên thẻ). Nếu không có ảnh phù hợp, bạn cũng có thể tìm trong trình duyệt rồi dán.
+55bd56ad	Khi bật, thiết bị chưa có ảnh sẽ được tìm theo mẫu trên Wikimedia Commons (trang chia sẻ ảnh dùng tự do), và chỉ những ảnh rõ ràng là cùng sản phẩm mới được dùng tự động. Chỉ gửi tên thiết bị
+6124e108	Với thiết bị không tìm thấy, dùng nút ảnh trên thẻ để dán ảnh bạn tìm được trong trình duyệt
+693c6982	Đang tìm ảnh của mẫu này trên Wikimedia Commons (trang chia sẻ ảnh dùng tự do)…
+6d191ffc	Ảnh của "{0}"
+6db944ec	Mở tìm kiếm hình ảnh theo mẫu. Nhấp chuột phải vào ảnh bạn thích → "Sao chép hình ảnh", rồi nhấn "Dán ảnh đã sao chép" bên dưới
+7c80ba3a	Không dán được ảnh.\n{0}
+8b4ed662	Tác giả và giấy phép của ảnh Wikimedia Commons
+a55323f3	Không tải được ảnh. Hãy chọn ảnh khác hoặc dán ảnh.
+aeaca01b	Tự động tìm ảnh thiết bị trên mạng
+b0dd9531	Không có ảnh trong bảng tạm. Trong trình duyệt, nhấp chuột phải vào ảnh, chọn "Sao chép hình ảnh" rồi nhấn lại.
+b3cec96e	Chọn từ tệp…
+b45d8636	Đang tải ảnh…
+d57e0ef7	Ảnh: {0} ({1})
+e2890741	Không rõ tác giả
+e29499f3	Tìm ảnh trên mạng…
+ec74b9eb	Không tìm được ảnh ({0}). Bạn cũng có thể tìm qua "Tìm ảnh trong trình duyệt" rồi dán.
+ed0f43c5	Dán ảnh đã sao chép

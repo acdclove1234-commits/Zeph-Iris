@@ -1189,7 +1189,6 @@ d4ae40d7	Trwa automatyczne strojenie lub test chłodzenia. Zacznij po ich zakoń
 d66864fa	Wnętrze obudowy
 1eef08cf	Zakończ edycję
 653d9443	Potrzebna jest co najmniej jedna karta.
-aa2f7c05	Wybierz obraz…
 44dceb5c	Wróć do ilustracji
 30ef4ec2	Wybierz obraz dla „{0}”
 3d493cb5	Pliki obrazów (*.png;*.jpg;*.jpeg;*.bmp;*.webp)|*.png;*.jpg;*.jpeg;*.bmp;*.webp
@@ -1686,3 +1685,23 @@ ab10ab7f	Ten sam kolor co urządzenie
 bf2c93a8	Jak całość
 c7218a33	Żółty
 cc601a2e	Ten sam kolor co całość
+2a367162	Szukaj obrazów w przeglądarce
+3ca8869d	W Wikimedia Commons nie znaleziono zdjęcia tego modelu. Skopiuj obraz przez „Szukaj obrazów w przeglądarce” i ustaw go przez „Wklej skopiowany obraz” (zdjęć ze stron producentów i podobnych używaj tylko na własny użytek).
+3d18f014	Wybierz zdjęcie (zdjęcia z Wikimedia Commons; autor i licencja są pokazane na karcie). Jeśli żadne nie pasuje, możesz też poszukać w przeglądarce i wkleić.
+55bd56ad	Gdy włączone, urządzenia bez zdjęcia są wyszukiwane po modelu w Wikimedia Commons (serwisie ze zdjęciami do swobodnego użytku), a automatycznie używane są tylko zdjęcia wyraźnie przedstawiające ten sam produkt. Wysyłane są tylko nazwy urządzeń
+6124e108	Dla urządzeń bez wyniku użyj przycisku obrazu na karcie, aby wkleić obraz znaleziony w przeglądarce
+693c6982	Szukanie zdjęć tego modelu w Wikimedia Commons (serwisie ze zdjęciami do swobodnego użytku)…
+6d191ffc	Zdjęcie „{0}”
+6db944ec	Otwiera wyszukiwanie obrazów dla modelu. Kliknij prawym przyciskiem obraz, który ci się podoba → „Kopiuj obraz”, a potem naciśnij poniżej „Wklej skopiowany obraz”
+7c80ba3a	Nie udało się wkleić obrazu.\n{0}
+8b4ed662	Autor i licencja zdjęcia z Wikimedia Commons
+a55323f3	Nie udało się pobrać zdjęcia. Wybierz inne lub wklej obraz.
+aeaca01b	Automatycznie szukaj zdjęć urządzeń w internecie
+b0dd9531	W schowku nie ma obrazu. W przeglądarce kliknij obraz prawym przyciskiem, wybierz „Kopiuj obraz” i naciśnij ponownie.
+b3cec96e	Wybierz z pliku…
+b45d8636	Pobieranie zdjęcia…
+d57e0ef7	Zdjęcie: {0} ({1})
+e2890741	Autor nieznany
+e29499f3	Szukaj zdjęcia w internecie…
+ec74b9eb	Nie udało się wyszukać zdjęć ({0}). Możesz też poszukać przez „Szukaj obrazów w przeglądarce” i wkleić.
+ed0f43c5	Wklej skopiowany obraz

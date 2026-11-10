@@ -1189,7 +1189,6 @@ d4ae40d7	Otomatik ayar veya soğutma testi sürüyor. Bittikten sonra başlatın
 d66864fa	Kasa içi
 1eef08cf	Düzenlemeyi bitir
 653d9443	En az bir kart gerekir.
-aa2f7c05	Resim seç…
 44dceb5c	Çizime dön
 30ef4ec2	"{0}" için resim seç
 3d493cb5	Resim dosyaları (*.png;*.jpg;*.jpeg;*.bmp;*.webp)|*.png;*.jpg;*.jpeg;*.bmp;*.webp
@@ -1686,3 +1685,23 @@ ab10ab7f	Cihazla aynı renk
 bf2c93a8	Genel ile aynı
 c7218a33	Sarı
 cc601a2e	Genel ile aynı renk
+2a367162	Tarayıcıda resim ara
+3ca8869d	Wikimedia Commons'ta bu modelin fotoğrafı bulunamadı. "Tarayıcıda resim ara" ile bir resim kopyalayıp "Kopyalanan resmi yapıştır" ile ayarlayabilirsiniz (üretici siteleri ve benzerlerindeki fotoğrafları yalnızca kendiniz için kullanın).
+3d18f014	Bir fotoğraf seçin (Wikimedia Commons fotoğrafları; yazar ve lisans kartta gösterilir). Uygun olan yoksa tarayıcıda arayıp yapıştırabilirsiniz.
+55bd56ad	Açıksa fotoğrafı olmayan cihazlar modele göre Wikimedia Commons'ta (serbestçe kullanılabilen fotoğraflar sitesi) aranır ve yalnızca açıkça aynı ürünü gösteren fotoğraflar otomatik kullanılır. Yalnızca cihaz adları gönderilir
+6124e108	Sonuç bulunamayan cihazlar için karttaki resim düğmesiyle tarayıcıda bulduğunuz bir resmi yapıştırabilirsiniz
+693c6982	Bu modelin fotoğrafları Wikimedia Commons'ta (serbestçe kullanılabilen fotoğraflar sitesi) aranıyor…
+6d191ffc	"{0}" fotoğrafı
+6db944ec	Model için resim aramasını açar. Beğendiğiniz resme sağ tıklayıp → "Resmi kopyala", ardından aşağıdaki "Kopyalanan resmi yapıştır"a basın
+7c80ba3a	Resim yapıştırılamadı.\n{0}
+8b4ed662	Wikimedia Commons fotoğrafının yazarı ve lisansı
+a55323f3	Fotoğraf indirilemedi. Başka birini seçin ya da bir resim yapıştırın.
+aeaca01b	Cihaz fotoğraflarını internette otomatik ara
+b0dd9531	Panoda resim yok. Tarayıcıda bir resme sağ tıklayıp "Resmi kopyala"yı seçin, sonra tekrar basın.
+b3cec96e	Dosyadan seç…
+b45d8636	Fotoğraf indiriliyor…
+d57e0ef7	Fotoğraf: {0} ({1})
+e2890741	Yazar bilinmiyor
+e29499f3	İnternette fotoğraf ara…
+ec74b9eb	Fotoğraf aranamadı ({0}). "Tarayıcıda resim ara" ile arayıp yapıştırabilirsiniz.
+ed0f43c5	Kopyalanan resmi yapıştır
