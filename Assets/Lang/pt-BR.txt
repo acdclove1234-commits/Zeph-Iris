@@ -1727,3 +1727,12 @@ c3299008	Pequenas luzes piam 2–4 vezes como pássaros sobre um verde-folha sua
 ce20ec89	Aurora
 f00ee174	Canto de pássaros
 f16a0b90	Luz vermelha, laranja e amarela tremula como chamas em cada LED
+17abf912	Cria um zip com os logs, as configurações e a lista de hardware e abre a página de relatos no GitHub (os dados pessoais são ocultados)
+1a54840a	Abre com versão, placa-mãe, CPU, placa de vídeo e Windows já preenchidos (precisa de uma conta no GitHub)
+4563aefc	② Abrir a página de relatos no GitHub
+51dabed8	Relatar um problema
+7a855753	Não foi possível criar o zip: {0}
+925344ed	Conte o que não funciona na página de relatos do GitHub: ① crie o zip do relato e ② abra a página, descreva o que aconteceu e arraste o zip para anexá-lo. O zip contém o resumo abaixo, a lista de sensores, as configurações e os logs dos últimos 3 dias. Nome de usuário, nome do PC, nomes de pastas, e-mails, endereços IP e o endereço e a senha das notificações no celular são ocultados (os nomes de peças e saídas de áudio continuam). O app não envia nada.
+acfe2730	① Criar o zip do relato
+b15ec58c	{0} foi criado (a pasta abre no Explorador). Arraste este arquivo para a página do relato para anexá-lo.
+d92849da	Relatar um problema…

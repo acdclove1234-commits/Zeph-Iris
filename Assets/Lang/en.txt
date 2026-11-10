@@ -1727,3 +1727,12 @@ c3299008	Small lights chirp 2–4 times like birdsong over a soft leaf green
 ce20ec89	Aurora
 f00ee174	Birdsong
 f16a0b90	Red, orange and yellow light flickers like flames on each LED
+17abf912	Makes a zip with the logs, settings and hardware list and opens the GitHub report page (personal details are hidden)
+1a54840a	Opens with the version, motherboard, CPU, graphics card and Windows fields filled in (needs a GitHub account)
+4563aefc	② Open the GitHub report page
+51dabed8	Report a problem
+7a855753	Couldn't make the zip: {0}
+925344ed	Tell us what does not work on the GitHub report page: ① make the report zip, then ② open the report page, describe what happened and drag the zip in to attach it. The zip contains the summary below, the sensor list, the settings and the logs of the last 3 days. User name, PC name, folder names, email addresses, IP addresses and the phone notification address and passcode are hidden (names of parts and audio outputs remain). The app sends nothing anywhere.
+acfe2730	① Make the report zip
+b15ec58c	Made {0} (its folder opens in Explorer). Drag this file into the report page to attach it.
+d92849da	Report a problem…

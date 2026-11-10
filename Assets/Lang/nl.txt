@@ -1727,3 +1727,12 @@ c3299008	Kleine lichtjes tjilpen 2–4 keer als vogels boven een zacht bladgroen
 ce20ec89	Noorderlicht
 f00ee174	Vogelgezang
 f16a0b90	Rood, oranje en geel licht flakkert als vlammen op elke led
+17abf912	Maakt een zip met de logboeken, instellingen en hardwarelijst en opent de meldpagina op GitHub (persoonlijke gegevens worden verborgen)
+1a54840a	Opent met versie, moederbord, CPU, videokaart en Windows al ingevuld (GitHub-account nodig)
+4563aefc	② Meldpagina op GitHub openen
+51dabed8	Probleem melden
+7a855753	Zip kon niet worden gemaakt: {0}
+925344ed	Laat op de meldpagina van GitHub weten wat niet werkt: ① maak de zip voor de melding en ② open de meldpagina, beschrijf wat er gebeurde en sleep de zip erheen om hem toe te voegen. De zip bevat het overzicht hieronder, de sensorlijst, de instellingen en de logboeken van de laatste 3 dagen. Gebruikersnaam, pc-naam, mapnamen, e-mailadressen, IP-adressen en het adres en wachtwoord van de telefoonmeldingen worden verborgen (namen van onderdelen en audio-uitgangen blijven staan). De app verstuurt niets.
+acfe2730	① Zip voor de melding maken
+b15ec58c	{0} is gemaakt (de map opent in Verkenner). Sleep dit bestand naar de meldpagina om het toe te voegen.
+d92849da	Probleem melden…

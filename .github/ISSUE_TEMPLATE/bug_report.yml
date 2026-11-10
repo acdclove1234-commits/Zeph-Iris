@@ -49,10 +49,12 @@ body:
     attributes:
       label: ログ / Logs
       description: |
-        アプリのフォルダー（C:\Program Files\Zeph-Iris）の logs フォルダーから、その日のログを添付してください。
-        ログに個人的な情報（PC の名前・フォルダーの名前など）があれば、消してからどうぞ。
-        Attach the day's log from the logs folder in the app folder (C:\Program Files\Zeph-Iris).
-        Remove anything personal (PC name, folder names) before posting.
+        6.10.2 以降: 設定 →「一般」→「不具合を報告…」→「① 報告用の zip を作る」でできた zip を、ここにドラッグして添付してください
+        （ログ・設定・部品の一覧が入っていて、個人的な情報は伏せてあります）。
+        それより前の版: アプリのフォルダー（C:\Program Files\Zeph-Iris）の logs フォルダーから、その日のログを添付してください。
+        From 6.10.2: drag the zip made by Settings → General → "Report a problem…" → "① Make the report zip" here
+        (logs, settings and the hardware list, with personal details hidden).
+        Older versions: attach the day's log from the logs folder in the app folder (C:\Program Files\Zeph-Iris).
   - type: checkboxes
     id: other-apps
     attributes:

@@ -1727,3 +1727,12 @@ c3299008	Kleine Lichter zwitschern 2–4-mal wie Vogelgesang über einem sanften
 ce20ec89	Polarlicht
 f00ee174	Vogelgesang
 f16a0b90	Rotes, orangefarbenes und gelbes Licht flackert wie Flammen auf jeder LED
+17abf912	Erstellt ein ZIP mit Protokollen, Einstellungen und Hardwareliste und öffnet die Meldeseite auf GitHub (persönliche Angaben werden ausgeblendet)
+1a54840a	Öffnet sie mit ausgefüllten Feldern für Version, Mainboard, CPU, Grafikkarte und Windows (GitHub-Konto nötig)
+4563aefc	② Meldeseite auf GitHub öffnen
+51dabed8	Problem melden
+7a855753	ZIP konnte nicht erstellt werden: {0}
+925344ed	Melden Sie auf der GitHub-Meldeseite, was nicht funktioniert: ① ZIP für die Meldung erstellen, dann ② die Meldeseite öffnen, beschreiben, was passiert ist, und das ZIP per Ziehen anhängen. Das ZIP enthält die Übersicht unten, die Sensorliste, die Einstellungen und die Protokolle der letzten 3 Tage. Benutzername, PC-Name, Ordnernamen, E-Mail-Adressen, IP-Adressen sowie Adresse und Passwort der Handy-Benachrichtigung werden ausgeblendet (Namen von Bauteilen und Audioausgängen bleiben). Die App sendet nichts.
+acfe2730	① ZIP für die Meldung erstellen
+b15ec58c	{0} wurde erstellt (der Ordner öffnet sich im Explorer). Ziehen Sie diese Datei auf die Meldeseite, um sie anzuhängen.
+d92849da	Problem melden…

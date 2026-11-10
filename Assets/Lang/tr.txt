@@ -1727,3 +1727,12 @@ c3299008	Yumuşak bir yaprak yeşilinin üzerinde küçük ışıklar kuş gibi 
 ce20ec89	Kutup ışıkları
 f00ee174	Kuş sesi
 f16a0b90	Kırmızı, turuncu ve sarı ışık her LED'de alev gibi titrer
+17abf912	Günlükleri, ayarları ve donanım listesini içeren bir zip oluşturur ve GitHub bildirim sayfasını açar (kişisel bilgiler gizlenir)
+1a54840a	Sürüm, anakart, CPU, ekran kartı ve Windows alanları doldurulmuş olarak açılır (GitHub hesabı gerekir)
+4563aefc	② GitHub bildirim sayfasını aç
+51dabed8	Sorun bildir
+7a855753	Zip oluşturulamadı: {0}
+925344ed	Neyin çalışmadığını GitHub bildirim sayfasından bize iletin: ① bildirim zip'ini oluşturun, ardından ② bildirim sayfasını açıp ne olduğunu yazın ve zip'i sürükleyerek ekleyin. Zip, aşağıdaki özeti, sensör listesini, ayarları ve son 3 günün günlüklerini içerir. Kullanıcı adı, PC adı, klasör adları, e-posta adresleri, IP adresleri ile telefon bildiriminin adresi ve parolası gizlenir (parça ve ses çıkışı adları kalır). Uygulama hiçbir yere bir şey göndermez.
+acfe2730	① Bildirim zip'ini oluştur
+b15ec58c	{0} oluşturuldu (klasörü Gezgin'de açılır). Eklemek için bu dosyayı bildirim sayfasına sürükleyin.
+d92849da	Sorun bildir…

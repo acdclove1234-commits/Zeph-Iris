@@ -1727,3 +1727,12 @@ c3299008	Pequeñas luces pían 2–4 veces como pájaros sobre un verde hoja sua
 ce20ec89	Aurora
 f00ee174	Canto de pájaros
 f16a0b90	Luz roja, naranja y amarilla parpadea como llamas en cada LED
+17abf912	Crea un zip con los registros, los ajustes y la lista de hardware y abre la página de informes de GitHub (los datos personales se ocultan)
+1a54840a	Se abre con la versión, la placa base, la CPU, la tarjeta gráfica y Windows ya rellenados (requiere una cuenta de GitHub)
+4563aefc	② Abrir la página de informes de GitHub
+51dabed8	Informar de un problema
+7a855753	No se pudo crear el zip: {0}
+925344ed	Cuéntanos qué no funciona en la página de informes de GitHub: ① crea el zip del informe y ② abre la página, describe lo que pasó y arrastra el zip para adjuntarlo. El zip contiene el resumen de abajo, la lista de sensores, los ajustes y los registros de los últimos 3 días. Se ocultan el nombre de usuario, el nombre del PC, los nombres de carpetas, los correos, las direcciones IP y la dirección y la contraseña de las notificaciones al móvil (los nombres de piezas y salidas de audio se mantienen). La app no envía nada a ningún sitio.
+acfe2730	① Crear el zip del informe
+b15ec58c	Se creó {0} (su carpeta se abre en el Explorador). Arrastra este archivo a la página del informe para adjuntarlo.
+d92849da	Informar de un problema…

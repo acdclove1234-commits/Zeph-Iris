@@ -1727,3 +1727,12 @@ c3299008	Cahaya kecil berkicau 2–4 kali seperti burung di atas hijau daun yang
 ce20ec89	Aurora
 f00ee174	Kicau burung
 f16a0b90	Cahaya merah, oranye, dan kuning berkedip seperti nyala api di setiap LED
+17abf912	Membuat zip berisi log, pengaturan, dan daftar perangkat keras, lalu membuka halaman laporan GitHub (info pribadi disembunyikan)
+1a54840a	Terbuka dengan versi, motherboard, CPU, kartu grafis, dan Windows sudah terisi (perlu akun GitHub)
+4563aefc	② Buka halaman laporan GitHub
+51dabed8	Laporkan masalah
+7a855753	Zip tidak dapat dibuat: {0}
+925344ed	Beri tahu kami apa yang tidak berfungsi di halaman laporan GitHub: ① buat zip laporan, lalu ② buka halaman laporan, tulis apa yang terjadi, dan seret zip untuk melampirkannya. Zip berisi ringkasan di bawah, daftar sensor, pengaturan, dan log 3 hari terakhir. Nama pengguna, nama PC, nama folder, alamat email, alamat IP, serta alamat dan kata sandi notifikasi ponsel disembunyikan (nama komponen dan output audio tetap ada). Aplikasi tidak mengirim apa pun.
+acfe2730	① Buat zip laporan
+b15ec58c	{0} sudah dibuat (foldernya terbuka di Explorer). Seret file ini ke halaman laporan untuk melampirkannya.
+d92849da	Laporkan masalah…

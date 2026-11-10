@@ -1727,3 +1727,12 @@ c3299008	Małe światełka ćwierkają 2–4 razy jak ptaki na tle łagodnej zie
 ce20ec89	Zorza polarna
 f00ee174	Śpiew ptaków
 f16a0b90	Czerwone, pomarańczowe i żółte światło migocze jak płomienie na każdej diodzie
+17abf912	Tworzy zip z dziennikami, ustawieniami i listą sprzętu, a następnie otwiera stronę zgłoszeń na GitHubie (dane osobiste są ukrywane)
+1a54840a	Otwiera się z wypełnionymi polami wersji, płyty głównej, CPU, karty graficznej i Windows (wymaga konta GitHub)
+4563aefc	② Otwórz stronę zgłoszeń na GitHubie
+51dabed8	Zgłoś problem
+7a855753	Nie udało się utworzyć zip: {0}
+925344ed	Zgłoś na stronie GitHuba, co nie działa: ① utwórz zip zgłoszenia, a potem ② otwórz stronę zgłoszeń, opisz, co się stało, i przeciągnij zip, aby go załączyć. Zip zawiera podsumowanie poniżej, listę czujników, ustawienia i dzienniki z ostatnich 3 dni. Nazwa użytkownika, nazwa komputera, nazwy folderów, adresy e-mail, adresy IP oraz adres i hasło powiadomień na telefon są ukrywane (nazwy podzespołów i wyjść audio zostają). Aplikacja niczego nie wysyła.
+acfe2730	① Utwórz zip zgłoszenia
+b15ec58c	Utworzono {0} (jego folder otworzy się w Eksploratorze). Przeciągnij ten plik na stronę zgłoszenia, aby go załączyć.
+d92849da	Zgłoś problem…

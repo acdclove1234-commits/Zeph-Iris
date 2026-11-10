@@ -1727,3 +1727,12 @@ c3299008	Những đốm sáng nhỏ nhảy 2–4 lần như tiếng chim hót tr
 ce20ec89	Cực quang
 f00ee174	Chim hót
 f16a0b90	Ánh sáng đỏ, cam và vàng lập lòe như ngọn lửa trên từng LED
+17abf912	Tạo tệp zip gồm nhật ký, cài đặt và danh sách phần cứng rồi mở trang báo lỗi trên GitHub (thông tin cá nhân được ẩn)
+1a54840a	Mở với các ô phiên bản, bo mạch chủ, CPU, card đồ họa và Windows đã điền sẵn (cần tài khoản GitHub)
+4563aefc	② Mở trang báo lỗi trên GitHub
+51dabed8	Báo lỗi
+7a855753	Không tạo được tệp zip: {0}
+925344ed	Hãy báo điều chưa hoạt động đúng qua trang báo lỗi trên GitHub: ① tạo tệp zip báo lỗi, rồi ② mở trang báo lỗi, viết điều đã xảy ra và kéo tệp zip vào để đính kèm. Tệp zip gồm phần tóm tắt bên dưới, danh sách cảm biến, cài đặt và nhật ký 3 ngày gần nhất. Tên người dùng, tên máy, tên thư mục, địa chỉ email, địa chỉ IP cùng địa chỉ và mật khẩu thông báo điện thoại được ẩn (tên linh kiện và thiết bị âm thanh vẫn giữ). Ứng dụng không gửi gì đi đâu cả.
+acfe2730	① Tạo tệp zip báo lỗi
+b15ec58c	Đã tạo {0} (thư mục sẽ mở trong Explorer). Kéo tệp này vào trang báo lỗi để đính kèm.
+d92849da	Báo lỗi…

@@ -542,10 +542,12 @@ b187e750	設定を書き出す…	MainWindow.xaml:3106
 f8cfb37f	セットアップウィザードを開く	MainWindow.xaml:3120
 0cdb9795	設定フォルダを開く	MainWindow.xaml:3121
 e252e493	ログフォルダを開く	MainWindow.xaml:3122
-c7cbd09a	ファン制御用のドライバー（PawnIO）	MainWindow.xaml:3130
-6234a43c	アンインストール（お片付け）	MainWindow.xaml:3138
-29c38de6	このアプリを使うのをやめるときに使います。ファンを BIOS の自動制御に戻したことを確かめてから、ライティングの制御・ログオン時の自動起動・ファイアウォールの許可などを片付けて終了します。何を行うかは、次の画面で確かめてから始められます（設定・記録を消すか、PawnIO もアンインストールするかも選べます）	MainWindow.xaml:3140
-b2abf4ee	アンインストール（お片付け）…	MainWindow.xaml:3142
+d92849da	不具合を報告…	MainWindow.xaml:3123
+17abf912	ログ・設定・部品の一覧をまとめた zip を作り、GitHub の報告ページを開きます（個人的な情報は伏せます）	MainWindow.xaml:3124
+c7cbd09a	ファン制御用のドライバー（PawnIO）	MainWindow.xaml:3132
+6234a43c	アンインストール（お片付け）	MainWindow.xaml:3140
+29c38de6	このアプリを使うのをやめるときに使います。ファンを BIOS の自動制御に戻したことを確かめてから、ライティングの制御・ログオン時の自動起動・ファイアウォールの許可などを片付けて終了します。何を行うかは、次の画面で確かめてから始められます（設定・記録を消すか、PawnIO もアンインストールするかも選べます）	MainWindow.xaml:3142
+b2abf4ee	アンインストール（お片付け）…	MainWindow.xaml:3144
 276c23be	ファンの回転数を変えるには、マザーボードのファン制御チップを読み書きするドライバー PawnIO（無料・LibreHardwareMonitor などでも使われています）が必要です。\n「PawnIO をインストール」を押すと、Windows に付属の winget で公式のパッケージ（namazso.PawnIO）を入れます。インターネットにつながっている必要があり、数十秒〜数分かかります。終わったら、アプリを起動し直すと使えるようになります。	UI/PawnIoInstallPanel.xaml:13
 32818dc0	PawnIO をインストール	UI/PawnIoInstallPanel.xaml:15
 8d7b411c	アプリを起動し直す	UI/PawnIoInstallPanel.xaml:16
@@ -1134,7 +1136,7 @@ a2b18858	テープ	Core/Rgb/CaseLayout.cs:74
 cb71e013	前面の縦のテープ（下から上へ）	Core/Rgb/CaseLayout.cs:75
 face4d45	天面の縁のテープ（前から後ろへ）	Core/Rgb/CaseLayout.cs:76
 a1303c99	底面の縁のテープ（前から後ろへ）	Core/Rgb/CaseLayout.cs:77
-f18c7cb3	ほかのデバイスの色	Core/Rgb/DeviceRenderer.cs:212
+f18c7cb3	ほかのデバイスの色	Core/Rgb/DeviceRenderer.cs:213
 1ad230d1	控えめ	Core/Rgb/MusicTuning.cs:19
 7c96252e	ふつう	Core/Rgb/MusicTuning.cs:20
 9c7d5155	強め	Core/Rgb/MusicTuning.cs:21
@@ -1559,6 +1561,13 @@ f028972c	Web サーバーを開始できませんでした。ポート番号を�
 233ed082	設定の「安全・バックアップ」から、ボタン 1 つでインストールできます。	MainWindow.Setup.cs:24
 5d6faa41	インストールの画面を開く	MainWindow.Setup.cs:25
 f292e9e8	PawnIO のインストールが終わってから、もう一度押してください。	MainWindow.Setup.cs:42
+51dabed8	不具合を報告	MainWindow.Support.cs:46
+925344ed	うまく動かないところを、GitHub の報告ページで知らせてください。① 報告用の zip を作る → ② 報告ページを開いて、何が起きたかを書き、zip をドラッグして添付する、の順です。zip には、下のまとめ・センサーの一覧・設定・直近 3 日のログが入ります。ユーザー名・PC の名前・フォルダーの名前・メールアドレス・IP アドレス・スマホ通知の宛先と合言葉は伏せます（部品や音の出力先の機器名は残ります）。アプリからはどこにも送りません。	MainWindow.Support.cs:54
+acfe2730	① 報告用の zip を作る	MainWindow.Support.cs:73
+b15ec58c	{0} を作りました（エクスプローラーで場所を開きます）。報告ページに、このファイルをドラッグして添付してください。	MainWindow.Support.cs:85
+7a855753	zip を作れませんでした: {0}	MainWindow.Support.cs:91
+4563aefc	② GitHub の報告ページを開く	MainWindow.Support.cs:98
+1a54840a	版・マザーボード・CPU・グラボ・Windows の欄を埋めた状態で開きます（GitHub のアカウントが必要です）	MainWindow.Support.cs:99
 302b3d1d	Ollama に接続しています…	MainWindow.Tools.cs:91
 6b275359	モデルがありません。PowerShell で「ollama pull qwen2.5:7b」などを実行して取得してください	MainWindow.Tools.cs:99
 8b713e28	保存していたモデル「{0}」が見つからないため、「{1}」に切り替えました	MainWindow.Tools.cs:101

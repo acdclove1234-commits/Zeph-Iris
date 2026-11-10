@@ -3120,6 +3120,8 @@
                                     <Button Style="{StaticResource AccentButton}" Content="セットアップウィザードを開く" Click="OnOpenWizardClick" Margin="0,0,8,8"/>
                                     <Button Style="{StaticResource GhostButton}" Content="設定フォルダを開く" Click="OnOpenFolderClick" Margin="0,0,8,8"/>
                                     <Button Style="{StaticResource GhostButton}" Content="ログフォルダを開く" Click="OnOpenLogsClick" Margin="0,0,8,8"/>
+                                    <Button Style="{StaticResource GhostButton}" Content="不具合を報告…" Click="OnReportProblemClick" Margin="0,0,8,8"
+                                            ToolTip="ログ・設定・部品の一覧をまとめた zip を作り、GitHub の報告ページを開きます（個人的な情報は伏せます）"/>
                                 </WrapPanel>
                             </StackPanel>
                         </Border>

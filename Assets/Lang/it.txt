@@ -1727,3 +1727,12 @@ c3299008	Piccole luci cinguettano 2–4 volte come uccellini su un verde foglia 
 ce20ec89	Aurora
 f00ee174	Cinguettio
 f16a0b90	Luce rossa, arancione e gialla tremola come fiamme su ogni LED
+17abf912	Crea uno zip con log, impostazioni ed elenco dell'hardware e apre la pagina di segnalazione su GitHub (i dati personali vengono nascosti)
+1a54840a	Si apre con versione, scheda madre, CPU, scheda video e Windows già compilati (serve un account GitHub)
+4563aefc	② Apri la pagina di segnalazione su GitHub
+51dabed8	Segnala un problema
+7a855753	Impossibile creare lo zip: {0}
+925344ed	Segnala sulla pagina di GitHub cosa non funziona: ① crea lo zip della segnalazione, poi ② apri la pagina, descrivi cosa è successo e trascina lo zip per allegarlo. Lo zip contiene il riepilogo qui sotto, l'elenco dei sensori, le impostazioni e i log degli ultimi 3 giorni. Nome utente, nome del PC, nomi delle cartelle, indirizzi e-mail, indirizzi IP e l'indirizzo e la password delle notifiche sul telefono vengono nascosti (i nomi dei componenti e delle uscite audio restano). L'app non invia nulla.
+acfe2730	① Crea lo zip della segnalazione
+b15ec58c	Creato {0} (la sua cartella si apre in Esplora file). Trascina questo file nella pagina di segnalazione per allegarlo.
+d92849da	Segnala un problema…

@@ -1727,3 +1727,12 @@ c3299008	De petites lumières gazouillent 2 à 4 fois comme des oiseaux sur un v
 ce20ec89	Aurore boréale
 f00ee174	Chant d'oiseaux
 f16a0b90	Une lumière rouge, orange et jaune vacille comme des flammes sur chaque LED
+17abf912	Crée un zip avec les journaux, les réglages et la liste du matériel, puis ouvre la page de signalement GitHub (les informations personnelles sont masquées)
+1a54840a	S'ouvre avec la version, la carte mère, le CPU, la carte graphique et Windows déjà remplis (compte GitHub requis)
+4563aefc	② Ouvrir la page de signalement GitHub
+51dabed8	Signaler un problème
+7a855753	Impossible de créer le zip : {0}
+925344ed	Signalez ce qui ne fonctionne pas sur la page GitHub : ① créez le zip du signalement, puis ② ouvrez la page, décrivez ce qui s'est passé et glissez-y le zip pour le joindre. Le zip contient le résumé ci-dessous, la liste des capteurs, les réglages et les journaux des 3 derniers jours. Le nom d'utilisateur, le nom du PC, les noms de dossiers, les adresses e-mail, les adresses IP ainsi que l'adresse et le mot de passe des notifications mobiles sont masqués (les noms des composants et des sorties audio restent). L'app n'envoie rien.
+acfe2730	① Créer le zip du signalement
+b15ec58c	{0} a été créé (son dossier s'ouvre dans l'Explorateur). Glissez ce fichier sur la page de signalement pour le joindre.
+d92849da	Signaler un problème…
