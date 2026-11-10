@@ -140,6 +140,28 @@ public static class MusicTuning
     public static IntensityProfile Profile(string intensity) =>
         Profiles.FirstOrDefault(p => p.Name == intensity) ?? Profiles[1];
 
+    /// <summary>
+    /// ハイハットへの反応（「強さ」と「激しい点滅を抑える」で決める）。ハイハットは 1 秒に何回も鳴るので、
+    /// キック・スネアと同じ明るさで光らせると、ちかちかして落ち着かない（「ハイハットに過敏」）。
+    ///   Gain = 光の明るさ・粒の数に掛ける倍率、MinGapSec = 同じまとまりで次に光らせるまでの最小の間隔（秒）
+    /// </summary>
+    public static (float Gain, double MinGapSec) HatResponse(ResolvedMusic m)
+    {
+        var (gain, gap) = m.Intensity switch
+        {
+            Intensities.Subtle => (0.35f, 0.25),
+            Intensities.High => (0.8f, 0.10),
+            Intensities.Intense => (1.0f, 0.06),
+            _ => (0.55f, 0.16),
+        };
+        if (m.ReduceFlashing)
+        {
+            gain *= 0.8f;
+            gap = Math.Max(gap, 0.2);
+        }
+        return (gain, gap);
+    }
+
     /// <summary>「強さ」を選んだとき: 反応の速さ・滑らかさ・メリハリ・いちばん暗いときの明るさを、その強さの値にする</summary>
     public static void ApplyIntensity(MusicConfig m, string intensity)
     {

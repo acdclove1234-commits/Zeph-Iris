@@ -91,8 +91,16 @@ public sealed class RoleEffect : IMusicEffect
                 _ => -1,
             };
             if (r < 0) continue;
+            float s = Math.Clamp(0.55f + 0.25f * e.Strength, 0, 1);
+            if (e.Kind == AudioEventKind.Hat)
+            {
+                // ハイハットは詰めて光らせない（MusicTuning.HatResponse の間隔）。明るさは下げない
+                // （この光り方では、高音のパーツはハイハットで光るのが役割なので、暗くすると低音・中音と釣り合わなくなる）
+                var (_, minGap) = MusicTuning.HatResponse(c.Music);
+                if (e.T - _hitT[r] < minGap && e.T >= _hitT[r]) continue;
+            }
             _hitT[r] = e.T;
-            _hitS[r] = Math.Clamp(0.55f + 0.25f * e.Strength, 0, 1);
+            _hitS[r] = s;
             // 出来事の多さ（1 秒あたり）: 間隔から求めて、ならしておく
             double gap = e.T - _lastHitT[r];
             if (gap > 0.02 && gap < 4) _rate[r] += (1 / (float)gap - _rate[r]) * RateFollow;

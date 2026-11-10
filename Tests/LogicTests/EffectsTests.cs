@@ -556,6 +556,45 @@ public static class EffectsTests
         T.Check(ripple.Spawned == 1, "Ripple: one kick → one ring");
     }
 
+    /// <summary>
+    /// きらめきのハイハット: 「強さ」が控えめほど暗く、同じまとまりでは詰めて光らせない（ハイハットに過敏にならない）
+    /// </summary>
+    public static void TestSparkleHatResponse()
+    {
+        float Peak(string intensity, bool reduce)
+        {
+            var cfg = MusicCfg(gamma: false);
+            var m = Music(MusicStyles.Sparkle) with { MinBrightness = 0, Intensity = intensity, ReduceFlashing = reduce };
+            var x = new Manual(Strip(100), cfg, m, new RgbDeviceSettings { Mirror = false });
+            x.In.Frame.MidE = 0;
+            x.Step(1.0);
+            float b = 0;
+            for (int i = 0; i < 100; i++) b = Math.Max(b, Max(x.R.LastLight, i));
+            x.Step(1.01, new AudioEvent(1, AudioEventKind.Hat, 1.01, 2f));
+            float p = 0;
+            for (int i = 0; i < 100; i++) p = Math.Max(p, Max(x.R.LastLight, i));
+            return p - b;
+        }
+        float subtle = Peak(Intensities.Subtle, false), moderate = Peak(Intensities.Moderate, false), intense = Peak(Intensities.Intense, false);
+        T.Check(subtle < moderate && moderate < intense, $"hat sparkle brighter with stronger intensity ({subtle:F2} < {moderate:F2} < {intense:F2})");
+        T.Check(Peak(Intensities.Moderate, true) < moderate, "reduce flashing dims hat sparkles");
+
+        // 16 分音符の刻み（0.06 秒おき）: 「ふつう」では 0.16 秒より詰めて光らせない
+        var cfg2 = MusicCfg(gamma: false);
+        var m2 = Music(MusicStyles.Sparkle) with { MinBrightness = 0, Intensity = Intensities.Moderate, ReduceFlashing = false };
+        var y = new Manual(Strip(100), cfg2, m2, new RgbDeviceSettings { Mirror = false });
+        y.In.Frame.MidE = 0;
+        y.Step(1.0);
+        y.Step(1.01, new AudioEvent(1, AudioEventKind.Hat, 1.01, 2f));
+        var lit = Enumerable.Range(0, 100).Where(i => Max(y.R.LastLight, i) > 0.1f).ToHashSet();
+        y.Step(1.07, new AudioEvent(2, AudioEventKind.Hat, 1.07, 2f));
+        var lit2 = Enumerable.Range(0, 100).Where(i => Max(y.R.LastLight, i) > 0.1f && !lit.Contains(i)).Count();
+        T.Check(lit2 == 0, $"a hat 0.06 s after the last one lights nothing new ({lit2} new LEDs)");
+        y.Step(1.25, new AudioEvent(3, AudioEventKind.Hat, 1.25, 2f));
+        int lit3 = Enumerable.Range(0, 100).Count(i => Max(y.R.LastLight, i) > 0.1f);
+        T.Check(lit3 > 0, "a hat 0.24 s later lights again");
+    }
+
     public static void TestSparkleAndChase()
     {
         // きらめき: ハイハットで粒が出て、0.08 秒で消える
@@ -567,8 +606,8 @@ public static class EffectsTests
         float baseLevel = Max(x.R.LastLight, 0);
         x.Step(1.01, new AudioEvent(1, AudioEventKind.Hat, 1.01, 2f));
         int sparks = 0;
-        for (int i = 0; i < 100; i++) if (Max(x.R.LastLight, i) > baseLevel + 0.4f) sparks++;
-        T.Check(sparks >= 2 && sparks <= 4, $"Sparkle: a hat (s=2) lights round(0.02·100·2) = 4 separate LEDs ({sparks} distinct)");
+        for (int i = 0; i < 100; i++) if (Max(x.R.LastLight, i) > baseLevel + 0.2f) sparks++;
+        T.Check(sparks >= 1 && sparks <= 3, $"Sparkle: a hat (s=2) at the default strength lights round(0.02·100·2·0.55) = 2 separate LEDs ({sparks} distinct)");
         x.Step(1.01 + 0.4);
         sparks = 0;
         for (int i = 0; i < 100; i++) if (Max(x.R.LastLight, i) > baseLevel + 0.05f) sparks++;

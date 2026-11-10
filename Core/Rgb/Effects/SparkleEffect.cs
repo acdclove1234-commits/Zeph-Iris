@@ -25,8 +25,8 @@ public sealed class SparkleEffect : IMusicEffect
     public const float SnareTauSec = 0.18f;
     /// <summary>キックで下地が明るくなる光の時定数（秒）</summary>
     public const double KickTauSec = 0.25;
-    /// <summary>ハイハットの粒を白へ寄せる割合</summary>
-    public const float HatWhiteMix = 0.6f;
+    /// <summary>ハイハットの粒を白へ寄せる割合（白すぎると、色の付いた下地の上で粒だけが目立ちすぎる）</summary>
+    public const float HatWhiteMix = 0.4f;
     /// <summary>スネアで光らせる、続けて並んだ LED の長さ（ゾーンに対する割合。強さで 0.6〜1 倍）</summary>
     public const float SnareLength = 0.12f;
     /// <summary>小さいゾーンでの、ハイハット・スネアの光の明るさ</summary>
@@ -39,6 +39,8 @@ public sealed class SparkleEffect : IMusicEffect
     private LinColor _base;
     private double _kickT = double.NegativeInfinity;
     private float _kickS;
+    /// <summary>まとまりごとの、最後にハイハットで光らせた時刻</summary>
+    private double[] _lastHatT = Array.Empty<double>();
 
     public string Name => MusicStyles.Sparkle;
 
@@ -56,6 +58,7 @@ public sealed class SparkleEffect : IMusicEffect
         Array.Clear(_col);
         _kickT = double.NegativeInfinity;
         _kickS = 0;
+        _lastHatT = Array.Empty<double>();
     }
 
     public void Update(EffectContext c)
@@ -76,21 +79,34 @@ public sealed class SparkleEffect : IMusicEffect
         _base = c.PalAt(c.T / BaseCycleSec) * c.Ilin(0.10f + 0.25f * c.Frame.MidE + 0.45f * kick);
     }
 
-    /// <summary>ハイハット: 離れた LED を 1 個ずつ、白に近い色で</summary>
+    /// <summary>
+    /// ハイハット: 離れた LED を 1 個ずつ、白に近い色で。明るさ・粒の数・間隔は「強さ」で決める（MusicTuning.HatResponse）。
+    /// 同じまとまりでは MinGapSec より詰めて光らせない（16 分音符の刻みで、ずっとちかちかしないように）
+    /// </summary>
     private void SpawnHat(EffectContext c, double t0, float strength)
     {
+        var (gain, minGap) = MusicTuning.HatResponse(c.Music);
+        // 強いハイハット（オープン・シンバル）ほど明るく、弱い刻みは控えめに
+        float level = gain * (0.6f + 0.4f * Math.Clamp((strength - 1f) / 2f, 0f, 1f));
+        if (_lastHatT.Length != c.SegmentCount)
+        {
+            _lastHatT = new double[c.SegmentCount];
+            Array.Fill(_lastHatT, double.NegativeInfinity);
+        }
         for (int k = 0; k < c.SegmentCount; k++)
         {
+            if (t0 - _lastHatT[k] < minGap && t0 >= _lastHatT[k]) continue;
+            _lastHatT[k] = t0;
             var s = c.Segments[k];
             if (s.Small)
             {
-                var zc = HatColor(c) * SmallHatLevel;
+                var zc = HatColor(c) * (SmallHatLevel * level);
                 for (int j = s.Start; j < s.Start + s.Count; j++) Set(j, t0, HatTauSec, zc);
                 continue;
             }
-            int n = Math.Clamp((int)MathF.Round(0.02f * s.Count * strength), 1, Math.Max(1, s.Count / 12));
+            int n = Math.Clamp((int)MathF.Round(0.02f * s.Count * strength * gain), 1, Math.Max(1, s.Count / 12));
             for (int q = 0; q < n; q++)
-                Set(s.Start + c.Rng.NextInt(s.Count), t0, HatTauSec, HatColor(c));
+                Set(s.Start + c.Rng.NextInt(s.Count), t0, HatTauSec, HatColor(c) * level);
         }
     }
 
