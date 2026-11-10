@@ -13,6 +13,11 @@ and Iris, the rainbow (the LEDs).
   for example: Settings [設定].
 
 
+■ What's new in v6.10.1
+  - Lighting: removed the flicker from Lightning, Waves, Birdsong, Fire, Aurora, Meteor and Heartbeat. Dark areas
+    are now smoothed like the other effects (except near black) instead of jumping in steps, and Heartbeat and
+    Aurora no longer blink off and on at low brightness. Fire flickers a little more slowly.
+
 ■ What's new in v6.10.0
   - Lighting: seven new effects: Lightning, Waves, Birdsong, Fire, Aurora, Meteor and Heartbeat. All follow the
     speed setting; Waves and Heartbeat use the chosen colour. They can also be chosen per device and per zone (for
