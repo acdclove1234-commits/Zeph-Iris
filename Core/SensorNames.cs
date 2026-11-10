@@ -41,6 +41,17 @@ public static class SensorNames
         => Pick(all.Where(s => s.HardwareType.StartsWith(hardware, StringComparison.Ordinal) && (sensorType is null || s.SensorType == sensorType)).ToList(),
             s => s.Name, candidates);
 
+    /// <summary>
+    /// 実メモリ（RAM）のセンサー。LibreHardwareMonitor は実メモリ（Total Memory・/ram）と、
+    /// 仮想メモリ込みのコミット量（Virtual Memory・/vram）を同じ名前（Memory・Memory Used など）で出すので、仮想メモリ側は選ばない
+    /// </summary>
+    public static SensorInfo? PhysicalMemory(IEnumerable<SensorInfo> all, string sensorType, string name)
+    {
+        var list = all.Where(s => s.HardwareType.StartsWith("Memory", StringComparison.Ordinal) && s.SensorType == sensorType && s.Name == name
+                                  && !s.Id.StartsWith("/vram/", StringComparison.Ordinal) && s.HardwareName != "Virtual Memory").ToList();
+        return list.FirstOrDefault(s => s.Id.StartsWith("/ram/", StringComparison.Ordinal)) ?? list.FirstOrDefault();
+    }
+
     /// <summary>CPU の温度（候補になければ、CPU の最初の温度）</summary>
     public static SensorInfo? CpuTemperature(IEnumerable<SensorInfo> temps)
     {

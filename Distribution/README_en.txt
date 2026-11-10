@@ -20,6 +20,8 @@ and Iris, the rainbow (the LEDs).
   - Installer: the official installer of PawnIO, the fan control driver, is now included. On PCs without PawnIO it
     is installed without the internet (winget remains the fallback). PawnIO's licence (GPL) and the location of its
     source code are in the licenses folder.
+  - Monitor: the "Memory (RAM)" tile showed memory including virtual memory (the page file), e.g. "43.6 / 53 GB"
+    on a 32 GB PC. It now shows physical memory only.
 
 ■ What's new in v6.10.2
   - Lighting: removed the faint flicker left in Lightning, Waves and the other new effects. Dim LEDs no longer

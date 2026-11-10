@@ -108,9 +108,10 @@ public partial class MainWindow
         }
 
         // --- メモリ
-        var memLoad = Find("Memory", "Load", n => n == "Memory");
-        var memUsed = Find("Memory", "Data", n => n == "Memory Used");
-        var memAvail = Find("Memory", "Data", n => n == "Memory Available");
+        // 仮想メモリ込み（Virtual Memory）も同じ名前で出るので、実メモリだけを選ぶ（32 GB の PC で 53 GB と出ていた）
+        var memLoad = SensorNames.PhysicalMemory(all, "Load", "Memory");
+        var memUsed = SensorNames.PhysicalMemory(all, "Data", "Memory Used");
+        var memAvail = SensorNames.PhysicalMemory(all, "Data", "Memory Available");
         if (memLoad is not null)
         {
             _metricTiles.Add(new MetricTileVm

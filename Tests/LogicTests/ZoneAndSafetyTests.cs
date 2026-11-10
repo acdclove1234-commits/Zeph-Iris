@@ -346,4 +346,21 @@ public static class ZoneAndSafetyTests
         T.Check(!HardwareHub.IsDimm("/ram") && !HardwareHub.IsDimm("/memory/generic"), "memory usage is not DIMM");
         T.Check(new SafetyConfig().ReadMemoryTemperature, "memory temperature is read by default");
     }
+
+    public static void TestRamTileIgnoresVirtualMemory()
+    {
+        // LHM の並び順どおり、仮想メモリ（/vram）が先に来ても実メモリ（/ram）を選ぶ
+        var all = new[]
+        {
+            new SensorInfo("/vram/load/1", "Memory", "Virtual Memory", "Memory", "Load"),
+            new SensorInfo("/vram/data/0", "Memory Used", "Virtual Memory", "Memory", "Data"),
+            new SensorInfo("/ram/load/0", "Memory", "Total Memory", "Memory", "Load"),
+            new SensorInfo("/ram/data/0", "Memory Used", "Total Memory", "Memory", "Data"),
+            new SensorInfo("/ram/data/1", "Memory Available", "Total Memory", "Memory", "Data"),
+        };
+        T.Check(SensorNames.PhysicalMemory(all, "Load", "Memory")?.Id == "/ram/load/0", "RAM load is physical memory");
+        T.Check(SensorNames.PhysicalMemory(all, "Data", "Memory Used")?.Id == "/ram/data/0", "RAM used is physical memory");
+        T.Check(SensorNames.PhysicalMemory(all, "Data", "Memory Available")?.Id == "/ram/data/1", "RAM available is physical memory");
+        T.Check(SensorNames.PhysicalMemory(all.Take(2), "Load", "Memory") is null, "virtual memory alone is not shown as RAM");
+    }
 }
