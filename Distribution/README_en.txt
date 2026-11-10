@@ -13,6 +13,12 @@ and Iris, the rainbow (the LEDs).
   for example: Settings [設定].
 
 
+■ What's new in v6.10.4
+  - Fixed the "Sync test" (Music sync → "Audio delay" row) never lighting the LEDs. The click fades in
+    smoothly, and its quiet start was taken for noise, so no click was ever detected.
+  - During the test only this app's own click is captured, so it works with music playing. On Windows versions
+    that cannot capture a single app, the whole output is captured as before; pause the music there.
+
 ■ What's new in v6.10.3
   - Music sync: "Sparkle" now brightens on the beat predicted from the tempo (it used to wait for a detected kick,
     so it lagged a little and missed beats where no kick was found), with a stronger beat pulse.

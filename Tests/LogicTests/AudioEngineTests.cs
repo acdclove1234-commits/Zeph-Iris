@@ -682,6 +682,36 @@ public static class AudioEngineTests
         T.Check(!run2.Kind(AudioEventKind.Click).Any(), "no Click events when ClickDetect is false");
     }
 
+    /// <summary>
+    /// 同期テストで本当に鳴らすクリック（SyncClick。なめらかに立ち上がる）を検出できる。
+    /// 立ち上がりの小さな音で「無音」の数え直しをしていたため、一度も検出できず、同期テストで LED が光らなかった
+    /// </summary>
+    public static void TestClickDetectRealSyncClick()
+    {
+        foreach (int rate in new[] { 48000, 192000 })
+        {
+            double lead = 0.4;
+            var buf = new float[rate * 4];
+            var rnd = new Random(7);
+            int start = (int)Math.Round(lead * rate);
+            for (int i = 0; i < buf.Length; i++)
+            {
+                float noise = (float)((rnd.NextDouble() - 0.5) * 0.004); // かすかな雑音（無音とみなす大きさより小さい）
+                buf[i] = noise + (i >= start ? SyncClick.Sample(i - start, rate) : 0f);
+            }
+            var truth = new List<double>();
+            for (double t = lead; t < 4 - 0.01; t += SyncClick.Interval) truth.Add(t);
+
+            var run = new EngineRun(new AudioEngine(rate) { ClickDetect = true }).Feed(buf, chunk: rate / 100);
+            var clicks = run.Kind(AudioEventKind.Click).ToList();
+            T.Check(clicks.Count == truth.Count, $"{rate} Hz: one Click per real sync click ({clicks.Count}/{truth.Count})");
+            double maxErr = 0;
+            for (int i = 0; i < Math.Min(clicks.Count, truth.Count); i++) maxErr = Math.Max(maxErr, Math.Abs(clicks[i].T - run.At(truth[i])));
+            T.Info($"{rate} Hz: click time error max {maxErr * 1e3:F2} ms");
+            T.Check(clicks.Count > 0 && maxErr < 0.001, $"{rate} Hz: Click time within 1 ms of the click start");
+        }
+    }
+
     public static void TestDropEvent()
     {
         var g = new SignalGen(48000, 26, seed: 51);

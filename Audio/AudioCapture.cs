@@ -91,8 +91,10 @@ public sealed class AudioCapture : IDisposable
 
     /// <summary>同期テストのクリック音を記録させる（エンジンを作り直しても引き継ぐ）</summary>
     /// <remarks>
-    /// オンの間は、反応する音を「特定のアプリだけ」にしていても、出力先の音をすべて取り込む。
-    /// クリック音はこのアプリ自身が鳴らすので、選んだアプリ（Spotify など）の音だけを取り込んでいると届かず、LED が光らないため
+    /// オンの間は、反応する音の設定にかかわらず、このアプリ自身の音（クリック音）だけを取り込む。
+    /// 選んだアプリ（Spotify など）の音だけではクリック音が届かず、出力先の音をすべて取り込むと、
+    /// 流れている曲のせいでクリックの前の静けさが来ないため、どちらでも LED が光らない。
+    /// アプリの音だけを取り込めない Windows・失敗したときは、出力先の音をすべて取り込む（曲を止めれば光る）
     /// </remarks>
     public bool ClickDetect
     {
@@ -101,9 +103,21 @@ public sealed class AudioCapture : IDisposable
         {
             _clickDetect = value;
             Engine.ClickDetect = value;
-            _source = value ? "" : _configuredSource;
+            _selfFailed = false;
+            _source = value ? SelfSource : _configuredSource;
         }
     }
+
+    /// <summary>同期テスト中の「反応する音」: このアプリ自身の音（アプリの名前と重ならない印）</summary>
+    private const string SelfSource = "\u0001sync-test";
+    /// <summary>同期テストで、このアプリの音だけを取り込めなかった（テストが終わるまで出力先の音をすべて取り込む）</summary>
+    private volatile bool _selfFailed;
+
+    /// <summary>記録に書く、反応する音の名前</summary>
+    private static string SourceName(string source) => source == SelfSource ? "同期テストのクリック音（このアプリ）" : source; // no-loc（ログだけ）
+
+    /// <summary>同期テスト中で、このアプリの音だけを取り込める（取り込むべき）か</summary>
+    private bool WantsSelf(string source) => source == SelfSource && !_selfFailed && ProcessLoopbackCapture.IsSupported;
 
     /// <summary>反応する音（空ならすべて、アプリ名ならそのアプリだけ）と分析の設定を変える。すぐに反映する</summary>
     public void Configure(string source, AudioEngineSettings settings)
@@ -113,7 +127,7 @@ public sealed class AudioCapture : IDisposable
         var engine = Engine;
         bool tempoChanged = engine.Settings.TempoFactor != settings.TempoFactor || engine.Settings.TempoMode != settings.TempoMode;
         _configuredSource = s;
-        if (!_clickDetect) _source = s; // 同期テスト中は、終わるまで全体の音のまま
+        if (!_clickDetect) _source = s; // 同期テスト中は、終わるまでこのアプリの音のまま
         _settings = settings;
         engine.Settings = settings;
         if (tempoChanged) engine.ResetTempo();
@@ -305,7 +319,9 @@ public sealed class AudioCapture : IDisposable
                 // 「特定のアプリだけ」: そのアプリの音の割合（ならして使う）
                 string source = _source;
                 double target;
-                if (source.Length == 0)
+                // 同期テストが始まった: このアプリの音だけの取り込みに切り替える
+                if (WantsSelf(source)) break;
+                if (source.Length == 0 || source == SelfSource)
                 {
                     target = 1;
                     ForgetApp();
@@ -382,6 +398,7 @@ public sealed class AudioCapture : IDisposable
     {
         string source = _source;
         double now = AudioClock.Now;
+        if (source == SelfSource) return WantsSelf(source) ? TryOpenSelf() : null;
         if (source.Length == 0)
         {
             ForgetApp();
@@ -454,6 +471,38 @@ public sealed class AudioCapture : IDisposable
         }
     }
 
+    /// <summary>同期テスト: このアプリ自身の音（クリック音）だけの取り込みを準備する。失敗したら、テストの間は出力先の音をすべて取り込む</summary>
+    private OpenedApp? TryOpenSelf()
+    {
+        int pid = Environment.ProcessId;
+        string name = AppAudioTarget.NormalizeName(Path.GetFileName(Environment.ProcessPath ?? ""));
+        var process = ProcessList.Open(pid, name, out _);
+        if (process is null)
+        {
+            SelfFailed("このアプリのプロセスを開けません"); // no-loc（ログだけ）
+            return null;
+        }
+        var capture = new ProcessLoopbackCapture(pid, includeTree: true); // 木を含めない指定は「このアプリ以外」の意味になる
+        try
+        {
+            capture.Open(ActivateTimeout);
+            return new OpenedApp(capture, process, SelfSource);
+        }
+        catch (Exception ex)
+        {
+            capture.Dispose();
+            process.Dispose();
+            SelfFailed(Message(ex));
+            return null;
+        }
+    }
+
+    private void SelfFailed(string why)
+    {
+        _selfFailed = true;
+        Log($"音楽連動: 同期テストのクリック音だけを取り込めないため、出力先の音をすべて取り込みます（曲を止めると光ります）: {why}");
+    }
+
     /// <summary>アプリの音だけの取り込みがうまくいかなかった: 理由と、次に試す時期を記録する</summary>
     private void AppFailed(string source, int pid, double now, string why)
     {
@@ -505,8 +554,10 @@ public sealed class AudioCapture : IDisposable
             Feed(buffer, bytes, PcmKind.Float32, ProcessLoopbackCapture.Channels);
         };
         capture.Stopped = ex => { stopped = ex; Volatile.Write(ref stoppedFlag, true); _wake.Set(); };
+        // 同期テスト: このアプリ自身の音だけ（アプリの音のセッションを探す・別のプロセスに移るのを追う必要はない）
+        bool self = source == SelfSource;
         using var scan = new AppScan();
-        scan.Refresh(enumerator, device, source, AudioClock.Now);
+        if (!self) scan.Refresh(enumerator, device, source, AudioClock.Now);
         capture.Start();
 
         // 聞いている出力先: アプリが「いつもの出力先」以外に出しているなら（アプリごとの出力先の設定など）、そちら
@@ -518,7 +569,7 @@ public sealed class AudioCapture : IDisposable
         AppOnly = true;
         Status = L("アプリの音だけを取り込み中");
         _planLogged = "";
-        Log($"音楽連動: {source} の音だけを取り込み開始（PID {pid} とその子プロセス・{ProcessLoopbackCapture.SampleRate} Hz・{ProcessLoopbackCapture.Channels} ch・{PcmKind.Float32}・聞いている出力先: {device.FriendlyName}）");
+        Log($"音楽連動: {SourceName(source)} の音だけを取り込み開始（PID {pid} とその子プロセス・{ProcessLoopbackCapture.SampleRate} Hz・{ProcessLoopbackCapture.Channels} ch・{PcmKind.Float32}・聞いている出力先: {device.FriendlyName}）");
 
         double started = AudioClock.Now;
         double deviceCheckAt = started;
@@ -580,7 +631,7 @@ public sealed class AudioCapture : IDisposable
                 }
 
                 // 3 秒ごと: 音を出しているプロセスが、取り込んでいるプロセスの木から別の木に移っていないか
-                if (scan.Due(source, now))
+                if (!self && scan.Due(source, now))
                 {
                     scan.Refresh(enumerator, device, source, now);
                     // アプリが出している出力先が変わった（アプリの設定で切り替えた など）: 表示と案内を合わせる
@@ -610,7 +661,8 @@ public sealed class AudioCapture : IDisposable
 
         if (Volatile.Read(ref stoppedFlag) && stopped is not null)
         {
-            AppFailed(source, pid, AudioClock.Now, L($"取り込みが止まりました: {Message(stopped)}"));
+            if (self) SelfFailed($"取り込みが止まりました: {Message(stopped)}"); // no-loc（ログだけ）
+            else AppFailed(source, pid, AudioClock.Now, L($"取り込みが止まりました: {Message(stopped)}"));
             if (!_stop && !_restartRequested) _wake.Reset();
             _wake.WaitOne(500);
         }

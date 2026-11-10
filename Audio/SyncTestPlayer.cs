@@ -74,13 +74,9 @@ public sealed class SyncTestPlayer : IDisposable
 
     public void Dispose() => Stop(null);
 
-    /// <summary>0.6 秒ごとに 5 ミリ秒の 1 kHz の音（なめらかに立ち上がって消える）を作る</summary>
+    /// <summary>0.6 秒ごとに 5 ミリ秒の 1 kHz の音（なめらかに立ち上がって消える。形は SyncClick）を作る</summary>
     private sealed class ClickProvider : IWaveProvider
     {
-        private const double Interval = 0.6;
-        private const double Length = 0.005;
-        private const double Frequency = 1000;
-        private const double Amplitude = 0.5;
         private readonly int _channels;
         private readonly int _rate;
         private long _frame;
@@ -98,18 +94,9 @@ public sealed class SyncTestPlayer : IDisposable
         {
             var samples = System.Runtime.InteropServices.MemoryMarshal.Cast<byte, float>(buffer.AsSpan(offset, count - count % (4 * _channels)));
             int frames = samples.Length / _channels;
-            long period = (long)(Interval * _rate);
-            long len = (long)(Length * _rate);
             for (int i = 0; i < frames; i++)
             {
-                long p = _frame % period;
-                float v = 0;
-                if (p < len)
-                {
-                    double t = (double)p / _rate;
-                    double env = 0.5 - 0.5 * Math.Cos(2 * Math.PI * p / len); // 端を丸めてプツッという雑音を防ぐ
-                    v = (float)(Amplitude * env * Math.Sin(2 * Math.PI * Frequency * t));
-                }
+                float v = SyncClick.Sample(_frame, _rate);
                 for (int c = 0; c < _channels; c++) samples[i * _channels + c] = v;
                 _frame++;
             }

@@ -85,6 +85,8 @@ public sealed class AudioEngine
     private const double ClickQuietLevel = 0.01;
     /// <summary>同期テスト: クリックの前に必要な、ほぼ無音の時間（秒）</summary>
     private const double ClickQuietSec = 0.300;
+    /// <summary>同期テスト: 音が出始めてから、クリックの大きさに届くまでの時間の上限（秒。クリックはなめらかに立ち上がるため）</summary>
+    private const double ClickAttackSec = 0.005;
 
     private readonly Decimator? _dec;
     private readonly double _decDelaySec;
@@ -113,6 +115,11 @@ public sealed class AudioEngine
     private bool _trackerOn;
     private int _quiet;
     private readonly int _quietNeeded;
+    /// <summary>同期テスト: 静けさのあとに音が出始めてから、クリックの大きさに届くまで待つ残りの音の数（0 なら待っていない）</summary>
+    private int _attackLeft;
+    private readonly int _attackNeeded;
+    /// <summary>同期テスト: 音が出始めた時刻（クリックの時刻にする）</summary>
+    private double _attackT;
 
     private volatile bool _resetRequested;
     private volatile bool _resetTempoRequested;
@@ -168,6 +175,7 @@ public sealed class AudioEngine
         _aGateRelease = TimeConst.Alpha(_dt, GateReleaseSec);
         _aApp = TimeConst.Alpha(_dt, AppGateSec);
         _quietNeeded = (int)Math.Round(ClickQuietSec * SampleRate);
+        _attackNeeded = Math.Max(1, (int)Math.Round(ClickAttackSec * SampleRate));
         ResetInternal();
     }
 
@@ -280,6 +288,7 @@ public sealed class AudioEngine
         _appEnv.V = SafeAppGate();
         _trackerOn = false;
         _quiet = 0;
+        _attackLeft = 0;
         _lastT = double.NegativeInfinity;
         _frame.Clear();
         _expSub = _expBass = _expMid = _expTreble = default;
@@ -318,14 +327,30 @@ public sealed class AudioEngine
         return _eff;
     }
 
-    /// <summary>同期テスト: ほぼ無音が 0.3 秒以上続いた後、急に大きくなった音 1 個の時刻を記録する</summary>
+    /// <summary>
+    /// 同期テスト: ほぼ無音が 0.3 秒以上続いた後、5 ミリ秒以内にクリックの大きさに届いた音を、出始めた時刻で記録する。
+    /// クリックはなめらかに立ち上がるので、出始めの小さな音（無音とクリックの間の大きさ）で数え直さない
+    /// </summary>
     private void DetectClick(float x, double t)
     {
         double a = Math.Abs(x);
-        if (a >= ClickLevel && _quiet >= _quietNeeded)
+        if (_attackLeft > 0)
         {
-            Events.Add(AudioEventKind.Click, t, (float)(a / ClickLevel));
+            if (a >= ClickLevel)
+            {
+                Events.Add(AudioEventKind.Click, _attackT, (float)(a / ClickLevel));
+                _attackLeft = 0;
+            }
+            else _attackLeft--;
             _quiet = 0;
+            return;
+        }
+        if (a >= ClickQuietLevel && _quiet >= _quietNeeded)
+        {
+            _attackT = t;
+            _quiet = 0;
+            if (a >= ClickLevel) Events.Add(AudioEventKind.Click, t, (float)(a / ClickLevel));
+            else _attackLeft = _attackNeeded;
             return;
         }
         if (a < ClickQuietLevel)
