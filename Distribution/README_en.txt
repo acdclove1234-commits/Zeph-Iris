@@ -13,6 +13,14 @@ and Iris, the rainbow (the LEDs).
   for example: Settings [設定].
 
 
+■ What's new in v6.10.2
+  - Lighting: removed the faint flicker left in Lightning, Waves and the other new effects. Dim LEDs no longer
+    alternate between neighbouring values; each keeps the value it last sent until the brightness clearly changes.
+  - Report a problem: Settings [設定] -> General -> "Report a problem…" makes a zip on the desktop with the logs,
+    settings and hardware list (user name, PC name, folder names, email and IP addresses, and the phone
+    notification address and passcode are hidden) and opens the GitHub report form with the version and hardware
+    filled in. The app sends nothing by itself.
+
 ■ What's new in v6.10.1
   - Lighting: removed the flicker from Lightning, Waves, Birdsong, Fire, Aurora, Meteor and Heartbeat. Dark areas
     are now smoothed like the other effects (except near black) instead of jumping in steps, and Heartbeat and
