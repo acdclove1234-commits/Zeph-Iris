@@ -123,6 +123,41 @@ public sealed class OutputStage
         return (byte)o;
     }
 
+    /// <summary>WriteHold で、前に送った値を保つ幅（0〜255 の段）。これを超えて変わったときだけ値を変える</summary>
+    public const float HoldBand = 0.75f;
+
+    /// <summary>
+    /// 前に送った値を保ちながら 0〜255 にする（ヒステリシス）。目標が前の値から HoldBand 段より離れたときだけ、四捨五入した値に変える。
+    /// ゆっくり変わる暗い色が、段の境目のあたりで 2・3・2・3 と行き来しない（ディザリングと違い、行き来そのものが起きない）。
+    /// 雷・波などの光り方用。ゆっくり明るくなる・暗くなるときは、1 段ずつ順に変わる
+    /// </summary>
+    public void WriteHold(ReadOnlySpan<LinColor> src, Span<Rgb> dst, float brightness)
+    {
+        int n = Math.Min(src.Length, dst.Length);
+        if (_held.Length != n * 3)
+        {
+            _held = new float[n * 3];
+            Array.Fill(_held, -1f);
+        }
+        for (int i = 0; i < n; i++)
+        {
+            var c = src[i];
+            byte r = Hold(c.R * brightness, ref _held[i * 3]);
+            byte g = Hold(c.G * brightness, ref _held[i * 3 + 1]);
+            byte b = Hold(c.B * brightness, ref _held[i * 3 + 2]);
+            dst[i] = new Rgb(r, g, b);
+        }
+    }
+
+    private float[] _held = Array.Empty<float>();
+
+    private static byte Hold(float v, ref float held)
+    {
+        float code = float.IsFinite(v) ? Math.Clamp(v * 255, 0f, 255f) : 0f;
+        if (held < 0 || Math.Abs(code - held) > HoldBand || (code < 0.5f && held > 0 && held <= 1)) held = MathF.Round(code);
+        return (byte)held;
+    }
+
     /// <summary>ディザリングなしで 0〜255 にする（四捨五入）。更新の遅いデバイス・止まっている光り方用</summary>
     public static void Quantize(ReadOnlySpan<LinColor> src, Span<Rgb> dst, float brightness)
     {

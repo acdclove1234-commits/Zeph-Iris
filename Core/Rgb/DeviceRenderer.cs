@@ -415,12 +415,14 @@ public sealed class DeviceRenderer
         if (!allow && _ditherAllowed) _out.Reset();
         _ditherAllowed = allow;
         // 虹・呼吸などでは使わない（OpenRGB が間引いて書くと端数の持ち越しがずれて、暗い色がちらつくことがあるため）。
-        // 雷・波・オーロラなど暗いところがゆっくり変わる光り方は使う（使わないと、暗い LED が 0・1・2… と段々に
-        // 跳んで、ちらついて見える）。書き込みを減らすデバイス（グラボ）は止まった絵なので使わない
+        // 雷・波・オーロラなど暗いところがゆっくり変わる光り方は、前に送った値を保つ書き方にする（下の WriteHold）。
+        // 書き込みを減らすデバイス（グラボ）は止まった絵なので、ふつうに四捨五入する
         bool ambient = layer == Layer.Mode && !Device.IsLowWrite && (AmbientEffects.Handles(cfg.Mode) || _planHasAmbient);
-        bool dither = allow && (layer is Layer.Music or Layer.SyncTest || _fade.Active || ambient);
-        _out.DitherFloorCode = ambient ? 1.5f : 0f;
-        _out.Write(_light, output, 1f, dither);
+        bool dither = allow && (layer is Layer.Music or Layer.SyncTest || _fade.Active);
+        _out.DitherFloorCode = 0f;
+        // 雷・波など: ディザリングの代わりに、前に送った値を保つ（暗い色が 2・3・2・3 と行き来しない）
+        if (ambient && !dither) _out.WriteHold(_light, output, 1f);
+        else _out.Write(_light, output, 1f, dither);
         _hasLast = true;
     }
 
