@@ -463,10 +463,7 @@ c0c9a6ba	Pencahayaan LED (integrasi OpenRGB)
 c1eb5397	Perhitungan biaya listrik
 6da48835	Menampilkan energi terpakai dan perkiraan biaya listrik di dasbor dan halaman laporan
 db0f8cfc	Harga listrik per kWh
-306750cc	yen (harga satuan di tagihan; jika tidak tahu, biarkan perkiraan 31 yen)
 1405c464	Konsumsi daya selain CPU dan GPU
-665cef72	W (motherboard, memori, SSD, kipas, rugi daya PSU, dll.; umumnya 40–80 W)
-b4d79a66	CPU dan GPU memakai nilai sensornya. Monitor dan speaker tidak termasuk. Ini bukan hasil ukur di stopkontak, jadi hanya perkiraan.
 69355ed4	Keamanan
 619b1ea2	Gunakan proses pengawas (disarankan)
 b686ae3d	Mencegah kipas tertahan di putaran rendah jika aplikasi dihentikan paksa atau macet. Task Manager menampilkan dua Zeph-Iris; salah satunya pengawas
@@ -1369,8 +1366,6 @@ efd9152e	Umur {0:F0}%
 5afe281d	Rekaman 10 menit sebelum dan sesudah gangguan disimpan: {0}
 61c7691d	Lihat rekaman
 29d6a363	{0:N0} yen
-37d31a15	CPU dan GPU memakai nilai sensor, sisanya dihitung {0:F0} W (tarif {1:0.##} yen/kWh). Hanya dihitung selama aplikasi berjalan.
-e03883da	CPU {0:F0} W · GPU {1:F0} W · lainnya {2:F0} W
 83b6ebdd	{0:F2} kWh · {1:F1} jam
 2f240cf7	{0:F1} kWh (dari rata-rata hari yang terekam)
 b5d6b2e1	Sekitar {0} · {1:F1} jam
@@ -1652,3 +1647,33 @@ f2252901	Kembali ke versi sebelumnya ({0}).\n\nSetelah penginstal versi sebelumn
 6d39169b	Pengaturan dan rekaman versi sebelumnya sudah dipindahkan dari {0}. Folder itu tidak dipakai lagi; periksa isinya, lalu boleh dihapus.
 f66007ff	{0} (versi sebelumnya)
 7f8ae76b	Zeph-Iris berjalan berkat perangkat lunak sumber terbuka seperti LibreHardwareMonitor, PawnIO, OpenRGB, NAudio, QRCoder, Montserrat, Zen Maru Gothic, dan Inno Setup. Terima kasih kepada semua yang membuatnya (lisensinya ada di folder licenses aplikasi).
+0021212b	Angkanya tidak cocok (sisa PC menjadi {0:F0} W). Ukur lagi
+074e3049	Daya dari stopkontak dihitung dengan nilai yang dikalibrasi pada {0} memakai pengukur daya colok (sisa PC {1:F0} W, efisiensi catu daya {2:F0}%; tarif {3:0.##} yen/kWh). Monitor dan sejenisnya tidak termasuk. Hanya dihitung selama aplikasi berjalan.
+083b2352	Angka pengukur daya saat idle
+138470aa	Colokkan kabel daya PC (bukan monitor) ke pengukur daya colok, masukkan angkanya, lalu tekan "Catat". Mencatat saat idle saja sudah cukup untuk kalibrasi. Jika Anda juga mencatat saat dibebani (selama game atau benchmark berjalan), efisiensi catu daya juga dihitung. Tunggu sampai angkanya stabil sebelum menekan.
+1d2db3b4	Daya CPU/GPU saat dibebani tidak lebih tinggi setidaknya {0:F0} W dari saat idle, jadi efisiensi catu daya tetap {1:F0}%
+1d6970b9	Daya CPU/GPU berfluktuasi ({0:F0} W dalam 20 detik). Tekan lagi setelah beban stabil
+2b38bba6	W (motherboard, memori, SSD, kipas, pompa, LED, dan lain-lain; biasanya 30–70 W)
+30253b1e	% (mencakup rugi-rugi catu daya; 87–90% untuk 80 PLUS Gold; jika tidak tahu, biarkan 88%)
+42c1084f	Catat
+5119fa5e	Masukkan angka pengukur daya sebagai angka
+54d4f6b0	Masukkan angka pengukur daya antara 10 dan 3000 W
+68a46800	Belum ada yang diukur
+7e04fd6d	Kedua angka tidak cocok (efisiensi catu daya menjadi {0:F0}%). Tunggu sampai pengukur daya stabil lalu ukur lagi
+89449c5d	Perkiraan sekitar ±20%: CPU dan GPU memakai nilai sensor, sisa PC dihitung {0:F0} W dan efisiensi catu daya {1:F0}% (tarif {2:0.##} yen/kWh). Anda dapat mengkalibrasinya dengan pengukur daya colok di "Perhitungan biaya listrik" pada Pengaturan. Hanya dihitung selama aplikasi berjalan.
+89dc9684	Efisiensi catu daya
+8d15c619	Angka pengukur daya saat dibebani
+8d572aec	Kalibrasi dengan pengukur daya colok
+a659b907	CPU dan GPU memakai nilai sensor; sisa PC dan rugi-rugi catu daya ditambahkan untuk mendapatkan daya yang diambil dari stopkontak. Monitor dan speaker tidak termasuk. Sampai dikalibrasi dengan pengukur daya colok, ini adalah perkiraan sekitar ±20%.
+adcd4c0b	Belum dikalibrasi
+bc9bf913	Belum ada nilai sensor daya CPU/GPU. Tunggu sebentar lalu tekan lagi
+c037de9a	CPU {0:F0} W · GPU {1:F0} W · Lainnya {2:F0} W · Rugi catu daya {3:F0} W
+c0bf5633	Terkalibrasi: sisa PC {0:F0} W, efisiensi catu daya {1:F0}% (dari angka saat idle dan dibebani)
+c91890c4	Terkalibrasi: sisa PC {0:F0} W (efisiensi catu daya tetap {1:F0}%; catat juga saat dibebani untuk menghitungnya)
+d46cee51	Dikalibrasi pada {0}
+e3b755dc	yen (paling akurat: total tagihan ÷ kWh yang dipakai; jika tidak tahu, biarkan 31 yen yang umum)
+e4d1e7a9	Hapus kalibrasi
+e6f4ba17	Angka pengukur daya ({0:F0} W) lebih kecil dari nilai sensor CPU dan GPU ({1:F0} W). Pastikan Anda mengukur stopkontak PC itu sendiri
+f7824b90	Kalibrasi dihapus; kembali ke perkiraan awal (sisa PC 50 W, efisiensi catu daya 88%)
+f7cdd477	Tercatat: stopkontak {0:F0} W · CPU+GPU {1:F0} W
+f83af4dd	Kedua angka tidak cocok (sisa PC menjadi {0:F0} W). Ukur lagi

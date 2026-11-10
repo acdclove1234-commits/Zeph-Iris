@@ -179,7 +179,7 @@ public partial class MainWindow
         if (_catalog is null) return;
         _longTerm.Add(s.Time, s.Values, s.Fans);
         double? W(string role) => _roles.TryGetValue(role, out var id) && s.Values.TryGetValue(id, out var v) ? v : null;
-        _energy.Add(s.Time, W(StatRoles.CpuPower), W(StatRoles.GpuPower), Config.Energy.BaseWatts);
+        _energy.Add(s.Time, W(StatRoles.CpuPower), W(StatRoles.GpuPower), Config.Energy.BaseWatts, Config.Energy.PsuEfficiency);
         _recorder.Tick(_history, s.Time);
 
         if (ReportPage.Visibility == Visibility.Visible && s.Time.Second % 5 == 0) RefreshEnergy();
@@ -224,9 +224,12 @@ public partial class MainWindow
     private void RefreshEnergy()
     {
         double price = Config.Energy.PricePerKwh;
-        EnergyNote.Text = L($"CPU・GPU はセンサーの値、それ以外は {Config.Energy.BaseWatts:F0} W として計算しています（単価 {price:0.##} 円/kWh）。アプリが動いている間だけ数えます。");
+        var cfg = Config.Energy;
+        EnergyNote.Text = cfg.CalibratedAt.Length > 0
+            ? L($"{cfg.CalibratedAt} にワットチェッカーで合わせ込んだ値（CPU・GPU 以外 {cfg.BaseWatts:F0} W・電源の効率 {cfg.PsuEfficiency:F0}%）で、コンセントから引く電力を計算しています（単価 {price:0.##} 円/kWh）。モニターなどは含みません。アプリが動いている間だけ数えます。")
+            : L($"CPU・GPU はセンサーの値、それ以外は {cfg.BaseWatts:F0} W、電源の効率は {cfg.PsuEfficiency:F0}% として計算した ±20% ほどの目安です（単価 {price:0.##} 円/kWh）。設定の「電気代の計算」でワットチェッカーと合わせ込めます。アプリが動いている間だけ数えます。");
         EnergyNow.Text = $"{_energy.CurrentWatts:F0} W";
-        EnergyNowSub.Text = L($"CPU {_energy.CpuWatts:F0} W ・ GPU {_energy.GpuWatts:F0} W ・ その他 {Config.Energy.BaseWatts:F0} W");
+        EnergyNowSub.Text = L($"CPU {_energy.CpuWatts:F0} W ・ GPU {_energy.GpuWatts:F0} W ・ その他 {_energy.BaseWatts:F0} W ・ 電源の損失 {_energy.LossWatts:F0} W");
 
         var today = _energy.Day(DateTime.Today);
         double month = _energy.MonthKwh(DateTime.Today);

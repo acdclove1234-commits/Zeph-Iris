@@ -463,10 +463,7 @@ c0c9a6ba	LED lighting (OpenRGB integration)
 c1eb5397	Electricity cost
 6da48835	Shows the energy used and an estimated electricity cost on the dashboard and the report page
 db0f8cfc	Electricity price per kWh
-306750cc	yen (the unit price on your bill; if unsure, keep the typical 31 yen)
 1405c464	Power draw besides CPU and GPU
-665cef72	W (motherboard, memory, SSD, fans, PSU losses and so on; typically 40–80 W)
-b4d79a66	CPU and GPU use their sensor values. Monitors and speakers are not included. This is not measured at the wall, so it is only an estimate.
 69355ed4	Safety
 619b1ea2	Use the watchdog process (recommended)
 b686ae3d	Prevents the fans from staying at a low speed if the app is killed or freezes. Task Manager shows two Zeph-Iris processes; one of them is the watchdog
@@ -1369,8 +1366,6 @@ efd9152e	Life {0:F0}%
 5afe281d	Saved the records from 10 minutes before and after the problem: {0}
 61c7691d	View records
 29d6a363	{0:N0} yen
-37d31a15	CPU and GPU use sensor values; everything else is counted as {0:F0} W (rate {1:0.##} yen/kWh). Only counted while the app is running.
-e03883da	CPU {0:F0} W · GPU {1:F0} W · other {2:F0} W
 83b6ebdd	{0:F2} kWh · {1:F1} hours
 2f240cf7	{0:F1} kWh (from the average of days with records)
 b5d6b2e1	About {0} · {1:F1} hours
@@ -1652,3 +1647,33 @@ f2252901	Go back to the previous version ({0}).\n\nAfter the previous version's 
 6d39169b	Carried over the settings and records of the previous version from {0}. That folder is no longer used; check what is in it, then you can delete it.
 f66007ff	{0} (the previous version)
 7f8ae76b	Zeph-Iris runs thanks to open-source software such as LibreHardwareMonitor, PawnIO, OpenRGB, NAudio, QRCoder, Montserrat, Zen Maru Gothic and Inno Setup. Many thanks to everyone who makes them (their licences are in the licenses folder of the app).
+0021212b	The reading does not fit (the rest of the PC came out at {0:F0} W). Measure again
+074e3049	The power drawn from the wall is calculated with the values calibrated on {0} with a plug-in power meter (rest of the PC {1:F0} W, power supply efficiency {2:F0}%; rate {3:0.##} yen/kWh). Monitors and the like are not included. Only counted while the app is running.
+083b2352	Power meter reading at idle
+138470aa	Plug the PC's power cord (not the monitor) into a plug-in power meter, enter the reading and press "Record". Recording at idle alone is enough to calibrate. If you also record under load (while a game or benchmark runs), the power supply efficiency is worked out too. Wait until the reading settles before pressing.
+1d2db3b4	The CPU/GPU power under load is not at least {0:F0} W higher than at idle, so the power supply efficiency stays at {1:F0}%
+1d6970b9	The CPU/GPU power is fluctuating ({0:F0} W within 20 s). Press again once the load settles
+2b38bba6	W (motherboard, memory, SSDs, fans, pump, LEDs and so on; usually 30–70 W)
+30253b1e	% (covers the power supply's losses; 87–90% for 80 PLUS Gold; if unsure, keep 88%)
+42c1084f	Record
+5119fa5e	Enter the power meter reading as a number
+54d4f6b0	Enter a power meter reading between 10 and 3000 W
+68a46800	Nothing measured yet
+7e04fd6d	The two readings do not fit together (the power supply efficiency came out at {0:F0}%). Wait for the power meter to settle and measure again
+89449c5d	An estimate within about ±20%: CPU and GPU use sensor values, the rest of the PC is counted as {0:F0} W and the power supply efficiency as {1:F0}% (rate {2:0.##} yen/kWh). You can calibrate it with a plug-in power meter under Electricity cost in Settings. Only counted while the app is running.
+89dc9684	Power supply efficiency
+8d15c619	Power meter reading under load
+8d572aec	Calibrate with a plug-in power meter
+a659b907	CPU and GPU use sensor values; the rest of the PC and the power supply's losses are added to give the power drawn from the wall outlet. Monitors and speakers are not included. Until you calibrate with a plug-in power meter, this is an estimate within about ±20%.
+adcd4c0b	Not calibrated yet
+bc9bf913	There are no CPU/GPU power sensor values yet. Wait a moment and press again
+c037de9a	CPU {0:F0} W · GPU {1:F0} W · Other {2:F0} W · PSU loss {3:F0} W
+c0bf5633	Calibrated: rest of the PC {0:F0} W, power supply efficiency {1:F0}% (from the idle and load readings)
+c91890c4	Calibrated: rest of the PC {0:F0} W (power supply efficiency stays at {1:F0}%; record under load too to work it out)
+d46cee51	Calibrated on {0}
+e3b755dc	yen (most accurate: the bill's total ÷ kWh used; if unsure, keep the typical 31 yen)
+e4d1e7a9	Clear calibration
+e6f4ba17	The power meter reading ({0:F0} W) is lower than the CPU and GPU sensor values ({1:F0} W). Check that you are measuring the PC's own outlet
+f7824b90	Calibration cleared; back to the starting estimate (rest of the PC 50 W, power supply efficiency 88%)
+f7cdd477	Recorded: outlet {0:F0} W · CPU+GPU {1:F0} W
+f83af4dd	The two readings do not fit together (the rest of the PC came out at {0:F0} W). Measure again

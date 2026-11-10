@@ -265,12 +265,14 @@ public static class LegacyTests
             if (File.Exists(EnergyMeter.FilePath)) File.Delete(EnergyMeter.FilePath);
             var em = new EnergyMeter();
             var t = DateTime.Today.AddHours(10);
-            for (int i = 0; i <= 3600; i++) em.Add(t.AddSeconds(i), 100, 200, 50); // 350 W × 1 時間
-            em.Add(t.AddSeconds(3600 + 600), 100, 200, 50); // 10 分空いた（スリープ）→ 数えない
-            Check(Math.Abs(em.TodayKwh - 0.35) < 0.001, $"350W × 1h = 0.35 kWh ({em.TodayKwh:F4})");
+            // 350 W × 1 時間。電源の効率 88% なので、コンセント側は 350 ÷ 0.88 = 397.7 W
+            for (int i = 0; i <= 3600; i++) em.Add(t.AddSeconds(i), 100, 200, 50, 88);
+            em.Add(t.AddSeconds(3600 + 600), 100, 200, 50, 88); // 10 分空いた（スリープ）→ 数えない
+            double expected = 0.35 / 0.88;
+            Check(Math.Abs(em.TodayKwh - expected) < 0.001, $"350W inside × 1h at 88% = {expected:F4} kWh ({em.TodayKwh:F4})");
             em.Save();
             var em2 = new EnergyMeter();
-            Check(Math.Abs(em2.TodayKwh - 0.35) < 0.001 && em2.LastDays(30).Count == 30, "energy persisted");
+            Check(Math.Abs(em2.TodayKwh - expected) < 0.001 && em2.LastDays(30).Count == 30, "energy persisted");
         }
 
         // ===== C14. OpenRGB のコントローラー情報（プロトコル版 1）

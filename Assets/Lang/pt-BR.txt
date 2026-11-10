@@ -463,10 +463,7 @@ c0c9a6ba	Iluminação de LED (integração com o OpenRGB)
 c1eb5397	Cálculo do custo de energia
 6da48835	Mostra a energia consumida e um custo de energia estimado no painel e na página de relatório
 db0f8cfc	Preço da energia por kWh
-306750cc	ienes (o preço unitário da sua conta; se não souber, deixe os 31 ienes de referência)
 1405c464	Consumo além de CPU e GPU
-665cef72	W (placa-mãe, memória, SSD, ventoinhas, perdas da fonte etc.; geralmente 40–80 W)
-b4d79a66	A CPU e a GPU usam os valores dos sensores. Monitores e caixas de som não entram. Não é medido na tomada, então é só uma estimativa.
 69355ed4	Segurança
 619b1ea2	Usar o processo vigia (recomendado)
 b686ae3d	Evita que as ventoinhas fiquem em baixa rotação se o app for encerrado à força ou travar. O Gerenciador de Tarefas mostra dois Zeph-Iris; um deles é o vigia
@@ -1369,8 +1366,6 @@ efd9152e	Vida útil {0:F0}%
 5afe281d	Os registros de 10 minutos antes e depois da falha foram salvos: {0}
 61c7691d	Ver registros
 29d6a363	{0:N0} ienes
-37d31a15	CPU e GPU usam os valores dos sensores; o restante é calculado como {0:F0} W (tarifa {1:0.##} ienes/kWh). Só conta enquanto o app está em execução.
-e03883da	CPU {0:F0} W · GPU {1:F0} W · outros {2:F0} W
 83b6ebdd	{0:F2} kWh · {1:F1} h
 2f240cf7	{0:F1} kWh (pela média dos dias com registros)
 b5d6b2e1	Cerca de {0} · {1:F1} h
@@ -1652,3 +1647,33 @@ f2252901	Voltar para a versão anterior ({0}).\n\nDepois de baixar do GitHub e c
 6d39169b	As configurações e os registros da versão anterior foram trazidos de {0}. Essa pasta não é mais usada; confira o conteúdo e depois pode apagá-la.
 f66007ff	{0} (a versão anterior)
 7f8ae76b	O Zeph-Iris funciona graças a software de código aberto como LibreHardwareMonitor, PawnIO, OpenRGB, NAudio, QRCoder, Montserrat, Zen Maru Gothic e Inno Setup. Muito obrigado a todos que os criam (as licenças estão na pasta "licenses" do app).
+0021212b	A leitura não bate (o resto do PC deu {0:F0} W). Meça de novo
+074e3049	A potência puxada da tomada é calculada com os valores calibrados em {0} com um medidor de consumo (resto do PC {1:F0} W, eficiência da fonte {2:F0}%; tarifa {3:0.##} ienes/kWh). Monitores e afins não estão incluídos. Só é contado enquanto o app está em execução.
+083b2352	Leitura do medidor em repouso
+138470aa	Ligue o cabo de força do PC (não o do monitor) em um medidor de consumo, digite a leitura e pressione "Registrar". Registrar em repouso já basta para calibrar. Se você também registrar sob carga (enquanto roda um jogo ou benchmark), a eficiência da fonte também é calculada. Espere a leitura estabilizar antes de pressionar.
+1d2db3b4	A potência da CPU/GPU sob carga não é pelo menos {0:F0} W maior que em repouso, então a eficiência da fonte fica em {1:F0}%
+1d6970b9	A potência da CPU/GPU está oscilando ({0:F0} W em 20 s). Pressione de novo quando a carga estabilizar
+2b38bba6	W (placa-mãe, memória, SSDs, ventoinhas, bomba, LEDs etc.; normalmente 30–70 W)
+30253b1e	% (cobre as perdas da fonte; 87–90% em 80 PLUS Gold; se não souber, deixe 88%)
+42c1084f	Registrar
+5119fa5e	Digite a leitura do medidor como número
+54d4f6b0	Digite uma leitura do medidor entre 10 e 3000 W
+68a46800	Nada medido ainda
+7e04fd6d	As duas leituras não batem (a eficiência da fonte deu {0:F0}%). Espere o medidor estabilizar e meça de novo
+89449c5d	Uma estimativa de cerca de ±20%: CPU e GPU usam os valores dos sensores, o resto do PC conta como {0:F0} W e a eficiência da fonte como {1:F0}% (tarifa {2:0.##} ienes/kWh). Você pode calibrá-la com um medidor de consumo em "Cálculo do custo de energia" nas Configurações. Só é contado enquanto o app está em execução.
+89dc9684	Eficiência da fonte
+8d15c619	Leitura do medidor sob carga
+8d572aec	Calibrar com um medidor de consumo
+a659b907	CPU e GPU usam os valores dos sensores; o resto do PC e as perdas da fonte são somados para obter a potência puxada da tomada. Monitores e alto-falantes não estão incluídos. Até calibrar com um medidor de consumo, é uma estimativa de cerca de ±20%.
+adcd4c0b	Ainda não calibrado
+bc9bf913	Ainda não há valores dos sensores de potência da CPU/GPU. Aguarde um pouco e pressione de novo
+c037de9a	CPU {0:F0} W · GPU {1:F0} W · Outros {2:F0} W · Perda da fonte {3:F0} W
+c0bf5633	Calibrado: resto do PC {0:F0} W, eficiência da fonte {1:F0}% (das leituras em repouso e sob carga)
+c91890c4	Calibrado: resto do PC {0:F0} W (a eficiência da fonte fica em {1:F0}%; registre também sob carga para calculá-la)
+d46cee51	Calibrado em {0}
+e3b755dc	ienes (o mais preciso: valor da conta ÷ kWh consumidos; se não souber, deixe os 31 ienes típicos)
+e4d1e7a9	Apagar calibração
+e6f4ba17	A leitura do medidor ({0:F0} W) é menor que os valores dos sensores da CPU e da GPU ({1:F0} W). Verifique se está medindo a tomada do próprio PC
+f7824b90	Calibração apagada; voltou à estimativa inicial (resto do PC 50 W, eficiência da fonte 88%)
+f7cdd477	Registrado: tomada {0:F0} W · CPU+GPU {1:F0} W
+f83af4dd	As duas leituras não batem (o resto do PC deu {0:F0} W). Meça de novo

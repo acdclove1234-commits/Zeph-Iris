@@ -463,10 +463,7 @@ c0c9a6ba	Iluminación LED (integración con OpenRGB)
 c1eb5397	Cálculo del coste eléctrico
 6da48835	Muestra la energía consumida y un coste eléctrico estimado en el panel y en la página del informe
 db0f8cfc	Precio de la electricidad por kWh
-306750cc	yenes (el precio unitario de tu factura; si no lo sabes, deja los 31 yenes orientativos)
 1405c464	Consumo aparte de CPU y GPU
-665cef72	W (placa base, memoria, SSD, ventiladores, pérdidas de la fuente, etc.; normalmente 40–80 W)
-b4d79a66	La CPU y la GPU usan los valores de sus sensores. No incluye monitores ni altavoces. No se mide en el enchufe, así que es solo una estimación.
 69355ed4	Seguridad
 619b1ea2	Usar el proceso vigilante (recomendado)
 b686ae3d	Evita que los ventiladores se queden a baja velocidad si la aplicación se cierra a la fuerza o se cuelga. El Administrador de tareas muestra dos Zeph-Iris; uno de ellos es el vigilante
@@ -1369,8 +1366,6 @@ efd9152e	Vida útil {0:F0} %
 5afe281d	Se guardaron los registros de 10 minutos antes y después del fallo: {0}
 61c7691d	Ver registros
 29d6a363	{0:N0} yenes
-37d31a15	La CPU y la GPU usan los valores de los sensores; lo demás se calcula como {0:F0} W (tarifa {1:0.##} yenes/kWh). Solo se cuenta mientras la aplicación está en marcha.
-e03883da	CPU {0:F0} W · GPU {1:F0} W · otros {2:F0} W
 83b6ebdd	{0:F2} kWh · {1:F1} h
 2f240cf7	{0:F1} kWh (según la media de los días con registros)
 b5d6b2e1	Unos {0} · {1:F1} h
@@ -1652,3 +1647,33 @@ f2252901	Volver a la versión anterior ({0}).\n\nDespués de descargar de GitHub
 6d39169b	Se han conservado los ajustes y grabaciones de la versión anterior desde {0}. Esa carpeta ya no se usa; revisa su contenido y después puedes borrarla.
 f66007ff	{0} (la versión anterior)
 7f8ae76b	Zeph-Iris funciona gracias a software de código abierto como LibreHardwareMonitor, PawnIO, OpenRGB, NAudio, QRCoder, Montserrat, Zen Maru Gothic e Inno Setup. Muchas gracias a quienes lo crean (sus licencias están en la carpeta «licenses» de la aplicación).
+0021212b	La lectura no encaja (el resto del PC salió {0:F0} W). Vuelve a medir
+074e3049	La potencia tomada del enchufe se calcula con los valores calibrados el {0} con un medidor de consumo (resto del PC {1:F0} W, eficiencia de la fuente {2:F0} %; tarifa {3:0.##} yenes/kWh). No incluye monitores y similares. Solo se cuenta mientras la app está en marcha.
+083b2352	Lectura del medidor en reposo
+138470aa	Conecta el cable de alimentación del PC (no el del monitor) a un medidor de consumo, introduce la lectura y pulsa «Registrar». Basta con registrar en reposo para calibrar. Si también registras con carga (mientras se ejecuta un juego o una prueba de rendimiento), también se calcula la eficiencia de la fuente. Espera a que la lectura se estabilice antes de pulsar.
+1d2db3b4	La potencia de CPU/GPU con carga no es al menos {0:F0} W mayor que en reposo, así que la eficiencia de la fuente se queda en {1:F0} %
+1d6970b9	La potencia de CPU/GPU fluctúa ({0:F0} W en 20 s). Vuelve a pulsar cuando la carga se estabilice
+2b38bba6	W (placa base, memoria, SSD, ventiladores, bomba, LED, etc.; normalmente 30–70 W)
+30253b1e	% (cubre las pérdidas de la fuente; 87–90 % en 80 PLUS Gold; si no lo sabes, deja 88 %)
+42c1084f	Registrar
+5119fa5e	Introduce la lectura del medidor como un número
+54d4f6b0	Introduce una lectura del medidor entre 10 y 3000 W
+68a46800	Aún no se ha medido nada
+7e04fd6d	Las dos lecturas no encajan (la eficiencia de la fuente salió {0:F0} %). Espera a que el medidor se estabilice y vuelve a medir
+89449c5d	Una estimación de aproximadamente ±20 %: la CPU y la GPU usan los valores de los sensores, el resto del PC se cuenta como {0:F0} W y la eficiencia de la fuente como {1:F0} % (tarifa {2:0.##} yenes/kWh). Puedes calibrarla con un medidor de consumo en «Cálculo del coste eléctrico» de Ajustes. Solo se cuenta mientras la app está en marcha.
+89dc9684	Eficiencia de la fuente
+8d15c619	Lectura del medidor con carga
+8d572aec	Calibrar con un medidor de consumo
+a659b907	La CPU y la GPU usan los valores de los sensores; se suman el resto del PC y las pérdidas de la fuente para obtener la potencia tomada del enchufe. No incluye monitores ni altavoces. Hasta calibrar con un medidor de consumo, es una estimación de aproximadamente ±20 %.
+adcd4c0b	Aún sin calibrar
+bc9bf913	Aún no hay valores de los sensores de potencia de CPU/GPU. Espera un momento y vuelve a pulsar
+c037de9a	CPU {0:F0} W · GPU {1:F0} W · Otros {2:F0} W · Pérdida de la fuente {3:F0} W
+c0bf5633	Calibrado: resto del PC {0:F0} W, eficiencia de la fuente {1:F0} % (a partir de las lecturas en reposo y con carga)
+c91890c4	Calibrado: resto del PC {0:F0} W (la eficiencia de la fuente se queda en {1:F0} %; registra también con carga para calcularla)
+d46cee51	Calibrado el {0}
+e3b755dc	yenes (lo más exacto: importe de la factura ÷ kWh consumidos; si no lo sabes, deja los 31 yenes habituales)
+e4d1e7a9	Borrar calibración
+e6f4ba17	La lectura del medidor ({0:F0} W) es menor que los valores de los sensores de CPU y GPU ({1:F0} W). Comprueba que mides el enchufe del propio PC
+f7824b90	Calibración borrada; se vuelve a la estimación inicial (resto del PC 50 W, eficiencia de la fuente 88 %)
+f7cdd477	Registrado: enchufe {0:F0} W · CPU+GPU {1:F0} W
+f83af4dd	Las dos lecturas no encajan (el resto del PC salió {0:F0} W). Vuelve a medir

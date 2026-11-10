@@ -220,6 +220,8 @@ public sealed class AppConfig : ObservableObject
         Safety.Normalize();
         Energy.PricePerKwh = Math.Clamp(Energy.PricePerKwh, 0, 200);
         Energy.BaseWatts = Math.Clamp(Energy.BaseWatts, 0, 1000);
+        Energy.PsuEfficiency = Energy.PsuEfficiency is >= EnergyCalibration.MinEfficiency and <= EnergyCalibration.MaxEfficiency
+            ? Energy.PsuEfficiency : EnergyConfig.DefaultPsuEfficiency;
         Rgb.Port = Math.Clamp(Rgb.Port, 1, 65535);
         if (Rgb.HighTemp - Rgb.LowTemp < 5) Rgb.HighTemp = Rgb.LowTemp + 5;
         Rgb.Speed = Math.Clamp(Rgb.Speed, 0.3, 10);
@@ -770,11 +772,25 @@ public sealed class EnergyConfig : ObservableObject
 {
     private double _pricePerKwh = 31;
     private double _baseWatts = 50;
+    private double _psuEfficiency = DefaultPsuEfficiency;
+    private string _calibratedAt = "";
+
+    /// <summary>電源の効率の初期値（%）。80 PLUS Gold の電源の、軽い負荷〜半分くらいの負荷での目安</summary>
+    public const double DefaultPsuEfficiency = 88;
 
     /// <summary>1 kWh あたりの電気代（円）。全国家庭電気製品公正取引協議会の目安単価は 31 円</summary>
     public double PricePerKwh { get => _pricePerKwh; set => Set(ref _pricePerKwh, value); }
-    /// <summary>CPU と GPU 以外（マザーボード・メモリ・SSD・ファン・電源の損失など）の目安（W）</summary>
+    /// <summary>CPU と GPU 以外（マザーボード・メモリ・SSD・ファン・ポンプ・LED など）の消費電力（W。電源の損失は含まない）</summary>
     public double BaseWatts { get => _baseWatts; set => Set(ref _baseWatts, value); }
+    /// <summary>電源の効率（%）。コンセントから引く電力 = PC の中で使う電力 ÷ 効率</summary>
+    public double PsuEfficiency { get => _psuEfficiency; set => Set(ref _psuEfficiency, value); }
+    /// <summary>ワットチェッカーで合わせ込んだ日（yyyy-MM-dd。空 = まだ）</summary>
+    public string CalibratedAt { get => _calibratedAt; set => Set(ref _calibratedAt, value ?? ""); }
+    /// <summary>合わせ込みに使った点: アイドル中・負荷中の、ワットチェッカーの値と CPU＋GPU のセンサーの値（W。0 = まだ）</summary>
+    public double IdleWallWatts { get; set; }
+    public double IdleSensorWatts { get; set; }
+    public double LoadWallWatts { get; set; }
+    public double LoadSensorWatts { get; set; }
 }
 
 /// <summary>OpenRGB と連携して、温度に合わせて LED の色を変える</summary>

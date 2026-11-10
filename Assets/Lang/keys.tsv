@@ -475,43 +475,51 @@ c0c9a6ba	LED のライティング（OpenRGB 連携）	MainWindow.xaml:2862
 158ada0f	LED の設定は、左のメニューの「ライティング」に移りました。接続・光り方・音楽連動・デバイスごとの設定をまとめて変えられます。	MainWindow.xaml:2864
 c1eb5397	電気代の計算	MainWindow.xaml:2872
 6da48835	ダッシュボードとレポート画面に、消費電力量と電気代の目安を表示します	MainWindow.xaml:2873
-db0f8cfc	1 kWh あたりの電気代	MainWindow.xaml:2884
-306750cc	円（検針票の単価。分からなければ目安の 31 円のまま）	MainWindow.xaml:2887
-1405c464	CPU・GPU 以外の消費電力	MainWindow.xaml:2888
-665cef72	W（マザーボード・メモリ・SSD・ファン・電源の損失など。一般的に 40〜80 W）	MainWindow.xaml:2891
-b4d79a66	CPU と GPU はセンサーの値を使います。モニターやスピーカーは含みません。コンセントで測った値ではないので、あくまで目安です。	MainWindow.xaml:2894
-69355ed4	安全機能	MainWindow.xaml:2903
-619b1ea2	見張りプロセスを使う（おすすめ）	MainWindow.xaml:2906
-b686ae3d	アプリが強制終了・フリーズしたとき、ファンが低い回転のまま止まってしまうのを防ぎます。タスクマネージャーに Zeph-Iris が 2 つ表示されますが、片方は見張り役です	MainWindow.xaml:2908
-f739cc9b	そのときの回転数	MainWindow.xaml:2921
-43c454af	ポンプは常に 100% にします	MainWindow.xaml:2921
-d063c0c0	アプリを自動で起動し直す（10 分間に 3 回までで、それ以上はお知らせを表示）	MainWindow.xaml:2925
-f2eae029	異常なセンサーの値を無視する	MainWindow.xaml:2930
-2487009f	一瞬だけ跳ねた値（読み取りエラー）で全開にならないようにします。負荷が変わっても値が動かない「固まった」センサーは、異常として扱います	MainWindow.xaml:2932
-3616d69f	起動時に部品の交換を確認する	MainWindow.xaml:2938
-f47011bb	GPU などを交換してセンサーが変わったときに、新しいセンサーへの置き換えを案内します	MainWindow.xaml:2940
-35eb3141	センサーがないときの回転数	MainWindow.xaml:2953
-90554019	部品を外した・交換したなどで、センサーそのものが見つからないカーブはこの回転数にします（センサーはあるのに値がおかしいときは、安全のため 100%）	MainWindow.xaml:2957
-963fb48e	異常の前後を自動で記録する	MainWindow.xaml:2962
-e424608f	緊急全開・ポンプ異常などのとき、前後 10 分の記録を保存します（レポート画面で確認できます）	MainWindow.xaml:2963
-f4e32f07	GPU のファンも制御できるようにする（試験的）	MainWindow.xaml:2969
-f73d1f9b	ファンカーブ画面の「端子を追加」に GPU のファンが表示されます。制御中は GPU ドライバーの自動制御（0 RPM モードなど）が止まるので、GPU の温度を使ったカーブで使ってください	MainWindow.xaml:2971
-f04fb800	メモリの温度を読む	MainWindow.xaml:2977
-5ac1bfd9	メモリの温度は、メモリの LED と同じ配線（SMBus）で読みます。OpenRGB などがこの配線を順番待ちせずに使っていると、ぶつかってメモリの温度が読めなくなることがあります。そのときはオフにしてください（メモリの温度を使うカーブは、センサーが見つからないときの回転数で回ります）	MainWindow.xaml:2979
-8154441c	設定のバックアップと共有	MainWindow.xaml:2988
-894c08f0	設定は変更のたびに自動でバックアップしています（10 分に 1 回まで・最大 30 個）。config.json が壊れても、起動時に自動で復旧します。プロファイルをファイルに書き出せば、別の PC で読み込めます（端子やセンサーは名前で対応付けます）	MainWindow.xaml:2990
-b187e750	設定を書き出す…	MainWindow.xaml:2992
-7c186faa	設定を読み込む…	MainWindow.xaml:2993
-077e159d	バックアップから戻す ▾	MainWindow.xaml:2994
-4222af0e	今すぐバックアップ	MainWindow.xaml:2995
-8d711ab6	セットアップとファイル	MainWindow.xaml:3004
-f8cfb37f	セットアップウィザードを開く	MainWindow.xaml:3006
-0cdb9795	設定フォルダを開く	MainWindow.xaml:3007
-e252e493	ログフォルダを開く	MainWindow.xaml:3008
-c7cbd09a	ファン制御用のドライバー（PawnIO）	MainWindow.xaml:3016
-6234a43c	アンインストール（お片付け）	MainWindow.xaml:3024
-29c38de6	このアプリを使うのをやめるときに使います。ファンを BIOS の自動制御に戻したことを確かめてから、ライティングの制御・ログオン時の自動起動・ファイアウォールの許可などを片付けて終了します。何を行うかは、次の画面で確かめてから始められます（設定・記録を消すか、PawnIO もアンインストールするかも選べます）	MainWindow.xaml:3026
-b2abf4ee	アンインストール（お片付け）…	MainWindow.xaml:3028
+db0f8cfc	1 kWh あたりの電気代	MainWindow.xaml:2885
+e3b755dc	円（明細の「請求金額 ÷ 使用量 kWh」がいちばん正確。分からなければ目安の 31 円のまま）	MainWindow.xaml:2888
+1405c464	CPU・GPU 以外の消費電力	MainWindow.xaml:2889
+2b38bba6	W（マザーボード・メモリ・SSD・ファン・ポンプ・LED など。一般的に 30〜70 W）	MainWindow.xaml:2892
+89dc9684	電源の効率	MainWindow.xaml:2893
+30253b1e	%（電源の損失の分。80 PLUS Gold で 87〜90%。分からなければ 88% のまま）	MainWindow.xaml:2896
+a659b907	CPU と GPU はセンサーの値を使い、それ以外の分と電源の損失を足して、コンセントから引く電力にします。モニターやスピーカーは含みません。ワットチェッカーで合わせ込むまでは ±20% ほどの目安です。	MainWindow.xaml:2899
+8d572aec	ワットチェッカーで合わせ込む	MainWindow.xaml:2902
+138470aa	PC 本体の電源コードをワットチェッカーにつなぎ（モニターは別のコンセントに）、表示の値を入れて「記録」を押します。アイドル中だけでも合わせ込めます。負荷中（ゲームやベンチマークを動かしている間）も記録すると、電源の効率も求めます。どちらも、値が落ち着いてから押してください。	MainWindow.xaml:2904
+083b2352	アイドル中のワットチェッカーの値	MainWindow.xaml:2916
+42c1084f	記録	MainWindow.xaml:2918
+8d15c619	負荷中のワットチェッカーの値	MainWindow.xaml:2920
+e4d1e7a9	合わせ込みを消す	MainWindow.xaml:2926
+69355ed4	安全機能	MainWindow.xaml:2936
+619b1ea2	見張りプロセスを使う（おすすめ）	MainWindow.xaml:2939
+b686ae3d	アプリが強制終了・フリーズしたとき、ファンが低い回転のまま止まってしまうのを防ぎます。タスクマネージャーに Zeph-Iris が 2 つ表示されますが、片方は見張り役です	MainWindow.xaml:2941
+f739cc9b	そのときの回転数	MainWindow.xaml:2954
+43c454af	ポンプは常に 100% にします	MainWindow.xaml:2954
+d063c0c0	アプリを自動で起動し直す（10 分間に 3 回までで、それ以上はお知らせを表示）	MainWindow.xaml:2958
+f2eae029	異常なセンサーの値を無視する	MainWindow.xaml:2963
+2487009f	一瞬だけ跳ねた値（読み取りエラー）で全開にならないようにします。負荷が変わっても値が動かない「固まった」センサーは、異常として扱います	MainWindow.xaml:2965
+3616d69f	起動時に部品の交換を確認する	MainWindow.xaml:2971
+f47011bb	GPU などを交換してセンサーが変わったときに、新しいセンサーへの置き換えを案内します	MainWindow.xaml:2973
+35eb3141	センサーがないときの回転数	MainWindow.xaml:2986
+90554019	部品を外した・交換したなどで、センサーそのものが見つからないカーブはこの回転数にします（センサーはあるのに値がおかしいときは、安全のため 100%）	MainWindow.xaml:2990
+963fb48e	異常の前後を自動で記録する	MainWindow.xaml:2995
+e424608f	緊急全開・ポンプ異常などのとき、前後 10 分の記録を保存します（レポート画面で確認できます）	MainWindow.xaml:2996
+f4e32f07	GPU のファンも制御できるようにする（試験的）	MainWindow.xaml:3002
+f73d1f9b	ファンカーブ画面の「端子を追加」に GPU のファンが表示されます。制御中は GPU ドライバーの自動制御（0 RPM モードなど）が止まるので、GPU の温度を使ったカーブで使ってください	MainWindow.xaml:3004
+f04fb800	メモリの温度を読む	MainWindow.xaml:3010
+5ac1bfd9	メモリの温度は、メモリの LED と同じ配線（SMBus）で読みます。OpenRGB などがこの配線を順番待ちせずに使っていると、ぶつかってメモリの温度が読めなくなることがあります。そのときはオフにしてください（メモリの温度を使うカーブは、センサーが見つからないときの回転数で回ります）	MainWindow.xaml:3012
+8154441c	設定のバックアップと共有	MainWindow.xaml:3021
+894c08f0	設定は変更のたびに自動でバックアップしています（10 分に 1 回まで・最大 30 個）。config.json が壊れても、起動時に自動で復旧します。プロファイルをファイルに書き出せば、別の PC で読み込めます（端子やセンサーは名前で対応付けます）	MainWindow.xaml:3023
+b187e750	設定を書き出す…	MainWindow.xaml:3025
+7c186faa	設定を読み込む…	MainWindow.xaml:3026
+077e159d	バックアップから戻す ▾	MainWindow.xaml:3027
+4222af0e	今すぐバックアップ	MainWindow.xaml:3028
+8d711ab6	セットアップとファイル	MainWindow.xaml:3037
+f8cfb37f	セットアップウィザードを開く	MainWindow.xaml:3039
+0cdb9795	設定フォルダを開く	MainWindow.xaml:3040
+e252e493	ログフォルダを開く	MainWindow.xaml:3041
+c7cbd09a	ファン制御用のドライバー（PawnIO）	MainWindow.xaml:3049
+6234a43c	アンインストール（お片付け）	MainWindow.xaml:3057
+29c38de6	このアプリを使うのをやめるときに使います。ファンを BIOS の自動制御に戻したことを確かめてから、ライティングの制御・ログオン時の自動起動・ファイアウォールの許可などを片付けて終了します。何を行うかは、次の画面で確かめてから始められます（設定・記録を消すか、PawnIO もアンインストールするかも選べます）	MainWindow.xaml:3059
+b2abf4ee	アンインストール（お片付け）…	MainWindow.xaml:3061
 276c23be	ファンの回転数を変えるには、マザーボードのファン制御チップを読み書きするドライバー PawnIO（無料・LibreHardwareMonitor などでも使われています）が必要です。\n「PawnIO をインストール」を押すと、Windows に付属の winget で公式のパッケージ（namazso.PawnIO）を入れます。インターネットにつながっている必要があり、数十秒〜数分かかります。終わったら、アプリを起動し直すと使えるようになります。	UI/PawnIoInstallPanel.xaml:13
 32818dc0	PawnIO をインストール	UI/PawnIoInstallPanel.xaml:15
 8d7b411c	アプリを起動し直す	UI/PawnIoInstallPanel.xaml:16
@@ -728,15 +736,15 @@ b0bc7eac	目標温度 {0:F0}°C	Core/Advisor.cs:202
 f87c3ac9	他のファンに連動	Core/Advisor.cs:204
 1b56d605	config.json が空です。	Core/AppConfig.cs:100
 c8d58466	標準	Core/AppConfig.cs:153
-52ed0fe4	最大値	Core/AppConfig.cs:586
-91302315	差分	Core/AppConfig.cs:589
-8e4f9981	起動時	Core/AppConfig.cs:1370
-b6d7dbf8	自動	Core/AppConfig.cs:1371
-ae81cf8d	手動	Core/AppConfig.cs:1372
-7aebcb13	読み込み前	Core/AppConfig.cs:1373
-44fc16c5	部品交換の対応付け前	Core/AppConfig.cs:1374
-f32b8618	復元前	Core/AppConfig.cs:1375
-4db25563	{0:yyyy/MM/dd HH:mm}（{1}）	Core/AppConfig.cs:1383
+52ed0fe4	最大値	Core/AppConfig.cs:588
+91302315	差分	Core/AppConfig.cs:591
+8e4f9981	起動時	Core/AppConfig.cs:1386
+b6d7dbf8	自動	Core/AppConfig.cs:1387
+ae81cf8d	手動	Core/AppConfig.cs:1388
+7aebcb13	読み込み前	Core/AppConfig.cs:1389
+44fc16c5	部品交換の対応付け前	Core/AppConfig.cs:1390
+f32b8618	復元前	Core/AppConfig.cs:1391
+4db25563	{0:yyyy/MM/dd HH:mm}（{1}）	Core/AppConfig.cs:1399
 7dc6c4d8	ワンタッチ静音	Core/AppController.cs:97
 c7f7bdf4	自動: {0}	Core/AppController.cs:98
 ab7eac67	ブースト中（残り {0}）	Core/AppController.cs:120
@@ -875,6 +883,15 @@ fd620ab2	{0} を {1} に連動させる	Core/Diagnostics.cs:283
 e7a34665	全プロファイルで「{0}」を「{1}」に連動させました。	Core/Diagnostics.cs:292
 c240c65a	大きな問題は見つかりませんでした	Core/Diagnostics.cs:300
 093b1c02	直近 {0:F0} 分の記録を確認しました。	Core/Diagnostics.cs:300
+bc9bf913	CPU・GPU の消費電力のセンサーの値がまだありません。少し待ってからもう一度押してください	Core/EnergyMeter.cs:188
+54d4f6b0	ワットチェッカーの値は 10〜3000 W の間で入れてください	Core/EnergyMeter.cs:189
+1d6970b9	CPU・GPU の消費電力が揺れています（20 秒で {0:F0} W）。負荷が落ち着いてから押してください	Core/EnergyMeter.cs:190
+e6f4ba17	ワットチェッカーの値（{0:F0} W）が、CPU と GPU のセンサーの値（{1:F0} W）より小さくなっています。PC 本体のコンセントで測っているか確かめてください	Core/EnergyMeter.cs:191
+7e04fd6d	2 回の値が合いません（電源の効率が {0:F0}% になりました）。ワットチェッカーの値が落ち着いてから、もう一度測ってください	Core/EnergyMeter.cs:208
+f83af4dd	2 回の値が合いません（CPU・GPU 以外が {0:F0} W になりました）。もう一度測ってください	Core/EnergyMeter.cs:211
+1d2db3b4	負荷中の CPU・GPU の消費電力が、アイドル中より {0:F0} W 以上大きくないので、電源の効率は {1:F0}% のままにしました	Core/EnergyMeter.cs:214
+68a46800	まだ測っていません	Core/EnergyMeter.cs:216
+0021212b	値が合いません（CPU・GPU 以外が {0:F0} W になりました）。もう一度測ってください	Core/EnergyMeter.cs:220
 4da047ad	スリープに入ったため中止しました。	Core/FanEngine.cs:286
 4e66f356	スリープ中	Core/FanEngine.cs:292
 dc704e71	スリープから復帰中	Core/FanEngine.cs:310
@@ -1241,6 +1258,13 @@ aa2f7c05	画像を選ぶ…	MainWindow.Devices.cs:67
 30ef4ec2	「{0}」の画像を選ぶ	MainWindow.Devices.cs:83
 3d493cb5	画像ファイル (*.png;*.jpg;*.jpeg;*.bmp;*.webp)|*.png;*.jpg;*.jpeg;*.bmp;*.webp	MainWindow.Devices.cs:84
 927e8083	画像を設定できませんでした。\n{0}	MainWindow.Devices.cs:99
+5119fa5e	ワットチェッカーの値を数字で入れてください	MainWindow.Energy.cs:26
+c0bf5633	合わせ込みました: CPU・GPU 以外 {0:F0} W・電源の効率 {1:F0}%（アイドル中と負荷中の 2 回から）	MainWindow.Energy.cs:67
+c91890c4	合わせ込みました: CPU・GPU 以外 {0:F0} W（電源の効率は {1:F0}% のまま。負荷中も記録すると効率も求めます）	MainWindow.Energy.cs:68
+f7824b90	合わせ込みを消して、初めの目安（CPU・GPU 以外 50 W・電源の効率 88%）に戻しました	MainWindow.Energy.cs:82
+f7cdd477	記録済み: コンセント {0:F0} W ・ CPU＋GPU {1:F0} W	MainWindow.Energy.cs:90
+d46cee51	{0} に合わせ込みました	MainWindow.Energy.cs:93
+adcd4c0b	まだ合わせ込んでいません	MainWindow.Energy.cs:93
 1c845124	記録期間: {0:hh\\:mm\\:ss}（{1:N0} サンプル）  ／  グラフにマウスを乗せると、その時刻の値を表示します	MainWindow.History.cs:32
 67fc1b84	{0} (仮想) [°C]	MainWindow.History.cs:41
 7f375751	まだ記録がありません。	MainWindow.History.cs:61
@@ -1250,30 +1274,30 @@ aa2f7c05	画像を選ぶ…	MainWindow.Devices.cs:67
 4c897111	書き出しに失敗しました。\n{0}	MainWindow.History.cs:87
 f6719722	まだバックアップはありません	MainWindow.Integrations.cs:29
 41c3b6de	最新のバックアップ: {0} ・ 全部で {1} 個（{2}）	MainWindow.Integrations.cs:30
-157c5131	トピック名を作り直しますか？\n\nスマホの ntfy アプリでは、新しいトピック名を購読し直す必要があります。	MainWindow.Integrations.cs:66
-a09fc803	送信しています…	MainWindow.Integrations.cs:76
-0d845e4d	送れませんでした: {0}	MainWindow.Integrations.cs:81
-7e4e7bd2	自動（CPU と GPU の高いほう）	MainWindow.Integrations.cs:92
-97682f4b	設定をバックアップしました: {0}	MainWindow.Integrations.cs:139
-51e56e6f	バックアップがありません	MainWindow.Integrations.cs:151
-5cb6d892	{0} の設定に戻しますか？\n\n今の設定もバックアップしてから戻すので、あとで元に戻せます。	MainWindow.Integrations.cs:157
-ca58240b	バックアップから戻す	MainWindow.Integrations.cs:158
-0a066c64	{0} の設定に戻しました（「元に戻す」で取り消せます）。	MainWindow.Integrations.cs:166
-4a2fd247	このバックアップは読み込めませんでした。\n{0}	MainWindow.Integrations.cs:170
-1b7a6d56	設定を書き出す	MainWindow.Integrations.cs:179
-5e2d8db8	Zeph-Iris の設定 (*.zeph-iris.json)|*.zeph-iris.json	MainWindow.Integrations.cs:180
-bf4b6694	Zeph-Iris設定_{0}_{1:yyyyMMdd}{2}	MainWindow.Integrations.cs:181
-dd581e02	{0} 個のプロファイルを書き出しました。このファイルを相手に送り、設定 →「安全・バックアップ」→「設定を読み込む」で読み込んでもらってください。	MainWindow.Integrations.cs:188
-25f3627c	書き出せませんでした。\n{0}	MainWindow.Integrations.cs:192
-e6cdafd7	ハードウェアの初期化が終わるまでお待ちください。	MainWindow.Integrations.cs:200
-de0ce3c8	設定を読み込む	MainWindow.Integrations.cs:206
-67578d3a	Zeph-Iris の設定 (*.zeph-iris.json;*.json)|*.zeph-iris.json;*.json	MainWindow.Integrations.cs:207
-49c7511d	このファイルは読み込めません。\n{0}	MainWindow.Integrations.cs:218
-d01ee250	。「元に戻す」で取り消せます。読み込んだファンは、カーブを確認してから使ってください。	MainWindow.Integrations.cs:232
-565076e7	カーブを確認	MainWindow.Integrations.cs:233
-e5decd8b	新しいハードウェアに合わせて設定を置き換えました（「元に戻す」で戻せます）。念のため、ファンカーブを確認してください。	MainWindow.Integrations.cs:256
-49a0ae7a	ハードウェアの変更があります。見つからないセンサーを使っているカーブは、安全のため一定の回転数で回しています。	MainWindow.Integrations.cs:265
-dff7789c	対応付けを開く	MainWindow.Integrations.cs:266
+157c5131	トピック名を作り直しますか？\n\nスマホの ntfy アプリでは、新しいトピック名を購読し直す必要があります。	MainWindow.Integrations.cs:67
+a09fc803	送信しています…	MainWindow.Integrations.cs:77
+0d845e4d	送れませんでした: {0}	MainWindow.Integrations.cs:82
+7e4e7bd2	自動（CPU と GPU の高いほう）	MainWindow.Integrations.cs:93
+97682f4b	設定をバックアップしました: {0}	MainWindow.Integrations.cs:140
+51e56e6f	バックアップがありません	MainWindow.Integrations.cs:152
+5cb6d892	{0} の設定に戻しますか？\n\n今の設定もバックアップしてから戻すので、あとで元に戻せます。	MainWindow.Integrations.cs:158
+ca58240b	バックアップから戻す	MainWindow.Integrations.cs:159
+0a066c64	{0} の設定に戻しました（「元に戻す」で取り消せます）。	MainWindow.Integrations.cs:167
+4a2fd247	このバックアップは読み込めませんでした。\n{0}	MainWindow.Integrations.cs:171
+1b7a6d56	設定を書き出す	MainWindow.Integrations.cs:180
+5e2d8db8	Zeph-Iris の設定 (*.zeph-iris.json)|*.zeph-iris.json	MainWindow.Integrations.cs:181
+bf4b6694	Zeph-Iris設定_{0}_{1:yyyyMMdd}{2}	MainWindow.Integrations.cs:182
+dd581e02	{0} 個のプロファイルを書き出しました。このファイルを相手に送り、設定 →「安全・バックアップ」→「設定を読み込む」で読み込んでもらってください。	MainWindow.Integrations.cs:189
+25f3627c	書き出せませんでした。\n{0}	MainWindow.Integrations.cs:193
+e6cdafd7	ハードウェアの初期化が終わるまでお待ちください。	MainWindow.Integrations.cs:201
+de0ce3c8	設定を読み込む	MainWindow.Integrations.cs:207
+67578d3a	Zeph-Iris の設定 (*.zeph-iris.json;*.json)|*.zeph-iris.json;*.json	MainWindow.Integrations.cs:208
+49c7511d	このファイルは読み込めません。\n{0}	MainWindow.Integrations.cs:219
+d01ee250	。「元に戻す」で取り消せます。読み込んだファンは、カーブを確認してから使ってください。	MainWindow.Integrations.cs:233
+565076e7	カーブを確認	MainWindow.Integrations.cs:234
+e5decd8b	新しいハードウェアに合わせて設定を置き換えました（「元に戻す」で戻せます）。念のため、ファンカーブを確認してください。	MainWindow.Integrations.cs:257
+49a0ae7a	ハードウェアの変更があります。見つからないセンサーを使っているカーブは、安全のため一定の回転数で回しています。	MainWindow.Integrations.cs:266
+dff7789c	対応付けを開く	MainWindow.Integrations.cs:267
 e45b0531	おまかせ調整の途中です。	MainWindow.Language.cs:55
 e955d878	冷却テストの途中です。	MainWindow.Language.cs:56
 afb9660d	キャリブレーションの途中です。	MainWindow.Language.cs:57
@@ -1422,25 +1446,26 @@ dd7ad3b9	自動（見つかりません）	MainWindow.Report.cs:122
 c4d4fe99	自動（{0}）	MainWindow.Report.cs:122
 096f8d69	使わない（休んでいるときとの差だけで比べる）	MainWindow.Report.cs:123
 29d6a363	{0:N0} 円	MainWindow.Report.cs:222
-37d31a15	CPU・GPU はセンサーの値、それ以外は {0:F0} W として計算しています（単価 {1:0.##} 円/kWh）。アプリが動いている間だけ数えます。	MainWindow.Report.cs:227
-e03883da	CPU {0:F0} W ・ GPU {1:F0} W ・ その他 {2:F0} W	MainWindow.Report.cs:229
-83b6ebdd	{0:F2} kWh ・ {1:F1} 時間	MainWindow.Report.cs:237
-2f240cf7	{0:F1} kWh（記録のある日の平均から）	MainWindow.Report.cs:241
-b5d6b2e1	約 {0} ・ {1:F1} 時間	MainWindow.Report.cs:246
-8dec5fdd	約 {0}	MainWindow.Report.cs:248
-c4867bf2	{0:M/d（ddd）}  {1:F2} kWh ・ 約 {2} ・ {3:F1} 時間	MainWindow.Report.cs:256
-df95f0be	記録を読み込んで調べています…	MainWindow.Report.cs:274
-8223041f	 ・ 基準: {0:yyyy/MM/dd} の掃除以降	MainWindow.Report.cs:288
-c427ad3a	{0:HH:mm} に確認 ・ 記録 {1:F0} 日分{2}	MainWindow.Report.cs:289
-00cd1e3b	メンテナンスのお知らせ: {0} に変化があります。	MainWindow.Report.cs:297
-4c563244	診断を見る	MainWindow.Report.cs:299
-5ff17925	調べられませんでした: {0}	MainWindow.Report.cs:305
-aa4e55c3	ファンやフィルター・ラジエーターを掃除しましたか？\n\nこれ以降の記録を新しい基準にして比べます（判定できるまで 10 日ほどかかります）。	MainWindow.Report.cs:317
-d83f7d90	掃除した	MainWindow.Report.cs:318
-b5814c1a	開けませんでした: {0}	MainWindow.Report.cs:355
-5f439d96	消費電力（目安）	MainWindow.Report.cs:367
-039fa193	電力	MainWindow.Report.cs:368
-239f35c2	今日 {0:F2} kWh ・ 約 {1:N0} 円	MainWindow.Report.cs:375
+074e3049	{0} にワットチェッカーで合わせ込んだ値（CPU・GPU 以外 {1:F0} W・電源の効率 {2:F0}%）で、コンセントから引く電力を計算しています（単価 {3:0.##} 円/kWh）。モニターなどは含みません。アプリが動いている間だけ数えます。	MainWindow.Report.cs:229
+89449c5d	CPU・GPU はセンサーの値、それ以外は {0:F0} W、電源の効率は {1:F0}% として計算した ±20% ほどの目安です（単価 {2:0.##} 円/kWh）。設定の「電気代の計算」でワットチェッカーと合わせ込めます。アプリが動いている間だけ数えます。	MainWindow.Report.cs:230
+c037de9a	CPU {0:F0} W ・ GPU {1:F0} W ・ その他 {2:F0} W ・ 電源の損失 {3:F0} W	MainWindow.Report.cs:232
+83b6ebdd	{0:F2} kWh ・ {1:F1} 時間	MainWindow.Report.cs:240
+2f240cf7	{0:F1} kWh（記録のある日の平均から）	MainWindow.Report.cs:244
+b5d6b2e1	約 {0} ・ {1:F1} 時間	MainWindow.Report.cs:249
+8dec5fdd	約 {0}	MainWindow.Report.cs:251
+c4867bf2	{0:M/d（ddd）}  {1:F2} kWh ・ 約 {2} ・ {3:F1} 時間	MainWindow.Report.cs:259
+df95f0be	記録を読み込んで調べています…	MainWindow.Report.cs:277
+8223041f	 ・ 基準: {0:yyyy/MM/dd} の掃除以降	MainWindow.Report.cs:291
+c427ad3a	{0:HH:mm} に確認 ・ 記録 {1:F0} 日分{2}	MainWindow.Report.cs:292
+00cd1e3b	メンテナンスのお知らせ: {0} に変化があります。	MainWindow.Report.cs:300
+4c563244	診断を見る	MainWindow.Report.cs:302
+5ff17925	調べられませんでした: {0}	MainWindow.Report.cs:308
+aa4e55c3	ファンやフィルター・ラジエーターを掃除しましたか？\n\nこれ以降の記録を新しい基準にして比べます（判定できるまで 10 日ほどかかります）。	MainWindow.Report.cs:320
+d83f7d90	掃除した	MainWindow.Report.cs:321
+b5814c1a	開けませんでした: {0}	MainWindow.Report.cs:358
+5f439d96	消費電力（目安）	MainWindow.Report.cs:370
+039fa193	電力	MainWindow.Report.cs:371
+239f35c2	今日 {0:F2} kWh ・ 約 {1:N0} 円	MainWindow.Report.cs:378
 b46fd1a2	現在「{0}」が起動中のため「{1}」を使っています	MainWindow.Settings.cs:38
 7cc5282f	新しいプロファイル	MainWindow.Settings.cs:72
 ca0a2914	{0} のコピー	MainWindow.Settings.cs:77

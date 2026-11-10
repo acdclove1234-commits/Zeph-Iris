@@ -2873,25 +2873,58 @@
                                 <TextBlock Text="ダッシュボードとレポート画面に、消費電力量と電気代の目安を表示します" Style="{StaticResource Caption}"/>
                                 <Grid Margin="0,14,0,0">
                                     <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="210"/>
+                                        <ColumnDefinition Width="250"/>
                                         <ColumnDefinition Width="100"/>
                                         <ColumnDefinition/>
                                     </Grid.ColumnDefinitions>
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="40"/>
                                         <RowDefinition Height="40"/>
+                                        <RowDefinition Height="40"/>
                                     </Grid.RowDefinitions>
                                     <TextBlock Text="1 kWh あたりの電気代" Style="{StaticResource Label}"/>
                                     <TextBox Grid.Column="1" Text="{Binding Energy.PricePerKwh}" TextAlignment="Right"/>
-                                    <TextBlock Grid.Column="2" Style="{StaticResource Caption}" Margin="10,0,0,0" VerticalAlignment="Center"
-                                               Text="円（検針票の単価。分からなければ目安の 31 円のまま）"/>
+                                    <TextBlock Grid.Column="2" Style="{StaticResource Caption}" Margin="10,0,0,0" VerticalAlignment="Center" TextWrapping="Wrap"
+                                               Text="円（明細の「請求金額 ÷ 使用量 kWh」がいちばん正確。分からなければ目安の 31 円のまま）"/>
                                     <TextBlock Grid.Row="1" Text="CPU・GPU 以外の消費電力" Style="{StaticResource Label}"/>
                                     <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Energy.BaseWatts}" TextAlignment="Right"/>
-                                    <TextBlock Grid.Row="1" Grid.Column="2" Style="{StaticResource Caption}" Margin="10,0,0,0" VerticalAlignment="Center"
-                                               Text="W（マザーボード・メモリ・SSD・ファン・電源の損失など。一般的に 40〜80 W）"/>
+                                    <TextBlock Grid.Row="1" Grid.Column="2" Style="{StaticResource Caption}" Margin="10,0,0,0" VerticalAlignment="Center" TextWrapping="Wrap"
+                                               Text="W（マザーボード・メモリ・SSD・ファン・ポンプ・LED など。一般的に 30〜70 W）"/>
+                                    <TextBlock Grid.Row="2" Text="電源の効率" Style="{StaticResource Label}"/>
+                                    <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding Energy.PsuEfficiency}" TextAlignment="Right"/>
+                                    <TextBlock Grid.Row="2" Grid.Column="2" Style="{StaticResource Caption}" Margin="10,0,0,0" VerticalAlignment="Center" TextWrapping="Wrap"
+                                               Text="%（電源の損失の分。80 PLUS Gold で 87〜90%。分からなければ 88% のまま）"/>
                                 </Grid>
                                 <TextBlock Style="{StaticResource Caption}" Margin="0,8,0,0" TextWrapping="Wrap"
-                                           Text="CPU と GPU はセンサーの値を使います。モニターやスピーカーは含みません。コンセントで測った値ではないので、あくまで目安です。"/>
+                                           Text="CPU と GPU はセンサーの値を使い、それ以外の分と電源の損失を足して、コンセントから引く電力にします。モニターやスピーカーは含みません。ワットチェッカーで合わせ込むまでは ±20% ほどの目安です。"/>
+
+                                <!-- ワットチェッカーで合わせ込む -->
+                                <TextBlock Text="ワットチェッカーで合わせ込む" Style="{StaticResource Label}" FontWeight="SemiBold" Margin="0,18,0,4"/>
+                                <TextBlock Style="{StaticResource Caption}" TextWrapping="Wrap"
+                                           Text="PC 本体の電源コードをワットチェッカーにつなぎ（モニターは別のコンセントに）、表示の値を入れて「記録」を押します。アイドル中だけでも合わせ込めます。負荷中（ゲームやベンチマークを動かしている間）も記録すると、電源の効率も求めます。どちらも、値が落ち着いてから押してください。"/>
+                                <Grid Margin="0,10,0,0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="250"/>
+                                        <ColumnDefinition Width="100"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="44"/>
+                                        <RowDefinition Height="44"/>
+                                    </Grid.RowDefinitions>
+                                    <TextBlock Text="アイドル中のワットチェッカーの値" Style="{StaticResource Label}" TextWrapping="Wrap"/>
+                                    <TextBox x:Name="IdleWallBox" Grid.Column="1" TextAlignment="Right" VerticalAlignment="Center"/>
+                                    <Button Grid.Column="2" Style="{StaticResource GhostButton}" Content="記録" Click="OnRecordIdleWattsClick" Margin="10,0,0,0" Padding="12,6" VerticalAlignment="Center"/>
+                                    <TextBlock x:Name="IdlePointText" Grid.Column="3" Style="{StaticResource Caption}" Margin="10,0,0,0" VerticalAlignment="Center" TextWrapping="Wrap"/>
+                                    <TextBlock Grid.Row="1" Text="負荷中のワットチェッカーの値" Style="{StaticResource Label}" TextWrapping="Wrap"/>
+                                    <TextBox x:Name="LoadWallBox" Grid.Row="1" Grid.Column="1" TextAlignment="Right" VerticalAlignment="Center"/>
+                                    <Button Grid.Row="1" Grid.Column="2" Style="{StaticResource GhostButton}" Content="記録" Click="OnRecordLoadWattsClick" Margin="10,0,0,0" Padding="12,6" VerticalAlignment="Center"/>
+                                    <TextBlock x:Name="LoadPointText" Grid.Row="1" Grid.Column="3" Style="{StaticResource Caption}" Margin="10,0,0,0" VerticalAlignment="Center" TextWrapping="Wrap"/>
+                                </Grid>
+                                <TextBlock x:Name="WattCalibrationText" Style="{StaticResource Caption}" Margin="0,8,0,0" TextWrapping="Wrap"/>
+                                <Button x:Name="ClearCalibrationButton" Style="{StaticResource GhostButton}" Content="合わせ込みを消す" Click="OnClearCalibrationClick"
+                                        HorizontalAlignment="Left" Margin="0,8,0,0" Padding="12,6"/>
                             </StackPanel>
                         </Border>
                     </StackPanel>

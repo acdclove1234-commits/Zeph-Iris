@@ -463,10 +463,7 @@ c0c9a6ba	Illuminazione LED (integrazione OpenRGB)
 c1eb5397	Calcolo del costo dell'elettricità
 6da48835	Mostra l'energia consumata e un costo stimato dell'elettricità sul pannello e nella pagina del rapporto
 db0f8cfc	Prezzo dell'elettricità per kWh
-306750cc	yen (il prezzo unitario in bolletta; se non lo sai, lascia i 31 yen indicativi)
 1405c464	Consumo oltre a CPU e GPU
-665cef72	W (scheda madre, memoria, SSD, ventole, perdite dell'alimentatore ecc.; di solito 40–80 W)
-b4d79a66	CPU e GPU usano i valori dei loro sensori. Monitor e altoparlanti non sono inclusi. Non è misurato alla presa, quindi è solo una stima.
 69355ed4	Sicurezza
 619b1ea2	Usa il processo watchdog (consigliato)
 b686ae3d	Evita che le ventole restino a bassa velocità se l'app viene chiusa a forza o si blocca. Il Gestione attività mostra due Zeph-Iris; uno dei due è il watchdog
@@ -1369,8 +1366,6 @@ efd9152e	Vita {0:F0}%
 5afe281d	Salvate le registrazioni dei 10 minuti prima e dopo l'anomalia: {0}
 61c7691d	Vedi registrazioni
 29d6a363	{0:N0} yen
-37d31a15	CPU e GPU usano i valori dei sensori, il resto è calcolato come {0:F0} W (tariffa {1:0.##} yen/kWh). Viene contato solo mentre l'app è in esecuzione.
-e03883da	CPU {0:F0} W · GPU {1:F0} W · altro {2:F0} W
 83b6ebdd	{0:F2} kWh · {1:F1} ore
 2f240cf7	{0:F1} kWh (dalla media dei giorni registrati)
 b5d6b2e1	Circa {0} · {1:F1} ore
@@ -1652,3 +1647,33 @@ f2252901	Ritorno alla versione precedente ({0}).\n\nDopo aver scaricato da GitHu
 6d39169b	Impostazioni e registrazioni della versione precedente sono state riprese da {0}. Quella cartella non viene più usata: controllane il contenuto, poi puoi eliminarla.
 f66007ff	{0} (la versione precedente)
 7f8ae76b	Zeph-Iris funziona grazie a software open source come LibreHardwareMonitor, PawnIO, OpenRGB, NAudio, QRCoder, Montserrat, Zen Maru Gothic e Inno Setup. Grazie a tutte le persone che li realizzano (le licenze sono nella cartella «licenses» dell'app).
+0021212b	Il valore non torna (il resto del PC risulta {0:F0} W). Misura di nuovo
+074e3049	La potenza prelevata dalla presa è calcolata con i valori calibrati il {0} con un misuratore di consumo (resto del PC {1:F0} W, efficienza dell'alimentatore {2:F0}%; tariffa {3:0.##} yen/kWh). Monitor e simili non sono inclusi. Conteggiato solo mentre l'app è in esecuzione.
+083b2352	Valore del misuratore a riposo
+138470aa	Collega il cavo di alimentazione del PC (non del monitor) a un misuratore di consumo, inserisci il valore letto e premi «Registra». Per calibrare basta una registrazione a riposo. Se registri anche sotto carico (mentre gira un gioco o un benchmark), viene calcolata anche l'efficienza dell'alimentatore. Attendi che il valore si stabilizzi prima di premere.
+1d2db3b4	La potenza di CPU/GPU sotto carico non supera di almeno {0:F0} W quella a riposo, quindi l'efficienza dell'alimentatore resta al {1:F0}%
+1d6970b9	La potenza di CPU/GPU oscilla ({0:F0} W in 20 s). Premi di nuovo quando il carico si è stabilizzato
+2b38bba6	W (scheda madre, memoria, SSD, ventole, pompa, LED ecc.; di solito 30–70 W)
+30253b1e	% (copre le perdite dell'alimentatore; 87–90% per un 80 PLUS Gold; se non lo sai, lascia 88%)
+42c1084f	Registra
+5119fa5e	Inserisci il valore del misuratore come numero
+54d4f6b0	Inserisci un valore del misuratore tra 10 e 3000 W
+68a46800	Ancora nessuna misura
+7e04fd6d	I due valori non tornano (l'efficienza dell'alimentatore risulta {0:F0}%). Attendi che il misuratore si stabilizzi e misura di nuovo
+89449c5d	Una stima di circa ±20%: CPU e GPU usano i valori dei sensori, il resto del PC è contato come {0:F0} W e l'efficienza dell'alimentatore come {1:F0}% (tariffa {2:0.##} yen/kWh). Puoi calibrarla con un misuratore di consumo in «Calcolo del costo dell'elettricità» nelle Impostazioni. Conteggiato solo mentre l'app è in esecuzione.
+89dc9684	Efficienza dell'alimentatore
+8d15c619	Valore del misuratore sotto carico
+8d572aec	Calibra con un misuratore di consumo
+a659b907	CPU e GPU usano i valori dei sensori; si aggiungono il resto del PC e le perdite dell'alimentatore per ottenere la potenza prelevata dalla presa. Monitor e altoparlanti non sono inclusi. Finché non calibri con un misuratore di consumo, è una stima di circa ±20%.
+adcd4c0b	Non ancora calibrato
+bc9bf913	Non ci sono ancora valori dei sensori di potenza CPU/GPU. Attendi un momento e premi di nuovo
+c037de9a	CPU {0:F0} W · GPU {1:F0} W · Altro {2:F0} W · Perdite alimentatore {3:F0} W
+c0bf5633	Calibrato: resto del PC {0:F0} W, efficienza dell'alimentatore {1:F0}% (dai valori a riposo e sotto carico)
+c91890c4	Calibrato: resto del PC {0:F0} W (l'efficienza dell'alimentatore resta al {1:F0}%; registra anche sotto carico per calcolarla)
+d46cee51	Calibrato il {0}
+e3b755dc	yen (il più preciso: importo della bolletta ÷ kWh consumati; se non lo sai, lascia i 31 yen tipici)
+e4d1e7a9	Cancella calibrazione
+e6f4ba17	Il valore del misuratore ({0:F0} W) è inferiore ai valori dei sensori di CPU e GPU ({1:F0} W). Controlla di misurare la presa del PC stesso
+f7824b90	Calibrazione cancellata; tornati alla stima iniziale (resto del PC 50 W, efficienza dell'alimentatore 88%)
+f7cdd477	Registrato: presa {0:F0} W · CPU+GPU {1:F0} W
+f83af4dd	I due valori non tornano (il resto del PC risulta {0:F0} W). Misura di nuovo

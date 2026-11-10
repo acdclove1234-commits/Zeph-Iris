@@ -463,10 +463,7 @@ c0c9a6ba	Ledverlichting (OpenRGB-koppeling)
 c1eb5397	Berekening stroomkosten
 6da48835	Toont het energieverbruik en geschatte stroomkosten op het dashboard en de rapportpagina
 db0f8cfc	Stroomprijs per kWh
-306750cc	yen (de prijs per eenheid op je rekening; weet je het niet, laat dan de richtwaarde van 31 yen staan)
 1405c464	Verbruik naast CPU en GPU
-665cef72	W (moederbord, geheugen, SSD, ventilatoren, voedingsverliezen enz.; meestal 40–80 W)
-b4d79a66	CPU en GPU gebruiken hun sensorwaarden. Monitoren en luidsprekers tellen niet mee. Dit is niet aan het stopcontact gemeten, dus alleen een schatting.
 69355ed4	Veiligheid
 619b1ea2	Watchdog-proces gebruiken (aanbevolen)
 b686ae3d	Voorkomt dat de ventilatoren op een laag toerental blijven hangen als de app wordt afgesloten of vastloopt. Taakbeheer toont twee Zeph-Iris-processen; één daarvan is de watchdog
@@ -1369,8 +1366,6 @@ efd9152e	Levensduur {0:F0}%
 5afe281d	De metingen van 10 minuten voor en na de storing zijn opgeslagen: {0}
 61c7691d	Metingen bekijken
 29d6a363	{0:N0} yen
-37d31a15	CPU en GPU gebruiken sensorwaarden, de rest wordt gerekend als {0:F0} W (tarief {1:0.##} yen/kWh). Alleen geteld zolang de app draait.
-e03883da	CPU {0:F0} W · GPU {1:F0} W · overig {2:F0} W
 83b6ebdd	{0:F2} kWh · {1:F1} uur
 2f240cf7	{0:F1} kWh (op basis van het gemiddelde van dagen met metingen)
 b5d6b2e1	Ongeveer {0} · {1:F1} uur
@@ -1652,3 +1647,33 @@ f2252901	Terug naar de vorige versie ({0}).\n\nNadat het installatieprogramma va
 6d39169b	De instellingen en metingen van de vorige versie zijn overgenomen uit {0}. Die map wordt niet meer gebruikt; controleer de inhoud en daarna kun je hem verwijderen.
 f66007ff	{0} (de vorige versie)
 7f8ae76b	Zeph-Iris werkt dankzij opensourcesoftware zoals LibreHardwareMonitor, PawnIO, OpenRGB, NAudio, QRCoder, Montserrat, Zen Maru Gothic en Inno Setup. Dank aan iedereen die ze maakt (de licenties staan in de map "licenses" van de app).
+0021212b	De waarde past niet (de rest van de pc kwam uit op {0:F0} W). Meet opnieuw
+074e3049	Het vermogen uit het stopcontact wordt berekend met de waarden die op {0} met een energiemeter zijn gekalibreerd (rest van de pc {1:F0} W, rendement van de voeding {2:F0}%; tarief {3:0.##} yen/kWh). Monitoren en dergelijke zijn niet meegerekend. Wordt alleen geteld terwijl de app draait.
+083b2352	Energiemeter in rust
+138470aa	Sluit het netsnoer van de pc (niet van de monitor) aan op een energiemeter, vul de afgelezen waarde in en druk op ‘Vastleggen’. Alleen in rust vastleggen is genoeg om te kalibreren. Legt u ook onder belasting vast (terwijl een game of benchmark draait), dan wordt ook het rendement van de voeding berekend. Wacht tot de waarde stabiel is voordat u drukt.
+1d2db3b4	Het CPU-/GPU-vermogen onder belasting is niet minstens {0:F0} W hoger dan in rust, dus het rendement van de voeding blijft {1:F0}%
+1d6970b9	Het CPU-/GPU-vermogen schommelt ({0:F0} W in 20 s). Druk opnieuw als de belasting stabiel is
+2b38bba6	W (moederbord, geheugen, SSD's, ventilatoren, pomp, leds enz.; meestal 30–70 W)
+30253b1e	% (dekt de verliezen van de voeding; 87–90% bij 80 PLUS Gold; weet u het niet, laat dan 88% staan)
+42c1084f	Vastleggen
+5119fa5e	Vul de energiemeterwaarde als getal in
+54d4f6b0	Vul een energiemeterwaarde tussen 10 en 3000 W in
+68a46800	Nog niets gemeten
+7e04fd6d	De twee waarden passen niet bij elkaar (het rendement van de voeding kwam uit op {0:F0}%). Wacht tot de energiemeter stabiel is en meet opnieuw
+89449c5d	Een schatting van ongeveer ±20%: CPU en GPU gebruiken sensorwaarden, de rest van de pc telt als {0:F0} W en het rendement van de voeding als {1:F0}% (tarief {2:0.##} yen/kWh). U kunt dit kalibreren met een energiemeter onder ‘Berekening stroomkosten’ in Instellingen. Wordt alleen geteld terwijl de app draait.
+89dc9684	Rendement van de voeding
+8d15c619	Energiemeter onder belasting
+8d572aec	Kalibreren met een energiemeter
+a659b907	CPU en GPU gebruiken sensorwaarden; de rest van de pc en de verliezen van de voeding worden opgeteld tot het vermogen uit het stopcontact. Monitoren en luidsprekers zijn niet meegerekend. Tot u kalibreert met een energiemeter is dit een schatting van ongeveer ±20%.
+adcd4c0b	Nog niet gekalibreerd
+bc9bf913	Er zijn nog geen waarden van de vermogenssensoren van CPU/GPU. Wacht even en druk opnieuw
+c037de9a	CPU {0:F0} W · GPU {1:F0} W · Overig {2:F0} W · Voedingsverlies {3:F0} W
+c0bf5633	Gekalibreerd: rest van de pc {0:F0} W, rendement van de voeding {1:F0}% (uit de waarden in rust en onder belasting)
+c91890c4	Gekalibreerd: rest van de pc {0:F0} W (rendement van de voeding blijft {1:F0}%; leg ook onder belasting vast om het te berekenen)
+d46cee51	Gekalibreerd op {0}
+e3b755dc	yen (het nauwkeurigst: factuurbedrag ÷ verbruikte kWh; weet u het niet, laat dan de gebruikelijke 31 yen staan)
+e4d1e7a9	Kalibratie wissen
+e6f4ba17	De energiemeterwaarde ({0:F0} W) is lager dan de sensorwaarden van CPU en GPU ({1:F0} W). Controleer of u het stopcontact van de pc zelf meet
+f7824b90	Kalibratie gewist; terug naar de beginschatting (rest van de pc 50 W, rendement van de voeding 88%)
+f7cdd477	Vastgelegd: stopcontact {0:F0} W · CPU+GPU {1:F0} W
+f83af4dd	De twee waarden passen niet bij elkaar (de rest van de pc kwam uit op {0:F0} W). Meet opnieuw

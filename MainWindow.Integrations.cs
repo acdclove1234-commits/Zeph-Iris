@@ -37,6 +37,7 @@ public partial class MainWindow
         UpdateRgbStatus();
         UpdateNtfyQr();
         RefreshUpdateCard();
+        RefreshCalibrationUi();
     }
 
     // =====================================================================

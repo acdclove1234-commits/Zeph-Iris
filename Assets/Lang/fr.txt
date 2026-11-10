@@ -463,10 +463,7 @@ c0c9a6ba	Éclairage LED (intégration OpenRGB)
 c1eb5397	Calcul du coût de l'électricité
 6da48835	Affiche l'énergie consommée et un coût d'électricité estimé sur le tableau de bord et la page Rapport
 db0f8cfc	Prix de l'électricité par kWh
-306750cc	yens (le prix unitaire de votre facture ; dans le doute, gardez la valeur indicative de 31 yens)
 1405c464	Consommation hors CPU et GPU
-665cef72	W (carte mère, mémoire, SSD, ventilateurs, pertes de l'alimentation, etc. ; en général 40 à 80 W)
-b4d79a66	Le CPU et le GPU utilisent les valeurs de leurs capteurs. Les écrans et enceintes ne sont pas inclus. Ce n'est pas une mesure à la prise, seulement une estimation.
 69355ed4	Sécurité
 619b1ea2	Utiliser le processus de surveillance (recommandé)
 b686ae3d	Empêche les ventilateurs de rester à basse vitesse si l'application est tuée ou se fige. Le Gestionnaire des tâches affiche deux Zeph-Iris ; l'un d'eux est la surveillance
@@ -1369,8 +1366,6 @@ efd9152e	Durée de vie {0:F0} %
 5afe281d	Les enregistrements des 10 minutes avant et après l'anomalie ont été sauvegardés : {0}
 61c7691d	Voir les enregistrements
 29d6a363	{0:N0} yens
-37d31a15	Le CPU et le GPU utilisent les valeurs des capteurs, le reste est compté pour {0:F0} W (tarif {1:0.##} yens/kWh). Seul le temps de fonctionnement de l'application est compté.
-e03883da	CPU {0:F0} W · GPU {1:F0} W · autres {2:F0} W
 83b6ebdd	{0:F2} kWh · {1:F1} h
 2f240cf7	{0:F1} kWh (d'après la moyenne des jours enregistrés)
 b5d6b2e1	Environ {0} · {1:F1} h
@@ -1652,3 +1647,33 @@ f2252901	Retour à la version précédente ({0}).\n\nUne fois le programme d'ins
 6d39169b	Les réglages et enregistrements de la version précédente ont été repris depuis {0}. Ce dossier n'est plus utilisé ; vérifiez son contenu, puis vous pouvez le supprimer.
 f66007ff	{0} (l'ancienne version)
 7f8ae76b	Zeph-Iris fonctionne grâce à des logiciels libres comme LibreHardwareMonitor, PawnIO, OpenRGB, NAudio, QRCoder, Montserrat, Zen Maru Gothic et Inno Setup. Merci à toutes les personnes qui les créent (leurs licences sont dans le dossier « licenses » de l'application).
+0021212b	La mesure ne convient pas (le reste du PC donne {0:F0} W). Mesurez à nouveau
+074e3049	La puissance tirée de la prise est calculée avec les valeurs calibrées le {0} avec un wattmètre (reste du PC {1:F0} W, rendement de l'alimentation {2:F0} % ; tarif {3:0.##} yens/kWh). Les écrans et autres ne sont pas inclus. Compté uniquement pendant que l'app fonctionne.
+083b2352	Valeur du wattmètre au repos
+138470aa	Branchez le cordon d'alimentation du PC (pas celui de l'écran) sur un wattmètre, saisissez la valeur affichée et appuyez sur « Enregistrer ». Une mesure au repos suffit pour calibrer. Si vous enregistrez aussi une mesure en charge (pendant un jeu ou un benchmark), le rendement de l'alimentation est aussi calculé. Attendez que la valeur se stabilise avant d'appuyer.
+1d2db3b4	La puissance CPU/GPU en charge ne dépasse pas celle au repos d'au moins {0:F0} W, le rendement de l'alimentation reste donc à {1:F0} %
+1d6970b9	La puissance CPU/GPU fluctue ({0:F0} W en 20 s). Appuyez à nouveau quand la charge s'est stabilisée
+2b38bba6	W (carte mère, mémoire, SSD, ventilateurs, pompe, LED, etc. ; en général 30–70 W)
+30253b1e	% (couvre les pertes de l'alimentation ; 87–90 % pour une 80 PLUS Gold ; à défaut, gardez 88 %)
+42c1084f	Enregistrer
+5119fa5e	Saisissez la valeur du wattmètre sous forme de nombre
+54d4f6b0	Saisissez une valeur du wattmètre entre 10 et 3000 W
+68a46800	Rien n'a encore été mesuré
+7e04fd6d	Les deux mesures ne concordent pas (le rendement de l'alimentation donne {0:F0} %). Attendez que le wattmètre se stabilise et mesurez à nouveau
+89449c5d	Une estimation à environ ±20 % : le CPU et le GPU utilisent les valeurs des capteurs, le reste du PC compte pour {0:F0} W et le rendement de l'alimentation pour {1:F0} % (tarif {2:0.##} yens/kWh). Vous pouvez la calibrer avec un wattmètre dans « Calcul du coût de l'électricité » des Paramètres. Compté uniquement pendant que l'app fonctionne.
+89dc9684	Rendement de l'alimentation
+8d15c619	Valeur du wattmètre en charge
+8d572aec	Calibrer avec un wattmètre
+a659b907	Le CPU et le GPU utilisent les valeurs des capteurs ; le reste du PC et les pertes de l'alimentation sont ajoutés pour obtenir la puissance tirée de la prise. Les écrans et les haut-parleurs ne sont pas inclus. Tant que vous n'avez pas calibré avec un wattmètre, c'est une estimation à environ ±20 %.
+adcd4c0b	Pas encore calibré
+bc9bf913	Il n'y a pas encore de valeurs des capteurs de puissance CPU/GPU. Patientez un peu et appuyez à nouveau
+c037de9a	CPU {0:F0} W · GPU {1:F0} W · Autre {2:F0} W · Pertes alim. {3:F0} W
+c0bf5633	Calibré : reste du PC {0:F0} W, rendement de l'alimentation {1:F0} % (d'après les mesures au repos et en charge)
+c91890c4	Calibré : reste du PC {0:F0} W (le rendement de l'alimentation reste à {1:F0} % ; enregistrez aussi en charge pour le calculer)
+d46cee51	Calibré le {0}
+e3b755dc	yens (le plus précis : montant de la facture ÷ kWh consommés ; à défaut, gardez les 31 yens habituels)
+e4d1e7a9	Effacer le calibrage
+e6f4ba17	La valeur du wattmètre ({0:F0} W) est inférieure aux valeurs des capteurs CPU et GPU ({1:F0} W). Vérifiez que vous mesurez bien la prise du PC lui-même
+f7824b90	Calibrage effacé ; retour à l'estimation de départ (reste du PC 50 W, rendement de l'alimentation 88 %)
+f7cdd477	Enregistré : prise {0:F0} W · CPU+GPU {1:F0} W
+f83af4dd	Les deux mesures ne concordent pas (le reste du PC donne {0:F0} W). Mesurez à nouveau
