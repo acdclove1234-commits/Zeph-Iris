@@ -140,7 +140,7 @@ public static class AmbientEffects
             for (int k = 0; k < pips; k++)
             {
                 double a = ts - (t0 + k * gap);
-                if (a >= 0 && a < 0.4) env = Math.Max(env, Math.Exp(-a / 0.05));
+                if (a >= 0 && a < 0.5) env = Math.Max(env, Math.Exp(-a / 0.08) * Math.Min(1, a / 0.015));
             }
             if (env <= 0) continue;
             var col = BirdColors[(int)(Hash(s, 26) * BirdColors.Length) % BirdColors.Length];
@@ -158,7 +158,7 @@ public static class AmbientEffects
     private static LinColor Fire(double ts, double p, int i, bool gamma)
     {
         // 揺らめき: LED ごとの、なめらかにつないだ乱数（速い揺れ ＋ ゆっくりした揺れ）
-        double fast = Smooth2(p * 9, ts * 4.5, 31), slow = Smooth2(p * 3, ts * 1.1, 32);
+        double fast = Smooth2(p * 7, ts * 2.8, 31), slow = Smooth2(p * 3, ts * 0.7, 32);
         double heat = Math.Clamp(0.25 + 0.55 * fast * (0.6 + 0.4 * slow) + 0.25 * (1 - p), 0, 1);
         // 熱さ → 色: 暗い赤 → 赤 → 橙 → 黄
         double r = Math.Clamp(heat * 1.6, 0, 1);
@@ -175,7 +175,7 @@ public static class AmbientEffects
     {
         double hue = 145 + 45 * Math.Sin(2 * Math.PI * (p * 0.8 + ts * 0.07)) + 50 * Math.Sin(2 * Math.PI * (p * 0.3 - ts * 0.04) + 1.1);
         double band = 0.5 + 0.5 * Math.Sin(2 * Math.PI * (p * 2.2 - ts * 0.12) + 1.2 * Math.Sin(2 * Math.PI * (ts * 0.05 + p * 0.5)));
-        double k = 0.08 + 0.92 * band * band;
+        double k = 0.14 + 0.86 * band * band;
         var (r, g, b) = Hsv(hue, 0.85, k);
         return Lin(r, g, b, gamma);
     }
@@ -191,7 +191,9 @@ public static class AmbientEffects
     private static LinColor Meteor(double ts, double p, double led, bool gamma)
     {
         // 夜空: ごく暗い紺に、星がうっすらまたたく
-        double twinkle = Hash((long)Math.Floor(ts * 2), (int)(p * 997) + 41) > 0.97 ? 0.08 : 0;
+        // 星: LED ごとに決まった位置の星が、ゆっくり明るくなって消える（ぱっと点いたり消えたりしない）
+        int star = (int)(p * 997) + 41;
+        double twinkle = Hash(star, 40) > 0.85 ? 0.10 * Math.Pow(0.5 + 0.5 * Math.Sin(2 * Math.PI * (ts * (0.15 + 0.2 * Hash(star, 42)) + Hash(star, 43))), 2) : 0;
         double r = 0.01 + twinkle, g = 0.012 + twinkle, b = 0.04 + twinkle;
         long slot = (long)Math.Floor(ts / MeteorSlotSec);
         for (long s = slot - 1; s <= slot; s++)
@@ -225,7 +227,7 @@ public static class AmbientEffects
         double lub = Math.Exp(-Math.Pow(ph / 0.07, 2));
         double dub = 0.65 * Math.Exp(-Math.Pow((ph - 0.26) / 0.08, 2));
         double lub2 = Math.Exp(-Math.Pow((ph - 1) / 0.07, 2));   // 次の拍の頭（境目でつながるように）
-        double k = 0.10 + 0.90 * Math.Max(Math.Max(lub, dub), lub2);
+        double k = 0.22 + 0.78 * Math.Max(Math.Max(lub, dub), lub2);
         return Lin(c.R * k, c.G * k, c.B * k, gamma);
     }
 

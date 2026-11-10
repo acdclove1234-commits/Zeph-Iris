@@ -133,6 +133,7 @@ public sealed class DeviceRenderer
     private LinColor[] _light = Array.Empty<LinColor>();
     // デバイス・ゾーンごとの光り方（上書きがなければ None）と、その色（null なら全体の色）
     private RgbLightPlan _plan = RgbLightPlan.None;
+    private bool _planHasAmbient;
     // ゾーン（ファンごとに分けたものを含む）
     private RgbZoneSplit.Expanded _zx = new(null, new[] { "" }, new[] { "" });
     private Rgb?[] _planColor = Array.Empty<Rgb?>();
@@ -413,8 +414,12 @@ public sealed class DeviceRenderer
         bool allow = !Device.IsSlow && input.AllowDither;
         if (!allow && _ditherAllowed) _out.Reset();
         _ditherAllowed = allow;
-        // 虹・呼吸などでは使わない（OpenRGB が間引いて書くと端数の持ち越しがずれて、暗い色がちらつくことがあるため）
-        bool dither = allow && (layer is Layer.Music or Layer.SyncTest || _fade.Active);
+        // 虹・呼吸などでは使わない（OpenRGB が間引いて書くと端数の持ち越しがずれて、暗い色がちらつくことがあるため）。
+        // 雷・波・オーロラなど暗いところがゆっくり変わる光り方は使う（使わないと、暗い LED が 0・1・2… と段々に
+        // 跳んで、ちらついて見える）。書き込みを減らすデバイス（グラボ）は止まった絵なので使わない
+        bool ambient = layer == Layer.Mode && !Device.IsLowWrite && (AmbientEffects.Handles(cfg.Mode) || _planHasAmbient);
+        bool dither = allow && (layer is Layer.Music or Layer.SyncTest || _fade.Active || ambient);
+        _out.DitherFloorCode = ambient ? 1.5f : 0f;
         _out.Write(_light, output, 1f, dither);
         _hasLast = true;
     }
@@ -826,6 +831,8 @@ public sealed class DeviceRenderer
     private void BuildLightPlan(int n, RgbDeviceSettings settings)
     {
         _plan = RgbLightPlan.Build(settings, n, _zx.Zones, k => _zx.Settings(settings, k));
+        _planHasAmbient = false;
+        foreach (var seg in _plan.Segments) if (AmbientEffects.Handles(seg.Mode)) _planHasAmbient = true;
         if (_planColor.Length != _plan.Segments.Count) _planColor = new Rgb?[_plan.Segments.Count];
         for (int k = 0; k < _plan.Segments.Count; k++)
             _planColor[k] = _plan.Segments[k].Color.Length > 0 ? Rgb.Parse(_plan.Segments[k].Color) : null;

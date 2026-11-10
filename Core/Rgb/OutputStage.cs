@@ -79,6 +79,12 @@ public sealed class OutputStage
     /// 光の量 src に明るさ brightness（0〜1）を掛けて、0〜255 の色にして dst へ入れる。
     /// dither = true なら、暗い成分（64 未満）は端数をコマをまたいで持ち越す（1 秒に何十回も送る速いデバイス用）
     /// </summary>
+    /// <summary>
+    /// この値（0〜255 の段）より暗い色はディザリングしない（四捨五入）。0 と 1 を行き来すると、消えたり点いたりして
+    /// ちらついて見えるため。雷・波などの光り方で 1.5 にする（音楽連動は 0 のまま: 暗くなって消えるまでを滑らかにする）
+    /// </summary>
+    public float DitherFloorCode { get; set; }
+
     public void Write(ReadOnlySpan<LinColor> src, Span<Rgb> dst, float brightness, bool dither)
     {
         int n = Math.Min(src.Length, dst.Length);
@@ -91,9 +97,9 @@ public sealed class OutputStage
         for (int i = 0; i < n; i++)
         {
             var c = src[i];
-            byte r = Dither(c.R * brightness, ref _err[i * 3]);
-            byte g = Dither(c.G * brightness, ref _err[i * 3 + 1]);
-            byte b = Dither(c.B * brightness, ref _err[i * 3 + 2]);
+            byte r = Dither(c.R * brightness, ref _err[i * 3], DitherFloorCode);
+            byte g = Dither(c.G * brightness, ref _err[i * 3 + 1], DitherFloorCode);
+            byte b = Dither(c.B * brightness, ref _err[i * 3 + 2], DitherFloorCode);
             dst[i] = new Rgb(r, g, b);
         }
     }
@@ -102,11 +108,11 @@ public sealed class OutputStage
     /// 1 成分のディザリング。a = 値×255 + 持ち越し、出す値 o = a を四捨五入、持ち越し = a − o（−0.5〜+0.5）。
     /// 真っ黒（0）はチラつかないよう、持ち越しを捨てて 0 のままにする
     /// </summary>
-    private static byte Dither(float v, ref float err)
+    private static byte Dither(float v, ref float err, float floorCode = 0)
     {
         if (!(v > 0)) { err = 0; return 0; }
         float code = v * 255;
-        if (code >= DitherBelowCode)
+        if (code >= DitherBelowCode || code < floorCode)
         {
             err = 0;
             return (byte)Math.Round(Math.Min(code, 255f));
