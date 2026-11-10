@@ -76,7 +76,11 @@ public sealed class SparkleEffect : IMusicEffect
             }
         }
         float kick = _kickS * (float)Math.Exp(-Math.Max(0, c.T - _kickT) / KickTauSec);
-        _base = c.PalAt(c.T / BaseCycleSec) * c.Ilin(0.10f + 0.25f * c.Frame.MidE + 0.45f * kick);
+        // ビートの光（テンポをつかんでいれば、予測した拍で光る。キックを検出してから光るだけだと、検出にかかる時間だけ遅れて見える。
+        // ほかの光り方と同じく、デバイスの遅れも先回りする）。コマの間の最大値から経過時間だけ減らした値も見る
+        float beatFl = Math.Max(c.Fl, c.FlPeak * (float)Math.Exp(-Math.Max(0, c.T - c.FlPeakT) / KickTauSec));
+        kick = Math.Max(kick, beatFl);
+        _base = c.PalAt(c.T / BaseCycleSec) * c.Ilin(0.08f + 0.22f * c.Frame.MidE + 0.6f * kick);
     }
 
     /// <summary>

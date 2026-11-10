@@ -595,6 +595,29 @@ public static class EffectsTests
         T.Check(lit3 > 0, "a hat 0.24 s later lights again");
     }
 
+    /// <summary>
+    /// きらめき: キックを検出しなくても、テンポをつかんでいれば予測した拍で全体が明るくなる
+    /// （キックの検出を待つと、検出にかかる時間だけ遅れて見えるため。ほかの光り方と同じ）
+    /// </summary>
+    public static void TestSparkleFollowsPredictedBeat()
+    {
+        var cfg = MusicCfg(gamma: false);
+        var m = Music(MusicStyles.Sparkle) with { MinBrightness = 0 };
+        var x = new Manual(Strip(60), cfg, m, new RgbDeviceSettings { Mirror = false });
+        x.In.Frame.MidE = 0;
+        x.In.Beat = new BeatState(0.5, 1.0, 0, 0.95, true, 0);
+        float onBeat = 0, between = 0;
+        for (double t = 1.6; t <= 4.0; t += 1 / 60.0)
+        {
+            x.Step(t);
+            double ph = (t - 1.0) / 0.5 % 1;
+            float level = x.R.LastLight.ToArray().Average(c => c.MaxChannel);
+            if (ph < 0.06 || ph > 0.97) onBeat = Math.Max(onBeat, level);
+            else if (ph is > 0.4 and < 0.6) between = Math.Max(between, level);
+        }
+        T.Check(onBeat > between * 1.5, $"Sparkle brightens on the predicted beat without a kick event (on beat {onBeat:F3}, between {between:F3})");
+    }
+
     public static void TestSparkleAndChase()
     {
         // きらめき: ハイハットで粒が出て、0.08 秒で消える

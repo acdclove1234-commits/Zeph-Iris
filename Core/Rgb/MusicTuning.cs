@@ -149,15 +149,15 @@ public static class MusicTuning
     {
         var (gain, gap) = m.Intensity switch
         {
-            Intensities.Subtle => (0.35f, 0.25),
-            Intensities.High => (0.8f, 0.10),
-            Intensities.Intense => (1.0f, 0.06),
-            _ => (0.55f, 0.16),
+            Intensities.Subtle => (0.45f, 0.20),
+            Intensities.High => (0.85f, 0.08),
+            Intensities.Intense => (1.0f, 0.05),
+            _ => (0.7f, 0.12),
         };
         if (m.ReduceFlashing)
         {
-            gain *= 0.8f;
-            gap = Math.Max(gap, 0.2);
+            gain *= 0.85f;
+            gap = Math.Max(gap, 0.15);
         }
         return (gain, gap);
     }
