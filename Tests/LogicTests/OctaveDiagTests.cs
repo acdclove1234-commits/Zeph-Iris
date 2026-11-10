@@ -129,6 +129,24 @@ public static class OctaveDiagTests
         }
     }
 
+    /// <summary>調査（MUSIC_TIMING、MUSIC_HALFSHIFT="1.3,2,3"）: 半拍ずれた位置へ取り直すのに必要な比（HalfShiftRatio）を変えたとき</summary>
+    public static void TestHalfShiftSweep()
+    {
+        string? folder = Environment.GetEnvironmentVariable("MUSIC_TIMING");
+        if (string.IsNullOrEmpty(folder) || !Directory.Exists(folder)) return;
+        var files = Directory.GetFiles(folder, "*.wav").Where(f => File.Exists(Path.ChangeExtension(f, ".done"))).OrderBy(f => f).ToList();
+        double saved = BeatTracker.Tune.HalfShiftRatio;
+        try
+        {
+            foreach (double r in (Environment.GetEnvironmentVariable("MUSIC_HALFSHIFT") ?? "1.3,2,3").Split(',').Select(double.Parse))
+            {
+                BeatTracker.Tune.HalfShiftRatio = r;
+                EvaluateAll(files, $"half shift ratio {r:F1}");
+            }
+        }
+        finally { BeatTracker.Tune.HalfShiftRatio = saved; }
+    }
+
     /// <summary>全曲を流して、同じ・倍・半分の割合・同期・拍の上の割合と、合成音のベンチの判定を 1 行に（曲ごとの内訳も）</summary>
     private static void EvaluateAll(List<string> files, string label)
     {
@@ -303,6 +321,73 @@ public static class OctaveDiagTests
         for (int j = 0; j < ls.Length; j++)
             T.Info($"switch after {ls[j],4:F0} s of 'half': double time in such runs {fixedDbl[j] / Math.Max(1, lockedDbl):P0}, caught {caughtDbl[j]} times in {string.Join(",", caughtSongs[j])}; " +
                    $"wrong switches on same-tempo locks {falseSame[j]} ({falseSame[j] / Math.Max(1, lockedSame / 3600):F1}/h) in {string.Join(",", falseSongs[j])}");
+    }
+
+    /// <summary>
+    /// 調査（MUSIC_TIMING）: ロック中でテンポが物差しと同じ 10 秒ごとの区間で、アプリの拍の上と、拍のちょうど間（半拍）の
+    /// どちらに音の立ち上がりが強いか（帯ごとの「間 ÷ 上」。1 より大きいと間のほうが強い）と、キック・スネアの数。
+    /// 物差しと合っている区間（ok）と半拍ずれている区間（OFF）を並べて出す。どちらの拍が本物かを音そのもので見るため
+    /// </summary>
+    public static void TestHalfBeatDiag()
+    {
+        string? folder = Environment.GetEnvironmentVariable("MUSIC_TIMING");
+        if (string.IsNullOrEmpty(folder) || !Directory.Exists(folder)) return;
+        string only = Environment.GetEnvironmentVariable("MUSIC_ONLY") ?? "";
+        foreach (string wav in Directory.GetFiles(folder, "*.wav").Where(f => File.Exists(Path.ChangeExtension(f, ".done"))).OrderBy(f => f))
+        {
+            string name = Path.GetFileNameWithoutExtension(wav);
+            if (only.Length > 0 && !only.Split(',').Contains(name)) continue;
+            var mono = MusicWavTests.ReadWavMono(wav, out int fs);
+            var e = new AudioEngine(fs) { Settings = MusicTuning.EngineSettings(new RgbConfig { Mode = RgbModes.Music }) };
+            var hops = new List<(double T, double[] V)>();
+            var refHops = new List<(double T, double Odf)>();
+            var log = new List<string>();
+            e.Onsets.DiagHop = (t, odf, bn) =>
+            {
+                hops.Add((t, new[] { bn[0], bn[1], bn[2], bn[3], odf }));
+                refHops.Add((t, (1.0 * bn[0] + 0.8 * bn[1] + 0.35 * bn[2] + 0.15 * bn[3]) / 2.3));
+            };
+            e.Tracker.DiagLog = s => log.Add(s);
+            var run = new EngineRun(e).Feed(mono);
+            var rb = BeatReference.Track(refHops, out double refBpm);
+            double hopSec = (hops[^1].T - hops[0].T) / (hops.Count - 1);
+            var kicks = run.Events.Where(x => x.Kind == AudioEventKind.Kick).Select(x => x.T).ToList();
+            var snares = run.Events.Where(x => x.Kind == AudioEventKind.Snare).Select(x => x.T).ToList();
+            T.Info($"--- {name} ref {refBpm:F1}");
+            for (double w = run.T0 + 8; w + 10 <= run.Frames[^1].T; w += 10)
+            {
+                int mid = run.Frames.FindIndex(f => f.T >= w + 5);
+                if (mid < 0) break;
+                var b = run.Beats[mid];
+                if (!b.Locked || b.Bpm <= 0) { T.Info($"  {w - run.T0,4:F0}s unlocked"); continue; }
+                double p = 60 / b.Bpm, anchor = b.NextBeatAfter(w + 5);
+                double Phase(double t) { double x = (t - anchor) / p; return x - Math.Floor(x); }
+                var on = new double[5];
+                var bt = new double[5];
+                int nb = 0, agree = 0, halfOff = 0;
+                for (double t = anchor - Math.Ceiling(5 / p) * p; t < w + 10; t += p)
+                {
+                    if (t < w) continue;
+                    nb++;
+                    for (int s = 0; s < 5; s++)
+                    {
+                        on[s] += PeakNear(hops, t, 2 * hopSec, s);
+                        bt[s] += PeakNear(hops, t + p / 2, 2 * hopSec, s);
+                    }
+                    double err = Math.Abs(MusicTiming.ErrTo(rb, t));
+                    if (err < 0.07) agree++;
+                    else if (Math.Abs(err - 30 / refBpm) < 0.07) halfOff++;
+                }
+                string verdict = agree > 2 * halfOff ? "ok " : halfOff > 2 * agree ? "OFF" : "mix";
+                int kOn = kicks.Count(t => t >= w && t < w + 10 && (Phase(t) < 0.12 || Phase(t) > 0.88));
+                int kBt = kicks.Count(t => t >= w && t < w + 10 && Math.Abs(Phase(t) - 0.5) < 0.12);
+                int sOn = snares.Count(t => t >= w && t < w + 10 && (Phase(t) < 0.12 || Phase(t) > 0.88));
+                int sBt = snares.Count(t => t >= w && t < w + 10 && Math.Abs(Phase(t) - 0.5) < 0.12);
+                string R(int s) => (bt[s] / Math.Max(1e-9, on[s])).ToString("F2");
+                T.Info($"  {w - run.T0,4:F0}s {verdict} app {b.Bpm,5:F1} between/on: bass {R(0)} lowmid {R(1)} mid {R(2)} high {R(3)} odf {R(4)} | kick on {kOn} bt {kBt} | snare on {sOn} bt {sBt}");
+            }
+            foreach (string s in log.Where(s => s.StartsWith("acquire") || s.StartsWith("locked")).Take(40)) T.Info("  log: " + s);
+        }
     }
 
     private static double PeakNear(List<(double T, double[] V)> hops, double t, double tol, int s)
