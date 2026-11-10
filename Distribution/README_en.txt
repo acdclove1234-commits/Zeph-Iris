@@ -13,6 +13,14 @@ and Iris, the rainbow (the LEDs).
   for example: Settings [設定].
 
 
+■ What's new in v6.10.3
+  - Music sync: "Sparkle" now brightens on the beat predicted from the tempo (it used to wait for a detected kick,
+    so it lagged a little and missed beats where no kick was found), with a stronger beat pulse.
+  - Hi-hat sparkles, toned down too far in 6.9.1, are partly back (moderate: 70% brightness, at least 0.12 s apart).
+  - Installer: the official installer of PawnIO, the fan control driver, is now included. On PCs without PawnIO it
+    is installed without the internet (winget remains the fallback). PawnIO's licence (GPL) and the location of its
+    source code are in the licenses folder.
+
 ■ What's new in v6.10.2
   - Lighting: removed the faint flicker left in Lightning, Waves and the other new effects. Dim LEDs no longer
     alternate between neighbouring values; each keeps the value it last sent until the brightness clearly changes.
