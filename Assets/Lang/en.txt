@@ -1713,3 +1713,17 @@ ed0f43c5	Paste copied image
 c9f1ad56	Don't split
 d68381ea	Fan {0}
 eb409a51	{0} fans
+01eb7369	Bands of green, cyan and violet light drift and ripple slowly across the night sky
+2634e74e	The chosen colour pulses twice, "lub-dub" (60 beats per minute at speed 1)
+4dc2e807	Now and then a light streaks across the dark night sky with a trail (the direction changes each time)
+5db4a3ad	Heartbeat
+678fa065	Waves
+71259fb6	Lightning
+750a4eb3	A dark stormy sky with the occasional white bolt. Each strike flickers 2–3 times and spreads out from where it hits before fading (all devices flash together)
+8b898d11	Fire
+9afce40d	Meteor
+a8481ef8	Swells of light roll back and forth over a sea of the chosen colour. The crests foam white
+c3299008	Small lights chirp 2–4 times like birdsong over a soft leaf green
+ce20ec89	Aurora
+f00ee174	Birdsong
+f16a0b90	Red, orange and yellow light flickers like flames on each LED

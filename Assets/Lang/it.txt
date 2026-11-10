@@ -1713,3 +1713,17 @@ ed0f43c5	Incolla immagine copiata
 c9f1ad56	Non dividere
 d68381ea	Ventola {0}
 eb409a51	{0} ventole
+01eb7369	Bande di luce verde, ciano e viola scorrono e ondeggiano lentamente nel cielo notturno
+2634e74e	Il colore scelto pulsa due volte, «tu-tum» (60 battiti al minuto a velocità 1)
+4dc2e807	Ogni tanto una luce attraversa il cielo notturno lasciando una scia (la direzione cambia ogni volta)
+5db4a3ad	Battito
+678fa065	Onde
+71259fb6	Temporale
+750a4eb3	Un cielo scuro di tempesta con qualche fulmine bianco. Ogni fulmine tremola 2–3 volte e si allarga dal punto in cui cade prima di spegnersi (tutti i dispositivi lampeggiano insieme)
+8b898d11	Fuoco
+9afce40d	Stella cadente
+a8481ef8	Ondate di luce vanno e vengono su un mare del colore scelto. Le creste spumeggiano di bianco
+c3299008	Piccole luci cinguettano 2–4 volte come uccellini su un verde foglia tenue
+ce20ec89	Aurora
+f00ee174	Cinguettio
+f16a0b90	Luce rossa, arancione e gialla tremola come fiamme su ogni LED

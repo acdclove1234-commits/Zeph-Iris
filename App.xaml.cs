@@ -798,7 +798,7 @@ public partial class App : Application
                 _controller.Config.Rgb.Music.Preset = MusicPresets.Custom;
                 _controller.Commit(recordUndo: false);
                 break;
-            case "led" when arg is RgbModes.Temperature or RgbModes.Rainbow or RgbModes.RainbowStatic or RgbModes.Breathing or RgbModes.Static or RgbModes.Music:
+            case "led" when RgbModes.IsKnown(arg):
                 _controller.Config.Rgb.Mode = arg;
                 _controller.Config.Rgb.Enabled = true;
                 _controller.Config.Rgb.LightsOff = false; // 光り方を選んだら点灯する

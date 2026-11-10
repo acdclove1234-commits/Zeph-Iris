@@ -1713,3 +1713,17 @@ ed0f43c5	Wklej skopiowany obraz
 c9f1ad56	Nie dziel
 d68381ea	Wentylator {0}
 eb409a51	{0} wentylatory
+01eb7369	Pasma zielonego, turkusowego i fioletowego światła powoli płyną i falują po nocnym niebie
+2634e74e	Wybrany kolor pulsuje dwa razy, „bum-bum” (60 uderzeń na minutę przy prędkości 1)
+4dc2e807	Od czasu do czasu światło przemyka z ogonem po ciemnym nocnym niebie (kierunek za każdym razem się zmienia)
+5db4a3ad	Bicie serca
+678fa065	Fale
+71259fb6	Burza
+750a4eb3	Ciemne burzowe niebo z rzadkimi białymi błyskawicami. Każde uderzenie migocze 2–3 razy i rozchodzi się od miejsca uderzenia, zanim zgaśnie (wszystkie urządzenia błyskają jednocześnie)
+8b898d11	Ogień
+9afce40d	Spadająca gwiazda
+a8481ef8	Fale światła przetaczają się tam i z powrotem po morzu w wybranym kolorze. Grzbiety fal pienią się na biało
+c3299008	Małe światełka ćwierkają 2–4 razy jak ptaki na tle łagodnej zieleni liści
+ce20ec89	Zorza polarna
+f00ee174	Śpiew ptaków
+f16a0b90	Czerwone, pomarańczowe i żółte światło migocze jak płomienie na każdej diodzie

@@ -96,7 +96,7 @@ public sealed class TrayIcon : IDisposable
         // LED: いまの光り方にチェックを付ける（メニューを開くたびに RefreshLightingMenu で更新）。
         // 選んだときは画面と同じ入口（App.ExecuteCommand）を通すので、「元に戻す」の履歴には残らない
         _ledMenu = new WinForms.ToolStripMenuItem(L("LED の光り方"));
-        foreach (var mode in new[] { RgbModes.Temperature, RgbModes.Rainbow, RgbModes.RainbowStatic, RgbModes.Breathing, RgbModes.Static, RgbModes.Music })
+        foreach (var mode in RgbModes.All)
         {
             var item = new WinForms.ToolStripMenuItem(ModeLabel(mode), null, (_, _) => command($"led:{mode}"));
             _ledModeItems.Add((item, mode));
@@ -135,16 +135,7 @@ public sealed class TrayIcon : IDisposable
     }
 
     /// <summary>光り方の表示名（画面の「光り方」と同じ言葉）</summary>
-    private static string ModeLabel(string mode) => mode switch
-    {
-        RgbModes.Temperature => L("温度"),
-        RgbModes.Rainbow => L("レインボー（流れる）"),
-        RgbModes.RainbowStatic => L("レインボー（固定）"),
-        RgbModes.Breathing => L("呼吸"),
-        RgbModes.Static => L("固定色"),
-        RgbModes.Music => L("音楽連動"),
-        _ => mode,
-    };
+    private static string ModeLabel(string mode) => RgbModes.Label(mode);
 
     /// <summary>いまの LED の設定（LightingState がなければ、メイン画面から読む）</summary>
     private RgbConfig? CurrentLighting()

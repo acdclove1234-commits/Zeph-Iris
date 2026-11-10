@@ -1713,3 +1713,17 @@ ed0f43c5	Gekopieerde afbeelding plakken
 c9f1ad56	Niet opsplitsen
 d68381ea	Ventilator {0}
 eb409a51	{0} ventilatoren
+01eb7369	Banden van groen, cyaan en violet licht drijven en golven langzaam door de nachtelijke hemel
+2634e74e	De gekozen kleur klopt twee keer, ‘boem-boem’ (60 slagen per minuut bij snelheid 1)
+4dc2e807	Af en toe schiet een licht met een staart door de donkere nachtelijke hemel (de richting wisselt elke keer)
+5db4a3ad	Hartslag
+678fa065	Golven
+71259fb6	Onweer
+750a4eb3	Een donkere onweerslucht met af en toe een witte bliksemflits. Elke inslag flikkert 2–3 keer en verspreidt zich vanaf de plek van inslag voordat hij vervaagt (alle apparaten flitsen tegelijk)
+8b898d11	Vuur
+9afce40d	Vallende ster
+a8481ef8	Deiningen van licht rollen heen en weer over een zee in de gekozen kleur. De golftoppen schuimen wit
+c3299008	Kleine lichtjes tjilpen 2–4 keer als vogels boven een zacht bladgroen
+ce20ec89	Noorderlicht
+f00ee174	Vogelgezang
+f16a0b90	Rood, oranje en geel licht flakkert als vlammen op elke led

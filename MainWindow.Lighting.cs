@@ -67,8 +67,13 @@ public static class LightOverrideChoices
 
     private static IReadOnlyList<ChoiceOption> Modes(string same) => new ChoiceOption[]
     {
-        new(SameId, same), new(RgbModes.Static, L("固定色")), new(RgbModes.Rainbow, L("レインボー（流れる）")),
-        new(RgbModes.RainbowStatic, L("レインボー（固定）")), new(RgbModes.Breathing, L("呼吸")), new(RgbModes.Temperature, L("温度")),
+        new(SameId, same), new(RgbModes.Static, RgbModes.Label(RgbModes.Static)), new(RgbModes.Rainbow, RgbModes.Label(RgbModes.Rainbow)),
+        new(RgbModes.RainbowStatic, RgbModes.Label(RgbModes.RainbowStatic)), new(RgbModes.Breathing, RgbModes.Label(RgbModes.Breathing)),
+        new(RgbModes.Temperature, RgbModes.Label(RgbModes.Temperature)),
+        new(RgbModes.Lightning, RgbModes.Label(RgbModes.Lightning)), new(RgbModes.Wave, RgbModes.Label(RgbModes.Wave)),
+        new(RgbModes.Birdsong, RgbModes.Label(RgbModes.Birdsong)), new(RgbModes.Fire, RgbModes.Label(RgbModes.Fire)),
+        new(RgbModes.Aurora, RgbModes.Label(RgbModes.Aurora)), new(RgbModes.Meteor, RgbModes.Label(RgbModes.Meteor)),
+        new(RgbModes.Heartbeat, RgbModes.Label(RgbModes.Heartbeat)),
         new(RgbLightModes.Off, L("消灯")),
     };
 
@@ -171,7 +176,7 @@ public sealed class RgbZoneVm : ObservableObject
     public IReadOnlyList<ChoiceOption> LightModeOptions => IsFanPart ? LightOverrideChoices.PartModes : LightOverrideChoices.ZoneModes;
     public IReadOnlyList<ColorOption> ColorOptions { get => _colorOptions; private set => Set(ref _colorOptions, value); }
     /// <summary>色を選べる光り方（デバイスと同じ・固定色・呼吸）</summary>
-    public bool ShowColor => _lightModeId is LightOverrideChoices.SameId or RgbModes.Static or RgbModes.Breathing;
+    public bool ShowColor => _lightModeId == LightOverrideChoices.SameId || RgbModes.UsesColor(_lightModeId);
 
     /// <summary>OpenRGB のゾーン名（設定の保存にも使う）</summary>
     public required string Name { get; init; }
@@ -387,7 +392,7 @@ public sealed class RgbDeviceVm : ObservableObject
     public IReadOnlyList<ChoiceOption> LightModeOptions => LightOverrideChoices.DeviceModes;
     public IReadOnlyList<ColorOption> ColorOptions { get => _colorOptions; private set => Set(ref _colorOptions, value); }
     /// <summary>色を選べる光り方（固定色・呼吸）</summary>
-    public bool ShowColor => _lightModeId is RgbModes.Static or RgbModes.Breathing;
+    public bool ShowColor => RgbModes.UsesColor(_lightModeId);
 
     /// <summary>光り方と色を設定から読み込む（このときは Edited を呼ばない）</summary>
     internal void LoadLight(RgbDeviceSettings s)
@@ -832,7 +837,7 @@ internal static class LightingRules
     public static bool UsesStaticColor(RgbConfig cfg)
     {
         var m = cfg.Music ?? new MusicConfig();
-        return cfg.Mode is RgbModes.Static or RgbModes.Breathing
+        return RgbModes.UsesColor(cfg.Mode)
             || (cfg.Mode == RgbModes.Music && (Palettes.UsesStaticColor(m.Palette) || m.IdleEffect is IdleEffects.Static or IdleEffects.Breathing))
             || cfg.OnStop == RgbStopBehaviors.Static;
     }
@@ -1208,7 +1213,7 @@ public partial class MainWindow
 
         // 選んだ光り方で使う設定だけを表示する
         bool music = rgb.Mode == RgbModes.Music;
-        SpeedRow.Visibility = VisibleIf(rgb.Mode is RgbModes.Rainbow or RgbModes.Breathing || (music && LightingRules.UsesSpeed(rgb.MusicStyle)));
+        SpeedRow.Visibility = VisibleIf(RgbModes.UsesSpeed(rgb.Mode) || (music && LightingRules.UsesSpeed(rgb.MusicStyle)));
         SpeedLabel.Text = music ? L("流れる速さ") : L("速さ");
         PunchRow.Visibility = VisibleIf(LightingRules.UsesPunch(rgb.MusicStyle));
         RefreshTuningDefaults();

@@ -1713,3 +1713,17 @@ ed0f43c5	Tempel gambar yang disalin
 c9f1ad56	Jangan dibagi
 d68381ea	Kipas {0}
 eb409a51	{0} kipas
+01eb7369	Pita cahaya hijau, sian, dan ungu mengalir dan bergelombang perlahan di langit malam
+2634e74e	Warna pilihan Anda berdenyut dua kali, "dag-dug" (60 denyut per menit pada kecepatan 1)
+4dc2e807	Sesekali cahaya melintas di langit malam yang gelap dengan ekor (arahnya berganti setiap kali)
+5db4a3ad	Detak jantung
+678fa065	Ombak
+71259fb6	Petir
+750a4eb3	Langit badai yang gelap dengan kilat putih sesekali. Setiap sambaran berkedip 2–3 kali dan menyebar dari titik jatuhnya sebelum memudar (semua perangkat berkilat bersamaan)
+8b898d11	Api
+9afce40d	Bintang jatuh
+a8481ef8	Gelombang cahaya bergulung maju mundur di atas lautan berwarna pilihan Anda. Puncaknya berbuih putih
+c3299008	Cahaya kecil berkicau 2–4 kali seperti burung di atas hijau daun yang lembut
+ce20ec89	Aurora
+f00ee174	Kicau burung
+f16a0b90	Cahaya merah, oranye, dan kuning berkedip seperti nyala api di setiap LED

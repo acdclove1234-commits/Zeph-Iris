@@ -1713,3 +1713,17 @@ ed0f43c5	Kopiertes Bild einfügen
 c9f1ad56	Nicht aufteilen
 d68381ea	Lüfter {0}
 eb409a51	{0} Lüfter
+01eb7369	Bänder aus grünem, türkisem und violettem Licht ziehen langsam wogend über den Nachthimmel
+2634e74e	Die gewählte Farbe pulsiert zweimal, „ba-bumm“ (60 Schläge pro Minute bei Tempo 1)
+4dc2e807	Ab und zu zieht ein Licht mit Schweif über den dunklen Nachthimmel (die Richtung wechselt jedes Mal)
+5db4a3ad	Herzschlag
+678fa065	Wellen
+71259fb6	Gewitter
+750a4eb3	Ein dunkler Gewitterhimmel mit gelegentlichen weißen Blitzen. Jeder Blitz flackert 2–3-mal und breitet sich vom Einschlag aus, bevor er verblasst (alle Geräte blitzen gleichzeitig)
+8b898d11	Feuer
+9afce40d	Sternschnuppe
+a8481ef8	Wellen aus Licht rollen über ein Meer in der gewählten Farbe hin und her. Die Wellenkämme schäumen weiß
+c3299008	Kleine Lichter zwitschern 2–4-mal wie Vogelgesang über einem sanften Blattgrün
+ce20ec89	Polarlicht
+f00ee174	Vogelgesang
+f16a0b90	Rotes, orangefarbenes und gelbes Licht flackert wie Flammen auf jeder LED

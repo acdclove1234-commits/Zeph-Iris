@@ -18,6 +18,49 @@ public static class RgbModes
     public const string Breathing = "Breathing";
     public const string Static = "Static";
     public const string Music = "Music";
+
+    // 動きのある光り方（AmbientEffects が描く）
+    public const string Lightning = "Lightning";
+    public const string Wave = "Wave";
+    public const string Birdsong = "Birdsong";
+    public const string Fire = "Fire";
+    public const string Aurora = "Aurora";
+    public const string Meteor = "Meteor";
+    public const string Heartbeat = "Heartbeat";
+
+    /// <summary>動きのある光り方（雷・波など）</summary>
+    public static readonly string[] Ambient = { Lightning, Wave, Birdsong, Fire, Aurora, Meteor, Heartbeat };
+
+    /// <summary>全体の「光り方」で選べるもの（画面・トレイのメニューの並び順）</summary>
+    public static readonly string[] All =
+        { Temperature, Rainbow, RainbowStatic, Breathing, Static, Lightning, Wave, Birdsong, Fire, Aurora, Meteor, Heartbeat, Music };
+
+    public static bool IsKnown(string? mode) => mode is not null && Array.IndexOf(All, mode) >= 0;
+
+    /// <summary>「色」で選んだ色を使う光り方</summary>
+    public static bool UsesColor(string mode) => mode is Static or Breathing or Wave or Heartbeat;
+
+    /// <summary>「速さ」を使う光り方</summary>
+    public static bool UsesSpeed(string mode) => mode is Rainbow or Breathing || Array.IndexOf(Ambient, mode) >= 0;
+
+    /// <summary>光り方の表示名（画面・トレイ・デバイスごとの選択で同じ言葉）</summary>
+    public static string Label(string mode) => mode switch
+    {
+        Temperature => L("温度"),
+        Rainbow => L("レインボー（流れる）"),
+        RainbowStatic => L("レインボー（固定）"),
+        Breathing => L("呼吸"),
+        Static => L("固定色"),
+        Music => L("音楽連動"),
+        Lightning => L("雷"),
+        Wave => L("波"),
+        Birdsong => L("さえずり"),
+        Fire => L("炎"),
+        Aurora => L("オーロラ"),
+        Meteor => L("流れ星"),
+        Heartbeat => L("心拍"),
+        _ => mode,
+    };
 }
 
 /// <summary>
@@ -30,7 +73,8 @@ public static class RgbLightModes
     public const string Off = "Off";
     /// <summary>選べる光り方（Same のほか）</summary>
     public static readonly string[] Overrides =
-        { RgbModes.Static, RgbModes.Rainbow, RgbModes.RainbowStatic, RgbModes.Breathing, RgbModes.Temperature, Off };
+        { RgbModes.Static, RgbModes.Rainbow, RgbModes.RainbowStatic, RgbModes.Breathing, RgbModes.Temperature,
+          RgbModes.Lightning, RgbModes.Wave, RgbModes.Birdsong, RgbModes.Fire, RgbModes.Aurora, RgbModes.Meteor, RgbModes.Heartbeat, Off };
 
     public static string Normalize(string? mode) => mode is not null && Array.IndexOf(Overrides, mode) >= 0 ? mode : Same;
 
@@ -39,10 +83,10 @@ public static class RgbLightModes
         hex is { Length: 7 } && hex[0] == '#' && int.TryParse(hex.AsSpan(1), NumberStyles.HexNumber, CultureInfo.InvariantCulture, out _) ? hex.ToUpperInvariant() : "";
 
     /// <summary>色を使う光り方か（固定色・呼吸）</summary>
-    public static bool UsesColor(string mode) => mode is RgbModes.Static or RgbModes.Breathing;
+    public static bool UsesColor(string mode) => RgbModes.UsesColor(mode);
 
     /// <summary>動き続ける光り方か（毎コマ送る必要がある）</summary>
-    public static bool IsAnimated(string mode) => mode is RgbModes.Rainbow or RgbModes.Breathing;
+    public static bool IsAnimated(string mode) => mode is RgbModes.Rainbow or RgbModes.Breathing || AmbientEffects.Handles(mode);
 
     /// <summary>設定のどこかに、動き続ける光り方の上書きがあるか（全体が止まった光り方でも、毎コマ描いて送るため）</summary>
     public static bool AnyAnimated(RgbConfig cfg)
@@ -213,7 +257,7 @@ public static class RgbEffects
     public static readonly Rgb EmergencyOff = new(0x20, 0, 0);
 
     /// <summary>温度の色・アニメーションなど、時間で変わるモードか（変わらないモードは 1 秒に 1 回でよい）</summary>
-    public static bool IsAnimated(string mode) => mode is RgbModes.Rainbow or RgbModes.Breathing or RgbModes.Music;
+    public static bool IsAnimated(string mode) => mode is RgbModes.Rainbow or RgbModes.Breathing or RgbModes.Music || AmbientEffects.Handles(mode);
     // RainbowStatic は止まっているので、温度・固定色と同じく変化があったときだけ送る
 
     /// <summary>緊急時の赤い点滅の、時刻 t（秒）の色</summary>
@@ -281,6 +325,10 @@ public static class RgbEffects
 
             case RgbModes.Static:
                 dst[..n].Fill(OutputStage.Lin(baseColor, gamma));
+                break;
+
+            case var m when AmbientEffects.Handles(m):
+                AmbientEffects.Fill(m, cfg, baseColor, t, pos, dst);
                 break;
 
             case RgbModes.Music:

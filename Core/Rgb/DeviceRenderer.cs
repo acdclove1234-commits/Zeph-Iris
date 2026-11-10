@@ -252,6 +252,14 @@ public sealed class DeviceRenderer
     };
 
     /// <summary>
+    /// 動きのある光り方（雷・波など）を描く時刻。グラボなど書き込みを減らすデバイスは、時刻 0 の絵で止める
+    /// （レインボー（流れる）を止まった虹にするのと同じ。動かし続けると、書き込みのたびにちかちかするため）。
+    /// 「虹・呼吸も動かす」をオンにしたグラボ（ちかちかしやすい機種を除く）は動かす
+    /// </summary>
+    public double TimeFor(string mode, RgbDeviceSettings? settings, double t) =>
+        AmbientEffects.Handles(mode) && Device.IsLowWrite && !(settings?.AnimateOnGpu == true && !Device.IsFlickerProne) ? 0 : t;
+
+    /// <summary>
     /// ちかちかしやすいデバイスで使う音楽連動の光り方（書き込みの回数を減らす）。
     ///   ・全体の設定に任せている（自動）ときは、色が絶えず少しずつ変わるミックス・ムードも「ビートで色替え」にする
     ///   ・デバイスごとに選んだ光り方は、遅いデバイス用の版にする（ムードを選んだときはムードのまま）
@@ -366,7 +374,7 @@ public sealed class DeviceRenderer
                 ActiveEffect = EffectCatalog.NameOf(variant);
                 break;
             default:
-                RgbEffects.FillLinear(ModeFor(cfg.Mode, settings), cfg, _staticRgb, input.T, SmoothTemperature(cfg, input), _pos, _main);
+                RgbEffects.FillLinear(ModeFor(cfg.Mode, settings), cfg, _staticRgb, TimeFor(cfg.Mode, settings, input.T), SmoothTemperature(cfg, input), _pos, _main);
                 ActiveEffect = "";
                 break;
         }
@@ -845,7 +853,7 @@ public sealed class DeviceRenderer
             // 温度は、全体が温度モードならならした値、そうでなければ段にした値（RgbTemperatureFilter）をそのまま使う
             double? temp = s.Mode == RgbModes.Temperature ? (cfg.Mode == RgbModes.Temperature ? _tempSmooth : input.Temperature) : null;
             if (temp is double tv && double.IsNaN(tv)) temp = input.Temperature;
-            RgbEffects.FillLinear(ModeFor(s.Mode, settings), cfg, _planColor[k] ?? _staticRgb, input.T, temp, _pos.AsSpan(start, len), dst);
+            RgbEffects.FillLinear(ModeFor(s.Mode, settings), cfg, _planColor[k] ?? _staticRgb, TimeFor(s.Mode, settings, input.T), temp, _pos.AsSpan(start, len), dst);
         }
     }
 

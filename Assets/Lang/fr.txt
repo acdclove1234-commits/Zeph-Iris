@@ -1713,3 +1713,17 @@ ed0f43c5	Coller l'image copiée
 c9f1ad56	Ne pas diviser
 d68381ea	Ventilateur {0}
 eb409a51	{0} ventilateurs
+01eb7369	Des bandes de lumière verte, cyan et violette dérivent et ondulent lentement dans le ciel nocturne
+2634e74e	La couleur choisie bat deux fois, « boum-boum » (60 battements par minute à la vitesse 1)
+4dc2e807	De temps en temps, une lumière traverse le ciel nocturne avec une traînée (la direction change à chaque fois)
+5db4a3ad	Battement de cœur
+678fa065	Vagues
+71259fb6	Orage
+750a4eb3	Un ciel d'orage sombre traversé de temps en temps par un éclair blanc. Chaque éclair scintille 2 à 3 fois et s'étend depuis son point d'impact avant de s'éteindre (tous les appareils s'illuminent ensemble)
+8b898d11	Feu
+9afce40d	Étoile filante
+a8481ef8	Des houles de lumière vont et viennent sur une mer de la couleur choisie. Les crêtes moussent en blanc
+c3299008	De petites lumières gazouillent 2 à 4 fois comme des oiseaux sur un vert feuille doux
+ce20ec89	Aurore boréale
+f00ee174	Chant d'oiseaux
+f16a0b90	Une lumière rouge, orange et jaune vacille comme des flammes sur chaque LED

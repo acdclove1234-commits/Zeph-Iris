@@ -1785,6 +1785,27 @@
                                 <RadioButton Style="{StaticResource Segment}" GroupName="RgbMode" Content="固定色" Margin="0,0,6,6"
                                              ToolTip="選んだ 1 色で光り続けます"
                                              IsChecked="{Binding Rgb.Mode, Converter={StaticResource Equals}, ConverterParameter=Static}"/>
+                                <RadioButton Style="{StaticResource Segment}" GroupName="RgbMode" Content="雷" Margin="0,0,6,6"
+                                             ToolTip="暗い嵐の空に、ときどき白い稲光が走ります。1 回の雷は 2〜3 回またたき、落ちた場所から広がって消えます（全部のデバイスで同時に光ります）"
+                                             IsChecked="{Binding Rgb.Mode, Converter={StaticResource Equals}, ConverterParameter=Lightning}"/>
+                                <RadioButton Style="{StaticResource Segment}" GroupName="RgbMode" Content="波" Margin="0,0,6,6"
+                                             ToolTip="選んだ色の海に、明るさのうねりが寄せては返します。波の頭は白く泡立ちます"
+                                             IsChecked="{Binding Rgb.Mode, Converter={StaticResource Equals}, ConverterParameter=Wave}"/>
+                                <RadioButton Style="{StaticResource Segment}" GroupName="RgbMode" Content="さえずり" Margin="0,0,6,6"
+                                             ToolTip="やわらかい若葉色の上に、小鳥の声のような小さな光が「ちちっ」と 2〜4 回跳ねます"
+                                             IsChecked="{Binding Rgb.Mode, Converter={StaticResource Equals}, ConverterParameter=Birdsong}"/>
+                                <RadioButton Style="{StaticResource Segment}" GroupName="RgbMode" Content="炎" Margin="0,0,6,6"
+                                             ToolTip="赤〜橙〜黄の光が、LED ごとにゆらゆらと揺らめきます"
+                                             IsChecked="{Binding Rgb.Mode, Converter={StaticResource Equals}, ConverterParameter=Fire}"/>
+                                <RadioButton Style="{StaticResource Segment}" GroupName="RgbMode" Content="オーロラ" Margin="0,0,6,6"
+                                             ToolTip="緑・水色・紫の光の帯が、夜空をゆっくり流れてうねります"
+                                             IsChecked="{Binding Rgb.Mode, Converter={StaticResource Equals}, ConverterParameter=Aurora}"/>
+                                <RadioButton Style="{StaticResource Segment}" GroupName="RgbMode" Content="流れ星" Margin="0,0,6,6"
+                                             ToolTip="暗い夜空を、ときどき光が尾を引いて流れます（向きはそのたびに変わります）"
+                                             IsChecked="{Binding Rgb.Mode, Converter={StaticResource Equals}, ConverterParameter=Meteor}"/>
+                                <RadioButton Style="{StaticResource Segment}" GroupName="RgbMode" Content="心拍" Margin="0,0,6,6"
+                                             ToolTip="選んだ色が「ドクン、ドクン」と 2 回ずつ脈打ちます（速さ 1 で 1 分に 60 回）"
+                                             IsChecked="{Binding Rgb.Mode, Converter={StaticResource Equals}, ConverterParameter=Heartbeat}"/>
                                 <RadioButton Style="{StaticResource Segment}" GroupName="RgbMode" Content="音楽連動" Margin="0,0,6,6"
                                              ToolTip="PC で流れている音（スピーカー・ヘッドホンに出ている音）に合わせて光ります。マイクは使いません"
                                              IsChecked="{Binding Rgb.Mode, Converter={StaticResource Equals}, ConverterParameter=Music}"/>

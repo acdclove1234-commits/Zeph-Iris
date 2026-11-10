@@ -130,7 +130,7 @@ public static class SoakTests
             new RgbDevice(2, "NVIDIA GeForce RTX 5070 Ti", 6, RgbDevice.TypeGpu, new[] { 1, 1, 1, 1, 1, 1 }, "I2C: x"),
         };
         var styles = MusicStyles.All.Select(s => (Mode: RgbModes.Music, Style: s))
-            .Concat(new[] { RgbModes.Temperature, RgbModes.Rainbow, RgbModes.RainbowStatic, RgbModes.Breathing, RgbModes.Static }.Select(m => (Mode: m, Style: MusicStyles.BeatHue)))
+            .Concat(new[] { RgbModes.Temperature, RgbModes.Rainbow, RgbModes.RainbowStatic, RgbModes.Breathing, RgbModes.Static }.Concat(RgbModes.Ambient).Select(m => (Mode: m, Style: MusicStyles.BeatHue)))
             .ToList();
         int bad = 0, exceptions = 0;
         string firstBad = "";

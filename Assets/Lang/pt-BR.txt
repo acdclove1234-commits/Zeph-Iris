@@ -1713,3 +1713,17 @@ ed0f43c5	Colar imagem copiada
 c9f1ad56	Não dividir
 d68381ea	Ventoinha {0}
 eb409a51	{0} ventoinhas
+01eb7369	Faixas de luz verde, ciano e violeta fluem e ondulam devagar pelo céu noturno
+2634e74e	A cor escolhida pulsa duas vezes, "tum-tum" (60 batidas por minuto na velocidade 1)
+4dc2e807	De vez em quando uma luz cruza o céu noturno escuro deixando um rastro (a direção muda a cada vez)
+5db4a3ad	Batimento cardíaco
+678fa065	Ondas
+71259fb6	Tempestade
+750a4eb3	Um céu escuro de tempestade com um raio branco de vez em quando. Cada raio pisca 2–3 vezes e se espalha a partir de onde cai antes de sumir (todos os dispositivos piscam juntos)
+8b898d11	Fogo
+9afce40d	Estrela cadente
+a8481ef8	Ondulações de luz vão e vêm sobre um mar da cor escolhida. As cristas espumam em branco
+c3299008	Pequenas luzes piam 2–4 vezes como pássaros sobre um verde-folha suave
+ce20ec89	Aurora
+f00ee174	Canto de pássaros
+f16a0b90	Luz vermelha, laranja e amarela tremula como chamas em cada LED

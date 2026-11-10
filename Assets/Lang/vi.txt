@@ -1713,3 +1713,17 @@ ed0f43c5	Dán ảnh đã sao chép
 c9f1ad56	Không chia
 d68381ea	Quạt {0}
 eb409a51	{0} quạt
+01eb7369	Những dải sáng xanh lá, xanh lơ và tím trôi và gợn chậm trên bầu trời đêm
+2634e74e	Màu bạn chọn đập hai nhịp "thình-thịch" (60 nhịp mỗi phút ở tốc độ 1)
+4dc2e807	Thỉnh thoảng một đốm sáng vụt qua bầu trời đêm tối kèm theo vệt đuôi (hướng mỗi lần một khác)
+5db4a3ad	Nhịp tim
+678fa065	Sóng
+71259fb6	Sấm sét
+750a4eb3	Bầu trời giông bão tối, thỉnh thoảng có tia sét trắng. Mỗi tia sét nhấp nháy 2–3 lần và lan ra từ chỗ đánh xuống rồi tắt (mọi thiết bị lóe sáng cùng lúc)
+8b898d11	Lửa
+9afce40d	Sao băng
+a8481ef8	Những đợt sóng ánh sáng dâng lên rút xuống trên biển màu bạn chọn. Đỉnh sóng sủi bọt trắng
+c3299008	Những đốm sáng nhỏ nhảy 2–4 lần như tiếng chim hót trên nền xanh lá dịu
+ce20ec89	Cực quang
+f00ee174	Chim hót
+f16a0b90	Ánh sáng đỏ, cam và vàng lập lòe như ngọn lửa trên từng LED

@@ -862,7 +862,7 @@ public sealed class RgbConfig : ObservableObject
     public string CaseDirection { get => _caseDirection; set { if (!string.IsNullOrEmpty(value)) Set(ref _caseDirection, value); } }
     private bool _caseLayout;
     private string _caseDirection = CaseDirections.Up;
-    /// <summary>光り方: Temperature / Rainbow / RainbowStatic / Breathing / Static / Music</summary>
+    /// <summary>光り方（RgbModes.All: 温度・虹・呼吸・固定色・雷・波・さえずり・炎・オーロラ・流れ星・心拍・音楽連動）</summary>
     public string Mode { get => _mode; set { if (!string.IsNullOrEmpty(value)) Set(ref _mode, value); } }
     /// <summary>レインボー・呼吸の速さ（0.3〜10 倍）</summary>
     public double Speed { get => _speed; set => Set(ref _speed, value); }

@@ -1713,3 +1713,17 @@ ed0f43c5	Pegar imagen copiada
 c9f1ad56	No dividir
 d68381ea	Ventilador {0}
 eb409a51	{0} ventiladores
+01eb7369	Bandas de luz verde, cian y violeta fluyen y ondulan despacio por el cielo nocturno
+2634e74e	El color elegido late dos veces, «pum-pum» (60 latidos por minuto a velocidad 1)
+4dc2e807	De vez en cuando una luz cruza el cielo nocturno oscuro dejando una estela (la dirección cambia cada vez)
+5db4a3ad	Latido
+678fa065	Olas
+71259fb6	Tormenta
+750a4eb3	Un cielo oscuro de tormenta con algún rayo blanco. Cada rayo parpadea 2–3 veces y se extiende desde donde cae antes de apagarse (todos los dispositivos destellan a la vez)
+8b898d11	Fuego
+9afce40d	Estrella fugaz
+a8481ef8	Oleadas de luz van y vienen sobre un mar del color elegido. Las crestas hacen espuma blanca
+c3299008	Pequeñas luces pían 2–4 veces como pájaros sobre un verde hoja suave
+ce20ec89	Aurora
+f00ee174	Canto de pájaros
+f16a0b90	Luz roja, naranja y amarilla parpadea como llamas en cada LED

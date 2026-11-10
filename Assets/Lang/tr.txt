@@ -1713,3 +1713,17 @@ ed0f43c5	Kopyalanan resmi yapıştır
 c9f1ad56	Bölme
 d68381ea	Fan {0}
 eb409a51	{0} fan
+01eb7369	Yeşil, camgöbeği ve mor ışık şeritleri gece gökyüzünde yavaşça akıp dalgalanır
+2634e74e	Seçilen renk ikişer kez "küt-küt" atar (hız 1'de dakikada 60 atış)
+4dc2e807	Arada bir, karanlık gece gökyüzünde kuyruklu bir ışık kayar (yönü her seferinde değişir)
+5db4a3ad	Kalp atışı
+678fa065	Dalgalar
+71259fb6	Şimşek
+750a4eb3	Ara sıra beyaz şimşeklerin çaktığı karanlık, fırtınalı bir gökyüzü. Her şimşek 2–3 kez yanıp söner ve düştüğü yerden yayılarak kaybolur (tüm cihazlar aynı anda çakar)
+8b898d11	Ateş
+9afce40d	Kayan yıldız
+a8481ef8	Seçilen renkteki bir denizin üzerinde ışık dalgaları gidip gelir. Dalga tepeleri beyaz köpürür
+c3299008	Yumuşak bir yaprak yeşilinin üzerinde küçük ışıklar kuş gibi 2–4 kez cıvıldar
+ce20ec89	Kutup ışıkları
+f00ee174	Kuş sesi
+f16a0b90	Kırmızı, turuncu ve sarı ışık her LED'de alev gibi titrer
