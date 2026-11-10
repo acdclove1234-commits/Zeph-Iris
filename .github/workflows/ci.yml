@@ -1,0 +1,42 @@
+# Build the app and run the logic tests and the translation check on every push and pull request.
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    runs-on: windows-latest
+    timeout-minutes: 30
+    env:
+      DOTNET_NOLOGO: true
+      DOTNET_CLI_TELEMETRY_OPTOUT: true
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+
+      # The logic tests reference LibreHardwareMonitorLib from the NuGet cache, so restore the app first.
+      - name: Build the app
+        run: dotnet build ProFanController.csproj -c Release
+
+      - name: Logic tests
+        run: dotnet run --project Tests/LogicTests -c Release
+
+      - name: Translation check
+        run: dotnet run --project tools/LocTool -c Release -- check
+
+      - name: UI smoke test
+        run: dotnet run --project Tests/UiSmoke -c Release

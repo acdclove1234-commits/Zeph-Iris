@@ -176,7 +176,10 @@ public static class XamlLocalizer
     /// 画面に残っている日本語（かなを含む文字）を集める（言語を切り替えたあとの確認用。ログに出して、訳し漏れを見つける）。
     /// 入力欄・Binding の値（プロファイル名など、利用者が付けた名前）は数えない
     /// </summary>
-    public static List<string> FindUntranslated(DependencyObject root, int max = 20)
+    /// <param name="visibleOnly">
+    /// 画面に出ている部品だけを見る（隠れている部品は、初めて表示されたときに訳すので、まだ日本語のままでよい）
+    /// </param>
+    public static List<string> FindUntranslated(DependencyObject root, int max = 20, bool visibleOnly = false)
     {
         var found = new List<string>();
         var seen = new HashSet<DependencyObject>(ReferenceEqualityComparer.Instance);
@@ -186,6 +189,7 @@ public static class XamlLocalizer
         {
             var d = stack.Pop();
             if (!seen.Add(d)) continue;
+            if (visibleOnly && d is UIElement { IsVisible: false }) continue;
             void Check(DependencyObject o, DependencyProperty p)
             {
                 if (o.GetValue(p) is string s && HasKana(s) && !DependencyPropertyHelper.GetValueSource(o, p).IsExpression)

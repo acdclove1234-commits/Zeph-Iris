@@ -5,6 +5,7 @@
 //   dotnet run --project tools/LocTool -- wrap           … 訳す文字列を L(…) で包む（--dry で数えるだけ）
 //   dotnet run --project tools/LocTool -- missing en     … en.txt にない見出しを「ハッシュ TAB 見出し」で出す
 //   dotnet run --project tools/LocTool -- stats          … 言語ごとに、訳してある割合
+//   dotnet run --project tools/LocTool -- check          … CI 用: 訳し漏れ・keys.tsv の作り忘れ・穴の番号の違いがあれば 1 を返す
 //   dotnet run --project tools/LocTool -- rename 古 新   … ソースの言葉を変えたあと（extract の前）、訳を新しい見出しへ付け替える
 //   見出しの作り方は実行時（Core/Loc.cs・UI/XamlLocalizer.cs）と同じ:
 //     XAML: Text / Content / ToolTip / Header / Title の値（{} で始まる値はそれを除く）、TextBox の Tag、Binding の StringFormat
@@ -94,6 +95,38 @@ switch (cmd)
             Console.WriteLine($"{Path.GetFileNameWithoutExtension(f),-8} {done,5} / {keys.Count} ({100.0 * done / Math.Max(1, keys.Count):F1}%)  使われていない訳 {stale}");
         }
         return 0;
+    }
+    case "check":
+    {
+        // CI 用: 1 つでも問題があれば 1 を返す
+        //   ・L() を通していない日本語がない
+        //   ・keys.tsv がソースと合っている（extract し忘れていない）
+        //   ・どの言語も全部訳してあり、使われていない訳がない
+        //   ・訳の中の {0} {1:F1} などの穴が、見出しと同じ番号だけ（足りない・多いと、表示がおかしくなるか例外になる）
+        int problems = 0;
+        void Problem(string text) { Console.WriteLine(text); problems++; }
+        foreach (var (file, line, text) in Lint(root)) Problem($"L() を通していない日本語: {file}:{line}\t{text}");
+        var fresh = Extract(root).Select(k => Hash(k.Key)).ToHashSet();
+        var keys = ReadKeys(langDir).ToList();
+        var saved = keys.Select(k => k.Hash).ToHashSet();
+        if (!fresh.SetEquals(saved)) Problem($"keys.tsv がソースと合っていません（extract してください）: 足りない {fresh.Except(saved).Count()} 件・余分 {saved.Except(fresh).Count()} 件");
+        var holeRx = new Regex(@"(?<!\{)\{(\d+)(?:[,:][^}]*)?\}(?!\})", RegexOptions.CultureInvariant);
+        HashSet<string> Holes(string s) => holeRx.Matches(s).Select(m => m.Groups[1].Value).ToHashSet();
+        foreach (var f in Directory.GetFiles(langDir, "*.txt").OrderBy(f => f))
+        {
+            string lang = Path.GetFileNameWithoutExtension(f);
+            var table = ReadTable(f);
+            foreach (var (h, key) in keys)
+            {
+                if (!table.TryGetValue(h, out var tr)) { Problem($"{lang}: 訳がありません {h:x8}\t{key}"); continue; }
+                var want = Holes(Unescape(key));
+                var got = Holes(tr);
+                if (!want.SetEquals(got)) Problem($"{lang}: 穴の番号が違います {h:x8}（見出し {{{string.Join("},{", want.Order())}}}・訳 {{{string.Join("},{", got.Order())}}}）\t{tr}");
+            }
+            foreach (var h in table.Keys.Where(h => !saved.Contains(h))) Problem($"{lang}: 使われていない訳 {h:x8}");
+        }
+        Console.WriteLine(problems == 0 ? "翻訳の確認: 問題なし" : $"翻訳の確認: 問題 {problems} 件");
+        return problems == 0 ? 0 : 1;
     }
     case "rename":
     {
