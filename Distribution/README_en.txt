@@ -13,6 +13,15 @@ and Iris, the rainbow (the LEDs).
   for example: Settings [設定].
 
 
+■ What's new in v6.9.1
+  - Music sync: "Sparkle" no longer over-reacts to hi-hats. The brightness, number and spacing of hi-hat sparkles
+    follow the intensity (moderate: 55% brightness, at least 0.16 s apart; calmer still with "Reduce flashing").
+    The treble parts of "Parts play their roles" no longer flash on every closely spaced hi-hat either.
+  - Lighting: a "Fans" setting per zone splits fans daisy-chained on one header (channel) so each fan can have
+    its own colour and light mode (Lian Li UNI HUB channels, fans on a splitter cable).
+  - The lighting page explains why fans on a Lian Li UNI HUB in MB Sync cannot have separate colours, and how to
+    let OpenRGB drive the hub directly.
+
 ■ What's new in v6.9.0
   - Lighting: each device and each zone (motherboard header) can have its own colour and light mode (solid,
     rainbow, breathing, temperature, off). Example: graphics card solid red, motherboard white, only the radiator
