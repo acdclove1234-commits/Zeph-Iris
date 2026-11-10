@@ -1657,6 +1657,8 @@ public partial class MainWindow
             ShowSyncHelp(app.SyncTestPlayer.Error.Length > 0 ? app.SyncTestPlayer.Error : L("クリック音を鳴らせませんでした"), warn: true);
             return;
         }
+        // クリック音はこのアプリが鳴らすので、反応する音を「Spotify だけ」などにしていても、テストの間は全体の音を取り込む
+        app.Audio.ClickDetect = true;
         app.Rgb.SyncTest = true;
         _syncTestOn = true;
         SyncTestToggle.IsChecked = true;
@@ -1673,6 +1675,7 @@ public partial class MainWindow
             try
             {
                 CurrentApp.SyncTestPlayer.Stop(CurrentApp.Audio.Engine);
+                CurrentApp.Audio.ClickDetect = false; // 反応する音を設定のもの（Spotify だけ、など）に戻す
             }
             catch (Exception ex)
             {

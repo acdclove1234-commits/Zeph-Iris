@@ -627,6 +627,7 @@ public partial class App : Application
         else
         {
             if (SyncTestPlayer.Running) SyncTestPlayer.Stop(Audio.Engine);
+            Audio.ClickDetect = false;
             Rgb.SyncTest = false;
             Audio.Stop();
         }

@@ -47,7 +47,10 @@ public sealed class AudioCapture : IDisposable
     private Thread? _thread;
     private volatile bool _stop;
     private volatile bool _restartRequested;
+    /// <summary>いま取り込む音（空ならすべて）。同期テスト中は設定にかかわらず空</summary>
     private volatile string _source = "";
+    /// <summary>設定で選んだ反応する音（同期テストが終わったら _source をこれに戻す）</summary>
+    private string _configuredSource = "";
     private AudioEngineSettings _settings = AudioEngineSettings.Default;
     private bool _clickDetect;
     private float[] _mono = new float[4096];
@@ -87,10 +90,19 @@ public sealed class AudioCapture : IDisposable
     public bool Running => _thread is not null;
 
     /// <summary>同期テストのクリック音を記録させる（エンジンを作り直しても引き継ぐ）</summary>
+    /// <remarks>
+    /// オンの間は、反応する音を「特定のアプリだけ」にしていても、出力先の音をすべて取り込む。
+    /// クリック音はこのアプリ自身が鳴らすので、選んだアプリ（Spotify など）の音だけを取り込んでいると届かず、LED が光らないため
+    /// </remarks>
     public bool ClickDetect
     {
         get => _clickDetect;
-        set { _clickDetect = value; Engine.ClickDetect = value; }
+        set
+        {
+            _clickDetect = value;
+            Engine.ClickDetect = value;
+            _source = value ? "" : _configuredSource;
+        }
     }
 
     /// <summary>反応する音（空ならすべて、アプリ名ならそのアプリだけ）と分析の設定を変える。すぐに反映する</summary>
@@ -100,7 +112,8 @@ public sealed class AudioCapture : IDisposable
         string s = AppAudioTarget.NormalizeName(source);
         var engine = Engine;
         bool tempoChanged = engine.Settings.TempoFactor != settings.TempoFactor || engine.Settings.TempoMode != settings.TempoMode;
-        _source = s;
+        _configuredSource = s;
+        if (!_clickDetect) _source = s; // 同期テスト中は、終わるまで全体の音のまま
         _settings = settings;
         engine.Settings = settings;
         if (tempoChanged) engine.ResetTempo();
