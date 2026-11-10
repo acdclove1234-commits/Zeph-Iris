@@ -1677,3 +1677,12 @@ e6f4ba17	La lectura del medidor ({0:F0} W) es menor que los valores de los senso
 f7824b90	Calibración borrada; se vuelve a la estimación inicial (resto del PC 50 W, eficiencia de la fuente 88 %)
 f7cdd477	Registrado: enchufe {0:F0} W · CPU+GPU {1:F0} W
 f83af4dd	Las dos lecturas no encajan (el resto del PC salió {0:F0} W). Vuelve a medir
+156f8722	Cambia el modo de luz solo de esta zona (conector), por ejemplo: solo el cabezal de la bomba AIO en blanco, ventiladores de la caja apagados. «Igual que el dispositivo» mantiene el ajuste del dispositivo
+55525f98	Color para color fijo y respiración. «Mismo color que el general» usa el «Color» de arriba
+5d9bf5c2	Da solo a este dispositivo un modo de luz distinto del de arriba (por ejemplo: la tarjeta gráfica en rojo fijo, el teclado en arcoíris). «Igual que el general» mantiene el ajuste de arriba. La sincronización con la música solo se elige en general
+79acf3fc	Color de este dispositivo
+8ed1329c	Color para color fijo y respiración. «Mismo color que el dispositivo» usa el color del dispositivo
+ab10ab7f	Mismo color que el dispositivo
+bf2c93a8	Igual que el general
+c7218a33	Amarillo
+cc601a2e	Mismo color que el general

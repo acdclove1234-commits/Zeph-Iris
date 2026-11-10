@@ -1677,3 +1677,12 @@ e6f4ba17	A leitura do medidor ({0:F0} W) é menor que os valores dos sensores da
 f7824b90	Calibração apagada; voltou à estimativa inicial (resto do PC 50 W, eficiência da fonte 88%)
 f7cdd477	Registrado: tomada {0:F0} W · CPU+GPU {1:F0} W
 f83af4dd	As duas leituras não batem (o resto do PC deu {0:F0} W). Meça de novo
+156f8722	Muda o modo de luz só desta zona (conector), por exemplo: só a cabeça da bomba AIO em branco, ventoinhas do gabinete apagadas. "Igual ao dispositivo" mantém o ajuste do dispositivo
+55525f98	Cor para cor fixa e respiração. "Mesma cor do geral" usa a "Cor" de cima
+5d9bf5c2	Dá só a este dispositivo um modo de luz diferente do de cima (por exemplo: a placa de vídeo em vermelho fixo, o teclado em arco-íris). "Igual ao geral" mantém o ajuste de cima. A sincronização com música só pode ser escolhida no geral
+79acf3fc	Cor deste dispositivo
+8ed1329c	Cor para cor fixa e respiração. "Mesma cor do dispositivo" usa a cor do dispositivo
+ab10ab7f	Mesma cor do dispositivo
+bf2c93a8	Igual ao geral
+c7218a33	Amarelo
+cc601a2e	Mesma cor do geral

@@ -1677,3 +1677,12 @@ e6f4ba17	De energiemeterwaarde ({0:F0} W) is lager dan de sensorwaarden van CPU 
 f7824b90	Kalibratie gewist; terug naar de beginschatting (rest van de pc 50 W, rendement van de voeding 88%)
 f7cdd477	Vastgelegd: stopcontact {0:F0} W · CPU+GPU {1:F0} W
 f83af4dd	De twee waarden passen niet bij elkaar (de rest van de pc kwam uit op {0:F0} W). Meet opnieuw
+156f8722	Wijzigt alleen de lichtmodus van deze zone (header), bijvoorbeeld: alleen de pompkop van de AIO wit, behuizingsventilatoren uit. ‘Zelfde als apparaat’ houdt de instelling van het apparaat
+55525f98	Kleur voor vaste kleur en ademen. ‘Zelfde kleur als geheel’ gebruikt de ‘Kleur’ hierboven
+5d9bf5c2	Geeft alleen dit apparaat een andere lichtmodus dan hierboven (bijvoorbeeld: de videokaart vast rood, het toetsenbord regenboog). ‘Zelfde als geheel’ houdt de instelling hierboven. Muzieksynchronisatie kan alleen voor het geheel worden gekozen
+79acf3fc	Kleur van dit apparaat
+8ed1329c	Kleur voor vaste kleur en ademen. ‘Zelfde kleur als apparaat’ gebruikt de kleur van het apparaat
+ab10ab7f	Zelfde kleur als apparaat
+bf2c93a8	Zelfde als geheel
+c7218a33	Geel
+cc601a2e	Zelfde kleur als geheel

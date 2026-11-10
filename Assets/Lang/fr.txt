@@ -1677,3 +1677,12 @@ e6f4ba17	La valeur du wattmètre ({0:F0} W) est inférieure aux valeurs des capt
 f7824b90	Calibrage effacé ; retour à l'estimation de départ (reste du PC 50 W, rendement de l'alimentation 88 %)
 f7cdd477	Enregistré : prise {0:F0} W · CPU+GPU {1:F0} W
 f83af4dd	Les deux mesures ne concordent pas (le reste du PC donne {0:F0} W). Mesurez à nouveau
+156f8722	Change le mode d'éclairage de cette zone (connecteur) uniquement, par exemple : seule la tête de pompe AIO en blanc, ventilateurs du boîtier éteints. « Comme l'appareil » garde le réglage de l'appareil
+55525f98	Couleur pour la couleur fixe et la respiration. « Même couleur que l'ensemble » utilise la « Couleur » ci-dessus
+5d9bf5c2	Donne uniquement à cet appareil un mode d'éclairage différent de celui ci-dessus (par exemple : carte graphique en rouge fixe, clavier en arc-en-ciel). « Comme l'ensemble » garde le réglage ci-dessus. La synchronisation musicale ne se choisit que pour l'ensemble
+79acf3fc	Couleur de cet appareil
+8ed1329c	Couleur pour la couleur fixe et la respiration. « Même couleur que l'appareil » utilise la couleur de l'appareil
+ab10ab7f	Même couleur que l'appareil
+bf2c93a8	Comme l'ensemble
+c7218a33	Jaune
+cc601a2e	Même couleur que l'ensemble

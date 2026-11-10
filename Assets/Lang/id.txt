@@ -1677,3 +1677,12 @@ e6f4ba17	Angka pengukur daya ({0:F0} W) lebih kecil dari nilai sensor CPU dan GP
 f7824b90	Kalibrasi dihapus; kembali ke perkiraan awal (sisa PC 50 W, efisiensi catu daya 88%)
 f7cdd477	Tercatat: stopkontak {0:F0} W · CPU+GPU {1:F0} W
 f83af4dd	Kedua angka tidak cocok (sisa PC menjadi {0:F0} W). Ukur lagi
+156f8722	Mengubah mode cahaya zona (header) ini saja, misalnya: hanya kepala pompa AIO yang putih, kipas casing mati. "Sama dengan perangkat" mempertahankan pengaturan perangkat
+55525f98	Warna untuk warna tetap dan bernapas. "Warna sama dengan keseluruhan" memakai "Warna" di atas
+5d9bf5c2	Memberi perangkat ini saja mode cahaya yang berbeda dari yang di atas (misalnya: kartu grafis merah tetap, keyboard pelangi). "Sama dengan keseluruhan" mempertahankan pengaturan di atas. Sinkronisasi musik hanya bisa dipilih untuk keseluruhan
+79acf3fc	Warna perangkat ini
+8ed1329c	Warna untuk warna tetap dan bernapas. "Warna sama dengan perangkat" memakai warna perangkat
+ab10ab7f	Warna sama dengan perangkat
+bf2c93a8	Sama dengan keseluruhan
+c7218a33	Kuning
+cc601a2e	Warna sama dengan keseluruhan

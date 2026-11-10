@@ -1677,3 +1677,12 @@ e6f4ba17	Số đo ({0:F0} W) nhỏ hơn giá trị cảm biến CPU và GPU ({1:
 f7824b90	Đã xóa hiệu chỉnh; trở về ước tính ban đầu (phần còn lại của máy 50 W, hiệu suất nguồn 88%)
 f7cdd477	Đã ghi: ổ cắm {0:F0} W · CPU+GPU {1:F0} W
 f83af4dd	Hai số đo không khớp (phần còn lại của máy ra {0:F0} W). Hãy đo lại
+156f8722	Chỉ đổi kiểu đèn của vùng (cổng) này, ví dụ: chỉ đầu bơm tản nước màu trắng, quạt case tắt. "Giống thiết bị" giữ cài đặt của thiết bị
+55525f98	Màu cho màu cố định và nhịp thở. "Cùng màu với toàn bộ" dùng "Màu" ở trên
+5d9bf5c2	Chỉ cho thiết bị này kiểu đèn khác với ở trên (ví dụ: card đồ họa đỏ cố định, bàn phím cầu vồng). "Giống toàn bộ" giữ cài đặt ở trên. Đồng bộ nhạc chỉ chọn được cho toàn bộ
+79acf3fc	Màu của thiết bị này
+8ed1329c	Màu cho màu cố định và nhịp thở. "Cùng màu với thiết bị" dùng màu của thiết bị
+ab10ab7f	Cùng màu với thiết bị
+bf2c93a8	Giống toàn bộ
+c7218a33	Vàng
+cc601a2e	Cùng màu với toàn bộ

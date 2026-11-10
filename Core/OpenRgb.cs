@@ -826,6 +826,9 @@ public sealed class RgbDeviceChannel
         _ => false,
     };
 
+    /// <summary>このデバイスの光り方（デバイスごとに選んでいればそれ、なければ全体の光り方）</summary>
+    private string DeviceMode => Input.Device?.LightMode is { Length: > 0 } m ? m : Input.Cfg.Mode;
+
     /// <summary>描く（描画でエラーが出たら false。そのコマは送らない）</summary>
     public bool Render()
     {
@@ -836,7 +839,7 @@ public sealed class RgbDeviceChannel
             {
                 // 白い LED だけのデバイス（G610 など）: 色相の変化が明るさの変化にならないよう、R・G・B の最大を白として送る。
                 // 温度モードは色だけで温度を表すので、白い LED は明るさ一定（設定の明るさ）にする（緊急時の点滅はそのまま）
-                bool constant = Input.Cfg.Mode == RgbModes.Temperature && !(Input.Emergency && Input.Cfg.BlinkOnEmergency) && !Input.SyncTest;
+                bool constant = DeviceMode == RgbModes.Temperature && !(Input.Emergency && Input.Cfg.BlinkOnEmergency) && !Input.SyncTest;
                 ToWhite(Frame, constant ? (byte)Math.Round(255 * Math.Clamp(Input.Cfg.Brightness, 0, 100) / 100) : null);
             }
             // 音楽連動で色が切り替わった（どのデバイスが切り替えても全デバイスで共有）: 更新の遅いデバイスにも、
@@ -1563,7 +1566,7 @@ public sealed class RgbSync : IDisposable
             }
 
             bool syncTest = _syncTest;
-            bool animated = channels.Count > 0 && (RgbEffects.IsAnimated(cfg.Mode) || (emergency && cfg.BlinkOnEmergency) || syncTest);
+            bool animated = channels.Count > 0 && (RgbEffects.IsAnimated(cfg.Mode) || RgbLightModes.AnyAnimated(cfg) || (emergency && cfg.BlinkOnEmergency) || syncTest);
             double period = animated ? AnimatedPeriod : StaticPeriod;
             now = AudioClock.Now;
             cadence.SetPeriod(period, now);
@@ -1636,7 +1639,7 @@ public sealed class RgbSync : IDisposable
             }
             ch.Prepare(tNow, tick, engine?.Features, engine?.Events, beat, temp, emergency, syncTest);
             if (!ch.Render()) continue;
-            if (follow && !follower && !ch.WhiteOnly)   // 白だけのキーボードは色を持たないので、合わせる元にしない
+            if (follow && !follower && !ch.WhiteOnly && !(ch.Input.Device?.HasLightOverride ?? false))   // 白だけのキーボードは色を持たないので、合わせる元にしない（光り方を上書きしたデバイスも、全体の色ではないので合わせる元にしない）
             {
                 scene.Add(ch.Renderer.LastLight);
                 haveLeader = true;
@@ -1839,6 +1842,7 @@ public sealed class RgbSync : IDisposable
     public static bool IsFollower(RgbDeviceChannel ch, RgbConfig cfg)
     {
         if (!(ch.Device.IsSlow || ch.Device.IsLowWrite)) return false;
+        if (ch.Input.Device?.LightMode is { Length: > 0 }) return false;   // デバイスごとの光り方（固定色など）にしたデバイスは合わせない
         string effect = ch.Input.Device?.Effect ?? "Auto";
         return string.IsNullOrEmpty(effect) || effect == EffectCatalog.Auto;
     }

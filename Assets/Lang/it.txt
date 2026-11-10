@@ -1677,3 +1677,12 @@ e6f4ba17	Il valore del misuratore ({0:F0} W) è inferiore ai valori dei sensori 
 f7824b90	Calibrazione cancellata; tornati alla stima iniziale (resto del PC 50 W, efficienza dell'alimentatore 88%)
 f7cdd477	Registrato: presa {0:F0} W · CPU+GPU {1:F0} W
 f83af4dd	I due valori non tornano (il resto del PC risulta {0:F0} W). Misura di nuovo
+156f8722	Cambia la modalità luce solo di questa zona (connettore), ad esempio: solo la testa della pompa AIO in bianco, ventole del case spente. «Come il dispositivo» mantiene l'impostazione del dispositivo
+55525f98	Colore per colore fisso e respiro. «Stesso colore generale» usa il «Colore» sopra
+5d9bf5c2	Dà solo a questo dispositivo una modalità luce diversa da quella sopra (ad esempio: scheda video rosso fisso, tastiera arcobaleno). «Come in generale» mantiene l'impostazione sopra. La sincronizzazione musicale si sceglie solo in generale
+79acf3fc	Colore di questo dispositivo
+8ed1329c	Colore per colore fisso e respiro. «Stesso colore del dispositivo» usa il colore del dispositivo
+ab10ab7f	Stesso colore del dispositivo
+bf2c93a8	Come in generale
+c7218a33	Giallo
+cc601a2e	Stesso colore generale

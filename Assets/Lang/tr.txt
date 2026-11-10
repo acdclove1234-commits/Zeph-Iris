@@ -1677,3 +1677,12 @@ e6f4ba17	Güç ölçer değeri ({0:F0} W), CPU ve GPU sensör değerlerinden ({1
 f7824b90	Kalibrasyon silindi; başlangıç tahminine dönüldü (PC'nin geri kalanı 50 W, güç kaynağı verimliliği %88)
 f7cdd477	Kaydedildi: priz {0:F0} W · CPU+GPU {1:F0} W
 f83af4dd	İki değer birbirini tutmuyor (PC'nin geri kalanı {0:F0} W çıktı). Yeniden ölçün
+156f8722	Yalnızca bu bölgenin (konnektörün) ışık modunu değiştirir; örneğin yalnızca AIO pompa kafası beyaz, kasa fanları kapalı. "Cihazla aynı" cihazın ayarını korur
+55525f98	Sabit renk ve nefes alma için renk. "Genel ile aynı renk" yukarıdaki "Renk"i kullanır
+5d9bf5c2	Yalnızca bu cihaza yukarıdakinden farklı bir ışık modu verir (örneğin: ekran kartı sabit kırmızı, klavye gökkuşağı). "Genel ile aynı" yukarıdaki ayarı korur. Müzik senkronu yalnızca genel olarak seçilebilir
+79acf3fc	Bu cihazın rengi
+8ed1329c	Sabit renk ve nefes alma için renk. "Cihazla aynı renk" cihazın rengini kullanır
+ab10ab7f	Cihazla aynı renk
+bf2c93a8	Genel ile aynı
+c7218a33	Sarı
+cc601a2e	Genel ile aynı renk

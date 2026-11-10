@@ -1677,3 +1677,12 @@ e6f4ba17	Odczyt watomierza ({0:F0} W) jest mniejszy niż wartości czujników CP
 f7824b90	Kalibrację usunięto; przywrócono początkowy szacunek (pozostała część komputera 50 W, sprawność zasilacza 88%)
 f7cdd477	Zapisano: gniazdko {0:F0} W · CPU+GPU {1:F0} W
 f83af4dd	Dwa odczyty do siebie nie pasują (pozostała część komputera wyszła {0:F0} W). Zmierz ponownie
+156f8722	Zmienia tryb świecenia tylko tej strefy (złącza), np. tylko głowica pompy AIO na biało, wentylatory obudowy wyłączone. „Jak urządzenie” zachowuje ustawienie urządzenia
+55525f98	Kolor dla stałego koloru i oddychania. „Ten sam kolor co całość” używa „Koloru” powyżej
+5d9bf5c2	Nadaje tylko temu urządzeniu inny tryb świecenia niż powyżej (np. karta graficzna stały czerwony, klawiatura tęcza). „Jak całość” zachowuje ustawienie powyżej. Synchronizację z muzyką można wybrać tylko dla całości
+79acf3fc	Kolor tego urządzenia
+8ed1329c	Kolor dla stałego koloru i oddychania. „Ten sam kolor co urządzenie” używa koloru urządzenia
+ab10ab7f	Ten sam kolor co urządzenie
+bf2c93a8	Jak całość
+c7218a33	Żółty
+cc601a2e	Ten sam kolor co całość

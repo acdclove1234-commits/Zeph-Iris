@@ -1026,6 +1026,13 @@ public sealed class RgbDeviceSettings
     public int GainB { get; set; } = 100;
     /// <summary>このデバイスだけの明るさ（0〜100%。全体の明るさに掛ける）</summary>
     public int Level { get; set; } = 100;
+    /// <summary>このデバイスの光り方（RgbLightModes。空なら全体の光り方。例: グラボだけ赤の固定色、キーボードだけレインボー）</summary>
+    public string LightMode { get; set; } = RgbLightModes.Same;
+    /// <summary>固定色・呼吸の色 "#RRGGBB"（空なら全体の色）</summary>
+    public string LightColor { get; set; } = "";
+    /// <summary>このデバイス（またはどれかのゾーン）が、全体と違う光り方になっている</summary>
+    [JsonIgnore]
+    public bool HasLightOverride => LightMode.Length > 0 || (Zones?.Exists(z => z is not null && z.LightMode.Length > 0) ?? false);
     /// <summary>ゾーン（マザーボードの端子ごとなど）の設定。書かれていないゾーンはデバイスの設定のまま</summary>
     public List<RgbZoneSettings> Zones { get; set; } = new();
 
@@ -1048,6 +1055,8 @@ public sealed class RgbDeviceSettings
         GainG = Math.Clamp(GainG, 0, 100);
         GainB = Math.Clamp(GainB, 0, 100);
         Level = Math.Clamp(Level, 0, 100);
+        LightMode = RgbLightModes.Normalize(LightMode);
+        LightColor = RgbLightModes.NormalizeColor(LightColor);
         Zones ??= new();
         Zones.RemoveAll(z => z is null || string.IsNullOrEmpty(z.Name));
         foreach (var z in Zones) z.Normalize();
@@ -1082,15 +1091,22 @@ public sealed class RgbZoneSettings
     public string Sound { get; set; } = MusicSounds.Auto;
     /// <summary>ケースの中の場所（CaseLayout の場所の Id。空なら場所を決めていない）</summary>
     public string Place { get; set; } = "";
+    /// <summary>このゾーンの光り方（RgbLightModes。空ならデバイスの光り方。例: 水冷のヘッドだけ白）</summary>
+    public string LightMode { get; set; } = RgbLightModes.Same;
+    /// <summary>固定色・呼吸の色 "#RRGGBB"（空ならデバイスの色）</summary>
+    public string LightColor { get; set; } = "";
 
     [JsonIgnore]
     public bool IsDefault => Effect == SameAsDevice && Mirror is null && Reverse is null
-        && GainR == 100 && GainG == 100 && GainB == 100 && Level == 100 && string.IsNullOrEmpty(Place) && Sound == MusicSounds.Auto;
+        && GainR == 100 && GainG == 100 && GainB == 100 && Level == 100 && string.IsNullOrEmpty(Place) && Sound == MusicSounds.Auto
+        && string.IsNullOrEmpty(LightMode) && string.IsNullOrEmpty(LightColor);
 
     public void Normalize()
     {
         Name ??= "";
         Place ??= "";
+        LightMode = RgbLightModes.Normalize(LightMode);
+        LightColor = RgbLightModes.NormalizeColor(LightColor);
         Sound = MusicSounds.Normalize(Sound);
         if (string.IsNullOrEmpty(Effect)) Effect = SameAsDevice;
         GainR = Math.Clamp(GainR, 0, 100);

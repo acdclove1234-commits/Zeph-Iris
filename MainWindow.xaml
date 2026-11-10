@@ -2160,8 +2160,29 @@
                                                                 ToolTip="このデバイスに最後に送った色（画面の色に近づけて表示しています）"/>
                                                 <TextBlock Text="{Binding ErrorText}" Style="{StaticResource Caption}" Foreground="{DynamicResource DangerBrush}" Margin="24,4,0,0"
                                                            Visibility="{Binding HasError, Converter={StaticResource BoolToVis}}"/>
+                                                    <WrapPanel Margin="24,8,0,0">
+                                                        <StackPanel Orientation="Horizontal" Margin="0,0,18,4">
+                                                            <TextBlock Text="このデバイスの色" Style="{StaticResource Label}" FontSize="13" Margin="0,0,8,0"/>
+                                                            <ComboBox Width="170" ItemsSource="{Binding LightModeOptions}" DisplayMemberPath="Label" SelectedValuePath="Id"
+                                                                      SelectedValue="{Binding LightModeId}"
+                                                                      ToolTip="このデバイスだけ、上の「光り方」と違う光り方にします（例: グラボは赤の固定色、キーボードはレインボー）。「全体と同じ」なら上の設定のままです。音楽連動は全体でだけ選べます"/>
+                                                        </StackPanel>
+                                                        <StackPanel Orientation="Horizontal" Margin="0,0,18,4" Visibility="{Binding ShowColor, Converter={StaticResource BoolToVis}}">
+                                                            <ComboBox Width="170" ItemsSource="{Binding ColorOptions}" SelectedValuePath="Id" SelectedValue="{Binding LightColorId}"
+                                                                      ToolTip="固定色・呼吸の色。「全体と同じ色」なら上の「色」を使います">
+                                                                <ComboBox.ItemTemplate>
+                                                                    <DataTemplate>
+                                                                        <StackPanel Orientation="Horizontal">
+                                                                            <Ellipse Width="12" Height="12" Margin="0,0,8,0" Fill="{Binding Swatch}" Stroke="{DynamicResource MutedBrush}" StrokeThickness="0.5" VerticalAlignment="Center"/>
+                                                                            <TextBlock Text="{Binding Label}" VerticalAlignment="Center"/>
+                                                                        </StackPanel>
+                                                                    </DataTemplate>
+                                                                </ComboBox.ItemTemplate>
+                                                            </ComboBox>
+                                                        </StackPanel>
+                                                    </WrapPanel>
                                                 <WrapPanel Margin="24,8,0,0">
-                                                    <StackPanel Orientation="Horizontal" Margin="0,0,18,4" Visibility="{Binding ShowEffect, Converter={StaticResource BoolToVis}}">
+                                                    <StackPanel Orientation="Horizontal" Margin="0,0,18,4" Visibility="{Binding ShowMusicEffect, Converter={StaticResource BoolToVis}}">
                                                         <TextBlock Text="光り方" Style="{StaticResource Label}" FontSize="13" Margin="0,0,8,0"/>
                                                         <ComboBox Width="170" ItemsSource="{Binding EffectOptions}" DisplayMemberPath="Label" SelectedValuePath="Id"
                                                                   SelectedValue="{Binding Effect}"
@@ -2241,13 +2262,32 @@
                                                                             <Run Text="{Binding LedText, Mode=OneWay}" Foreground="{DynamicResource MutedBrush}" FontSize="12"/>
                                                                         </TextBlock>
                                                                         <WrapPanel Margin="0,6,0,0">
-                                                                            <StackPanel Orientation="Horizontal" Margin="0,0,18,4" Visibility="{Binding ShowEffect, Converter={StaticResource BoolToVis}}">
+                                                                            <StackPanel Orientation="Horizontal" Margin="0,0,18,4">
+                                                                                <TextBlock Text="色" Style="{StaticResource Label}" FontSize="13" Margin="0,0,8,0"/>
+                                                                                <ComboBox Width="150" ItemsSource="{Binding LightModeOptions}" DisplayMemberPath="Label" SelectedValuePath="Id"
+                                                                                          SelectedValue="{Binding LightModeId}"
+                                                                                          ToolTip="このゾーン（端子）だけ光り方を変えます（例: 水冷のヘッドだけ白、ケースファンは消灯）。「デバイスと同じ」ならデバイスの設定のままです"/>
+                                                                                <StackPanel Orientation="Horizontal" Margin="8,0,0,0" Visibility="{Binding ShowColor, Converter={StaticResource BoolToVis}}">
+                                                                                    <ComboBox Width="180" ItemsSource="{Binding ColorOptions}" SelectedValuePath="Id" SelectedValue="{Binding LightColorId}"
+                                                                                              ToolTip="固定色・呼吸の色。「デバイスと同じ色」ならデバイスの色を使います">
+                                                                                        <ComboBox.ItemTemplate>
+                                                                                            <DataTemplate>
+                                                                                                <StackPanel Orientation="Horizontal">
+                                                                                                    <Ellipse Width="12" Height="12" Margin="0,0,8,0" Fill="{Binding Swatch}" Stroke="{DynamicResource MutedBrush}" StrokeThickness="0.5" VerticalAlignment="Center"/>
+                                                                                                    <TextBlock Text="{Binding Label}" VerticalAlignment="Center"/>
+                                                                                                </StackPanel>
+                                                                                            </DataTemplate>
+                                                                                        </ComboBox.ItemTemplate>
+                                                                                    </ComboBox>
+                                                                                </StackPanel>
+                                                                            </StackPanel>
+                                                                            <StackPanel Orientation="Horizontal" Margin="0,0,18,4" Visibility="{Binding ShowMusicEffect, Converter={StaticResource BoolToVis}}">
                                                                                 <TextBlock Text="光り方" Style="{StaticResource Label}" FontSize="13" Margin="0,0,8,0"/>
                                                                                 <ComboBox Width="170" ItemsSource="{Binding EffectOptions}" DisplayMemberPath="Label" SelectedValuePath="Id"
                                                                                           SelectedValue="{Binding EffectId}"
                                                                                           ToolTip="このゾーンだけ音楽連動の光り方を変えます（例: ラジエーターのファンは音量メーター、電源はビートで色替え）"/>
                                                                             </StackPanel>
-                                                                            <StackPanel Orientation="Horizontal" Margin="0,0,18,4" Visibility="{Binding ShowEffect, Converter={StaticResource BoolToVis}}">
+                                                                            <StackPanel Orientation="Horizontal" Margin="0,0,18,4" Visibility="{Binding ShowMusicEffect, Converter={StaticResource BoolToVis}}">
                                                                                 <TextBlock Text="反応する音" Style="{StaticResource Label}" FontSize="13" Margin="0,0,8,0"/>
                                                                                 <ComboBox Width="190" ItemsSource="{Binding SoundOptions}" DisplayMemberPath="Label" SelectedValuePath="Id"
                                                                                           SelectedValue="{Binding SoundId}"

@@ -20,6 +20,110 @@ public static class RgbModes
     public const string Music = "Music";
 }
 
+/// <summary>
+/// デバイス・ゾーンごとの光り方（RgbDeviceSettings.LightMode / RgbZoneSettings.LightMode の値）。
+/// 空は「全体（ゾーンならデバイス）と同じ」。音楽連動は全体の設定でだけ選べる（音の取り込みは全体で 1 つのため）
+/// </summary>
+public static class RgbLightModes
+{
+    public const string Same = "";
+    public const string Off = "Off";
+    /// <summary>選べる光り方（Same のほか）</summary>
+    public static readonly string[] Overrides =
+        { RgbModes.Static, RgbModes.Rainbow, RgbModes.RainbowStatic, RgbModes.Breathing, RgbModes.Temperature, Off };
+
+    public static string Normalize(string? mode) => mode is not null && Array.IndexOf(Overrides, mode) >= 0 ? mode : Same;
+
+    /// <summary>"#RRGGBB" 以外は空（全体の色を使う）</summary>
+    public static string NormalizeColor(string? hex) =>
+        hex is { Length: 7 } && hex[0] == '#' && int.TryParse(hex.AsSpan(1), NumberStyles.HexNumber, CultureInfo.InvariantCulture, out _) ? hex.ToUpperInvariant() : "";
+
+    /// <summary>色を使う光り方か（固定色・呼吸）</summary>
+    public static bool UsesColor(string mode) => mode is RgbModes.Static or RgbModes.Breathing;
+
+    /// <summary>動き続ける光り方か（毎コマ送る必要がある）</summary>
+    public static bool IsAnimated(string mode) => mode is RgbModes.Rainbow or RgbModes.Breathing;
+
+    /// <summary>設定のどこかに、動き続ける光り方の上書きがあるか（全体が止まった光り方でも、毎コマ描いて送るため）</summary>
+    public static bool AnyAnimated(RgbConfig cfg)
+    {
+        foreach (var d in cfg.DeviceSettings)
+        {
+            if (d is null) continue;
+            if (IsAnimated(d.LightMode)) return true;
+            if (d.Zones is null) continue;
+            foreach (var z in d.Zones)
+                if (z is not null && IsAnimated(z.LightMode)) return true;
+        }
+        return false;
+    }
+}
+
+/// <summary>
+/// デバイス 1 台の LED を、光り方の上書きごとのまとまりに分けたもの（全体と同じ光り方の LED は含まない）。
+/// DeviceRenderer が設定の変わったときだけ作り直し、毎コマその範囲だけ描き直す
+/// </summary>
+public sealed class RgbLightPlan
+{
+    public sealed record Segment(int Start, int Length, string Mode, string Color);
+
+    public IReadOnlyList<Segment> Segments { get; }
+    /// <summary>デバイス全部の LED が上書きされている（全体の光り方を描く必要がない）</summary>
+    public bool CoversAll { get; }
+    /// <summary>デバイス全体の光り方（ゾーンを分けない）。上書きがなければ空</summary>
+    public string DeviceMode { get; }
+
+    private RgbLightPlan(List<Segment> segments, bool coversAll, string deviceMode)
+    {
+        Segments = segments;
+        CoversAll = coversAll;
+        DeviceMode = deviceMode;
+    }
+
+    public static readonly RgbLightPlan None = new(new List<Segment>(), false, "");
+
+    /// <param name="ledCount">デバイスの LED の数</param>
+    /// <param name="zones">ゾーンごとの LED の数（なければ null。デバイス全体を 1 つとして扱う）</param>
+    /// <param name="zoneName">k 番目のゾーンの名前</param>
+    public static RgbLightPlan Build(RgbDeviceSettings s, int ledCount, IReadOnlyList<int>? zones, Func<int, string> zoneName)
+    {
+        string devMode = RgbLightModes.Normalize(s.LightMode);
+        string devColor = RgbLightModes.NormalizeColor(s.LightColor);
+        var list = new List<Segment>();
+        int covered = 0;
+        void Add(int start, int len, string mode, string color)
+        {
+            if (len <= 0 || mode.Length == 0) return;
+            len = Math.Min(len, ledCount - start);
+            if (len <= 0) return;
+            // 隣のまとまりと同じ光り方・色ならつなげる（虹の並びがゾーンごとに切れないように）
+            if (list.Count > 0 && list[^1] is var last && last.Start + last.Length == start && last.Mode == mode && last.Color == color)
+                list[^1] = last with { Length = last.Length + len };
+            else list.Add(new Segment(start, len, mode, color));
+            covered += len;
+        }
+        if (zones is null || zones.Count == 0 || zones.Sum() != ledCount)
+        {
+            Add(0, ledCount, devMode, devColor);
+        }
+        else
+        {
+            int start = 0;
+            for (int k = 0; k < zones.Count; k++)
+            {
+                var z = s.ZoneFor(zoneName(k));
+                string zm = RgbLightModes.Normalize(z?.LightMode);
+                string zc = RgbLightModes.NormalizeColor(z?.LightColor);
+                // ゾーンの光り方が空ならデバイスの光り方。ゾーンの色が空ならデバイスの色
+                if (zm.Length == 0) Add(start, zones[k], devMode, zc.Length > 0 ? zc : devColor);
+                else Add(start, zones[k], zm, zc.Length > 0 ? zc : devColor);
+                start += zones[k];
+            }
+        }
+        return list.Count == 0 ? None : new RgbLightPlan(list, covered >= ledCount, devMode);
+    }
+}
+
 /// <summary>音楽連動の光り方（RgbConfig.MusicStyle の値）</summary>
 public static class MusicStyles
 {
@@ -145,7 +249,7 @@ public static class RgbEffects
     /// </summary>
     /// <param name="mode">光り方（RgbModes。cfg.Mode と違う光り方も描ける: 音が止まったときの呼吸・固定色など）</param>
     public static void FillLinear(string mode, RgbConfig cfg, Rgb baseColor, double t, double? temperature,
-        double[] pos, Span<LinColor> dst)
+        ReadOnlySpan<double> pos, Span<LinColor> dst)
     {
         int n = Math.Min(pos.Length, dst.Length);
         bool gamma = cfg.Gamma;

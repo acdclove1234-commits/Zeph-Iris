@@ -49,6 +49,55 @@ public enum LightingChoiceKind
 /// <summary>コンボボックスの選択肢（Id = 設定に保存する値、Label = 画面に出す言葉）</summary>
 public sealed record ChoiceOption(string Id, string Label);
 
+/// <summary>色の選択肢（Id は "#RRGGBB"。空は「全体（ゾーンならデバイス）の色と同じ」）。Swatch は見本の丸</summary>
+public sealed record ColorOption(string Id, string Label, Brush? Swatch);
+
+/// <summary>デバイス・ゾーンごとの光り方と色の選択肢</summary>
+public static class LightOverrideChoices
+{
+    /// <summary>画面の「全体と同じ」の Id（設定では空。選択欄が空の値を書き戻すことがあるため、画面では別の値にする）</summary>
+    public const string SameId = "same";
+
+    public static IReadOnlyList<ChoiceOption> DeviceModes => _deviceModes.Value;
+    private static readonly PerLanguage<IReadOnlyList<ChoiceOption>> _deviceModes = new(() => Modes(L("全体と同じ")));
+    public static IReadOnlyList<ChoiceOption> ZoneModes => _zoneModes.Value;
+    private static readonly PerLanguage<IReadOnlyList<ChoiceOption>> _zoneModes = new(() => Modes(L("デバイスと同じ")));
+
+    private static IReadOnlyList<ChoiceOption> Modes(string same) => new ChoiceOption[]
+    {
+        new(SameId, same), new(RgbModes.Static, L("固定色")), new(RgbModes.Rainbow, L("レインボー（流れる）")),
+        new(RgbModes.RainbowStatic, L("レインボー（固定）")), new(RgbModes.Breathing, L("呼吸")), new(RgbModes.Temperature, L("温度")),
+        new(RgbLightModes.Off, L("消灯")),
+    };
+
+    /// <summary>色の選択肢（先頭は「同じ色」。設定にある色が一覧になければ、その色も足す）</summary>
+    public static IReadOnlyList<ColorOption> Colors(bool zone, string current)
+    {
+        var list = new List<ColorOption> { new(SameId, zone ? L("デバイスと同じ色") : L("全体と同じ色"), null) };
+        foreach (var (hex, name) in Swatches) list.Add(new(hex, name, Solid(hex)));
+        if (current.Length > 0 && !list.Exists(c => c.Id == current)) list.Add(new(current, current, Solid(current)));
+        return list;
+    }
+
+    private static (string Hex, string Name)[] Swatches => _swatches.Value;
+    private static readonly PerLanguage<(string Hex, string Name)[]> _swatches = new(() => new[]
+    {
+        ("#FFFFFF", L("白")), ("#FF0000", L("赤")), ("#FF0080", L("ピンク")), ("#FFB000", L("オレンジ")), ("#FFE000", L("黄色")),
+        ("#00FF50", L("緑")), ("#00B4FF", L("水色")), ("#0040FF", L("青")), ("#6A00FF", L("紫")),
+    });
+
+    private static Brush Solid(string hex)
+    {
+        var c = (Color)ColorConverter.ConvertFromString(hex);
+        var b = new SolidColorBrush(c);
+        b.Freeze();
+        return b;
+    }
+
+    public static string ToSetting(string id) => id == SameId ? "" : id;
+    public static string FromSetting(string? value) => string.IsNullOrEmpty(value) ? SameId : value;
+}
+
 /// <summary>
 /// ライティング画面のチップ・カード 1 つ分（プリセット・音楽の表現・強さ・色の組み合わせ・テンポ・音が止まったとき・色の候補）。
 /// IsSelected が true のものは、画面で色が付いて「選ばれている」と分かるようになる
@@ -102,6 +151,25 @@ public sealed class RgbZoneVm : ObservableObject
     private string _effectId = RgbZoneSettings.SameAsDevice, _mirrorId = SameId, _reverseId = SameId, _soundId = MusicSounds.Auto;
     private int _gainR = 100, _gainG = 100, _gainB = 100, _level = 100;
     private bool _showEffect, _loading;
+    private string _lightModeId = LightOverrideChoices.SameId, _lightColorId = LightOverrideChoices.SameId;
+    private IReadOnlyList<ColorOption> _colorOptions = LightOverrideChoices.Colors(zone: true, "");
+
+    /// <summary>このゾーンの光り方（"same" ならデバイスと同じ）</summary>
+    public string LightModeId
+    {
+        get => _lightModeId;
+        set { if (!string.IsNullOrEmpty(value) && Set(ref _lightModeId, value)) { Raise(nameof(ShowColor)); Raise(nameof(ShowMusicEffect)); NotifyEdited(); } }
+    }
+    /// <summary>このゾーンの色（"same" ならデバイスの色）</summary>
+    public string LightColorId
+    {
+        get => _lightColorId;
+        set { if (!string.IsNullOrEmpty(value) && Set(ref _lightColorId, value)) NotifyEdited(); }
+    }
+    public IReadOnlyList<ChoiceOption> LightModeOptions => LightOverrideChoices.ZoneModes;
+    public IReadOnlyList<ColorOption> ColorOptions { get => _colorOptions; private set => Set(ref _colorOptions, value); }
+    /// <summary>色を選べる光り方（デバイスと同じ・固定色・呼吸）</summary>
+    public bool ShowColor => _lightModeId is LightOverrideChoices.SameId or RgbModes.Static or RgbModes.Breathing;
 
     /// <summary>OpenRGB のゾーン名（設定の保存にも使う）</summary>
     public required string Name { get; init; }
@@ -113,7 +181,9 @@ public sealed class RgbZoneVm : ObservableObject
     public IReadOnlyList<ChoiceOption> ReverseOptions => ReverseChoices;
     public IReadOnlyList<ChoiceOption> SoundOptions => SoundChoices;
     /// <summary>光り方を表示する（音楽連動のときだけ）</summary>
-    public bool ShowEffect { get => _showEffect; set => Set(ref _showEffect, value); }
+    public bool ShowEffect { get => _showEffect; set { if (Set(ref _showEffect, value)) Raise(nameof(ShowMusicEffect)); } }
+    /// <summary>音楽連動の光り方・反応する音を表示する（音楽連動で、このゾーンの光り方を変えていないとき）</summary>
+    public bool ShowMusicEffect => _showEffect && _lightModeId == LightOverrideChoices.SameId;
 
     public string EffectId { get => _effectId; set { if (!string.IsNullOrEmpty(value) && Set(ref _effectId, value)) NotifyEdited(); } }
     public string MirrorId { get => _mirrorId; set { if (!string.IsNullOrEmpty(value) && Set(ref _mirrorId, value)) NotifyEdited(); } }
@@ -141,6 +211,8 @@ public sealed class RgbZoneVm : ObservableObject
         GainR = _gainR, GainG = _gainG, GainB = _gainB, Level = _level,
         Sound = _soundId,
         Place = Place,
+        LightMode = LightOverrideChoices.ToSetting(_lightModeId),
+        LightColor = LightOverrideChoices.ToSetting(_lightColorId),
     };
 
     /// <summary>設定から読んだ値を入れる（このときは Edited を呼ばない）</summary>
@@ -158,6 +230,10 @@ public sealed class RgbZoneVm : ObservableObject
             Level = z?.Level ?? 100;
             Place = z?.Place ?? "";
             SoundId = MusicSounds.Normalize(z?.Sound);
+            string color = RgbLightModes.NormalizeColor(z?.LightColor);
+            ColorOptions = LightOverrideChoices.Colors(zone: true, color);
+            LightModeId = LightOverrideChoices.FromSetting(RgbLightModes.Normalize(z?.LightMode));
+            LightColorId = LightOverrideChoices.FromSetting(color);
         }
         finally
         {
@@ -261,6 +337,42 @@ public sealed class RgbDeviceVm : ObservableObject
     private bool _selected, _canSelect, _showEffect, _swap, _reverse, _animateOnGpu, _showDetails;
     private int _gainR = 100, _gainG = 100, _gainB = 100, _level = 100;
     private string _effect = "Auto", _mirrorId = "auto", _fpsId = "0", _leadId = "-1", _statusText = "", _errorText = "";
+    private string _lightModeId = LightOverrideChoices.SameId, _lightColorId = LightOverrideChoices.SameId;
+    private IReadOnlyList<ColorOption> _colorOptions = LightOverrideChoices.Colors(zone: false, "");
+
+    /// <summary>このデバイスの光り方（"same" なら全体と同じ。例: グラボだけ赤の固定色）</summary>
+    public string LightModeId
+    {
+        get => _lightModeId;
+        set { if (!string.IsNullOrEmpty(value) && Set(ref _lightModeId, value)) { Raise(nameof(ShowColor)); Raise(nameof(ShowMusicEffect)); NotifyEdited(); } }
+    }
+    /// <summary>このデバイスの色（"same" なら全体の色）</summary>
+    public string LightColorId
+    {
+        get => _lightColorId;
+        set { if (!string.IsNullOrEmpty(value) && Set(ref _lightColorId, value)) NotifyEdited(); }
+    }
+    public IReadOnlyList<ChoiceOption> LightModeOptions => LightOverrideChoices.DeviceModes;
+    public IReadOnlyList<ColorOption> ColorOptions { get => _colorOptions; private set => Set(ref _colorOptions, value); }
+    /// <summary>色を選べる光り方（固定色・呼吸）</summary>
+    public bool ShowColor => _lightModeId is RgbModes.Static or RgbModes.Breathing;
+
+    /// <summary>光り方と色を設定から読み込む（このときは Edited を呼ばない）</summary>
+    internal void LoadLight(RgbDeviceSettings s)
+    {
+        _loading = true;
+        try
+        {
+            string color = RgbLightModes.NormalizeColor(s.LightColor);
+            ColorOptions = LightOverrideChoices.Colors(zone: false, color);
+            LightModeId = LightOverrideChoices.FromSetting(RgbLightModes.Normalize(s.LightMode));
+            LightColorId = LightOverrideChoices.FromSetting(color);
+        }
+        finally
+        {
+            _loading = false;
+        }
+    }
     private bool _loading;
 
     /// <summary>OpenRGB のデバイス名（設定の保存にも使う）</summary>
@@ -343,9 +455,13 @@ public sealed class RgbDeviceVm : ObservableObject
         set
         {
             if (!Set(ref _showEffect, value)) return;
+            Raise(nameof(ShowMusicEffect));
             foreach (var z in Zones) z.ShowEffect = value;
         }
     }
+
+    /// <summary>音楽連動の光り方を表示する（音楽連動で、このデバイスの光り方を変えていないとき）</summary>
+    public bool ShowMusicEffect => _showEffect && _lightModeId == LightOverrideChoices.SameId;
 
     /// <summary>「ゾーンと色合わせ」を開いている</summary>
     public bool ShowDetails { get => _showDetails; set => Set(ref _showDetails, value); }
@@ -402,6 +518,8 @@ public sealed class RgbDeviceVm : ObservableObject
     /// <summary>色合わせとゾーンの設定を、設定の項目に書き込む</summary>
     internal void WriteCalibration(RgbDeviceSettings s)
     {
+        s.LightMode = LightOverrideChoices.ToSetting(_lightModeId);
+        s.LightColor = LightOverrideChoices.ToSetting(_lightColorId);
         s.GainR = _gainR;
         s.GainG = _gainG;
         s.GainB = _gainB;
@@ -565,7 +683,7 @@ internal static class LightingRules
     /// <summary>既定のままのデバイス設定か（それなら一覧に入れておく必要はない）</summary>
     public static bool IsDefault(RgbDeviceSettings s)
         => (string.IsNullOrEmpty(s.Effect) || s.Effect == "Auto") && s.Mirror is null && !s.Reverse && s.MaxFps <= 0 && s.LatencyMs < 0
-           && !s.WhiteOnly && !s.AnimateOnGpu && s.GainR == 100 && s.GainG == 100 && s.GainB == 100 && s.Level == 100
+           && !s.WhiteOnly && !s.AnimateOnGpu && string.IsNullOrEmpty(s.LightMode) && string.IsNullOrEmpty(s.LightColor) && s.GainR == 100 && s.GainG == 100 && s.GainB == 100 && s.Level == 100
            && (s.Zones is null || s.Zones.All(z => z.IsDefault));
 
     /// <summary>
@@ -1334,6 +1452,7 @@ public partial class MainWindow
             };
             vm.Load(rgb.SwapRedGreen.Contains(d.Name), s.Effect, s.Mirror, s.Reverse, s.MaxFps, s.LatencyMs, s.AnimateOnGpu);
             vm.LoadCalibration(s);
+            vm.LoadLight(s);
             vm.LoadZones(d, s);
             vm.Edited = OnRgbDeviceEdited;
             _rgbDeviceRows.Add(vm);

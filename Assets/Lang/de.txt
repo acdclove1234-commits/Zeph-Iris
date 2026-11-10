@@ -1677,3 +1677,12 @@ e6f4ba17	Der Messgerätwert ({0:F0} W) ist kleiner als die CPU- und GPU-Sensorwe
 f7824b90	Abgleich gelöscht; zurück zum Anfangswert (Rest des PCs 50 W, Netzteil-Wirkungsgrad 88 %)
 f7cdd477	Erfasst: Steckdose {0:F0} W · CPU+GPU {1:F0} W
 f83af4dd	Die beiden Werte passen nicht zusammen (der Rest des PCs ergab {0:F0} W). Messen Sie erneut
+156f8722	Ändert den Lichtmodus nur dieser Zone (dieses Anschlusses), z. B. nur den Pumpenkopf der AIO in Weiß, Gehäuselüfter aus. „Wie das Gerät“ behält die Einstellung des Geräts
+55525f98	Farbe für feste Farbe und Atmen. „Gleiche Farbe wie insgesamt“ nutzt die „Farbe“ oben
+5d9bf5c2	Gibt nur diesem Gerät einen anderen Lichtmodus als oben (z. B. Grafikkarte in festem Rot, Tastatur im Regenbogen). „Wie insgesamt“ behält die obige Einstellung. Musiksynchronisation lässt sich nur insgesamt wählen
+79acf3fc	Farbe dieses Geräts
+8ed1329c	Farbe für feste Farbe und Atmen. „Gleiche Farbe wie das Gerät“ nutzt die Farbe des Geräts
+ab10ab7f	Gleiche Farbe wie das Gerät
+bf2c93a8	Wie insgesamt
+c7218a33	Gelb
+cc601a2e	Gleiche Farbe wie insgesamt

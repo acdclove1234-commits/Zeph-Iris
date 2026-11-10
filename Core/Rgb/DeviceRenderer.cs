@@ -131,6 +131,12 @@ public sealed class DeviceRenderer
     private LinColor[] _main = Array.Empty<LinColor>();
     private LinColor[] _idleBuf = Array.Empty<LinColor>();
     private LinColor[] _light = Array.Empty<LinColor>();
+    // デバイス・ゾーンごとの光り方（上書きがなければ None）と、その色（null なら全体の色）
+    private RgbLightPlan _plan = RgbLightPlan.None;
+    private Rgb?[] _planColor = Array.Empty<Rgb?>();
+
+    /// <summary>このデバイスの、光り方を上書きした範囲（テスト・表示用）</summary>
+    public RgbLightPlan LightPlan => _plan;
 
     // いま描いているもの（変わったらクロスフェード）
     private Layer _layer = Layer.None;
@@ -362,6 +368,12 @@ public sealed class DeviceRenderer
                 ActiveEffect = "";
                 break;
         }
+        // デバイス・ゾーンごとの光り方（グラボだけ赤、水冷のヘッドだけ白、など）: その LED だけ描き直す
+        if (layer is Layer.Mode or Layer.Music && _plan.Segments.Count > 0)
+        {
+            ApplyLightPlan(input, cfg, settings);
+            if (_plan.CoversAll) ActiveEffect = "";
+        }
 
         // 4. 明るさ・クロスフェード → 0〜255
         float bri = (float)(Math.Clamp(cfg.Brightness, 0, 100) / 100);
@@ -445,6 +457,7 @@ public sealed class DeviceRenderer
             if (effect is not null) _hasZoneEffects = true;
         }
         BuildGains(n, settings);
+        BuildLightPlan(n, settings);
         string layoutKey = key.ToString();
         if (n == _layoutN && layoutKey == _layoutKey) return;
         _layoutKey = layoutKey;
@@ -795,6 +808,41 @@ public sealed class DeviceRenderer
         double age = input.TEval - _lastClickT;
         float k = age >= 0 ? (float)Math.Exp(-age / SyncFlashTauSec) : 0f;
         Array.Fill(_main, LinColor.White * k);
+    }
+
+    /// <summary>デバイス・ゾーンごとの光り方の範囲と色を、設定から作り直す（設定が変わったときだけ）</summary>
+    private void BuildLightPlan(int n, RgbDeviceSettings settings)
+    {
+        _plan = RgbLightPlan.Build(settings, n, Device.Zones, Device.ZoneName);
+        if (_planColor.Length != _plan.Segments.Count) _planColor = new Rgb?[_plan.Segments.Count];
+        for (int k = 0; k < _plan.Segments.Count; k++)
+            _planColor[k] = _plan.Segments[k].Color.Length > 0 ? Rgb.Parse(_plan.Segments[k].Color) : null;
+    }
+
+    /// <summary>
+    /// 光り方を上書きした LED を描き直す（全体の光り方の上に描く）。グラボなど書き込みを減らすデバイスは、
+    /// 全体の光り方と同じく、流れる虹・呼吸を止まった虹・固定色にする
+    /// </summary>
+    private void ApplyLightPlan(RenderInput input, RgbConfig cfg, RgbDeviceSettings settings)
+    {
+        var segs = _plan.Segments;
+        int n = _main.Length;
+        for (int k = 0; k < segs.Count; k++)
+        {
+            var s = segs[k];
+            int start = Math.Min(s.Start, n), len = Math.Min(s.Length, n - start);
+            if (len <= 0) continue;
+            var dst = _main.AsSpan(start, len);
+            if (s.Mode == RgbLightModes.Off)
+            {
+                dst.Clear();
+                continue;
+            }
+            // 温度は、全体が温度モードならならした値、そうでなければ段にした値（RgbTemperatureFilter）をそのまま使う
+            double? temp = s.Mode == RgbModes.Temperature ? (cfg.Mode == RgbModes.Temperature ? _tempSmooth : input.Temperature) : null;
+            if (temp is double tv && double.IsNaN(tv)) temp = input.Temperature;
+            RgbEffects.FillLinear(ModeFor(s.Mode, settings), cfg, _planColor[k] ?? _staticRgb, input.T, temp, _pos.AsSpan(start, len), dst);
+        }
     }
 
     /// <summary>温度モードの温度を 1.5 秒でならす（温度の値が 1 秒ごとに跳んでも、色はなめらかに変わる）</summary>

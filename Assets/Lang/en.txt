@@ -1677,3 +1677,12 @@ e6f4ba17	The power meter reading ({0:F0} W) is lower than the CPU and GPU sensor
 f7824b90	Calibration cleared; back to the starting estimate (rest of the PC 50 W, power supply efficiency 88%)
 f7cdd477	Recorded: outlet {0:F0} W · CPU+GPU {1:F0} W
 f83af4dd	The two readings do not fit together (the rest of the PC came out at {0:F0} W). Measure again
+156f8722	Changes the light mode of this zone (header) only (for example: only the AIO pump head in white, case fans off). "Same as device" keeps the device's setting
+55525f98	Colour for solid colour and breathing. "Same colour as overall" uses the "Colour" above
+5d9bf5c2	Gives only this device a different light mode from the one above (for example: the graphics card in solid red, the keyboard in rainbow). "Same as overall" keeps the setting above. Music sync can only be chosen overall
+79acf3fc	This device's colour
+8ed1329c	Colour for solid colour and breathing. "Same colour as device" uses the device's colour
+ab10ab7f	Same colour as device
+bf2c93a8	Same as overall
+c7218a33	Yellow
+cc601a2e	Same colour as overall
