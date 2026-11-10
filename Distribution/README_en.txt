@@ -13,6 +13,16 @@ and Iris, the rainbow (the LEDs).
   for example: Settings [設定].
 
 
+■ What's new in v6.8.2
+  - Electricity cost: the power supply's losses are now included (Settings: "Power supply efficiency", 88% by
+    default). Before, they were left out, so the estimate read 10-20% below a wall-outlet measurement; with the
+    same settings it now reads a little over 10% higher than before.
+  - Settings [設定] -> Notifications & integrations -> Electricity cost: calibrate with a plug-in power meter. Enter
+    the reading at idle and press "Record" to work out the power of everything besides the CPU and GPU; record
+    under load too (during a game, for example) to work out the power supply efficiency. "Clear calibration"
+    goes back to the starting estimate.
+  - The report page says "an estimate within about ±20%" before calibration and shows the calibration date after.
+
 ■ What's new in v6.8.1
   - Safety: with a fan curve on an SSD temperature, playing music or copying files could make the app report
     "the temperature sensor is stuck" and run every fan at 100%. The "load changed but the temperature did not"
