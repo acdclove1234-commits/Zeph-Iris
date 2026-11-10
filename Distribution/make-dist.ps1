@@ -34,10 +34,28 @@ try {
     # このスクリプト自身は入れない
     Get-ChildItem $PSScriptRoot | Where-Object { $_.Name -ne 'make-dist.ps1' } | Copy-Item -Destination $package -Recurse
 
+    # PawnIO の公式のインストーラーを、公式のリリースから取ってくる（版と SHA-256 を決めておき、違えば止める）。
+    # setup.exe に入れるだけで、アプリのフォルダーには置かない。取ってきたものは obj\PawnIO\<版> に残し、次からはそれを使う
+    $pawnVersion = '2.2.0'
+    $pawnSha256 = '1F519A22E47187F70A1379A48CA604981C4FCF694F4E65B734AAA74A9FBA3032'
+    $pawnDir = Join-Path $root "obj\PawnIO\$pawnVersion"
+    $pawnSetup = Join-Path $pawnDir 'PawnIO_setup.exe'
+    if (-not (Test-Path $pawnSetup) -or (Get-FileHash $pawnSetup -Algorithm SHA256).Hash -ne $pawnSha256) {
+        Write-Host "PawnIO $pawnVersion の公式のインストーラーを取ってきています..." -ForegroundColor Cyan
+        New-Item -ItemType Directory -Force $pawnDir | Out-Null
+        [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+        Invoke-WebRequest -UseBasicParsing -Uri "https://github.com/namazso/PawnIO.Setup/releases/download/$pawnVersion/PawnIO_setup.exe" -OutFile $pawnSetup
+        $got = (Get-FileHash $pawnSetup -Algorithm SHA256).Hash
+        if ($got -ne $pawnSha256) {
+            Remove-Item $pawnSetup -Force
+            throw "PawnIO_setup.exe の SHA-256 が違います（$got）。公式のリリースが変わっていないか確かめてください"
+        }
+    }
+
     $setup = Join-Path $root "Zeph-Iris-$version-setup.exe"
     if (Test-Path $setup) { Remove-Item $setup }
     Write-Host "インストーラーを作っています（$iscc）..." -ForegroundColor Cyan
-    & $iscc /Q "/DAppVersion=$version" "/DSourceDir=$package" "/DOutputDir=$root" $script
+    & $iscc /Q "/DAppVersion=$version" "/DSourceDir=$package" "/DOutputDir=$root" "/DPawnIoSetup=$pawnSetup" $script
     if ($LASTEXITCODE -ne 0) { throw "ISCC.exe に失敗しました（終了コード $LASTEXITCODE）" }
     if (-not (Test-Path $setup)) { throw "インストーラーができていません: $setup" }
     Write-Host "できました: $setup" -ForegroundColor Green

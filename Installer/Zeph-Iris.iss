@@ -80,34 +80,34 @@ WillMigrate=The settings and records of the previous version of this app (Fanlum
 CloseFailed=Zeph-Iris could not be closed. Right-click the Zeph-Iris icon in the notification area of the taskbar, choose "Exit (hand back to BIOS)", and try again.
 UninstallCloseAsk=Zeph-Iris is running. Exit it and uninstall?%nThe fans go back to the BIOS settings.
 DeleteDataAsk=Also delete the settings, logs and records of Zeph-Iris?%n%nChoose No to keep them in the app folder, for example to install Zeph-Iris again later.
-WillInstallPawnIO=PawnIO, the driver Zeph-Iris uses for fan control, is not installed. Setup installs it from the official winget source (needs the internet).
-InstallingPawnIO=Installing PawnIO, the driver for fan control (needs the internet; this can take a few minutes)...
-japanese.WillInstallPawnIO=ファン制御に使うドライバー（PawnIO）が入っていないので、winget の公式の取得元からインストールします（インターネットが必要です）。
-japanese.InstallingPawnIO=ファン制御に使うドライバー（PawnIO）をインストールしています（インターネットが必要です。数分かかることがあります）…
-german.WillInstallPawnIO=PawnIO, der Treiber, den Zeph-Iris für die Lüftersteuerung nutzt, ist nicht installiert. Das Setup installiert ihn aus der offiziellen winget-Quelle (Internet nötig).
-german.InstallingPawnIO=PawnIO, der Treiber für die Lüftersteuerung, wird installiert (Internet nötig, kann einige Minuten dauern)…
-french.WillInstallPawnIO=PawnIO, le pilote utilisé par Zeph-Iris pour contrôler les ventilateurs, n'est pas installé. L'installation l'ajoute depuis la source officielle winget (Internet requis).
-french.InstallingPawnIO=Installation de PawnIO, le pilote de contrôle des ventilateurs (Internet requis, peut prendre quelques minutes)…
-spanish.WillInstallPawnIO=PawnIO, el controlador que Zeph-Iris usa para los ventiladores, no está instalado. El instalador lo instalará desde la fuente oficial de winget (requiere Internet).
-spanish.InstallingPawnIO=Instalando PawnIO, el controlador para los ventiladores (requiere Internet; puede tardar unos minutos)…
-italian.WillInstallPawnIO=PawnIO, il driver che Zeph-Iris usa per le ventole, non è installato. L'installazione lo aggiunge dalla fonte ufficiale di winget (serve Internet).
-italian.InstallingPawnIO=Installazione di PawnIO, il driver per le ventole (serve Internet; può richiedere qualche minuto)…
-brazilianportuguese.WillInstallPawnIO=O PawnIO, driver que o Zeph-Iris usa para controlar as ventoinhas, não está instalado. O instalador vai instalá-lo pela fonte oficial do winget (precisa de internet).
-brazilianportuguese.InstallingPawnIO=Instalando o PawnIO, o driver de controle das ventoinhas (precisa de internet; pode levar alguns minutos)…
-polish.WillInstallPawnIO=PawnIO, sterownik używany przez Zeph-Iris do sterowania wentylatorami, nie jest zainstalowany. Instalator zainstaluje go z oficjalnego źródła winget (wymaga internetu).
-polish.InstallingPawnIO=Instalowanie PawnIO, sterownika do sterowania wentylatorami (wymaga internetu; może potrwać kilka minut)…
-dutch.WillInstallPawnIO=PawnIO, het stuurprogramma dat Zeph-Iris voor de ventilatoren gebruikt, is niet geïnstalleerd. Setup installeert het vanuit de officiële winget-bron (internet nodig).
-dutch.InstallingPawnIO=PawnIO, het stuurprogramma voor de ventilatorregeling, wordt geïnstalleerd (internet nodig; kan enkele minuten duren)…
-turkish.WillInstallPawnIO=Zeph-Iris'in fan denetimi için kullandığı PawnIO sürücüsü yüklü değil. Kurulum onu resmi winget kaynağından yükleyecek (internet gerekir).
-turkish.InstallingPawnIO=Fan denetimi sürücüsü PawnIO yükleniyor (internet gerekir; birkaç dakika sürebilir)…
-russian.WillInstallPawnIO=PawnIO — драйвер, который Zeph-Iris использует для управления вентиляторами, — не установлен. Программа установки установит его из официального источника winget (нужен интернет).
-russian.InstallingPawnIO=Установка PawnIO — драйвера для управления вентиляторами (нужен интернет; может занять несколько минут)…
-ukrainian.WillInstallPawnIO=PawnIO — драйвер, який Zeph-Iris використовує для керування вентиляторами, — не встановлено. Програма встановлення встановить його з офіційного джерела winget (потрібен інтернет).
-ukrainian.InstallingPawnIO=Встановлення PawnIO — драйвера для керування вентиляторами (потрібен інтернет; може тривати кілька хвилин)…
-korean.WillInstallPawnIO=Zeph-Iris가 팬 제어에 쓰는 드라이버 PawnIO가 설치되어 있지 않습니다. 설치 프로그램이 winget 공식 원본에서 설치합니다(인터넷 필요).
-korean.InstallingPawnIO=팬 제어용 드라이버 PawnIO를 설치하는 중입니다(인터넷이 필요하며 몇 분 걸릴 수 있습니다)…
-thai.WillInstallPawnIO=ยังไม่ได้ติดตั้ง PawnIO ไดรเวอร์ที่ Zeph-Iris ใช้ควบคุมพัดลม ตัวติดตั้งจะติดตั้งจากแหล่ง winget อย่างเป็นทางการ (ต้องใช้อินเทอร์เน็ต)
-thai.InstallingPawnIO=กำลังติดตั้ง PawnIO ไดรเวอร์สำหรับควบคุมพัดลม (ต้องใช้อินเทอร์เน็ต อาจใช้เวลาหลายนาที)…
+WillInstallPawnIO=PawnIO, the driver Zeph-Iris uses for fan control, is not installed. Setup installs it with the official PawnIO installer included in this setup.
+InstallingPawnIO=Installing PawnIO, the driver for fan control...
+japanese.WillInstallPawnIO=ファン制御に使うドライバー（PawnIO）が入っていないので、このセットアップに入っている PawnIO の公式のインストーラーでインストールします。
+japanese.InstallingPawnIO=ファン制御に使うドライバー（PawnIO）をインストールしています…
+german.WillInstallPawnIO=PawnIO, der Treiber, den Zeph-Iris für die Lüftersteuerung nutzt, ist nicht installiert. Das Setup installiert ihn mit dem offiziellen PawnIO-Installer, der in diesem Setup enthalten ist.
+german.InstallingPawnIO=PawnIO, der Treiber für die Lüftersteuerung, wird installiert…
+french.WillInstallPawnIO=PawnIO, le pilote utilisé par Zeph-Iris pour contrôler les ventilateurs, n'est pas installé. L'installation l'ajoute avec l'installeur officiel de PawnIO inclus dans ce programme d'installation.
+french.InstallingPawnIO=Installation de PawnIO, le pilote de contrôle des ventilateurs…
+spanish.WillInstallPawnIO=PawnIO, el controlador que Zeph-Iris usa para los ventiladores, no está instalado. El instalador lo instalará con el instalador oficial de PawnIO incluido en este instalador.
+spanish.InstallingPawnIO=Instalando PawnIO, el controlador para los ventiladores…
+italian.WillInstallPawnIO=PawnIO, il driver che Zeph-Iris usa per le ventole, non è installato. L'installazione lo aggiunge con il programma di installazione ufficiale di PawnIO incluso in questo setup.
+italian.InstallingPawnIO=Installazione di PawnIO, il driver per le ventole…
+brazilianportuguese.WillInstallPawnIO=O PawnIO, driver que o Zeph-Iris usa para controlar as ventoinhas, não está instalado. O instalador vai instalá-lo com o instalador oficial do PawnIO incluído nesta instalação.
+brazilianportuguese.InstallingPawnIO=Instalando o PawnIO, o driver de controle das ventoinhas…
+polish.WillInstallPawnIO=PawnIO, sterownik używany przez Zeph-Iris do sterowania wentylatorami, nie jest zainstalowany. Instalator zainstaluje go oficjalnym instalatorem PawnIO dołączonym do tej instalacji.
+polish.InstallingPawnIO=Instalowanie PawnIO, sterownika do sterowania wentylatorami…
+dutch.WillInstallPawnIO=PawnIO, het stuurprogramma dat Zeph-Iris voor de ventilatoren gebruikt, is niet geïnstalleerd. Setup installeert het met het officiële PawnIO-installatieprogramma dat in deze setup zit.
+dutch.InstallingPawnIO=PawnIO, het stuurprogramma voor de ventilatorregeling, wordt geïnstalleerd…
+turkish.WillInstallPawnIO=Zeph-Iris'in fan denetimi için kullandığı PawnIO sürücüsü yüklü değil. Kurulum onu bu kuruluma dahil olan resmi PawnIO yükleyicisiyle yükleyecek.
+turkish.InstallingPawnIO=Fan denetimi sürücüsü PawnIO yükleniyor…
+russian.WillInstallPawnIO=PawnIO — драйвер, который Zeph-Iris использует для управления вентиляторами, — не установлен. Программа установки поставит его с помощью официального установщика PawnIO, входящего в этот установщик.
+russian.InstallingPawnIO=Установка PawnIO — драйвера для управления вентиляторами…
+ukrainian.WillInstallPawnIO=PawnIO — драйвер, який Zeph-Iris використовує для керування вентиляторами, — не встановлено. Програма встановлення встановить його за допомогою офіційного інсталятора PawnIO, що входить до цього інсталятора.
+ukrainian.InstallingPawnIO=Встановлення PawnIO — драйвера для керування вентиляторами…
+korean.WillInstallPawnIO=Zeph-Iris가 팬 제어에 쓰는 드라이버 PawnIO가 설치되어 있지 않습니다. 이 설치 프로그램에 들어 있는 PawnIO 공식 설치 프로그램으로 설치합니다.
+korean.InstallingPawnIO=팬 제어용 드라이버 PawnIO를 설치하고 있습니다…
+thai.WillInstallPawnIO=ยังไม่ได้ติดตั้ง PawnIO ซึ่งเป็นไดรเวอร์ที่ Zeph-Iris ใช้ควบคุมพัดลม ตัวติดตั้งจะติดตั้งด้วยตัวติดตั้งทางการของ PawnIO ที่รวมมาในตัวติดตั้งนี้
+thai.InstallingPawnIO=กำลังติดตั้ง PawnIO ไดรเวอร์สำหรับควบคุมพัดลม…
 
 japanese.WillClose=Zeph-Iris が動いています。セットアップは、入れる前に Zeph-Iris を終了します。Zeph-Iris がまた起動するまで、ファンは BIOS の設定で回ります。
 japanese.WillMigrate=このアプリの前の版（Fanlume・ProFanController）の設定と記録は、Zeph-Iris が起動するときに引き継ぎます。
@@ -193,6 +193,11 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 [Files]
 ; make-dist.ps1 がまとめた exe・説明書・バッチ・ライセンスを、そのままアプリのフォルダーへ
 Source: "{#SourceDir}\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+; PawnIO の公式のインストーラー（make-dist.ps1 が公式のリリースから取ってきて、SHA-256 を確かめたもの）。
+; アプリのフォルダーには入れず、PawnIO が入っていないときだけ一時フォルダーに出して実行する（InstallPawnIo）
+#ifdef PawnIoSetup
+Source: "{#PawnIoSetup}"; Flags: dontcopy
+#endif
 
 [Icons]
 Name: "{autoprograms}\{#AppName}"; Filename: "{app}\{#AppExe}"
@@ -320,12 +325,17 @@ begin
 end;
 
 { ----- PawnIO（ファン制御に使うドライバー） -----
-  入っていなければ、アプリと同じやり方（Core/PawnIoSetup.cs の InstallArguments）で winget から入れる。
+  入っていなければ、このセットアップに入れてある PawnIO の公式のインストーラー（-install -silent）で入れる。
+  それでも入らなければ、アプリと同じやり方（Core/PawnIoSetup.cs の InstallArguments）で winget から入れる。
   うまくいかなくても止めない（アプリのはじめの設定の画面が、もう一度入れるか、公式サイトを案内する） }
 
 const
   PawnIoUninstallKey = 'SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\PawnIO';
   PawnIoWingetArguments = 'install --id namazso.PawnIO -e --source winget --silent --accept-source-agreements --accept-package-agreements';
+  PawnIoSetupArguments = '-install -silent';
+
+var
+  PawnIoNeedsRestart: Boolean;
 
 function PawnIoInstalled(): Boolean;
 begin
@@ -377,10 +387,27 @@ begin
   WizardForm.StatusLabel.Caption := CustomMessage('InstallingPawnIO');
   WizardForm.ProgressGauge.Style := npbstMarquee;
   try
-    if Exec(WingetPath(), PawnIoWingetArguments, '', SW_HIDE, ewWaitUntilTerminated, ResultCode) then
-      Log(Format('winget install PawnIO: exit code %d', [ResultCode]))
+#ifdef PawnIoSetup
+    // 1. このセットアップに入れてある公式のインストーラー（ネットがなくても入る）
+    ExtractTemporaryFile('PawnIO_setup.exe');
+    if Exec(ExpandConstant('{tmp}\PawnIO_setup.exe'), PawnIoSetupArguments, '', SW_HIDE, ewWaitUntilTerminated, ResultCode) then
+    begin
+      Log(Format('bundled PawnIO setup: exit code %d', [ResultCode]));
+      // 3010 = 入ったが、使うには Windows の再起動が要る
+      if ResultCode = 3010 then
+        PawnIoNeedsRestart := True;
+    end
     else
-      Log(Format('winget could not be started (error %d)', [ResultCode]));
+      Log(Format('bundled PawnIO setup could not be started (error %d)', [ResultCode]));
+#endif
+    // 2. それでも入っていなければ winget（以前の版と同じ）
+    if not PawnIoInstalled() then
+    begin
+      if Exec(WingetPath(), PawnIoWingetArguments, '', SW_HIDE, ewWaitUntilTerminated, ResultCode) then
+        Log(Format('winget install PawnIO: exit code %d', [ResultCode]))
+      else
+        Log(Format('winget could not be started (error %d)', [ResultCode]));
+    end;
   finally
     WizardForm.ProgressGauge.Style := npbstNormal;
   end;
@@ -388,6 +415,12 @@ begin
     Log('PawnIO is installed now')
   else
     Log('PawnIO is still missing; the app setup offers it again');
+end;
+
+{ PawnIO が「再起動が要る」と返したときは、最後に再起動をすすめる（アプリの「更新する」からの /NORESTART では聞かない） }
+function NeedRestart(): Boolean;
+begin
+  Result := PawnIoNeedsRestart;
 end;
 
 procedure CurStepChanged(CurStep: TSetupStep);

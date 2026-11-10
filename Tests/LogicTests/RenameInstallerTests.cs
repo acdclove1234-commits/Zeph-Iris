@@ -182,4 +182,37 @@ public static class RenameInstallerTests
         string dist = File.ReadAllText(Path.Combine(d.FullName, "Distribution", "make-dist.ps1"));
         T.Check(dist.Contains(AppIdentity.ExeName) && dist.Contains("Zeph-Iris-$version-setup.exe"), "the build script makes the setup from Zeph-Iris.exe");
     }
+
+    /// <summary>
+    /// PawnIO の同梱: 作るスクリプトは公式のリリースから決まった版を取り、SHA-256 を確かめて ISCC に渡す。
+    /// インストーラーは、入っていないときだけ一時フォルダーに出して -install -silent で実行し、だめなら winget に戻る。
+    /// ライセンスの案内（GPL の全文と、ソースコードの場所）も入っている
+    /// </summary>
+    public static void TestPawnIoBundled()
+    {
+        var d = new DirectoryInfo(AppContext.BaseDirectory);
+        while (d is not null && !File.Exists(Path.Combine(d.FullName, "ProFanController.csproj"))) d = d.Parent;
+        if (d is null) { T.Check(false, "repository found"); return; }
+        string iss = File.ReadAllText(Path.Combine(d.FullName, "Installer", "Zeph-Iris.iss"));
+        string dist = File.ReadAllText(Path.Combine(d.FullName, "Distribution", "make-dist.ps1"));
+        string notices = File.ReadAllText(Path.Combine(d.FullName, "Distribution", "licenses", "THIRD-PARTY-NOTICES.txt"));
+        var version = System.Text.RegularExpressions.Regex.Match(dist, @"\$pawnVersion = '([0-9.]+)'").Groups[1].Value;
+        var sha = System.Text.RegularExpressions.Regex.Match(dist, @"\$pawnSha256 = '([0-9A-F]{64})'").Groups[1].Value;
+        T.Check(version.Length > 0 && sha.Length == 64, $"build script pins the PawnIO version and SHA-256 ({version})");
+        T.Check(dist.Contains("https://github.com/namazso/PawnIO.Setup/releases/download/$pawnVersion/PawnIO_setup.exe", StringComparison.Ordinal),
+            "downloaded only from the official PawnIO release");
+        T.Check(dist.Contains("Get-FileHash", StringComparison.Ordinal) && dist.Contains("/DPawnIoSetup=$pawnSetup", StringComparison.Ordinal), "hash checked and passed to ISCC");
+        T.Check(iss.Contains("Source: \"{#PawnIoSetup}\"; Flags: dontcopy", StringComparison.Ordinal), "bundled, not copied to the app folder");
+        T.Check(iss.Contains("ExtractTemporaryFile('PawnIO_setup.exe')", StringComparison.Ordinal) && iss.Contains("'-install -silent'", StringComparison.Ordinal),
+            "run silently from the temp folder");
+        int bundled = iss.IndexOf("ExtractTemporaryFile('PawnIO_setup.exe')", StringComparison.Ordinal);
+        int winget = iss.IndexOf("Exec(WingetPath(), PawnIoWingetArguments", StringComparison.Ordinal);
+        T.Check(bundled > 0 && winget > bundled, "winget only as the fallback after the bundled setup");
+        T.Check(iss.Contains("function NeedRestart(): Boolean;", StringComparison.Ordinal) && iss.Contains("ResultCode = 3010", StringComparison.Ordinal),
+            "asks for a restart when PawnIO needs one (3010)");
+        T.Check(notices.Contains($"PawnIO {version}", StringComparison.Ordinal) && notices.Contains("https://github.com/namazso/PawnIO", StringComparison.Ordinal),
+            "notice names the bundled version and the source code");
+        T.Check(File.Exists(Path.Combine(d.FullName, "Distribution", "licenses", "PawnIO-COPYING.txt")), "the GPL text is shipped");
+        T.Check(!iss.Contains("winget の公式の取得元からインストールします", StringComparison.Ordinal), "setup no longer says the internet is needed");
+    }
 }

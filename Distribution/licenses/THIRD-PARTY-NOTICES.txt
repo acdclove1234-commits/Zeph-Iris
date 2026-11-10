@@ -40,8 +40,17 @@ Inno Setup 6（インストーラーとアンインストーラー）
   License: Inno Setup License  https://jrsoftware.org/files/is/license.txt
   Copyright (C) 1997-2026 Jordan Russell, Portions Copyright (C) 2000-2026 Martijn Laan
 
-PawnIO（ドライバ・別途インストール）
-  https://pawnio.eu/
+PawnIO 2.2.0（ファン制御に使うドライバー）
+  License: GPL-2.0-or-later（PawnIO-COPYING.txt）  Copyright (C) namazso
+  Source : https://github.com/namazso/PawnIO （公式サイト https://pawnio.eu/）
+  ※ Zeph-Iris のインストーラーには、PawnIO の公式のインストーラー（PawnIO_setup.exe 2.2.0。
+     https://github.com/namazso/PawnIO.Setup/releases/tag/2.2.0 のもの）を、改変せずにそのまま入れています。
+     PawnIO が入っていない PC でだけ実行し、アプリのフォルダーには残しません。
+     PawnIO のソースコードは上記のリポジトリで公開されています。Zeph-Iris は PawnIO とは別のプログラムで、
+     LibreHardwareMonitorLib を通して、デバイスの入出力の制御（IOCTL）だけで PawnIO を使います。
+  The Zeph-Iris installer contains the official, unmodified PawnIO installer (PawnIO_setup.exe 2.2.0)
+  and runs it only on PCs without PawnIO. PawnIO is licensed under the GPL-2.0-or-later; its source code
+  is available at https://github.com/namazso/PawnIO.
 
 Ollama（AI 機能を使う場合のみ・別途インストール）
   License: MIT License  https://github.com/ollama/ollama
