@@ -1459,7 +1459,7 @@ public sealed class FanEngine : IDisposable
         float value = (float)Math.Clamp(duty, 0, 100);
         if (f.LastWritten is double w && !FanSafety.NeedsWrite(w, value, floor, force)) return;
         float send = value;
-        if (reassert && f.LastSent is float last && last == send) send = value + FanSafety.ReassertNudge;
+        if (reassert && f.LastSent is float last && last == send) send = FanSafety.Nudged(value);
         c.SetSoftware(send);
         _touched[c] = send;
         _pendingRestore.Remove(c);
@@ -1717,7 +1717,7 @@ public sealed class FanEngine : IDisposable
     /// </summary>
     private static bool ToggleRestore(IFanControl c, float last, int attempt)
     {
-        try { c.SetSoftware(last + (attempt % 2 == 0 ? FanSafety.ReassertNudge : 0)); }
+        try { c.SetSoftware(attempt % 2 == 0 ? FanSafety.Nudged(last) : last); }
         catch (Exception ex) { Logger.Warn($"BIOS 復帰前の書き込みに失敗（{attempt} 回目）: {c.Id}: {ex.Message}"); }
         try
         {
@@ -1832,6 +1832,12 @@ public static class FanSafety
     public const double WriteDeadband = 1.0;
     /// <summary>書き直すときに値をずらす量（%）。PWM の分解能（約 0.39%）よりずっと小さいので回転は変わらない</summary>
     public const float ReassertNudge = 0.001f;
+
+    /// <summary>
+    /// 書き直す値を ReassertNudge だけずらす。100% のときは下へずらす（100% を超える値を書かない。
+    /// LHM は丸めるので回転は変わらないが、範囲の外の値を受け付けないチップ・ドライバーがあってもよいように）
+    /// </summary>
+    public static float Nudged(float value) => value + ReassertNudge <= 100f ? value + ReassertNudge : value - ReassertNudge;
     /// <summary>読み戻した値と書いた値の差がこれ（%）以下なら一致とみなす（PWM は 0〜255 の 256 段階なので丸めの差がある）</summary>
     public const double ReadbackTolerance = 2.0;
     /// <summary>この周期の数だけ続けて食い違ったら書き直す（1 回だけなら、書き込みと読み取りのタイミングのずれかもしれない）</summary>
