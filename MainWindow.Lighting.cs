@@ -62,6 +62,8 @@ public static class LightOverrideChoices
     private static readonly PerLanguage<IReadOnlyList<ChoiceOption>> _deviceModes = new(() => Modes(L("全体と同じ")));
     public static IReadOnlyList<ChoiceOption> ZoneModes => _zoneModes.Value;
     private static readonly PerLanguage<IReadOnlyList<ChoiceOption>> _zoneModes = new(() => Modes(L("デバイスと同じ")));
+    public static IReadOnlyList<ChoiceOption> PartModes => _partModes.Value;
+    private static readonly PerLanguage<IReadOnlyList<ChoiceOption>> _partModes = new(() => Modes(L("ゾーンと同じ")));
 
     private static IReadOnlyList<ChoiceOption> Modes(string same) => new ChoiceOption[]
     {
@@ -71,9 +73,9 @@ public static class LightOverrideChoices
     };
 
     /// <summary>色の選択肢（先頭は「同じ色」。設定にある色が一覧になければ、その色も足す）</summary>
-    public static IReadOnlyList<ColorOption> Colors(bool zone, string current)
+    public static IReadOnlyList<ColorOption> Colors(bool zone, string current, bool part = false)
     {
-        var list = new List<ColorOption> { new(SameId, zone ? L("デバイスと同じ色") : L("全体と同じ色"), null) };
+        var list = new List<ColorOption> { new(SameId, part ? L("ゾーンと同じ色") : zone ? L("デバイスと同じ色") : L("全体と同じ色"), null) };
         foreach (var (hex, name) in Swatches) list.Add(new(hex, name, Solid(hex)));
         if (current.Length > 0 && !list.Exists(c => c.Id == current)) list.Add(new(current, current, Solid(current)));
         return list;
@@ -166,7 +168,7 @@ public sealed class RgbZoneVm : ObservableObject
         get => _lightColorId;
         set { if (!string.IsNullOrEmpty(value) && Set(ref _lightColorId, value)) NotifyEdited(); }
     }
-    public IReadOnlyList<ChoiceOption> LightModeOptions => LightOverrideChoices.ZoneModes;
+    public IReadOnlyList<ChoiceOption> LightModeOptions => IsFanPart ? LightOverrideChoices.PartModes : LightOverrideChoices.ZoneModes;
     public IReadOnlyList<ColorOption> ColorOptions { get => _colorOptions; private set => Set(ref _colorOptions, value); }
     /// <summary>色を選べる光り方（デバイスと同じ・固定色・呼吸）</summary>
     public bool ShowColor => _lightModeId is LightOverrideChoices.SameId or RgbModes.Static or RgbModes.Breathing;
@@ -174,6 +176,34 @@ public sealed class RgbZoneVm : ObservableObject
     /// <summary>OpenRGB のゾーン名（設定の保存にも使う）</summary>
     public required string Name { get; init; }
     public required int Leds { get; init; }
+    /// <summary>ファンごとに分けたときの、分けた部分（ファン 1 台分）の行</summary>
+    public bool IsFanPart { get; init; }
+    /// <summary>分けた部分なら何台目か（1 から）</summary>
+    public int FanIndex { get; init; }
+    /// <summary>画面に出す名前（分けた部分は「ファン 2」など）</summary>
+    public string DisplayName => IsFanPart ? L($"ファン {FanIndex}") : Name;
+    public Thickness RowMargin => IsFanPart ? new Thickness(24, 0, 0, 6) : new Thickness(0, 0, 0, 6);
+    /// <summary>「ファンの数」を選べる（分けた部分ではなく、LED が 2 個以上あるゾーン）</summary>
+    public bool ShowFans => !IsFanPart && Leds >= 2;
+    public static IReadOnlyList<ChoiceOption> FanChoices => _fanChoices.Value;
+    private static readonly PerLanguage<IReadOnlyList<ChoiceOption>> _fanChoices = new(() =>
+        new[] { new ChoiceOption("0", L("分けない")) }.Concat(Enumerable.Range(2, RgbZoneSplit.MaxFans - 1)
+            .Select(k => new ChoiceOption(k.ToString(CultureInfo.InvariantCulture), L($"{k} 台")))).ToList());
+    public IReadOnlyList<ChoiceOption> FanOptions => FanChoices;
+    private string _fansId = "0";
+    /// <summary>このゾーンに数珠つなぎにしたファンの数（"0" = 分けない）</summary>
+    public string FansId
+    {
+        get => _fansId;
+        set
+        {
+            if (string.IsNullOrEmpty(value) || !Set(ref _fansId, value)) return;
+            NotifyEdited();
+            if (!_loading) FansChanged?.Invoke();
+        }
+    }
+    /// <summary>ファンの数を変えたとき（ゾーンの行を作り直す）</summary>
+    internal Action? FansChanged { get; set; }
     public string LedText => L($"LED {Leds} 個");
     /// <summary>光り方の選択肢（先頭が「デバイスと同じ」）</summary>
     public required IReadOnlyList<ChoiceOption> EffectOptions { get; init; }
@@ -213,6 +243,7 @@ public sealed class RgbZoneVm : ObservableObject
         Place = Place,
         LightMode = LightOverrideChoices.ToSetting(_lightModeId),
         LightColor = LightOverrideChoices.ToSetting(_lightColorId),
+        Fans = IsFanPart ? 0 : int.TryParse(_fansId, NumberStyles.Integer, CultureInfo.InvariantCulture, out int fans) ? fans : 0,
     };
 
     /// <summary>設定から読んだ値を入れる（このときは Edited を呼ばない）</summary>
@@ -231,9 +262,10 @@ public sealed class RgbZoneVm : ObservableObject
             Place = z?.Place ?? "";
             SoundId = MusicSounds.Normalize(z?.Sound);
             string color = RgbLightModes.NormalizeColor(z?.LightColor);
-            ColorOptions = LightOverrideChoices.Colors(zone: true, color);
+            ColorOptions = LightOverrideChoices.Colors(zone: true, color, part: IsFanPart);
             LightModeId = LightOverrideChoices.FromSetting(RgbLightModes.Normalize(z?.LightMode));
             LightColorId = LightOverrideChoices.FromSetting(color);
+            FansId = (z?.Fans ?? 0) >= 2 ? z!.Fans.ToString(CultureInfo.InvariantCulture) : "0";
         }
         finally
         {
@@ -476,12 +508,15 @@ public sealed class RgbDeviceVm : ObservableObject
     public ObservableCollection<RgbZoneVm> Zones { get; } = new();
     public bool HasZones => Zones.Count > 0;
 
+    /// <summary>ゾーンの行を作り直す（ファンの数を変えたとき。画面が設定を書いたあとに呼ぶ）</summary>
+    internal Action? ReloadZones { get; set; }
+
     /// <summary>ゾーンの行を作る（設定から値を読み込む）</summary>
     internal void LoadZones(RgbDevice device, RgbDeviceSettings settings)
     {
         Zones.Clear();
         var zones = device.Zones;
-        if (zones is not null && zones.Count(z => z > 0) >= 2)
+        if (zones is not null && (zones.Count(z => z > 0) >= 2 || zones.Count(z => z > 0) == 1 && zones.Max() >= 8))
         {
             var options = new List<ChoiceOption> { new(RgbZoneSettings.SameAsDevice, L("デバイスと同じ")) };
             options.AddRange(EffectOptions);
@@ -493,6 +528,21 @@ public sealed class RgbDeviceVm : ObservableObject
                 z.Load(settings.ZoneFor(name));
                 z.Edited = () => NotifyEdited(nameof(Zones));
                 Zones.Add(z);
+                z.FansChanged = () => ReloadZones?.Invoke();
+                // ファンごとに分けたゾーン: ファン 1 台ずつの行を足す（設定は「ゾーン名 #1」…で保存する）
+                int fans = settings.ZoneFor(name)?.Fans ?? 0;
+                if (fans >= 2 && zones[k] >= fans)
+                {
+                    int each = zones[k] / fans, extra = zones[k] % fans;
+                    for (int f = 0; f < fans; f++)
+                    {
+                        string part = RgbZoneSplit.PartName(name, f);
+                        var p = new RgbZoneVm { Name = part, Leds = each + (f < extra ? 1 : 0), EffectOptions = options, ShowEffect = _showEffect, IsFanPart = true, FanIndex = f + 1 };
+                        p.Load(settings.ZoneFor(part));
+                        p.Edited = () => NotifyEdited(nameof(Zones));
+                        Zones.Add(p);
+                    }
+                }
             }
         }
         Raise(nameof(HasZones));
@@ -1454,6 +1504,8 @@ public partial class MainWindow
             vm.LoadCalibration(s);
             vm.LoadLight(s);
             vm.LoadZones(d, s);
+            var dev = d;
+            vm.ReloadZones = () => Dispatcher.BeginInvoke(() => vm.LoadZones(dev, Config.Rgb.SettingsFor(dev.Name)));
             vm.Edited = OnRgbDeviceEdited;
             _rgbDeviceRows.Add(vm);
         }

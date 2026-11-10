@@ -1705,3 +1705,11 @@ e2890741	Pembuat tidak diketahui
 e29499f3	Cari foto di internet…
 ec74b9eb	Foto tidak dapat dicari ({0}). Anda juga bisa mencari lewat "Cari gambar di browser" lalu menempel.
 ed0f43c5	Tempel gambar yang disalin
+512b961e	Jumlah kipas
+66441f18	Sama dengan zona
+6803cdde	Warna sama dengan zona
+9a813855	Jumlah kipas yang dirangkai pada header (kanal) ini. Jika dibagi, tiap kipas bisa punya warna dan mode cahaya sendiri (LED dibagi rata). Untuk kanal Lian Li UNI HUB dan kipas dengan kabel splitter
+9ccdaf43	Agar tiap kipas punya warna sendiri: kipas yang dirangkai pada satu header (kanal) bisa dibagi lewat "Jumlah kipas" di "Buka penyamaan warna dan pengaturan per zona". Jika Lian Li UNI HUB disinkronkan dengan motherboard (MB Sync), hub meneruskan satu sinyal motherboard ke semua kipas, jadi warnanya tidak bisa dibedakan. Hentikan sinkronisasi hub (cabut kabel MB Sync atau matikan di L-Connect) lalu tutup L-Connect; hub akan muncul sebagai perangkat OpenRGB, dengan warna per kanal dan per kipas.
+c9f1ad56	Jangan dibagi
+d68381ea	Kipas {0}
+eb409a51	{0} kipas

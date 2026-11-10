@@ -1100,6 +1100,11 @@ public sealed class RgbZoneSettings
     public string Sound { get; set; } = MusicSounds.Auto;
     /// <summary>ケースの中の場所（CaseLayout の場所の Id。空なら場所を決めていない）</summary>
     public string Place { get; set; } = "";
+    /// <summary>
+    /// このゾーンに数珠つなぎにしたファンの数（0 = 分けない）。2 以上なら LED を等分して、ファンごとに別の色・光り方にできる
+    /// （Lian Li の UNI HUB のチャンネル・マザーボードの 1 本の端子につないだ複数のファンなど）
+    /// </summary>
+    public int Fans { get; set; }
     /// <summary>このゾーンの光り方（RgbLightModes。空ならデバイスの光り方。例: 水冷のヘッドだけ白）</summary>
     public string LightMode { get; set; } = RgbLightModes.Same;
     /// <summary>固定色・呼吸の色 "#RRGGBB"（空ならデバイスの色）</summary>
@@ -1108,13 +1113,14 @@ public sealed class RgbZoneSettings
     [JsonIgnore]
     public bool IsDefault => Effect == SameAsDevice && Mirror is null && Reverse is null
         && GainR == 100 && GainG == 100 && GainB == 100 && Level == 100 && string.IsNullOrEmpty(Place) && Sound == MusicSounds.Auto
-        && string.IsNullOrEmpty(LightMode) && string.IsNullOrEmpty(LightColor);
+        && string.IsNullOrEmpty(LightMode) && string.IsNullOrEmpty(LightColor) && Fans == 0;
 
     public void Normalize()
     {
         Name ??= "";
         Place ??= "";
         LightMode = RgbLightModes.Normalize(LightMode);
+        Fans = Fans <= 1 ? 0 : Math.Min(Fans, RgbZoneSplit.MaxFans);
         LightColor = RgbLightModes.NormalizeColor(LightColor);
         Sound = MusicSounds.Normalize(Sound);
         if (string.IsNullOrEmpty(Effect)) Effect = SameAsDevice;

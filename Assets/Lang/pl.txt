@@ -1705,3 +1705,11 @@ e2890741	Autor nieznany
 e29499f3	Szukaj zdjęcia w internecie…
 ec74b9eb	Nie udało się wyszukać zdjęć ({0}). Możesz też poszukać przez „Szukaj obrazów w przeglądarce” i wkleić.
 ed0f43c5	Wklej skopiowany obraz
+512b961e	Wentylatory
+66441f18	Jak strefa
+6803cdde	Ten sam kolor co strefa
+9a813855	Liczba wentylatorów połączonych szeregowo na tym złączu (kanale). Po podziale każdy wentylator może mieć własny kolor i tryb świecenia (diody dzielone są po równo). Dla kanałów Lian Li UNI HUB i wentylatorów na rozgałęźniku
+9ccdaf43	Aby każdy wentylator miał własny kolor: wentylatory połączone szeregowo na jednym złączu (kanale) można podzielić opcją „Wentylatory” w „Otwórz dopasowanie koloru i ustawienia stref”. Jeśli Lian Li UNI HUB jest zsynchronizowany z płytą główną (MB Sync), hub przekazuje jeden sygnał płyty do wszystkich wentylatorów, więc nie mogą mieć różnych kolorów. Wyłącz synchronizację huba (odłącz kabel MB Sync lub wyłącz ją w L-Connect) i zamknij L-Connect; hub pojawi się wtedy jako urządzenie OpenRGB z kolorami dla każdego kanału i wentylatora.
+c9f1ad56	Nie dziel
+d68381ea	Wentylator {0}
+eb409a51	{0} wentylatory

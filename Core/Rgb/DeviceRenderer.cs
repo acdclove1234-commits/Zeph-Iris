@@ -133,6 +133,8 @@ public sealed class DeviceRenderer
     private LinColor[] _light = Array.Empty<LinColor>();
     // デバイス・ゾーンごとの光り方（上書きがなければ None）と、その色（null なら全体の色）
     private RgbLightPlan _plan = RgbLightPlan.None;
+    // ゾーン（ファンごとに分けたものを含む）
+    private RgbZoneSplit.Expanded _zx = new(null, new[] { "" }, new[] { "" });
     private Rgb?[] _planColor = Array.Empty<Rgb?>();
 
     /// <summary>このデバイスの、光り方を上書きした範囲（テスト・表示用）</summary>
@@ -430,7 +432,9 @@ public sealed class DeviceRenderer
         if (n == _layoutN && ReferenceEquals(settings, _settingsRef) && caseKey == _caseKey) return;
         _settingsRef = settings;
         _caseKey = caseKey;
-        RgbEffects.SegmentZones(n, Device.Zones, _segZones);
+        // ファンごとに分けたゾーン（RgbZoneSettings.Fans）は、分けた部分をそれぞれ 1 つのゾーンとして扱う
+        _zx = RgbZoneSplit.Expand(Device.Zones, Device.ZoneName, settings);
+        RgbEffects.SegmentZones(n, _zx.Zones, _segZones);
         var zoneSet = new RgbZoneSettings?[_segZones.Count];
         var key = new System.Text.StringBuilder();
         key.Append(n).Append('|').Append(settings.Mirror?.ToString() ?? "-").Append('|').Append(settings.Reverse).Append('|').Append(caseKey);
@@ -445,12 +449,12 @@ public sealed class DeviceRenderer
         {
             int zone = _segZones[k].Zone;
             // ゾーンの情報がないデバイス（全体で 1 つのまとまり）は、最初のゾーンの名前で設定を探す（ケースの中の場所など）
-            var z = zone >= 0 ? settings.ZoneFor(Device.ZoneName(zone))
-                : _segZones.Count == 1 ? settings.ZoneFor(Device.ZoneName(0)) : null;
+            var z = zone >= 0 ? _zx.Settings(settings, zone)
+                : _segZones.Count == 1 ? _zx.Settings(settings, 0) : null;
             zoneSet[k] = z;
             key.Append('|').Append(z?.Mirror?.ToString() ?? "-").Append(',').Append(z?.Reverse?.ToString() ?? "-").Append(',').Append(z?.Place ?? "");
             // 反応する音（光り方「パーツごとの役割」用。設定がなければパーツの種類・ケースの中の場所から決める）
-            _segRole[k] = MusicSounds.Resolve(z?.Sound, Device, Device.ZoneName(Math.Max(0, zone)), z?.Place);
+            _segRole[k] = MusicSounds.Resolve(z?.Sound, Device, _zx.Name(Math.Max(0, zone)), z?.Place);
             key.Append(',').Append((int)_segRole[k]);
             string? effect = z is null || z.Effect == RgbZoneSettings.SameAsDevice ? null : z.Effect;
             _segEffect[k] = effect;
@@ -475,7 +479,7 @@ public sealed class DeviceRenderer
             _fade.Cancel();
             _hasLast = false;
         }
-        _pos = RgbEffects.Positions(n, Device.Zones);
+        _pos = RgbEffects.Positions(n, _zx.Zones);
         c.Segments = new LedSegment[_segZones.Count];
         c.SegmentCount = _segZones.Count;
         c.HasSmallSegment = false;
@@ -528,7 +532,7 @@ public sealed class DeviceRenderer
     private void BuildGains(int n, RgbDeviceSettings settings)
     {
         if (_gain.Length != n) _gain = new LinColor[n];
-        var ledZone = RgbEffects.LedZones(n, Device.Zones);
+        var ledZone = RgbEffects.LedZones(n, _zx.Zones);
         float level = settings.Level / 100f;
         float dr = settings.GainR / 100f * level, dg = settings.GainG / 100f * level, db = settings.GainB / 100f * level;
         var zones = new Dictionary<int, LinColor>();
@@ -538,7 +542,7 @@ public sealed class DeviceRenderer
             int zone = ledZone[i];
             if (!zones.TryGetValue(zone, out var g))
             {
-                var z = zone >= 0 ? settings.ZoneFor(Device.ZoneName(zone)) : null;
+                var z = zone >= 0 ? _zx.Settings(settings, zone) : null;
                 float zl = z is null ? 1f : z.Level / 100f;
                 g = z is null ? new LinColor(dr, dg, db) : new LinColor(dr * z.GainR / 100f * zl, dg * z.GainG / 100f * zl, db * z.GainB / 100f * zl);
                 zones[zone] = g;
@@ -813,7 +817,7 @@ public sealed class DeviceRenderer
     /// <summary>デバイス・ゾーンごとの光り方の範囲と色を、設定から作り直す（設定が変わったときだけ）</summary>
     private void BuildLightPlan(int n, RgbDeviceSettings settings)
     {
-        _plan = RgbLightPlan.Build(settings, n, Device.Zones, Device.ZoneName);
+        _plan = RgbLightPlan.Build(settings, n, _zx.Zones, k => _zx.Settings(settings, k));
         if (_planColor.Length != _plan.Segments.Count) _planColor = new Rgb?[_plan.Segments.Count];
         for (int k = 0; k < _plan.Segments.Count; k++)
             _planColor[k] = _plan.Segments[k].Color.Length > 0 ? Rgb.Parse(_plan.Segments[k].Color) : null;

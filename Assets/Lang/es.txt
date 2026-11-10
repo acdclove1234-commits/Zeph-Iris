@@ -1705,3 +1705,11 @@ e2890741	Autor desconocido
 e29499f3	Buscar una foto en internet…
 ec74b9eb	No se pudieron buscar fotos ({0}). También puedes buscar con «Buscar imágenes en el navegador» y pegar.
 ed0f43c5	Pegar imagen copiada
+512b961e	Ventiladores
+66441f18	Igual que la zona
+6803cdde	Mismo color que la zona
+9a813855	Número de ventiladores encadenados en este conector (canal). Al dividirlo, cada ventilador puede tener su propio color y modo de luz (los LED se reparten por igual). Para los canales de un Lian Li UNI HUB y ventiladores con cable divisor
+9ccdaf43	Para dar a cada ventilador su propio color: los ventiladores encadenados en un conector (canal) se pueden dividir con «Ventiladores» en «Abrir ajuste de color y ajustes por zona». Si un Lian Li UNI HUB está sincronizado con la placa base (MB Sync), el hub pasa la única señal de la placa a todos los ventiladores, así que no pueden tener colores distintos. Desactiva la sincronización del hub (desconecta el cable MB Sync o desactívala en L-Connect) y cierra L-Connect; entonces el hub aparece como dispositivo de OpenRGB, con colores por canal y por ventilador.
+c9f1ad56	No dividir
+d68381ea	Ventilador {0}
+eb409a51	{0} ventiladores

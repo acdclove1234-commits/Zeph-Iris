@@ -1705,3 +1705,11 @@ e2890741	Maker onbekend
 e29499f3	Online een foto zoeken…
 ec74b9eb	Er kon niet naar foto's worden gezocht ({0}). U kunt ook zoeken via ‘Afbeeldingen zoeken in de browser’ en plakken.
 ed0f43c5	Gekopieerde afbeelding plakken
+512b961e	Ventilatoren
+66441f18	Zelfde als zone
+6803cdde	Zelfde kleur als zone
+9a813855	Aantal ventilatoren dat in serie op deze header (dit kanaal) zit. Na het opsplitsen kan elke ventilator een eigen kleur en lichtmodus hebben (de leds worden gelijk verdeeld). Voor kanalen van een Lian Li UNI HUB en ventilatoren op een splitterkabel
+9ccdaf43	Elke ventilator een eigen kleur geven: ventilatoren die in serie op één header (kanaal) zitten, kunt u opsplitsen met ‘Ventilatoren’ onder ‘Kleurafstemming en zone-instellingen openen’. Is een Lian Li UNI HUB gesynchroniseerd met het moederbord (MB Sync), dan geeft de hub het ene signaal van het moederbord door aan alle ventilatoren, waardoor ze geen eigen kleur kunnen hebben. Stop de synchronisatie van de hub (koppel de MB Sync-kabel los of zet synchronisatie uit in L-Connect) en sluit L-Connect af; de hub verschijnt dan als OpenRGB-apparaat, met kleuren per kanaal en per ventilator.
+c9f1ad56	Niet opsplitsen
+d68381ea	Ventilator {0}
+eb409a51	{0} ventilatoren

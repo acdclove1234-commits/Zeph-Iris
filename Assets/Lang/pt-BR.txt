@@ -1705,3 +1705,11 @@ e2890741	Autor desconhecido
 e29499f3	Procurar uma foto na internet…
 ec74b9eb	Não foi possível procurar fotos ({0}). Você também pode procurar com "Procurar imagens no navegador" e colar.
 ed0f43c5	Colar imagem copiada
+512b961e	Ventoinhas
+66441f18	Igual à zona
+6803cdde	Mesma cor da zona
+9a813855	Número de ventoinhas ligadas em série neste conector (canal). Ao dividir, cada ventoinha pode ter sua própria cor e modo de luz (os LEDs são divididos igualmente). Para canais de um Lian Li UNI HUB e ventoinhas em cabo divisor
+9ccdaf43	Para dar a cada ventoinha sua própria cor: ventoinhas ligadas em série em um conector (canal) podem ser divididas com "Ventoinhas" em "Abrir ajuste de cor e configurações por zona". Se um Lian Li UNI HUB estiver sincronizado com a placa-mãe (MB Sync), o hub repassa o único sinal da placa-mãe para todas as ventoinhas, então elas não podem ter cores diferentes. Desligue a sincronização do hub (desconecte o cabo MB Sync ou desative-a no L-Connect) e feche o L-Connect; o hub aparece como dispositivo do OpenRGB, com cores por canal e por ventoinha.
+c9f1ad56	Não dividir
+d68381ea	Ventoinha {0}
+eb409a51	{0} ventoinhas

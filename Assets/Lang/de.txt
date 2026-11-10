@@ -1705,3 +1705,11 @@ e2890741	Urheber unbekannt
 e29499f3	Foto online suchen…
 ec74b9eb	Fotos konnten nicht gesucht werden ({0}). Sie können auch über „Bilder im Browser suchen“ suchen und einfügen.
 ed0f43c5	Kopiertes Bild einfügen
+512b961e	Lüfteranzahl
+66441f18	Wie die Zone
+6803cdde	Gleiche Farbe wie die Zone
+9a813855	Anzahl der Lüfter, die an diesem Anschluss (Kanal) hintereinander hängen. Aufgeteilt kann jeder Lüfter eine eigene Farbe und einen eigenen Lichtmodus haben (die LEDs werden gleichmäßig verteilt). Für Kanäle eines Lian Li UNI HUB und Lüfter an einem Y-Kabel
+9ccdaf43	So bekommt jeder Lüfter eine eigene Farbe: Hintereinander an einem Anschluss (Kanal) hängende Lüfter lassen sich unter „Farbabgleich und Zoneneinstellungen öffnen“ mit „Lüfteranzahl“ aufteilen. Ist ein Lian Li UNI HUB mit dem Mainboard synchronisiert (MB Sync), gibt der Hub das eine Signal des Mainboards an alle Lüfter weiter, sodass sie keine eigenen Farben haben können. Beenden Sie die Synchronisation des Hubs (MB-Sync-Kabel abziehen oder in L-Connect ausschalten) und beenden Sie L-Connect; dann erscheint der Hub als OpenRGB-Gerät mit Farben pro Kanal und pro Lüfter.
+c9f1ad56	Nicht aufteilen
+d68381ea	Lüfter {0}
+eb409a51	{0} Lüfter

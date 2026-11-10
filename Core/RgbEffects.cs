@@ -84,8 +84,8 @@ public sealed class RgbLightPlan
 
     /// <param name="ledCount">デバイスの LED の数</param>
     /// <param name="zones">ゾーンごとの LED の数（なければ null。デバイス全体を 1 つとして扱う）</param>
-    /// <param name="zoneName">k 番目のゾーンの名前</param>
-    public static RgbLightPlan Build(RgbDeviceSettings s, int ledCount, IReadOnlyList<int>? zones, Func<int, string> zoneName)
+    /// <param name="zoneSettings">k 番目のゾーンの設定（ファンごとに分けたゾーンは、ゾーンの設定と合わせたもの。RgbZoneSplit）</param>
+    public static RgbLightPlan Build(RgbDeviceSettings s, int ledCount, IReadOnlyList<int>? zones, Func<int, RgbZoneSettings?> zoneSettings)
     {
         string devMode = RgbLightModes.Normalize(s.LightMode);
         string devColor = RgbLightModes.NormalizeColor(s.LightColor);
@@ -111,7 +111,7 @@ public sealed class RgbLightPlan
             int start = 0;
             for (int k = 0; k < zones.Count; k++)
             {
-                var z = s.ZoneFor(zoneName(k));
+                var z = zoneSettings(k);
                 string zm = RgbLightModes.Normalize(z?.LightMode);
                 string zc = RgbLightModes.NormalizeColor(z?.LightColor);
                 // ゾーンの光り方が空ならデバイスの光り方。ゾーンの色が空ならデバイスの色
@@ -373,5 +373,86 @@ public static class RgbEffects
         for (int k = 0; k < zones.Count; k++)
             for (int j = 0; j < zones[k]; j++) map[i++] = k;
         return map;
+    }
+}
+
+/// <summary>
+/// ゾーンをファンごとに分ける（RgbZoneSettings.Fans）。Lian Li の UNI HUB のチャンネルや、マザーボードの 1 本の端子に
+/// 数珠つなぎにしたファンは、OpenRGB では 1 つのゾーンなので、LED を等分してファンごとのゾーンとして扱う。
+/// 分けた部分の名前は「ゾーン名 #1」…。設定は、分けた部分の設定があればそれ、なければ元のゾーンの設定を使う
+/// </summary>
+public static class RgbZoneSplit
+{
+    public const int MaxFans = 8;
+
+    public static string PartName(string zone, int k) => $"{zone} #{k + 1}";
+
+    /// <summary>分けたあとのゾーン（LED の数・名前・元のゾーンの名前。分けていないゾーンは元の名前のまま）</summary>
+    public sealed record Expanded(IReadOnlyList<int>? Zones, IReadOnlyList<string> Names, IReadOnlyList<string> Parents)
+    {
+        public string Name(int k) => k >= 0 && k < Names.Count ? Names[k] : "";
+
+        /// <summary>k 番目のゾーンの設定（分けた部分は、元のゾーンの設定と合わせる）</summary>
+        public RgbZoneSettings? Settings(RgbDeviceSettings s, int k)
+        {
+            if (k < 0 || k >= Names.Count) return null;
+            var own = s.ZoneFor(Names[k]);
+            if (Names[k] == Parents[k]) return own;
+            return Merge(own, s.ZoneFor(Parents[k]), Names[k]);
+        }
+    }
+
+    /// <summary>デバイスのゾーンを、設定のファンの数で分ける（どのゾーンも分けなければ、元のまま）</summary>
+    public static Expanded Expand(IReadOnlyList<int>? zones, Func<int, string> zoneName, RgbDeviceSettings s)
+    {
+        if (zones is null || zones.Count == 0) return new Expanded(zones, new[] { zoneName(0) }, new[] { zoneName(0) });
+        var counts = new List<int>();
+        var names = new List<string>();
+        var parents = new List<string>();
+        for (int k = 0; k < zones.Count; k++)
+        {
+            string name = zoneName(k);
+            int fans = s.ZoneFor(name)?.Fans ?? 0;
+            if (fans >= 2 && zones[k] >= fans)
+            {
+                // 等分して、割り切れない分は前のファンから 1 個ずつ足す
+                int each = zones[k] / fans, extra = zones[k] % fans;
+                for (int f = 0; f < fans; f++)
+                {
+                    counts.Add(each + (f < extra ? 1 : 0));
+                    names.Add(PartName(name, f));
+                    parents.Add(name);
+                }
+            }
+            else
+            {
+                counts.Add(zones[k]);
+                names.Add(name);
+                parents.Add(name);
+            }
+        }
+        return new Expanded(counts, names, parents);
+    }
+
+    /// <summary>分けた部分の設定: 部分で選んだ値があればそれ、なければ元のゾーンの値（ケースの中の場所は部分のものだけ）</summary>
+    public static RgbZoneSettings Merge(RgbZoneSettings? part, RgbZoneSettings? zone, string name)
+    {
+        part ??= new RgbZoneSettings { Name = name };
+        zone ??= new RgbZoneSettings();
+        return new RgbZoneSettings
+        {
+            Name = name,
+            Effect = part.Effect == RgbZoneSettings.SameAsDevice ? zone.Effect : part.Effect,
+            Mirror = part.Mirror ?? zone.Mirror,
+            Reverse = part.Reverse ?? zone.Reverse,
+            GainR = part.GainR != 100 ? part.GainR : zone.GainR,
+            GainG = part.GainG != 100 ? part.GainG : zone.GainG,
+            GainB = part.GainB != 100 ? part.GainB : zone.GainB,
+            Level = part.Level != 100 ? part.Level : zone.Level,
+            Sound = part.Sound == MusicSounds.Auto ? zone.Sound : part.Sound,
+            Place = part.Place,
+            LightMode = part.LightMode.Length > 0 ? part.LightMode : zone.LightMode,
+            LightColor = part.LightColor.Length > 0 ? part.LightColor : zone.LightColor,
+        };
     }
 }

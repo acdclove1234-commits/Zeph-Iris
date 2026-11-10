@@ -77,7 +77,8 @@ public static class LightOverrideTests
         var o = Render(cfg, s, Board());
         T.Check(o[..18].All(c => c == new Rgb(0, 255, 0)), "device green on board and header 1");
         T.Check(o[18..26].All(c => c == new Rgb(255, 0, 255)), "header 2 uses its own colour with the device's mode");
-        var plan = RgbLightPlan.Build(s, 34, Zones, k => new[] { "Board", "Header 1", "Header 2", "Header 3" }[k]);
+        var names = new[] { "Board", "Header 1", "Header 2", "Header 3" };
+        var plan = RgbLightPlan.Build(s, 34, Zones, k => s.ZoneFor(names[k]));
         T.Check(plan.CoversAll && plan.Segments.Count == 3, $"plan merges neighbours with the same look ({plan.Segments.Count} segments)");
     }
 
@@ -101,5 +102,47 @@ public static class LightOverrideTests
         T.Check(!RgbLightModes.AnyAnimated(cfg), "static override → not animated");
         cfg.DeviceSettings.Add(new RgbDeviceSettings { Name = "Board", Zones = new() { new RgbZoneSettings { Name = "Header 1", LightMode = RgbModes.Breathing } } });
         T.Check(RgbLightModes.AnyAnimated(cfg), "breathing zone → animated");
+    }
+
+    /// <summary>ゾーンをファンの数で等分する（割り切れない分は前のファンから 1 個ずつ）。分けないゾーンはそのまま</summary>
+    public static void TestZoneSplitCounts()
+    {
+        var s = new RgbDeviceSettings { Name = "Hub", Zones = new() { new RgbZoneSettings { Name = "Channel 1", Fans = 3 } } };
+        var x = RgbZoneSplit.Expand(new[] { 50, 16 }, k => new[] { "Channel 1", "Channel 2" }[k], s);
+        T.Check(x.Zones!.SequenceEqual(new[] { 17, 17, 16, 16 }), $"50 LEDs / 3 fans = 17,17,16 then 16 ({string.Join(",", x.Zones!)})");
+        T.Check(x.Names.SequenceEqual(new[] { "Channel 1 #1", "Channel 1 #2", "Channel 1 #3", "Channel 2" }), "part names");
+        var none = RgbZoneSplit.Expand(new[] { 2 }, k => "Small", new RgbDeviceSettings { Zones = new() { new RgbZoneSettings { Name = "Small", Fans = 4 } } });
+        T.Check(none.Zones!.SequenceEqual(new[] { 2 }), "a zone with fewer LEDs than fans is not split");
+        T.Check(new RgbZoneSettings { Name = "Z", Fans = 3 } is { IsDefault: false }, "a split zone is saved");
+        var n = new RgbZoneSettings { Name = "Z", Fans = 1 };
+        n.Normalize();
+        T.Check(n.Fans == 0 && n.IsDefault, "1 fan = not split");
+    }
+
+    /// <summary>
+    /// 3 台のファンに分けたゾーンで、2 台目だけ赤にすると、2 台目の LED だけ赤。
+    /// ほかの台は、元のゾーンの設定（白）のまま（分けた部分の設定がなければ、元のゾーンの設定を使う）
+    /// </summary>
+    public static void TestSplitFanColours()
+    {
+        var dev = new RgbDevice(3, "Lian Li Uni Hub", 48, 4, new[] { 48 }, "HID: x") { ZoneNames = new[] { "Channel 1" } };
+        var cfg = new RgbConfig { Mode = RgbModes.Static, Brightness = 100, Gamma = false, StaticColor = "#0000FF" };
+        var s = new RgbDeviceSettings
+        {
+            Name = dev.Name,
+            Zones = new()
+            {
+                new RgbZoneSettings { Name = "Channel 1", Fans = 3, LightMode = RgbModes.Static, LightColor = "#FFFFFF" },
+                new RgbZoneSettings { Name = "Channel 1 #2", LightMode = RgbModes.Static, LightColor = "#FF0000" },
+            },
+        };
+        var o = Render(cfg, s, dev);
+        T.Check(o[..16].All(c => c == new Rgb(255, 255, 255)), "fan 1 white (from the zone)");
+        T.Check(o[16..32].All(c => c == new Rgb(255, 0, 0)), "fan 2 red (its own setting)");
+        T.Check(o[32..].All(c => c == new Rgb(255, 255, 255)), "fan 3 white (from the zone)");
+        // 虹（止まった）は、ファンごとに 1 周（3 台とも同じ並び）
+        var r = new RgbDeviceSettings { Name = dev.Name, LightMode = RgbModes.RainbowStatic, Zones = new() { new RgbZoneSettings { Name = "Channel 1", Fans = 3 } } };
+        var rr = Render(cfg, r, dev);
+        T.Check(rr[0] == rr[16] && rr[16] == rr[32] && rr[0] != rr[8], "still rainbow repeats on each fan");
     }
 }

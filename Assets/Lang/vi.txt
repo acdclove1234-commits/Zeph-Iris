@@ -1705,3 +1705,11 @@ e2890741	Không rõ tác giả
 e29499f3	Tìm ảnh trên mạng…
 ec74b9eb	Không tìm được ảnh ({0}). Bạn cũng có thể tìm qua "Tìm ảnh trong trình duyệt" rồi dán.
 ed0f43c5	Dán ảnh đã sao chép
+512b961e	Số quạt
+66441f18	Giống vùng
+6803cdde	Cùng màu với vùng
+9a813855	Số quạt nối tiếp trên cổng (kênh) này. Khi chia, mỗi quạt có thể có màu và kiểu đèn riêng (LED được chia đều). Dành cho các kênh của Lian Li UNI HUB và quạt dùng cáp chia
+9ccdaf43	Để mỗi quạt có màu riêng: các quạt nối tiếp trên một cổng (kênh) có thể chia bằng "Số quạt" trong "Mở chỉnh màu và cài đặt theo vùng". Nếu Lian Li UNI HUB đang đồng bộ với bo mạch chủ (MB Sync), hub sẽ chuyển một tín hiệu duy nhất của bo mạch chủ tới mọi quạt nên không thể đặt màu riêng. Hãy tắt đồng bộ của hub (rút cáp MB Sync hoặc tắt trong L-Connect) và thoát L-Connect; hub sẽ xuất hiện như một thiết bị OpenRGB, có thể đặt màu theo kênh và theo quạt.
+c9f1ad56	Không chia
+d68381ea	Quạt {0}
+eb409a51	{0} quạt

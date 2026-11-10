@@ -1705,3 +1705,11 @@ e2890741	Autore sconosciuto
 e29499f3	Cerca una foto online…
 ec74b9eb	Impossibile cercare le foto ({0}). Puoi anche cercare con «Cerca immagini nel browser» e incollare.
 ed0f43c5	Incolla immagine copiata
+512b961e	Ventole
+66441f18	Come la zona
+6803cdde	Stesso colore della zona
+9a813855	Numero di ventole collegate in serie su questo connettore (canale). Dividendo, ogni ventola può avere un proprio colore e modalità luce (i LED sono divisi in parti uguali). Per i canali di un Lian Li UNI HUB e le ventole con cavo splitter
+9ccdaf43	Per dare a ogni ventola il proprio colore: le ventole in serie su un connettore (canale) si possono dividere con «Ventole» in «Apri allineamento colore e impostazioni per zona». Se un Lian Li UNI HUB è sincronizzato con la scheda madre (MB Sync), l'hub passa l'unico segnale della scheda madre a tutte le ventole, che quindi non possono avere colori diversi. Interrompi la sincronizzazione dell'hub (scollega il cavo MB Sync o disattivala in L-Connect) e chiudi L-Connect; l'hub apparirà come dispositivo OpenRGB, con colori per canale e per ventola.
+c9f1ad56	Non dividere
+d68381ea	Ventola {0}
+eb409a51	{0} ventole

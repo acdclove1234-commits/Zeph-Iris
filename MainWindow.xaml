@@ -2268,13 +2268,18 @@
                                                     <ItemsControl ItemsSource="{Binding Zones}">
                                                         <ItemsControl.ItemTemplate>
                                                             <DataTemplate>
-                                                                <Border Background="{DynamicResource Inset2Brush}" CornerRadius="8" Padding="12,8" Margin="0,0,0,6">
+                                                                <Border Background="{DynamicResource Inset2Brush}" CornerRadius="8" Padding="12,8" Margin="{Binding RowMargin}">
                                                                     <StackPanel>
                                                                         <TextBlock>
-                                                                            <Run Text="{Binding Name, Mode=OneWay}" FontWeight="SemiBold"/>
+                                                                            <Run Text="{Binding DisplayName, Mode=OneWay}" FontWeight="SemiBold"/>
                                                                             <Run Text="{Binding LedText, Mode=OneWay}" Foreground="{DynamicResource MutedBrush}" FontSize="12"/>
                                                                         </TextBlock>
                                                                         <WrapPanel Margin="0,6,0,0">
+                                                                            <StackPanel Orientation="Horizontal" Margin="0,0,18,4" Visibility="{Binding ShowFans, Converter={StaticResource BoolToVis}}">
+                                                                                <TextBlock Text="ファンの数" Style="{StaticResource Label}" FontSize="13" Margin="0,0,8,0"/>
+                                                                                <ComboBox Width="110" ItemsSource="{Binding FanOptions}" DisplayMemberPath="Label" SelectedValuePath="Id" SelectedValue="{Binding FansId}"
+                                                                                          ToolTip="この端子（チャンネル）に数珠つなぎにしたファンの数。分けると、ファン 1 台ずつ色・光り方を変えられます（LED を台数で等分します）。Lian Li の UNI HUB のチャンネルや、分岐ケーブルでつないだファン向け"/>
+                                                                            </StackPanel>
                                                                             <StackPanel Orientation="Horizontal" Margin="0,0,18,4">
                                                                                 <TextBlock Text="色" Style="{StaticResource Label}" FontSize="13" Margin="0,0,8,0"/>
                                                                                 <ComboBox Width="150" ItemsSource="{Binding LightModeOptions}" DisplayMemberPath="Label" SelectedValuePath="Id"
@@ -2349,6 +2354,8 @@
                             <TextBlock x:Name="MissingDevicesText" Style="{StaticResource Caption}" Margin="0,4,0,0" Visibility="Collapsed"/>
                             <TextBlock Style="{StaticResource Caption}" Margin="0,8,0,0" TextWrapping="Wrap"
                                        Text="ヒント: 何もつないでいないマザーボードの ARGB 端子は、OpenRGB の Devices →（マザーボード）→「Edit Device」で LED の数を 0 にしておくと、送るデータが減って動きが滑らかになります。左右対称・逆向きは、LED の並びを使う光り方（スペクトラム・音量メーターなど）で効きます。"/>
+                            <TextBlock Style="{StaticResource Caption}" Margin="0,6,0,0" TextWrapping="Wrap"
+                                       Text="ファンを 1 台ずつ違う色にするには: 1 本の端子（チャンネル）に数珠つなぎにしたファンは、「色合わせ・ゾーンごとの設定を開く」の「ファンの数」で分けられます。Lian Li の UNI HUB をマザーボードと同期（MB Sync）させていると、ハブはマザーボードの 1 本の信号をそのまま全部のファンに流すので、ファンごとの色にはなりません。ハブの同期をやめ（MB Sync のケーブルを外すか、L-Connect で同期をオフにする）、L-Connect を終了すると、ハブが OpenRGB のデバイスとして出て、チャンネル・ファンごとに色を変えられます。"/>
                         </StackPanel>
                     </Border>
 

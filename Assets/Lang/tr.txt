@@ -1705,3 +1705,11 @@ e2890741	Yazar bilinmiyor
 e29499f3	İnternette fotoğraf ara…
 ec74b9eb	Fotoğraf aranamadı ({0}). "Tarayıcıda resim ara" ile arayıp yapıştırabilirsiniz.
 ed0f43c5	Kopyalanan resmi yapıştır
+512b961e	Fan sayısı
+66441f18	Bölgeyle aynı
+6803cdde	Bölgeyle aynı renk
+9a813855	Bu konnektöre (kanala) zincirleme bağlı fan sayısı. Bölünce her fanın kendi rengi ve ışık modu olabilir (LED'ler eşit bölünür). Lian Li UNI HUB kanalları ve çoklayıcı kabloyla bağlı fanlar için
+9ccdaf43	Her fana kendi rengini vermek için: bir konnektöre (kanala) zincirleme bağlı fanlar, "Renk eşleştirme ve bölge ayarlarını aç" içindeki "Fan sayısı" ile bölünebilir. Lian Li UNI HUB anakartla senkronize ise (MB Sync), hub anakartın tek sinyalini tüm fanlara aktarır, bu yüzden fanlar farklı renk alamaz. Hub senkronunu kapatın (MB Sync kablosunu çıkarın veya L-Connect'te kapatın) ve L-Connect'ten çıkın; hub OpenRGB cihazı olarak görünür ve kanal ile fan başına renk verilebilir.
+c9f1ad56	Bölme
+d68381ea	Fan {0}
+eb409a51	{0} fan

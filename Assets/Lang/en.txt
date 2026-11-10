@@ -1705,3 +1705,11 @@ e2890741	Unknown author
 e29499f3	Find a photo online…
 ec74b9eb	Couldn't search for photos ({0}). You can also search with "Search images in the browser" and paste.
 ed0f43c5	Paste copied image
+512b961e	Fans
+66441f18	Same as zone
+6803cdde	Same colour as zone
+9a813855	Number of fans daisy-chained on this header (channel). When split, each fan can have its own colour and light mode (the LEDs are divided equally). For Lian Li UNI HUB channels and fans on a splitter cable
+9ccdaf43	To give each fan its own colour: fans daisy-chained on one header (channel) can be split with "Fans" under "Open color matching and per-zone settings". If a Lian Li UNI HUB is synced to the motherboard (MB Sync), the hub passes the motherboard's single signal to all fans, so they cannot have separate colours. Stop the hub's sync (unplug the MB Sync cable or turn sync off in L-Connect) and quit L-Connect; the hub then appears as an OpenRGB device, with colours per channel and per fan.
+c9f1ad56	Don't split
+d68381ea	Fan {0}
+eb409a51	{0} fans
