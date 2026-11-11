@@ -42,8 +42,18 @@ public sealed class BeatTracker
     /// </summary>
     internal static class Tune
     {
-        /// <summary>ロックできないまま、別のテンポを試すまでの時間（秒）</summary>
-        internal static double StuckSec = 4.5;
+        /// <summary>
+        /// ロックできないまま、別のテンポを試すまでの時間（秒）。4.5 秒だと、付点・シャッフルの曲で正しいテンポを
+        /// ロックする前に外してしまい、候補を渡り歩いて 1 分以上つかめないことがあった（実際の 12 曲で、つかむまで平均 26.6 → 13.7 秒）
+        /// </summary>
+        internal static double StuckSec = 7;
+        /// <summary>
+        /// 裏拍への張りつきの確かめ（CheckSide）: 拍の並びから半拍ずらした位置の、低音の立ち上がりが SideLowRatio 倍以上、
+        /// 全体の立ち上がりが SideOdfRatio 倍以上のときを数え（当てはまらなければ 1 つ減らす）、SideConfirmSec 分たまったら半拍ずらす
+        /// （SideLowRatio = 0 なら確かめない）。見るのは直近 SideWindowSec 秒。
+        /// 実際の曲（裏拍に 40 秒以上張りついた 2 曲を含む 7 曲）で、裏拍にいた時間 12% → 5%、ほかの曲は変わらない値
+        /// </summary>
+        internal static double SideLowRatio = 1.25, SideOdfRatio = 1.05, SideConfirmSec = 4, SideWindowSec = 8;
         /// <summary>「ありがちな」テンポの中心（秒。0.5 = 120 BPM）</summary>
         internal static double PriorCentreSec = 0.5;
         /// <summary>「ありがちさ」の幅（オクターブ）。中心より速い側だけ別に決められる（1 = 遅い側と同じ）</summary>
@@ -221,6 +231,10 @@ public sealed class BeatTracker
     private int _candidateCount;
     // ロック中に、テンポの判定が「今の半分」と言い続けている回数
     private int _halfRun;
+    // ロック中に、「半拍ずらした位置のほうが拍らしい」が続いている回数（CheckSide）
+    private int _sideRun;
+    /// <summary>調べる用: true なら CheckSide のたびに比べた値を DiagLog に出す</summary>
+    internal static bool SideDiag { get; set; }
     // 試して合わなかったテンポを抑える重み（1 = 抑えない）
     private readonly double[] _veto;
     private readonly int _stuckLimit;
@@ -360,6 +374,7 @@ public sealed class BeatTracker
         _candidate = 0;
         _candidateCount = 0;
         _halfRun = 0;
+        _sideRun = 0;
         _hasGrid = false;
         _nextBeat = 0;
         _nextIdx = 1;
@@ -523,6 +538,7 @@ public sealed class BeatTracker
         }
 
         if (_period <= 0) return;
+        if (_hasGrid && _lock != BeatLock.Unlocked && CheckSide()) return;
         if (!_hasGrid)
         {
             AcquirePhase(allowGlide: false);
@@ -544,6 +560,50 @@ public sealed class BeatTracker
             double need = d >= 0.35 ? Math.Max(ReacquireRatio, Tune.HalfShiftRatio) : ReacquireRatio;
             if (_phaseScore[best] > need * Math.Max(1e-9, _phaseScore[cur])) AcquirePhase(allowGlide: true);
         }
+    }
+
+    /// <summary>
+    /// ロック中: 拍の並びが裏拍（ちょうど半拍ずれた位置）に張りついていないか確かめ、張りついていれば半拍ずらす（ずらしたら true）。
+    /// ハイハット・コードが裏拍で強い部分では、全体の立ち上がりの合い方だけを見ると、裏拍に乗ったまま確かさも高いまま居続ける
+    /// （実際の曲で 40 秒以上）。キック（低音の立ち上がり）は拍に乗ることが多いので、直近 SideWindowSec 秒で
+    /// 半拍ずらした位置の低音が SideLowRatio 倍以上、全体も SideOdfRatio 倍以上強いときを数え、SideConfirmSec 分たまったら半拍ずらす。
+    /// テンポと拍の番号はそのまま
+    /// </summary>
+    private bool CheckSide()
+    {
+        if (Tune.SideLowRatio <= 0) { _sideRun = 0; return false; }
+        int window = (int)Math.Min(_count - 2, Math.Round(Tune.SideWindowSec * _f));
+        int beats = (int)(window / _period);
+        if (beats < 6) { _sideRun = 0; return false; }
+        double last = _nextBeat - _period;
+        while (last > _n - 1) last -= _period;
+        double lowOn = 0, lowOff = 0, odfOn = 0, odfOff = 0;
+        for (int k = 0; k < beats; k++)
+        {
+            double pos = last - k * _period;
+            long i = (long)Math.Round(pos), j = (long)Math.Round(pos - 0.5 * _period);
+            lowOn += Math.Max(LowAt(i - 1), Math.Max(LowAt(i), LowAt(i + 1)));
+            lowOff += Math.Max(LowAt(j - 1), Math.Max(LowAt(j), LowAt(j + 1)));
+            odfOn += Math.Max(OdfAt(i - 1), Math.Max(OdfAt(i), OdfAt(i + 1)));
+            odfOff += Math.Max(OdfAt(j - 1), Math.Max(OdfAt(j), OdfAt(j + 1)));
+        }
+        bool off = lowOff >= Tune.SideLowRatio * Math.Max(1e-9, lowOn) && odfOff >= Tune.SideOdfRatio * Math.Max(1e-9, odfOn);
+        if (SideDiag) DiagLog?.Invoke($"sidecheck t {_tNow:F1} low ×{lowOff / Math.Max(1e-9, lowOn):F2} all ×{odfOff / Math.Max(1e-9, odfOn):F2} run {_sideRun}");
+        // 比べた値は曲の中で上下するので、続いた回数ではなく「当てはまった回数 − 当てはまらなかった回数」をためる
+        // （拍に乗っているときは低音が 0.9 倍以下で当てはまらないので、たまらない）
+        _sideRun = off ? _sideRun + 1 : Math.Max(0, _sideRun - 1);
+        if (_sideRun * UpdateSec < Tune.SideConfirmSec) return false;
+        _sideRun = 0;
+        double next = _nextBeat - 0.5 * _period;
+        if (next <= _n) next += _period;
+        DiagLog?.Invoke($"side: shift half a beat t {_tNow:F2} (low ×{lowOff / Math.Max(1e-9, lowOn):F2}, all ×{odfOff / Math.Max(1e-9, odfOn):F2})");
+        _nextBeat = next;
+        _glide = 0;
+        _pendCount = 0;
+        ClearHist();
+        Array.Clear(_sdb);
+        _sdbCount = 0;
+        return true;
     }
 
     /// <summary>テンポの候補を求める（周期。コマ単位の小数）。求められなければ 0</summary>

@@ -28,6 +28,8 @@ public sealed class ScrollEffect : IMusicEffect
     public const double SecondsAcross = 2;
     /// <summary>ビートの光を白で足す割合</summary>
     public const float FlashWhite = 0.3f;
+    /// <summary>静かな部分での明るさの倍率（盛り上がりで 1。EffectContext.SectionGain）</summary>
+    public const float SectionMin = 0.6f;
     /// <summary>時間を進める刻み（秒）。分析の 1 コマ（約 10.7 ミリ秒）より細かくする</summary>
     public const double GridSec = 0.002;
 
@@ -76,7 +78,7 @@ public sealed class ScrollEffect : IMusicEffect
     {
         double half = c.Pal.Span * 0.5;
         for (int g = 0; g < 3; g++) _col[g] = c.ColorAt(g * half);
-        _head = Head(c.Frame, c.Fl);
+        _head = Head(c.Frame, c.Fl) * c.SectionGain(SectionMin);
 
         double perSec = (c.Locked ? 1 / (BeatsAcross * c.Period) : 1 / SecondsAcross) * c.Speed;
         float keep = EffectContext.Decay(c.Dt, FadeTauSec);
@@ -130,8 +132,10 @@ public sealed class ScrollEffect : IMusicEffect
     private LinColor HeadAt(EffectContext c, double t)
     {
         var ring = c.Features;
-        if (ring is null || !ring.Sample(t, _sample)) return Head(c.Frame, c.FlashAt(t));
-        return Head(_sample, c.FlashAt(t));
+        // 静かな部分では控えめに、盛り上がりでは大きく
+        float sec = c.SectionGain(SectionMin);
+        if (ring is null || !ring.Sample(t, _sample)) return Head(c.Frame, c.FlashAt(t)) * sec;
+        return Head(_sample, c.FlashAt(t)) * sec;
     }
 
     private LinColor Head(AudioFrame f, float fl) =>

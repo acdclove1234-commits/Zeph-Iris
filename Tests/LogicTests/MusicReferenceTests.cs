@@ -442,11 +442,12 @@ public static class TrackLogDiagTests
             e.Onsets.DiagHop = (t, odf, bn) => hops.Add((t, (1.0 * bn[0] + 0.8 * bn[1] + 0.35 * bn[2] + 0.15 * bn[3]) / 2.3));
             var log = new List<string>();
             var tr = e.Tracker;
+            BeatTracker.SideDiag = Environment.GetEnvironmentVariable("SIDE_DIAG") == "1";
             tr.DiagLog = m => { if (!m.StartsWith("beat ")) log.Add($"{m}  [{tr.Lock}]"); };
             var run = new EngineRun(e).Feed(mono);
             var beats = BeatReference.Track(hops, out double bpm);
             T.Info($"ref {bpm:F1} BPM");
-            foreach (var l in log.Take(80)) T.Info("  " + l);
+            foreach (var l in log.Take(BeatTracker.SideDiag ? 4000 : 80)) T.Info("  " + l);
             // 10 秒ごと: アプリの拍（光る位置）が、物差しの拍からどれだけずれているか（周期の割合。0 = 表、0.5 = 裏）
             for (double w = 10; w < mono.Length / (double)fs; w += 10)
             {

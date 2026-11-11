@@ -25,6 +25,8 @@ public sealed class BeatHueEffect : IMusicEffect
     {
         /// <summary>低音を明るさに使う割合</summary>
         internal static float BassShare = 0.7f;
+        /// <summary>テンポをつかんでいるとき、拍の間の低音の光を減らす割合（EffectContext.OffBeatDuck）</summary>
+        internal static float OffBeatDuck = 0.25f;
         /// <summary>メロディ（高音・中音の立ち上がり）の光を明るさに使う割合（0 = 使わない）・中音の重み・立ち上がりを何倍にするか</summary>
         internal static float MelodyShare = 1f, MelodyMidWeight = 0.7f, MelodyGain = 3f;
         /// <summary>立ち上がりを測る基準（直近の平均）の時定数（秒）</summary>
@@ -70,7 +72,8 @@ public sealed class BeatHueEffect : IMusicEffect
         // 拍をつかんでいる曲では拍の光が主役、つかめていない静かな曲（ベル・アルペジオ）ではメロディの光が主役。
         // ドラムが鳴っている曲では、テンポをつかめていなくても、キック・スネアの光を主役にする
         float melShare = Tune.MelodyShare * (1 - Tune.MelodyDuck * c.Conf) * (1 - Tune.DrumDuck * DrumPresence(c));
-        _i = Math.Max(Math.Max(c.Fl, Tune.BassShare * f.BassE), melShare * _mel);
+        // 拍の間の低音（8 分・16 分のベース・キック）は控えめにして、拍の光を目立たせる
+        _i = Math.Max(Math.Max(c.Fl, Tune.BassShare * c.OffBeatDuck(Tune.OffBeatDuck) * f.BassE), melShare * _mel);
     }
 
     /// <summary>ドラムが鳴っている度合い（0〜1）: 直近 DrumWindowSec 秒のキック・スネアの数（1 秒あたり DrumFullRate で 1）</summary>

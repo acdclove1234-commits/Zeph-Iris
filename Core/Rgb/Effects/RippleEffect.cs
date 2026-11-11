@@ -28,6 +28,8 @@ public sealed class RippleEffect : IMusicEffect
     public const double FreeSpeed = 1.2;
     /// <summary>予測ビートで出す輪の強さ</summary>
     public const float PredictedAmp = 0.9f;
+    /// <summary>静かな部分での輪の明るさの倍率（盛り上がりで 1。EffectContext.SectionGain）</summary>
+    public const float SectionMin = 0.6f;
     /// <summary>下地（いまの色）の明るさ（× 低音）</summary>
     public const float BaseShare = 0.15f;
     /// <summary>輪の中心（ゾーンの中央）</summary>
@@ -105,7 +107,7 @@ public sealed class RippleEffect : IMusicEffect
             if (_rings[k].T0 < oldest) { oldest = _rings[k].T0; slot = k; }
         }
         _ringColorPos += c.Pal.Step;   // 輪ごとにパレットの次の色
-        _rings[slot] = new Ring { Active = true, T0 = t0, A = amp, Color = c.PalAt(_ringColorPos) };
+        _rings[slot] = new Ring { Active = true, T0 = t0, A = amp * c.SectionGain(SectionMin), Color = c.PalAt(_ringColorPos) };
         _spawned++;
     }
 

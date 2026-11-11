@@ -875,6 +875,16 @@ public static class EffectsTests
 
     public static void TestFrameRateIndependence()
     {
+        // 光り方そのものの計算を比べる。立ち上がりの段つきを止める仕上げ（AttackHold）は、コマが細かいほど働く
+        // （8 fps では 1 コマが保つ時間より長いので何もしない）ので、ここでは外す（AttackHold は TestAttackHold* で確かめる）
+        double savedHold = AttackHold.HoldSec;
+        AttackHold.HoldSec = 0;
+        try { FrameRateIndependence(); }
+        finally { AttackHold.HoldSec = savedHold; }
+    }
+
+    private static void FrameRateIndependence()
+    {
         // 同じ 10 秒の合成音楽を 144 / 60 / 30 / 8 fps で描き、LED ごとの平均の明るさ（R+G+B）を比べる。
         // コマの位置がたまたまキックの頂点に当たるかどうかの「偶然の差」と、コマ数で明るさが変わる「偏り」を分けるため、
         // 描き始めを 1 コマの 1/6 ずつずらして 6 回描き、その平均で比べる（偶然の差は平均すると小さくなるが、偏りは残る）

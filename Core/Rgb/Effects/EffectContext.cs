@@ -142,6 +142,32 @@ public sealed class EffectContext
     /// <summary>ビートの光（0〜1。強さの設定 FlashAmp と、点滅の制限をかけた後）</summary>
     public float Fl;
     /// <summary>
+    /// 曲の盛り上がり（0〜1。SectionMeter）。いまの部分の音量（1.5 秒でならす）が、曲の大きいところから何 dB 下か。
+    /// 静かな A メロで 0.3〜0.6、サビで 1 くらい。自動の音量調整は数秒で静かな部分も「最大」に合わせるので、その前の値で見る
+    /// </summary>
+    public float Section = 1;
+
+    /// <summary>盛り上がりに合わせた明るさの倍率（静かな部分で min、盛り上がりで 1）</summary>
+    public float SectionGain(float min) => min + (1 - min) * Section;
+
+    /// <summary>
+    /// 拍の間の光を控えめにする倍率: テンポをつかんでいるとき、拍の頭の前後 0.12 拍は 1、0.25 拍より離れると 1 − duck × テンポの確かさ。
+    /// 低音・キックで光る光り方で、8 分・16 分のベースやキックの光を拍の光より小さくして、拍を目立たせる
+    /// （拍の光と拍の間の光がほぼ同じ明るさだと、どこが拍か分からず、せわしなく見える）
+    /// </summary>
+    public float OffBeatDuck(float duck) => OffBeatDuckAt(T, duck);
+
+    /// <summary>OffBeatDuck を、時刻 t（コマの間のピークの時刻など）の拍の位置で求める</summary>
+    public float OffBeatDuckAt(double t, float duck)
+    {
+        if (!Locked || duck <= 0) return 1;
+        double phase = Period > 0 ? Phase + (t - T) / Period : Phase;
+        double ph = phase - Math.Floor(phase);
+        double d = Math.Min(ph, 1 - ph);
+        float s = Smoothstep((float)((d - 0.12) / 0.13));
+        return 1 - duck * Conf * s;
+    }
+    /// <summary>
     /// 前のコマから今のコマまでの間で、ビートの光がいちばん強かった値と、その時刻。
     /// 光はビートの瞬間に最大なので、1 秒に 8 回しか描かなくても、残光はこの値から減らす
     /// </summary>

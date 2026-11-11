@@ -102,6 +102,8 @@ public sealed class DeviceRenderer
     private readonly IdleMixer _idle = new();
     private readonly SnapshotFade _fade = new();
     private readonly OutputStage _out = new();
+    private readonly AttackHold _attack = new();
+    private readonly SectionMeter _section = new();
     private readonly IMusicEffect?[] _effects = new IMusicEffect?[EffectCatalog.VariantCount];
     private readonly int[] _effectLayout = new int[EffectCatalog.VariantCount];
     private MoodEffect? _idleMood;
@@ -409,6 +411,11 @@ public sealed class DeviceRenderer
             for (int i = 0; i < n; i++) _light[i] = _main[i] * bri;
         }
         _fade.Apply(_light, input.T);
+        // 音楽連動: 明るくなった直後の小さな下がりを止める（低音の値の上下で、光の立ち上がりが段つきになってちらつく）。
+        // ゾーン全体が一緒に明るくなる光り方だけ（波紋・テンポ追従など光が動く光り方では、通り過ぎた光が残って尾を引くため）。
+        // 書き込みを減らすデバイス（グラボ）は、光り方の側で立ち上がりを遅らせているので使わない
+        if (layer == Layer.Music && !Device.IsLowWrite && AttackHold.Applies(variant)) _attack.Apply(_light, n, dt);
+        else _attack.Reset();
         // ディザリングは、1 秒に何十回も送る速いデバイスで、動きのある光り方だけ（止まった色は毎回同じ値を送る）
         // 送る速さが下がって間引くようになったら、持ち越していた端数を捨てる（戻ったときに古い端数を使わない）
         bool allow = !Device.IsSlow && input.AllowDither;
@@ -623,6 +630,7 @@ public sealed class DeviceRenderer
         c.T = t1;
         c.Dt = dt;
         SampleWindow(input.Features, t0, t1);
+        c.Section = _section.Update(c.Frame, dt);
 
         _beat.Update(c, t0, t1);
         BeatDriver.SyncSharedColor(c);

@@ -32,6 +32,8 @@ public sealed class SparkleEffect : IMusicEffect
     /// <summary>小さいゾーンでの、ハイハット・スネアの光の明るさ</summary>
     public const float SmallHatLevel = 0.4f;
     public const float SmallSnareLevel = 0.8f;
+    /// <summary>静かな部分での明るさの倍率（盛り上がりで 1。EffectContext.SectionGain）</summary>
+    public const float SectionMin = 0.6f;
 
     private double[] _t0 = Array.Empty<double>();
     private float[] _tau = Array.Empty<float>();
@@ -80,7 +82,9 @@ public sealed class SparkleEffect : IMusicEffect
         // ほかの光り方と同じく、デバイスの遅れも先回りする）。コマの間の最大値から経過時間だけ減らした値も見る
         float beatFl = Math.Max(c.Fl, c.FlPeak * (float)Math.Exp(-Math.Max(0, c.T - c.FlPeakT) / KickTauSec));
         kick = Math.Max(kick, beatFl);
-        _base = c.PalAt(c.T / BaseCycleSec) * c.Ilin(0.08f + 0.22f * c.Frame.MidE + 0.6f * kick);
+        // 静かな部分では控えめに、盛り上がりでは大きく（キックの光と中音の分だけ。下地の明るさは変えない）
+        float sec = c.SectionGain(SectionMin);
+        _base = c.PalAt(c.T / BaseCycleSec) * c.Ilin(0.08f + sec * (0.22f * c.Frame.MidE + 0.6f * kick));
     }
 
     /// <summary>
@@ -91,7 +95,7 @@ public sealed class SparkleEffect : IMusicEffect
     {
         var (gain, minGap) = MusicTuning.HatResponse(c.Music);
         // 強いハイハット（オープン・シンバル）ほど明るく、弱い刻みは控えめに
-        float level = gain * (0.6f + 0.4f * Math.Clamp((strength - 1f) / 2f, 0f, 1f));
+        float level = gain * c.SectionGain(SectionMin) * (0.6f + 0.4f * Math.Clamp((strength - 1f) / 2f, 0f, 1f));
         if (_lastHatT.Length != c.SegmentCount)
         {
             _lastHatT = new double[c.SegmentCount];
@@ -117,7 +121,7 @@ public sealed class SparkleEffect : IMusicEffect
     /// <summary>スネア: 続けて並んだ LED のまとまりを、いまの色の反対側の色で</summary>
     private void SpawnSnare(EffectContext c, double t0, float strength)
     {
-        var col = c.ColorAt(0.5);
+        var col = c.ColorAt(0.5) * c.SectionGain(SectionMin);
         for (int k = 0; k < c.SegmentCount; k++)
         {
             var s = c.Segments[k];

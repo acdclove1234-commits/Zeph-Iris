@@ -20,12 +20,16 @@ public sealed class ChaseEffect : IMusicEffect
     public const double FreePeriodSec = 0.5;
     /// <summary>彗星の尾の長さ（1 周に対する割合）</summary>
     public const double CometTail = 0.12;
+    /// <summary>拍の頭で帯を明るくする割合（ビートの光 × この割合。ほかの時間は 1 − この割合）</summary>
+    public const float BeatAccent = 0.3f;
+    /// <summary>静かな部分での帯の明るさの倍率（盛り上がりで 1。EffectContext.SectionGain）</summary>
+    public const float SectionMin = 0.6f;
 
     private readonly BeatHueEffect _small = new();
     private LinColor _lockedColor, _freeColor;
     private double _lockedPhase, _freePhase;
     private long _lockedIdx, _freeIdx;
-    private float _blend, _freeGain;
+    private float _blend, _freeGain, _lockedGain = 1;
 
     public string Name => MusicStyles.Chase;
 
@@ -43,6 +47,9 @@ public sealed class ChaseEffect : IMusicEffect
         _freePhase = tb - _freeIdx;
         _freeColor = c.PalAt(FloorDiv(_freeIdx, 2) * step);
         _freeGain = 0.3f + 0.7f * Math.Clamp(c.Frame.LoudVU, 0f, 1f);
+        // テンポに合わせて走る帯も、拍の頭でぱっと明るく（ビートの光）、静かな部分では控えめに
+        float fl = Math.Max(c.Fl, c.FlPeak * (float)Math.Exp(-Math.Max(0, c.T - c.FlPeakT) / 0.15));
+        _lockedGain = c.SectionGain(SectionMin) * (1 - BeatAccent + BeatAccent * fl);
         if (c.HasSmallSegment) _small.Update(c);
     }
 
@@ -60,7 +67,7 @@ public sealed class ChaseEffect : IMusicEffect
         float ne = s.Ne;
         for (int j = s.Start; j < s.Start + s.Count; j++)
         {
-            float lockedLit = _blend > 0 ? Lit(c, s, j, _lockedPhase, _lockedIdx, ne) : 0f;
+            float lockedLit = _blend > 0 ? Lit(c, s, j, _lockedPhase, _lockedIdx, ne) * _lockedGain : 0f;
             float freeLit = _blend < 1 ? Lit(c, s, j, _freePhase, _freeIdx, ne) * _freeGain : 0f;
             var a = _lockedColor * c.Ilin(lockedLit);
             var b = _freeColor * c.Ilin(freeLit);

@@ -13,6 +13,18 @@ and Iris, the rainbow (the LEDs).
   for example: Settings [設定].
 
 
+■ What's new in v6.11.1 (music sync tuned on 24 recorded songs)
+  - Tempo tracking: in parts where hi-hats or chords are strongest between the beats, the predicted beat could stick
+    exactly between the real beats. If the kicks (bass) are clearly stronger half a beat away, it now shifts half a
+    beat (time on the off-beat: 15% → 9% on average). Songs with a dotted or shuffle feel no longer take a minute
+    or more to lock (26.6 → 13.7 s on average).
+  - Pulse, Beat hue, Mix, Role: a kick flash no longer rises in steps (bright → a little darker → brighter), which
+    looked like flicker (about half the flicker).
+  - Beat hue: bass between the beats is toned down so the beat stands out. Chase: the bar brightens on each beat.
+    Sparkle, Ripple, Chase, Scroll: calmer in quiet parts, bigger in the chorus.
+  - Device photos: frames from review videos and charts are no longer used as product photos; ones picked earlier
+    are removed and searched again.
+
 ■ What's new in v6.11.0
   - Auto setup (the "Auto setup" page, formerly "Test & tune"): one button measures fans not measured yet, then
     measures with the CPU, then with the GPU, and builds the quietest curves that still hold the target
