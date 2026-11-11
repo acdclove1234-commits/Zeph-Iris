@@ -19,6 +19,7 @@
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVis"/>
         <ui:EqualsConverter x:Key="Equals"/>
+        <ui:FanSubtitleConverter x:Key="FanSubtitle"/>
 
         <!-- 制御モードごとに表示するパネル -->
         <Style x:Key="TargetOnly" TargetType="FrameworkElement">
@@ -383,6 +384,28 @@
                                      Content="センサー" Checked="OnNavChanged"/>
                         <RadioButton x:Name="NavSettings" Style="{StaticResource NavItem}" Tag="&#xE713;"
                                      Content="設定" Checked="OnNavChanged"/>
+                        <!-- 不具合を報告（いつでも見つけられるように、ページの切り替えの下に置く） -->
+                        <Button x:Name="NavReportProblem" Click="OnReportProblemClick" Cursor="Hand" Margin="12,10,12,0" Padding="12,8"
+                                Background="Transparent" BorderThickness="0" HorizontalContentAlignment="Left" Focusable="True"
+                                ToolTip="ログ・設定・部品の一覧を zip にまとめて、GitHub の報告ページを開きます（どこにも自動では送りません）">
+                            <Button.Template>
+                                <ControlTemplate TargetType="Button">
+                                    <Border x:Name="Bd" Background="{TemplateBinding Background}" CornerRadius="8" Padding="{TemplateBinding Padding}">
+                                        <ContentPresenter HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                    </Border>
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter TargetName="Bd" Property="Background" Value="{DynamicResource CardBrush}"/>
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Button.Template>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="&#xEBE8;" FontFamily="{StaticResource IconFont}" FontSize="15" VerticalAlignment="Center"
+                                           Foreground="{DynamicResource WarnBrush}" Margin="0,0,12,0"/>
+                                <TextBlock Text="不具合を報告…" FontSize="14" Foreground="{DynamicResource SubTextBrush}" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
                     </StackPanel>
                 </ScrollViewer>
             </DockPanel>
@@ -761,10 +784,13 @@
                             <DataTemplate>
                                 <StackPanel>
                                     <TextBlock Text="{Binding Name}" FontWeight="SemiBold" Foreground="{DynamicResource TextBrush}"/>
-                                    <TextBlock Style="{StaticResource Caption}">
-                                        <Run Text="{Binding Role, Mode=OneWay}"/>
-                                        <Run Text=" · "/>
-                                        <Run Text="{Binding ControlId, Mode=OneWay}"/>
+                                    <TextBlock Style="{StaticResource Caption}" TextTrimming="CharacterEllipsis" ToolTip="{Binding ControlId}">
+                                        <TextBlock.Text>
+                                            <MultiBinding Converter="{StaticResource FanSubtitle}">
+                                                <Binding Path="Role"/>
+                                                <Binding Path="ControlId"/>
+                                            </MultiBinding>
+                                        </TextBlock.Text>
                                     </TextBlock>
                                 </StackPanel>
                             </DataTemplate>

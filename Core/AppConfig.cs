@@ -78,6 +78,8 @@ public sealed class AppConfig : ObservableObject
     public EnergyConfig Energy { get; set; } = new();
     public RgbConfig Rgb { get; set; } = new();
     public MaintenanceConfig Maintenance { get; set; } = new();
+    /// <summary>自動セットアップを適用したときの様子（季節で室温が上がったら測り直しを勧めるため。適用していなければ null）</summary>
+    public SetupBaselineConfig? SetupBaseline { get; set; }
     /// <summary>アプリの中からの更新（新しい版の確認）</summary>
     public UpdateConfig Update { get; set; } = new();
     /// <summary>前回起動時に見つかったハードウェア（部品の交換を検知するため）</summary>

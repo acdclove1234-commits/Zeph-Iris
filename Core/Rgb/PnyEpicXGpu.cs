@@ -106,12 +106,20 @@ public sealed class PnyEpicXEncoder
         for (int k = 0; k < z.Map.Length; k++)
         {
             var c = frame[z.Map[k].Frame];
-            if (!all && z.Sent[k] == c) continue;
+            // 見て分からない小さな変化（各色 SkipDelta 段以下）は書かない（書く回数が減ると、CPU の使用と遅れが減る）。
+            // 小さな変化が積もって SkipDelta を超えたら書く。FullRefreshSec ごとの書き直しでは全部書く
+            if (!all && Near(z.Sent[k], c)) continue;
             if (!Write(bus, z.Register, ModeDirect, 0xFF, z.Map[k].Led, c, ref writes)) return false;
             z.Sent[k] = c;
         }
         return true;
     }
+
+    /// <summary>LED 1 個ごとに書くとき、書かずに済ませる色の差（各色の段数。0〜255 のうち）</summary>
+    public const int SkipDelta = 2;
+
+    private static bool Near(Rgb a, Rgb b)
+        => Math.Abs(a.R - b.R) <= SkipDelta && Math.Abs(a.G - b.G) <= SkipDelta && Math.Abs(a.B - b.B) <= SkipDelta;
 
     private bool Write(II2cBlockWriter bus, byte register, byte b0, byte b1, byte b2, Rgb c, ref int writes)
     {
@@ -141,6 +149,12 @@ public sealed class PnyEpicXGpu
     public const ushort PnySubVendor = 0x196E;
     /// <summary>色が変わっていなくても、この秒数ごとに全部書き直す（ほかのソフトに色を変えられたときに戻すため）</summary>
     public const double FullRefreshSec = 5;
+    /// <summary>
+    /// 書き込みに使ってよい時間の割合。NvAPI の I2C は LED 1 個ずつの書き込みで、書いている間は CPU を使い続ける。
+    /// 音楽連動では毎コマ色が変わるので、休みなく書くと 1 コア近くを使い続けていた（実機で 1 コアの 80〜97%）。
+    /// 送る回数はふだん 1 秒に 10 回（OpenRgb の DirectGpuMaxFps）。設定で回数を上げても、書き終わったら書くのにかかった時間 ×（1 / この割合 − 1）だけ休み、書き込みが休みなく続かないようにする
+    /// </summary>
+    public const double BusyShare = 0.5;
     /// <summary>この回数続けて書けなかったら、ログに残す</summary>
     private const int WarnAfterFailures = 3;
     /// <summary>この回数続けて書けなかったら、直接書くのをあきらめて OpenRGB を通す（アプリを起動し直すまで）</summary>
@@ -285,7 +299,31 @@ public sealed class PnyEpicXGpu
                     if (full) _lastFull = now;
                 }
                 WriteFrame(full);
+                // 書き込みに使う時間を BusyShare までにする（次のコマは、休んでいる間に届いた新しいもの 1 つだけを書く）
+                int rest = RestMs(LastWriteMs);
+                if (rest > 0) Thread.Sleep(rest);
             }
+        }
+    }
+
+    /// <summary>書き終わってから休む時間（ミリ秒）: 書くのにかかった時間 ×（1 / BusyShare − 1）。最大 100 ミリ秒</summary>
+    public static int RestMs(double writeMs)
+        => writeMs > 0 && double.IsFinite(writeMs) ? (int)Math.Min(100, Math.Round(writeMs * (1 / BusyShare - 1))) : 0;
+
+    /// <summary>直近の書き込みにかかった時間の合計（ミリ秒。調べる用・ログ用。TakeBusyMs で読むと 0 に戻る）</summary>
+    private double _busyMs;
+
+    /// <summary>前に読んだときから、書き込みにかかった時間の合計（ミリ秒）</summary>
+    public double TakeBusyMs() => Interlocked.Exchange(ref _busyMs, 0);
+
+    /// <summary>開いているすべてのグラボの、前に読んだときからの書き込み時間の合計（ミリ秒。ログ用）</summary>
+    public static double TakeAllBusyMs()
+    {
+        lock (OpenGate)
+        {
+            double sum = 0;
+            foreach (var g in Opened.Values) sum += g.TakeBusyMs();
+            return sum;
         }
     }
 
@@ -303,6 +341,8 @@ public sealed class PnyEpicXGpu
         }
         LastWriteMs = System.Diagnostics.Stopwatch.GetElapsedTime(t0).TotalMilliseconds;
         LastWrites = writes;
+        double busy = Volatile.Read(ref _busyMs);
+        Volatile.Write(ref _busyMs, busy + LastWriteMs);
         if (ok)
         {
             if (writes > 0)

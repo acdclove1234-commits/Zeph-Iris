@@ -718,10 +718,17 @@ public sealed class RgbDeviceChannel
         ? AutoDirectLatencyMs(gpu.AverageWriteMs, LatencyMs)
         : LatencyMs;
 
-    /// <summary>1 秒に送る回数の上限: 設定が 1 以上ならその値、なければ遅いデバイス 8・ほか 60</summary>
+    /// <summary>
+    /// 直接書き込むグラボ（PNY）に送る回数の上限（1 秒あたり。自動のとき）。NvAPI の I2C は LED を 1 個ずつ書き、書いている間は
+    /// CPU を使い続ける（LED ごとに色が違うコマで約 35 ミリ秒）。毎コマ（60 回）送ると書き込みが休みなく続き、
+    /// アプリが 1 コア近くを使っていた。10 回にしても、ビートの瞬間は「早めに送る」で間に合う（RenderScheduler）
+    /// </summary>
+    public const double DirectGpuMaxFps = 10;
+
+    /// <summary>1 秒に送る回数の上限: 設定が 1 以上ならその値、なければ遅いデバイス 8・直接書き込むグラボ 10・ほか 60</summary>
     public static double MaxFpsFor(RgbDevice device, RgbDeviceSettings settings)
     {
-        double auto = device.IsFlickerProne ? FlickerProneMaxFps : device.IsGpu ? GpuMaxFps : device.IsSlow ? 8 : 60;
+        double auto = device.IsFlickerProne ? FlickerProneMaxFps : device.IsGpu ? GpuMaxFps : device.DirectGpu ? DirectGpuMaxFps : device.IsSlow ? 8 : 60;
         double user = settings.MaxFps > 0 ? settings.MaxFps : auto;
         return device.IsLowWrite ? Math.Min(auto, user) : user;   // グラボは上げられない（下げるのは可）
     }

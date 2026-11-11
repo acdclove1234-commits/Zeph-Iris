@@ -192,8 +192,9 @@ public partial class App : Application
             StartDelayedRestart(90);
         };
 
+        // 「不具合を報告…」はトレイからだけ（スマホ・ウィジェットの共通の入口 ExecuteCommand には入れない）
         var tray = new TrayIcon(ShowMainWindow, TogglePause, ToggleWidget, name => controller.SetActiveProfile(name),
-            cmd => ExecuteCommand(cmd), ExitApplication);
+            cmd => { if (cmd == TrayIcon.ReportCommand) ShowReportFromTray(); else ExecuteCommand(cmd); }, ExitApplication);
         _tray = tray;
         tray.LightingState = () => controller.Config.Rgb;
         // エンジンの健康状態が変わったら知らせる（読めない部品がある・BIOS 制御で復旧を待っている など）
@@ -569,17 +570,36 @@ public partial class App : Application
     }
 
     /// <summary>「○秒後に起動し直す」プロセスとして起動されたときの引数</summary>
-    /// <summary>メモリの使い方を 1 行でログに書く（使用中・専用・.NET のヒープ・.NET が OS から確保した分）</summary>
+    /// <summary>
+    /// メモリの使い方を 1 行でログに書く（使用中・専用・.NET のヒープ・.NET が OS から確保した分）。
+    /// 前に書いたときからの CPU の使用率（1 コアあたり）と、グラボへの直接書き込みに使った時間の割合も書く（重さの調べ用）
+    /// </summary>
     private static void LogMemory()
     {
         try
         {
             using var p = System.Diagnostics.Process.GetCurrentProcess();
             var gc = GC.GetGCMemoryInfo();
-            Logger.Info($"メモリ: 使用中 {p.WorkingSet64 / 1048576} MB・専用 {p.PrivateMemorySize64 / 1048576} MB（.NET のヒープ {gc.HeapSizeBytes / 1048576} MB・.NET が確保 {gc.TotalCommittedBytes / 1048576} MB・スレッド {p.Threads.Count}）");
+            var now = DateTime.UtcNow;
+            var cpu = p.TotalProcessorTime;
+            string cpuText = "";
+            if (_lastCpuAt != default)
+            {
+                double wall = (now - _lastCpuAt).TotalMilliseconds;
+                double gpuBusy = PnyEpicXGpu.TakeAllBusyMs();
+                if (wall > 0)
+                    cpuText = $"・CPU 1 コアの {(cpu - _lastCpu).TotalMilliseconds / wall * 100:F0}%" + (gpuBusy > 0 ? $"（グラボの直接書き込み {gpuBusy / wall * 100:F0}%）" : ""); // no-loc（ログだけ）
+            }
+            else PnyEpicXGpu.TakeAllBusyMs();
+            _lastCpu = cpu;
+            _lastCpuAt = now;
+            Logger.Info($"メモリ: 使用中 {p.WorkingSet64 / 1048576} MB・専用 {p.PrivateMemorySize64 / 1048576} MB（.NET のヒープ {gc.HeapSizeBytes / 1048576} MB・.NET が確保 {gc.TotalCommittedBytes / 1048576} MB・スレッド {p.Threads.Count}）{cpuText}");
         }
         catch (Exception ex) { Logger.Warn($"メモリの記録に失敗: {ex.Message}"); }
     }
+
+    private static TimeSpan _lastCpu;
+    private static DateTime _lastCpuAt;
 
     private const string DelayedRestartArgument = "--restart-after";
 
@@ -741,6 +761,14 @@ public partial class App : Application
         _window.Show();
         if (_window.WindowState == WindowState.Minimized) _window.WindowState = WindowState.Normal;
         _window.Activate();
+    }
+
+    /// <summary>トレイの「不具合を報告…」: 画面を出して、報告の画面を開く</summary>
+    private void ShowReportFromTray()
+    {
+        if (_window is null) return;
+        ShowMainWindow();
+        _window.ShowReportDialogFromOutside();
     }
 
     public void TogglePause()

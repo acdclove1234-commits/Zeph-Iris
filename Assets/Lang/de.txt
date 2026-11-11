@@ -1759,3 +1759,8 @@ fdc48725	Wählen Sie mindestens einen Lüfter sowie CPU und/oder GPU.
 fe39437d	Tipp: Messen Sie danach auf der Seite „Automatische Einrichtung“, um die leisesten Kurven für diesen PC zu erstellen (ca. 20–30 Min.).
 140786db	Ca. 1–2 Min. pro Lüfter. Ist die Stoppdrehzahl bekannt, wird auch die Mindestdrehzahl auf einen sicheren Wert gesetzt
 14e2760b	Noch nicht gemessene Lüfter zuerst messen
+08749344	Eine neue Messung ergibt Kurven, die auch in dieser Jahreszeit leise und sicher bleiben (ca. 20–30 Min.).
+5f83a291	Die CPU-Leerlauftemperatur ist etwa {0:F0}°C höher als bei der Messung der automatischen Einrichtung (der Raum scheint wärmer zu sein).
+8d7a30b2	Automatische Einrichtung öffnen
+c66cfe16	Der Raum ist etwa {0:F0}°C wärmer als bei der Messung der automatischen Einrichtung.
+e595df6a	Packt Protokolle, Einstellungen und die Teileliste in eine ZIP-Datei und öffnet die GitHub-Meldeseite (nichts wird automatisch gesendet)

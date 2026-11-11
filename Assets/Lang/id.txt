@@ -1759,3 +1759,8 @@ fdc48725	Pilih minimal satu kipas untuk diukur, serta CPU dan/atau GPU.
 fe39437d	Tips: setelah selesai, ukur di halaman "Penyiapan otomatis" untuk membuat kurva paling senyap yang cocok untuk PC ini (sekitar 20–30 menit).
 140786db	Sekitar 1–2 menit per kipas. Setelah kecepatan berhentinya diketahui, kecepatan minimum juga diatur ke nilai aman
 14e2760b	Ukur dulu kipas yang belum diukur
+08749344	Mengukur ulang menghasilkan kurva yang tetap senyap dan aman di musim ini juga (sekitar 20–30 menit).
+5f83a291	Suhu CPU saat idle sekitar {0:F0}°C lebih tinggi dibanding saat pengaturan otomatis mengukur (ruangan tampaknya lebih hangat).
+8d7a30b2	Buka pengaturan otomatis
+c66cfe16	Ruangan sekitar {0:F0}°C lebih hangat dibanding saat pengaturan otomatis mengukur.
+e595df6a	Mengemas log, pengaturan, dan daftar komponen ke dalam zip lalu membuka halaman laporan GitHub (tidak ada yang dikirim otomatis)

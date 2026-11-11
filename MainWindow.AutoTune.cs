@@ -392,6 +392,62 @@ public partial class MainWindow
     }
 
     // =====================================================================
+    // 季節: 室温が上がったら、測り直しを勧める
+    // =====================================================================
+
+    private readonly SeasonCheck _season = new();
+    private DateTime _seasonLastFeed = DateTime.MinValue, _seasonNextCheck = DateTime.Now.AddMinutes(10);
+
+    private void UpdateSeasonCheck(EngineSnapshot s)
+    {
+        if (SetupRunning || _test is not null) return;   // 測っている間の温度は数えない
+        double dt = _seasonLastFeed == DateTime.MinValue ? 1 : (s.Time - _seasonLastFeed).TotalSeconds;
+        _seasonLastFeed = s.Time;
+        double? Read(string role) => _roles.TryGetValue(role, out var id) && s.Values.TryGetValue(id, out var v) && v is float f ? f : null;
+        _season.Feed(Read(StatRoles.CpuTemp), Read(StatRoles.CpuLoad), Read(StatRoles.Ambient), dt);
+        if (DateTime.Now < _seasonNextCheck) return;
+        _seasonNextCheck = DateTime.Now.AddHours(1);
+        var b = Config.SetupBaseline;
+        // 6.11.1 より前に自動セットアップのカーブを入れた人は、測ったときの様子が残っていない: 今の様子を基準にする
+        if (b is null && HasAutoTunedCurves() && _season.TrySeed(DateTime.Now) is { } seeded)
+        {
+            Config.SetupBaseline = seeded;
+            ScheduleCommit();
+            Logger.Info($"季節: 自動セットアップのカーブの基準を、今の様子にしました（CPU の休んでいるとき {seeded.CpuIdleTemp:F1}°C・室温 {seeded.RoomTemp?.ToString("F1") ?? "-"}°C）");
+            return;
+        }
+        var (remind, rise, byRoom) = _season.Check(b, DateTime.Now);
+        if (!remind || b is null) return;
+        b.RemindedAt = DateTime.Now;
+        ScheduleCommit();
+        Logger.Info($"季節: 自動セットアップのときより {(byRoom ? "室温" : "CPU の休んでいるときの温度")} が {rise:F1}°C 高いので、測り直しを勧めました");
+        ShowAlert((byRoom ? L($"室温が、自動セットアップで測ったときより約 {rise:F0}°C 高くなっています。")
+                          : L($"CPU が休んでいるときの温度が、自動セットアップで測ったときより約 {rise:F0}°C 高くなっています（室温が上がったようです）。"))
+                  + L("もう一度測ると、今の季節でも静かで安全なカーブにできます（約 20〜30 分）。"),
+            AlertLevel.Info, L("自動セットアップを開く"), () => NavTest.IsChecked = true);
+    }
+
+    /// <summary>自動セットアップで作ったカーブがあるか（名前で見る。日本語と今の言語の両方）</summary>
+    private bool HasAutoTunedCurves()
+    {
+        var names = new HashSet<string> { "CPU（自動調整）", "GPU（自動調整）", L("CPU（自動調整）"), L("GPU（自動調整）") };   // no-loc（探す言葉: 日本語で保存された名前も見る）
+        return Config.Profiles.SelectMany(p => p.Fans).SelectMany(f => f.Curves).Any(c => names.Contains(c.Name));
+    }
+
+    /// <summary>自動セットアップの結果を適用したとき: 測ったときの様子を覚える（季節の確かめに使う）</summary>
+    private void RememberSetupBaseline()
+    {
+        double? room = null;
+        if (_lastSnapshot is { } s && _roles.TryGetValue(StatRoles.Ambient, out var id) && s.Values.TryGetValue(id, out var v) && v is float f) room = f;
+        Config.SetupBaseline = new SetupBaselineConfig
+        {
+            AppliedAt = DateTime.Now,
+            CpuIdleTemp = _tuneResults.TryGetValue(SetupStepKind.TuneCpu, out var cpu) ? cpu.IdleTemp : null,
+            RoomTemp = room,
+        };
+    }
+
+    // =====================================================================
     // 結果
     // =====================================================================
 
@@ -434,6 +490,7 @@ public partial class MainWindow
         FlushCommit();
         int n = 0;
         foreach (var kind in _tuneResults.Keys) n += ApplyTune(profile, kind, TargetFor(kind));
+        RememberSetupBaseline();
         _controller.Commit();
         ShowAlert(L($"「{profile.Name}」に、自動で作ったカーブを {n} 本入れました（「元に戻す」で戻せます）。"), AlertLevel.Info,
             L("カーブを見る"), () => { NavCurves.IsChecked = true; SelectEditProfile(profile.Name, _tuneResults.Values.First().Fans[0].ControlId, 0); });
@@ -451,6 +508,7 @@ public partial class MainWindow
             lines.Add(string.Join(" ", new[] { $"{p.Name}" }
                 .Concat(_tuneResults.Keys.OrderBy(k => k).Select(k => $"{(k == SetupStepKind.TuneGpu ? "GPU" : "CPU")} {TargetFor(k) + offset:F0}°C"))));
         }
+        RememberSetupBaseline();
         _controller.Commit();
         ShowAlert(L($"全プロファイルに適用しました（目標: {string.Join(L(" ／ "), lines)}）。「元に戻す」で戻せます。"), AlertLevel.Info);
     }

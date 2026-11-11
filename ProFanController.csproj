@@ -18,7 +18,7 @@
     <!-- 画面は WPF なので、高 DPI の設定は app.manifest に書く（WinForms 用の ApplicationHighDpiMode を勧める警告は出さない） -->
     <NoWarn>$(NoWarn);WFAC010</NoWarn>
     <AssemblyName>Zeph-Iris</AssemblyName>
-    <Version>6.11.1</Version>
+    <Version>6.12.0</Version>
     <Product>Zeph-Iris</Product>
     <!-- exe のアイコン（エクスプローラー・デスクトップのショートカットに表示される） -->
     <ApplicationIcon>Assets\app.ico</ApplicationIcon>
@@ -40,6 +40,11 @@
     <None Remove="tools/**" />
     <None Remove="Tests/**" />
     <Page Remove="Tests/**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- README の画面写真を作る道具（Tests/Screenshots）が、作り物のハードウェアで本体の画面を動かすため -->
+    <InternalsVisibleTo Include="Screenshots" />
   </ItemGroup>
 
   <ItemGroup>

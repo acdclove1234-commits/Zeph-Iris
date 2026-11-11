@@ -69,6 +69,32 @@ public static class PnyDirectTests
         T.Check(Apply(enc, Uniform(blue), bus) == 1, "arrow back to one colour: 1 static write (front unchanged)");
     }
 
+    /// <summary>
+    /// 書き込みの CPU を抑える: 見て分からない小さな変化は書かない・送る回数はふだん 1 秒に 10 回・書き込みが休みなく続かない
+    /// （直接書き込みのグラボで、音楽連動のとき毎コマ 41 個を書き、アプリが 1 コア近くを使っていた）
+    /// </summary>
+    public static void TestDirectWritesStayLight()
+    {
+        var enc = new PnyEpicXEncoder();
+        var bus = new FakeBus();
+        var frame = Uniform(new Rgb(0, 0, 200));
+        frame[30] = new Rgb(0, 200, 0);
+        Apply(enc, frame, bus);
+        // 矢印のゾーン全体が 2 段だけ暗くなる（残光が少しずつ消えるときなど）
+        var dim = (Rgb[])frame.Clone();
+        for (int i = 24; i < 41; i++) dim[i] = new Rgb((byte)Math.Max(0, frame[i].R - 2), (byte)Math.Max(0, frame[i].G - 2), (byte)Math.Max(0, frame[i].B - 2));
+        T.Check(Apply(enc, dim, bus) == 0, "changes of 2 levels or less are not written");
+        var dimmer = (Rgb[])frame.Clone();
+        for (int i = 24; i < 41; i++) dimmer[i] = new Rgb((byte)Math.Max(0, frame[i].R - 3), (byte)Math.Max(0, frame[i].G - 3), (byte)Math.Max(0, frame[i].B - 3));
+        T.Check(Apply(enc, dimmer, bus) == 17, "once the change passes 2 levels the LEDs are written");
+        T.Check(Apply(enc, dimmer, bus, full: true) > 0, "the full refresh still writes everything");
+
+        T.Check(RgbDeviceChannel.MaxFpsFor(Pny() with { DirectGpu = true }, new RgbDeviceSettings()) == RgbDeviceChannel.DirectGpuMaxFps
+                && RgbDeviceChannel.DirectGpuMaxFps <= 12, "a directly written GPU sends about 10 times a second by default (beats still go out early)");
+        T.Check(PnyEpicXGpu.RestMs(35) == 35 && PnyEpicXGpu.RestMs(0) == 0 && PnyEpicXGpu.RestMs(500) == 100,
+            "after a 35 ms write the writer rests 35 ms (writes at most half the time), capped at 100 ms");
+    }
+
     public static void TestLogoAndFrontLedNumbers()
     {
         var enc = new PnyEpicXEncoder();
@@ -146,7 +172,9 @@ public static class PnyDirectTests
         T.Check(!direct.IsSlow && !direct.IsGpu && !direct.IsLowWrite, "direct: not slow, no GPU write limits");
         T.Check(direct.DefaultLatencyMs == 8, $"direct: latency 8 ms ({direct.DefaultLatencyMs})");
         var settings = new RgbDeviceSettings { Name = direct.Name };
-        T.Check(RgbDeviceChannel.MaxFpsFor(direct, settings) == 60, "direct: up to 60 sends per second");
+        // 毎コマ（60 回）書くと、NvAPI の I2C で CPU を使い続けるので、ふだんは 10 回（ビートの瞬間は早めに送る）
+        T.Check(RgbDeviceChannel.MaxFpsFor(direct, settings) == RgbDeviceChannel.DirectGpuMaxFps, "direct: about 10 sends per second by default");
+        T.Check(RgbDeviceChannel.MaxFpsFor(direct, new RgbDeviceSettings { Name = direct.Name, MaxFps = 30 }) == 30, "direct: the user can raise it");
         T.Check(RgbDeviceChannel.MaxFpsFor(viaOpenRgb, settings) == RgbDeviceChannel.GpuMaxFps, "through OpenRGB: still capped");
         var ch = new RgbDeviceChannel(direct, 0);
         T.Check(!ch.SendsEveryFrame(RgbSync.AnimatedPeriod), "direct: no dithering (keeps zones in one colour)");

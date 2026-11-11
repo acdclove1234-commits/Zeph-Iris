@@ -14,6 +14,9 @@ namespace ProFanController.UI;
 
 public sealed class TrayIcon : IDisposable
 {
+    /// <summary>「不具合を報告…」のときに command へ渡す名前（App がトレイからのときだけ受け付ける）</summary>
+    public const string ReportCommand = "report-problem";
+
     private readonly WinForms.NotifyIcon _icon;
     private readonly Drawing.Icon _appIcon;
     private readonly Action _open, _togglePause, _toggleWidget, _exit;
@@ -130,6 +133,7 @@ public sealed class TrayIcon : IDisposable
         _pauseItem = new WinForms.ToolStripMenuItem(L("一時停止（BIOS に戻す）"), null, (_, _) => togglePause());
         menu.Items.Add(_pauseItem);
         menu.Items.Add(new WinForms.ToolStripSeparator());
+        menu.Items.Add(new WinForms.ToolStripMenuItem(L("不具合を報告…"), null, (_, _) => command(ReportCommand)));
         menu.Items.Add(new WinForms.ToolStripMenuItem(L("終了（BIOS 制御に戻す）"), null, (_, _) => exit()));
         return menu;
     }

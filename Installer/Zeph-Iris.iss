@@ -57,10 +57,12 @@ RestartApplications=no
 SetupMutex=Zeph-IrisSetup
 ShowLanguageDialog=auto
 LanguageDetectionMethod=uilanguage
+; 入れる前に、通信するものとプライバシーを見せる（SignPath の決まり・PRIVACY.md の要約）
+InfoBeforeFile=privacy-en.txt
 
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
-Name: "japanese"; MessagesFile: "compiler:Languages\Japanese.isl"
+Name: "japanese"; MessagesFile: "compiler:Languages\Japanese.isl"; InfoBeforeFile: "privacy-ja.txt"
 Name: "german"; MessagesFile: "compiler:Languages\German.isl"
 Name: "french"; MessagesFile: "compiler:Languages\French.isl"
 Name: "spanish"; MessagesFile: "compiler:Languages\Spanish.isl"

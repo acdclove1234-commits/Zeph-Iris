@@ -338,6 +338,9 @@ public partial class MainWindow : Window
     public void OnCatalogReady(HardwareCatalog catalog)
     {
         _catalog = catalog;
+        // ファンカーブの一覧の 2 行目に、端子の ID ではなく名前（例「CPU Fan」）を出す
+        UI.FanSubtitleConverter.Names = catalog.Controls.GroupBy(c => c.Id).ToDictionary(g => g.Key, g => g.First().Name);
+        FanList.Items.Refresh();
 
         RebuildSensorOptions();
         RebuildTempCards();
@@ -374,6 +377,7 @@ public partial class MainWindow : Window
         RecordLongTerm(s);
         UpdateTest(s);
         UpdateTune(s);
+        UpdateSeasonCheck(s);
         UpdateListen(s);
         foreach (var card in _tempCards) card.SetSuspect(s.Suspects is { } sus && sus.TryGetValue(card.SensorId, out var why) ? why : null);
 

@@ -31,6 +31,30 @@ public static class ModeSyncBenchTests
     /// <summary>その曲で分析が出した出来事（調べる用。時刻は曲の始まりから）</summary>
     public static readonly List<(double T, AudioEventKind Kind, float Strength)> AllEvents = new();
 
+    /// <summary>
+    /// 調べる用: 環境変数 SYNTH_WAV にフォルダー。合成した曲（音の多い曲・テンポ違い）を 32 bit の WAV で書く
+    /// （録音を消したあとでも、光り方の比べに使えるように）
+    /// </summary>
+    public static void TestWriteSynthSongs()
+    {
+        string? dir = Environment.GetEnvironmentVariable("SYNTH_WAV");
+        if (string.IsNullOrEmpty(dir)) return;
+        Directory.CreateDirectory(dir);
+        foreach (double bpm in new[] { 92.0, 118, 128, 140 })
+        {
+            var g = new SignalGen(48000, 60, seed: (int)bpm);
+            g.DenseMix(bpm, 0.5, 59);
+            string path = Path.Combine(dir, $"synth{bpm:000}.wav");
+            using var bw = new BinaryWriter(File.Create(path));
+            int n = g.Buf.Length;
+            bw.Write("RIFF"u8.ToArray()); bw.Write(36 + n * 4); bw.Write("WAVE"u8.ToArray());
+            bw.Write("fmt "u8.ToArray()); bw.Write(16); bw.Write((short)3); bw.Write((short)1); bw.Write(48000); bw.Write(48000 * 4); bw.Write((short)4); bw.Write((short)32);
+            bw.Write("data"u8.ToArray()); bw.Write(n * 4);
+            foreach (var x in g.Buf) bw.Write(x);
+            T.Info($"wrote {path}");
+        }
+    }
+
     public static void TestModeSyncBench()
     {
         string? dir = Environment.GetEnvironmentVariable("MODE_WAV");

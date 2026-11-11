@@ -1759,3 +1759,8 @@ fdc48725	Scegli almeno una ventola da misurare e la CPU e/o la GPU.
 fe39437d	Suggerimento: dopo, misura nella pagina «Configurazione automatica» per creare le curve più silenziose adatte a questo PC (circa 20–30 min).
 140786db	Circa 1–2 min per ventola. Nota la velocità di arresto, anche la velocità minima viene portata a un valore sicuro
 14e2760b	Misura prima le ventole non ancora misurate
+08749344	Misurando di nuovo si ottengono curve silenziose e sicure anche in questa stagione (circa 20–30 min).
+5f83a291	La temperatura a riposo della CPU è circa {0:F0}°C più alta di quando la configurazione automatica ha misurato (la stanza sembra più calda).
+8d7a30b2	Apri la configurazione automatica
+c66cfe16	La stanza è circa {0:F0}°C più calda di quando la configurazione automatica ha misurato.
+e595df6a	Raccoglie log, impostazioni ed elenco dei componenti in uno zip e apre la pagina di segnalazione GitHub (nulla viene inviato automaticamente)

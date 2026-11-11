@@ -13,6 +13,19 @@ and Iris, the rainbow (the LEDs).
   for example: Settings [設定].
 
 
+■ What's new in v6.12.0 (lighter, season-aware, easier to report)
+  - Lighter: direct LED writes to PNY graphics cards kept almost one CPU core busy. They are now limited to 10 per
+    second (up to 30 in the settings), rest between writes, and skip LEDs whose colour barely changed. The
+    memory line in the log also shows CPU use. The exe is no longer compressed, which saves about 60–100 MB of
+    memory (the download is a little larger).
+  - Season reminder: when the room is 5°C or more warmer than when auto setup measured (without a room sensor:
+    the CPU idle temperature is 6°C or more higher), the app suggests measuring again (at most every 30 days).
+  - "Report a problem" [不具合を報告…] is now at the bottom of the sidebar and in the tray icon's menu.
+  - Music sync: Spectrum no longer rises in steps on a kick either (less flicker).
+  - Fan curves: the list shows "Fan · CPU Fan" instead of the header's internal ID.
+  - Installer: shows what the app sends over the network (update check, device photos) and how to turn it off
+    before installing (privacy policy: PRIVACY.md).
+
 ■ What's new in v6.11.1 (music sync tuned on 24 recorded songs)
   - Tempo tracking: in parts where hi-hats or chords are strongest between the beats, the predicted beat could stick
     exactly between the real beats. If the kicks (bass) are clearly stronger half a beat away, it now shifts half a

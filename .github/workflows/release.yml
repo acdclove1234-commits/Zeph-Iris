@@ -1,0 +1,141 @@
+# Build the release installer on GitHub Actions and sign it with SignPath (see CODE_SIGNING.md).
+#
+# Run it by hand (Actions > Release build > Run workflow) after the version bump is on main and CI has passed.
+# Steps: tests -> publish Zeph-Iris.exe -> sign the exe -> build the installer around the signed exe -> sign the installer.
+# Every signing request waits for manual approval in SignPath. The signed installer is uploaded as the
+# "Zeph-Iris-setup" workflow artifact; attach it to the GitHub release from there.
+#
+# Settings (repository > Settings > Secrets and variables > Actions):
+#   secret   SIGNPATH_API_TOKEN               API token of the SignPath CI user (submitter only)
+#   variable SIGNPATH_ORGANIZATION_ID         SignPath organization id
+#   variable SIGNPATH_PROJECT_SLUG            e.g. Zeph-Iris
+#   variable SIGNPATH_SIGNING_POLICY_SLUG     e.g. release-signing
+#   variable SIGNPATH_EXE_CONFIGURATION       artifact configuration for the zip with Zeph-Iris.exe
+#   variable SIGNPATH_SETUP_CONFIGURATION     artifact configuration for the zip with Zeph-Iris-<version>-setup.exe
+# Without the token the workflow still builds, but the installer is unsigned (a warning says so).
+name: Release build
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: windows-latest
+    timeout-minutes: 120
+    env:
+      DOTNET_NOLOGO: true
+      DOTNET_CLI_TELEMETRY_OPTOUT: true
+      SIGN: ${{ secrets.SIGNPATH_API_TOKEN != '' }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Build the app
+        run: dotnet build ProFanController.csproj -c Release
+
+      - name: Logic tests
+        run: dotnet run --project Tests/LogicTests -c Release
+
+      - name: Translation check
+        run: dotnet run --project tools/LocTool -c Release -- check
+
+      - name: UI smoke test
+        run: dotnet run --project Tests/UiSmoke -c Release
+
+      - name: Install Inno Setup
+        shell: pwsh
+        run: |
+          if (-not (Test-Path "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe")) { choco install innosetup -y --no-progress }
+
+      - name: Publish Zeph-Iris.exe
+        shell: pwsh
+        run: ./Distribution/make-dist.ps1 -PublishOnly out/exe
+
+      - name: Upload the unsigned exe
+        id: unsigned-exe
+        uses: actions/upload-artifact@v4
+        with:
+          name: unsigned-exe
+          path: out/exe/Zeph-Iris.exe
+          if-no-files-found: error
+
+      - name: Sign the exe
+        if: env.SIGN == 'true'
+        uses: signpath/github-action-submit-signing-request@v3
+        with:
+          api-token: ${{ secrets.SIGNPATH_API_TOKEN }}
+          organization-id: ${{ vars.SIGNPATH_ORGANIZATION_ID }}
+          project-slug: ${{ vars.SIGNPATH_PROJECT_SLUG }}
+          signing-policy-slug: ${{ vars.SIGNPATH_SIGNING_POLICY_SLUG }}
+          artifact-configuration-slug: ${{ vars.SIGNPATH_EXE_CONFIGURATION }}
+          github-artifact-id: ${{ steps.unsigned-exe.outputs.artifact-id }}
+          wait-for-completion: true
+          wait-for-completion-timeout-in-seconds: 7200
+          output-artifact-directory: out/signed-exe
+
+      - name: Use the unsigned exe (no SignPath token)
+        if: env.SIGN != 'true'
+        shell: pwsh
+        run: |
+          Write-Host "::warning::SIGNPATH_API_TOKEN is not set, so this build is NOT signed."
+          New-Item -ItemType Directory -Force out/signed-exe | Out-Null
+          Copy-Item out/exe/Zeph-Iris.exe out/signed-exe/
+
+      - name: Build the installer
+        shell: pwsh
+        run: ./Distribution/make-dist.ps1 -Exe out/signed-exe/Zeph-Iris.exe -OutputDir out/setup
+
+      - name: Upload the unsigned installer
+        id: unsigned-setup
+        uses: actions/upload-artifact@v4
+        with:
+          name: unsigned-setup
+          path: out/setup/*.exe
+          if-no-files-found: error
+
+      - name: Sign the installer
+        if: env.SIGN == 'true'
+        uses: signpath/github-action-submit-signing-request@v3
+        with:
+          api-token: ${{ secrets.SIGNPATH_API_TOKEN }}
+          organization-id: ${{ vars.SIGNPATH_ORGANIZATION_ID }}
+          project-slug: ${{ vars.SIGNPATH_PROJECT_SLUG }}
+          signing-policy-slug: ${{ vars.SIGNPATH_SIGNING_POLICY_SLUG }}
+          artifact-configuration-slug: ${{ vars.SIGNPATH_SETUP_CONFIGURATION }}
+          github-artifact-id: ${{ steps.unsigned-setup.outputs.artifact-id }}
+          wait-for-completion: true
+          wait-for-completion-timeout-in-seconds: 7200
+          output-artifact-directory: out/signed-setup
+
+      - name: Keep the unsigned installer (no SignPath token)
+        if: env.SIGN != 'true'
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force out/signed-setup | Out-Null
+          Copy-Item out/setup/*.exe out/signed-setup/
+
+      - name: Show the signature and checksum
+        shell: pwsh
+        run: |
+          Get-ChildItem out/signed-setup/*.exe | ForEach-Object {
+            $sig = Get-AuthenticodeSignature $_.FullName
+            "{0}  {1} bytes  sha256 {2}  signature: {3} {4}" -f $_.Name, $_.Length, (Get-FileHash $_.FullName -Algorithm SHA256).Hash, $sig.Status, $sig.SignerCertificate.Subject
+          }
+
+      - name: Upload the installer
+        uses: actions/upload-artifact@v4
+        with:
+          name: Zeph-Iris-setup
+          path: out/signed-setup/*.exe
+          if-no-files-found: error

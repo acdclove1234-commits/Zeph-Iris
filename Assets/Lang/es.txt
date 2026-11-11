@@ -1759,3 +1759,8 @@ fdc48725	Elige al menos un ventilador a medir y la CPU y/o la GPU.
 fe39437d	Consejo: después, mide en la página «Configuración automática» para crear las curvas más silenciosas para este PC (aprox. 20–30 min).
 140786db	Aprox. 1–2 min por ventilador. Al conocer la velocidad de parada, también se fija una velocidad mínima segura
 14e2760b	Medir primero los ventiladores aún no medidos
+08749344	Medir de nuevo da curvas que siguen silenciosas y seguras también en esta estación (unos 20–30 min).
+5f83a291	La temperatura en reposo de la CPU es unos {0:F0}°C más alta que cuando midió la configuración automática (la habitación parece más cálida).
+8d7a30b2	Abrir la configuración automática
+c66cfe16	La habitación está unos {0:F0}°C más caliente que cuando midió la configuración automática.
+e595df6a	Reúne registros, ajustes y la lista de piezas en un zip y abre la página de informes de GitHub (no se envía nada automáticamente)

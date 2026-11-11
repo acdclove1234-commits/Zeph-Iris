@@ -1759,3 +1759,8 @@ fdc48725	Wybierz co najmniej jeden wentylator do pomiaru oraz CPU i/lub GPU.
 fe39437d	Wskazówka: potem zmierz na stronie „Konfiguracja automatyczna”, aby utworzyć najcichsze krzywe dla tego komputera (ok. 20–30 min).
 140786db	Ok. 1–2 min na wentylator. Gdy znane są obroty zatrzymania, minimalne obroty też są ustawiane na bezpieczną wartość
 14e2760b	Najpierw zmierz jeszcze niezmierzone wentylatory
+08749344	Ponowny pomiar da krzywe, które także w tej porze roku będą ciche i bezpieczne (ok. 20–30 min).
+5f83a291	Temperatura CPU w spoczynku jest o około {0:F0}°C wyższa niż podczas pomiaru automatycznej konfiguracji (w pokoju chyba zrobiło się cieplej).
+8d7a30b2	Otwórz automatyczną konfigurację
+c66cfe16	W pokoju jest o około {0:F0}°C cieplej niż podczas pomiaru automatycznej konfiguracji.
+e595df6a	Pakuje logi, ustawienia i listę podzespołów do pliku zip i otwiera stronę zgłoszeń GitHub (nic nie jest wysyłane automatycznie)

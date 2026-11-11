@@ -1759,3 +1759,8 @@ fdc48725	Kies minstens één ventilator om te meten, en de CPU en/of GPU.
 fe39437d	Tip: meet daarna op de pagina "Automatische instelling" om de stilste curves voor deze pc te maken (ca. 20–30 min).
 140786db	Ca. 1–2 min per ventilator. Zodra het stoptoerental bekend is, wordt ook het minimumtoerental op een veilige waarde gezet
 14e2760b	Nog niet gemeten ventilatoren eerst meten
+08749344	Opnieuw meten geeft curves die ook in dit seizoen stil en veilig blijven (ca. 20–30 min).
+5f83a291	De CPU-temperatuur in rust is ongeveer {0:F0}°C hoger dan toen de automatische instelling mat (de kamer lijkt warmer).
+8d7a30b2	Automatische instelling openen
+c66cfe16	De kamer is ongeveer {0:F0}°C warmer dan toen de automatische instelling mat.
+e595df6a	Bundelt logs, instellingen en de onderdelenlijst in een zip en opent de GitHub-meldpagina (er wordt niets automatisch verzonden)

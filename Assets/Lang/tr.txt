@@ -1759,3 +1759,8 @@ fdc48725	Ölçülecek en az bir fan ile CPU ve/veya GPU'yu seçin.
 fe39437d	İpucu: ardından "Otomatik kurulum" sayfasında ölçerek bu PC'ye uygun en sessiz eğrileri oluşturun (yaklaşık 20–30 dk).
 140786db	Fan başına yaklaşık 1–2 dk. Durma devri bilinince en düşük devir de güvenli bir değere ayarlanır
 14e2760b	Henüz ölçülmemiş fanları önce ölç
+08749344	Yeniden ölçmek, bu mevsimde de sessiz ve güvenli kalan eğriler verir (yaklaşık 20–30 dk).
+5f83a291	CPU boşta sıcaklığı, otomatik kurulumun ölçtüğü zamana göre yaklaşık {0:F0}°C daha yüksek (oda ısınmış görünüyor).
+8d7a30b2	Otomatik kurulumu aç
+c66cfe16	Oda, otomatik kurulumun ölçtüğü zamana göre yaklaşık {0:F0}°C daha sıcak.
+e595df6a	Günlükleri, ayarları ve parça listesini bir zip dosyasında toplar ve GitHub rapor sayfasını açar (hiçbir şey otomatik gönderilmez)

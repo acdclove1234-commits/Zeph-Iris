@@ -1,28 +1,57 @@
-# Zeph-Iris
+<p align="center"><img src="docs/images/icon.png" width="96" alt=""></p>
 
-[English](README.md) | **日本語**
+<h1 align="center">Zeph-Iris</h1>
 
-> 6.6.1 までの名前は **ProFanController**、6.7.0〜6.7.3 の名前は **Fanlume** です（同じ名前の別のサービスがあったため変えました）。設定と記録は Zeph-Iris にそのまま引き継げます（「[Fanlume・ProFanController から移るとき](#fanlumeprofancontroller-から移るとき)」を見てください）。
+<p align="center"><b>Windows のデスクトップ PC のファンを、静かに・安全に。LED も光らせる。設定はボタン 1 つ。</b></p>
 
-**Zeph-Iris**（ゼフィリス）は、西風の神ゼピュロス（ファン）と虹の女神イリス（LED）から名付けました。Windows 用のファン制御・監視ツールです。マザーボードのファン端子を温度に合わせて制御し、OpenRGB と連携して PC の LED も光らせます（温度・レインボー・音楽連動など）。
+<p align="center">
+  <a href="../../releases/latest"><img src="https://img.shields.io/github/v/release/acdclove1234-commits/Zeph-Iris?label=download" alt="最新の版"></a>
+  <a href="../../actions/workflows/ci.yml"><img src="https://github.com/acdclove1234-commits/Zeph-Iris/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue" alt="MIT License"></a>
+  <img src="https://img.shields.io/badge/Windows-10%20%7C%2011-0078D4" alt="Windows 10 | 11">
+  <img src="https://img.shields.io/badge/languages-18-8a63f5" alt="18 言語">
+</p>
 
-> 画面の表示は 18 言語に対応しています（日本語・英語・中国語〈簡体字・繁体字〉・韓国語・ロシア語・ウクライナ語・ドイツ語・フランス語・スペイン語・イタリア語・ポルトガル語〈ブラジル〉・ポーランド語・オランダ語・トルコ語・ベトナム語・タイ語・インドネシア語）。Windows の表示言語に合わせて選ばれ、設定 →「見た目」→「表示言語」で変えられます（選ぶとすぐに切り替わります。アプリは起動し直しません）。日本語以外は新しく訳したもので、ぎこちない言い回しが残っているかもしれません。直し方は「[翻訳](#翻訳)」を見てください。
+<p align="center"><a href="README.md">English</a> | <b>日本語</b></p>
+
+<p align="center"><img src="docs/images/dashboard-ja.png" width="860" alt="ダッシュボード: CPU・グラボ・ケース内の温度、負荷、メモリ、SSD、消費電力"></p>
+
+**Zeph-Iris**（ゼフィリス）は、西風の神ゼピュロス（ファン）と虹の女神イリス（LED）から名付けました。マザーボードのファン端子を温度に合わせて制御し、PC を見張り、LED を温度・レインボー・音楽に合わせて光らせます。
+
+- **ボタン 1 つの自動セットアップ** — ファンを 1 つずつ測り、CPU とグラボに負荷をかけて、目標温度を守れるいちばん静かなカーブを作ります。適用する前に結果を確かめられます。
+- **安全第一** — 緊急全開、センサーの異常値の除外、ポンプの見張り、アプリが落ちたら起動し直す見張りプロセス、終了・スリープ時は BIOS 制御に戻す。
+- **音楽連動の LED** — キック・スネアの検出とテンポの追従。実際の曲を録音して調整しました。12 種類の光り方（OpenRGB と連携）。
+- **アカウントなし・テレメトリーなし** — [プライバシーポリシー](PRIVACY.md) を見てください。
+
+> 6.6.1 までの名前は **ProFanController**、6.7.0〜6.7.3 の名前は **Fanlume** です。設定と記録は引き継げます（「[Fanlume・ProFanController から移るとき](#fanlumeprofancontroller-から移るとき)」を見てください）。
 
 > 個人で作ったツールです。ファンやポンプの制御を誤ると、部品が熱くなりすぎることがあります。ご利用は自己責任でお願いします（LICENSE の「無保証」のとおりです）。
+
+## 画面
+
+| 自動セットアップ | ファンカーブ |
+|---|---|
+| <img src="docs/images/autosetup-ja.png" alt="自動セットアップの結果: 回転数ごとの温度と、できたカーブ"> | <img src="docs/images/curves-ja.png" alt="ファンカーブの編集"> |
+| **履歴** | **デバイス** |
+| <img src="docs/images/history-ja.png" alt="温度とファンの回転数の履歴"> | <img src="docs/images/devices-ja.png" alt="見つけたマザーボード・CPU・グラボ・SSD"> |
+
+<sub>画面の写真は、作り物のハードウェア（`Tests/Screenshots`）で撮っています。実際の PC の情報は写っていません。</sub>
 
 ## できること
 
 - **ファン制御**: 温度カーブ・目標温度・固定値・ほかのファンへの連動。複数の温度センサー、ヒステリシス、回転の上がり下がりの速さ、共振する回転数を避ける設定
-- **おまかせ調整**: 負荷をかけて測り、目標温度を守れるいちばん静かなカーブを作る
+- **自動セットアップ**: ボタン 1 つで、ファンごとの特性（止まる・回り出す回転数）を測り、CPU とグラボに負荷をかけてファンを少しずつ下げ、静かで安全なカーブを作る。測ったときより室温が 5°C 以上上がったら、測り直しをおすすめします
 - **安全機能**: 緊急全開、センサーの異常値の除外・固着の検知、ポンプの回転の見張り、見張りプロセス（本体が落ちたらファンを安全な回転数にして起動し直す）、終了・スリープ時は BIOS 制御に戻す
 - **監視・記録**: ダッシュボード、履歴、電気代の目安、ファンの劣化・ホコリの検知、異常の前後の記録
 - **LED（OpenRGB 連携）**: 温度・レインボー・呼吸・固定色・音楽連動（キック・スネアの検出、テンポの追従、12 種類の光り方）。デバイス・端子（ゾーン）ごとの設定と色合わせ。PNY ARGB Epic-X のグラボは OpenRGB を通さず直接書き込み
-- **そのほか**: プロファイルの自動切り替え、スマホからの確認（同じネットワーク内）、ntfy / Discord への通知、タスクトレイ常駐・ログオン時の自動起動、18 言語の画面表示
+- **そのほか**: プロファイルの自動切り替え、スマホからの確認（同じネットワーク内）、ntfy / Discord への通知、タスクトレイ常駐・ログオン時の自動起動、サイドバーとトレイの「不具合を報告…」、18 言語の画面表示
+
+> 画面の表示は 18 言語に対応しています（日本語・英語・中国語〈簡体字・繁体字〉・韓国語・ロシア語・ウクライナ語・ドイツ語・フランス語・スペイン語・イタリア語・ポルトガル語〈ブラジル〉・ポーランド語・オランダ語・トルコ語・ベトナム語・タイ語・インドネシア語）。Windows の表示言語に合わせて選ばれ、設定 →「見た目」→「表示言語」で変えられます。日本語以外は新しく訳したもので、ぎこちない言い回しが残っているかもしれません。直し方は「[翻訳](#翻訳)」を見てください。
 
 ## 必要なもの
 
 - Windows 10 / 11（64bit）のデスクトップ PC
-- [PawnIO](https://pawnio.eu/)（ファンの制御用のドライバー。LibreHardwareMonitor 0.9.6 以降で必要）
+- [PawnIO](https://pawnio.eu/)（ファンの制御用の署名つきドライバー。LibreHardwareMonitor 0.9.6 以降で必要）。インストーラーに PawnIO の公式のインストーラーが入っていて、自動で入れます
 - 管理者権限（Super I/O にアクセスするため、起動時に UAC の確認が出ます）
 - LED を使う場合: [OpenRGB](https://openrgb.org/)（起動しておき、SDK サーバーをオンにする）
 
@@ -39,6 +68,8 @@
 | CPU | Intel Core Ultra 5 245KF |
 | グラボ | PNY GeForce RTX 5070 Ti 16GB ARGB Epic-X OC |
 
+構成の違うもう 1 台の PC でも、PawnIO のインストール・Lian Li のファン・不具合の報告まで動くことを確かめました。
+
 ほかのマザーボード・グラボでも、[LibreHardwareMonitor](https://github.com/LibreHardwareMonitor/LibreHardwareMonitor)（ファン・温度）と OpenRGB（LED）が対応している部品なら動きます。ただし、機種ごとの仕様やセンサーの並びによって、動きが違うことがあります。うまく動かないときは、お使いの部品の型番を添えて知らせてください。
 
 対応していない・確かめていない部品のときの動き:
@@ -52,10 +83,10 @@
 
 ## 使い方（インストーラー）
 
-1. [Releases](../../releases) から `Zeph-Iris-<版>-setup.exe` をダウンロードして実行する。`C:\Program Files\Zeph-Iris` に入り、スタートメニューにも登録されます。コード署名をしていないため「Windows によって PC が保護されました」と出たら、「詳細情報」→「実行」を押してください
-2. 最後の画面の「Zeph-Iris を実行する」はチェックしたままにする。PawnIO（ファン制御に使うドライバー）が入っていなければ、インストーラーが winget で入れます。うまくいかなければ、アプリのはじめの設定の画面がもう一度入れます
-   （それでもだめなときは、アプリのフォルダーの「1_PawnIO をインストール.bat」を右クリック →「管理者として実行」するか、[公式サイト](https://pawnio.eu/)のインストーラーを使う）
-3. セットアップの案内に沿って、ファン端子に名前を付ける
+1. [Releases](../../releases/latest) から `Zeph-Iris-<版>-setup.exe` をダウンロードして実行する。`C:\Program Files\Zeph-Iris` に入り、スタートメニューにも登録されます。まだコード署名をしていないため（SignPath での署名を準備中です。「[コード署名の方針](CODE_SIGNING.md)」）、「Windows によって PC が保護されました」と出たら、「詳細情報」→「実行」を押してください
+2. 最後の画面の「Zeph-Iris を実行する」はチェックしたままにする。PawnIO（ファン制御に使うドライバー）が入っていなければ、インストーラーに入っている PawnIO の公式のインストーラーで入れます
+   （うまくいかないときは、アプリのフォルダーの「1_PawnIO をインストール.bat」を右クリック →「管理者として実行」するか、[公式サイト](https://pawnio.eu/)のインストーラーを使う）
+3. はじめの設定の案内に沿ってファン端子に名前を付け、「自動セットアップ」の画面で **自動セットアップを開始** を押す（約 20〜30 分。測っているあいだは PC を触らずにおく）
 
 詳しくは、アプリのフォルダーにある「はじめにお読みください.txt」（英語は `README_en.txt`。このリポジトリでは `Distribution/` の中）を見てください。新しい版への更新は、アプリの設定 →「一般」→「アップデート」→「更新する」を押すだけです（6.7.1 から）。新しいインストーラーをダウンロードし、GitHub に公開されたものと同じか（大きさ・SHA-256）を確かめてから、画面を出さずに入れ替えます。新しいインストーラーを手で実行してもかまいません。どちらも、動いている Zeph-Iris を正しく終了してから（そのあいだファンは BIOS の設定で回ります）入れ替え、設定・記録はそのまま残ります。
 
@@ -99,6 +130,8 @@ powershell -ExecutionPolicy Bypass -File Distribution/make-dist.ps1
 | `Audio/`・`Core/Audio/` | 音楽連動の音の取り込みと分析（帯域・キック・テンポ） |
 | `UI/`・`MainWindow*` | 画面（WPF） |
 | `Tests/LogicTests/` | ロジックのテスト（画面・実機なしで動く） |
+| `Tests/Screenshots/` | README の画面写真を作る（作り物のハードウェアで本物の画面を動かす。`dotnet run --project Tests/Screenshots -c Release -- <フォルダー> ja`） |
+| `.github/workflows/` | CI（`ci.yml`）と、署名つきのリリースのビルド（`release.yml`。[CODE_SIGNING.md](CODE_SIGNING.md)） |
 | `Distribution/` | アプリと一緒に入れる説明書（日本語・英語）・バッチ・ライセンスと、インストーラーを作るスクリプト |
 | `Installer/` | インストーラーの Inno Setup のスクリプト（`Zeph-Iris.iss`） |
 | `Assets/Lang/` | 画面の言葉の翻訳表（言語ごとに 1 ファイル）と、元の文の一覧（`keys.tsv`） |
@@ -114,7 +147,12 @@ powershell -ExecutionPolicy Bypass -File Distribution/make-dist.ps1
 
 ## 不具合の報告
 
-[Issues](../../issues/new/choose) に、マザーボード・CPU・グラボの型番と、アプリのフォルダーの `logs` フォルダーを添えて送ってください。動作を確かめたのはまだ 1 台だけなので、ほかの部品での報告はとても助かります。
+サイドバーのいちばん下（またはタスクトレイのアイコンのメニュー）の **不具合を報告…** を押してください。ログ・設定・見つけた部品の一覧を PC の中で zip にまとめ、[Issues](../../issues/new/choose) のページを開きます。zip の中身を確かめて添付してください。自動では何も送りません。動作を確かめたのはまだ 2 台だけなので、ほかの部品での報告はとても助かります。
+
+## プライバシーとコード署名
+
+- [プライバシーポリシー](PRIVACY.md): アカウントもテレメトリーもありません。アプリが自分から通信するのは GitHub（新しい版の確認）と Wikimedia Commons（デバイスの写真）だけで、どちらも止められます。
+- [コード署名の方針](CODE_SIGNING.md): SignPath の審査が通ったら、リリースに署名します。
 
 ## 謝辞
 

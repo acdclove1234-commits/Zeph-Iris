@@ -1,0 +1,14 @@
+﻿Privacy
+
+Zeph-Iris runs on your PC. It has no account, no telemetry and no ads, and it does not collect personal data.
+
+On its own, the app contacts only:
+- GitHub (api.github.com): checks for a new version, at most once a day. Turn off: Settings > "Check for new versions automatically".
+- Wikimedia Commons (commons.wikimedia.org): searches photos of your parts by their model names. Turn off: Devices > "Find device photos online automatically".
+
+Phone notifications (ntfy), phone/web remote, AI advice (Ollama) and OpenRGB lighting do nothing until you set them up.
+"Report a problem" only makes a zip on your PC and opens the GitHub issue page; nothing is uploaded automatically.
+
+Setup installs PawnIO (a signed driver for reading sensors and setting fan speeds) and an auto-start task. The uninstaller removes them.
+
+Full privacy policy: https://github.com/acdclove1234-commits/Zeph-Iris/blob/main/PRIVACY.md

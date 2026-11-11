@@ -1759,3 +1759,8 @@ fdc48725	Chọn ít nhất một quạt cần đo và CPU và/hoặc GPU.
 fe39437d	Mẹo: sau đó, hãy đo ở trang "Thiết lập tự động" để tạo đường cong êm nhất phù hợp với PC này (khoảng 20–30 phút).
 140786db	Mỗi quạt khoảng 1–2 phút. Khi biết tốc độ dừng, tốc độ tối thiểu cũng được đặt về giá trị an toàn
 14e2760b	Đo trước các quạt chưa được đo
+08749344	Đo lại sẽ cho đường cong vẫn êm và an toàn trong mùa này (khoảng 20–30 phút).
+5f83a291	Nhiệt độ CPU khi nghỉ cao hơn khoảng {0:F0}°C so với lúc thiết lập tự động đo (có vẻ phòng đã ấm lên).
+8d7a30b2	Mở thiết lập tự động
+c66cfe16	Phòng ấm hơn khoảng {0:F0}°C so với lúc thiết lập tự động đo.
+e595df6a	Gom nhật ký, cài đặt và danh sách linh kiện vào một tệp zip rồi mở trang báo lỗi GitHub (không gửi gì tự động)

@@ -33,6 +33,9 @@ public partial class MainWindow
 
     private void OnReportProblemClick(object sender, RoutedEventArgs e) => ShowReportDialog();
 
+    /// <summary>画面の外（トレイのメニュー）から報告の画面を開く</summary>
+    public void ShowReportDialogFromOutside() => ShowReportDialog();
+
     /// <summary>
     /// 報告の画面: 何が入るかを見せて、zip を作る・GitHub の報告ページを開く。
     /// 報告ページは版・部品の欄を埋めた状態で開くので、あとは「何が起きたか」を書いて zip を添付するだけ

@@ -1,29 +1,58 @@
-# Zeph-Iris
+<p align="center"><img src="docs/images/icon.png" width="96" alt=""></p>
 
-**English** | [日本語](README.ja.md)
+<h1 align="center">Zeph-Iris</h1>
 
-> This app was called **ProFanController** up to 6.6.1 and **Fanlume** from 6.7.0 to 6.7.3 (renamed because another service already uses that name). Settings and records carry over to Zeph-Iris (see [Moving from Fanlume or ProFanController](#moving-from-fanlume-or-profancontroller)).
+<p align="center"><b>Quiet, safe fan control and LED lighting for Windows desktop PCs — set up in one click.</b></p>
 
-**Zeph-Iris** — after Zephyr, the west wind (the fans), and Iris, the rainbow (the LEDs). A fan control and monitoring tool for Windows. It drives the motherboard's fan headers from temperature curves and, together with OpenRGB, lights the PC's LEDs (temperature, rainbow, music sync and more).
+<p align="center">
+  <a href="../../releases/latest"><img src="https://img.shields.io/github/v/release/acdclove1234-commits/Zeph-Iris?label=download" alt="Latest release"></a>
+  <a href="../../actions/workflows/ci.yml"><img src="https://github.com/acdclove1234-commits/Zeph-Iris/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue" alt="MIT License"></a>
+  <img src="https://img.shields.io/badge/Windows-10%20%7C%2011-0078D4" alt="Windows 10 | 11">
+  <img src="https://img.shields.io/badge/languages-18-8a63f5" alt="18 languages">
+</p>
 
-> **The user interface is available in 18 languages**: English, Japanese, Chinese (Simplified and Traditional), Korean, Russian, Ukrainian, German, French, Spanish, Italian, Portuguese (Brazil), Polish, Dutch, Turkish, Vietnamese, Thai and Indonesian. It follows the Windows display language; to choose another one, go to Settings → Appearance → Language (it switches right away, without restarting the app). The original text is Japanese and the other languages are new translations, so some wording may read unnaturally; corrections are welcome (see [Translations](#translations)).
+<p align="center"><b>English</b> | <a href="README.ja.md">日本語</a></p>
+
+<p align="center"><img src="docs/images/dashboard-en.png" width="860" alt="Dashboard: CPU, GPU and case temperatures, load, memory, SSD and power"></p>
+
+**Zeph-Iris** — after Zephyr, the west wind (the fans), and Iris, the rainbow (the LEDs). It drives your motherboard's fan headers from temperatures, watches over the PC, and lights the LEDs with temperature, rainbow or music sync.
+
+- **One-button auto setup** — measures every fan, loads the CPU and GPU, and builds the quietest curve that still holds your target temperature. You check the result before it is applied.
+- **Safe by design** — emergency full speed, bad-sensor filtering, pump watch, a watchdog that restarts the app, and fans handed back to the BIOS on exit or sleep.
+- **Music sync lighting** — kick and snare detection and beat tracking, tuned on recorded songs; a dozen styles, with OpenRGB.
+- **No account, no telemetry** — see the [privacy policy](PRIVACY.md).
+
+> This app was called **ProFanController** up to 6.6.1 and **Fanlume** from 6.7.0 to 6.7.3. Settings and records carry over (see [Moving from Fanlume or ProFanController](#moving-from-fanlume-or-profancontroller)).
 
 > This is a personal project. Wrong fan or pump control can let parts get too hot. Use it at your own risk (see the "no warranty" clause in the LICENSE).
+
+## Screenshots
+
+| Auto setup | Fan curves |
+|---|---|
+| <img src="docs/images/autosetup-en.png" alt="Auto setup result: measured temperatures per fan speed and the resulting curve"> | <img src="docs/images/curves-en.png" alt="Fan curve editor"> |
+| **History** | **Devices** |
+| <img src="docs/images/history-en.png" alt="History graph of temperatures and fan speeds"> | <img src="docs/images/devices-en.png" alt="Detected motherboard, CPU, graphics card and SSD"> |
+
+<sub>Screenshots are made with simulated hardware (`Tests/Screenshots`), so they show no real PC's details.</sub>
 
 ## Features
 
 - **Fan control**: temperature curves, target temperature, fixed duty, following another fan. Several sensors per curve, hysteresis, ramp-up/down rates, and resonance bands to skip
-- **Auto-tune**: loads the PC, measures, and builds the quietest curve that still holds your target temperature
+- **Auto setup**: one button measures each fan (stop and start speeds), then loads the CPU and GPU and lowers the fans step by step to build the quietest safe curve. When the room gets 5°C or more warmer than when you measured, the app suggests measuring again
 - **Safety**: emergency full speed (also watches the CPU and GPU temperatures when no curve uses them), filtering of bad sensor values and stuck sensors, pump speed watch, a watchdog process (sets safe fan speeds and restarts the app if it crashes), and handing the fans back to the BIOS on exit and sleep
 - **Monitoring and diagnostics**: dashboard, history, electricity estimate, fan wear and dust checks that compare like with like (room temperature and fan-curve changes are taken into account), and a flight recorder for incidents
 - **LEDs (with OpenRGB)**: temperature, rainbow, breathing, static colour and music sync (kick and snare detection, beat tracking, a dozen styles), per device and per zone. Music sync can listen to one app only (for example Spotify). PNY ARGB Epic-X graphics cards are written directly, without OpenRGB
-- **Other**: automatic profile switching, a phone view on the same network, ntfy / Discord notifications, tray icon and start at logon, and a user interface in 18 languages
+- **Other**: automatic profile switching, a phone view on the same network, ntfy / Discord notifications, tray icon and start at logon, "Report a problem" in the sidebar and tray menu, and a user interface in 18 languages
 - **Optional**: an AI cooling advisor using a local [Ollama](https://ollama.com/) model (off by default; turn it on at the top of the Diagnostics page; your data stays on the PC)
+
+> **The user interface is available in 18 languages**: English, Japanese, Chinese (Simplified and Traditional), Korean, Russian, Ukrainian, German, French, Spanish, Italian, Portuguese (Brazil), Polish, Dutch, Turkish, Vietnamese, Thai and Indonesian. It follows the Windows display language; to choose another one, go to Settings → Appearance → Language. The original text is Japanese and the other languages are new translations, so some wording may read unnaturally; corrections are welcome (see [Translations](#translations)).
 
 ## Requirements
 
 - A Windows 10 / 11 (64-bit) desktop PC
-- [PawnIO](https://pawnio.eu/) (the driver used for fan control; required by LibreHardwareMonitor 0.9.6 and later). The app can install it for you
+- [PawnIO](https://pawnio.eu/) (the signed driver used for fan control; required by LibreHardwareMonitor 0.9.6 and later). The installer includes the official PawnIO installer and sets it up for you
 - Administrator rights (needed for the Super I/O chip; Windows asks for confirmation at start)
 - For LEDs: [OpenRGB](https://openrgb.org/) running with its SDK server turned on
 
@@ -40,6 +69,8 @@ The app is developed and tested on this PC. This is an example that has been che
 | CPU | Intel Core Ultra 5 245KF |
 | Graphics card | PNY GeForce RTX 5070 Ti 16GB ARGB Epic-X OC |
 
+It has also been checked on a second, different PC (including the PawnIO setup, Lian Li fans and the problem report).
+
 Other motherboards and graphics cards work as long as [LibreHardwareMonitor](https://github.com/LibreHardwareMonitor/LibreHardwareMonitor) (fans and temperatures) and OpenRGB (LEDs) support them, but behaviour can differ with each model's specifics and sensor layout. If something does not work, please report it with your hardware models.
 
 What happens with unsupported or unchecked parts:
@@ -53,10 +84,10 @@ What happens with unsupported or unchecked parts:
 
 ## Getting started (installer)
 
-1. Download `Zeph-Iris-<version>-setup.exe` from [Releases](../../releases) and run it. It installs to `C:\Program Files\Zeph-Iris` and adds a Start menu entry. The installer is not code-signed, so Windows may show "Windows protected your PC": press "More info" → "Run anyway"
-2. Leave "Launch Zeph-Iris" ticked on the last page. If PawnIO (the fan control driver) is not installed, the installer installs it with winget; if that fails, the app's first setup screen tries again
-   (or right-click `1_PawnIO をインストール.bat` ("install PawnIO") in the app folder → Run as administrator, or use the installer from the [official site](https://pawnio.eu/))
-3. Follow the setup to name your fan headers
+1. Download `Zeph-Iris-<version>-setup.exe` from [Releases](../../releases/latest) and run it. It installs to `C:\Program Files\Zeph-Iris` and adds a Start menu entry. The installer is not code-signed yet (signing through SignPath is being prepared, see [Code signing policy](CODE_SIGNING.md)), so Windows may show "Windows protected your PC": press "More info" → "Run anyway"
+2. Leave "Launch Zeph-Iris" ticked on the last page. If PawnIO (the fan control driver) is not installed, the installer installs it with the official PawnIO installer it contains
+   (if that fails: right-click `1_PawnIO をインストール.bat` ("install PawnIO") in the app folder → Run as administrator, or use the installer from the [official site](https://pawnio.eu/))
+3. Follow the first setup to name your fan headers, then press **Start auto setup** on the Auto setup page (about 20–30 minutes; leave the PC alone while it measures)
 
 See `README_en.txt` in the app folder (in this repository under `Distribution/`) for details. To update, use Settings → General → Updates → "Update" in the app (from 6.7.1 on): it downloads the new installer, checks it against the file published on GitHub (size and SHA-256), and replaces the app without any screens. You can also run the newer installer yourself. Either way the running Zeph-Iris is closed properly (the fans go back to the BIOS settings for a moment) and settings and records are kept.
 
@@ -100,6 +131,8 @@ The `config.json` at the top is a development sample (copied to the build output
 | `Audio/`, `Core/Audio/` | music sync: audio capture and analysis (bands, kicks, tempo) |
 | `UI/`, `MainWindow*` | user interface (WPF) |
 | `Tests/LogicTests/` | logic tests (run without the UI or hardware) |
+| `Tests/Screenshots/` | makes the README screenshots by running the real window on simulated hardware (`dotnet run --project Tests/Screenshots -c Release -- <folder> en`) |
+| `.github/workflows/` | CI (`ci.yml`) and the signed release build (`release.yml`, see [CODE_SIGNING.md](CODE_SIGNING.md)) |
 | `Distribution/` | guides (Japanese and English), a batch file and licences installed with the app, and the script that builds the installer |
 | `Installer/` | the Inno Setup script for the installer (`Zeph-Iris.iss`) |
 | `Assets/Lang/` | translation tables for the user interface (one file per language) and the list of source texts (`keys.tsv`) |
@@ -115,7 +148,12 @@ The texts on screen are written in Japanese in the source code and looked up in 
 
 ## Reporting problems
 
-Please open an [issue](../../issues/new/choose) with your motherboard, CPU and graphics card models and the `logs` folder from the app folder. So far the app has been checked on one PC only, so reports from other hardware help a lot.
+Press **Report a problem…** at the bottom of the sidebar (or in the tray icon's menu). It packs the logs, settings and the list of detected parts into a zip on your PC and opens the [issue](../../issues/new/choose) page; check the zip and attach it. Nothing is sent automatically. So far the app has been checked on two PCs, so reports from other hardware help a lot.
+
+## Privacy and code signing
+
+- [Privacy policy](PRIVACY.md): no account and no telemetry. On its own the app only contacts GitHub (update check) and Wikimedia Commons (device photos), and both can be turned off.
+- [Code signing policy](CODE_SIGNING.md): releases will be signed through SignPath once the application is accepted.
 
 ## Thanks
 

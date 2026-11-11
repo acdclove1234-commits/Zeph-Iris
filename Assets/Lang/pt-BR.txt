@@ -1759,3 +1759,8 @@ fdc48725	Escolha pelo menos uma ventoinha a medir e a CPU e/ou a GPU.
 fe39437d	Dica: depois, meça na página "Configuração automática" para criar as curvas mais silenciosas para este PC (cerca de 20–30 min).
 140786db	Cerca de 1–2 min por ventoinha. Sabendo onde param, a velocidade mínima também é ajustada para um valor seguro
 14e2760b	Medir primeiro as ventoinhas ainda não medidas
+08749344	Medir de novo gera curvas que continuam silenciosas e seguras nesta estação também (cerca de 20–30 min).
+5f83a291	A temperatura da CPU em repouso está cerca de {0:F0}°C mais alta do que quando a configuração automática mediu (o cômodo parece mais quente).
+8d7a30b2	Abrir a configuração automática
+c66cfe16	O cômodo está cerca de {0:F0}°C mais quente do que quando a configuração automática mediu.
+e595df6a	Reúne logs, configurações e a lista de peças em um zip e abre a página de relatório do GitHub (nada é enviado automaticamente)

@@ -1759,3 +1759,8 @@ fdc48725	Choose at least one fan to measure, and the CPU and/or GPU.
 fe39437d	Tip: afterwards, measure on the "Auto setup" page to build the quietest curves that suit this PC (about 20–30 min).
 140786db	About 1–2 min per fan. Once the stop speed is known, the minimum speed is also set to a safe value
 14e2760b	Measure fans not measured yet first
+08749344	Measuring again gives curves that stay quiet and safe in this season too (about 20–30 min).
+5f83a291	The CPU idle temperature is about {0:F0}°C higher than when auto setup measured it (the room seems warmer).
+8d7a30b2	Open auto setup
+c66cfe16	The room is about {0:F0}°C warmer than when auto setup measured it.
+e595df6a	Bundles logs, settings and the parts list into a zip and opens the GitHub report page (nothing is sent automatically)
