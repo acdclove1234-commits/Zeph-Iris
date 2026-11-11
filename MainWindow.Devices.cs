@@ -24,6 +24,7 @@ public partial class MainWindow
     private void RebuildDevices()
     {
         if (_catalog is null) return;
+        PruneUnsuitablePhotos();
         _deviceCards.Clear();
         // マザーボード → CPU → GPU → その他 の順に並べる
         foreach (var d in _catalog.Devices.OrderBy(d => d.Kind switch { "Motherboard" => 0, "Cpu" => 1, "Gpu" => 2, _ => 3 }))
@@ -153,6 +154,22 @@ public partial class MainWindow
             Logger.Warn($"画像の貼り付けに失敗: {ex.Message}");
             MessageBox.Show(this, L($"画像を貼り付けられませんでした。\n{ex.Message}"), AppIdentity.Name, MessageBoxButton.OK, MessageBoxImage.Warning);
         }
+    }
+
+    /// <summary>
+    /// 前の版が選んだネットの写真のうち、製品の写真ではないもの（動画の 1 コマ・グラフなど。DevicePhotos.IsUnsuitableTitle）を外し、
+    /// もう一度探せるようにする（例: CPU の写真に、レビュー動画のベンチマークのグラフが付いていた）
+    /// </summary>
+    private void PruneUnsuitablePhotos()
+    {
+        var bad = Config.DeviceImages.Where(i => DevicePhotos.IsUnsuitableSource(i.SourceUrl)).ToList();
+        foreach (var i in bad)
+        {
+            Config.DeviceImages.Remove(i);
+            Config.DevicePhotoSearched.Remove(i.DeviceKey);
+            Logger.Info($"製品の写真ではない画像を外しました（{i.DeviceKey}）: {i.SourceUrl}");
+        }
+        if (bad.Count > 0) ScheduleCommit();
     }
 
     private static DeviceImageConfig SaveImage(DeviceCardVm card, byte[] bytes, string ext, PhotoCandidate? from = null)

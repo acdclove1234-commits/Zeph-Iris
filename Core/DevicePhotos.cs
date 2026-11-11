@@ -84,6 +84,35 @@ public static class DevicePhotos
         if (key.Length > 3 && (key.EndsWith("F", StringComparison.OrdinalIgnoreCase)) && char.IsLetter(key[^2])) yield return key[..^1];
     }
 
+    // 製品の写真ではないファイルの題名に出てくる言葉（動画の 1 コマ・ベンチマークのグラフ・スライドなど）
+    private static readonly string[] NotPhotoWords =
+    {
+        "video", "screenshot", "screen", "capture", "chart", "graph", "benchmark", "benchmarks", "diagram", "comparison",
+        "slide", "slides", "presentation", "logo", "review", "gameplay", "fps", "score", "scores", "result", "results",
+    };
+
+    // 動画の画面と同じ大きさ（PNG でこの大きさなら、動画から切り出した 1 コマのことが多い）
+    private static readonly (int W, int H)[] VideoSizes = { (1280, 720), (1366, 768), (1600, 900), (1920, 1080), (2560, 1440), (3840, 2160) };
+
+    /// <summary>題名から、製品の写真ではない（動画の 1 コマ・グラフ・スライドなど）と分かるか</summary>
+    public static bool IsUnsuitableTitle(string title)
+    {
+        string t = Normalize(title);
+        return NotPhotoWords.Any(w => ContainsWord(t, " " + w + " "));
+    }
+
+    /// <summary>動画の画面と同じ大きさの PNG（動画から切り出した 1 コマらしい）</summary>
+    public static bool IsVideoFrame(string mime, int width, int height)
+        => mime == "image/png" && VideoSizes.Any(s => s.W == width && s.H == height);
+
+    /// <summary>保存してある写真の元のページ（Commons の File: ページ）が、製品の写真ではないもの</summary>
+    public static bool IsUnsuitableSource(string sourceUrl)
+    {
+        if (string.IsNullOrEmpty(sourceUrl) || !sourceUrl.Contains("/wiki/File:", StringComparison.OrdinalIgnoreCase)) return false;
+        string title = Uri.UnescapeDataString(sourceUrl[(sourceUrl.IndexOf("/wiki/File:", StringComparison.OrdinalIgnoreCase) + 11)..]).Replace('_', ' ');
+        return IsUnsuitableTitle(title);
+    }
+
     /// <summary>
     /// 自動で使ってよいくらい確かか: 型番の数字の言葉が全部あり、ほかの言葉（メーカー名・シリーズ名）も 1 つ以上ある
     /// （"RTX 5070 Ti" だけだと別のメーカーのグラボの写真のこともあるため）
@@ -98,7 +127,7 @@ public static class DevicePhotos
         if (KeyTerms(deviceName).Count == 0) return Array.Empty<PhotoCandidate>();
         string query = string.Join(' ', terms);
         string url = Api + "?action=query&format=json&generator=search&gsrnamespace=6&gsrlimit=20"
-                     + "&prop=imageinfo&iiprop=url|extmetadata|mime&iiextmetadatafilter=Artist|LicenseShortName"
+                     + "&prop=imageinfo&iiprop=url|extmetadata|mime|size&iiextmetadatafilter=Artist|LicenseShortName"
                      + $"&iiurlwidth={ImageWidth}&gsrsearch={Uri.EscapeDataString(query)}";
         using var res = await Http.GetAsync(url, ct).ConfigureAwait(false);
         res.EnsureSuccessStatusCode();
@@ -120,6 +149,10 @@ public static class DevicePhotos
             var info = infos[0];
             string mime = Str(info, "mime");
             if (mime is not ("image/jpeg" or "image/png" or "image/webp")) continue;   // 動画・PDF・SVG は使わない
+            // 製品の写真ではないもの（レビュー動画の 1 コマ・ベンチマークのグラフなど）は使わない
+            int width = info.TryGetProperty("width", out var wv) && wv.ValueKind == JsonValueKind.Number ? wv.GetInt32() : 0;
+            int height = info.TryGetProperty("height", out var hv) && hv.ValueKind == JsonValueKind.Number ? hv.GetInt32() : 0;
+            if (IsUnsuitableTitle(title) || IsVideoFrame(mime, width, height)) continue;
             int score = Score(title, deviceName);
             if (score == 0) continue;
             string thumb = Str(info, "thumburl"), page2 = Str(info, "descriptionurl");

@@ -66,6 +66,36 @@ public static class DevicePhotoTests
         T.Check(pny.Author == "Some & One" && pny.License == "CC BY-SA 4.0", $"author and licence without HTML ({pny.Author} / {pny.License})");
     }
 
+    /// <summary>
+    /// 製品の写真ではないものは使わない。Ryzen 7 9800X3D で探すと、Commons にはレビュー動画から切り出したコマ
+    /// （3840×2160 の PNG。ベンチマークのグラフ）しかなく、それが CPU の写真になっていた
+    /// </summary>
+    public static void TestRejectsVideoFramesAndCharts()
+    {
+        const string json = """
+        {"query":{"pages":{
+          "1":{"title":"File:Video zum AMD Ryzen 7 9800X3D (ZMASLO) 01.png","imageinfo":[{"mime":"image/png","width":3840,"height":2160,
+               "thumburl":"https://upload.wikimedia.org/a.png","descriptionurl":"https://commons.wikimedia.org/wiki/File:a.png"}]},
+          "2":{"title":"File:AMD Ryzen 7 9800X3D frame.png","imageinfo":[{"mime":"image/png","width":1920,"height":1080,
+               "thumburl":"https://upload.wikimedia.org/b.png","descriptionurl":"https://commons.wikimedia.org/wiki/File:b.png"}]},
+          "3":{"title":"File:AMD Ryzen 7 9800X3D benchmark chart.jpg","imageinfo":[{"mime":"image/jpeg","width":1200,"height":800,
+               "thumburl":"https://upload.wikimedia.org/c.jpg","descriptionurl":"https://commons.wikimedia.org/wiki/File:c.jpg"}]},
+          "4":{"title":"File:AMD Ryzen 7 9800X3D top.jpg","imageinfo":[{"mime":"image/jpeg","width":4000,"height":3000,
+               "thumburl":"https://upload.wikimedia.org/d.jpg","descriptionurl":"https://commons.wikimedia.org/wiki/File:d.jpg"}]}
+        }}}
+        """;
+        using var doc = JsonDocument.Parse(json);
+        var list = DevicePhotos.Parse(doc.RootElement, "AMD Ryzen 7 9800X3D");
+        T.Check(list.Count == 1 && list[0].Title == "AMD Ryzen 7 9800X3D top", $"video frames (title or 16:9 screen-size PNG) and charts are skipped ({string.Join(", ", list.Select(c => c.Title))})");
+        T.Check(!DevicePhotos.IsVideoFrame("image/jpeg", 1920, 1080) && !DevicePhotos.IsVideoFrame("image/png", 1920, 1200), "a JPEG photo or another PNG size is not taken for a frame");
+        T.Check(!DevicePhotos.IsUnsuitableTitle("PNY RTX 5070 Ti at Computex 2025") && !DevicePhotos.IsUnsuitableTitle("Screenless device"),
+            "ordinary product photo titles pass (whole words only)");
+        // 前の版が付けた写真（保存してある元のページ）も見分けて外せる
+        T.Check(DevicePhotos.IsUnsuitableSource("https://commons.wikimedia.org/wiki/File:Video_zum_AMD_Ryzen_7_9800X3D_(ZMASLO)_01.png"), "a saved video-frame photo is recognised from its source page");
+        T.Check(!DevicePhotos.IsUnsuitableSource("https://commons.wikimedia.org/wiki/File:PNY_RTX_5070_Ti_at_Computex_2025.jpg") && !DevicePhotos.IsUnsuitableSource(""),
+            "product photos and own images are kept");
+    }
+
     /// <summary>画像の種類は中身で見る（拡張子や返事の種類を信じない）</summary>
     public static void TestImageExtension()
     {
