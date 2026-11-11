@@ -13,6 +13,20 @@ and Iris, the rainbow (the LEDs).
   for example: Settings [設定].
 
 
+■ What's new in v6.11.0
+  - Auto setup (the "Auto setup" page, formerly "Test & tune"): one button measures fans not measured yet, then
+    measures with the CPU, then with the GPU, and builds the quietest curves that still hold the target
+    temperatures (about 20–30 min; you check the result before applying it).
+  - The app now loads the GPU itself, so there is no need to start a game or benchmark.
+  - Measured fans get their minimum speed raised just above the speed where they stop (never lowered).
+  - The CPU and GPU targets are set separately. "Apply to all profiles" uses +5°C for Silent and −5°C for
+    Max cooling.
+  - Renamed: "Auto-tune" is now "Auto setup", "Target temperature (automatic)" is "Target temperature",
+    "Auto calibration" is "Fan characteristics" ("Measure fan"), and "Create automatically…" on the curve page is
+    "Auto setup…".
+  - A run that measured nothing no longer reports "unreachable even at full speed (°C at full speed)".
+  - The GPU load uses Vortice (MIT License); its licence is in the licenses folder.
+
 ■ What's new in v6.10.4
   - Fixed the "Sync test" (Music sync → "Audio delay" row) never lighting the LEDs. The click fades in
     smoothly, and its quiet start was taken for noise, so no click was ever detected.

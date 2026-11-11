@@ -231,9 +231,9 @@ public partial class MainWindow
     private void OnStartTestClick(object sender, RoutedEventArgs e)
     {
         if (_catalog is null || _test is not null) return;
-        if (_tuner is not null)
+        if (SetupRunning)
         {
-            MessageBox.Show(this, L("おまかせ調整が実行中です。終わってから始めてください。"), AppIdentity.Name, MessageBoxButton.OK, MessageBoxImage.Information);
+            MessageBox.Show(this, L("自動セットアップが実行中です。終わってから始めてください。"), AppIdentity.Name, MessageBoxButton.OK, MessageBoxImage.Information);
             return;
         }
         var cpuTemp = SensorNames.CpuTemperature(_catalog.Temperatures)
@@ -340,5 +340,6 @@ public partial class MainWindow
     {
         _test?.Dispose();
         _tuner?.Dispose();
+        _gpuLoad?.Dispose();
     }
 }

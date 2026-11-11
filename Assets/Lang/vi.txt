@@ -9,7 +9,6 @@ f70fd09f	Bảng điều khiển
 a010a7fc	Lịch sử
 133b6776	Báo cáo
 b4bcc740	Chẩn đoán
-977807d2	Kiểm tra & tinh chỉnh
 60dd6c40	Đèn LED
 dfa4a412	Cảm biến
 6243fa06	Cài đặt
@@ -64,8 +63,6 @@ ba60770e	Tên (chung cho mọi cấu hình)
 59c6e4bc	Cách điều khiển
 a80265dc	Đường cong
 051753eb	Tự đặt tốc độ cho từng nhiệt độ
-530a9c8a	Nhiệt độ mục tiêu (tự động)
-1fc9ab3c	Chỉ cần chọn nhiệt độ, tốc độ tự điều chỉnh
 27bd9d15	Cố định
 84b1afad	Luôn cùng một tốc độ (cho bơm)
 26a15192	Theo (nhóm)
@@ -91,9 +88,7 @@ fa9ef1de	Tốc độ giảm / giây
 a5668673	Không bao giờ dưới 40% với bất kỳ cài đặt nào. Nếu tốc độ dưới ngưỡng cảnh báo liên tục 3 giây, bơm sẽ lên 100% và thông báo cho bạn, kể cả khi BIOS đang điều khiển.
 7c811ff7	Tốc độ cảnh báo
 cb5145a7	Dùng làm tốc độ tối thiểu
-812e0683	Hiệu chỉnh tự động
 ec41d4ae	Dừng
-9514979f	Chạy quạt từ 0 đến 100% và đo tốc độ lúc dừng, lúc bắt đầu quay và tốc độ tối đa (khoảng 1–2 phút)
 26101bee	+ Thêm dải
 f5097e76	Cộng hưởng (bỏ qua tốc độ ồn)
 11bb3e7a	Thêm các dải tốc độ làm vỏ máy hoặc két tản nhiệt kêu ù, quạt sẽ đi qua nhanh thay vì dừng lại ở đó (chung cho mọi cấu hình)
@@ -103,8 +98,6 @@ ea6d9cfc	Bỏ qua chỗ này
 ed263790	Dải bỏ qua
 49024f94	% đến
 8b7237a1	Chưa có. Nếu không có tốc độ nào gây khó chịu, cứ để như vậy.
-166baf5a	Tạo tự động…
-3eb67669	Tạo tải cho PC, đo đạc và tạo đường cong êm nhất vẫn giữ được nhiệt độ mục tiêu (trang Kiểm tra & tinh chỉnh)
 cd6687b0	Sao chép ▾
 a8a30430	+ Thêm đường cong
 29506d39	Xóa đường cong này
@@ -147,20 +140,10 @@ f0f25c1b	Hãy nhấn sau khi vệ sinh lưới lọc hoặc quạt. Các bản g
 9c1df669	Kiểm tra ngay
 267e9ec4	Kiểm tra hao mòn và bụi của quạt
 2c6b3065	Lưu bản ghi mỗi phút và so sánh với trước đây: "cùng lệnh tốc độ mà vòng quay có giảm không (ổ trục hao mòn, bụi)" và "cùng công suất mà nhiệt độ có tăng không (lưới lọc hoặc két tản nhiệt bị tắc)".
-060669c9	Bắt đầu tự tinh chỉnh
-96cc9d01	Tự tinh chỉnh (tự tạo đường cong)
 46ac54ca	Khuyên dùng
-121a7d95	Trong lúc tải thực, giảm dần tốc độ quạt từ 100% và đo điểm nhiệt độ ổn định. Từ đó tạo đường cong êm nhất vẫn giữ được nhiệt độ mục tiêu (khoảng 8–15 phút; dừng giữa chừng thì điều khiển thường lệ sẽ tiếp tục).
-e9947588	Đối tượng làm mát
-d881d18f	CPU (tải tích hợp, tự động)
-e57cca88	GPU (tạo tải bằng game hoặc benchmark)
-c074a956	Khi tải tối đa, không để nhiệt độ vượt quá mức này
-0c43c305	Quạt cần tinh chỉnh
-183c9165	Đo với các quạt đã chọn chạy cùng tốc độ. Bơm không tham gia (vẫn chạy như thường).
 3e4a2fef	Kết quả đo
 67633e51	Đường cong được tạo (thay đổi nhiệt độ mục tiêu ở trên sẽ tạo lại mà không cần đo lại)
 0e95ff55	Áp dụng cho cấu hình này
-6f4b51e9	Cấu hình có tên chứa "Yên tĩnh" dùng mục tiêu +5°C, "Hiệu năng" dùng mục tiêu −5°C, các cấu hình khác giữ nguyên mục tiêu
 a6de9295	Áp dụng cho mọi cấu hình
 35ae4fe6	10 phút
 c7ad32f7	15 phút
@@ -168,7 +151,6 @@ c7ad32f7	15 phút
 cc4ae169	Kiểm tra làm mát
 16e5632b	Tự động đo theo thứ tự: nghỉ 30 giây → tải toàn bộ nhân CPU → ngừng tải và làm nguội. Cho biết cài đặt quạt hiện tại làm mát tốt đến đâu. Không bao gồm GPU; muốn thử cả GPU, hãy chạy game hoặc benchmark trong lúc kiểm tra.
 eb918d75	Khi đã sẵn sàng, nhấn "Bắt đầu kiểm tra". Đóng các ứng dụng nặng để đo chính xác.
-9e3aee28	Diễn biến trong lúc kiểm tra và tinh chỉnh
 339697a1	Lưu báo cáo
 8a49bfd9	Nhờ AI phân tích
 1ba434e9	Kết quả
@@ -411,7 +393,6 @@ b373eaee	Chu kỳ cập nhật
 1ac4b576	Giới thiệu ứng dụng
 81d90dca	+ Cấu hình mới
 4cdf9ede	Lưu một bộ đường cong quạt với tên riêng và chuyển đổi giữa chúng
-774923ad	Vai trò của cấu hình này. Dù đổi tên, tự tinh chỉnh (Yên tĩnh lấy mục tiêu +5°C, Làm mát tối đa −5°C), đường cong của quạt mới và thao tác nhanh "Yên tĩnh" vẫn hoạt động đúng nhờ vai trò này
 82ac5e85	Gói điện năng Windows dùng với cấu hình này
 d663551d	Dùng thường ngày
 80173301	Nhân bản
@@ -542,7 +523,6 @@ c1db4c06	Khi tắt, giao cho BIOS; ứng dụng chỉ giám sát tốc độ và
 b58afa04	Đã sẵn sàng
 861676ec	Bắt đầu điều khiển ngay
 01bcdd36	Khi tắt sẽ bắt đầu ở chế độ DRY RUN (chỉ tính toán, không ghi vào quạt)
-709f1f3b	Mẹo: sau khi xong, đo tốc độ tối thiểu của từng quạt bằng "Hiệu chỉnh tự động" ở trang Đường cong quạt để cài đặt êm hơn nữa.
 aceb0a14	Hủy
 f193a383	Quay lại
 303830fc	Tiếp
@@ -728,7 +708,6 @@ f8650f35	Đang ngừng tải và trở về điều khiển thường lệ…
 9af40572	Đã dừng vì chuyển sang tốc độ tối đa khẩn cấp
 ef174ee8	Đã dừng vì nhiệt độ đạt {0:F0}°C
 13912a14	Đã dừng vì tải GPU không còn (hãy để game hoặc benchmark tiếp tục chạy)
-f3ec99ac	Đã dừng vì không có tải
 5d76038f	Đang đo tốc độ tối đa…
 966245da	Đang đo trong lúc giảm tốc độ… ({0:F0}%)
 8db302e0	Đang tìm tốc độ bắt đầu quay… ({0:F0}%)
@@ -810,7 +789,6 @@ ea0f0b04	{0:P0} số bản ghi ở mức 95% trở lên. Nguyên nhân có lẽ 
 8b53f64d	Dịch đường cong sang phải 5°C
 fe86db70	Đã dịch đường cong của "{0}" sang phải 5°C.
 9cf10287	{0}: hiệu chỉnh sẽ giúp tinh chỉnh chính xác hơn
-65f73a32	"Hiệu chỉnh tự động" ở màn hình Đường cong quạt sẽ đo tốc độ dừng và tốc độ tối đa (khoảng 1–2 phút).
 afae536a	{0}: tốc độ tối thiểu nằm trong vùng dừng
 f8161c81	Quạt này dừng khi dưới {0:F0}%, nhưng tốc độ tối thiểu lại là {1:F0}%. Dừng rồi quay liên tục sẽ gây tiếng lách cách và giảm tuổi thọ.
 3272f28b	Đặt tốc độ tối thiểu {0:F0}%
@@ -1128,31 +1106,16 @@ eb7cfe73	Đã gỡ xong. Đang kiểm tra…
 3487b9bc	Đang kiểm tra tệp đã tải…
 dbd5b1f0	Đang tải xuống…
 9e8ebaf4	Đang tiến hành… {0}%
-305b4308	(theo {0})
 0f6e5123	Đang chạy kiểm tra làm mát hoặc hiệu chỉnh. Hãy bắt đầu sau khi xong.
-5b079133	Hãy chọn ít nhất một quạt để tinh chỉnh.
-395141d9	Không tìm thấy cảm biến nhiệt độ GPU.
 4b25b2cd	Không tìm thấy cảm biến nhiệt độ CPU.
-7a122984	Không tìm thấy cảm biến mức dùng GPU nên không thể tinh chỉnh GPU.
-c7751269	• Sau khi bắt đầu, hãy mở game hoặc benchmark (3DMark, FF Benchmark…) và giữ tải cho GPU.\n
-c886e5d0	• CPU sẽ chạy hết công suất (hãy đóng các ứng dụng nặng khác).\n
-dbca6724	Bắt đầu tự tinh chỉnh (khoảng {0} phút).\n\n
-a1ca3c2f	• {0} quạt đã chọn sẽ được giảm dần từ 100%. Tiếng quạt sẽ to nhỏ thất thường.\n
-ac505b53	• Khi nhiệt độ {0} đạt {1:F0}°C, sẽ dừng ngay và trở về điều khiển thường lệ.\n
-46002470	• Kết quả chỉ được áp dụng sau khi bạn xác nhận, nên dừng giữa chừng cũng không thay đổi cài đặt.
-36a2fc44	Tự tinh chỉnh
 417196a4	Hiện tại {0:F0}°C / quạt {1:F0}%
 5d9f4450	Hiện tại {0:F0}°C
-fe560e0e	Đã đo xong. Hãy xem đường cong và chọn cấu hình để áp dụng.
-507f470e	Tự tinh chỉnh: đo được quá ít bước nên không tạo được đường cong.
-afab154e	Đã đo xong phần tự tinh chỉnh. Hãy xem đường cong kết quả rồi áp dụng.
 8bbd848f	Xem kết quả
 59c5b033	{0} · khi nghỉ {1:F1}°C · khi tải tối đa:
 5ab01921	Không giữ được {0:F0}°C kể cả khi chạy tối đa (hãy cân nhắc tăng cường làm mát)
 d1e24e74	Tốc độ cần để giữ {0:F0}°C: khoảng {1:F0}%
 9e669da9	* Kết thúc giữa chừng nên chỉ tạo từ các bước đã đo ({0})
 d63ad09b	Không tìm thấy cấu hình "{0}". Hãy chọn lại.
-26bd87a8	Đã áp dụng đường cong tạo tự động cho {1} quạt của "{0}" (có thể khôi phục bằng "Hoàn tác").
 b6e37608	Xem đường cong
 85bbd542	Đã áp dụng cho mọi cấu hình (mục tiêu: {0}). Có thể khôi phục bằng "Hoàn tác".
 cd7e4f98	CPU (tự tinh chỉnh)
@@ -1174,7 +1137,6 @@ e158d65b	• Ngay sau khi thêm, "Điều khiển bằng ứng dụng này" đan
 5c0edbde	Đường cong {0}
 68339e34	Cần ít nhất một đường cong. Để chạy tốc độ không đổi, hãy chuyển sang "Tốc độ cố định".
 0de821a1	Một quạt khác đang được hiệu chỉnh. Hãy bắt đầu sau khi xong.
-d4ae40d7	Đang chạy tự tinh chỉnh hoặc kiểm tra làm mát. Hãy bắt đầu sau khi xong.
 2e3bb637	Quạt này không có trong cấu hình đang chạy.
 3009598f	Bắt đầu hiệu chỉnh "{0}".\n\n
 8d17b7e8	• Trong khoảng 1–2 phút, quạt sẽ lúc chạy tối đa lúc dừng.\n
@@ -1439,7 +1401,6 @@ be68c30e	{0} đang phân tích… (lần đầu sẽ mất thời gian tải mô
 dea2940c	Đã dừng
 54fa54cb	Mô hình "{0}" không có trong Ollama. Hãy chọn lại bằng "Làm mới danh sách" hoặc chạy "ollama pull {1}" trong PowerShell
 d7dc8672	Lỗi: {0}
-3decf270	Đang chạy tự tinh chỉnh. Hãy bắt đầu sau khi xong.
 2ccbef69	Sẽ kiểm tra làm mát trong khoảng {0} phút.\n\n
 502399da	• Trong lúc kiểm tra CPU chạy hết công suất nên tiếng quạt sẽ lớn.\n
 c0d1c3f1	• Khi nhiệt độ CPU đạt {0:F0}°C, tải sẽ tự dừng.\n
@@ -1469,7 +1430,6 @@ d3ec144f	Ảo ({0})
 f45a5a37	Danh sách phần cứng đã phát hiện. Có thể thay hình bằng ảnh tự chụp… qua nút hình ảnh
 31e94c42	Đặt mối quan hệ giữa nhiệt độ và tốc độ cho từng quạt. Thay đổi được áp dụng và lưu ngay
 b5ccd0c3	Tự chẩn đoán từ bản ghi và kiểm tra bụi, độ xuống cấp của quạt (lời khuyên AI là tùy chọn)
-2efbce3f	Tạo tải để tự tạo đường cong hoặc đo xem cài đặt hiện tại làm mát được đến đâu
 73339fb8	Nhiệt độ và tốc độ tối đa 24 giờ (trừ lúc ứng dụng đóng; trước khi khởi động lại là trung bình mỗi phút)
 389ce2cc	Ước tính tiền điện · bản ghi sự cố
 4bd55735	Cho LED của PC sáng theo nhiệt độ, cầu vồng, âm nhạc… qua liên kết OpenRGB
@@ -1591,7 +1551,6 @@ d2937a7a	Phần mềm âm thanh: {0} (ánh sáng theo âm thanh trước khi áp
 db4d82a2	Máy tính Từ xa
 d6776d41	Có thể đổi ngôn ngữ hiển thị, chủ đề, màu nhấn, màu nền, màu chữ, phông chữ và cỡ chữ. Thay đổi được áp dụng ngay
 e0480009	Ngôn ngữ của chữ trên màn hình. "Tự động" thì theo ngôn ngữ hiển thị của Windows (tiếng Anh nếu không hỗ trợ). Chọn là đổi ngay
-e45b0531	Đang tự tinh chỉnh.
 e955d878	Đang kiểm tra làm mát.
 afb9660d	Đang hiệu chỉnh.
 c8e0f349	Đang nghe thử tiếng quạt.
@@ -1736,3 +1695,67 @@ f16a0b90	Ánh sáng đỏ, cam và vàng lập lòe như ngọn lửa trên từ
 acfe2730	① Tạo tệp zip báo lỗi
 b15ec58c	Đã tạo {0} (thư mục sẽ mở trong Explorer). Kéo tệp này vào trang báo lỗi để đính kèm.
 d92849da	Báo lỗi…
+050c3438	"Thiết lập tự động" hoặc "Đo quạt" ở trang Đường cong quạt sẽ đo tốc độ dừng và tốc độ tối đa (mỗi quạt khoảng 1–2 phút).
+08978566	đo bằng GPU ({0} quạt)
+08fb3614	Thiết lập tự động…
+0929dde7	theo {0}
+095205e6	Bắt đầu thiết lập tự động
+0acedb82	Đưa các đường cong CPU và GPU đã đo vào hồ sơ đã chọn
+10eada78	Đã dừng vì tải GPU đã ngừng
+1941f6aa	đo bằng CPU ({0} quạt)
+2646b9f3	• Đo bằng GPU: ứng dụng tạo tải tối đa cho GPU và đo cùng cách (không cần mở trò chơi).
+266ab9c4	Không tìm thấy GPU để tạo tải
+31af6243	Giữ CPU dưới nhiệt độ này khi tải tối đa
+33d3e475	Đo đặc tính quạt
+3f5571aa	"{0}": dừng khi dưới {1:F0}%, nên tốc độ tối thiểu nay là {2:F0}%
+42a72e3a	Thiết lập tự động
+4610da9f	GPU: không thể đo vì không có cảm biến nhiệt độ hoặc mức sử dụng
+462bc50c	• Bạn xem kết quả trước khi áp dụng, nên dừng giữa chừng không thay đổi gì.
+47647013	Các bước: {0} · khoảng {1} phút. Bơm không được tính.
+48090db5	Trong khi đo
+4ac2f56e	Bắt đầu thiết lập tự động (khoảng {0} phút).\n\n
+50136e19	Chọn các quạt cần đo và CPU và/hoặc GPU. Bơm không được tính (vẫn chạy như thường).
+53661bf6	đo {0} quạt
+5899b660	• Đo bằng CPU: tạo tải tối đa cho CPU và giảm quạt dần từ 100%.
+5a241b3a	Đang chạy thiết lập tự động. Hãy bắt đầu sau khi xong.
+6d8d04fc	Đặc tính quạt (hiệu chỉnh)
+6da30665	Đang đo "{0}": {1}
+72f6035d	Đang chạy thiết lập tự động hoặc kiểm tra làm mát. Hãy bắt đầu sau khi xong.
+743c2e54	Đã dừng: đã tạo tải cho GPU nhưng mức sử dụng không tăng
+766747f4	Một nút làm tất cả: ① đo từng quạt, ② tạo tải cho CPU và GPU rồi đo nhiệt độ trong khi giảm quạt dần từ 100%, ③ tạo "đường cong êm nhất vẫn giữ được nhiệt độ mục tiêu". Bạn xem kết quả trước khi áp dụng (nếu dừng giữa chừng, điều khiển thường sẽ trở lại và không có gì thay đổi).
+7a0a5001	Không thể đo GPU vì không tìm thấy cảm biến nhiệt độ hoặc mức sử dụng GPU
+7b75bea7	Đã thêm {1} đường cong tạo tự động vào "{0}" (Hoàn tác để trả lại).
+814a5f43	"{0}": đã đo (dừng khi dưới {1:F0}%, tối đa {2:N0} rpm)
+8226a1e3	Đang thiết lập tự động.
+847327ae	Không thể đo "{0}": {1}
+8d17780e	Mục tiêu CPU
+8f35db7c	• Quạt sẽ lúc to lúc nhỏ. Hãy đóng các ứng dụng nặng.
+901a429f	Đo chưa đủ để tạo đường cong.
+94396456	{0}: kết thúc sớm, nên đường cong chỉ dùng các bước đã đo ({1})
+94d6baac	Không thể tạo tải: {0}
+9decdc86	Đã dừng: không có tải GPU trong 3 phút (hãy mở trò chơi hoặc benchmark)
+9f77375a	Mục tiêu GPU
+a390636e	Điều chỉnh tốc độ ngay lập tức để không vượt quá nhiệt độ đã đặt
+a9addd42	Giữ GPU dưới nhiệt độ này khi tải tối đa (ứng dụng tự tạo tải; không cần mở trò chơi)
+aae4c566	Đang đo "{0}"…
+ab824de0	Đưa các đường cong CPU và GPU đã đo vào mọi hồ sơ. Hồ sơ có vai trò "Yên tĩnh" dùng mục tiêu +5°C, "Làm mát tối đa" −5°C, còn lại dùng đúng mục tiêu
+addb0201	Chạy quạt từ 0 đến 100% và đo điểm dừng, điểm bắt đầu quay và tốc độ tối đa (khoảng 1–2 phút). "Thiết lập tự động" đo một lượt mọi quạt chưa được đo
+af0435c9	Tạo tải cho CPU và GPU, đo và tạo đường cong êm nhất vẫn giữ được nhiệt độ mục tiêu (mở trang Thiết lập tự động)
+b499b2f2	Đã đo xong. Hãy xem các đường cong và chọn hồ sơ để áp dụng.
+b7615185	Đang tạo tải cho GPU (chờ mức sử dụng tăng)…
+b940650e	• Nếu CPU đạt {0:F0}°C hoặc GPU đạt {1:F0}°C, sẽ dừng ngay và trở về điều khiển thường.
+c07922c2	chưa đo
+c4256752	• Đo quạt ({0}): lần lượt từng quạt chạy hết tốc độ rồi dừng.
+ccb1e668	Thiết lập tự động đã đo xong. Hãy xem các đường cong kết quả và áp dụng.
+d0b44b86	Thiết lập tự động: đo chưa đủ để tạo đường cong.
+d36eeaf3	Vai trò của hồ sơ này. Dù đổi tên, thiết lập tự động (Yên tĩnh mục tiêu +5°C, Làm mát tối đa −5°C), đường cong cho quạt mới và "Yên tĩnh" nhanh vẫn hoạt động đúng theo vai trò này
+d6fd5420	Đã dừng. Hãy xem đường cong tạo từ phần đã đo và chọn có áp dụng hay không.
+e0e8a2f4	Đo quạt
+ee9c1f57	Đo từng quạt và nhiệt độ khi CPU và GPU chịu tải, rồi tự động tạo đường cong. Bạn cũng có thể kiểm tra thiết lập hiện tại làm mát tốt đến đâu
+f42e11b9	Đã dừng. Điều khiển thường đã trở lại.
+f965efc0	Kiểm tra làm mát (kiểm tra thiết lập hiện tại)
+fd03884c	CPU: không thể đo vì không có cảm biến nhiệt độ
+fdc48725	Chọn ít nhất một quạt cần đo và CPU và/hoặc GPU.
+fe39437d	Mẹo: sau đó, hãy đo ở trang "Thiết lập tự động" để tạo đường cong êm nhất phù hợp với PC này (khoảng 20–30 phút).
+140786db	Mỗi quạt khoảng 1–2 phút. Khi biết tốc độ dừng, tốc độ tối thiểu cũng được đặt về giá trị an toàn
+14e2760b	Đo trước các quạt chưa được đo

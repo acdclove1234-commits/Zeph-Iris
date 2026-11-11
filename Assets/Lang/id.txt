@@ -9,7 +9,6 @@ f70fd09f	Dasbor
 a010a7fc	Riwayat
 133b6776	Laporan
 b4bcc740	Diagnostik
-977807d2	Uji & setel
 60dd6c40	Pencahayaan
 dfa4a412	Sensor
 6243fa06	Pengaturan
@@ -64,8 +63,6 @@ ba60770e	Nama (sama untuk semua profil)
 59c6e4bc	Cara kendali
 a80265dc	Kurva
 051753eb	Tentukan sendiri putaran untuk tiap suhu
-530a9c8a	Suhu target (otomatis)
-1fc9ab3c	Cukup tentukan suhu, putaran menyesuaikan sendiri
 27bd9d15	Tetap
 84b1afad	Selalu putaran yang sama (untuk pompa)
 26a15192	Ikuti (grup)
@@ -91,9 +88,7 @@ fa9ef1de	Laju turun / dtk
 a5668673	Tidak pernah di bawah 40% dengan pengaturan apa pun. Jika putaran di bawah nilai peringatan selama 3 detik, naik ke 100% dan memberi tahu Anda, meskipun dikendalikan BIOS.
 7c811ff7	Putaran peringatan
 cb5145a7	Pakai sebagai putaran minimum
-812e0683	Kalibrasi otomatis
 ec41d4ae	Hentikan
-9514979f	Menjalankan kipas dari 0 hingga 100% dan mengukur putaran saat berhenti, saat mulai berputar, dan maksimum (sekitar 1–2 menit)
 26101bee	+ Tambah rentang
 f5097e76	Resonansi (lewati putaran yang bising)
 11bb3e7a	Tambahkan rentang putaran tempat casing atau radiator berdengung; kipas akan melewatinya dengan cepat alih-alih bertahan di sana (sama untuk semua profil)
@@ -103,8 +98,6 @@ ea6d9cfc	Lewati di sini
 ed263790	Rentang yang dilewati
 49024f94	% hingga
 8b7237a1	Belum ada. Jika tidak ada putaran yang mengganggu, biarkan saja begini.
-166baf5a	Buat otomatis…
-3eb67669	Memberi beban pada PC, mengukur, dan membuat kurva tersenyap yang masih menjaga suhu target (halaman Uji & setel)
 cd6687b0	Salin ▾
 a8a30430	+ Tambah kurva
 29506d39	Hapus kurva ini
@@ -147,20 +140,10 @@ f0f25c1b	Tekan setelah membersihkan filter atau kipas. Rekaman mulai sekarang me
 9c1df669	Periksa sekarang
 267e9ec4	Pemeriksaan keausan dan debu kipas
 2c6b3065	Menyimpan rekaman setiap menit dan membandingkannya dengan masa lalu: "apakah putaran turun untuk perintah yang sama (bantalan aus, debu)?" dan "apakah suhu naik untuk daya yang sama (filter atau radiator tersumbat)?".
-060669c9	Mulai penyetelan otomatis
-96cc9d01	Penyetelan otomatis (buat kurva otomatis)
 46ac54ca	Disarankan
-121a7d95	Di bawah beban nyata, menurunkan putaran kipas sedikit demi sedikit dari 100% dan mengukur di mana suhu stabil. Dari situ dibuat kurva tersenyap yang masih menjaga suhu target (sekitar 8–15 menit; jika dihentikan di tengah, kendali normal berlanjut).
-e9947588	Yang didinginkan
-d881d18f	CPU (beban bawaan, otomatis)
-e57cca88	GPU (beban dengan gim atau benchmark)
-c074a956	Saat beban penuh, menjaga agar suhu tidak melebihi nilai ini
-0c43c305	Kipas yang disetel
-183c9165	Mengukur dengan kipas yang dipilih pada putaran yang sama. Pompa tidak termasuk (berjalan seperti biasa).
 3e4a2fef	Hasil pengukuran
 67633e51	Kurva yang dihasilkan (mengubah suhu target di atas akan membuatnya ulang tanpa mengukur lagi)
 0e95ff55	Terapkan ke profil ini
-6f4b51e9	Profil yang namanya mengandung "Senyap" memakai target +5°C, "Performa" target −5°C, yang lain target apa adanya
 a6de9295	Terapkan ke semua profil
 35ae4fe6	10 mnt
 c7ad32f7	15 mnt
@@ -168,7 +151,6 @@ c7ad32f7	15 mnt
 cc4ae169	Uji pendinginan
 16e5632b	Mengukur otomatis: diam 30 detik → beban di semua inti CPU → hentikan beban dan dinginkan. Menunjukkan seberapa baik pengaturan kipas saat ini mendinginkan. GPU tidak termasuk; untuk menguji GPU juga, jalankan gim atau benchmark selama pengujian.
 eb918d75	Jika sudah siap, tekan "Mulai uji". Tutup aplikasi berat agar hasilnya akurat.
-9e3aee28	Perkembangan selama uji dan penyetelan
 339697a1	Simpan laporan
 8a49bfd9	Minta AI menganalisis
 1ba434e9	Hasil
@@ -411,7 +393,6 @@ b373eaee	Interval pembaruan
 1ac4b576	Tentang aplikasi ini
 81d90dca	+ Profil baru
 4cdf9ede	Simpan sekumpulan kurva kipas dengan nama dan beralih di antaranya
-774923ad	Peran profil ini. Meski namanya diganti, penyetelan otomatis (Senyap target +5°C, Pendinginan maksimum −5°C), kurva kipas baru, dan aksi cepat "Senyap" tetap bekerja benar lewat peran ini
 82ac5e85	Rencana daya Windows untuk profil ini
 d663551d	Pakai sehari-hari
 80173301	Duplikat
@@ -542,7 +523,6 @@ c1db4c06	Jika nonaktif, diserahkan ke BIOS; aplikasi hanya memantau putaran dan 
 b58afa04	Siap
 861676ec	Mulai kendali sekarang
 01bcdd36	Jika nonaktif, mulai dalam DRY RUN (hanya menghitung, tidak menulis ke kipas)
-709f1f3b	Tips: setelah selesai, ukur putaran minimum tiap kipas dengan "Kalibrasi otomatis" di halaman Kurva kipas agar bisa disetel lebih senyap.
 aceb0a14	Batal
 f193a383	Kembali
 303830fc	Berikutnya
@@ -728,7 +708,6 @@ f8650f35	Menghentikan beban dan kembali ke kendali biasa…
 9af40572	Dihentikan karena kecepatan penuh darurat
 ef174ee8	Dihentikan karena suhu mencapai {0:F0}°C
 13912a14	Dihentikan karena beban GPU hilang (biarkan gim atau benchmark terus berjalan)
-f3ec99ac	Dihentikan karena tidak ada beban
 5d76038f	Mengukur putaran maksimum…
 966245da	Mengukur sambil menurunkan putaran… ({0:F0}%)
 8db302e0	Mencari putaran mulai berputar… ({0:F0}%)
@@ -810,7 +789,6 @@ ea0f0b04	Selama {0:P0} rekaman, putaran berada di 95% atau lebih. Kemungkinan ma
 8b53f64d	Geser kurva 5°C ke kanan
 fe86db70	Kurva "{0}" sudah digeser 5°C ke kanan.
 9cf10287	{0}: kalibrasi membuat penyetelan lebih akurat
-65f73a32	"Kalibrasi otomatis" di layar Kurva kipas mengukur putaran berhenti dan putaran maksimum (sekitar 1–2 menit).
 afae536a	{0}: putaran minimum ada di zona berhenti
 f8161c81	Kipas ini berhenti di bawah {0:F0}%, tetapi putaran minimumnya {1:F0}%. Berhenti dan berputar berulang kali menimbulkan bunyi klik dan memperpendek umur kipas.
 3272f28b	Jadikan putaran minimum {0:F0}%
@@ -1128,31 +1106,16 @@ eb7cfe73	Pencopotan selesai. Memeriksa…
 3487b9bc	Memeriksa file yang diunduh…
 dbd5b1f0	Mengunduh…
 9e8ebaf4	Sedang berjalan… {0}%
-305b4308	(mengikuti {0})
 0f6e5123	Uji pendinginan atau kalibrasi sedang berjalan. Mulai setelah selesai.
-5b079133	Pilih minimal satu kipas yang akan disetel.
-395141d9	Sensor suhu GPU tidak ditemukan.
 4b25b2cd	Sensor suhu CPU tidak ditemukan.
-7a122984	Sensor penggunaan GPU tidak ditemukan, jadi GPU tidak bisa disetel.
-c7751269	• Setelah dimulai, jalankan gim atau benchmark (3DMark, FF Benchmark, dll.) dan terus beri beban pada GPU.\n
-c886e5d0	• CPU akan diberi beban penuh (tutup aplikasi berat lainnya).\n
-dbca6724	Memulai penyetelan otomatis (sekitar {0} mnt).\n\n
-a1ca3c2f	• {0} kipas yang dipilih diturunkan sedikit demi sedikit dari 100%. Suaranya akan naik-turun.\n
-ac505b53	• Jika suhu {0} mencapai {1:F0}°C, penyetelan langsung dihentikan dan kendali biasa dipulihkan.\n
-46002470	• Hasil baru diterapkan setelah Anda memeriksanya, jadi menghentikan di tengah tidak mengubah pengaturan.
-36a2fc44	Penyetelan otomatis
 417196a4	Saat ini {0:F0}°C / kipas {1:F0}%
 5d9f4450	Saat ini {0:F0}°C
-fe560e0e	Pengukuran selesai. Periksa kurvanya dan pilih profil tujuan penerapan.
-507f470e	Penyetelan otomatis: langkah yang terukur terlalu sedikit, jadi kurva tidak bisa dibuat.
-afab154e	Pengukuran penyetelan otomatis selesai. Periksa kurva hasilnya lalu terapkan.
 8bbd848f	Lihat hasil
 59c5b033	{0} · saat diam {1:F1}°C · saat beban penuh:
 5ab01921	{0:F0}°C tidak bisa dipertahankan bahkan dengan kecepatan penuh (pertimbangkan meningkatkan pendinginan)
 d1e24e74	Putaran yang diperlukan untuk mempertahankan {0:F0}°C: sekitar {1:F0}%
 9e669da9	* Berakhir di tengah jalan, jadi dibuat hanya dari langkah yang terukur ({0})
 d63ad09b	Profil "{0}" tidak ditemukan. Pilih lagi.
-26bd87a8	Kurva yang dibuat otomatis diterapkan ke {1} kipas di "{0}" (bisa dikembalikan dengan "Urungkan").
 b6e37608	Lihat kurva
 85bbd542	Diterapkan ke semua profil (target: {0}). Bisa dikembalikan dengan "Urungkan".
 cd7e4f98	CPU (penyetelan otomatis)
@@ -1174,7 +1137,6 @@ e158d65b	• Tepat setelah ditambahkan, "Kendalikan dengan aplikasi ini" dalam k
 5c0edbde	Kurva {0}
 68339e34	Minimal perlu satu kurva. Untuk putaran tetap, beralihlah ke "Putaran tetap".
 0de821a1	Kipas lain sedang dikalibrasi. Mulai setelah selesai.
-d4ae40d7	Penyetelan otomatis atau uji pendinginan sedang berjalan. Mulai setelah selesai.
 2e3bb637	Kipas ini tidak ada di profil yang sedang aktif.
 3009598f	Memulai kalibrasi "{0}".\n\n
 8d17b7e8	• Selama sekitar 1–2 menit, kipas akan bergantian berputar penuh dan berhenti.\n
@@ -1439,7 +1401,6 @@ be68c30e	{0} sedang menganalisis… (pertama kali, memuat model butuh waktu)
 dea2940c	Dihentikan
 54fa54cb	Model "{0}" tidak ada di Ollama. Pilih ulang lewat "Perbarui daftar" atau jalankan "ollama pull {1}" di PowerShell
 d7dc8672	Galat: {0}
-3decf270	Penyetelan otomatis sedang berjalan. Mulai setelah selesai.
 2ccbef69	Uji pendinginan akan dilakukan sekitar {0} menit.\n\n
 502399da	• Selama uji, CPU bekerja penuh sehingga suara kipas menjadi keras.\n
 c0d1c3f1	• Jika suhu CPU mencapai {0:F0}°C, beban otomatis dihentikan.\n
@@ -1469,7 +1430,6 @@ d3ec144f	Virtual ({0})
 f45a5a37	Daftar perangkat keras yang terdeteksi. Lewat tombol gambar, Anda bisa menggantinya dengan foto sendiri, misalnya
 31e94c42	Atur hubungan suhu dan putaran untuk setiap kipas. Perubahan langsung diterapkan dan disimpan
 b5ccd0c3	Diagnosis otomatis dari rekaman serta pemeriksaan debu dan keausan kipas (saran AI opsional)
-2efbce3f	Memberi beban untuk membuat kurva otomatis atau mengukur seberapa baik pengaturan saat ini mendinginkan
 73339fb8	Suhu dan putaran hingga 24 jam (tidak termasuk saat aplikasi ditutup; sebelum mulai ulang berupa rata-rata per menit)
 389ce2cc	Perkiraan biaya listrik dan rekaman gangguan
 4bd55735	Menyalakan LED PC sesuai suhu, pelangi, musik, dan lainnya lewat OpenRGB
@@ -1591,7 +1551,6 @@ d2937a7a	Perangkat lunak audio: {0} (cahaya mengikuti suara sebelum efek diterap
 db4d82a2	Desktop Jarak Jauh
 d6776d41	Ubah bahasa tampilan, tema, warna aksen, warna latar, warna teks, font, dan ukuran teks. Perubahan langsung berlaku
 e0480009	Bahasa teks di layar. "Otomatis" mengikuti bahasa tampilan Windows (Inggris jika tidak didukung). Langsung berganti begitu dipilih
-e45b0531	Penyetelan otomatis sedang berjalan.
 e955d878	Uji pendinginan sedang berjalan.
 afb9660d	Kalibrasi sedang berjalan.
 c8e0f349	Pemeriksaan suara kipas sedang berjalan.
@@ -1736,3 +1695,67 @@ f16a0b90	Cahaya merah, oranye, dan kuning berkedip seperti nyala api di setiap L
 acfe2730	① Buat zip laporan
 b15ec58c	{0} sudah dibuat (foldernya terbuka di Explorer). Seret file ini ke halaman laporan untuk melampirkannya.
 d92849da	Laporkan masalah…
+050c3438	"Penyiapan otomatis", atau "Ukur kipas" di halaman Kurva kipas, mengukur kecepatan berhenti dan kecepatan maksimum (sekitar 1–2 menit per kipas).
+08978566	ukur dengan GPU ({0} kipas)
+08fb3614	Penyiapan otomatis…
+0929dde7	mengikuti {0}
+095205e6	Mulai penyiapan otomatis
+0acedb82	Memasukkan kurva CPU dan GPU yang diukur ke profil yang dipilih
+10eada78	Dihentikan karena beban GPU berhenti
+1941f6aa	ukur dengan CPU ({0} kipas)
+2646b9f3	• Ukur dengan GPU: aplikasi membebani GPU penuh dan mengukur dengan cara yang sama (tidak perlu membuka game).
+266ab9c4	Tidak ditemukan GPU yang dapat dibebani
+31af6243	Menjaga CPU di bawah suhu ini saat beban penuh
+33d3e475	Ukur karakteristik kipas
+3f5571aa	"{0}": berhenti di bawah {1:F0}%, jadi kecepatan minimumnya sekarang {2:F0}%
+42a72e3a	Penyiapan otomatis
+4610da9f	GPU: tidak dapat diukur karena sensor suhu atau penggunaan tidak ditemukan
+462bc50c	• Anda memeriksa hasilnya sebelum menerapkan, jadi berhenti di tengah tidak mengubah apa pun.
+47647013	Langkah: {0} · sekitar {1} menit. Pompa tidak termasuk.
+48090db5	Selama pengukuran
+4ac2f56e	Memulai penyiapan otomatis (sekitar {0} menit).\n\n
+50136e19	Pilih kipas yang akan diukur serta CPU dan/atau GPU. Pompa tidak termasuk (tetap berjalan seperti biasa).
+53661bf6	ukur {0} kipas
+5899b660	• Ukur dengan CPU: membebani CPU penuh dan menurunkan kipas bertahap dari 100%.
+5a241b3a	Penyiapan otomatis sedang berjalan. Mulai setelah selesai.
+6d8d04fc	Karakteristik kipas (kalibrasi)
+6da30665	Mengukur "{0}": {1}
+72f6035d	Penyiapan otomatis atau uji pendinginan sedang berjalan. Mulai setelah selesai.
+743c2e54	Dihentikan: GPU sudah dibebani tetapi penggunaannya tidak naik
+766747f4	Satu tombol untuk semuanya: ① mengukur setiap kipas, ② membebani CPU dan GPU dan mengukur suhu sambil menurunkan kipas bertahap dari 100%, ③ membuat "kurva paling senyap yang tetap menjaga suhu target". Anda memeriksa hasilnya sebelum menerapkannya (jika dihentikan di tengah, kontrol normal kembali dan tidak ada yang berubah).
+7a0a5001	GPU tidak dapat diukur karena sensor suhu atau penggunaan GPU tidak ditemukan
+7b75bea7	{1} kurva buatan otomatis ditambahkan ke "{0}" (Urungkan untuk mengembalikan).
+814a5f43	"{0}": sudah diukur (berhenti di bawah {1:F0}%, maks {2:N0} rpm)
+8226a1e3	Penyiapan otomatis sedang berjalan.
+847327ae	Tidak dapat mengukur "{0}": {1}
+8d17780e	Target CPU
+8f35db7c	• Suara kipas akan naik turun. Tutup aplikasi yang berat.
+901a429f	Pengukuran tidak cukup untuk membuat kurva.
+94396456	{0}: selesai lebih awal, jadi kurva hanya memakai tahap yang terukur ({1})
+94d6baac	Tidak dapat membuat beban: {0}
+9decdc86	Dihentikan: tidak ada beban GPU dalam 3 menit (jalankan game atau benchmark)
+9f77375a	Target GPU
+a390636e	Menyesuaikan kecepatan secara langsung agar tidak melewati suhu yang ditentukan
+a9addd42	Menjaga GPU di bawah suhu ini saat beban penuh (aplikasi yang membuat bebannya; tidak perlu membuka game)
+aae4c566	Mengukur "{0}"…
+ab824de0	Memasukkan kurva CPU dan GPU yang diukur ke semua profil. Profil berperan "Senyap" memakai target +5°C, "Pendinginan maksimum" −5°C, dan lainnya sesuai target
+addb0201	Menjalankan kipas dari 0 sampai 100% dan mengukur kapan berhenti, kapan mulai berputar, dan kecepatan maksimumnya (sekitar 1–2 menit). "Penyiapan otomatis" mengukur sekaligus semua kipas yang belum diukur
+af0435c9	Membebani CPU dan GPU, mengukur, lalu membuat kurva paling senyap yang tetap menjaga suhu target (membuka halaman Penyiapan otomatis)
+b499b2f2	Pengukuran selesai. Periksa kurvanya dan pilih profil yang akan diterapkan.
+b7615185	Membebani GPU (menunggu penggunaannya naik)…
+b940650e	• Jika CPU mencapai {0:F0}°C atau GPU {1:F0}°C, proses langsung berhenti dan kembali ke kontrol normal.
+c07922c2	belum diukur
+c4256752	• Ukur kipas ({0}): satu per satu, setiap kipas berputar penuh lalu berhenti.
+ccb1e668	Penyiapan otomatis selesai mengukur. Periksa kurva hasilnya lalu terapkan.
+d0b44b86	Penyiapan otomatis: pengukuran tidak cukup untuk membuat kurva.
+d36eeaf3	Peran profil ini. Meski namanya diganti, penyiapan otomatis (Senyap target +5°C, Pendinginan maksimum −5°C), kurva untuk kipas baru, dan "Senyap" cepat tetap bekerja dengan benar sesuai peran ini
+d6fd5420	Dihentikan. Periksa kurva yang dibuat dari hasil pengukuran dan pilih apakah akan menerapkannya.
+e0e8a2f4	Ukur kipas
+ee9c1f57	Mengukur setiap kipas dan suhu saat CPU dan GPU dibebani, lalu membuat kurva secara otomatis. Anda juga dapat memeriksa seberapa baik pengaturan saat ini mendinginkan
+f42e11b9	Dihentikan. Kontrol normal sudah kembali.
+f965efc0	Uji pendinginan (periksa pengaturan saat ini)
+fd03884c	CPU: tidak dapat diukur karena sensor suhu tidak ditemukan
+fdc48725	Pilih minimal satu kipas untuk diukur, serta CPU dan/atau GPU.
+fe39437d	Tips: setelah selesai, ukur di halaman "Penyiapan otomatis" untuk membuat kurva paling senyap yang cocok untuk PC ini (sekitar 20–30 menit).
+140786db	Sekitar 1–2 menit per kipas. Setelah kecepatan berhentinya diketahui, kecepatan minimum juga diatur ke nilai aman
+14e2760b	Ukur dulu kipas yang belum diukur

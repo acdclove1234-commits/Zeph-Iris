@@ -9,7 +9,6 @@ f70fd09f	Pano
 a010a7fc	Geçmiş
 133b6776	Rapor
 b4bcc740	Tanılama
-977807d2	Test ve ayar
 60dd6c40	Aydınlatma
 dfa4a412	Sensörler
 6243fa06	Ayarlar
@@ -64,8 +63,6 @@ ba60770e	Ad (tüm profillerde ortak)
 59c6e4bc	Kontrol yöntemi
 a80265dc	Eğri
 051753eb	Her sıcaklık için devri kendiniz belirleyin
-530a9c8a	Hedef sıcaklık (otomatik)
-1fc9ab3c	Sadece sıcaklığı seçin, devir kendini ayarlar
 27bd9d15	Sabit
 84b1afad	Her zaman aynı devir (pompalar için)
 26a15192	Takip (grup)
@@ -91,9 +88,7 @@ fa9ef1de	Azalış hızı / sn
 a5668673	Hiçbir ayarda %40'ın altına inmez. Devir 3 saniye boyunca uyarı değerinin altında kalırsa, BIOS kontrolünde bile %100'e çıkar ve sizi bilgilendirir.
 7c811ff7	Uyarı devri
 cb5145a7	En düşük devir olarak kullan
-812e0683	Otomatik kalibrasyon
 ec41d4ae	Durdur
-9514979f	Fanı %0'dan %100'e çalıştırır ve durduğu, dönmeye başladığı ve en yüksek devri ölçer (yaklaşık 1–2 dakika)
 26101bee	+ Aralık ekle
 f5097e76	Rezonans (gürültülü devirleri atla)
 11bb3e7a	Kasanın veya radyatörün uğuldadığı devir aralıklarını ekleyin; fan bu aralıklarda kalmadan hızla geçer (tüm profillerde ortak)
@@ -103,8 +98,6 @@ ea6d9cfc	Burayı atla
 ed263790	Atlanacak aralık
 49024f94	% ile
 8b7237a1	Henüz yok. Rahatsız eden bir devir yoksa böyle bırakabilirsiniz.
-166baf5a	Otomatik oluştur…
-3eb67669	Bilgisayara yük bindirir, ölçer ve hedef sıcaklığı hâlâ koruyan en sessiz eğriyi oluşturur (Test ve ayar sayfası)
 cd6687b0	Kopyala ▾
 a8a30430	+ Eğri ekle
 29506d39	Bu eğriyi sil
@@ -147,20 +140,10 @@ f0f25c1b	Filtreleri veya fanları temizledikten sonra basın. Bundan sonraki kay
 9c1df669	Şimdi kontrol et
 267e9ec4	Fan aşınması ve toz kontrolü
 2c6b3065	Her dakika bir kayıt saklar ve geçmişle karşılaştırır: "aynı komutta devir düştü mü (rulman aşınması, toz)?" ve "aynı güçte sıcaklık arttı mı (tıkanmış filtre veya radyatör)?".
-060669c9	Otomatik ayarı başlat
-96cc9d01	Otomatik ayar (eğrileri otomatik oluştur)
 46ac54ca	Önerilen
-121a7d95	Gerçek yük altında fan devrini %100'den adım adım düşürür ve sıcaklığın nerede dengelendiğini ölçer. Buna göre hedef sıcaklığı hâlâ koruyan en sessiz eğriyi oluşturur (yaklaşık 8–15 dakika; yarıda durdurursanız normal kontrol devam eder).
-e9947588	Soğutulacak
-d881d18f	CPU (yerleşik yük, otomatik)
-e57cca88	GPU (oyun veya benchmark ile yük)
-c074a956	Tam yükte sıcaklığın bunu aşmasını önler
-0c43c305	Ayarlanacak fanlar
-183c9165	Seçilen fanları aynı devirde tutarak ölçer. Pompalar hariçtir (her zamanki gibi çalışırlar).
 3e4a2fef	Ölçümler
 67633e51	Oluşacak eğri (yukarıdaki hedef sıcaklığı değiştirmek, yeniden ölçmeden eğriyi yeniler)
 0e95ff55	Bu profile uygula
-6f4b51e9	Adında "Sessiz" olan profiller hedef +5°C, "Performans" hedef −5°C, diğerleri hedefin kendisiyle oluşturulur
 a6de9295	Tüm profillere uygula
 35ae4fe6	10 dk
 c7ad32f7	15 dk
@@ -168,7 +151,6 @@ c7ad32f7	15 dk
 cc4ae169	Soğutma testi
 16e5632b	Otomatik olarak ölçer: 30 saniye bekleme → tüm CPU çekirdeklerine yük → yükü durdurup soğutma. Mevcut fan ayarlarınızın ne kadar iyi soğuttuğunu gösterir. GPU dahil değildir; onu da test etmek için test sırasında bir oyun veya benchmark çalıştırın.
 eb918d75	Hazır olduğunuzda "Testi başlat"a basın. Doğru ölçüm için ağır uygulamaları kapatın.
-9e3aee28	Test ve ayar sırasındaki değişim
 339697a1	Raporu kaydet
 8a49bfd9	Yapay zekâya analiz ettir
 1ba434e9	Sonuç
@@ -411,7 +393,6 @@ b373eaee	Güncelleme aralığı
 1ac4b576	Bu uygulama hakkında
 81d90dca	+ Yeni profil
 4cdf9ede	Bir fan eğrisi takımını adla kaydedip aralarında geçiş yapın
-774923ad	Bu profilin rolü. Adını değiştirseniz de otomatik ayar (Sessiz hedef +5°C, Maksimum soğutma −5°C), yeni fanların eğrileri ve hızlı "Sessiz" işlemi bu role göre doğru çalışır
 82ac5e85	Bu profille kullanılacak Windows güç planı
 d663551d	Varsayılan olarak kullan
 80173301	Çoğalt
@@ -542,7 +523,6 @@ c1db4c06	Kapalıyken BIOS yönetir; uygulama yalnızca devri izler ve arızaya k
 b58afa04	Hazır
 861676ec	Kontrole hemen başla
 01bcdd36	Kapalıyken DRY RUN ile başlar (yalnızca hesaplar, fanlara hiçbir şey yazmaz)
-709f1f3b	İpucu: sonra Fan eğrileri sayfasındaki "Otomatik kalibrasyon" ile her fanın en düşük devrini ölçün; daha da sessiz bir ayar elde edersiniz.
 aceb0a14	İptal
 f193a383	Geri
 303830fc	İleri
@@ -728,7 +708,6 @@ f8650f35	Yük durduruluyor ve normal kontrole dönülüyor…
 9af40572	Acil tam hız nedeniyle durduruldu
 ef174ee8	Sıcaklık {0:F0}°C'ye ulaştığı için durduruldu
 13912a14	GPU yükü kalktığı için durduruldu (oyunu veya benchmark'ı çalıştırmaya devam edin)
-f3ec99ac	Yük uygulanmadığı için durduruldu
 5d76038f	En yüksek devir ölçülüyor…
 966245da	Devir düşürülerek ölçülüyor… (%{0:F0})
 8db302e0	Başlama devri aranıyor… (%{0:F0})
@@ -810,7 +789,6 @@ ea0f0b04	Kayıtların {0:P0} kadarında %95 veya üzerindeydi. Sorun eğriden ç
 8b53f64d	Eğriyi 5°C sağa kaydır
 fe86db70	"{0}" eğrisi 5°C sağa kaydırıldı.
 9cf10287	{0}: kalibrasyonla daha hassas ayar yapılabilir
-65f73a32	Fan eğrileri ekranındaki "Otomatik kalibrasyon" durma devrini ve en yüksek devri ölçer (yaklaşık 1–2 dakika).
 afae536a	{0}: en düşük devir durma bölgesinde
 f8161c81	Bu fan %{0:F0} değerinin altında duruyor, ama en düşük devir %{1:F0}. Sürekli durup kalkması tıkırtıya ve ömrün kısalmasına yol açar.
 3272f28b	En düşük devri %{0:F0} yap
@@ -1128,31 +1106,16 @@ eb7cfe73	Kaldırma bitti. Kontrol ediliyor…
 3487b9bc	İndirilen dosya kontrol ediliyor…
 dbd5b1f0	İndiriliyor…
 9e8ebaf4	İlerliyor… %{0}
-305b4308	({0} takibi)
 0f6e5123	Bir soğutma testi veya kalibrasyon sürüyor. Bittikten sonra başlatın.
-5b079133	Ayarlanacak en az bir fan seçin.
-395141d9	GPU sıcaklık sensörü bulunamadı.
 4b25b2cd	CPU sıcaklık sensörü bulunamadı.
-7a122984	GPU kullanım sensörü bulunamadığı için GPU ayarlanamaz.
-c7751269	• Başladıktan sonra bir oyun veya benchmark (3DMark, FF Benchmark vb.) açıp GPU'ya yük vermeye devam edin.\n
-c886e5d0	• CPU'ya tam yük verilir (diğer ağır uygulamaları kapatın).\n
-dbca6724	Otomatik ayar başlıyor (yaklaşık {0} dk).\n\n
-a1ca3c2f	• Seçilen {0} fan %100'den yavaş yavaş düşürülür. Ses yükselip alçalacaktır.\n
-ac505b53	• {0} sıcaklığı {1:F0}°C'ye ulaşırsa hemen durdurulur ve normal kontrole dönülür.\n
-46002470	• Sonuç siz onayladıktan sonra uygulanır, bu yüzden yarıda durdurmak hiçbir ayarı değiştirmez.
-36a2fc44	Otomatik ayar
 417196a4	Şu an {0:F0}°C / fan %{1:F0}
 5d9f4450	Şu an {0:F0}°C
-fe560e0e	Ölçüm bitti. Eğriyi kontrol edip uygulanacak profili seçin.
-507f470e	Otomatik ayar: ölçülebilen adım sayısı az olduğu için eğri oluşturulamadı.
-afab154e	Otomatik ayar ölçümü bitti. Ortaya çıkan eğriyi kontrol edip uygulayın.
 8bbd848f	Sonuçları gör
 59c5b033	{0} · boşta {1:F1}°C · tam yükte:
 5ab01921	Tam hızda bile {0:F0}°C korunamıyor (soğutmayı iyileştirmeyi düşünün)
 d1e24e74	{0:F0}°C'yi korumak için gereken devir: yaklaşık %{1:F0}
 9e669da9	* Yarıda bittiği için yalnızca ölçülen adımlarla oluşturuldu ({0})
 d63ad09b	"{0}" profili bulunamadı. Yeniden seçin.
-26bd87a8	Otomatik oluşturulan eğri "{0}" içindeki {1} fana uygulandı ("Geri al" ile geri alabilirsiniz).
 b6e37608	Eğriyi gör
 85bbd542	Tüm profillere uygulandı (hedef: {0}). "Geri al" ile geri alabilirsiniz.
 cd7e4f98	CPU (otomatik ayar)
@@ -1174,7 +1137,6 @@ e158d65b	• Ekledikten hemen sonra "Bu uygulamayla kontrol et" kapalıdır (esk
 5c0edbde	Eğri {0}
 68339e34	En az bir eğri gerekir. Sabit bir devir için "Sabit devir"e geçin.
 0de821a1	Başka bir fanın kalibrasyonu sürüyor. Bittikten sonra başlatın.
-d4ae40d7	Otomatik ayar veya soğutma testi sürüyor. Bittikten sonra başlatın.
 2e3bb637	Bu fan etkin profilde yok.
 3009598f	"{0}" kalibrasyonu başlıyor.\n\n
 8d17b7e8	• Yaklaşık 1–2 dakika boyunca fan tam hızda dönüp durur.\n
@@ -1439,7 +1401,6 @@ be68c30e	{0} analiz ediyor… (ilk seferde modelin yüklenmesi zaman alır)
 dea2940c	Durduruldu
 54fa54cb	"{0}" modeli Ollama'da yok. "Listeyi yenile" ile yeniden seçin veya PowerShell'de "ollama pull {1}" çalıştırın
 d7dc8672	Hata: {0}
-3decf270	Otomatik ayar sürüyor. Bittikten sonra başlatın.
 2ccbef69	Yaklaşık {0} dakikalık bir soğutma testi yapılacak.\n\n
 502399da	• Test sırasında CPU tam güçle çalıştığı için fan sesi artar.\n
 c0d1c3f1	• CPU sıcaklığı {0:F0}°C'ye ulaşırsa yük otomatik olarak durdurulur.\n
@@ -1469,7 +1430,6 @@ d3ec144f	Sanal ({0})
 f45a5a37	Algılanan donanım. Resim düğmesiyle görseli, örneğin kendi çektiğiniz bir fotoğrafla değiştirebilirsiniz
 31e94c42	Her fan için sıcaklık ile devir arasındaki ilişkiyi ayarlayın. Değişiklikler hemen uygulanır ve kaydedilir
 b5ccd0c3	Kayıtlara dayalı otomatik tanılama ve fanlardaki toz ile yıpranma kontrolü (yapay zekâ önerisi isteğe bağlı)
-2efbce3f	Yük uygulayarak eğrileri otomatik oluşturur veya mevcut ayarlarla ne kadar soğutulduğunu ölçer
 73339fb8	En fazla 24 saatlik sıcaklık ve devir (uygulamanın kapalı olduğu süre hariç; yeniden başlatma öncesi dakikalık ortalamalar)
 389ce2cc	Elektrik maliyeti tahmini ve arıza kayıtları
 4bd55735	OpenRGB üzerinden bilgisayarın LED'lerini sıcaklığa, gökkuşağına, müziğe vb. göre yakar
@@ -1591,7 +1551,6 @@ d2937a7a	Ses yazılımı: {0} (ışık, efektler uygulanmadan önceki sese göre
 db4d82a2	Uzak Masaüstü
 d6776d41	Görüntüleme dilini, temayı, vurgu rengini, arka planı, yazı rengini, yazı tipini ve yazı boyutunu değiştirin. Değişiklikler hemen uygulanır
 e0480009	Ekrandaki metinlerin dili. "Otomatik", Windows görüntüleme dilini izler (desteklenmiyorsa İngilizce). Seçtiğiniz anda değişir
-e45b0531	Otomatik ayar sürüyor.
 e955d878	Soğutma testi sürüyor.
 afb9660d	Kalibrasyon sürüyor.
 c8e0f349	Bir fanın sesi kontrol ediliyor.
@@ -1736,3 +1695,67 @@ f16a0b90	Kırmızı, turuncu ve sarı ışık her LED'de alev gibi titrer
 acfe2730	① Bildirim zip'ini oluştur
 b15ec58c	{0} oluşturuldu (klasörü Gezgin'de açılır). Eklemek için bu dosyayı bildirim sayfasına sürükleyin.
 d92849da	Sorun bildir…
+050c3438	"Otomatik kurulum" veya Fan eğrileri sayfasındaki "Fanı ölç", durma devrini ve en yüksek devri ölçer (fan başına yaklaşık 1–2 dk).
+08978566	GPU ile ölç ({0} fan)
+08fb3614	Otomatik kurulum…
+0929dde7	{0} ile bağlı
+095205e6	Otomatik kurulumu başlat
+0acedb82	Ölçülen CPU ve GPU eğrilerini seçili profile ekler
+10eada78	GPU yükü durduğu için durduruldu
+1941f6aa	CPU ile ölç ({0} fan)
+2646b9f3	• GPU ile ölç: uygulama GPU'ya tam yük bindirir ve aynı şekilde ölçer (oyun açmaya gerek yok).
+266ab9c4	Yük bindirilecek GPU bulunamadı
+31af6243	CPU'yu tam yükte bu sıcaklığın altında tutar
+33d3e475	Fan özelliklerini ölç
+3f5571aa	"{0}": %{1:F0} altında durduğu için en düşük devir artık %{2:F0}
+42a72e3a	Otomatik kurulum
+4610da9f	GPU: sıcaklık veya kullanım sensörü bulunamadığı için ölçülemedi
+462bc50c	• Sonucu uygulamadan önce kontrol ettiğiniz için yarıda durdurmak hiçbir şeyi değiştirmez.
+47647013	Adımlar: {0} · yaklaşık {1} dk. Pompalar dahil değildir.
+48090db5	Ölçüm sırasında
+4ac2f56e	Otomatik kurulum başlıyor (yaklaşık {0} dk).\n\n
+50136e19	Ölçülecek fanları ve CPU ve/veya GPU'yu seçin. Pompalar dahil değildir (her zamanki gibi çalışır).
+53661bf6	{0} fanı ölç
+5899b660	• CPU ile ölç: CPU'ya tam yük bindirir ve fanları %100'den adım adım düşürür.
+5a241b3a	Otomatik kurulum çalışıyor. Bittikten sonra başlatın.
+6d8d04fc	Fan özellikleri (kalibrasyon)
+6da30665	"{0}" ölçülüyor: {1}
+72f6035d	Otomatik kurulum veya soğutma testi çalışıyor. Bittikten sonra başlatın.
+743c2e54	Durduruldu: GPU'ya yük bindirildi ama kullanım artmadı
+766747f4	Tek düğme hepsini yapar: ① her fanı ölçer, ② CPU ve GPU'ya yük bindirir ve fanları %100'den adım adım düşürürken sıcaklığı ölçer, ③ "hedef sıcaklığı hâlâ koruyan en sessiz eğriyi" oluşturur. Sonucu uygulamadan önce kontrol edersiniz (yarıda durdurursanız normal kontrol geri gelir ve hiçbir şey değişmez).
+7a0a5001	GPU sıcaklık veya kullanım sensörü bulunamadığı için GPU ölçülemez
+7b75bea7	"{0}" profiline otomatik oluşturulan {1} eğri eklendi (Geri al ile geri alınabilir).
+814a5f43	"{0}": ölçüldü (%{1:F0} altında durur, en fazla {2:N0} rpm)
+8226a1e3	Otomatik kurulum sürüyor.
+847327ae	"{0}" ölçülemedi: {1}
+8d17780e	CPU hedefi
+8f35db7c	• Fanların sesi artıp azalacak. Lütfen ağır uygulamaları kapatın.
+901a429f	Eğri oluşturmak için yeterli ölçüm yapılamadı.
+94396456	{0}: erken bitti, eğri yalnızca ölçülen adımları kullanıyor ({1})
+94d6baac	Yük oluşturulamadı: {0}
+9decdc86	Durduruldu: 3 dakika içinde GPU yükü oluşmadı (bir oyun veya benchmark başlatın)
+9f77375a	GPU hedefi
+a390636e	Belirlenen sıcaklığı aşmamak için devri anında ayarlar
+a9addd42	GPU'yu tam yükte bu sıcaklığın altında tutar (yükü uygulama oluşturur; oyun açmaya gerek yok)
+aae4c566	"{0}" ölçülüyor…
+ab824de0	Ölçülen CPU ve GPU eğrilerini tüm profillere ekler. "Sessiz" rolündeki profiller hedef +5°C, "Maksimum soğutma" −5°C, diğerleri hedefin kendisini kullanır
+addb0201	Fanı 0'dan %100'e çalıştırır; nerede durduğunu, nerede döndüğünü ve en yüksek devrini ölçer (yaklaşık 1–2 dk). "Otomatik kurulum" henüz ölçülmemiş tüm fanları tek seferde ölçer
+af0435c9	CPU ve GPU'ya yük bindirip ölçer ve hedef sıcaklığı hâlâ koruyan en sessiz eğriyi oluşturur (Otomatik kurulum sayfasını açar)
+b499b2f2	Ölçüm bitti. Eğrileri kontrol edin ve uygulanacak profili seçin.
+b7615185	GPU'ya yük bindiriliyor (kullanımın artması bekleniyor)…
+b940650e	• CPU {0:F0}°C'ye veya GPU {1:F0}°C'ye ulaşırsa hemen durur ve normal kontrole döner.
+c07922c2	henüz ölçülmedi
+c4256752	• Fanları ölç ({0}): sırayla her fan tam devirde döner ve durur.
+ccb1e668	Otomatik kurulum ölçümü bitirdi. Ortaya çıkan eğrileri kontrol edip uygulayın.
+d0b44b86	Otomatik kurulum: eğri oluşturmak için yeterli ölçüm yapılamadı.
+d36eeaf3	Bu profilin rolü. Adını değiştirseniz bile otomatik kurulum (Sessiz hedef +5°C, Maksimum soğutma −5°C), yeni fanların eğrileri ve hızlı "Sessiz" bu role göre doğru çalışır
+d6fd5420	Durduruldu. Ölçülenlerden oluşturulan eğriyi kontrol edin ve uygulayıp uygulamayacağınızı seçin.
+e0e8a2f4	Fanı ölç
+ee9c1f57	Her fanı ve CPU ile GPU yükü altındaki sıcaklıkları ölçer, sonra eğrileri otomatik oluşturur. Mevcut ayarların ne kadar iyi soğuttuğunu da kontrol edebilirsiniz
+f42e11b9	Durduruldu. Normal kontrol geri geldi.
+f965efc0	Soğutma testi (mevcut ayarları kontrol et)
+fd03884c	CPU: sıcaklık sensörü bulunamadığı için ölçülemedi
+fdc48725	Ölçülecek en az bir fan ile CPU ve/veya GPU'yu seçin.
+fe39437d	İpucu: ardından "Otomatik kurulum" sayfasında ölçerek bu PC'ye uygun en sessiz eğrileri oluşturun (yaklaşık 20–30 dk).
+140786db	Fan başına yaklaşık 1–2 dk. Durma devri bilinince en düşük devir de güvenli bir değere ayarlanır
+14e2760b	Henüz ölçülmemiş fanları önce ölç

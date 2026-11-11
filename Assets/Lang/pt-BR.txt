@@ -9,7 +9,6 @@ f70fd09f	Painel
 a010a7fc	Histórico
 133b6776	Relatório
 b4bcc740	Diagnóstico
-977807d2	Teste e ajuste
 60dd6c40	Iluminação
 dfa4a412	Sensores
 6243fa06	Configurações
@@ -64,8 +63,6 @@ ba60770e	Nome (comum a todos os perfis)
 59c6e4bc	Modo de controle
 a80265dc	Curva
 051753eb	Defina você a rotação para cada temperatura
-530a9c8a	Temperatura-alvo (automático)
-1fc9ab3c	Só escolha a temperatura; a rotação se ajusta sozinha
 27bd9d15	Fixo
 84b1afad	Sempre a mesma rotação (para bombas)
 26a15192	Seguir (grupo)
@@ -91,9 +88,7 @@ fa9ef1de	Descida / s
 a5668673	Nunca fica abaixo de 40% em nenhuma configuração. Se a rotação ficar 3 segundos abaixo do valor de alerta, vai a 100% e avisa você, mesmo sob controle da BIOS.
 7c811ff7	Rotação de alerta
 cb5145a7	Usar como rotação mínima
-812e0683	Calibração automática
 ec41d4ae	Parar
-9514979f	Gira a ventoinha de 0 a 100% e mede a rotação em que ela para, em que volta a girar e a máxima (cerca de 1–2 minutos)
 26101bee	+ Adicionar faixa
 f5097e76	Ressonância (pular rotações barulhentas)
 11bb3e7a	Adicione as faixas de rotação em que o gabinete ou o radiador zumbe, e a ventoinha passa por elas rapidamente em vez de ficar nelas (comum a todos os perfis)
@@ -103,8 +98,6 @@ ea6d9cfc	Evitar aqui
 ed263790	Faixa a evitar
 49024f94	% a
 8b7237a1	Nenhuma ainda. Se nenhuma rotação incomoda, pode deixar assim.
-166baf5a	Criar automaticamente…
-3eb67669	Coloca carga no PC, mede e cria a curva mais silenciosa que ainda mantém a temperatura-alvo (página Teste e ajuste)
 cd6687b0	Copiar ▾
 a8a30430	+ Adicionar curva
 29506d39	Excluir esta curva
@@ -147,20 +140,10 @@ f0f25c1b	Pressione depois de limpar filtros ou ventoinhas. Os registros a partir
 9c1df669	Verificar agora
 267e9ec4	Desgaste e poeira das ventoinhas
 2c6b3065	Salva um registro a cada minuto e compara com o passado: "a rotação caiu com o mesmo comando (desgaste do rolamento, poeira)?" e "a temperatura subiu com a mesma potência (filtro ou radiador entupido)?".
-060669c9	Iniciar ajuste automático
-96cc9d01	Ajuste automático (criar curvas automaticamente)
 46ac54ca	Recomendado
-121a7d95	Sob carga real, reduz a rotação das ventoinhas aos poucos a partir de 100% e mede onde a temperatura se estabiliza. Com isso cria a curva mais silenciosa que ainda mantém a temperatura-alvo (cerca de 8–15 minutos; se parar no meio, o controle normal volta).
-e9947588	O que resfriar
-d881d18f	CPU (carga embutida, automático)
-e57cca88	GPU (carga com jogo ou benchmark)
-c074a956	Sob carga máxima, evita que a temperatura passe deste valor
-0c43c305	Ventoinhas a ajustar
-183c9165	Mede com as ventoinhas escolhidas na mesma rotação. As bombas ficam de fora (funcionam como sempre).
 3e4a2fef	Medições
 67633e51	Curva resultante (mudar a temperatura-alvo acima recria a curva sem medir de novo)
 0e95ff55	Aplicar a este perfil
-6f4b51e9	Perfis com "Silencioso" no nome usam alvo +5 °C, "Desempenho" alvo −5 °C e os demais o alvo como está
 a6de9295	Aplicar a todos os perfis
 35ae4fe6	10 min
 c7ad32f7	15 min
@@ -168,7 +151,6 @@ c7ad32f7	15 min
 cc4ae169	Teste de resfriamento
 16e5632b	Mede automaticamente: repouso de 30 segundos → carga em todos os núcleos da CPU → fim da carga e resfriamento. Mostra quanto suas configurações atuais resfriam. A GPU não está incluída; para testá-la também, rode um jogo ou benchmark durante o teste.
 eb918d75	Quando estiver pronto, pressione "Iniciar teste". Feche apps pesados para medir com precisão.
-9e3aee28	Evolução durante o teste e o ajuste
 339697a1	Salvar relatório
 8a49bfd9	Pedir análise à IA
 1ba434e9	Resultado
@@ -411,7 +393,6 @@ b373eaee	Intervalo de atualização
 1ac4b576	Sobre este app
 81d90dca	+ Novo perfil
 4cdf9ede	Salve um conjunto de curvas das ventoinhas com um nome e alterne entre eles
-774923ad	O papel deste perfil. Mesmo se você renomeá-lo, o ajuste automático (Silencioso mira +5 °C, Máximo resfriamento −5 °C), as curvas de novas ventoinhas e a ação rápida "Silencioso" continuam funcionando certo graças a este papel
 82ac5e85	Plano de energia do Windows para este perfil
 d663551d	Usar como padrão
 80173301	Duplicar
@@ -542,7 +523,6 @@ c1db4c06	Desligado, a BIOS continua no comando; o app só acompanha a rotação 
 b58afa04	Tudo pronto
 861676ec	Começar o controle agora
 01bcdd36	Desligado, começa em DRY RUN (só calcula e não escreve nada nas ventoinhas)
-709f1f3b	Dica: depois, meça a rotação mínima de cada ventoinha com "Calibração automática" na página de curvas para um ajuste ainda mais silencioso.
 aceb0a14	Cancelar
 f193a383	Voltar
 303830fc	Avançar
@@ -728,7 +708,6 @@ f8650f35	Parando a carga e voltando ao controle normal…
 9af40572	Interrompido pela velocidade máxima de emergência
 ef174ee8	Interrompido porque a temperatura chegou a {0:F0} °C
 13912a14	Interrompido porque a carga da GPU sumiu (mantenha o jogo ou benchmark rodando)
-f3ec99ac	Interrompido porque nenhuma carga foi aplicada
 5d76038f	Medindo a rotação máxima…
 966245da	Medindo enquanto baixa a rotação… ({0:F0}%)
 8db302e0	Procurando a rotação de partida… ({0:F0}%)
@@ -810,7 +789,6 @@ ea0f0b04	Ficou em 95% ou mais em {0:P0} dos registros. Provavelmente falta capac
 8b53f64d	Deslocar a curva 5 °C para a direita
 fe86db70	A curva de "{0}" foi deslocada 5 °C para a direita.
 9cf10287	{0}: com a calibração o ajuste fica mais preciso
-65f73a32	A "Calibração automática" na tela Curvas das ventoinhas mede a rotação de parada e a rotação máxima (cerca de 1–2 minutos).
 afae536a	{0}: a rotação mínima está na faixa de parada
 f8161c81	Esta ventoinha para abaixo de {0:F0}%, mas a rotação mínima é {1:F0}%. Parar e voltar a girar repetidamente causa estalos e reduz a vida útil.
 3272f28b	Definir rotação mínima em {0:F0}%
@@ -1128,31 +1106,16 @@ eb7cfe73	Desinstalação concluída. Verificando…
 3487b9bc	Verificando o arquivo baixado…
 dbd5b1f0	Baixando…
 9e8ebaf4	Em andamento… {0}%
-305b4308	(segue {0})
 0f6e5123	Há um teste de resfriamento ou uma calibração em andamento. Comece depois que terminar.
-5b079133	Escolha pelo menos uma ventoinha para ajustar.
-395141d9	Sensor de temperatura da GPU não encontrado.
 4b25b2cd	Sensor de temperatura da CPU não encontrado.
-7a122984	Sensor de uso da GPU não encontrado, então a GPU não pode ser ajustada.
-c7751269	• Depois de iniciar, abra um jogo ou benchmark (3DMark, FF Benchmark etc.) e mantenha a GPU sob carga.\n
-c886e5d0	• A CPU será colocada em carga total (feche outros apps pesados).\n
-dbca6724	Iniciando o ajuste automático (cerca de {0} min).\n\n
-a1ca3c2f	• As {0} ventoinhas escolhidas serão reduzidas aos poucos a partir de 100%. O som vai aumentar e diminuir.\n
-ac505b53	• Se a temperatura de {0} chegar a {1:F0} °C, o ajuste para na hora e volta o controle normal.\n
-46002470	• O resultado só é aplicado depois da sua confirmação, então interromper no meio não muda nenhuma configuração.
-36a2fc44	Ajuste automático
 417196a4	Agora {0:F0} °C / ventoinha {1:F0}%
 5d9f4450	Agora {0:F0} °C
-fe560e0e	A medição terminou. Confira a curva e escolha o perfil em que aplicá-la.
-507f470e	Ajuste automático: poucos passos medidos, não foi possível criar a curva.
-afab154e	A medição do ajuste automático terminou. Confira a curva resultante e aplique-a.
 8bbd848f	Ver resultado
 59c5b033	{0} · em repouso {1:F1} °C · em carga total:
 5ab01921	Não é possível manter {0:F0} °C nem na velocidade máxima (considere melhorar o resfriamento)
 d1e24e74	Rotação necessária para manter {0:F0} °C: cerca de {1:F0}%
 9e669da9	* Terminou antes, então foi criada só com os passos medidos ({0})
 d63ad09b	Perfil "{0}" não encontrado. Escolha de novo.
-26bd87a8	A curva criada automaticamente foi aplicada a {1} ventoinhas de "{0}" (dá para reverter com "Desfazer").
 b6e37608	Ver curva
 85bbd542	Aplicado a todos os perfis (alvo: {0}). Dá para reverter com "Desfazer".
 cd7e4f98	CPU (ajuste automático)
@@ -1174,7 +1137,6 @@ e158d65b	• Logo após adicionar, "Controlar com este app" fica desligado (como
 5c0edbde	Curva {0}
 68339e34	É preciso pelo menos uma curva. Para uma rotação constante, mude para "Rotação fixa".
 0de821a1	Outra ventoinha está sendo calibrada. Comece depois que terminar.
-d4ae40d7	Há um ajuste automático ou teste de resfriamento em andamento. Comece depois que terminar.
 2e3bb637	Esta ventoinha não está no perfil ativo.
 3009598f	Iniciando a calibração de "{0}".\n\n
 8d17b7e8	• Por cerca de 1–2 minutos, a ventoinha vai alternar entre velocidade máxima e parada.\n
@@ -1439,7 +1401,6 @@ be68c30e	{0} está analisando… (na primeira vez, carregar o modelo demora)
 dea2940c	Parado
 54fa54cb	O modelo "{0}" não está no Ollama. Escolha de novo em "Atualizar lista" ou execute "ollama pull {1}" no PowerShell
 d7dc8672	Erro: {0}
-3decf270	Há um ajuste automático em andamento. Comece depois que terminar.
 2ccbef69	Será feito um teste de resfriamento de cerca de {0} minutos.\n\n
 502399da	• Durante o teste a CPU trabalha no máximo, então as ventoinhas ficam barulhentas.\n
 c0d1c3f1	• Se a temperatura da CPU chegar a {0:F0} °C, a carga para automaticamente.\n
@@ -1469,7 +1430,6 @@ d3ec144f	Virtual ({0})
 f45a5a37	O hardware detectado. Com o botão de imagem você pode trocar a imagem, por exemplo, por uma foto sua
 31e94c42	Defina para cada ventoinha a relação entre temperatura e rotação. As alterações são aplicadas e salvas na hora
 b5ccd0c3	Diagnóstico automático a partir dos registros e verificação de poeira e desgaste das ventoinhas (conselhos de IA opcionais)
-2efbce3f	Aplica carga para criar curvas automaticamente ou medir o quanto as configurações atuais resfriam
 73339fb8	Até 24 horas de temperaturas e rotações (sem os períodos com o app fechado; antes de reiniciar, médias por minuto)
 389ce2cc	Estimativa do custo de energia e registros de falhas
 4bd55735	Acende os LEDs do PC conforme a temperatura, em arco-íris, com a música etc., pelo OpenRGB
@@ -1591,7 +1551,6 @@ d2937a7a	Software de áudio: {0} (a luz acompanha o som antes dos efeitos; se pa
 db4d82a2	Área de Trabalho Remota
 d6776d41	Mude o idioma, o tema, a cor de destaque, o fundo, a cor do texto, a fonte e o tamanho do texto. As mudanças valem na hora
 e0480009	Idioma do texto na tela. "Auto" segue o idioma de exibição do Windows (inglês se não for suportado). Muda assim que você escolhe
-e45b0531	Há um ajuste automático em andamento.
 e955d878	Há um teste de resfriamento em andamento.
 afb9660d	Há uma calibração em andamento.
 c8e0f349	Há uma verificação do som de uma ventoinha em andamento.
@@ -1736,3 +1695,67 @@ f16a0b90	Luz vermelha, laranja e amarela tremula como chamas em cada LED
 acfe2730	① Criar o zip do relato
 b15ec58c	{0} foi criado (a pasta abre no Explorador). Arraste este arquivo para a página do relato para anexá-lo.
 d92849da	Relatar um problema…
+050c3438	A "Configuração automática", ou "Medir ventoinha" na página Curvas das ventoinhas, mede a velocidade de parada e a máxima (cerca de 1–2 min por ventoinha).
+08978566	medir com GPU ({0} ventoinhas)
+08fb3614	Configuração automática…
+0929dde7	segue {0}
+095205e6	Iniciar configuração automática
+0acedb82	Coloca as curvas medidas da CPU e da GPU no perfil escolhido
+10eada78	Parado porque a carga da GPU parou
+1941f6aa	medir com CPU ({0} ventoinhas)
+2646b9f3	• Medir com GPU: o app carrega a GPU ao máximo e mede do mesmo jeito (não precisa abrir um jogo).
+266ab9c4	Nenhuma GPU encontrada para carregar
+31af6243	Mantém a CPU abaixo desta temperatura em carga total
+33d3e475	Medir características da ventoinha
+3f5571aa	"{0}": para abaixo de {1:F0}%, então a velocidade mínima agora é {2:F0}%
+42a72e3a	Configuração automática
+4610da9f	GPU: não foi possível medir, sem sensor de temperatura ou de uso
+462bc50c	• Você confere o resultado antes de aplicar, então parar no meio não muda nada.
+47647013	Etapas: {0} · cerca de {1} min. Bombas ficam de fora.
+48090db5	Durante a medição
+4ac2f56e	Iniciando a configuração automática (cerca de {0} min).\n\n
+50136e19	Escolha as ventoinhas a medir e a CPU e/ou a GPU. Bombas ficam de fora (funcionam como sempre).
+53661bf6	medir {0} ventoinha(s)
+5899b660	• Medir com CPU: carrega a CPU ao máximo e baixa as ventoinhas aos poucos a partir de 100%.
+5a241b3a	A configuração automática está em andamento. Inicie depois que terminar.
+6d8d04fc	Características da ventoinha (calibração)
+6da30665	Medindo "{0}": {1}
+72f6035d	Uma configuração automática ou um teste de resfriamento está em andamento. Inicie depois que terminar.
+743c2e54	Parado: a GPU foi carregada mas o uso não subiu
+766747f4	Um só botão faz tudo: ① mede cada ventoinha, ② carrega a CPU e a GPU e mede a temperatura enquanto baixa as ventoinhas aos poucos a partir de 100%, ③ cria "a curva mais silenciosa que ainda mantém a temperatura alvo". Você confere o resultado antes de aplicar (se parar no meio, o controle normal volta e nada muda).
+7a0a5001	Não é possível medir a GPU porque não foi encontrado sensor de temperatura ou de uso da GPU
+7b75bea7	{1} curva(s) criada(s) automaticamente adicionada(s) a "{0}" (Desfazer reverte).
+814a5f43	"{0}": medida (para abaixo de {1:F0}%, máx. {2:N0} rpm)
+8226a1e3	A configuração automática está em andamento.
+847327ae	Não foi possível medir "{0}": {1}
+8d17780e	Alvo da CPU
+8f35db7c	• As ventoinhas vão ficar mais altas e mais baixas. Feche apps pesados.
+901a429f	Não houve medição suficiente para criar uma curva.
+94396456	{0}: terminou antes, então a curva usa só as etapas medidas ({1})
+94d6baac	Não foi possível gerar a carga: {0}
+9decdc86	Parado: nenhuma carga na GPU em 3 minutos (abra um jogo ou benchmark)
+9f77375a	Alvo da GPU
+a390636e	Ajusta a velocidade na hora para não passar da temperatura definida
+a9addd42	Mantém a GPU abaixo desta temperatura em carga total (o app gera a carga; não precisa abrir um jogo)
+aae4c566	Medindo "{0}"…
+ab824de0	Coloca as curvas medidas da CPU e da GPU em todos os perfis. Perfis com a função "Silencioso" usam alvo +5 °C, "Máximo resfriamento" −5 °C e os demais o alvo definido
+addb0201	Gira a ventoinha de 0 a 100% e mede onde ela para, onde começa a girar e a velocidade máxima (cerca de 1–2 min). A "Configuração automática" mede de uma vez todas as ventoinhas ainda não medidas
+af0435c9	Carrega a CPU e a GPU, mede e cria a curva mais silenciosa que ainda mantém a temperatura alvo (abre a página Configuração automática)
+b499b2f2	Medição concluída. Confira as curvas e escolha o perfil em que aplicá-las.
+b7615185	Carregando a GPU (esperando o uso subir)…
+b940650e	• Se a CPU chegar a {0:F0} °C ou a GPU a {1:F0} °C, para na hora e volta ao controle normal.
+c07922c2	ainda não medida
+c4256752	• Medir ventoinhas ({0}): uma por vez, cada ventoinha gira no máximo e para.
+ccb1e668	A configuração automática terminou de medir. Confira as curvas e aplique-as.
+d0b44b86	Configuração automática: não houve medição suficiente para criar uma curva.
+d36eeaf3	A função deste perfil. Mesmo renomeado, a configuração automática (Silencioso: alvo +5 °C, Máximo resfriamento: −5 °C), as curvas de novas ventoinhas e o "Silencioso" rápido funcionam corretamente com esta função
+d6fd5420	Parado. Confira a curva criada com o que foi medido e escolha se quer aplicá-la.
+e0e8a2f4	Medir ventoinha
+ee9c1f57	Mede cada ventoinha e as temperaturas com carga na CPU e na GPU e cria curvas automaticamente. Você também pode conferir quanto as configurações atuais resfriam
+f42e11b9	Parado. O controle normal voltou.
+f965efc0	Teste de resfriamento (conferir as configurações atuais)
+fd03884c	CPU: não foi possível medir, sem sensor de temperatura
+fdc48725	Escolha pelo menos uma ventoinha a medir e a CPU e/ou a GPU.
+fe39437d	Dica: depois, meça na página "Configuração automática" para criar as curvas mais silenciosas para este PC (cerca de 20–30 min).
+140786db	Cerca de 1–2 min por ventoinha. Sabendo onde param, a velocidade mínima também é ajustada para um valor seguro
+14e2760b	Medir primeiro as ventoinhas ainda não medidas

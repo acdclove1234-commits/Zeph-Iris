@@ -9,7 +9,6 @@ f70fd09f	Panel
 a010a7fc	Historial
 133b6776	Informe
 b4bcc740	Diagnóstico
-977807d2	Prueba y ajuste
 60dd6c40	Iluminación
 dfa4a412	Sensores
 6243fa06	Ajustes
@@ -64,8 +63,6 @@ ba60770e	Nombre (común a todos los perfiles)
 59c6e4bc	Modo de control
 a80265dc	Curva
 051753eb	Decide tú la velocidad para cada temperatura
-530a9c8a	Temperatura objetivo (automático)
-1fc9ab3c	Solo indica una temperatura y la velocidad se ajusta sola
 27bd9d15	Fija
 84b1afad	Siempre la misma velocidad (para bombas)
 26a15192	Seguir (grupo)
@@ -91,9 +88,7 @@ fa9ef1de	Bajada / s
 a5668673	Nunca baja del 40 % con ningún ajuste. Si la velocidad pasa 3 segundos por debajo del valor de alerta, se pone al 100 % y te avisa, incluso bajo control de la BIOS.
 7c811ff7	Velocidad de alerta
 cb5145a7	Usar como velocidad mínima
-812e0683	Calibración automática
 ec41d4ae	Detener
-9514979f	Hace girar el ventilador de 0 a 100 % y mide la velocidad a la que se para, a la que arranca y la máxima (1–2 minutos aprox.)
 26101bee	+ Añadir rango
 f5097e76	Resonancia (evitar velocidades ruidosas)
 11bb3e7a	Añade los rangos de velocidad en los que zumba la caja o el radiador y el ventilador los atravesará rápido en lugar de quedarse en ellos (común a todos los perfiles)
@@ -103,8 +98,6 @@ ea6d9cfc	Evitar aquí
 ed263790	Rango a evitar
 49024f94	% a
 8b7237a1	Aún no hay ninguno. Si ninguna velocidad molesta, puedes dejarlo así.
-166baf5a	Crear automáticamente…
-3eb67669	Carga el PC, mide y crea la curva más silenciosa que aún mantiene la temperatura objetivo (página Prueba y ajuste)
 cd6687b0	Copiar ▾
 a8a30430	+ Añadir curva
 29506d39	Eliminar esta curva
@@ -147,20 +140,10 @@ f0f25c1b	Pulsa esto después de limpiar filtros o ventiladores. Los registros a 
 9c1df669	Comprobar ahora
 267e9ec4	Desgaste y polvo de los ventiladores
 2c6b3065	Guarda un registro cada minuto y compara con el pasado: «¿ha bajado la velocidad con la misma orden (desgaste del rodamiento, polvo)?» y «¿ha subido la temperatura con la misma potencia (filtro o radiador obstruido)?».
-060669c9	Iniciar ajuste automático
-96cc9d01	Ajuste automático (crear curvas automáticamente)
 46ac54ca	Recomendado
-121a7d95	Con carga real, baja la velocidad de los ventiladores poco a poco desde el 100 % y mide dónde se estabiliza la temperatura. Con eso crea la curva más silenciosa que aún mantiene la temperatura objetivo (unos 8–15 minutos; si lo detienes, vuelve el control normal).
-e9947588	Qué refrigerar
-d881d18f	CPU (carga integrada, automático)
-e57cca88	GPU (carga con un juego o benchmark)
-c074a956	Con carga máxima, evita que la temperatura supere este valor
-0c43c305	Ventiladores a ajustar
-183c9165	Mide con los ventiladores elegidos a la misma velocidad. Las bombas quedan fuera (funcionan como siempre).
 3e4a2fef	Mediciones
 67633e51	Curva resultante (si cambias la temperatura objetivo de arriba, se recalcula sin volver a medir)
 0e95ff55	Aplicar a este perfil
-6f4b51e9	Los perfiles con «Silencioso» en el nombre usan objetivo +5 °C, «Rendimiento» objetivo −5 °C y los demás el objetivo tal cual
 a6de9295	Aplicar a todos los perfiles
 35ae4fe6	10 min
 c7ad32f7	15 min
@@ -168,7 +151,6 @@ c7ad32f7	15 min
 cc4ae169	Prueba de refrigeración
 16e5632b	Mide automáticamente: reposo 30 segundos → carga en todos los núcleos de la CPU → fin de la carga y enfriamiento. Muestra lo bien que refrigeran tus ajustes actuales. La GPU no se incluye; para probarla también, ejecuta un juego o benchmark durante la prueba.
 eb918d75	Cuando estés listo, pulsa «Iniciar prueba». Cierra las aplicaciones pesadas para obtener resultados precisos.
-9e3aee28	Evolución durante la prueba y el ajuste
 339697a1	Guardar informe
 8a49bfd9	Pedir análisis a la IA
 1ba434e9	Resultado
@@ -411,7 +393,6 @@ b373eaee	Intervalo de actualización
 1ac4b576	Acerca de esta aplicación
 81d90dca	+ Nuevo perfil
 4cdf9ede	Guarda un conjunto de curvas de ventiladores con un nombre y cambia entre ellos
-774923ad	El papel de este perfil. Aunque lo renombres, el ajuste automático (Silencioso apunta a +5 °C, Máxima refrigeración a −5 °C), las curvas de ventiladores nuevos y la acción rápida «Silencio» siguen funcionando bien gracias a este papel
 82ac5e85	Plan de energía de Windows para este perfil
 d663551d	Usar por defecto
 80173301	Duplicar
@@ -542,7 +523,6 @@ c1db4c06	Desactivado, la BIOS sigue al mando; la aplicación solo vigila la velo
 b58afa04	Todo listo
 861676ec	Empezar a controlar ya
 01bcdd36	Desactivado, empieza en DRY RUN (solo calcula y no escribe nada en los ventiladores)
-709f1f3b	Consejo: después, mide la velocidad mínima de cada ventilador con «Calibración automática» en la página Curvas para un ajuste aún más silencioso.
 aceb0a14	Cancelar
 f193a383	Atrás
 303830fc	Siguiente
@@ -728,7 +708,6 @@ f8650f35	Deteniendo la carga y volviendo al control normal…
 9af40572	Se detuvo por la velocidad máxima de emergencia
 ef174ee8	Se detuvo porque la temperatura llegó a {0:F0} °C
 13912a14	Se detuvo porque la carga de la GPU desapareció (mantén el juego o benchmark en marcha)
-f3ec99ac	Se detuvo porque no se aplicó carga
 5d76038f	Midiendo la velocidad máxima…
 966245da	Midiendo mientras baja la velocidad… ({0:F0} %)
 8db302e0	Buscando la velocidad de arranque… ({0:F0} %)
@@ -810,7 +789,6 @@ ea0f0b04	Estuvo al 95 % o más durante el {0:P0} de los registros. Probablemente
 8b53f64d	Desplazar la curva 5 °C a la derecha
 fe86db70	Se desplazó la curva de «{0}» 5 °C a la derecha.
 9cf10287	{0}: con una calibración se puede ajustar con más precisión
-65f73a32	La «Calibración automática» de la pantalla Curvas de ventiladores mide la velocidad de parada y la velocidad máxima (tarda 1–2 minutos).
 afae536a	{0}: la velocidad mínima está en la zona de parada
 f8161c81	Este ventilador se detiene por debajo del {0:F0} %, pero su velocidad mínima es del {1:F0} %. Pararse y arrancar una y otra vez provoca chasquidos y acorta su vida útil.
 3272f28b	Fijar la velocidad mínima en {0:F0} %
@@ -1128,31 +1106,16 @@ eb7cfe73	Desinstalación terminada. Comprobando…
 3487b9bc	Comprobando el archivo descargado…
 dbd5b1f0	Descargando…
 9e8ebaf4	En curso… {0} %
-305b4308	(sigue a {0})
 0f6e5123	Hay una prueba de refrigeración o una calibración en curso. Empiece cuando termine.
-5b079133	Elija al menos un ventilador para ajustar.
-395141d9	No se encontró el sensor de temperatura de la GPU.
 4b25b2cd	No se encontró el sensor de temperatura de la CPU.
-7a122984	No se encontró el sensor de uso de la GPU, así que no se puede ajustar la GPU.
-c7751269	• Al empezar, abra un juego o un benchmark (3DMark, FF Benchmark, etc.) y mantenga la GPU con carga.\n
-c886e5d0	• Se pone la CPU a plena carga (cierre otras aplicaciones pesadas).\n
-dbca6724	Empieza el ajuste automático (unos {0} min).\n\n
-a1ca3c2f	• Los {0} ventiladores elegidos bajarán poco a poco desde el 100 %. El ruido subirá y bajará.\n
-ac505b53	• Si la temperatura de {0} llega a {1:F0} °C, se detiene en el acto y vuelve el control habitual.\n
-46002470	• El resultado se aplica solo tras revisarlo, así que detenerlo a mitad no cambia ningún ajuste.
-36a2fc44	Ajuste automático
 417196a4	Ahora {0:F0} °C / ventilador {1:F0} %
 5d9f4450	Ahora {0:F0} °C
-fe560e0e	Medición terminada. Revise la curva y elija el perfil al que aplicarla.
-507f470e	Ajuste automático: se midieron muy pocos pasos y no se pudo crear la curva.
-afab154e	La medición del ajuste automático terminó. Revise la curva resultante y aplíquela.
 8bbd848f	Ver resultado
 59c5b033	{0} · en reposo {1:F1} °C · a plena carga:
 5ab01921	No se pueden mantener {0:F0} °C ni a velocidad máxima (plantéese mejorar la refrigeración)
 d1e24e74	Velocidad necesaria para mantener {0:F0} °C: alrededor del {1:F0} %
 9e669da9	* Terminó antes de tiempo; se creó solo con los pasos medidos ({0})
 d63ad09b	No se encuentra el perfil «{0}». Elija otro.
-26bd87a8	Se aplicó la curva creada automáticamente a {1} ventiladores de «{0}» (se puede revertir con «Deshacer»).
 b6e37608	Ver curva
 85bbd542	Aplicado a todos los perfiles (objetivo: {0}). Se puede revertir con «Deshacer».
 cd7e4f98	CPU (ajuste automático)
@@ -1174,7 +1137,6 @@ e158d65b	• Justo después de añadirlo, «Controlar con esta aplicación» est
 5c0edbde	Curva {0}
 68339e34	Se necesita al menos una curva. Para una velocidad constante, cambie a «Velocidad fija».
 0de821a1	Se está calibrando otro ventilador. Empiece cuando termine.
-d4ae40d7	Hay un ajuste automático o una prueba de refrigeración en curso. Empiece cuando termine.
 2e3bb637	Este ventilador no está en el perfil activo.
 3009598f	Empieza la calibración de «{0}».\n\n
 8d17b7e8	• Durante 1–2 minutos, el ventilador alternará entre velocidad máxima y parado.\n
@@ -1439,7 +1401,6 @@ be68c30e	{0} está analizando… (la primera vez, cargar el modelo tarda un poco
 dea2940c	Detenido
 54fa54cb	El modelo «{0}» no está en Ollama. Elija otro con «Actualizar lista» o ejecute «ollama pull {1}» en PowerShell
 d7dc8672	Error: {0}
-3decf270	Hay un ajuste automático en curso. Empiece cuando termine.
 2ccbef69	Se hará una prueba de refrigeración de unos {0} minutos.\n\n
 502399da	• Durante la prueba la CPU trabaja al máximo, así que los ventiladores harán más ruido.\n
 c0d1c3f1	• Si la temperatura de la CPU llega a {0:F0} °C, la carga se detiene automáticamente.\n
@@ -1469,7 +1430,6 @@ d3ec144f	Virtual ({0})
 f45a5a37	Hardware detectado. Con el botón de imagen puede sustituirla, por ejemplo, por una foto propia
 31e94c42	Defina para cada ventilador la relación entre temperatura y velocidad. Los cambios se aplican y guardan al instante
 b5ccd0c3	Diagnóstico automático a partir de los registros y comprobación de polvo y desgaste de los ventiladores (consejos de IA opcionales)
-2efbce3f	Aplica carga para crear curvas automáticamente o medir cuánto enfrían los ajustes actuales
 73339fb8	Hasta 24 horas de temperaturas y velocidades (sin el tiempo con la aplicación cerrada; antes de un reinicio, medias por minuto)
 389ce2cc	Estimación del coste eléctrico y registros de fallos
 4bd55735	Ilumina los LED del PC según la temperatura, en arcoíris, al ritmo de la música, etc., mediante OpenRGB
@@ -1591,7 +1551,6 @@ d2937a7a	Software de audio: {0} (la luz sigue al sonido antes de los efectos; si
 db4d82a2	Escritorio remoto
 d6776d41	Cambia el idioma, el tema, el color de acento, el fondo, el color del texto, la fuente y el tamaño del texto. Los cambios se aplican al momento
 e0480009	Idioma del texto en pantalla. «Auto» sigue el idioma de Windows (inglés si no es compatible). Cambia en cuanto eliges uno
-e45b0531	Hay un ajuste automático en curso.
 e955d878	Hay una prueba de refrigeración en curso.
 afb9660d	Hay una calibración en curso.
 c8e0f349	Se está comprobando el sonido de un ventilador.
@@ -1736,3 +1695,67 @@ f16a0b90	Luz roja, naranja y amarilla parpadea como llamas en cada LED
 acfe2730	① Crear el zip del informe
 b15ec58c	Se creó {0} (su carpeta se abre en el Explorador). Arrastra este archivo a la página del informe para adjuntarlo.
 d92849da	Informar de un problema…
+050c3438	La «Configuración automática» o «Medir ventilador» en la página Curvas de ventilador miden la velocidad de parada y la máxima (aprox. 1–2 min por ventilador).
+08978566	medir con GPU ({0} ventiladores)
+08fb3614	Configuración automática…
+0929dde7	sigue a {0}
+095205e6	Iniciar configuración automática
+0acedb82	Pone las curvas medidas de CPU y GPU en el perfil elegido
+10eada78	Detenido porque la carga de la GPU se detuvo
+1941f6aa	medir con CPU ({0} ventiladores)
+2646b9f3	• Medir con GPU: la app carga la GPU al máximo y mide igual (no hace falta abrir un juego).
+266ab9c4	No se encontró ninguna GPU a la que cargar
+31af6243	Mantiene la CPU por debajo de esta temperatura a plena carga
+33d3e475	Medir características del ventilador
+3f5571aa	«{0}»: se para por debajo del {1:F0} %, así que su velocidad mínima ahora es {2:F0} %
+42a72e3a	Configuración automática
+4610da9f	GPU: no se pudo medir porque no hay sensor de temperatura o uso
+462bc50c	• Revisas el resultado antes de aplicarlo, así que detenerlo no cambia nada.
+47647013	Pasos: {0} · aprox. {1} min. Las bombas quedan excluidas.
+48090db5	Durante la medición
+4ac2f56e	Iniciando la configuración automática (aprox. {0} min).\n\n
+50136e19	Elige los ventiladores a medir y la CPU y/o la GPU. Las bombas quedan excluidas (funcionan como siempre).
+53661bf6	medir {0} ventilador(es)
+5899b660	• Medir con CPU: carga la CPU al máximo y baja los ventiladores paso a paso desde el 100 %.
+5a241b3a	La configuración automática está en curso. Empieza cuando termine.
+6d8d04fc	Características del ventilador (calibración)
+6da30665	Midiendo «{0}»: {1}
+72f6035d	Hay una configuración automática o una prueba de refrigeración en curso. Empieza cuando termine.
+743c2e54	Detenido: se cargó la GPU pero su uso no subió
+766747f4	Un solo botón lo hace todo: ① mide cada ventilador, ② carga la CPU y la GPU y mide la temperatura mientras baja los ventiladores paso a paso desde el 100 %, ③ crea «la curva más silenciosa que aún mantiene la temperatura objetivo». Revisas el resultado antes de aplicarlo (si lo detienes, vuelve el control normal y no cambia nada).
+7a0a5001	No se puede medir la GPU porque no se encontró sensor de temperatura o uso de la GPU
+7b75bea7	Se añadieron {1} curva(s) creadas automáticamente a «{0}» (Deshacer lo revierte).
+814a5f43	«{0}»: medido (se para por debajo del {1:F0} %, máx. {2:N0} rpm)
+8226a1e3	La configuración automática está en curso.
+847327ae	No se pudo medir «{0}»: {1}
+8d17780e	Objetivo CPU
+8f35db7c	• Los ventiladores sonarán más fuerte y más suave. Cierra las apps pesadas.
+901a429f	No se midió lo suficiente para crear una curva.
+94396456	{0}: terminó antes, así que la curva usa solo los pasos medidos ({1})
+94d6baac	No se pudo generar la carga: {0}
+9decdc86	Detenido: no hubo carga en la GPU en 3 minutos (abre un juego o benchmark)
+9f77375a	Objetivo GPU
+a390636e	Ajusta la velocidad sobre la marcha para no superar la temperatura fijada
+a9addd42	Mantiene la GPU por debajo de esta temperatura a plena carga (la app genera la carga; no hace falta abrir un juego)
+aae4c566	Midiendo «{0}»…
+ab824de0	Pone las curvas medidas de CPU y GPU en todos los perfiles. Los perfiles con el rol «Silencioso» usan objetivo +5 °C, «Máxima refrigeración» −5 °C y el resto el objetivo tal cual
+addb0201	Hace girar el ventilador de 0 a 100 % y mide dónde se para, dónde arranca y su velocidad máxima (aprox. 1–2 min). La «Configuración automática» mide de una vez todos los ventiladores aún no medidos
+af0435c9	Carga la CPU y la GPU, mide y crea la curva más silenciosa que aún mantiene la temperatura objetivo (abre la página Configuración automática)
+b499b2f2	Medición terminada. Revisa las curvas y elige el perfil al que aplicarlas.
+b7615185	Cargando la GPU (esperando a que suba su uso)…
+b940650e	• Si la CPU llega a {0:F0} °C o la GPU a {1:F0} °C, se detiene al instante y vuelve al control normal.
+c07922c2	aún sin medir
+c4256752	• Medir ventiladores ({0}): uno a uno, cada ventilador gira al máximo y se para.
+ccb1e668	La configuración automática terminó de medir. Revisa las curvas resultantes y aplícalas.
+d0b44b86	Configuración automática: no se midió lo suficiente para crear una curva.
+d36eeaf3	El rol de este perfil. Aunque lo renombres, la configuración automática (Silencioso: objetivo +5 °C, Máxima refrigeración: −5 °C), las curvas de ventiladores nuevos y el «Silencioso» rápido funcionan bien con este rol
+d6fd5420	Detenido. Revisa la curva creada con lo medido y decide si aplicarla.
+e0e8a2f4	Medir ventilador
+ee9c1f57	Mide cada ventilador y las temperaturas con carga de CPU y GPU, y crea curvas automáticamente. También puedes comprobar cuánto enfría la configuración actual
+f42e11b9	Detenido. Ha vuelto el control normal.
+f965efc0	Prueba de refrigeración (comprobar la configuración actual)
+fd03884c	CPU: no se pudo medir porque no hay sensor de temperatura
+fdc48725	Elige al menos un ventilador a medir y la CPU y/o la GPU.
+fe39437d	Consejo: después, mide en la página «Configuración automática» para crear las curvas más silenciosas para este PC (aprox. 20–30 min).
+140786db	Aprox. 1–2 min por ventilador. Al conocer la velocidad de parada, también se fija una velocidad mínima segura
+14e2760b	Medir primero los ventiladores aún no medidos

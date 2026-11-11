@@ -9,7 +9,6 @@ f70fd09f	Übersicht
 a010a7fc	Verlauf
 133b6776	Bericht
 b4bcc740	Diagnose
-977807d2	Test & Abstimmung
 60dd6c40	Beleuchtung
 dfa4a412	Sensoren
 6243fa06	Einstellungen
@@ -64,8 +63,6 @@ ba60770e	Name (für alle Profile gleich)
 59c6e4bc	Steuerungsart
 a80265dc	Kurve
 051753eb	Drehzahl für jede Temperatur selbst festlegen
-530a9c8a	Zieltemperatur (automatisch)
-1fc9ab3c	Nur eine Temperatur festlegen, die Drehzahl regelt sich selbst
 27bd9d15	Fest
 84b1afad	Immer dieselbe Drehzahl (für Pumpen)
 26a15192	Folgen (Gruppe)
@@ -91,9 +88,7 @@ fa9ef1de	Abfallrate / s
 a5668673	Fällt in keiner Einstellung unter 40 %. Liegt die Drehzahl 3 Sekunden lang unter dem Warnwert, geht sie auf 100 % und Sie werden benachrichtigt – auch unter BIOS-Steuerung.
 7c811ff7	Warndrehzahl
 cb5145a7	Als Mindestdrehzahl übernehmen
-812e0683	Automatische Kalibrierung
 ec41d4ae	Abbrechen
-9514979f	Fährt den Lüfter von 0 bis 100 % und misst, wo er stoppt, wo er anläuft und seine Höchstdrehzahl (ca. 1–2 Minuten)
 26101bee	+ Bereich hinzufügen
 f5097e76	Resonanzbereiche (laute Drehzahlen überspringen)
 11bb3e7a	Tragen Sie Drehzahlbereiche ein, in denen Gehäuse oder Radiator brummen – der Lüfter durchläuft sie dann zügig, statt dort zu bleiben (für alle Profile gleich)
@@ -103,8 +98,6 @@ ea6d9cfc	Hier überspringen
 ed263790	Übersprungener Bereich
 49024f94	% bis
 8b7237a1	Noch keine. Wenn keine Drehzahl stört, kann es so bleiben.
-166baf5a	Automatisch erstellen…
-3eb67669	Belastet den PC, misst und erstellt die leiseste Kurve, die die Zieltemperatur noch hält (Seite „Test & Abstimmung“)
 cd6687b0	Kopieren ▾
 a8a30430	+ Kurve hinzufügen
 29506d39	Diese Kurve löschen
@@ -147,20 +140,10 @@ f0f25c1b	Nach dem Reinigen von Filtern oder Lüftern drücken. Aufzeichnungen ab
 9c1df669	Jetzt prüfen
 267e9ec4	Lüfterverschleiß und Staub prüfen
 2c6b3065	Speichert jede Minute eine Aufzeichnung und vergleicht mit früher: „Ist die Drehzahl bei gleicher Ansteuerung gesunken (Lagerverschleiß, Staub)?“ und „Ist die Temperatur bei gleicher Leistung gestiegen (verstopfter Filter oder Radiator)?“.
-060669c9	Automatische Abstimmung starten
-96cc9d01	Automatische Abstimmung (Kurven automatisch erstellen)
 46ac54ca	Empfohlen
-121a7d95	Senkt unter echter Last die Lüfterdrehzahl schrittweise von 100 % und misst, wo sich die Temperatur einpendelt. Daraus entsteht die leiseste Kurve, die die Zieltemperatur noch hält (ca. 8–15 Minuten; bei Abbruch läuft die normale Steuerung weiter).
-e9947588	Was gekühlt wird
-d881d18f	CPU (eingebaute Last, automatisch)
-e57cca88	GPU (Last durch Spiel oder Benchmark)
-c074a956	Unter Volllast soll die Temperatur nicht darüber steigen
-0c43c305	Abzustimmende Lüfter
-183c9165	Misst mit den gewählten Lüftern auf gleicher Drehzahl. Pumpen sind ausgenommen (sie laufen wie gewohnt).
 3e4a2fef	Messergebnisse
 67633e51	Entstehende Kurve (wenn Sie die Zieltemperatur oben ändern, wird sie ohne neue Messung neu erstellt)
 0e95ff55	Auf dieses Profil anwenden
-6f4b51e9	Profile mit „Leise“ im Namen erhalten Ziel +5 °C, „Leistung“ Ziel −5 °C, alle anderen das Ziel unverändert
 a6de9295	Auf alle Profile anwenden
 35ae4fe6	10 Min.
 c7ad32f7	15 Min.
@@ -168,7 +151,6 @@ c7ad32f7	15 Min.
 cc4ae169	Kühltest
 16e5632b	Misst automatisch: 30 Sekunden Leerlauf → Last auf alle CPU-Kerne → Last beenden und abkühlen. Zeigt, wie gut Ihre aktuellen Lüftereinstellungen kühlen. Die GPU ist nicht enthalten; um sie mitzutesten, während des Tests ein Spiel oder einen Benchmark laufen lassen.
 eb918d75	Wenn Sie bereit sind, drücken Sie „Test starten“. Schließen Sie anspruchsvolle Apps für genaue Ergebnisse.
-9e3aee28	Verlauf während Test und Abstimmung
 339697a1	Bericht speichern
 8a49bfd9	Von der KI analysieren lassen
 1ba434e9	Ergebnis
@@ -411,7 +393,6 @@ b373eaee	Aktualisierungsintervall
 1ac4b576	Über diese App
 81d90dca	+ Neues Profil
 4cdf9ede	Speichern Sie eine Zusammenstellung von Lüfterkurven unter einem Namen und wechseln Sie zwischen ihnen
-774923ad	Die Rolle dieses Profils. Auch nach einer Umbenennung arbeiten die automatische Abstimmung (Leise mit Ziel +5 °C, Maximale Kühlung −5 °C), die Kurven neuer Lüfter und die Schnellaktion „Leise“ über diese Rolle richtig
 82ac5e85	Windows-Energiesparplan für dieses Profil
 d663551d	Standardmäßig verwenden
 80173301	Duplizieren
@@ -542,7 +523,6 @@ c1db4c06	Wenn aus, bleibt das BIOS zuständig; die App überwacht nur die Drehza
 b58afa04	Alles bereit
 861676ec	Steuerung sofort starten
 01bcdd36	Wenn aus, startet die App im DRY RUN (rechnet nur und schreibt nichts an die Lüfter)
-709f1f3b	Tipp: Messen Sie anschließend auf der Seite Lüfterkurven mit „Automatische Kalibrierung“ die Mindestdrehzahl jedes Lüfters – so wird es noch leiser.
 aceb0a14	Abbrechen
 f193a383	Zurück
 303830fc	Weiter
@@ -728,7 +708,6 @@ f8650f35	Last wird beendet, normale Steuerung wird wiederhergestellt…
 9af40572	Wegen Notfall-Volllast abgebrochen
 ef174ee8	Abgebrochen, weil die Temperatur {0:F0} °C erreicht hat
 13912a14	Abgebrochen, weil die GPU-Last weggefallen ist (Spiel oder Benchmark weiterlaufen lassen)
-f3ec99ac	Abgebrochen, weil keine Last anlag
 5d76038f	Höchstdrehzahl wird gemessen…
 966245da	Messung bei sinkender Drehzahl… ({0:F0} %)
 8db302e0	Anlaufdrehzahl wird gesucht… ({0:F0} %)
@@ -810,7 +789,6 @@ ea0f0b04	In {0:P0} der Aufzeichnungen lag die Drehzahl bei 95 % oder mehr. Vermu
 8b53f64d	Kurve um 5 °C nach rechts verschieben
 fe86db70	Die Kurve von „{0}“ wurde um 5 °C nach rechts verschoben.
 9cf10287	{0}: mit einer Kalibrierung lässt sich genauer abstimmen
-65f73a32	Die „Automatische Kalibrierung“ auf der Seite Lüfterkurven misst die Stoppdrehzahl und die Höchstdrehzahl (etwa 1–2 Minuten).
 afae536a	{0}: Mindestdrehzahl liegt im Stoppbereich
 f8161c81	Dieser Lüfter bleibt unter {0:F0} % stehen, die Mindestdrehzahl ist aber {1:F0} %. Ständiges Anhalten und Anlaufen verursacht Klickgeräusche und verkürzt die Lebensdauer.
 3272f28b	Mindestdrehzahl auf {0:F0} % setzen
@@ -1128,31 +1106,16 @@ eb7cfe73	Deinstallation beendet. Wird geprüft…
 3487b9bc	Heruntergeladene Datei wird geprüft…
 dbd5b1f0	Download läuft…
 9e8ebaf4	Läuft… {0} %
-305b4308	(folgt {0})
 0f6e5123	Ein Kühltest oder eine Kalibrierung läuft. Starten Sie, wenn sie beendet ist.
-5b079133	Wählen Sie mindestens einen Lüfter zum Abstimmen.
-395141d9	Kein GPU-Temperatursensor gefunden.
 4b25b2cd	Kein CPU-Temperatursensor gefunden.
-7a122984	Kein Sensor für die GPU-Auslastung gefunden, daher kann die GPU nicht abgestimmt werden.
-c7751269	• Starten Sie danach ein Spiel oder einen Benchmark (3DMark, FF-Benchmark usw.) und halten Sie die GPU unter Last.\n
-c886e5d0	• Die CPU wird voll ausgelastet (schließen Sie andere aufwendige Apps).\n
-dbca6724	Die automatische Abstimmung beginnt (etwa {0} Min.).\n\n
-a1ca3c2f	• Die {0} gewählten Lüfter werden von 100 % schrittweise gesenkt. Es wird abwechselnd lauter und leiser.\n
-ac505b53	• Erreicht die Temperatur von {0} {1:F0} °C, wird sofort abgebrochen und zur normalen Steuerung zurückgekehrt.\n
-46002470	• Das Ergebnis wird erst nach Ihrer Prüfung übernommen; ein Abbruch ändert also keine Einstellungen.
-36a2fc44	Automatische Abstimmung
 417196a4	Aktuell {0:F0} °C / Lüfter {1:F0} %
 5d9f4450	Aktuell {0:F0} °C
-fe560e0e	Die Messung ist beendet. Prüfen Sie die Kurve und wählen Sie das Profil, auf das sie angewendet wird.
-507f470e	Automatische Abstimmung: Zu wenige Stufen gemessen, daher konnte keine Kurve erstellt werden.
-afab154e	Die Messung der automatischen Abstimmung ist beendet. Prüfen Sie die Kurve und wenden Sie sie an.
 8bbd848f	Ergebnis ansehen
 59c5b033	{0} · Leerlauf {1:F1} °C · bei voller Last:
 5ab01921	{0:F0} °C lassen sich selbst bei voller Drehzahl nicht halten (erwägen Sie eine bessere Kühlung)
 d1e24e74	Nötige Drehzahl, um {0:F0} °C zu halten: etwa {1:F0} %
 9e669da9	* Vorzeitig beendet, daher nur aus den gemessenen Stufen erstellt ({0})
 d63ad09b	Profil „{0}“ nicht gefunden. Wählen Sie erneut.
-26bd87a8	Die automatisch erstellte Kurve wurde auf {1} Lüfter in „{0}“ angewendet (mit „Rückgängig“ zurücknehmbar).
 b6e37608	Kurve ansehen
 85bbd542	Auf alle Profile angewendet (Ziel: {0}). Mit „Rückgängig“ zurücknehmbar.
 cd7e4f98	CPU (automatisch abgestimmt)
@@ -1174,7 +1137,6 @@ e158d65b	• Direkt nach dem Hinzufügen ist „Mit dieser App steuern“ aus (w
 5c0edbde	Kurve {0}
 68339e34	Mindestens eine Kurve ist nötig. Für eine konstante Drehzahl wechseln Sie zu „Feste Drehzahl“.
 0de821a1	Ein anderer Lüfter wird gerade kalibriert. Starten Sie, wenn das beendet ist.
-d4ae40d7	Eine automatische Abstimmung oder ein Kühltest läuft. Starten Sie, wenn sie beendet sind.
 2e3bb637	Dieser Lüfter ist nicht im aktiven Profil enthalten.
 3009598f	Kalibrierung von „{0}“ wird gestartet.\n\n
 8d17b7e8	• Etwa 1–2 Minuten lang läuft der Lüfter abwechselnd mit voller Drehzahl und steht still.\n
@@ -1439,7 +1401,6 @@ be68c30e	{0} analysiert… (beim ersten Mal dauert das Laden des Modells etwas)
 dea2940c	Gestoppt
 54fa54cb	Das Modell „{0}“ ist nicht in Ollama. Wählen Sie mit „Liste aktualisieren“ neu oder führen Sie „ollama pull {1}“ in PowerShell aus
 d7dc8672	Fehler: {0}
-3decf270	Eine automatische Abstimmung läuft. Starten Sie, wenn sie beendet ist.
 2ccbef69	Ein Kühltest läuft etwa {0} Minuten.\n\n
 502399da	• Während des Tests läuft die CPU mit voller Leistung, daher werden die Lüfter laut.\n
 c0d1c3f1	• Erreicht die CPU-Temperatur {0:F0} °C, wird die Last automatisch beendet.\n
@@ -1469,7 +1430,6 @@ d3ec144f	Virtuell ({0})
 f45a5a37	Die erkannte Hardware. Über die Bildschaltfläche können Sie ein Bild z. B. durch ein eigenes Foto ersetzen
 31e94c42	Legen Sie für jeden Lüfter fest, wie die Drehzahl von der Temperatur abhängt. Änderungen werden sofort übernommen und gespeichert
 b5ccd0c3	Automatische Diagnose aus den Aufzeichnungen und Prüfung der Lüfter auf Staub und Verschleiß (KI-Rat optional)
-2efbce3f	Belastet das System, um Kurven automatisch zu erstellen oder zu messen, wie gut die aktuellen Einstellungen kühlen
 73339fb8	Bis zu 24 Stunden Temperaturen und Drehzahlen (ohne Zeiten, in denen die App geschlossen war; vor einem Neustart Minutenmittel)
 389ce2cc	Stromkostenschätzung und Fehleraufzeichnungen
 4bd55735	Lässt die LEDs des PCs über OpenRGB passend zu Temperatur, Regenbogen, Musik usw. leuchten
@@ -1591,7 +1551,6 @@ d2937a7a	Audiosoftware: {0} (die Beleuchtung folgt dem Ton vor den Effekten; wir
 db4d82a2	Remotedesktop
 d6776d41	Ändern Sie Anzeigesprache, Design, Akzentfarbe, Hintergrund, Textfarbe, Schriftart und Textgröße. Änderungen gelten sofort
 e0480009	Sprache der Bildschirmtexte. „Auto“ folgt der Windows-Anzeigesprache (Englisch, falls nicht unterstützt). Wechselt sofort nach der Auswahl
-e45b0531	Die automatische Abstimmung läuft noch.
 e955d878	Ein Kühltest läuft noch.
 afb9660d	Eine Kalibrierung läuft noch.
 c8e0f349	Die Geräuschprüfung eines Lüfters läuft noch.
@@ -1736,3 +1695,67 @@ f16a0b90	Rotes, orangefarbenes und gelbes Licht flackert wie Flammen auf jeder L
 acfe2730	① ZIP für die Meldung erstellen
 b15ec58c	{0} wurde erstellt (der Ordner öffnet sich im Explorer). Ziehen Sie diese Datei auf die Meldeseite, um sie anzuhängen.
 d92849da	Problem melden…
+050c3438	Die „Automatische Einrichtung“ oder „Lüfter messen“ auf der Seite Lüfterkurven misst Stopp- und Höchstdrehzahl (ca. 1–2 Min. pro Lüfter).
+08978566	mit GPU messen ({0} Lüfter)
+08fb3614	Automatische Einrichtung…
+0929dde7	folgt {0}
+095205e6	Automatische Einrichtung starten
+0acedb82	Übernimmt die gemessenen CPU- und GPU-Kurven in das gewählte Profil
+10eada78	Abgebrochen, weil die GPU-Last aufgehört hat
+1941f6aa	mit CPU messen ({0} Lüfter)
+2646b9f3	• Mit GPU messen: Die App belastet die GPU voll und misst genauso (kein Spiel nötig).
+266ab9c4	Keine GPU gefunden, die belastet werden kann
+31af6243	Hält die CPU unter Volllast unter dieser Temperatur
+33d3e475	Lüftereigenschaften messen
+3f5571aa	„{0}“: stoppt unter {1:F0} %, daher ist die Mindestdrehzahl jetzt {2:F0} %
+42a72e3a	Automatische Einrichtung
+4610da9f	GPU: Messung nicht möglich, kein Temperatur- oder Auslastungssensor gefunden
+462bc50c	• Sie prüfen das Ergebnis vor dem Anwenden, ein Abbruch ändert also nichts.
+47647013	Schritte: {0} · ca. {1} Min. Pumpen sind ausgenommen.
+48090db5	Während der Messung
+4ac2f56e	Automatische Einrichtung wird gestartet (ca. {0} Min.).\n\n
+50136e19	Wählen Sie die zu messenden Lüfter sowie CPU und/oder GPU. Pumpen sind ausgenommen (sie laufen wie gewohnt).
+53661bf6	{0} Lüfter messen
+5899b660	• Mit CPU messen: belastet die CPU voll und senkt die Lüfter schrittweise von 100 %.
+5a241b3a	Die automatische Einrichtung läuft. Starten Sie danach.
+6d8d04fc	Lüftereigenschaften (Kalibrierung)
+6da30665	„{0}“ wird gemessen: {1}
+72f6035d	Die automatische Einrichtung oder ein Kühltest läuft. Starten Sie danach.
+743c2e54	Abgebrochen: Die GPU wurde belastet, aber die Auslastung stieg nicht
+766747f4	Ein Klick erledigt alles: ① misst jeden Lüfter, ② belastet CPU und GPU und misst die Temperatur, während die Lüfter schrittweise von 100 % gesenkt werden, ③ erstellt „die leiseste Kurve, die die Zieltemperatur noch hält“. Sie prüfen das Ergebnis, bevor Sie es anwenden (bei Abbruch läuft die normale Steuerung weiter und nichts ändert sich).
+7a0a5001	Die GPU kann nicht gemessen werden, weil kein GPU-Temperatur- oder Auslastungssensor gefunden wurde
+7b75bea7	{1} automatisch erstellte Kurve(n) zu „{0}“ hinzugefügt (mit Rückgängig zurücksetzbar).
+814a5f43	„{0}“: gemessen (stoppt unter {1:F0} %, max. {2:N0} U/min)
+8226a1e3	Die automatische Einrichtung läuft gerade.
+847327ae	„{0}“ konnte nicht gemessen werden: {1}
+8d17780e	CPU-Ziel
+8f35db7c	• Die Lüfter werden lauter und leiser. Bitte schließen Sie rechenintensive Apps.
+901a429f	Es wurde nicht genug gemessen, um eine Kurve zu erstellen.
+94396456	{0}: vorzeitig beendet, die Kurve nutzt nur die gemessenen Stufen ({1})
+94d6baac	Last konnte nicht erzeugt werden: {0}
+9decdc86	Abgebrochen: Innerhalb von 3 Minuten kam keine GPU-Last (starten Sie ein Spiel oder einen Benchmark)
+9f77375a	GPU-Ziel
+a390636e	Passt die Drehzahl laufend an, damit die eingestellte Temperatur nicht überschritten wird
+a9addd42	Hält die GPU unter Volllast unter dieser Temperatur (die App erzeugt die Last; kein Spiel nötig)
+aae4c566	„{0}“ wird gemessen…
+ab824de0	Übernimmt die gemessenen CPU- und GPU-Kurven in alle Profile. Profile mit der Rolle „Leise“ erhalten Ziel +5 °C, „Maximale Kühlung“ −5 °C, die übrigen das eingestellte Ziel
+addb0201	Lässt den Lüfter von 0 bis 100 % laufen und misst, wo er stoppt, wo er anläuft und seine Höchstdrehzahl (ca. 1–2 Min.). Die „Automatische Einrichtung“ misst alle noch nicht gemessenen Lüfter auf einmal
+af0435c9	Belastet CPU und GPU, misst und erstellt die leiseste Kurve, die die Zieltemperatur noch hält (öffnet die Seite „Automatische Einrichtung“)
+b499b2f2	Messung abgeschlossen. Prüfen Sie die Kurven und wählen Sie das Profil, auf das sie angewendet werden.
+b7615185	GPU wird belastet (warte, bis die Auslastung steigt)…
+b940650e	• Erreicht die CPU {0:F0} °C oder die GPU {1:F0} °C, wird sofort abgebrochen und zur normalen Steuerung zurückgekehrt.
+c07922c2	noch nicht gemessen
+c4256752	• Lüfter messen ({0}): Nacheinander läuft jeder Lüfter mit voller Drehzahl und stoppt.
+ccb1e668	Die automatische Einrichtung hat die Messung abgeschlossen. Prüfen Sie die Kurven und wenden Sie sie an.
+d0b44b86	Automatische Einrichtung: Es wurde nicht genug gemessen, um eine Kurve zu erstellen.
+d36eeaf3	Die Rolle dieses Profils. Auch nach einer Umbenennung funktionieren die automatische Einrichtung (Leise: Ziel +5 °C, Maximale Kühlung: −5 °C), die Kurven für neue Lüfter und das schnelle „Leise“ mit dieser Rolle richtig
+d6fd5420	Abgebrochen. Prüfen Sie die aus den Messwerten erstellte Kurve und entscheiden Sie, ob Sie sie anwenden.
+e0e8a2f4	Lüfter messen
+ee9c1f57	Misst jeden Lüfter und die Temperaturen unter CPU- und GPU-Last und erstellt daraus automatisch Kurven. Sie können auch prüfen, wie gut die aktuellen Einstellungen kühlen
+f42e11b9	Abgebrochen. Die normale Steuerung läuft wieder.
+f965efc0	Kühltest (aktuelle Einstellungen prüfen)
+fd03884c	CPU: Messung nicht möglich, kein Temperatursensor gefunden
+fdc48725	Wählen Sie mindestens einen Lüfter sowie CPU und/oder GPU.
+fe39437d	Tipp: Messen Sie danach auf der Seite „Automatische Einrichtung“, um die leisesten Kurven für diesen PC zu erstellen (ca. 20–30 Min.).
+140786db	Ca. 1–2 Min. pro Lüfter. Ist die Stoppdrehzahl bekannt, wird auch die Mindestdrehzahl auf einen sicheren Wert gesetzt
+14e2760b	Noch nicht gemessene Lüfter zuerst messen

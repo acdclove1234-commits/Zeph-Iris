@@ -9,7 +9,6 @@ f70fd09f	Pannello
 a010a7fc	Cronologia
 133b6776	Rapporto
 b4bcc740	Diagnostica
-977807d2	Test e regolazione
 60dd6c40	Illuminazione
 dfa4a412	Sensori
 6243fa06	Impostazioni
@@ -64,8 +63,6 @@ ba60770e	Nome (comune a tutti i profili)
 59c6e4bc	Modalità di controllo
 a80265dc	Curva
 051753eb	Decidi tu la velocità per ogni temperatura
-530a9c8a	Temperatura obiettivo (automatica)
-1fc9ab3c	Imposta solo la temperatura, la velocità si regola da sola
 27bd9d15	Fissa
 84b1afad	Sempre la stessa velocità (per le pompe)
 26a15192	Segui (gruppo)
@@ -91,9 +88,7 @@ fa9ef1de	Discesa / s
 a5668673	Non scende mai sotto il 40% con nessuna impostazione. Se la velocità resta sotto il valore di allarme per 3 secondi, passa al 100% e ti avvisa, anche sotto controllo del BIOS.
 7c811ff7	Velocità di allarme
 cb5145a7	Usa come velocità minima
-812e0683	Calibrazione automatica
 ec41d4ae	Interrompi
-9514979f	Porta la ventola da 0 a 100% e misura la velocità a cui si ferma, a cui riparte e quella massima (circa 1–2 minuti)
 26101bee	+ Aggiungi intervallo
 f5097e76	Risonanze (salta le velocità rumorose)
 11bb3e7a	Aggiungi gli intervalli di velocità in cui il case o il radiatore vibrano: la ventola li attraversa rapidamente invece di fermarcisi (comune a tutti i profili)
@@ -103,8 +98,6 @@ ea6d9cfc	Evita qui
 ed263790	Intervallo da evitare
 49024f94	% a
 8b7237a1	Ancora nessuno. Se nessuna velocità dà fastidio, puoi lasciare così.
-166baf5a	Crea automaticamente…
-3eb67669	Mette sotto carico il PC, misura e crea la curva più silenziosa che mantiene ancora la temperatura obiettivo (pagina Test e regolazione)
 cd6687b0	Copia ▾
 a8a30430	+ Aggiungi curva
 29506d39	Elimina questa curva
@@ -147,20 +140,10 @@ f0f25c1b	Premi dopo aver pulito filtri o ventole. Le registrazioni da ora divent
 9c1df669	Controlla ora
 267e9ec4	Controllo usura e polvere delle ventole
 2c6b3065	Salva una registrazione ogni minuto e confronta con il passato: «la velocità è scesa a parità di comando (usura del cuscinetto, polvere)?» e «la temperatura è salita a parità di potenza (filtro o radiatore intasati)?».
-060669c9	Avvia la regolazione automatica
-96cc9d01	Regolazione automatica (crea le curve da sola)
 46ac54ca	Consigliato
-121a7d95	Sotto carico reale abbassa poco a poco la velocità delle ventole dal 100% e misura dove si assesta la temperatura. Da questo crea la curva più silenziosa che mantiene ancora la temperatura obiettivo (circa 8–15 minuti; se la interrompi, torna il controllo normale).
-e9947588	Cosa raffreddare
-d881d18f	CPU (carico integrato, automatico)
-e57cca88	GPU (carico con un gioco o un benchmark)
-c074a956	Sotto carico massimo, impedisce alla temperatura di superare questo valore
-0c43c305	Ventole da regolare
-183c9165	Misura con le ventole scelte alla stessa velocità. Le pompe sono escluse (funzionano come sempre).
 3e4a2fef	Misurazioni
 67633e51	Curva risultante (cambiando la temperatura obiettivo qui sopra si ricrea senza misurare di nuovo)
 0e95ff55	Applica a questo profilo
-6f4b51e9	I profili con «Silenzioso» nel nome hanno obiettivo +5 °C, «Prestazioni» obiettivo −5 °C, gli altri l'obiettivo così com'è
 a6de9295	Applica a tutti i profili
 35ae4fe6	10 min
 c7ad32f7	15 min
@@ -168,7 +151,6 @@ c7ad32f7	15 min
 cc4ae169	Test di raffreddamento
 16e5632b	Misura in automatico: riposo 30 secondi → carico su tutti i core della CPU → fine del carico e raffreddamento. Mostra quanto raffreddano le impostazioni attuali. La GPU non è inclusa; per provarla, avvia un gioco o un benchmark durante il test.
 eb918d75	Quando sei pronto, premi «Avvia il test». Chiudi le app pesanti per misure accurate.
-9e3aee28	Andamento durante test e regolazione
 339697a1	Salva rapporto
 8a49bfd9	Fai analizzare all'IA
 1ba434e9	Risultato
@@ -411,7 +393,6 @@ b373eaee	Intervallo di aggiornamento
 1ac4b576	Informazioni su questa app
 81d90dca	+ Nuovo profilo
 4cdf9ede	Salva un insieme di curve delle ventole con un nome e passa dall'uno all'altro
-774923ad	Il ruolo di questo profilo. Anche rinominandolo, la regolazione automatica (Silenzioso mira a +5 °C, Massimo raffreddamento a −5 °C), le curve delle nuove ventole e l'azione rapida «Silenzioso» funzionano correttamente grazie a questo ruolo
 82ac5e85	Combinazione di risparmio energia di Windows per questo profilo
 d663551d	Usa come predefinito
 80173301	Duplica
@@ -542,7 +523,6 @@ c1db4c06	Se disattivo, resta al BIOS; l'app controlla solo la velocità e proteg
 b58afa04	Tutto pronto
 861676ec	Avvia subito il controllo
 01bcdd36	Se disattivo, parte in DRY RUN (calcola soltanto e non scrive nulla sulle ventole)
-709f1f3b	Suggerimento: dopo, misura la velocità minima di ogni ventola con «Calibrazione automatica» nella pagina Curve per un'impostazione ancora più silenziosa.
 aceb0a14	Annulla
 f193a383	Indietro
 303830fc	Avanti
@@ -728,7 +708,6 @@ f8650f35	Arresto del carico e ritorno al controllo normale…
 9af40572	Interrotto per la massima velocità di emergenza
 ef174ee8	Interrotto perché la temperatura ha raggiunto {0:F0} °C
 13912a14	Interrotto perché il carico della GPU è sparito (tieni attivo il gioco o il benchmark)
-f3ec99ac	Interrotto perché non è stato applicato alcun carico
 5d76038f	Misurazione della velocità massima…
 966245da	Misurazione abbassando la velocità… ({0:F0}%)
 8db302e0	Ricerca della velocità di avvio… ({0:F0}%)
@@ -810,7 +789,6 @@ ea0f0b04	Per il {0:P0} delle registrazioni era al 95% o più. Più che la curva,
 8b53f64d	Sposta la curva di 5 °C a destra
 fe86db70	La curva di «{0}» è stata spostata di 5 °C a destra.
 9cf10287	{0}: con la calibrazione la regolazione è più precisa
-65f73a32	La «Calibrazione automatica» nella schermata Curve ventole misura la velocità di arresto e quella massima (circa 1–2 minuti).
 afae536a	{0}: la velocità minima è nella zona di arresto
 f8161c81	Questa ventola si ferma sotto il {0:F0}%, ma la velocità minima è {1:F0}%. Fermarsi e ripartire di continuo provoca ticchettii e ne riduce la durata.
 3272f28b	Imposta la velocità minima al {0:F0}%
@@ -1128,31 +1106,16 @@ eb7cfe73	Disinstallazione terminata. Verifica in corso…
 3487b9bc	Verifica del file scaricato…
 dbd5b1f0	Download in corso…
 9e8ebaf4	In corso… {0}%
-305b4308	(segue {0})
 0f6e5123	È in corso un test di raffreddamento o una calibrazione. Inizia al termine.
-5b079133	Seleziona almeno una ventola da regolare.
-395141d9	Sensore di temperatura GPU non trovato.
 4b25b2cd	Sensore di temperatura CPU non trovato.
-7a122984	Sensore di utilizzo GPU non trovato, quindi la GPU non può essere regolata.
-c7751269	• Dopo l'avvio, apri un gioco o un benchmark (3DMark, FF Benchmark, ecc.) e mantieni la GPU sotto carico.\n
-c886e5d0	• La CPU viene caricata al massimo (chiudi le altre app pesanti).\n
-dbca6724	Inizia la regolazione automatica (circa {0} min).\n\n
-a1ca3c2f	• Le {0} ventole selezionate vengono abbassate gradualmente dal 100%. Il rumore aumenterà e diminuirà.\n
-ac505b53	• Se la temperatura {0} raggiunge {1:F0} °C, la regolazione si interrompe subito e torna il controllo abituale.\n
-46002470	• Il risultato viene applicato solo dopo il tuo controllo, quindi interrompere a metà non cambia le impostazioni.
-36a2fc44	Regolazione automatica
 417196a4	Ora {0:F0} °C / ventola {1:F0}%
 5d9f4450	Ora {0:F0} °C
-fe560e0e	Misurazione terminata. Controlla la curva e scegli il profilo a cui applicarla.
-507f470e	Regolazione automatica: troppo pochi livelli misurati, impossibile creare la curva.
-afab154e	La misurazione della regolazione automatica è terminata. Controlla la curva risultante e applicala.
 8bbd848f	Vedi risultato
 59c5b033	{0} · a riposo {1:F1} °C · a pieno carico:
 5ab01921	Non è possibile mantenere {0:F0} °C nemmeno alla massima velocità (valuta di migliorare il raffreddamento)
 d1e24e74	Velocità necessaria per mantenere {0:F0} °C: circa {1:F0}%
 9e669da9	* Terminata in anticipo, creata solo con i livelli misurati ({0})
 d63ad09b	Profilo «{0}» non trovato. Scegline un altro.
-26bd87a8	La curva creata automaticamente è stata applicata a {1} ventole di «{0}» (annullabile con «Annulla»).
 b6e37608	Vedi curva
 85bbd542	Applicato a tutti i profili (obiettivo: {0}). Annullabile con «Annulla».
 cd7e4f98	CPU (regolazione automatica)
@@ -1174,7 +1137,6 @@ e158d65b	• Subito dopo l'aggiunta, «Controlla con questa app» è disattivato
 5c0edbde	Curva {0}
 68339e34	Serve almeno una curva. Per una velocità costante, passa a «Velocità fissa».
 0de821a1	È in corso la calibrazione di un'altra ventola. Inizia al termine.
-d4ae40d7	È in corso una regolazione automatica o un test di raffreddamento. Inizia al termine.
 2e3bb637	Questa ventola non fa parte del profilo attivo.
 3009598f	Inizia la calibrazione di «{0}».\n\n
 8d17b7e8	• Per circa 1–2 minuti la ventola alternerà massima velocità e arresto.\n
@@ -1439,7 +1401,6 @@ be68c30e	{0} sta analizzando… (la prima volta il caricamento del modello richi
 dea2940c	Interrotto
 54fa54cb	Il modello «{0}» non è presente in Ollama. Scegline un altro con «Aggiorna elenco» o esegui «ollama pull {1}» in PowerShell
 d7dc8672	Errore: {0}
-3decf270	È in corso una regolazione automatica. Inizia al termine.
 2ccbef69	Verrà eseguito un test di raffreddamento di circa {0} minuti.\n\n
 502399da	• Durante il test la CPU lavora al massimo, quindi le ventole diventano rumorose.\n
 c0d1c3f1	• Se la temperatura della CPU raggiunge {0:F0} °C, il carico si ferma automaticamente.\n
@@ -1469,7 +1430,6 @@ d3ec144f	Virtuale ({0})
 f45a5a37	L'hardware rilevato. Con il pulsante dell'immagine puoi sostituirla, ad esempio con una tua foto
 31e94c42	Imposta per ogni ventola la relazione tra temperatura e velocità. Le modifiche vengono applicate e salvate subito
 b5ccd0c3	Diagnosi automatica dalle registrazioni e controllo di polvere e usura delle ventole (consigli dell'IA facoltativi)
-2efbce3f	Applica un carico per creare curve automaticamente o misurare quanto raffreddano le impostazioni attuali
 73339fb8	Fino a 24 ore di temperature e velocità (esclusi i periodi con l'app chiusa; prima di un riavvio, medie al minuto)
 389ce2cc	Stima del costo dell'elettricità e registrazioni delle anomalie
 4bd55735	Illumina i LED del PC in base a temperatura, arcobaleno, musica e altro tramite OpenRGB
@@ -1591,7 +1551,6 @@ d2937a7a	Software audio: {0} (la luce segue il suono prima degli effetti; se sem
 db4d82a2	Desktop remoto
 d6776d41	Cambia lingua, tema, colore di accento, sfondo, colore del testo, carattere e dimensione del testo. Le modifiche si applicano subito
 e0480009	Lingua del testo a schermo. «Auto» segue la lingua di visualizzazione di Windows (inglese se non supportata). Cambia subito appena la scegli
-e45b0531	È in corso una regolazione automatica.
 e955d878	È in corso un test di raffreddamento.
 afb9660d	È in corso una calibrazione.
 c8e0f349	È in corso il controllo del rumore di una ventola.
@@ -1736,3 +1695,67 @@ f16a0b90	Luce rossa, arancione e gialla tremola come fiamme su ogni LED
 acfe2730	① Crea lo zip della segnalazione
 b15ec58c	Creato {0} (la sua cartella si apre in Esplora file). Trascina questo file nella pagina di segnalazione per allegarlo.
 d92849da	Segnala un problema…
+050c3438	La «Configurazione automatica», o «Misura ventola» nella pagina Curve ventole, misura la velocità di arresto e quella massima (circa 1–2 min per ventola).
+08978566	misura con GPU ({0} ventole)
+08fb3614	Configurazione automatica…
+0929dde7	segue {0}
+095205e6	Avvia configurazione automatica
+0acedb82	Inserisce le curve CPU e GPU misurate nel profilo scelto
+10eada78	Interrotto perché il carico della GPU si è fermato
+1941f6aa	misura con CPU ({0} ventole)
+2646b9f3	• Misura con GPU: l'app carica la GPU al massimo e misura allo stesso modo (non serve avviare un gioco).
+266ab9c4	Nessuna GPU trovata da caricare
+31af6243	Mantiene la CPU sotto questa temperatura a pieno carico
+33d3e475	Misura le caratteristiche della ventola
+3f5571aa	«{0}»: si ferma sotto il {1:F0}%, quindi ora la velocità minima è {2:F0}%
+42a72e3a	Configurazione automatica
+4610da9f	GPU: impossibile misurare, nessun sensore di temperatura o utilizzo trovato
+462bc50c	• Controlli il risultato prima di applicarlo, quindi interrompere non cambia nulla.
+47647013	Passi: {0} · circa {1} min. Le pompe sono escluse.
+48090db5	Durante la misura
+4ac2f56e	Avvio della configurazione automatica (circa {0} min).\n\n
+50136e19	Scegli le ventole da misurare e la CPU e/o la GPU. Le pompe sono escluse (funzionano come sempre).
+53661bf6	misura {0} ventola/e
+5899b660	• Misura con CPU: carica la CPU al massimo e abbassa le ventole a passi dal 100%.
+5a241b3a	Configurazione automatica in corso. Avvia al termine.
+6d8d04fc	Caratteristiche della ventola (calibrazione)
+6da30665	Misura di «{0}»: {1}
+72f6035d	È in corso una configurazione automatica o un test di raffreddamento. Avvia al termine.
+743c2e54	Interrotto: la GPU è stata caricata ma il suo utilizzo non è salito
+766747f4	Un solo pulsante fa tutto: ① misura ogni ventola, ② carica CPU e GPU e misura la temperatura abbassando le ventole a passi dal 100%, ③ crea «la curva più silenziosa che mantiene ancora la temperatura obiettivo». Controlli il risultato prima di applicarlo (se lo interrompi, torna il controllo normale e non cambia nulla).
+7a0a5001	Impossibile misurare la GPU: nessun sensore di temperatura o utilizzo della GPU trovato
+7b75bea7	Aggiunte {1} curve create automaticamente a «{0}» (Annulla per tornare indietro).
+814a5f43	«{0}»: misurata (si ferma sotto il {1:F0}%, max {2:N0} rpm)
+8226a1e3	Configurazione automatica in corso.
+847327ae	Impossibile misurare «{0}»: {1}
+8d17780e	Obiettivo CPU
+8f35db7c	• Le ventole diventeranno più rumorose e più silenziose. Chiudi le app pesanti.
+901a429f	Misure insufficienti per creare una curva.
+94396456	{0}: terminato prima, la curva usa solo i passi misurati ({1})
+94d6baac	Impossibile creare il carico: {0}
+9decdc86	Interrotto: nessun carico GPU entro 3 minuti (avvia un gioco o un benchmark)
+9f77375a	Obiettivo GPU
+a390636e	Regola la velocità al volo per restare sotto la temperatura impostata
+a9addd42	Mantiene la GPU sotto questa temperatura a pieno carico (il carico lo crea l'app; non serve avviare un gioco)
+aae4c566	Misura di «{0}»…
+ab824de0	Inserisce le curve CPU e GPU misurate in tutti i profili. I profili con ruolo «Silenzioso» puntano a +5 °C, «Massimo raffreddamento» a −5 °C, gli altri all'obiettivo impostato
+addb0201	Fa girare la ventola da 0 a 100% e misura dove si ferma, dove riparte e la velocità massima (circa 1–2 min). La «Configurazione automatica» misura in una volta tutte le ventole non ancora misurate
+af0435c9	Carica CPU e GPU, misura e crea la curva più silenziosa che mantiene ancora la temperatura obiettivo (apre la pagina Configurazione automatica)
+b499b2f2	Misura terminata. Controlla le curve e scegli il profilo a cui applicarle.
+b7615185	Carico sulla GPU (in attesa che l'utilizzo salga)…
+b940650e	• Se la CPU raggiunge {0:F0} °C o la GPU {1:F0} °C, si ferma subito e torna al controllo normale.
+c07922c2	non ancora misurata
+c4256752	• Misura ventole ({0}): una alla volta, ogni ventola gira al massimo e si ferma.
+ccb1e668	La configurazione automatica ha finito di misurare. Controlla le curve ottenute e applicale.
+d0b44b86	Configurazione automatica: misure insufficienti per creare una curva.
+d36eeaf3	Il ruolo di questo profilo. Anche se lo rinomini, la configurazione automatica (Silenzioso: obiettivo +5 °C, Massimo raffreddamento: −5 °C), le curve delle nuove ventole e il «Silenzioso» rapido funzionano correttamente con questo ruolo
+d6fd5420	Interrotto. Controlla la curva creata con le misure fatte e scegli se applicarla.
+e0e8a2f4	Misura ventola
+ee9c1f57	Misura ogni ventola e le temperature sotto carico di CPU e GPU, poi crea le curve automaticamente. Puoi anche verificare quanto raffreddano le impostazioni attuali
+f42e11b9	Interrotto. Il controllo normale è tornato.
+f965efc0	Test di raffreddamento (verifica le impostazioni attuali)
+fd03884c	CPU: impossibile misurare, nessun sensore di temperatura trovato
+fdc48725	Scegli almeno una ventola da misurare e la CPU e/o la GPU.
+fe39437d	Suggerimento: dopo, misura nella pagina «Configurazione automatica» per creare le curve più silenziose adatte a questo PC (circa 20–30 min).
+140786db	Circa 1–2 min per ventola. Nota la velocità di arresto, anche la velocità minima viene portata a un valore sicuro
+14e2760b	Misura prima le ventole non ancora misurate

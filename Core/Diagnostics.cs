@@ -158,7 +158,7 @@ public static class Diagnostics
                 {
                     Level = FindingLevel.Info,
                     Title = L($"{fan.Name}: キャリブレーションをすると、より正確に調整できます"),
-                    Detail = L("ファンカーブ画面の「自動キャリブレーション」で、止まる回転数と最大回転数を測れます（約 1〜2 分）。"),
+                    Detail = L("「自動セットアップ」か、ファンカーブ画面の「特性を測る」で、止まる回転数と最大回転数を測れます（1 台 約 1〜2 分）。"),
                 });
             }
             else if (fan.MinDuty < cal.StopDuty)

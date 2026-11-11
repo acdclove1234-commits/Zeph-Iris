@@ -18,7 +18,7 @@
     <!-- 画面は WPF なので、高 DPI の設定は app.manifest に書く（WinForms 用の ApplicationHighDpiMode を勧める警告は出さない） -->
     <NoWarn>$(NoWarn);WFAC010</NoWarn>
     <AssemblyName>Zeph-Iris</AssemblyName>
-    <Version>6.10.4</Version>
+    <Version>6.11.0</Version>
     <Product>Zeph-Iris</Product>
     <!-- exe のアイコン（エクスプローラー・デスクトップのショートカットに表示される） -->
     <ApplicationIcon>Assets\app.ico</ApplicationIcon>
@@ -48,6 +48,9 @@
     <PackageReference Include="QRCoder" Version="1.6.0" />
     <!-- 音楽連動: PC から出ている音を取り込む（WASAPI ループバック）・アプリごとの音量メーター -->
     <PackageReference Include="NAudio.Wasapi" Version="2.2.1" />
+    <!-- 自動セットアップ: GPU に負荷をかける（Direct3D 11 の計算シェーダー） -->
+    <PackageReference Include="Vortice.D3DCompiler" Version="3.8.2" />
+    <PackageReference Include="Vortice.Direct3D11" Version="3.8.2" />
   </ItemGroup>
 
   <ItemGroup>

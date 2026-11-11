@@ -38,10 +38,12 @@ public sealed class AutoTuneResult
         sb.AppendLine(L($"待機時の温度: {IdleTemp:F1} °C"));
         foreach (var s in Steps)
             sb.AppendLine($"  {s.Duty,3:F0}% → {s.SteadyTemp:F1} °C{(s.AvgRpm is double r ? L($"（{r:N0} rpm）") : "")}");
+        // 1 段も測れなかったとき（負荷がかからなかったなど）は、目標を守れるかは分からない
+        if (Steps.Count == 0) return sb.ToString();
         var need = AutoTuner.RequiredDuty(Steps, target);
-        var top = Steps.OrderByDescending(x => x.Duty).FirstOrDefault();
+        var top = Steps.OrderByDescending(x => x.Duty).First();
         sb.AppendLine(need.Insufficient
-            ? L($"目標 {target:F0}°C は全開でも届きません（全開で {top?.SteadyTemp:F1}°C）")
+            ? L($"目標 {target:F0}°C は全開でも届きません（全開で {top.SteadyTemp:F1}°C）")
             : L($"目標 {target:F0}°C を守るのに必要な回転数: 約 {need.Duty:F0}%"));
         return sb.ToString();
     }
@@ -63,6 +65,8 @@ public sealed class AutoTuner : IDisposable
 
     private static readonly TimeSpan IdleTime = TimeSpan.FromSeconds(20);
     private static readonly TimeSpan WaitLoadTimeout = TimeSpan.FromMinutes(3);
+    /// <summary>内蔵の負荷で、使用率が上がるのを待つ上限（10 秒続けて 70% 以上になれば始める）</summary>
+    private static readonly TimeSpan BuiltInLoadTimeout = TimeSpan.FromSeconds(45);
     // 簡易水冷は冷却液がゆっくり温まるので、1 段ごとに少なくとも 1 分は待つ
     private static readonly TimeSpan MinHold = TimeSpan.FromSeconds(60);
     private static readonly TimeSpan MaxHold = TimeSpan.FromSeconds(180);
@@ -83,10 +87,12 @@ public sealed class AutoTuner : IDisposable
     private readonly string _sensorName;
     private readonly string? _loadSensorId;
     private readonly bool _builtInLoad;
+    /// <summary>内蔵の負荷（GPU）が本当にかかったかを、使用率センサーで確かめてから測り始める</summary>
+    private readonly bool _verifyLoad;
     private readonly double _target;
     private readonly double _abortTemp;
     private readonly List<double> _duties;
-    private readonly StressLoad _load = new();
+    private readonly ILoadGenerator _load;
     private readonly List<(DateTime T, double Temp)> _window = new();
     private readonly List<double> _idle = new();
     private readonly List<double> _rpms = new();
@@ -107,17 +113,22 @@ public sealed class AutoTuner : IDisposable
     public IReadOnlyList<AutoTuneStep> Steps => _steps;
     public DateTime StartedAt { get; } = DateTime.Now;
 
-    /// <param name="loadSensorId">外部の負荷（ゲームなど）を使うときに見る使用率センサー。null なら内蔵の CPU 負荷</param>
+    /// <param name="loadSensorId">負荷を確かめる使用率センサー（GPU）。null なら内蔵の CPU 負荷を使い、確かめない</param>
     /// <param name="minDuty">選んだファンの最低回転数（これより下は測らない）</param>
+    /// <param name="load">
+    /// loadSensorId があるときに使う内蔵の負荷（GPU の負荷など）。null なら、ゲームなどの外部の負荷がかかるのを待つ
+    /// </param>
     public AutoTuner(FanEngine engine, List<(string ControlId, string Name)> fans, string sensorId, string sensorName,
-        string? loadSensorId, double target, double abortTemp, double minDuty)
+        string? loadSensorId, double target, double abortTemp, double minDuty, ILoadGenerator? load = null)
     {
         _engine = engine;
         _fans = fans;
         _sensorId = sensorId;
         _sensorName = sensorName;
         _loadSensorId = loadSensorId;
-        _builtInLoad = loadSensorId is null;
+        _builtInLoad = loadSensorId is null || load is not null;
+        _verifyLoad = loadSensorId is not null && load is not null;
+        _load = load ?? new StressLoad();
         _target = target;
         _abortTemp = abortTemp;
         _duties = new[] { 100.0, 80, 65, 50, 40, 30 }.Where(d => d >= minDuty).ToList();
@@ -140,6 +151,7 @@ public sealed class AutoTuner : IDisposable
     public string StatusText => Current switch
     {
         Phase.Idle => L("待機時の温度を測っています…"),
+        Phase.WaitLoad when _verifyLoad => L("GPU に負荷をかけています（使用率が上がるのを待っています）…"),
         Phase.WaitLoad when _builtInLoad => L("負荷を開始しています…"),
         Phase.WaitLoad => L("ゲームやベンチマークを起動してください（GPU 使用率が 70% を超えたら自動で始まります）"),
         Phase.Warmup => L("全開で温まるまで待っています…"),
@@ -174,10 +186,12 @@ public sealed class AutoTuner : IDisposable
             }
         }
 
-        // 外部の負荷（ゲームなど）がやめられたら中止
-        if (!_builtInLoad && Current is Phase.Warmup or Phase.Steps && LoadOf(s) is double load && load < 40)
+        // 負荷がかからなくなったら中止（外部の負荷: ゲームなどがやめられた。内蔵の負荷: GPU が止めた）
+        if (_loadSensorId is not null && Current is Phase.Warmup or Phase.Steps && LoadOf(s) is double load && load < 40)
         {
-            Abort(L("GPU の負荷がなくなったため中止しました（ゲームやベンチマークを動かし続けてください）"));
+            Abort(_builtInLoad
+                ? L("GPU の負荷が止まったため中止しました")
+                : L("GPU の負荷がなくなったため中止しました（ゲームやベンチマークを動かし続けてください）"));
             return;
         }
 
@@ -193,8 +207,13 @@ public sealed class AutoTuner : IDisposable
                 break;
 
             case Phase.WaitLoad:
-                bool loaded = _builtInLoad;
-                if (!_builtInLoad)
+                if (_load.Error is { } loadError)
+                {
+                    Abort(L($"負荷をかけられませんでした: {loadError}"));
+                    break;
+                }
+                bool loaded = _builtInLoad && !_verifyLoad;
+                if (!loaded)
                 {
                     // ゲームの読み込み中などの一瞬の負荷ではなく、10 秒続いてから始める
                     if (LoadOf(s) is double l && l >= ExternalLoadThreshold)
@@ -212,9 +231,11 @@ public sealed class AutoTuner : IDisposable
                     Override(100, now);
                     Next(Phase.Warmup, now);
                 }
-                else if (now - _phaseStart >= WaitLoadTimeout)
+                else if (now - _phaseStart >= (_builtInLoad ? BuiltInLoadTimeout : WaitLoadTimeout))
                 {
-                    Abort(L("負荷がかからなかったため中止しました"));
+                    Abort(_builtInLoad
+                        ? L("GPU に負荷をかけましたが、使用率が上がらなかったため中止しました")
+                        : L("3 分待っても GPU に負荷がかからなかったため中止しました（ゲームやベンチマークを起動してください）"));
                 }
                 break;
 

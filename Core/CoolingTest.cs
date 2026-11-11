@@ -9,9 +9,20 @@ using System.Text;
 
 namespace ProFanController;
 
-/// <summary>全コアで浮動小数点演算を回し続けて CPU を発熱させる</summary>
-public sealed class StressLoad : IDisposable
+/// <summary>測定のための負荷（CPU・GPU）。Start で始め、Stop で止める。始められなかったときは Error に理由</summary>
+public interface ILoadGenerator
 {
+    void Start();
+    void Stop();
+    /// <summary>負荷をかけられなかった理由（問題なければ null）</summary>
+    string? Error { get; }
+}
+
+/// <summary>全コアで浮動小数点演算を回し続けて CPU を発熱させる</summary>
+public sealed class StressLoad : IDisposable, ILoadGenerator
+{
+    public string? Error => null;
+
     private CancellationTokenSource? _cts;
     private readonly List<Thread> _threads = new();
 

@@ -9,7 +9,6 @@ f70fd09f	Pulpit
 a010a7fc	Historia
 133b6776	Raport
 b4bcc740	Diagnostyka
-977807d2	Test i strojenie
 60dd6c40	Podświetlenie
 dfa4a412	Czujniki
 6243fa06	Ustawienia
@@ -64,8 +63,6 @@ ba60770e	Nazwa (wspólna dla wszystkich profili)
 59c6e4bc	Sposób sterowania
 a80265dc	Krzywa
 051753eb	Samodzielnie ustal obroty dla każdej temperatury
-530a9c8a	Temperatura docelowa (automatycznie)
-1fc9ab3c	Wystarczy ustawić temperaturę, obroty dobiorą się same
 27bd9d15	Stałe
 84b1afad	Zawsze te same obroty (dla pomp)
 26a15192	Podążaj (grupa)
@@ -91,9 +88,7 @@ fa9ef1de	Spadek / s
 a5668673	W żadnym ustawieniu nie spada poniżej 40%. Jeśli obroty przez 3 sekundy są poniżej progu ostrzeżenia, przechodzi na 100% i powiadamia — nawet pod sterowaniem BIOS.
 7c811ff7	Próg ostrzeżenia
 cb5145a7	Ustaw jako minimalne obroty
-812e0683	Automatyczna kalibracja
 ec41d4ae	Przerwij
-9514979f	Uruchamia wentylator od 0 do 100% i mierzy obroty zatrzymania, startu oraz maksymalne (ok. 1–2 minuty)
 26101bee	+ Dodaj zakres
 f5097e76	Rezonans (omijaj głośne obroty)
 11bb3e7a	Dodaj zakresy obrotów, przy których buczy obudowa lub chłodnica — wentylator przejdzie przez nie szybko, zamiast w nich zostać (wspólne dla wszystkich profili)
@@ -103,8 +98,6 @@ ea6d9cfc	Omijaj to
 ed263790	Omijany zakres
 49024f94	% do
 8b7237a1	Brak. Jeśli żadne obroty nie przeszkadzają, można tak zostawić.
-166baf5a	Utwórz automatycznie…
-3eb67669	Obciąża komputer, mierzy i tworzy najcichszą krzywą, która nadal utrzymuje temperaturę docelową (strona Test i strojenie)
 cd6687b0	Kopiuj ▾
 a8a30430	+ Dodaj krzywą
 29506d39	Usuń tę krzywą
@@ -147,20 +140,10 @@ f0f25c1b	Naciśnij po wyczyszczeniu filtrów lub wentylatorów. Zapisy od tej ch
 9c1df669	Sprawdź teraz
 267e9ec4	Kontrola zużycia i kurzu wentylatorów
 2c6b3065	Zapisuje dane co minutę i porównuje z przeszłością: „czy obroty spadły przy tym samym wysterowaniu (zużycie łożyska, kurz)?” i „czy temperatura wzrosła przy tej samej mocy (zatkany filtr lub chłodnica)?”.
-060669c9	Uruchom automatyczne strojenie
-96cc9d01	Automatyczne strojenie (krzywe tworzone same)
 46ac54ca	Zalecane
-121a7d95	Pod rzeczywistym obciążeniem stopniowo zmniejsza obroty wentylatorów od 100% i mierzy, gdzie temperatura się ustala. Na tej podstawie tworzy najcichszą krzywą, która nadal utrzymuje temperaturę docelową (ok. 8–15 minut; po przerwaniu wraca zwykłe sterowanie).
-e9947588	Co chłodzić
-d881d18f	CPU (wbudowane obciążenie, automatycznie)
-e57cca88	GPU (obciążenie grą lub benchmarkiem)
-c074a956	Przy pełnym obciążeniu nie pozwala temperaturze przekroczyć tej wartości
-0c43c305	Strojone wentylatory
-183c9165	Mierzy przy jednakowych obrotach wybranych wentylatorów. Pompy są pomijane (działają normalnie).
 3e4a2fef	Wyniki pomiarów
 67633e51	Wynikowa krzywa (zmiana temperatury docelowej powyżej przelicza ją bez ponownego pomiaru)
 0e95ff55	Zastosuj do tego profilu
-6f4b51e9	Profile z „Cichy” w nazwie dostają cel +5°C, z „Wydajność” cel −5°C, pozostałe cel bez zmian
 a6de9295	Zastosuj do wszystkich profili
 35ae4fe6	10 min
 c7ad32f7	15 min
@@ -168,7 +151,6 @@ c7ad32f7	15 min
 cc4ae169	Test chłodzenia
 16e5632b	Mierzy automatycznie: 30 sekund spoczynku → obciążenie wszystkich rdzeni CPU → koniec obciążenia i schładzanie. Pokazuje, jak dobrze chłodzą obecne ustawienia. GPU nie jest uwzględniony; aby go sprawdzić, uruchom podczas testu grę lub benchmark.
 eb918d75	Gdy będziesz gotowy, naciśnij „Rozpocznij test”. Zamknij ciężkie aplikacje, aby wyniki były dokładne.
-9e3aee28	Przebieg podczas testu i strojenia
 339697a1	Zapisz raport
 8a49bfd9	Daj AI do analizy
 1ba434e9	Wynik
@@ -411,7 +393,6 @@ b373eaee	Interwał odświeżania
 1ac4b576	O aplikacji
 81d90dca	+ Nowy profil
 4cdf9ede	Zapisz zestaw krzywych wentylatorów pod nazwą i przełączaj się między nimi
-774923ad	Rola tego profilu. Nawet po zmianie nazwy automatyczne strojenie (Cichy: cel +5°C, Maks. chłodzenie: −5°C), krzywe nowych wentylatorów i szybka akcja „Cicho” działają poprawnie dzięki tej roli
 82ac5e85	Plan zasilania Windows dla tego profilu
 d663551d	Używaj domyślnie
 80173301	Duplikuj
@@ -542,7 +523,6 @@ c1db4c06	Po wyłączeniu steruje BIOS, a aplikacja tylko pilnuje obrotów i chro
 b58afa04	Wszystko gotowe
 861676ec	Od razu rozpocznij sterowanie
 01bcdd36	Po wyłączeniu start w trybie DRY RUN (tylko obliczenia, bez zapisu do wentylatorów)
-709f1f3b	Wskazówka: potem zmierz minimalne obroty każdego wentylatora przyciskiem „Automatyczna kalibracja” na stronie krzywych — będzie jeszcze ciszej.
 aceb0a14	Anuluj
 f193a383	Wstecz
 303830fc	Dalej
@@ -728,7 +708,6 @@ f8650f35	Zatrzymywanie obciążenia i powrót do zwykłego sterowania…
 9af40572	Przerwano z powodu awaryjnej pełnej prędkości
 ef174ee8	Przerwano, bo temperatura osiągnęła {0:F0}°C
 13912a14	Przerwano, bo obciążenie GPU zniknęło (nie zamykaj gry ani benchmarku)
-f3ec99ac	Przerwano, bo nie przyłożono obciążenia
 5d76038f	Pomiar maksymalnych obrotów…
 966245da	Pomiar przy zmniejszaniu obrotów… ({0:F0}%)
 8db302e0	Szukanie obrotów startowych… ({0:F0}%)
@@ -810,7 +789,6 @@ ea0f0b04	Przez {0:P0} zapisów obroty wynosiły 95% lub więcej. Raczej brakuje 
 8b53f64d	Przesuń krzywą o 5°C w prawo
 fe86db70	Krzywa „{0}” została przesunięta o 5°C w prawo.
 9cf10287	{0}: kalibracja pozwala na dokładniejsze strojenie
-65f73a32	„Automatyczna kalibracja” na ekranie Krzywe wentylatorów mierzy obroty zatrzymania i obroty maksymalne (około 1–2 minut).
 afae536a	{0}: minimalne obroty są w strefie zatrzymania
 f8161c81	Ten wentylator zatrzymuje się poniżej {0:F0}%, a minimalne obroty to {1:F0}%. Ciągłe zatrzymywanie i ruszanie powoduje klikanie i skraca żywotność.
 3272f28b	Ustaw minimalne obroty na {0:F0}%
@@ -1128,31 +1106,16 @@ eb7cfe73	Odinstalowanie zakończone. Sprawdzanie…
 3487b9bc	Sprawdzanie pobranego pliku…
 dbd5b1f0	Pobieranie…
 9e8ebaf4	W toku… {0}%
-305b4308	(podąża za {0})
 0f6e5123	Trwa test chłodzenia lub kalibracja. Zacznij po ich zakończeniu.
-5b079133	Wybierz co najmniej jeden wentylator do strojenia.
-395141d9	Nie znaleziono czujnika temperatury GPU.
 4b25b2cd	Nie znaleziono czujnika temperatury CPU.
-7a122984	Nie znaleziono czujnika obciążenia GPU, więc nie można stroić GPU.
-c7751269	• Po starcie uruchom grę lub benchmark (3DMark, FF Benchmark itp.) i utrzymuj obciążenie GPU.\n
-c886e5d0	• CPU zostanie w pełni obciążone (zamknij inne ciężkie aplikacje).\n
-dbca6724	Rozpoczyna się automatyczne strojenie (około {0} min).\n\n
-a1ca3c2f	• Wybrane wentylatory ({0}) będą stopniowo zwalniać od 100%. Dźwięk będzie to głośniejszy, to cichszy.\n
-ac505b53	• Gdy temperatura {0} osiągnie {1:F0}°C, strojenie od razu się zatrzyma i wróci zwykłe sterowanie.\n
-46002470	• Wynik jest stosowany dopiero po sprawdzeniu, więc przerwanie w trakcie niczego nie zmienia w ustawieniach.
-36a2fc44	Automatyczne strojenie
 417196a4	Teraz {0:F0}°C / wentylator {1:F0}%
 5d9f4450	Teraz {0:F0}°C
-fe560e0e	Pomiar zakończony. Sprawdź krzywą i wybierz profil, do którego ją zastosować.
-507f470e	Automatyczne strojenie: zmierzono za mało stopni, nie można utworzyć krzywej.
-afab154e	Pomiar automatycznego strojenia zakończony. Sprawdź uzyskaną krzywą i zastosuj ją.
 8bbd848f	Zobacz wynik
 59c5b033	{0} · w spoczynku {1:F1}°C · przy pełnym obciążeniu:
 5ab01921	Nawet na pełnej prędkości nie da się utrzymać {0:F0}°C (rozważ poprawę chłodzenia)
 d1e24e74	Obroty potrzebne do utrzymania {0:F0}°C: około {1:F0}%
 9e669da9	* Zakończono przedwcześnie, krzywą utworzono tylko z zmierzonych stopni ({0})
 d63ad09b	Nie znaleziono profilu „{0}”. Wybierz ponownie.
-26bd87a8	Automatycznie utworzoną krzywą zastosowano do wentylatorów w „{0}” ({1} szt.); można to cofnąć przyciskiem „Cofnij”.
 b6e37608	Zobacz krzywą
 85bbd542	Zastosowano do wszystkich profili (cel: {0}). Można to cofnąć przyciskiem „Cofnij”.
 cd7e4f98	CPU (strojenie automatyczne)
@@ -1174,7 +1137,6 @@ e158d65b	• Zaraz po dodaniu „Steruj tą aplikacją” jest wyłączone (jak 
 5c0edbde	Krzywa {0}
 68339e34	Potrzebna jest co najmniej jedna krzywa. Aby mieć stałe obroty, przełącz na „Stałe obroty”.
 0de821a1	Trwa kalibracja innego wentylatora. Zacznij po jej zakończeniu.
-d4ae40d7	Trwa automatyczne strojenie lub test chłodzenia. Zacznij po ich zakończeniu.
 2e3bb637	Tego wentylatora nie ma w aktywnym profilu.
 3009598f	Rozpoczyna się kalibracja „{0}”.\n\n
 8d17b7e8	• Przez około 1–2 minuty wentylator będzie na przemian pracował na pełnych obrotach i stawał.\n
@@ -1439,7 +1401,6 @@ be68c30e	{0} analizuje… (za pierwszym razem wczytanie modelu trwa dłużej)
 dea2940c	Zatrzymano
 54fa54cb	Modelu „{0}” nie ma w Ollama. Wybierz ponownie przyciskiem „Odśwież listę” albo uruchom w PowerShell „ollama pull {1}”
 d7dc8672	Błąd: {0}
-3decf270	Trwa automatyczne strojenie. Zacznij po jego zakończeniu.
 2ccbef69	Test chłodzenia potrwa około {0} min.\n\n
 502399da	• Podczas testu CPU pracuje z pełną mocą, więc wentylatory będą głośniejsze.\n
 c0d1c3f1	• Gdy temperatura CPU osiągnie {0:F0}°C, obciążenie zatrzyma się automatycznie.\n
@@ -1469,7 +1430,6 @@ d3ec144f	Wirtualny ({0})
 f45a5a37	Wykryty sprzęt. Przyciskiem obrazu można podmienić obraz, np. na własne zdjęcie
 31e94c42	Ustaw dla każdego wentylatora zależność obrotów od temperatury. Zmiany są od razu stosowane i zapisywane
 b5ccd0c3	Automatyczna diagnoza z zapisów i kontrola kurzu oraz zużycia wentylatorów (porady AI opcjonalnie)
-2efbce3f	Obciąża system, by automatycznie tworzyć krzywe lub mierzyć, jak dobrze chłodzą bieżące ustawienia
 73339fb8	Do 24 godzin temperatur i obrotów (bez okresów, gdy aplikacja była zamknięta; przed ponownym uruchomieniem średnie minutowe)
 389ce2cc	Szacunkowy koszt energii i zapisy awarii
 4bd55735	Przez OpenRGB podświetla diody komputera zależnie od temperatury, tęczą, w rytm muzyki itd.
@@ -1591,7 +1551,6 @@ d2937a7a	Oprogramowanie dźwięku: {0} (światło podąża za dźwiękiem przed 
 db4d82a2	Pulpit zdalny
 d6776d41	Zmień język, motyw, kolor akcentu, tło, kolor tekstu, czcionkę i rozmiar tekstu. Zmiany działają od razu
 e0480009	Język tekstów na ekranie. „Auto” podąża za językiem wyświetlania Windows (angielski, jeśli nie jest obsługiwany). Zmienia się od razu po wybraniu
-e45b0531	Trwa automatyczne strojenie.
 e955d878	Trwa test chłodzenia.
 afb9660d	Trwa kalibracja.
 c8e0f349	Trwa sprawdzanie dźwięku wentylatora.
@@ -1736,3 +1695,67 @@ f16a0b90	Czerwone, pomarańczowe i żółte światło migocze jak płomienie na 
 acfe2730	① Utwórz zip zgłoszenia
 b15ec58c	Utworzono {0} (jego folder otworzy się w Eksploratorze). Przeciągnij ten plik na stronę zgłoszenia, aby go załączyć.
 d92849da	Zgłoś problem…
+050c3438	„Konfiguracja automatyczna” lub „Zmierz wentylator” na stronie Krzywe wentylatorów mierzy obroty zatrzymania i maksymalne (ok. 1–2 min na wentylator).
+08978566	pomiar z GPU ({0} wentylatory)
+08fb3614	Konfiguracja automatyczna…
+0929dde7	za {0}
+095205e6	Uruchom konfigurację automatyczną
+0acedb82	Wstawia zmierzone krzywe CPU i GPU do wybranego profilu
+10eada78	Przerwano, ponieważ obciążenie GPU ustało
+1941f6aa	pomiar z CPU ({0} wentylatory)
+2646b9f3	• Pomiar z GPU: aplikacja w pełni obciąża GPU i mierzy tak samo (nie trzeba uruchamiać gry).
+266ab9c4	Nie znaleziono GPU, które można obciążyć
+31af6243	Utrzymuje CPU poniżej tej temperatury przy pełnym obciążeniu
+33d3e475	Zmierz charakterystykę wentylatora
+3f5571aa	„{0}”: zatrzymuje się poniżej {1:F0}%, więc minimalne obroty to teraz {2:F0}%
+42a72e3a	Konfiguracja automatyczna
+4610da9f	GPU: nie można zmierzyć, brak czujnika temperatury lub użycia
+462bc50c	• Wynik sprawdzasz przed zastosowaniem, więc przerwanie niczego nie zmienia.
+47647013	Kroki: {0} · ok. {1} min. Pompy są pominięte.
+48090db5	W trakcie pomiaru
+4ac2f56e	Rozpoczynam konfigurację automatyczną (ok. {0} min).\n\n
+50136e19	Wybierz wentylatory do pomiaru oraz CPU i/lub GPU. Pompy są pominięte (działają jak zwykle).
+53661bf6	zmierz {0} wentylator(y)
+5899b660	• Pomiar z CPU: w pełni obciąża CPU i stopniowo zmniejsza obroty od 100%.
+5a241b3a	Trwa konfiguracja automatyczna. Uruchom po zakończeniu.
+6d8d04fc	Charakterystyka wentylatora (kalibracja)
+6da30665	Pomiar „{0}”: {1}
+72f6035d	Trwa konfiguracja automatyczna lub test chłodzenia. Uruchom po zakończeniu.
+743c2e54	Przerwano: GPU zostało obciążone, ale użycie nie wzrosło
+766747f4	Jeden przycisk robi wszystko: ① mierzy każdy wentylator, ② obciąża CPU i GPU i mierzy temperaturę, stopniowo zmniejszając obroty od 100%, ③ tworzy „najcichszą krzywą, która nadal utrzymuje temperaturę docelową”. Wynik sprawdzasz przed zastosowaniem (po przerwaniu wraca normalne sterowanie i nic się nie zmienia).
+7a0a5001	Nie można zmierzyć GPU, ponieważ nie znaleziono czujnika temperatury ani użycia GPU
+7b75bea7	Dodano {1} automatycznie utworzone krzywe do „{0}” (Cofnij przywraca).
+814a5f43	„{0}”: zmierzono (zatrzymuje się poniżej {1:F0}%, maks. {2:N0} obr./min)
+8226a1e3	Trwa konfiguracja automatyczna.
+847327ae	Nie udało się zmierzyć „{0}”: {1}
+8d17780e	Cel CPU
+8f35db7c	• Wentylatory będą głośniejsze i cichsze. Zamknij ciężkie aplikacje.
+901a429f	Zmierzono za mało, aby utworzyć krzywą.
+94396456	{0}: zakończono wcześniej, więc krzywa używa tylko zmierzonych kroków ({1})
+94d6baac	Nie udało się utworzyć obciążenia: {0}
+9decdc86	Przerwano: w ciągu 3 minut nie pojawiło się obciążenie GPU (uruchom grę lub benchmark)
+9f77375a	Cel GPU
+a390636e	Na bieżąco zmienia obroty, aby nie przekroczyć ustawionej temperatury
+a9addd42	Utrzymuje GPU poniżej tej temperatury przy pełnym obciążeniu (obciążenie tworzy aplikacja; nie trzeba uruchamiać gry)
+aae4c566	Pomiar „{0}”…
+ab824de0	Wstawia zmierzone krzywe CPU i GPU do wszystkich profili. Profile z rolą „Cichy” mają cel +5°C, „Maks. chłodzenie” −5°C, a pozostałe cel bez zmian
+addb0201	Uruchamia wentylator od 0 do 100% i mierzy, gdzie się zatrzymuje, gdzie rusza i jego maksymalne obroty (ok. 1–2 min). „Konfiguracja automatyczna” mierzy naraz wszystkie jeszcze niezmierzone wentylatory
+af0435c9	Obciąża CPU i GPU, mierzy i tworzy najcichszą krzywą, która nadal utrzymuje temperaturę docelową (otwiera stronę Konfiguracja automatyczna)
+b499b2f2	Pomiar zakończony. Sprawdź krzywe i wybierz profil, do którego je zastosować.
+b7615185	Obciążanie GPU (czekam na wzrost użycia)…
+b940650e	• Gdy CPU osiągnie {0:F0}°C lub GPU {1:F0}°C, pomiar natychmiast się kończy i wraca normalne sterowanie.
+c07922c2	jeszcze niezmierzony
+c4256752	• Pomiar wentylatorów ({0}): po kolei każdy wentylator rusza na pełne obroty i się zatrzymuje.
+ccb1e668	Konfiguracja automatyczna zakończyła pomiar. Sprawdź krzywe i zastosuj je.
+d0b44b86	Konfiguracja automatyczna: zmierzono za mało, aby utworzyć krzywą.
+d36eeaf3	Rola tego profilu. Nawet po zmianie nazwy konfiguracja automatyczna (Cichy: cel +5°C, Maks. chłodzenie: −5°C), krzywe nowych wentylatorów i szybki „Cichy” działają poprawnie według tej roli
+d6fd5420	Przerwano. Sprawdź krzywą utworzoną z wykonanych pomiarów i zdecyduj, czy ją zastosować.
+e0e8a2f4	Zmierz wentylator
+ee9c1f57	Mierzy każdy wentylator i temperatury przy obciążeniu CPU i GPU, a potem automatycznie tworzy krzywe. Możesz też sprawdzić, jak dobrze chłodzą obecne ustawienia
+f42e11b9	Przerwano. Wróciło normalne sterowanie.
+f965efc0	Test chłodzenia (sprawdź obecne ustawienia)
+fd03884c	CPU: nie można zmierzyć, brak czujnika temperatury
+fdc48725	Wybierz co najmniej jeden wentylator do pomiaru oraz CPU i/lub GPU.
+fe39437d	Wskazówka: potem zmierz na stronie „Konfiguracja automatyczna”, aby utworzyć najcichsze krzywe dla tego komputera (ok. 20–30 min).
+140786db	Ok. 1–2 min na wentylator. Gdy znane są obroty zatrzymania, minimalne obroty też są ustawiane na bezpieczną wartość
+14e2760b	Najpierw zmierz jeszcze niezmierzone wentylatory

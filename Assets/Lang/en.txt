@@ -9,7 +9,6 @@ f70fd09f	Dashboard
 a010a7fc	History
 133b6776	Report
 b4bcc740	Diagnostics
-977807d2	Test & tune
 60dd6c40	Lighting
 dfa4a412	Sensors
 6243fa06	Settings
@@ -64,8 +63,6 @@ ba60770e	Name (shared by all profiles)
 59c6e4bc	Control mode
 a80265dc	Curve
 051753eb	Set the speed for each temperature yourself
-530a9c8a	Target temperature (automatic)
-1fc9ab3c	Just set a temperature; the speed adjusts itself
 27bd9d15	Fixed
 84b1afad	Always the same speed (for pumps)
 26a15192	Follow (group)
@@ -91,9 +88,7 @@ fa9ef1de	Ramp-down rate / s
 a5668673	Never goes below 40% in any setting. If the speed stays below the alert value for 3 seconds, it goes to 100% and notifies you, even under BIOS control.
 7c811ff7	Alert speed
 cb5145a7	Use as minimum speed
-812e0683	Auto calibration
 ec41d4ae	Stop
-9514979f	Runs the fan from 0 to 100% and measures the speed where it stops, where it starts and its maximum (about 1–2 minutes)
 26101bee	+ Add band
 f5097e76	Resonance bands (skip noisy speeds)
 11bb3e7a	Add speed bands where the case or radiator hums, and the fan passes through them quickly instead of staying there (shared by all profiles)
@@ -103,8 +98,6 @@ ea6d9cfc	Skip this
 ed263790	Band to skip
 49024f94	% to
 8b7237a1	None yet. If no speed sounds bad, you can leave it like this.
-166baf5a	Create automatically…
-3eb67669	Loads the PC, measures, and builds the quietest curve that still holds the target temperature (Test & tune page)
 cd6687b0	Copy ▾
 a8a30430	+ Add curve
 29506d39	Delete this curve
@@ -147,20 +140,10 @@ f0f25c1b	Press this after cleaning filters or fans. Records from now on become t
 9c1df669	Check now
 267e9ec4	Fan wear and dust check
 2c6b3065	Saves a record every minute and compares with the past: "is the speed lower for the same duty (bearing wear, dust)?" and "is the temperature higher for the same power (clogged filter or radiator)?".
-060669c9	Start auto-tune
-96cc9d01	Auto-tune (create curves automatically)
 46ac54ca	Recommended
-121a7d95	Under real load, lowers the fan speed step by step from 100% and measures where the temperature settles. From that it builds the quietest curve that still holds the target temperature (about 8–15 minutes; if you stop it midway, normal control resumes).
-e9947588	What to cool
-d881d18f	CPU (built-in load, automatic)
-e57cca88	GPU (load with a game or benchmark)
-c074a956	Under full load, keeps the temperature from going above this
-0c43c305	Fans to tune
-183c9165	Measures with the chosen fans at the same speed. Pumps are excluded (they run as usual).
 3e4a2fef	Measurements
 67633e51	Resulting curve (moving the target temperature above rebuilds it without measuring again)
 0e95ff55	Apply to this profile
-6f4b51e9	Profiles with "Silent" in the name get target +5°C, "Performance" gets target −5°C, others get the target as is
 a6de9295	Apply to all profiles
 35ae4fe6	10 min
 c7ad32f7	15 min
@@ -168,7 +151,6 @@ c7ad32f7	15 min
 cc4ae169	Cooling test
 16e5632b	Measures automatically: idle for 30 seconds → load on all CPU cores → stop the load and cool down. Shows how well your current fan settings cool. The GPU is not included; to test it too, run a game or benchmark during the test.
 eb918d75	When ready, press "Start test". Close heavy apps for accurate results.
-9e3aee28	Trend during test and tuning
 339697a1	Save report
 8a49bfd9	Ask the AI to analyze
 1ba434e9	Result
@@ -411,7 +393,6 @@ b373eaee	Update interval
 1ac4b576	About this app
 81d90dca	+ New profile
 4cdf9ede	Save a set of fan curves under a name and switch between them
-774923ad	This profile's role. Even if you rename it, auto-tune (Silent targets +5°C, Max cooling −5°C), the curves for new fans and the quick "Silent" action keep working through this role
 82ac5e85	Windows power plan to use with this profile
 d663551d	Use by default
 80173301	Duplicate
@@ -542,7 +523,6 @@ c1db4c06	When off, the BIOS stays in charge; the app only watches the speed and 
 b58afa04	All set
 861676ec	Start controlling right away
 01bcdd36	When off, it starts in DRY RUN (calculates only and writes nothing to the fans)
-709f1f3b	Tip: afterwards, measure each fan's minimum speed with "Auto calibration" on the Fan curves page for an even quieter setup.
 aceb0a14	Cancel
 f193a383	Back
 303830fc	Next
@@ -728,7 +708,6 @@ f8650f35	Stopping the load and returning to normal control…
 9af40572	Stopped because of emergency full speed
 ef174ee8	Stopped because the temperature reached {0:F0}°C
 13912a14	Stopped because the GPU load went away (keep the game or benchmark running)
-f3ec99ac	Stopped because no load was applied
 5d76038f	Measuring the maximum speed…
 966245da	Measuring while lowering the speed… ({0:F0}%)
 8db302e0	Looking for the speed where it starts… ({0:F0}%)
@@ -810,7 +789,6 @@ ea0f0b04	It was at 95% or more for {0:P0} of the records. This points to a lack 
 8b53f64d	Shift the curve 5°C to the right
 fe86db70	Shifted the curve of "{0}" 5°C to the right.
 9cf10287	{0}: calibrating allows more accurate tuning
-65f73a32	"Auto calibration" on the Fan curves screen measures the stop speed and the maximum speed (takes about 1–2 minutes).
 afae536a	{0}: minimum speed is in the stall range
 f8161c81	This fan stops below {0:F0}%, but its minimum speed is {1:F0}%. Repeated stopping and starting causes clicking and shortens its life.
 3272f28b	Set minimum speed to {0:F0}%
@@ -1128,31 +1106,16 @@ eb7cfe73	Uninstall finished. Checking…
 3487b9bc	Checking the downloaded file…
 dbd5b1f0	Downloading…
 9e8ebaf4	In progress… {0}%
-305b4308	(follows {0})
 0f6e5123	A cooling test or calibration is running. Start after it finishes.
-5b079133	Select at least one fan to tune.
-395141d9	No GPU temperature sensor found.
 4b25b2cd	No CPU temperature sensor found.
-7a122984	No GPU usage sensor found, so the GPU can't be tuned.
-c7751269	• After it starts, launch a game or benchmark (3DMark, FF benchmark, etc.) and keep the GPU under load.\n
-c886e5d0	• The CPU is put under full load (close other heavy apps).\n
-dbca6724	Starting auto tuning (about {0} min).\n\n
-a1ca3c2f	• The {0} selected fans are lowered gradually from 100%. They will get louder and quieter.\n
-ac505b53	• If the {0} temperature reaches {1:F0}°C, tuning stops at once and normal control resumes.\n
-46002470	• You check the results before they are applied, so stopping midway changes no settings.
-36a2fc44	Auto tuning
 417196a4	Now {0:F0}°C / fan {1:F0}%
 5d9f4450	Now {0:F0}°C
-fe560e0e	Measurement finished. Check the curve and choose the profile to apply it to.
-507f470e	Auto tuning: too few steps could be measured, so no curve could be made.
-afab154e	Auto tuning measurement finished. Check the resulting curve and apply it.
 8bbd848f	View results
 59c5b033	{0} · idle {1:F1}°C · under full load:
 5ab01921	{0:F0}°C can't be held even at full speed (consider improving cooling)
 d1e24e74	Speed needed to hold {0:F0}°C: about {1:F0}%
 9e669da9	* It ended early, so the curve uses only the measured steps ({0})
 d63ad09b	Profile "{0}" not found. Choose again.
-26bd87a8	Applied the automatically made curve to {1} fans in "{0}" (you can revert it with "Undo").
 b6e37608	View curve
 85bbd542	Applied to all profiles (target: {0}). You can revert it with "Undo".
 cd7e4f98	CPU (auto-tuned)
@@ -1174,7 +1137,6 @@ e158d65b	• Right after adding, "Control with this app" is off (as before). Che
 5c0edbde	Curve {0}
 68339e34	At least one curve is needed. For a constant speed, switch to "Fixed speed".
 0de821a1	Another fan is being calibrated. Start after it finishes.
-d4ae40d7	Auto tuning or a cooling test is running. Start after it finishes.
 2e3bb637	This fan isn't in the active profile.
 3009598f	Starting calibration of "{0}".\n\n
 8d17b7e8	• For about 1–2 minutes, the fan will switch between full speed and stopped.\n
@@ -1439,7 +1401,6 @@ be68c30e	{0} is analyzing… (the first time, loading the model takes a while)
 dea2940c	Stopped
 54fa54cb	Model "{0}" isn't in Ollama. Choose again with "Refresh list", or run "ollama pull {1}" in PowerShell
 d7dc8672	Error: {0}
-3decf270	Auto tuning is running. Start after it finishes.
 2ccbef69	A cooling test will run for about {0} minutes.\n\n
 502399da	• During the test the CPU runs at full power, so the fans get loud.\n
 c0d1c3f1	• If the CPU temperature reaches {0:F0}°C, the load stops automatically.\n
@@ -1469,7 +1430,6 @@ d3ec144f	Virtual ({0})
 f45a5a37	The hardware that was detected. Use the image button to replace a picture with your own photo, for example
 31e94c42	Set the relationship between temperature and speed for each fan. Changes are applied and saved immediately
 b5ccd0c3	Automatic diagnosis from the records and checks for dust and wear on the fans (AI advice is optional)
-2efbce3f	Applies load to create curves automatically or to measure how well the current settings cool
 73339fb8	Up to 24 hours of temperatures and speeds (excluding times the app was closed; before a restart, 1-minute averages)
 389ce2cc	Electricity cost estimate and problem records
 4bd55735	Lights the PC's LEDs to match temperature, rainbow, music and more through OpenRGB
@@ -1591,7 +1551,6 @@ d2937a7a	Audio software: {0} (the lights follow the sound before effects are app
 db4d82a2	Remote Desktop
 d6776d41	Change the display language, theme, accent color, background, text color, font and text size. Changes apply right away
 e0480009	Language of the on-screen text. "Auto" follows the Windows display language (English if it is not supported). It switches as soon as you choose one
-e45b0531	Auto tuning is in progress.
 e955d878	A cooling test is in progress.
 afb9660d	A calibration is in progress.
 c8e0f349	A fan sound check is in progress.
@@ -1736,3 +1695,67 @@ f16a0b90	Red, orange and yellow light flickers like flames on each LED
 acfe2730	① Make the report zip
 b15ec58c	Made {0} (its folder opens in Explorer). Drag this file into the report page to attach it.
 d92849da	Report a problem…
+050c3438	"Auto setup", or "Measure fan" on the Fan curves page, measures the stop speed and top speed (about 1–2 min per fan).
+08978566	measure with GPU ({0} fans)
+08fb3614	Auto setup…
+0929dde7	follows {0}
+095205e6	Start auto setup
+0acedb82	Puts the measured CPU and GPU curves into the selected profile
+10eada78	Stopped because the GPU load stopped
+1941f6aa	measure with CPU ({0} fans)
+2646b9f3	• Measure with GPU: the app loads the GPU fully and measures the same way (no need to start a game).
+266ab9c4	No GPU found to put load on
+31af6243	Keeps the CPU under this temperature at full load
+33d3e475	Measure fan characteristics
+3f5571aa	"{0}": stops below {1:F0}%, so its minimum speed is now {2:F0}%
+42a72e3a	Auto setup
+4610da9f	GPU: could not measure because no temperature or usage sensor was found
+462bc50c	• You check the result before applying it, so stopping midway changes nothing.
+47647013	Steps: {0} · about {1} min. Pumps are excluded.
+48090db5	During measurement
+4ac2f56e	Starting auto setup (about {0} min).\n\n
+50136e19	Choose the fans to measure and the CPU and/or GPU. Pumps are excluded (they run as usual).
+53661bf6	measure {0} fan(s)
+5899b660	• Measure with CPU: loads the CPU fully and lowers the fans step by step from 100%.
+5a241b3a	Auto setup is running. Start after it finishes.
+6d8d04fc	Fan characteristics (calibration)
+6da30665	Measuring "{0}": {1}
+72f6035d	Auto setup or a cooling test is running. Start after it finishes.
+743c2e54	Stopped: the GPU was loaded but its usage did not rise
+766747f4	One button does it all: ① measures each fan, ② loads the CPU and GPU and measures the temperature while lowering the fans step by step from 100%, ③ builds "the quietest curve that still holds the target temperature". You check the result before applying it (if you stop midway, normal control resumes and nothing changes).
+7a0a5001	The GPU cannot be measured because no GPU temperature or usage sensor was found
+7b75bea7	Added {1} auto-built curve(s) to "{0}" (Undo reverts it).
+814a5f43	"{0}": measured (stops below {1:F0}%, max {2:N0} rpm)
+8226a1e3	Auto setup is in progress.
+847327ae	Could not measure "{0}": {1}
+8d17780e	CPU target
+8f35db7c	• The fans will get louder and quieter. Please close heavy apps.
+901a429f	Not enough was measured to build a curve.
+94396456	{0}: ended early, so the curve uses only the measured steps ({1})
+94d6baac	Could not create the load: {0}
+9decdc86	Stopped: no GPU load appeared within 3 minutes (start a game or benchmark)
+9f77375a	GPU target
+a390636e	Adjusts the speed on the fly to stay under the set temperature
+a9addd42	Keeps the GPU under this temperature at full load (the app creates the load; no need to start a game)
+aae4c566	Measuring "{0}"…
+ab824de0	Puts the measured CPU and GPU curves into every profile. Profiles with the "Silent" role target +5°C, "Max cooling" −5°C, and the rest the target as set
+addb0201	Runs the fan from 0 to 100% and measures where it stops, where it starts and its top speed (about 1–2 min). "Auto setup" measures every fan not measured yet in one go
+af0435c9	Loads the CPU and GPU, measures, and builds the quietest curve that still holds the target temperature (opens the Auto setup page)
+b499b2f2	Measurement finished. Check the curves and choose the profile to apply them to.
+b7615185	Loading the GPU (waiting for its usage to rise)…
+b940650e	• If the CPU reaches {0:F0}°C or the GPU {1:F0}°C, it stops at once and returns to normal control.
+c07922c2	not measured yet
+c4256752	• Measure fans ({0}): one at a time, each fan runs at full speed and stops.
+ccb1e668	Auto setup has finished measuring. Check the resulting curves and apply them.
+d0b44b86	Auto setup: not enough was measured to build a curve.
+d36eeaf3	This profile's role. Even if you rename it, auto setup (Silent targets +5°C, Max cooling −5°C), the curves for new fans and the quick "Silent" work correctly with this role
+d6fd5420	Stopped. Check the curve built from what was measured and choose whether to apply it.
+e0e8a2f4	Measure fan
+ee9c1f57	Measures each fan and the temperatures under CPU and GPU load, then builds curves automatically. You can also check how well the current settings cool
+f42e11b9	Stopped. Normal control is back.
+f965efc0	Cooling test (check the current settings)
+fd03884c	CPU: could not measure because no temperature sensor was found
+fdc48725	Choose at least one fan to measure, and the CPU and/or GPU.
+fe39437d	Tip: afterwards, measure on the "Auto setup" page to build the quietest curves that suit this PC (about 20–30 min).
+140786db	About 1–2 min per fan. Once the stop speed is known, the minimum speed is also set to a safe value
+14e2760b	Measure fans not measured yet first

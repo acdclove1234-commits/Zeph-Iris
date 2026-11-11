@@ -52,7 +52,7 @@ public partial class MainWindow
     /// 切り替えられるなら null
     /// </summary>
     public string? LanguageSwitchBlocker() =>
-        _tuner is not null ? L("おまかせ調整の途中です。")
+        SetupRunning ? L("自動セットアップの途中です。")
         : _test is not null ? L("冷却テストの途中です。")
         : _calibratingId is not null ? L("キャリブレーションの途中です。")
         : _listenId is not null && DateTime.Now < _listenUntil ? L("ファンの音を確かめている途中です。")

@@ -293,9 +293,9 @@ public partial class MainWindow
             MessageBox.Show(this, L("ほかのファンのキャリブレーションが実行中です。終わってから始めてください。"), AppIdentity.Name, MessageBoxButton.OK, MessageBoxImage.Information);
             return;
         }
-        if (_tuner is not null || _test is not null)
+        if (SetupRunning || _test is not null)
         {
-            MessageBox.Show(this, L("おまかせ調整か冷却テストが実行中です。終わってから始めてください。"), AppIdentity.Name, MessageBoxButton.OK, MessageBoxImage.Information);
+            MessageBox.Show(this, L("自動セットアップか冷却テストが実行中です。終わってから始めてください。"), AppIdentity.Name, MessageBoxButton.OK, MessageBoxImage.Information);
             return;
         }
         // エンジンは実行中のプロファイルのファンしか扱わないため（結果は全プロファイル共通で使える）
@@ -308,7 +308,7 @@ public partial class MainWindow
             L($"「{fan.Name}」のキャリブレーションを開始します。\n\n") +
             L("・約 1〜2 分間、ファンが全開になったり止まったりします。\n") +
             L("・CPU/GPU に負荷をかけていない状態で実行してください（温度が 80°C を超えると自動で中止します）。"),
-            L("自動キャリブレーション"), MessageBoxButton.OKCancel, MessageBoxImage.Information);
+            L("ファンの特性を測る"), MessageBoxButton.OKCancel, MessageBoxImage.Information);
         if (answer != MessageBoxResult.OK) return;
 
         _calibratingId = fan.ControlId;
@@ -325,6 +325,7 @@ public partial class MainWindow
     public void OnCalibrationProgress(CalibrationProgress p)
     {
         _calibratingId = p.ControlId;
+        OnSetupCalibrationProgress(p);
         if (SelectedFan?.ControlId != p.ControlId) return;
         CalibrateButton.Visibility = Visibility.Collapsed;
         CancelCalibrationButton.Visibility = Visibility.Visible;
@@ -343,9 +344,11 @@ public partial class MainWindow
             Config.Calibrations.Add(result);
             ScheduleCommit();
         }
-        ShowAlert(message, result is null ? AlertLevel.Warning : AlertLevel.Info);
+        // 自動セットアップの途中は、1 台ずつ知らせず、終わったときにまとめて知らせる
+        if (!SetupRunning) ShowAlert(message, result is null ? AlertLevel.Warning : AlertLevel.Info);
         UpdateCalibrationPanel();
         if (SelectedFan?.ControlId == controlId) CurveGraph.Calibration = result ?? Config.FindCalibration(controlId);
+        OnSetupCalibrationFinished(controlId, result, message);
     }
 
     private void UpdateCalibrationPanel()

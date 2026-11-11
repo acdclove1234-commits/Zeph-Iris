@@ -376,7 +376,7 @@
                         <RadioButton x:Name="NavTools" Style="{StaticResource NavItem}" Tag="&#xE946;"
                                      Content="診断" Checked="OnNavChanged"/>
                         <RadioButton x:Name="NavTest" Style="{StaticResource NavItem}" Tag="&#xE945;"
-                                     Content="テスト・調整" Checked="OnNavChanged"/>
+                                     Content="自動セットアップ" Checked="OnNavChanged"/>
                         <RadioButton x:Name="NavLighting" Style="{StaticResource NavItem}" Tag="&#xE790;"
                                      Content="ライティング" Checked="OnNavChanged"/>
                         <RadioButton x:Name="NavSensors" Style="{StaticResource NavItem}" Tag="&#xE9D9;"
@@ -833,8 +833,8 @@
                                     <RadioButton Style="{StaticResource OptionCard}" Margin="0,0,8,0"
                                                  IsChecked="{Binding Mode, Converter={StaticResource Equals}, ConverterParameter=Target}">
                                         <StackPanel>
-                                            <TextBlock Text="目標温度（おまかせ）" FontWeight="SemiBold"/>
-                                            <TextBlock Text="温度を決めるだけで自動調整" Style="{StaticResource Caption}" FontSize="12"/>
+                                            <TextBlock Text="目標温度" FontWeight="SemiBold"/>
+                                            <TextBlock Text="決めた温度を超えないよう、その場で回転を変える" Style="{StaticResource Caption}" FontSize="12"/>
                                         </StackPanel>
                                     </RadioButton>
                                     <RadioButton Style="{StaticResource OptionCard}" Margin="0,0,8,0"
@@ -977,7 +977,7 @@
                             </StackPanel>
                         </Border>
 
-                        <!-- 自動キャリブレーション（ファンのみ） -->
+                        <!-- ファンの特性（キャリブレーション。ファンのみ） -->
                         <Border Style="{StaticResource FanOnly}" Margin="0,0,0,14">
                             <Border Style="{StaticResource Card}">
                                 <StackPanel>
@@ -985,12 +985,12 @@
                                         <StackPanel DockPanel.Dock="Right" Orientation="Horizontal">
                                             <Button x:Name="ApplyCalibrationButton" Style="{StaticResource GhostButton}" Content="最低回転数に反映"
                                                     Click="OnApplyCalibrationClick" Margin="0,0,8,0" Visibility="Collapsed"/>
-                                            <Button x:Name="CalibrateButton" Style="{StaticResource AccentButton}" Content="自動キャリブレーション" Click="OnCalibrateClick"/>
+                                            <Button x:Name="CalibrateButton" Style="{StaticResource AccentButton}" Content="特性を測る" Click="OnCalibrateClick"/>
                                             <Button x:Name="CancelCalibrationButton" Style="{StaticResource DangerButton}" Content="中止" Click="OnCancelCalibrationClick" Visibility="Collapsed"/>
                                         </StackPanel>
                                         <StackPanel>
-                                            <TextBlock Text="自動キャリブレーション" Style="{StaticResource H2}"/>
-                                            <TextBlock Text="ファンを 0〜100% で動かして、止まる回転数・回り始める回転数・最大回転数を測ります（約 1〜2 分）" Style="{StaticResource Caption}"/>
+                                            <TextBlock Text="ファンの特性（キャリブレーション）" Style="{StaticResource H2}"/>
+                                            <TextBlock Text="ファンを 0〜100% で動かして、止まる回転数・回り始める回転数・最大回転数を測ります（約 1〜2 分）。「自動セットアップ」なら、まだ測っていないファンをまとめて測ります" TextWrapping="Wrap" Style="{StaticResource Caption}"/>
                                         </StackPanel>
                                     </DockPanel>
                                     <ProgressBar x:Name="CalibrationProgressBar" Style="{StaticResource DutyBar}" Margin="0,14,0,0" Visibility="Collapsed"/>
@@ -1067,8 +1067,8 @@
                                 <StackPanel>
                                     <DockPanel>
                                         <StackPanel DockPanel.Dock="Right" Orientation="Horizontal">
-                                            <Button Style="{StaticResource AccentButton}" Content="自動で作る…" Click="OnGoAutoTuneClick" Margin="0,0,8,0"
-                                                    ToolTip="負荷をかけて測り、目標温度を守れる最も静かなカーブを自動で作ります（テスト・調整画面）"/>
+                                            <Button Style="{StaticResource AccentButton}" Content="自動セットアップ…" Click="OnGoAutoTuneClick" Margin="0,0,8,0"
+                                                    ToolTip="CPU と GPU に負荷をかけて測り、目標温度を守れるいちばん静かなカーブを自動で作ります（自動セットアップの画面を開きます）"/>
                                             <Button x:Name="CopyCurveButton" Style="{StaticResource GhostButton}" Content="コピー ▾" Click="OnCopyCurveClick" Margin="0,0,8,0"/>
                                             <Button Style="{StaticResource GhostButton}" Content="＋ カーブを追加" Click="OnAddCurveClick" Margin="0,0,8,0"/>
                                             <Button Style="{StaticResource DangerButton}" Content="このカーブを削除" Click="OnRemoveCurveClick"/>
@@ -1355,23 +1355,23 @@
             <!-- ================= 冷却テスト ================= -->
             <ScrollViewer x:Name="TestPage" Grid.Row="2" VerticalScrollBarVisibility="Auto" Padding="36,0,36,30" Visibility="Collapsed">
                 <StackPanel>
-                    <!-- おまかせ調整（カーブの自動作成） -->
+                    <!-- 自動セットアップ（ファンを調べる → CPU・GPU に負荷をかけて測る → カーブを作る） -->
                     <Border Style="{StaticResource Card}" Margin="0,0,0,14">
                         <StackPanel>
                             <DockPanel>
                                 <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" VerticalAlignment="Top">
-                                    <Button x:Name="StartTuneButton" Style="{StaticResource AccentButton}" Content="自動調整を開始" Click="OnStartTuneClick"/>
+                                    <Button x:Name="StartTuneButton" Style="{StaticResource AccentButton}" Content="自動セットアップを開始" Click="OnStartTuneClick"/>
                                     <Button x:Name="CancelTuneButton" Style="{StaticResource DangerButton}" Content="中止" Click="OnCancelTuneClick" Visibility="Collapsed"/>
                                 </StackPanel>
                                 <StackPanel Margin="0,0,16,0">
                                     <StackPanel Orientation="Horizontal">
-                                        <TextBlock Text="おまかせ調整（カーブを自動で作る）" Style="{StaticResource H2}"/>
+                                        <TextBlock Text="自動セットアップ" Style="{StaticResource H2}"/>
                                         <Border Style="{StaticResource Badge}">
                                             <TextBlock Text="おすすめ" FontSize="11" FontWeight="Bold" Foreground="White"/>
                                         </Border>
                                     </StackPanel>
                                     <TextBlock Style="{StaticResource Caption}" TextWrapping="Wrap"
-                                               Text="実際に負荷をかけたまま、ファンの回転を 100% から少しずつ下げて、温度が落ち着くところを測ります。その結果から「目標温度を守れる、いちばん静かなカーブ」を作ります（約 8〜15 分。途中で中止しても、いつもの制御に戻ります）。"/>
+                                               Text="ボタン 1 つで、① ファンの特性を測る → ② CPU と GPU に負荷をかけて、ファンを 100% から少しずつ下げながら温度を測る → ③「目標温度を守れる、いちばん静かなカーブ」を作る、まで進みます。結果は確かめてから適用します（途中で中止しても、いつもの制御に戻り、設定は変わりません）。"/>
                                 </StackPanel>
                             </DockPanel>
 
@@ -1382,22 +1382,25 @@
                                     <ColumnDefinition Width="70"/>
                                 </Grid.ColumnDefinitions>
                                 <Grid.RowDefinitions>
-                                    <RowDefinition Height="40"/>
+                                    <RowDefinition Height="38"/>
                                     <RowDefinition Height="38"/>
                                     <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
                                 </Grid.RowDefinitions>
-                                <TextBlock Text="冷やす対象" Style="{StaticResource Label}"/>
-                                <StackPanel Grid.Column="1" Grid.ColumnSpan="2" Orientation="Horizontal" VerticalAlignment="Center">
-                                    <RadioButton x:Name="TuneCpu" Style="{StaticResource Segment}" GroupName="TuneTarget" IsChecked="True" Checked="OnTuneTargetChanged"
-                                                 Content="CPU（内蔵の負荷で自動）"/>
-                                    <RadioButton x:Name="TuneGpu" Style="{StaticResource Segment}" GroupName="TuneTarget" Checked="OnTuneTargetChanged"
-                                                 Content="GPU（ゲームやベンチマークで負荷）"/>
-                                </StackPanel>
-                                <TextBlock Grid.Row="1" Text="目標温度" Style="{StaticResource Label}" ToolTip="全力で負荷をかけたときに、この温度を超えないようにします"/>
-                                <Slider x:Name="TuneTargetSlider" Grid.Row="1" Grid.Column="1" Minimum="55" Maximum="95" Value="80"
+                                <CheckBox x:Name="TuneCpuCheck" Style="{StaticResource Check}" IsChecked="True" VerticalAlignment="Center" Content="CPU の目標"
+                                          Checked="OnTuneTargetChanged" Unchecked="OnTuneTargetChanged"
+                                          ToolTip="CPU に全力で負荷をかけたときに、この温度を超えないようにします"/>
+                                <Slider x:Name="TuneTargetSlider" Grid.Column="1" Minimum="55" Maximum="95" Value="80"
                                         IsSnapToTickEnabled="True" TickFrequency="1" ValueChanged="OnTuneTargetValueChanged"/>
-                                <TextBlock x:Name="TuneTargetText" Grid.Row="1" Grid.Column="2" Style="{StaticResource Value}" Text="80°C"/>
-                                <TextBlock Grid.Row="2" Text="調整するファン" Style="{StaticResource Label}" VerticalAlignment="Top" Margin="0,6,0,0"/>
+                                <TextBlock x:Name="TuneTargetText" Grid.Column="2" Style="{StaticResource Value}" Text="80°C"/>
+                                <CheckBox x:Name="TuneGpuCheck" Grid.Row="1" Style="{StaticResource Check}" IsChecked="True" VerticalAlignment="Center" Content="GPU の目標"
+                                          Checked="OnTuneTargetChanged" Unchecked="OnTuneTargetChanged"
+                                          ToolTip="GPU に全力で負荷をかけたときに、この温度を超えないようにします（負荷はアプリがかけます。ゲームの起動は要りません）"/>
+                                <Slider x:Name="TuneGpuTargetSlider" Grid.Row="1" Grid.Column="1" Minimum="55" Maximum="90" Value="75"
+                                        IsSnapToTickEnabled="True" TickFrequency="1" ValueChanged="OnTuneTargetValueChanged"/>
+                                <TextBlock x:Name="TuneGpuTargetText" Grid.Row="1" Grid.Column="2" Style="{StaticResource Value}" Text="75°C"/>
+                                <TextBlock Grid.Row="2" Text="ファン" Style="{StaticResource Label}" VerticalAlignment="Top" Margin="0,6,0,0"/>
                                 <ItemsControl x:Name="TuneFans" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" Margin="0,4,0,0">
                                     <ItemsControl.ItemsPanel>
                                         <ItemsPanelTemplate>
@@ -1406,7 +1409,8 @@
                                     </ItemsControl.ItemsPanel>
                                     <ItemsControl.ItemTemplate>
                                         <DataTemplate>
-                                            <CheckBox Style="{StaticResource Check}" IsChecked="{Binding Selected}" Margin="0,4,20,4" ToolTip="{Binding Hint}">
+                                            <CheckBox Style="{StaticResource Check}" IsChecked="{Binding Selected}" Margin="0,4,20,4" ToolTip="{Binding Hint}"
+                                                      Checked="OnTuneFanChanged" Unchecked="OnTuneFanChanged">
                                                 <TextBlock>
                                                     <Run Text="{Binding Name, Mode=OneWay}"/>
                                                     <Run Text="{Binding Hint, Mode=OneWay}" Foreground="{DynamicResource MutedBrush}" FontSize="12"/>
@@ -1415,13 +1419,17 @@
                                         </DataTemplate>
                                     </ItemsControl.ItemTemplate>
                                 </ItemsControl>
+                                <CheckBox x:Name="TuneCalibrateCheck" Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" Style="{StaticResource Check}" IsChecked="True" Margin="0,8,0,0"
+                                          Checked="OnTuneTargetChanged" Unchecked="OnTuneTargetChanged"
+                                          Content="まだ測っていないファンは、先に特性を測る"/>
+                                <TextBlock Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2" Style="{StaticResource Caption}" TextWrapping="Wrap" Margin="28,2,0,0"
+                                           Text="1 台 約 1〜2 分。止まる回転数が分かると、最低回転数も安全な値にします"/>
                             </Grid>
 
                             <ProgressBar x:Name="TuneProgress" Style="{StaticResource DutyBar}" Margin="0,14,0,0" Visibility="Collapsed"/>
                             <DockPanel Margin="0,8,0,0">
                                 <TextBlock x:Name="TuneLive" DockPanel.Dock="Right" FontWeight="SemiBold"/>
-                                <TextBlock x:Name="TuneStatus" Style="{StaticResource Caption}" TextWrapping="Wrap"
-                                           Text="選んだファンを同じ回転数にそろえて測ります。ポンプは対象外です（いつもどおり動きます）。"/>
+                                <TextBlock x:Name="TuneStatus" Style="{StaticResource Caption}" TextWrapping="Wrap"/>
                             </DockPanel>
 
                             <!-- 結果 -->
@@ -1432,8 +1440,14 @@
                                     <ColumnDefinition/>
                                 </Grid.ColumnDefinitions>
                                 <StackPanel>
-                                    <TextBlock Text="測定結果" Style="{StaticResource H2}" FontSize="15"/>
-                                    <TextBlock x:Name="TuneIdleText" Style="{StaticResource Caption}" Margin="0,4,0,8"/>
+                                    <DockPanel>
+                                        <StackPanel x:Name="TuneResultSwitch" DockPanel.Dock="Right" Orientation="Horizontal">
+                                            <RadioButton x:Name="TuneResultCpu" Style="{StaticResource Segment}" GroupName="TuneResult" Content="CPU" IsChecked="True" Checked="OnTuneResultSwitch"/>
+                                            <RadioButton x:Name="TuneResultGpu" Style="{StaticResource Segment}" GroupName="TuneResult" Content="GPU" Checked="OnTuneResultSwitch"/>
+                                        </StackPanel>
+                                        <TextBlock Text="測定結果" Style="{StaticResource H2}" FontSize="15"/>
+                                    </DockPanel>
+                                    <TextBlock x:Name="TuneIdleText" Style="{StaticResource Caption}" Margin="0,4,0,8" TextWrapping="Wrap"/>
                                     <ItemsControl x:Name="TuneSteps">
                                         <ItemsControl.ItemTemplate>
                                             <DataTemplate>
@@ -1458,9 +1472,10 @@
                                     <ctl:CurveEditor x:Name="TuneCurve" Height="230" Margin="0,8,0,0" ReadOnly="True"/>
                                     <WrapPanel Margin="0,12,0,0">
                                         <ComboBox x:Name="TuneProfileCombo" Width="170" DisplayMemberPath="Name" Margin="0,0,8,8"/>
-                                        <Button Style="{StaticResource GhostButton}" Content="このプロファイルに適用" Click="OnApplyTuneClick" Margin="0,0,8,8"/>
+                                        <Button Style="{StaticResource GhostButton}" Content="このプロファイルに適用" Click="OnApplyTuneClick" Margin="0,0,8,8"
+                                                ToolTip="測った CPU と GPU のカーブを、選んだプロファイルに入れます"/>
                                         <Button Style="{StaticResource AccentButton}" Click="OnApplyTuneAllClick" Margin="0,0,0,8"
-                                                ToolTip="名前に「静音」が付くプロファイルは目標 +5°C、「パフォーマンス」は目標 −5°C、それ以外は目標どおりで作ります">
+                                                ToolTip="測った CPU と GPU のカーブを、全プロファイルに入れます。役割が「静音」のプロファイルは目標 +5°C、「冷却重視」は −5°C、それ以外は目標どおりで作ります">
                                             <TextBlock Text="全プロファイルにまとめて適用"/>
                                         </Button>
                                     </WrapPanel>
@@ -1480,7 +1495,7 @@
                                     <Button x:Name="CancelTestButton" Style="{StaticResource DangerButton}" Content="中止" Click="OnCancelTestClick" Visibility="Collapsed"/>
                                 </StackPanel>
                                 <StackPanel Margin="0,0,16,0">
-                                    <TextBlock Text="冷却テスト" Style="{StaticResource H2}"/>
+                                    <TextBlock Text="冷却テスト（今の設定を確かめる）" Style="{StaticResource H2}"/>
                                     <TextBlock Style="{StaticResource Caption}"
                                                Text="待機 30 秒 → CPU 全コアに負荷 → 負荷を止めて冷却、の順に自動で測ります。今のファン設定でどこまで冷えるかが分かります。GPU は含まれないので、GPU も試すときはテスト中にゲームやベンチマークを動かしてください。"/>
                                 </StackPanel>
@@ -1495,7 +1510,7 @@
 
                     <Border Style="{StaticResource Card}" Margin="0,0,0,14">
                         <StackPanel>
-                            <TextBlock Text="テスト・調整中の推移" Style="{StaticResource H2}"/>
+                            <TextBlock Text="測定中の推移" Style="{StaticResource H2}"/>
                             <ctl:HistoryChart x:Name="TestChart" Height="280" Margin="0,12,0,0"/>
                         </StackPanel>
                     </Border>
@@ -2685,7 +2700,7 @@
                                                 <TextBox Text="{Binding Name}" Margin="0,0,10,0"/>
                                                 <ComboBox Grid.Column="1" Margin="0,0,10,0" DisplayMemberPath="Label" SelectedValuePath="Id"
                                                           SelectedValue="{Binding Role}"
-                                                          ToolTip="このプロファイルの役割。名前を変えても、おまかせ調整（静音は目標温度 +5°C・冷却重視は −5°C）・新しいファンのカーブ・ワンタッチの「静音」が、この役割で正しく動きます"
+                                                          ToolTip="このプロファイルの役割。名前を変えても、自動セットアップ（静音は目標温度 +5°C・冷却重視は −5°C）・新しいファンのカーブ・ワンタッチの「静音」が、この役割で正しく動きます"
                                                           ItemsSource="{Binding ProfileRoleOptions, RelativeSource={RelativeSource AncestorType=Window}}"/>
                                                 <ComboBox Grid.Column="2" Margin="0,0,10,0" DisplayMemberPath="Name" SelectedValuePath="Guid"
                                                           SelectedValue="{Binding PowerPlanGuid}" ToolTip="このプロファイルのときに使う Windows の電源プラン"

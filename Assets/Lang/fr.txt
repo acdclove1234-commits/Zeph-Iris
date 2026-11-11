@@ -9,7 +9,6 @@ f70fd09f	Tableau de bord
 a010a7fc	Historique
 133b6776	Rapport
 b4bcc740	Diagnostic
-977807d2	Test et réglage
 60dd6c40	Éclairage
 dfa4a412	Capteurs
 6243fa06	Paramètres
@@ -64,8 +63,6 @@ ba60770e	Nom (commun à tous les profils)
 59c6e4bc	Mode de contrôle
 a80265dc	Courbe
 051753eb	Définir soi-même la vitesse pour chaque température
-530a9c8a	Température cible (automatique)
-1fc9ab3c	Choisissez une température, la vitesse s'ajuste seule
 27bd9d15	Fixe
 84b1afad	Toujours la même vitesse (pour les pompes)
 26a15192	Suivre (groupe)
@@ -91,9 +88,7 @@ fa9ef1de	Descente / s
 a5668673	Ne descend jamais sous 40 %, quel que soit le réglage. Si la vitesse reste 3 secondes sous le seuil d'alerte, elle passe à 100 % et vous êtes averti, même sous contrôle du BIOS.
 7c811ff7	Vitesse d'alerte
 cb5145a7	Utiliser comme vitesse minimale
-812e0683	Calibrage automatique
 ec41d4ae	Arrêter
-9514979f	Fait tourner le ventilateur de 0 à 100 % et mesure la vitesse d'arrêt, de démarrage et la vitesse maximale (environ 1 à 2 minutes)
 26101bee	+ Ajouter une plage
 f5097e76	Plages de résonance (éviter les vitesses bruyantes)
 11bb3e7a	Ajoutez les plages de vitesse où le boîtier ou le radiateur vibre : le ventilateur les traverse rapidement au lieu d'y rester (commun à tous les profils)
@@ -103,8 +98,6 @@ ea6d9cfc	Éviter ici
 ed263790	Plage à éviter
 49024f94	% à
 8b7237a1	Aucune pour l'instant. Si aucune vitesse ne vous gêne, vous pouvez laisser ainsi.
-166baf5a	Créer automatiquement…
-3eb67669	Charge le PC, mesure et crée la courbe la plus silencieuse qui tient encore la température cible (page Test et réglage)
 cd6687b0	Copier ▾
 a8a30430	+ Ajouter une courbe
 29506d39	Supprimer cette courbe
@@ -147,20 +140,10 @@ f0f25c1b	Appuyez après avoir nettoyé filtres ou ventilateurs. Les enregistreme
 9c1df669	Vérifier maintenant
 267e9ec4	Usure et poussière des ventilateurs
 2c6b3065	Enregistre chaque minute et compare avec le passé : « la vitesse a-t-elle baissé pour la même consigne (usure du roulement, poussière) ? » et « la température a-t-elle monté pour la même puissance (filtre ou radiateur encrassé) ? ».
-060669c9	Lancer le réglage auto
-96cc9d01	Réglage automatique (création des courbes)
 46ac54ca	Recommandé
-121a7d95	Sous charge réelle, réduit la vitesse des ventilateurs pas à pas depuis 100 % et mesure où la température se stabilise. En déduit la courbe la plus silencieuse qui tient encore la température cible (8 à 15 minutes environ ; en cas d'arrêt, le contrôle normal reprend).
-e9947588	À refroidir
-d881d18f	CPU (charge intégrée, automatique)
-e57cca88	GPU (charge par un jeu ou un benchmark)
-c074a956	Sous pleine charge, empêche la température de dépasser cette valeur
-0c43c305	Ventilateurs à régler
-183c9165	Mesure avec les ventilateurs choisis à la même vitesse. Les pompes sont exclues (elles tournent normalement).
 3e4a2fef	Mesures
 67633e51	Courbe obtenue (modifier la température cible ci-dessus la recalcule sans nouvelle mesure)
 0e95ff55	Appliquer à ce profil
-6f4b51e9	Les profils dont le nom contient « Silencieux » visent la cible +5 °C, « Performance » la cible −5 °C, les autres la cible telle quelle
 a6de9295	Appliquer à tous les profils
 35ae4fe6	10 min
 c7ad32f7	15 min
@@ -168,7 +151,6 @@ c7ad32f7	15 min
 cc4ae169	Test de refroidissement
 16e5632b	Mesure automatiquement : repos 30 secondes → charge sur tous les cœurs du CPU → arrêt de la charge et refroidissement. Montre l'efficacité de vos réglages actuels. Le GPU n'est pas inclus ; pour le tester aussi, lancez un jeu ou un benchmark pendant le test.
 eb918d75	Quand vous êtes prêt, appuyez sur « Lancer le test ». Fermez les applications lourdes pour des mesures précises.
-9e3aee28	Évolution pendant le test et le réglage
 339697a1	Enregistrer le rapport
 8a49bfd9	Faire analyser par l'IA
 1ba434e9	Résultat
@@ -411,7 +393,6 @@ b373eaee	Intervalle de mise à jour
 1ac4b576	À propos de cette application
 81d90dca	+ Nouveau profil
 4cdf9ede	Enregistrez un ensemble de courbes de ventilateurs sous un nom et basculez de l'un à l'autre
-774923ad	Le rôle de ce profil. Même si vous le renommez, le réglage auto (Silencieux vise +5 °C, Refroidissement max −5 °C), les courbes des nouveaux ventilateurs et l'action rapide « Silencieux » fonctionnent correctement grâce à ce rôle
 82ac5e85	Mode d'alimentation Windows à utiliser avec ce profil
 d663551d	Utiliser par défaut
 80173301	Dupliquer
@@ -542,7 +523,6 @@ c1db4c06	Désactivé, le BIOS garde la main ; l'application surveille seulement 
 b58afa04	Tout est prêt
 861676ec	Commencer le contrôle tout de suite
 01bcdd36	Désactivé, démarre en DRY RUN (calcule seulement, n'écrit rien aux ventilateurs)
-709f1f3b	Astuce : ensuite, mesurez la vitesse minimale de chaque ventilateur avec « Calibrage automatique » dans la page Courbes pour un réglage encore plus silencieux.
 aceb0a14	Annuler
 f193a383	Retour
 303830fc	Suivant
@@ -728,7 +708,6 @@ f8650f35	Arrêt de la charge et retour au contrôle normal…
 9af40572	Interrompu à cause de la pleine vitesse d'urgence
 ef174ee8	Interrompu car la température a atteint {0:F0} °C
 13912a14	Interrompu car la charge du GPU a disparu (laissez tourner le jeu ou le benchmark)
-f3ec99ac	Interrompu car aucune charge n'a été appliquée
 5d76038f	Mesure de la vitesse maximale…
 966245da	Mesure en baissant la vitesse… ({0:F0} %)
 8db302e0	Recherche de la vitesse de démarrage… ({0:F0} %)
@@ -810,7 +789,6 @@ ea0f0b04	Pendant {0:P0} des enregistrements, il était à 95 % ou plus. Le probl
 8b53f64d	Décaler la courbe de 5 °C vers la droite
 fe86db70	La courbe de « {0} » a été décalée de 5 °C vers la droite.
 9cf10287	{0} : un calibrage permet un réglage plus précis
-65f73a32	Le « Calibrage automatique » de l'écran Courbes des ventilateurs mesure la vitesse d'arrêt et la vitesse maximale (environ 1 à 2 minutes).
 afae536a	{0} : la vitesse minimale est dans la zone d'arrêt
 f8161c81	Ce ventilateur s'arrête en dessous de {0:F0} %, mais sa vitesse minimale est de {1:F0} %. Les arrêts et redémarrages répétés provoquent des cliquetis et réduisent sa durée de vie.
 3272f28b	Régler la vitesse minimale à {0:F0} %
@@ -1128,31 +1106,16 @@ eb7cfe73	Désinstallation terminée. Vérification…
 3487b9bc	Vérification du fichier téléchargé…
 dbd5b1f0	Téléchargement…
 9e8ebaf4	En cours… {0} %
-305b4308	(suit {0})
 0f6e5123	Un test de refroidissement ou un calibrage est en cours. Commencez quand il sera terminé.
-5b079133	Choisissez au moins un ventilateur à régler.
-395141d9	Aucun capteur de température GPU trouvé.
 4b25b2cd	Aucun capteur de température CPU trouvé.
-7a122984	Aucun capteur d'utilisation GPU trouvé ; le GPU ne peut pas être réglé.
-c7751269	• Une fois lancé, démarrez un jeu ou un benchmark (3DMark, FF Benchmark, etc.) et maintenez le GPU en charge.\n
-c886e5d0	• Le CPU sera chargé à fond (fermez les autres applications gourmandes).\n
-dbca6724	Le réglage automatique commence (environ {0} min).\n\n
-a1ca3c2f	• Les {0} ventilateurs choisis sont abaissés progressivement depuis 100 %. Le bruit va monter et descendre.\n
-ac505b53	• Si la température {0} atteint {1:F0} °C, le réglage s'arrête aussitôt et le contrôle habituel reprend.\n
-46002470	• Le résultat n'est appliqué qu'après votre vérification ; un arrêt en cours ne modifie donc aucun réglage.
-36a2fc44	Réglage automatique
 417196a4	Actuellement {0:F0} °C / ventilateur {1:F0} %
 5d9f4450	Actuellement {0:F0} °C
-fe560e0e	Mesure terminée. Vérifiez la courbe et choisissez le profil auquel l'appliquer.
-507f470e	Réglage automatique : trop peu de paliers mesurés, impossible de créer une courbe.
-afab154e	La mesure du réglage automatique est terminée. Vérifiez la courbe obtenue et appliquez-la.
 8bbd848f	Voir le résultat
 59c5b033	{0} · au repos {1:F1} °C · à pleine charge :
 5ab01921	Impossible de tenir {0:F0} °C même à pleine vitesse (envisagez d'améliorer le refroidissement)
 d1e24e74	Vitesse nécessaire pour tenir {0:F0} °C : environ {1:F0} %
 9e669da9	* Arrêté avant la fin : créée à partir des seuls paliers mesurés ({0})
 d63ad09b	Profil « {0} » introuvable. Choisissez-en un autre.
-26bd87a8	La courbe créée automatiquement a été appliquée à {1} ventilateurs de « {0} » (annulable avec « Annuler »).
 b6e37608	Voir la courbe
 85bbd542	Appliqué à tous les profils (cible : {0}). Annulable avec « Annuler ».
 cd7e4f98	CPU (réglage auto)
@@ -1174,7 +1137,6 @@ e158d65b	• Juste après l'ajout, « Contrôler avec cette application » est d
 5c0edbde	Courbe {0}
 68339e34	Au moins une courbe est nécessaire. Pour une vitesse constante, passez à « Vitesse fixe ».
 0de821a1	Un autre ventilateur est en cours de calibrage. Commencez quand il sera terminé.
-d4ae40d7	Un réglage automatique ou un test de refroidissement est en cours. Commencez quand il sera terminé.
 2e3bb637	Ce ventilateur ne fait pas partie du profil actif.
 3009598f	Début du calibrage de « {0} ».\n\n
 8d17b7e8	• Pendant environ 1 à 2 minutes, le ventilateur alternera entre pleine vitesse et arrêt.\n
@@ -1439,7 +1401,6 @@ be68c30e	{0} analyse… (la première fois, le chargement du modèle prend du te
 dea2940c	Arrêté
 54fa54cb	Le modèle « {0} » n'est pas dans Ollama. Choisissez-en un autre avec « Actualiser la liste » ou exécutez « ollama pull {1} » dans PowerShell
 d7dc8672	Erreur : {0}
-3decf270	Un réglage automatique est en cours. Commencez quand il sera terminé.
 2ccbef69	Un test de refroidissement va durer environ {0} minutes.\n\n
 502399da	• Pendant le test, le CPU tourne à pleine puissance : les ventilateurs deviennent bruyants.\n
 c0d1c3f1	• Si la température du CPU atteint {0:F0} °C, la charge s'arrête automatiquement.\n
@@ -1469,7 +1430,6 @@ d3ec144f	Virtuel ({0})
 f45a5a37	Le matériel détecté. Le bouton d'image permet de remplacer une image, par exemple par votre propre photo
 31e94c42	Définissez pour chaque ventilateur la relation entre température et vitesse. Les modifications sont appliquées et enregistrées immédiatement
 b5ccd0c3	Diagnostic automatique à partir des enregistrements et contrôle de la poussière et de l'usure des ventilateurs (conseils de l'IA en option)
-2efbce3f	Applique une charge pour créer des courbes automatiquement ou mesurer l'efficacité des réglages actuels
 73339fb8	Jusqu'à 24 heures de températures et de vitesses (hors périodes où l'application était fermée ; avant un redémarrage, moyennes par minute)
 389ce2cc	Estimation du coût de l'électricité et enregistrements d'anomalies
 4bd55735	Allume les LED du PC selon la température, en arc-en-ciel, au rythme de la musique, etc., via OpenRGB
@@ -1591,7 +1551,6 @@ d2937a7a	Logiciels audio : {0} (la lumière suit le son avant les effets ; si el
 db4d82a2	Bureau à distance
 d6776d41	Changez la langue d'affichage, le thème, la couleur d'accent, le fond, la couleur du texte, la police et la taille du texte. Les changements s'appliquent immédiatement
 e0480009	Langue du texte à l'écran. « Auto » suit la langue d'affichage de Windows (anglais si elle n'est pas prise en charge). Le changement est immédiat dès que vous en choisissez une
-e45b0531	Un réglage automatique est en cours.
 e955d878	Un test de refroidissement est en cours.
 afb9660d	Un calibrage est en cours.
 c8e0f349	Une vérification du bruit d'un ventilateur est en cours.
@@ -1736,3 +1695,67 @@ f16a0b90	Une lumière rouge, orange et jaune vacille comme des flammes sur chaqu
 acfe2730	① Créer le zip du signalement
 b15ec58c	{0} a été créé (son dossier s'ouvre dans l'Explorateur). Glissez ce fichier sur la page de signalement pour le joindre.
 d92849da	Signaler un problème…
+050c3438	La « Configuration automatique », ou « Mesurer le ventilateur » sur la page Courbes de ventilateur, mesure la vitesse d'arrêt et la vitesse maximale (env. 1–2 min par ventilateur).
+08978566	mesurer avec le GPU ({0} ventilateurs)
+08fb3614	Configuration automatique…
+0929dde7	suit {0}
+095205e6	Lancer la configuration automatique
+0acedb82	Place les courbes CPU et GPU mesurées dans le profil choisi
+10eada78	Arrêté car la charge du GPU s'est arrêtée
+1941f6aa	mesurer avec le CPU ({0} ventilateurs)
+2646b9f3	• Mesurer avec le GPU : l'application charge le GPU à fond et mesure de la même façon (inutile de lancer un jeu).
+266ab9c4	Aucun GPU à charger n'a été trouvé
+31af6243	Garde le CPU sous cette température à pleine charge
+33d3e475	Mesurer les caractéristiques du ventilateur
+3f5571aa	« {0} » : s'arrête sous {1:F0} %, sa vitesse minimale est donc maintenant de {2:F0} %
+42a72e3a	Configuration automatique
+4610da9f	GPU : mesure impossible, aucun capteur de température ou d'utilisation trouvé
+462bc50c	• Vous vérifiez le résultat avant de l'appliquer : un arrêt en cours de route ne change rien.
+47647013	Étapes : {0} · env. {1} min. Les pompes sont exclues.
+48090db5	Pendant la mesure
+4ac2f56e	Lancement de la configuration automatique (env. {0} min).\n\n
+50136e19	Choisissez les ventilateurs à mesurer et le CPU et/ou le GPU. Les pompes sont exclues (elles tournent normalement).
+53661bf6	mesurer {0} ventilateur(s)
+5899b660	• Mesurer avec le CPU : charge le CPU à fond et baisse les ventilateurs pas à pas depuis 100 %.
+5a241b3a	La configuration automatique est en cours. Lancez-le ensuite.
+6d8d04fc	Caractéristiques du ventilateur (calibrage)
+6da30665	Mesure de « {0} » : {1}
+72f6035d	Une configuration automatique ou un test de refroidissement est en cours. Lancez-le ensuite.
+743c2e54	Arrêté : le GPU a été chargé mais son utilisation n'a pas augmenté
+766747f4	Un seul bouton fait tout : ① mesure chaque ventilateur, ② charge le CPU et le GPU et mesure la température en baissant les ventilateurs pas à pas depuis 100 %, ③ crée « la courbe la plus silencieuse qui tient encore la température cible ». Vous vérifiez le résultat avant de l'appliquer (en cas d'arrêt, le contrôle normal reprend et rien ne change).
+7a0a5001	Le GPU ne peut pas être mesuré : aucun capteur de température ou d'utilisation du GPU trouvé
+7b75bea7	{1} courbe(s) créée(s) automatiquement ajoutée(s) à « {0} » (Annuler pour revenir en arrière).
+814a5f43	« {0} » : mesuré (s'arrête sous {1:F0} %, max. {2:N0} tr/min)
+8226a1e3	La configuration automatique est en cours.
+847327ae	Impossible de mesurer « {0} » : {1}
+8d17780e	Cible CPU
+8f35db7c	• Les ventilateurs vont devenir plus bruyants puis plus calmes. Fermez les applications lourdes.
+901a429f	Pas assez de mesures pour créer une courbe.
+94396456	{0} : terminé plus tôt, la courbe n'utilise que les paliers mesurés ({1})
+94d6baac	Impossible de créer la charge : {0}
+9decdc86	Arrêté : aucune charge GPU en 3 minutes (lancez un jeu ou un benchmark)
+9f77375a	Cible GPU
+a390636e	Ajuste la vitesse en continu pour rester sous la température fixée
+a9addd42	Garde le GPU sous cette température à pleine charge (l'application crée la charge ; inutile de lancer un jeu)
+aae4c566	Mesure de « {0} »…
+ab824de0	Place les courbes CPU et GPU mesurées dans tous les profils. Les profils au rôle « Silencieux » visent +5 °C, « Refroidissement max » −5 °C, et les autres la cible telle quelle
+addb0201	Fait tourner le ventilateur de 0 à 100 % et mesure où il s'arrête, où il démarre et sa vitesse maximale (env. 1–2 min). La « Configuration automatique » mesure en une fois tous les ventilateurs pas encore mesurés
+af0435c9	Charge le CPU et le GPU, mesure et crée la courbe la plus silencieuse qui tient encore la température cible (ouvre la page Configuration automatique)
+b499b2f2	Mesure terminée. Vérifiez les courbes et choisissez le profil auquel les appliquer.
+b7615185	Charge du GPU en cours (attente de la hausse d'utilisation)…
+b940650e	• Si le CPU atteint {0:F0} °C ou le GPU {1:F0} °C, tout s'arrête aussitôt et le contrôle normal reprend.
+c07922c2	pas encore mesuré
+c4256752	• Mesurer les ventilateurs ({0}) : un par un, chaque ventilateur tourne à fond puis s'arrête.
+ccb1e668	La configuration automatique a fini de mesurer. Vérifiez les courbes obtenues et appliquez-les.
+d0b44b86	Configuration automatique : pas assez de mesures pour créer une courbe.
+d36eeaf3	Le rôle de ce profil. Même renommé, la configuration automatique (Silencieux : cible +5 °C, Refroidissement max : −5 °C), les courbes des nouveaux ventilateurs et le « Silencieux » rapide fonctionnent correctement avec ce rôle
+d6fd5420	Arrêté. Vérifiez la courbe créée à partir des mesures et choisissez de l'appliquer ou non.
+e0e8a2f4	Mesurer le ventilateur
+ee9c1f57	Mesure chaque ventilateur et les températures sous charge CPU et GPU, puis crée les courbes automatiquement. Vous pouvez aussi vérifier l'efficacité des réglages actuels
+f42e11b9	Arrêté. Le contrôle normal a repris.
+f965efc0	Test de refroidissement (vérifier les réglages actuels)
+fd03884c	CPU : mesure impossible, aucun capteur de température trouvé
+fdc48725	Choisissez au moins un ventilateur à mesurer, et le CPU et/ou le GPU.
+fe39437d	Astuce : ensuite, mesurez sur la page « Configuration automatique » pour créer les courbes les plus silencieuses adaptées à ce PC (env. 20–30 min).
+140786db	Env. 1–2 min par ventilateur. Une fois la vitesse d'arrêt connue, la vitesse minimale est aussi réglée sur une valeur sûre
+14e2760b	Mesurer d'abord les ventilateurs pas encore mesurés

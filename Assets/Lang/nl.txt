@@ -9,7 +9,6 @@ f70fd09f	Dashboard
 a010a7fc	Geschiedenis
 133b6776	Rapport
 b4bcc740	Diagnose
-977807d2	Testen & afstemmen
 60dd6c40	Verlichting
 dfa4a412	Sensoren
 6243fa06	Instellingen
@@ -64,8 +63,6 @@ ba60770e	Naam (gelijk in alle profielen)
 59c6e4bc	Regelwijze
 a80265dc	Curve
 051753eb	Zelf het toerental per temperatuur bepalen
-530a9c8a	Doeltemperatuur (automatisch)
-1fc9ab3c	Alleen een temperatuur kiezen, het toerental regelt zichzelf
 27bd9d15	Vast
 84b1afad	Altijd hetzelfde toerental (voor pompen)
 26a15192	Volgen (groep)
@@ -91,9 +88,7 @@ fa9ef1de	Daalsnelheid / s
 a5668673	Gaat bij geen enkele instelling onder 40%. Blijft het toerental 3 seconden onder de alarmwaarde, dan gaat hij naar 100% en krijg je een melding, ook onder BIOS-regeling.
 7c811ff7	Alarmtoerental
 cb5145a7	Als minimaal toerental gebruiken
-812e0683	Automatisch kalibreren
 ec41d4ae	Stoppen
-9514979f	Laat de ventilator van 0 tot 100% draaien en meet waar hij stopt, waar hij aanloopt en het maximum (ongeveer 1–2 minuten)
 26101bee	+ Bereik toevoegen
 f5097e76	Resonantie (luide toerentallen overslaan)
 11bb3e7a	Voeg toerentalbereiken toe waarin de kast of radiator bromt; de ventilator gaat er dan snel doorheen in plaats van te blijven hangen (gelijk in alle profielen)
@@ -103,8 +98,6 @@ ea6d9cfc	Hier overslaan
 ed263790	Over te slaan bereik
 49024f94	% tot
 8b7237a1	Nog geen. Als geen enkel toerental hinderlijk klinkt, kun je het zo laten.
-166baf5a	Automatisch maken…
-3eb67669	Belast de pc, meet en maakt de stilste curve die de doeltemperatuur nog haalt (pagina Testen & afstemmen)
 cd6687b0	Kopiëren ▾
 a8a30430	+ Curve toevoegen
 29506d39	Deze curve verwijderen
@@ -147,20 +140,10 @@ f0f25c1b	Druk hierop na het reinigen van filters of ventilatoren. Metingen vanaf
 9c1df669	Nu controleren
 267e9ec4	Slijtage- en stofcontrole van ventilatoren
 2c6b3065	Slaat elke minuut een meting op en vergelijkt met vroeger: "is het toerental lager bij dezelfde aansturing (lagerslijtage, stof)?" en "is de temperatuur hoger bij hetzelfde vermogen (verstopt filter of radiator)?".
-060669c9	Automatisch afstemmen starten
-96cc9d01	Automatisch afstemmen (curves automatisch maken)
 46ac54ca	Aanbevolen
-121a7d95	Verlaagt onder echte belasting het ventilatortoerental stap voor stap vanaf 100% en meet waar de temperatuur zich stabiliseert. Daaruit ontstaat de stilste curve die de doeltemperatuur nog haalt (ongeveer 8–15 minuten; stop je halverwege, dan gaat de normale regeling verder).
-e9947588	Wat koelen
-d881d18f	CPU (ingebouwde belasting, automatisch)
-e57cca88	GPU (belasting met een game of benchmark)
-c074a956	Houdt de temperatuur onder volle belasting onder deze waarde
-0c43c305	Af te stemmen ventilatoren
-183c9165	Meet met de gekozen ventilatoren op hetzelfde toerental. Pompen doen niet mee (ze draaien zoals altijd).
 3e4a2fef	Meetresultaten
 67633e51	Resulterende curve (als je de doeltemperatuur hierboven wijzigt, wordt hij zonder nieuwe meting opnieuw gemaakt)
 0e95ff55	Op dit profiel toepassen
-6f4b51e9	Profielen met "Stil" in de naam krijgen doel +5 °C, "Prestaties" doel −5 °C, de rest het doel ongewijzigd
 a6de9295	Op alle profielen toepassen
 35ae4fe6	10 min
 c7ad32f7	15 min
@@ -168,7 +151,6 @@ c7ad32f7	15 min
 cc4ae169	Koeltest
 16e5632b	Meet automatisch: 30 seconden rust → belasting op alle CPU-kernen → belasting stoppen en afkoelen. Laat zien hoe goed je huidige ventilatorinstellingen koelen. De GPU doet niet mee; wil je die ook testen, start dan tijdens de test een game of benchmark.
 eb918d75	Druk op "Test starten" als je klaar bent. Sluit zware apps voor nauwkeurige resultaten.
-9e3aee28	Verloop tijdens test en afstemming
 339697a1	Rapport opslaan
 8a49bfd9	Laten analyseren door de AI
 1ba434e9	Resultaat
@@ -411,7 +393,6 @@ b373eaee	Bijwerkinterval
 1ac4b576	Over deze app
 81d90dca	+ Nieuw profiel
 4cdf9ede	Sla een set ventilatorcurves onder een naam op en wissel ertussen
-774923ad	De rol van dit profiel. Ook als je het hernoemt, werken automatisch afstemmen (Stil richt op +5 °C, Maximale koeling op −5 °C), de curves voor nieuwe ventilatoren en de snelactie "Stil" goed via deze rol
 82ac5e85	Windows-energiebeheerschema voor dit profiel
 d663551d	Standaard gebruiken
 80173301	Dupliceren
@@ -542,7 +523,6 @@ c1db4c06	Uit: het BIOS blijft verantwoordelijk; de app bewaakt alleen het toeren
 b58afa04	Alles klaar
 861676ec	Meteen beginnen met regelen
 01bcdd36	Uit: start in DRY RUN (berekent alleen en schrijft niets naar de ventilatoren)
-709f1f3b	Tip: meet daarna met "Automatisch kalibreren" op de pagina Ventilatorcurves het minimale toerental van elke ventilator voor een nog stillere instelling.
 aceb0a14	Annuleren
 f193a383	Terug
 303830fc	Volgende
@@ -728,7 +708,6 @@ f8650f35	Belasting stoppen en terug naar normale regeling…
 9af40572	Afgebroken vanwege noodvolle snelheid
 ef174ee8	Afgebroken omdat de temperatuur {0:F0} °C bereikte
 13912a14	Afgebroken omdat de GPU-belasting wegviel (laat de game of benchmark doorlopen)
-f3ec99ac	Afgebroken omdat er geen belasting was
 5d76038f	Maximaal toerental wordt gemeten…
 966245da	Meten terwijl het toerental daalt… ({0:F0}%)
 8db302e0	Aanlooptoerental wordt gezocht… ({0:F0}%)
@@ -810,7 +789,6 @@ ea0f0b04	In {0:P0} van de metingen zat hij op 95% of hoger. Waarschijnlijk ligt 
 8b53f64d	Curve 5 °C naar rechts schuiven
 fe86db70	De curve van "{0}" is 5 °C naar rechts geschoven.
 9cf10287	{0}: met kalibratie kun je nauwkeuriger afstemmen
-65f73a32	"Automatisch kalibreren" op het scherm Ventilatorcurves meet het stoptoerental en het maximale toerental (ongeveer 1–2 minuten).
 afae536a	{0}: minimumtoerental ligt in het stopgebied
 f8161c81	Deze ventilator stopt onder {0:F0}%, maar het minimumtoerental is {1:F0}%. Steeds stoppen en weer aanlopen geeft tikgeluiden en verkort de levensduur.
 3272f28b	Minimumtoerental op {0:F0}% zetten
@@ -1128,31 +1106,16 @@ eb7cfe73	Verwijderen klaar. Controleren…
 3487b9bc	Gedownload bestand wordt gecontroleerd…
 dbd5b1f0	Downloaden…
 9e8ebaf4	Bezig… {0}%
-305b4308	(volgt {0})
 0f6e5123	Er loopt een koeltest of kalibratie. Begin als die klaar is.
-5b079133	Kies minstens één ventilator om af te stemmen.
-395141d9	Geen GPU-temperatuursensor gevonden.
 4b25b2cd	Geen CPU-temperatuursensor gevonden.
-7a122984	Geen sensor voor GPU-gebruik gevonden, dus de GPU kan niet worden afgestemd.
-c7751269	• Start daarna een game of benchmark (3DMark, FF-benchmark enz.) en houd de GPU belast.\n
-c886e5d0	• De CPU wordt volledig belast (sluit andere zware apps).\n
-dbca6724	Automatisch afstemmen begint (ongeveer {0} min).\n\n
-a1ca3c2f	• De {0} gekozen ventilatoren worden geleidelijk verlaagd vanaf 100%. Het geluid wordt afwisselend harder en zachter.\n
-ac505b53	• Bereikt de {0}-temperatuur {1:F0} °C, dan wordt meteen gestopt en keert de normale regeling terug.\n
-46002470	• Het resultaat wordt pas toegepast nadat je het hebt bekeken, dus tussentijds stoppen verandert geen instellingen.
-36a2fc44	Automatisch afstemmen
 417196a4	Nu {0:F0} °C / ventilator {1:F0}%
 5d9f4450	Nu {0:F0} °C
-fe560e0e	Meting klaar. Bekijk de curve en kies het profiel waarop je hem toepast.
-507f470e	Automatisch afstemmen: te weinig stappen gemeten, dus er kon geen curve worden gemaakt.
-afab154e	De meting voor automatisch afstemmen is klaar. Bekijk de curve en pas hem toe.
 8bbd848f	Resultaat bekijken
 59c5b033	{0} · in rust {1:F1} °C · bij volle belasting:
 5ab01921	{0:F0} °C is zelfs op volle snelheid niet vast te houden (overweeg betere koeling)
 d1e24e74	Toerental nodig om {0:F0} °C vast te houden: ongeveer {1:F0}%
 9e669da9	* Voortijdig gestopt, dus alleen gemaakt van de gemeten stappen ({0})
 d63ad09b	Profiel "{0}" niet gevonden. Kies opnieuw.
-26bd87a8	De automatisch gemaakte curve is toegepast op {1} ventilatoren in "{0}" (terug te draaien met "Ongedaan maken").
 b6e37608	Curve bekijken
 85bbd542	Toegepast op alle profielen (doel: {0}). Terug te draaien met "Ongedaan maken".
 cd7e4f98	CPU (automatisch afgestemd)
@@ -1174,7 +1137,6 @@ e158d65b	• Direct na het toevoegen staat "Met deze app regelen" uit (zoals voo
 5c0edbde	Curve {0}
 68339e34	Er is minstens één curve nodig. Voor een constant toerental schakel je over naar "Vast toerental".
 0de821a1	Er wordt al een andere ventilator gekalibreerd. Begin als dat klaar is.
-d4ae40d7	Er loopt een automatische afstemming of koeltest. Begin als die klaar is.
 2e3bb637	Deze ventilator zit niet in het actieve profiel.
 3009598f	Kalibratie van "{0}" begint.\n\n
 8d17b7e8	• Ongeveer 1–2 minuten lang draait de ventilator afwisselend op volle snelheid en staat hij stil.\n
@@ -1439,7 +1401,6 @@ be68c30e	{0} analyseert… (de eerste keer duurt het laden van het model even)
 dea2940c	Gestopt
 54fa54cb	Model "{0}" staat niet in Ollama. Kies opnieuw met "Lijst vernieuwen" of voer "ollama pull {1}" uit in PowerShell
 d7dc8672	Fout: {0}
-3decf270	Er loopt een automatische afstemming. Begin als die klaar is.
 2ccbef69	Er wordt een koeltest van ongeveer {0} minuten uitgevoerd.\n\n
 502399da	• Tijdens de test werkt de CPU op vol vermogen, dus de ventilatoren worden luid.\n
 c0d1c3f1	• Bereikt de CPU-temperatuur {0:F0} °C, dan stopt de belasting automatisch.\n
@@ -1469,7 +1430,6 @@ d3ec144f	Virtueel ({0})
 f45a5a37	De gedetecteerde hardware. Met de afbeeldingsknop kun je een afbeelding vervangen, bijvoorbeeld door een eigen foto
 31e94c42	Stel per ventilator het verband tussen temperatuur en toerental in. Wijzigingen worden meteen toegepast en opgeslagen
 b5ccd0c3	Automatische diagnose op basis van de metingen en controle op stof en slijtage van de ventilatoren (AI-advies optioneel)
-2efbce3f	Belast het systeem om automatisch curves te maken of te meten hoe goed de huidige instellingen koelen
 73339fb8	Tot 24 uur aan temperaturen en toerentallen (zonder de tijd dat de app gesloten was; vóór een herstart gemiddelden per minuut)
 389ce2cc	Schatting van stroomkosten en storingsregistraties
 4bd55735	Laat de leds van de pc via OpenRGB oplichten op temperatuur, regenboog, muziek en meer
@@ -1591,7 +1551,6 @@ d2937a7a	Audiosoftware: {0} (het licht volgt het geluid vóór de effecten; lijk
 db4d82a2	Extern bureaublad
 d6776d41	Wijzig weergavetaal, thema, accentkleur, achtergrond, tekstkleur, lettertype en tekstgrootte. Wijzigingen gelden meteen
 e0480009	Taal van de schermteksten. "Auto" volgt de weergavetaal van Windows (Engels als die niet wordt ondersteund). Wisselt meteen zodra je er een kiest
-e45b0531	Er loopt een automatische afstemming.
 e955d878	Er loopt een koeltest.
 afb9660d	Er loopt een kalibratie.
 c8e0f349	Er loopt een geluidscontrole van een ventilator.
@@ -1736,3 +1695,67 @@ f16a0b90	Rood, oranje en geel licht flakkert als vlammen op elke led
 acfe2730	① Zip voor de melding maken
 b15ec58c	{0} is gemaakt (de map opent in Verkenner). Sleep dit bestand naar de meldpagina om het toe te voegen.
 d92849da	Probleem melden…
+050c3438	"Automatische instelling", of "Ventilator meten" op de pagina Ventilatorcurves, meet het stoptoerental en het maximale toerental (ca. 1–2 min per ventilator).
+08978566	meten met GPU ({0} ventilatoren)
+08fb3614	Automatische instelling…
+0929dde7	volgt {0}
+095205e6	Automatische instelling starten
+0acedb82	Zet de gemeten CPU- en GPU-curves in het gekozen profiel
+10eada78	Gestopt omdat de GPU-belasting stopte
+1941f6aa	meten met CPU ({0} ventilatoren)
+2646b9f3	• Meten met GPU: de app belast de GPU volledig en meet op dezelfde manier (geen game nodig).
+266ab9c4	Geen GPU gevonden om te belasten
+31af6243	Houdt de CPU bij volle belasting onder deze temperatuur
+33d3e475	Ventilatoreigenschappen meten
+3f5571aa	"{0}": stopt onder {1:F0}%, dus het minimumtoerental is nu {2:F0}%
+42a72e3a	Automatische instelling
+4610da9f	GPU: kon niet meten, geen temperatuur- of gebruikssensor gevonden
+462bc50c	• U controleert het resultaat voor het toepassen, dus halverwege stoppen verandert niets.
+47647013	Stappen: {0} · ca. {1} min. Pompen doen niet mee.
+48090db5	Tijdens het meten
+4ac2f56e	Automatische instelling wordt gestart (ca. {0} min).\n\n
+50136e19	Kies de te meten ventilatoren en de CPU en/of GPU. Pompen doen niet mee (ze draaien zoals gewoonlijk).
+53661bf6	{0} ventilator(en) meten
+5899b660	• Meten met CPU: belast de CPU volledig en verlaagt de ventilatoren stap voor stap vanaf 100%.
+5a241b3a	De automatische instelling loopt. Start daarna.
+6d8d04fc	Ventilatoreigenschappen (kalibratie)
+6da30665	"{0}" wordt gemeten: {1}
+72f6035d	Er loopt een automatische instelling of koeltest. Start daarna.
+743c2e54	Gestopt: de GPU werd belast maar het gebruik steeg niet
+766747f4	Eén knop doet alles: ① meet elke ventilator, ② belast de CPU en GPU en meet de temperatuur terwijl de ventilatoren stap voor stap vanaf 100% omlaag gaan, ③ maakt "de stilste curve die de doeltemperatuur nog haalt". U controleert het resultaat voordat u het toepast (stopt u halverwege, dan gaat de normale regeling verder en verandert er niets).
+7a0a5001	De GPU kan niet worden gemeten omdat er geen GPU-temperatuur- of gebruikssensor is gevonden
+7b75bea7	{1} automatisch gemaakte curve(s) toegevoegd aan "{0}" (Ongedaan maken zet het terug).
+814a5f43	"{0}": gemeten (stopt onder {1:F0}%, max. {2:N0} rpm)
+8226a1e3	De automatische instelling is bezig.
+847327ae	Kon "{0}" niet meten: {1}
+8d17780e	CPU-doel
+8f35db7c	• De ventilatoren worden luider en stiller. Sluit zware apps.
+901a429f	Er is niet genoeg gemeten om een curve te maken.
+94396456	{0}: eerder geëindigd, dus de curve gebruikt alleen de gemeten stappen ({1})
+94d6baac	Kon geen belasting maken: {0}
+9decdc86	Gestopt: binnen 3 minuten geen GPU-belasting (start een game of benchmark)
+9f77375a	GPU-doel
+a390636e	Past het toerental direct aan om onder de ingestelde temperatuur te blijven
+a9addd42	Houdt de GPU bij volle belasting onder deze temperatuur (de app maakt de belasting; geen game nodig)
+aae4c566	"{0}" wordt gemeten…
+ab824de0	Zet de gemeten CPU- en GPU-curves in alle profielen. Profielen met de rol "Stil" krijgen doel +5 °C, "Maximale koeling" −5 °C en de rest het ingestelde doel
+addb0201	Laat de ventilator van 0 tot 100% draaien en meet waar hij stopt, waar hij start en zijn maximale toerental (ca. 1–2 min). "Automatische instelling" meet alle nog niet gemeten ventilatoren in één keer
+af0435c9	Belast de CPU en GPU, meet en maakt de stilste curve die de doeltemperatuur nog haalt (opent de pagina Automatische instelling)
+b499b2f2	Meting klaar. Controleer de curves en kies het profiel om ze op toe te passen.
+b7615185	GPU wordt belast (wachten tot het gebruik stijgt)…
+b940650e	• Bereikt de CPU {0:F0} °C of de GPU {1:F0} °C, dan stopt het meteen en keert de normale regeling terug.
+c07922c2	nog niet gemeten
+c4256752	• Ventilatoren meten ({0}): één voor één draait elke ventilator op vol toerental en stopt.
+ccb1e668	De automatische instelling is klaar met meten. Controleer de curves en pas ze toe.
+d0b44b86	Automatische instelling: er is niet genoeg gemeten om een curve te maken.
+d36eeaf3	De rol van dit profiel. Ook als u het hernoemt, werken de automatische instelling (Stil: doel +5 °C, Maximale koeling: −5 °C), de curves voor nieuwe ventilatoren en het snelle "Stil" goed met deze rol
+d6fd5420	Gestopt. Controleer de curve die uit de metingen is gemaakt en kies of u die toepast.
+e0e8a2f4	Ventilator meten
+ee9c1f57	Meet elke ventilator en de temperaturen onder CPU- en GPU-belasting en maakt automatisch curves. U kunt ook controleren hoe goed de huidige instellingen koelen
+f42e11b9	Gestopt. De normale regeling is terug.
+f965efc0	Koeltest (huidige instellingen controleren)
+fd03884c	CPU: kon niet meten, geen temperatuursensor gevonden
+fdc48725	Kies minstens één ventilator om te meten, en de CPU en/of GPU.
+fe39437d	Tip: meet daarna op de pagina "Automatische instelling" om de stilste curves voor deze pc te maken (ca. 20–30 min).
+140786db	Ca. 1–2 min per ventilator. Zodra het stoptoerental bekend is, wordt ook het minimumtoerental op een veilige waarde gezet
+14e2760b	Nog niet gemeten ventilatoren eerst meten

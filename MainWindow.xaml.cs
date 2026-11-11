@@ -153,7 +153,7 @@ public partial class MainWindow : Window
         RebuildVirtualRows();
         RebuildDevices();
         // おまかせ調整の一覧も、入れ替わった設定のプロファイル・ファンで作り直す（調整中は除く）
-        if (_catalog is not null && _tuner is null) RebuildTuneFans();
+        if (_catalog is not null && !SetupRunning) RebuildTuneFans();
         if (_catalog is not null) SelectEditProfile(profile ?? _controller.EffectiveProfile, controlId, curveIndex);
     }
 
@@ -510,7 +510,7 @@ public partial class MainWindow : Window
             _ when sender == NavDevices => (L("デバイス"), L("検出したハードウェアの一覧です。画像のボタンから、自分で撮った写真などに差し替えられます")),
             _ when sender == NavCurves => (L("ファンカーブ"), L("ファンごとに温度と回転数の関係を設定します。変更はすぐに反映・保存されます")),
             _ when sender == NavTools => (L("診断"), L("記録からの自動診断と、ファンのホコリ・劣化のチェック（AI のアドバイスはオプション）")),
-            _ when sender == NavTest => (L("テスト・調整"), L("負荷をかけて、カーブを自動で作ったり、今の設定でどこまで冷えるかを測ったりします")),
+            _ when sender == NavTest => (L("自動セットアップ"), L("ファンの特性と、CPU・GPU に負荷をかけたときの温度を測って、カーブを自動で作ります。今の設定でどこまで冷えるかも確かめられます")),
             _ when sender == NavHistory => (L("履歴"), L("最大 24 時間分の温度と回転数（アプリを閉じていた間を除く。再起動前の分は 1 分ごとの平均）")),
             _ when sender == NavReport => (L("レポート"), L("電気代の目安・異常の記録")),
             _ when sender == NavLighting => (L("ライティング"), L("OpenRGB 連携で、PC の LED を温度・レインボー・音楽などに合わせて光らせます")),
@@ -524,7 +524,7 @@ public partial class MainWindow : Window
         // 診断: ホコリ・劣化のチェックを、まだ調べていなければ調べる
         if (ToolsPage.Visibility == Visibility.Visible && _healthItems.Count == 0 && !_healthRunning) _ = AnalyzeHealthAsync(automatic: false);
         if (SettingsPage.Visibility == Visibility.Visible) RefreshSettingsInfo();
-        if (TestPage.Visibility == Visibility.Visible && _tuner is null && _catalog is not null) RebuildTuneFans();
+        if (TestPage.Visibility == Visibility.Visible && !SetupRunning && _catalog is not null) RebuildTuneFans();
     }
 
     private void OnSettingsTabChanged(object sender, RoutedEventArgs e)
