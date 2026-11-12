@@ -341,6 +341,7 @@ public partial class MainWindow : Window
         // ファンカーブの一覧の 2 行目に、端子の ID ではなく名前（例「CPU Fan」）を出す
         UI.FanSubtitleConverter.Names = catalog.Controls.GroupBy(c => c.Id).ToDictionary(g => g.Key, g => g.First().Name);
         FanList.Items.Refresh();
+        StartConflictWatch();
 
         RebuildSensorOptions();
         RebuildTempCards();

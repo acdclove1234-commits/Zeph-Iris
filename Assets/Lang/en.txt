@@ -1764,3 +1764,37 @@ fe39437d	Tip: afterwards, measure on the "Auto setup" page to build the quietest
 8d7a30b2	Open auto setup
 c66cfe16	The room is about {0:F0}°C warmer than when auto setup measured it.
 e595df6a	Bundles logs, settings and the parts list into a zip and opens the GitHub report page (nothing is sent automatically)
+00fadc54	Do not control the same fans or LEDs in iCUE (fans on a Corsair hub can stay with iCUE).
+04e9e205	Quit SignalRGB, or set it not to control the same devices.
+06127d5d	Quit or uninstall Polychrome RGB.
+1c36d60e	Turn off Afterburner's automatic (software) fan control, or turn off this app's graphics card fan control.
+1d109c7e	{0}: curve "{1}" has no temperature sensor, so it was not imported
+1d429c5c	{0}: Mix "{1}" was imported as "use the highest" in Zeph-Iris
+1fe20088	Turn off fan control in Argus Monitor, or quit it.
+262a4a95	Import from FanControl…
+27bd2ad9	{0}: FanControl's offset ({1:+0;-0}%) does not exist in Zeph-Iris and was not imported (adjust the curve points instead)
+40d41833	FanControl settings (*.json)|*.json
+51a6a6c2	Quit Mystic Light, or turn its lighting off.
+5d608685	These parts of the FanControl settings could not be imported as they are:
+6025be36	Stop using Fan Xpert (fan control) and Aura (lighting) in Armoury Crate, or uninstall it.
+623b4fe3	Turn on "MB Sync" (sync with the motherboard) in L-Connect to hand fan speed and LEDs to the motherboard (this app).
+6636279c	This is not a FanControl settings file (no Controls found).
+675c60b0	Stop using Fan Xpert in AI Suite, or quit AI Suite.
+71dd4f9b	No fans using a curve were found.
+949138bf	It fights over fan speed, which can make speeds change by themselves or settings not take effect.
+94b33104	Uninstall Mystic Light from MSI Center, or turn its lighting off.
+9e64c8b8	It fights over LED colours, which can make colours reset and flicker.
+a4fa184c	Imports the curves and fan names from FanControl (Rem0o) as a new profile (choose the .json in its Configurations folder)
+ae03d42c	Quit FanControl. Its curves can be moved to this app with "Import from FanControl…".
+b2de1575	Stop using the fan settings and Mystic Light in MSI Center, or uninstall MSI Center.
+b89b6d5d	Quit and uninstall {0} (its settings were carried over to Zeph-Iris).
+bd5cc643	Quit or uninstall RGB Fusion.
+c8469f39	It fights over fan speed and LED colours, which can make speeds change by themselves, colours reset and flicker.
+cb870dab	{0} is running.
+d075bf5e	Quit SpeedFan.
+d48dabb5	{0}: the type of curve "{1}" is unknown, so it was not imported
+d5a279cc	Import FanControl settings
+d74a156a	Do not control the same fans or LEDs in CAM (devices on an NZXT hub can stay with CAM).
+f095a744	This is not a FanControl settings file. Choose a .json in the Configurations folder inside FanControl's folder.
+f94ca8e1	Turn off Aura (lighting) in Armoury Crate's settings, or uninstall Armoury Crate.
+b9b79f98	FanControl ({0})

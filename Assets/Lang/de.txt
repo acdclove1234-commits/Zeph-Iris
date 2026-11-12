@@ -1764,3 +1764,37 @@ fe39437d	Tipp: Messen Sie danach auf der Seite „Automatische Einrichtung“, u
 8d7a30b2	Automatische Einrichtung öffnen
 c66cfe16	Der Raum ist etwa {0:F0}°C wärmer als bei der Messung der automatischen Einrichtung.
 e595df6a	Packt Protokolle, Einstellungen und die Teileliste in eine ZIP-Datei und öffnet die GitHub-Meldeseite (nichts wird automatisch gesendet)
+00fadc54	Steuere dieselben Lüfter oder LEDs nicht in iCUE (Lüfter an einem Corsair-Hub können bei iCUE bleiben).
+04e9e205	Beende SignalRGB oder stelle es so ein, dass es dieselben Geräte nicht steuert.
+06127d5d	Beende oder deinstalliere Polychrome RGB.
+1c36d60e	Schalte die automatische (Software-)Lüftersteuerung in Afterburner aus oder die Grafikkarten-Lüftersteuerung dieser App.
+1d109c7e	{0}: Kurve „{1}“ hat keinen Temperatursensor und wurde nicht übernommen
+1d429c5c	{0}: Mix „{1}“ wurde in Zeph-Iris als „höchsten Wert verwenden“ übernommen
+1fe20088	Schalte die Lüftersteuerung in Argus Monitor aus oder beende es.
+262a4a95	Aus FanControl übernehmen…
+27bd2ad9	{0}: Den Offset von FanControl ({1:+0;-0}%) gibt es in Zeph-Iris nicht; er wurde nicht übernommen (passe stattdessen die Kurvenpunkte an)
+40d41833	FanControl-Einstellungen (*.json)|*.json
+51a6a6c2	Beende Mystic Light oder schalte die Beleuchtung aus.
+5d608685	Diese Teile der FanControl-Einstellungen ließen sich nicht unverändert übernehmen:
+6025be36	Nutze Fan Xpert (Lüftersteuerung) und Aura (Beleuchtung) in Armoury Crate nicht mehr oder deinstalliere es.
+623b4fe3	Schalte in L-Connect „MB Sync“ (mit dem Mainboard synchronisieren) ein, um Lüfterdrehzahl und LEDs dem Mainboard (dieser App) zu überlassen.
+6636279c	Dies ist keine FanControl-Einstellungsdatei (keine Controls gefunden).
+675c60b0	Nutze Fan Xpert in AI Suite nicht mehr oder beende AI Suite.
+71dd4f9b	Es wurden keine Lüfter mit Kurve gefunden.
+949138bf	Beide steuern die Lüfterdrehzahl; dadurch können sich Drehzahlen von selbst ändern oder Einstellungen nicht greifen.
+94b33104	Deinstalliere Mystic Light aus MSI Center oder schalte die Beleuchtung aus.
+9e64c8b8	Beide steuern die LED-Farben; dadurch können Farben zurückspringen oder flackern.
+a4fa184c	Übernimmt Kurven und Lüfternamen aus FanControl (Rem0o) als neues Profil (die .json im Ordner Configurations wählen)
+ae03d42c	Beende FanControl. Die Kurven lassen sich mit „Aus FanControl übernehmen…“ in diese App übertragen.
+b2de1575	Nutze die Lüftereinstellungen und Mystic Light in MSI Center nicht mehr oder deinstalliere MSI Center.
+b89b6d5d	Beende und deinstalliere {0} (die Einstellungen wurden in Zeph-Iris übernommen).
+bd5cc643	Beende oder deinstalliere RGB Fusion.
+c8469f39	Beide steuern Lüfterdrehzahl und LED-Farben; dadurch können sich Drehzahlen von selbst ändern und Farben zurückspringen oder flackern.
+cb870dab	{0} läuft.
+d075bf5e	Beende SpeedFan.
+d48dabb5	{0}: Der Kurventyp „{1}“ ist unbekannt und wurde nicht übernommen
+d5a279cc	FanControl-Einstellungen übernehmen
+d74a156a	Steuere dieselben Lüfter oder LEDs nicht in CAM (Geräte an einem NZXT-Hub können bei CAM bleiben).
+f095a744	Dies ist keine FanControl-Einstellungsdatei. Wähle eine .json im Ordner Configurations im FanControl-Ordner.
+f94ca8e1	Schalte Aura (Beleuchtung) in den Einstellungen von Armoury Crate aus oder deinstalliere Armoury Crate.
+b9b79f98	FanControl ({0})

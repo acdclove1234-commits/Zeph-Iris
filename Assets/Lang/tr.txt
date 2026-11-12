@@ -1764,3 +1764,37 @@ fe39437d	İpucu: ardından "Otomatik kurulum" sayfasında ölçerek bu PC'ye uyg
 8d7a30b2	Otomatik kurulumu aç
 c66cfe16	Oda, otomatik kurulumun ölçtüğü zamana göre yaklaşık {0:F0}°C daha sıcak.
 e595df6a	Günlükleri, ayarları ve parça listesini bir zip dosyasında toplar ve GitHub rapor sayfasını açar (hiçbir şey otomatik gönderilmez)
+00fadc54	iCUE'da aynı fanları veya LED'leri kontrol etmeyin (Corsair hub'ına bağlı fanlar iCUE'da kalabilir).
+04e9e205	SignalRGB'yi kapatın veya aynı cihazları kontrol etmeyecek şekilde ayarlayın.
+06127d5d	Polychrome RGB'yi kapatın veya kaldırın.
+1c36d60e	Afterburner'ın otomatik (yazılım) fan kontrolünü veya bu uygulamanın ekran kartı fan kontrolünü kapatın.
+1d109c7e	{0}: "{1}" eğrisinin sıcaklık sensörü yok, bu yüzden içe aktarılmadı
+1d429c5c	{0}: "{1}" karışımı Zeph-Iris'te "en yükseğini kullan" olarak içe aktarıldı
+1fe20088	Argus Monitor'da fan kontrolünü kapatın veya programı kapatın.
+262a4a95	FanControl'dan içe aktar…
+27bd2ad9	{0}: FanControl'ün ofseti ({1:+0;-0}%) Zeph-Iris'te yok ve içe aktarılmadı (bunun yerine eğri noktalarını ayarlayın)
+40d41833	FanControl ayarları (*.json)|*.json
+51a6a6c2	Mystic Light'ı kapatın veya aydınlatmasını kapatın.
+5d608685	FanControl ayarlarının şu kısımları olduğu gibi içe aktarılamadı:
+6025be36	Armoury Crate'te Fan Xpert'i (fan kontrolü) ve Aura'yı (aydınlatma) kullanmayı bırakın veya kaldırın.
+623b4fe3	Fan hızını ve LED'leri anakarta (bu uygulamaya) bırakmak için L-Connect'te "MB Sync"i (anakartla senkronize et) açın.
+6636279c	Bu bir FanControl ayar dosyası değil (Controls bulunamadı).
+675c60b0	AI Suite'te Fan Xpert'i kullanmayı bırakın veya AI Suite'i kapatın.
+71dd4f9b	Eğri kullanan fan bulunamadı.
+949138bf	İkisi de fan hızını kontrol etmeye çalışır; hız kendiliğinden değişebilir veya ayarlar uygulanmayabilir.
+94b33104	Mystic Light'ı MSI Center'dan kaldırın veya aydınlatmasını kapatın.
+9e64c8b8	İkisi de LED renklerini kontrol etmeye çalışır; renkler geri dönebilir veya titreyebilir.
+a4fa184c	FanControl'dan (Rem0o) eğrileri ve fan adlarını yeni bir profil olarak içe aktarır (Configurations klasöründeki .json dosyasını seçin)
+ae03d42c	FanControl'ü kapatın. Eğrileri "FanControl'dan içe aktar…" ile bu uygulamaya taşıyabilirsiniz.
+b2de1575	MSI Center'daki fan ayarlarını ve Mystic Light'ı kullanmayı bırakın veya MSI Center'ı kaldırın.
+b89b6d5d	{0} uygulamasını kapatıp kaldırın (ayarları Zeph-Iris'e aktarıldı).
+bd5cc643	RGB Fusion'ı kapatın veya kaldırın.
+c8469f39	İkisi de fan hızını ve LED renklerini kontrol etmeye çalışır; hızlar kendiliğinden değişebilir, renkler geri dönebilir veya titreyebilir.
+cb870dab	{0} çalışıyor.
+d075bf5e	SpeedFan'i kapatın.
+d48dabb5	{0}: "{1}" eğrisinin türü bilinmiyor, bu yüzden içe aktarılmadı
+d5a279cc	FanControl ayarlarını içe aktar
+d74a156a	CAM'de aynı fanları veya LED'leri kontrol etmeyin (NZXT hub'ına bağlı cihazlar CAM'de kalabilir).
+f095a744	Bu bir FanControl ayar dosyası değil. FanControl klasöründeki Configurations klasöründen bir .json seçin.
+f94ca8e1	Armoury Crate ayarlarında Aura'yı (aydınlatma) kapatın veya Armoury Crate'i kaldırın.
+b9b79f98	FanControl ({0})

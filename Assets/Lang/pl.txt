@@ -1764,3 +1764,37 @@ fe39437d	Wskazówka: potem zmierz na stronie „Konfiguracja automatyczna”, ab
 8d7a30b2	Otwórz automatyczną konfigurację
 c66cfe16	W pokoju jest o około {0:F0}°C cieplej niż podczas pomiaru automatycznej konfiguracji.
 e595df6a	Pakuje logi, ustawienia i listę podzespołów do pliku zip i otwiera stronę zgłoszeń GitHub (nic nie jest wysyłane automatycznie)
+00fadc54	Nie steruj tymi samymi wentylatorami ani diodami w iCUE (wentylatory na hubie Corsair mogą zostać w iCUE).
+04e9e205	Zamknij SignalRGB albo ustaw, by nie sterował tymi samymi urządzeniami.
+06127d5d	Zamknij lub odinstaluj Polychrome RGB.
+1c36d60e	Wyłącz automatyczne (programowe) sterowanie wentylatorami w Afterburnerze albo sterowanie wentylatorami karty graficznej w tej aplikacji.
+1d109c7e	{0}: krzywa „{1}” nie ma czujnika temperatury, więc jej nie zaimportowano
+1d429c5c	{0}: Mix „{1}” zaimportowano w Zeph-Iris jako „użyj najwyższej”
+1fe20088	Wyłącz sterowanie wentylatorami w Argus Monitor albo go zamknij.
+262a4a95	Importuj z FanControl…
+27bd2ad9	{0}: przesunięcie z FanControl ({1:+0;-0}%) nie istnieje w Zeph-Iris i nie zostało zaimportowane (zamiast tego dostosuj punkty krzywej)
+40d41833	Ustawienia FanControl (*.json)|*.json
+51a6a6c2	Zamknij Mystic Light albo wyłącz podświetlenie.
+5d608685	Tych części ustawień FanControl nie dało się zaimportować bez zmian:
+6025be36	Przestań używać Fan Xpert (sterowanie wentylatorami) i Aura (podświetlenie) w Armoury Crate albo je odinstaluj.
+623b4fe3	Włącz „MB Sync” (synchronizacja z płytą główną) w L-Connect, aby oddać obroty wentylatorów i diody płycie głównej (tej aplikacji).
+6636279c	To nie jest plik ustawień FanControl (nie znaleziono Controls).
+675c60b0	Przestań używać Fan Xpert w AI Suite albo zamknij AI Suite.
+71dd4f9b	Nie znaleziono wentylatorów używających krzywej.
+949138bf	Obie aplikacje sterują obrotami wentylatorów, więc mogą zmieniać się same albo ustawienia nie działać.
+94b33104	Odinstaluj Mystic Light z MSI Center albo wyłącz podświetlenie.
+9e64c8b8	Obie aplikacje sterują kolorami diod, więc kolory mogą wracać lub migać.
+a4fa184c	Importuje krzywe i nazwy wentylatorów z FanControl (Rem0o) jako nowy profil (wybierz plik .json z folderu Configurations)
+ae03d42c	Zamknij FanControl. Jego krzywe można przenieść do tej aplikacji przez „Importuj z FanControl…”.
+b2de1575	Przestań używać ustawień wentylatorów i Mystic Light w MSI Center albo odinstaluj MSI Center.
+b89b6d5d	Zamknij i odinstaluj {0} (jego ustawienia przeniesiono do Zeph-Iris).
+bd5cc643	Zamknij lub odinstaluj RGB Fusion.
+c8469f39	Obie aplikacje sterują obrotami wentylatorów i kolorami diod, więc obroty mogą zmieniać się same, a kolory wracać lub migać.
+cb870dab	{0} jest uruchomiony.
+d075bf5e	Zamknij SpeedFan.
+d48dabb5	{0}: nieznany typ krzywej „{1}”, więc jej nie zaimportowano
+d5a279cc	Importuj ustawienia FanControl
+d74a156a	Nie steruj tymi samymi wentylatorami ani diodami w CAM (urządzenia na hubie NZXT mogą zostać w CAM).
+f095a744	To nie jest plik ustawień FanControl. Wybierz plik .json z folderu Configurations w folderze FanControl.
+f94ca8e1	Wyłącz Aura (podświetlenie) w ustawieniach Armoury Crate albo odinstaluj Armoury Crate.
+b9b79f98	FanControl ({0})

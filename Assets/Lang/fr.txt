@@ -1764,3 +1764,37 @@ fe39437d	Astuce : ensuite, mesurez sur la page « Configuration automatique » p
 8d7a30b2	Ouvrir la configuration automatique
 c66cfe16	La pièce est environ {0:F0}°C plus chaude que lors de la mesure de la configuration automatique.
 e595df6a	Regroupe les journaux, les réglages et la liste des composants dans un zip et ouvre la page de signalement GitHub (rien n'est envoyé automatiquement)
+00fadc54	Ne contrôlez pas les mêmes ventilateurs ou LED dans iCUE (les ventilateurs sur un hub Corsair peuvent rester sous iCUE).
+04e9e205	Quittez SignalRGB, ou réglez-le pour qu'il ne contrôle pas les mêmes appareils.
+06127d5d	Quittez ou désinstallez Polychrome RGB.
+1c36d60e	Désactivez le contrôle automatique (logiciel) des ventilateurs d'Afterburner, ou le contrôle des ventilateurs de la carte graphique dans cette application.
+1d109c7e	{0} : la courbe « {1} » n'a pas de capteur de température, elle n'a pas été importée
+1d429c5c	{0} : le mélange « {1} » a été importé dans Zeph-Iris en « utiliser la plus haute »
+1fe20088	Désactivez le contrôle des ventilateurs dans Argus Monitor, ou quittez-le.
+262a4a95	Importer depuis FanControl…
+27bd2ad9	{0} : le décalage de FanControl ({1:+0;-0} %) n'existe pas dans Zeph-Iris et n'a pas été importé (ajustez plutôt les points de la courbe)
+40d41833	Réglages FanControl (*.json)|*.json
+51a6a6c2	Quittez Mystic Light, ou éteignez son éclairage.
+5d608685	Ces parties des réglages de FanControl n'ont pas pu être importées telles quelles :
+6025be36	N'utilisez plus Fan Xpert (contrôle des ventilateurs) ni Aura (éclairage) dans Armoury Crate, ou désinstallez-le.
+623b4fe3	Activez « MB Sync » (synchroniser avec la carte mère) dans L-Connect pour confier la vitesse des ventilateurs et les LED à la carte mère (cette application).
+6636279c	Ce n'est pas un fichier de réglages FanControl (aucun Controls trouvé).
+675c60b0	N'utilisez plus Fan Xpert dans AI Suite, ou quittez AI Suite.
+71dd4f9b	Aucun ventilateur utilisant une courbe n'a été trouvé.
+949138bf	Les deux se disputent la vitesse des ventilateurs : elle peut changer toute seule ou les réglages ne pas s'appliquer.
+94b33104	Désinstallez Mystic Light de MSI Center, ou éteignez son éclairage.
+9e64c8b8	Les deux se disputent les couleurs des LED : elles peuvent revenir ou scintiller.
+a4fa184c	Importe les courbes et les noms des ventilateurs de FanControl (Rem0o) dans un nouveau profil (choisissez le .json de son dossier Configurations)
+ae03d42c	Quittez FanControl. Ses courbes peuvent être transférées dans cette application avec « Importer depuis FanControl… ».
+b2de1575	N'utilisez plus les réglages des ventilateurs ni Mystic Light dans MSI Center, ou désinstallez MSI Center.
+b89b6d5d	Quittez et désinstallez {0} (ses réglages ont été repris dans Zeph-Iris).
+bd5cc643	Quittez ou désinstallez RGB Fusion.
+c8469f39	Les deux se disputent la vitesse des ventilateurs et les couleurs des LED : la vitesse peut changer toute seule, les couleurs revenir ou scintiller.
+cb870dab	{0} est en cours d'exécution.
+d075bf5e	Quittez SpeedFan.
+d48dabb5	{0} : le type de la courbe « {1} » est inconnu, elle n'a pas été importée
+d5a279cc	Importer les réglages de FanControl
+d74a156a	Ne contrôlez pas les mêmes ventilateurs ou LED dans CAM (les appareils sur un hub NZXT peuvent rester sous CAM).
+f095a744	Ce n'est pas un fichier de réglages FanControl. Choisissez un .json dans le dossier Configurations du dossier de FanControl.
+f94ca8e1	Désactivez Aura (éclairage) dans les réglages d'Armoury Crate, ou désinstallez Armoury Crate.
+b9b79f98	FanControl ({0})

@@ -1764,3 +1764,37 @@ fe39437d	Dica: depois, meça na página "Configuração automática" para criar 
 8d7a30b2	Abrir a configuração automática
 c66cfe16	O cômodo está cerca de {0:F0}°C mais quente do que quando a configuração automática mediu.
 e595df6a	Reúne logs, configurações e a lista de peças em um zip e abre a página de relatório do GitHub (nada é enviado automaticamente)
+00fadc54	Não controle as mesmas ventoinhas ou LEDs no iCUE (ventoinhas em um hub Corsair podem ficar com o iCUE).
+04e9e205	Feche o SignalRGB ou configure-o para não controlar os mesmos dispositivos.
+06127d5d	Feche ou desinstale o Polychrome RGB.
+1c36d60e	Desligue o controle automático (por software) de ventoinhas do Afterburner, ou o controle das ventoinhas da placa de vídeo neste app.
+1d109c7e	{0}: a curva "{1}" não tem sensor de temperatura, então não foi importada
+1d429c5c	{0}: o Mix "{1}" foi importado no Zeph-Iris como "usar a mais alta"
+1fe20088	Desligue o controle de ventoinhas do Argus Monitor ou feche-o.
+262a4a95	Importar do FanControl…
+27bd2ad9	{0}: o deslocamento do FanControl ({1:+0;-0}%) não existe no Zeph-Iris e não foi importado (ajuste os pontos da curva)
+40d41833	Configurações do FanControl (*.json)|*.json
+51a6a6c2	Feche o Mystic Light ou desligue a iluminação.
+5d608685	Estas partes das configurações do FanControl não puderam ser importadas como estão:
+6025be36	Pare de usar o Fan Xpert (controle de ventoinhas) e o Aura (iluminação) no Armoury Crate, ou desinstale-o.
+623b4fe3	Ative o "MB Sync" (sincronizar com a placa-mãe) no L-Connect para deixar a velocidade das ventoinhas e os LEDs com a placa-mãe (este app).
+6636279c	Não é um arquivo de configurações do FanControl (nenhum Controls encontrado).
+675c60b0	Pare de usar o Fan Xpert no AI Suite ou feche o AI Suite.
+71dd4f9b	Nenhuma ventoinha usando curva foi encontrada.
+949138bf	Os dois disputam a velocidade das ventoinhas: ela pode mudar sozinha ou as configurações não valerem.
+94b33104	Desinstale o Mystic Light do MSI Center ou desligue a iluminação.
+9e64c8b8	Os dois disputam as cores dos LEDs: elas podem voltar ou piscar.
+a4fa184c	Importa as curvas e os nomes das ventoinhas do FanControl (Rem0o) como um novo perfil (escolha o .json da pasta Configurations)
+ae03d42c	Feche o FanControl. As curvas podem ser passadas para este app com "Importar do FanControl…".
+b2de1575	Pare de usar as configurações de ventoinhas e o Mystic Light no MSI Center, ou desinstale o MSI Center.
+b89b6d5d	Feche e desinstale o {0} (as configurações foram passadas para o Zeph-Iris).
+bd5cc643	Feche ou desinstale o RGB Fusion.
+c8469f39	Os dois disputam a velocidade das ventoinhas e as cores dos LEDs: a velocidade pode mudar sozinha e as cores voltarem ou piscarem.
+cb870dab	{0} está em execução.
+d075bf5e	Feche o SpeedFan.
+d48dabb5	{0}: o tipo da curva "{1}" é desconhecido, então ela não foi importada
+d5a279cc	Importar configurações do FanControl
+d74a156a	Não controle as mesmas ventoinhas ou LEDs no CAM (dispositivos em um hub NZXT podem ficar com o CAM).
+f095a744	Não é um arquivo de configurações do FanControl. Escolha um .json na pasta Configurations dentro da pasta do FanControl.
+f94ca8e1	Desligue o Aura (iluminação) nas configurações do Armoury Crate ou desinstale o Armoury Crate.
+b9b79f98	FanControl ({0})

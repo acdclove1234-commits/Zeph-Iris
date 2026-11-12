@@ -1764,3 +1764,37 @@ fe39437d	Mẹo: sau đó, hãy đo ở trang "Thiết lập tự động" để 
 8d7a30b2	Mở thiết lập tự động
 c66cfe16	Phòng ấm hơn khoảng {0:F0}°C so với lúc thiết lập tự động đo.
 e595df6a	Gom nhật ký, cài đặt và danh sách linh kiện vào một tệp zip rồi mở trang báo lỗi GitHub (không gửi gì tự động)
+00fadc54	Đừng điều khiển cùng quạt hay LED trong iCUE (quạt cắm vào hub Corsair có thể để iCUE quản lý).
+04e9e205	Thoát SignalRGB, hoặc đặt để nó không điều khiển cùng thiết bị.
+06127d5d	Thoát hoặc gỡ Polychrome RGB.
+1c36d60e	Tắt điều khiển quạt tự động (phần mềm) của Afterburner, hoặc tắt điều khiển quạt card đồ họa của ứng dụng này.
+1d109c7e	{0}: đường cong "{1}" không có cảm biến nhiệt độ nên chưa nhập
+1d429c5c	{0}: Mix "{1}" được nhập vào Zeph-Iris theo kiểu "dùng giá trị cao nhất"
+1fe20088	Tắt điều khiển quạt trong Argus Monitor, hoặc thoát nó.
+262a4a95	Nhập từ FanControl…
+27bd2ad9	{0}: độ lệch của FanControl ({1:+0;-0}%) không có trong Zeph-Iris nên chưa nhập (hãy chỉnh các điểm của đường cong)
+40d41833	Cài đặt FanControl (*.json)|*.json
+51a6a6c2	Thoát Mystic Light, hoặc tắt đèn của nó.
+5d608685	Những phần sau của cài đặt FanControl không nhập nguyên trạng được:
+6025be36	Ngừng dùng Fan Xpert (điều khiển quạt) và Aura (đèn) trong Armoury Crate, hoặc gỡ nó.
+623b4fe3	Bật "MB Sync" (đồng bộ với bo mạch chủ) trong L-Connect để giao tốc độ quạt và LED cho bo mạch chủ (ứng dụng này).
+6636279c	Đây không phải tệp cài đặt của FanControl (không tìm thấy Controls).
+675c60b0	Ngừng dùng Fan Xpert trong AI Suite, hoặc thoát AI Suite.
+71dd4f9b	Không tìm thấy quạt nào dùng đường cong.
+949138bf	Hai bên tranh nhau tốc độ quạt, khiến tốc độ tự thay đổi hoặc cài đặt không có tác dụng.
+94b33104	Gỡ Mystic Light khỏi MSI Center, hoặc tắt đèn của nó.
+9e64c8b8	Hai bên tranh nhau màu LED, khiến màu bị trả về hoặc nhấp nháy.
+a4fa184c	Nhập các đường cong và tên quạt từ FanControl (Rem0o) thành một hồ sơ mới (chọn tệp .json trong thư mục Configurations)
+ae03d42c	Thoát FanControl. Có thể chuyển các đường cong sang ứng dụng này bằng "Nhập từ FanControl…".
+b2de1575	Ngừng dùng cài đặt quạt và Mystic Light trong MSI Center, hoặc gỡ MSI Center.
+b89b6d5d	Thoát và gỡ {0} (cài đặt đã được chuyển sang Zeph-Iris).
+bd5cc643	Thoát hoặc gỡ RGB Fusion.
+c8469f39	Hai bên tranh nhau tốc độ quạt và màu LED, khiến tốc độ tự thay đổi, màu bị trả về hoặc nhấp nháy.
+cb870dab	{0} đang chạy.
+d075bf5e	Thoát SpeedFan.
+d48dabb5	{0}: không rõ loại đường cong "{1}", nên chưa nhập
+d5a279cc	Nhập cài đặt FanControl
+d74a156a	Đừng điều khiển cùng quạt hay LED trong CAM (thiết bị cắm vào hub NZXT có thể để CAM quản lý).
+f095a744	Đây không phải tệp cài đặt của FanControl. Hãy chọn tệp .json trong thư mục Configurations bên trong thư mục FanControl.
+f94ca8e1	Tắt Aura (đèn) trong cài đặt của Armoury Crate, hoặc gỡ Armoury Crate.
+b9b79f98	FanControl ({0})

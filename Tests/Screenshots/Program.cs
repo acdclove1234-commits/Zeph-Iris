@@ -141,6 +141,8 @@ internal static class Program
                 if (rb.GroupName == "Range" && (rb.Tag as string) == "5") rb.IsChecked = true;
         });
         Shot("NavSensors", "sensors");
+        // 設定: アップデートの欄まで送る
+        Shot("NavSettings", "settings", () => ((FrameworkElement)w.FindName("UpdateCheckButton")).BringIntoView());
         Shot("NavLighting", "lighting");
 
         // 自動セットアップ: 測り終えた結果を見せる（測定そのものは 20〜30 分かかるので、結果だけ入れる）

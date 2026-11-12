@@ -1,0 +1,23 @@
+# yaml-language-server: $schema=https://aka.ms/winget-manifest.installer.1.9.0.schema.json
+PackageIdentifier: acdclove1234-commits.Zeph-Iris
+PackageVersion: 6.12.0
+MinimumOSVersion: 10.0.17763.0
+InstallerType: inno
+Scope: machine
+ElevationRequirement: elevatesSelf
+InstallModes:
+- interactive
+- silent
+- silentWithProgress
+UpgradeBehavior: install
+ProductCode: '{0D723C37-A7D9-4A7E-B013-F7F1700BDBA3}_is1'
+ReleaseDate: 2026-11-12
+AppsAndFeaturesEntries:
+- DisplayName: Zeph-Iris
+  ProductCode: '{0D723C37-A7D9-4A7E-B013-F7F1700BDBA3}_is1'
+Installers:
+- Architecture: x64
+  InstallerUrl: https://github.com/acdclove1234-commits/Zeph-Iris/releases/download/v6.12.0/Zeph-Iris-6.12.0-setup.exe
+  InstallerSha256: 8596FF6D50521D167C9CF9D55E090940C492A28A1A485881116E6FFFAB4744E2
+ManifestType: installer
+ManifestVersion: 1.9.0

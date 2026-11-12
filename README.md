@@ -44,6 +44,7 @@
 - **Safety**: emergency full speed (also watches the CPU and GPU temperatures when no curve uses them), filtering of bad sensor values and stuck sensors, pump speed watch, a watchdog process (sets safe fan speeds and restarts the app if it crashes), and handing the fans back to the BIOS on exit and sleep
 - **Monitoring and diagnostics**: dashboard, history, electricity estimate, fan wear and dust checks that compare like with like (room temperature and fan-curve changes are taken into account), and a flight recorder for incidents
 - **LEDs (with OpenRGB)**: temperature, rainbow, breathing, static colour and music sync (kick and snare detection, beat tracking, a dozen styles), per device and per zone. Music sync can listen to one app only (for example Spotify). PNY ARGB Epic-X graphics cards are written directly, without OpenRGB
+- **Switching from another app**: import curves and fan names from FanControl, and a warning (with how to fix it) when vendor software such as Armoury Crate, iCUE or L-Connect fights over the same fans or LEDs
 - **Other**: automatic profile switching, a phone view on the same network, ntfy / Discord notifications, tray icon and start at logon, "Report a problem" in the sidebar and tray menu, and a user interface in 18 languages
 - **Optional**: an AI cooling advisor using a local [Ollama](https://ollama.com/) model (off by default; turn it on at the top of the Diagnostics page; your data stays on the PC)
 
@@ -167,6 +168,12 @@ Zeph-Iris stands on the shoulders of these open-source projects. Many thanks to 
 - [Montserrat](https://github.com/JulietaUla/Montserrat) and [Zen Maru Gothic](https://github.com/googlefonts/zen-marugothic) — the fonts
 - [Inno Setup](https://jrsoftware.org/isinfo.php) — the installer
 - [.NET](https://github.com/dotnet) and WPF
+
+## How Zeph-Iris is made
+
+The code is written with [Claude Code](https://claude.com/claude-code), an AI coding assistant. The author decides what to build and how it should behave, tests every change on real hardware (fans, pumps, LEDs and music sync are checked by eye and ear), reviews the results, and decides each release. Logic tests, a UI test in six languages and a translation check run on every change in CI.
+
+If something looks wrong, please say so in an [issue](../../issues/new/choose); reports from real PCs are what this project is built on.
 
 ## License
 

@@ -1764,3 +1764,37 @@ fe39437d	提示：完成後，在「自動設定」頁面測量，可產生適�
 8d7a30b2	開啟自動設定
 c66cfe16	室溫比自動設定測量時高約 {0:F0}°C。
 e595df6a	將記錄、設定和零件清單打包為 zip，並開啟 GitHub 回報頁面（不會自動傳送任何內容）
+00fadc54	請不要在 iCUE 中控制相同的風扇和 LED（接在 Corsair 集線器上的風扇可以繼續交給 iCUE）。
+04e9e205	請結束 SignalRGB，或將其設定為不控制相同的裝置。
+06127d5d	請結束或解除安裝 Polychrome RGB。
+1c36d60e	請關閉 Afterburner 的自動（軟體）風扇控制，或關閉本應用程式的顯示卡風扇控制。
+1d109c7e	{0}：曲線「{1}」沒有溫度感測器，因此沒有匯入
+1d429c5c	{0}：混合「{1}」在 Zeph-Iris 中以「使用最高值」匯入
+1fe20088	請關閉 Argus Monitor 的風扇控制，或將其結束。
+262a4a95	從 FanControl 匯入…
+27bd2ad9	{0}：Zeph-Iris 沒有 FanControl 的偏移（{1:+0;-0}%），因此沒有匯入（請改為調整曲線的點）
+40d41833	FanControl 設定 (*.json)|*.json
+51a6a6c2	請結束 Mystic Light，或關閉其燈光。
+5d608685	FanControl 設定中的以下部分無法照原樣匯入：
+6025be36	請停用 Armoury Crate 的 Fan Xpert（風扇控制）和 Aura（燈光），或將其解除安裝。
+623b4fe3	在 L-Connect 中開啟「MB Sync」（與主機板同步），即可把風扇轉速和 LED 交給主機板（本應用程式）。
+6636279c	這不是 FanControl 的設定檔（找不到 Controls）。
+675c60b0	請停用 AI Suite 的 Fan Xpert，或結束 AI Suite。
+71dd4f9b	找不到使用曲線的風扇。
+949138bf	兩者會爭奪風扇轉速，可能導致轉速自行變化或設定不生效。
+94b33104	請從 MSI Center 解除安裝 Mystic Light，或關閉其燈光。
+9e64c8b8	兩者會爭奪 LED 顏色，可能導致顏色復原或閃爍。
+a4fa184c	將 FanControl（Rem0o）的曲線和風扇名稱匯入為新的設定檔（選擇其 Configurations 資料夾中的 .json）
+ae03d42c	請結束 FanControl。其曲線可以透過「從 FanControl 匯入…」移到本應用程式。
+b2de1575	請停用 MSI Center 的風扇設定和 Mystic Light，或解除安裝 MSI Center。
+b89b6d5d	請結束並解除安裝 {0}（其設定已移轉到 Zeph-Iris）。
+bd5cc643	請結束或解除安裝 RGB Fusion。
+c8469f39	兩者會爭奪風扇轉速和 LED 顏色，可能導致轉速自行變化、顏色復原或閃爍。
+cb870dab	{0} 正在執行。
+d075bf5e	請結束 SpeedFan。
+d48dabb5	{0}：曲線「{1}」的類型不明，因此沒有匯入
+d5a279cc	匯入 FanControl 的設定
+d74a156a	請不要在 CAM 中控制相同的風扇和 LED（接在 NZXT 集線器上的裝置可以繼續交給 CAM）。
+f095a744	這不是 FanControl 的設定檔。請選擇 FanControl 資料夾內 Configurations 資料夾中的 .json。
+f94ca8e1	請在 Armoury Crate 的設定中關閉 Aura（燈光），或解除安裝 Armoury Crate。
+b9b79f98	FanControl ({0})

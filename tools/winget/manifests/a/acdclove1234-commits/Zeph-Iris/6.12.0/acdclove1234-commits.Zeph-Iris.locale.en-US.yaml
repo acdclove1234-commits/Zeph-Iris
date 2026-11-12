@@ -1,0 +1,33 @@
+# yaml-language-server: $schema=https://aka.ms/winget-manifest.defaultLocale.1.9.0.schema.json
+PackageIdentifier: acdclove1234-commits.Zeph-Iris
+PackageVersion: 6.12.0
+PackageLocale: en-US
+Publisher: Zeph-Iris contributors
+PublisherUrl: https://github.com/acdclove1234-commits
+PublisherSupportUrl: https://github.com/acdclove1234-commits/Zeph-Iris/issues
+PrivacyUrl: https://github.com/acdclove1234-commits/Zeph-Iris/blob/main/PRIVACY.md
+PackageName: Zeph-Iris
+PackageUrl: https://github.com/acdclove1234-commits/Zeph-Iris
+License: MIT
+LicenseUrl: https://github.com/acdclove1234-commits/Zeph-Iris/blob/main/LICENSE
+ShortDescription: Quiet, safe fan control and RGB lighting for Windows desktop PCs, set up in one click.
+Description: |-
+  Zeph-Iris drives your motherboard's fan headers from temperature curves, watches over the PC and lights the LEDs.
+  One-button auto setup measures every fan, loads the CPU and GPU, and builds the quietest curve that still holds your target temperature.
+  Safety features include emergency full speed, bad-sensor filtering, a pump watch, a watchdog process, and handing the fans back to the BIOS on exit.
+  LEDs (through OpenRGB): temperature, rainbow, breathing and music sync with beat tracking.
+  No account, no telemetry, no ads. The user interface is available in 18 languages. Installs the signed PawnIO driver for hardware access.
+Moniker: zeph-iris
+Tags:
+- fan-control
+- fan
+- rgb
+- openrgb
+- lighting
+- hardware-monitor
+- temperature
+- music-sync
+- pc-cooling
+ReleaseNotesUrl: https://github.com/acdclove1234-commits/Zeph-Iris/releases/tag/v6.12.0
+ManifestType: defaultLocale
+ManifestVersion: 1.9.0

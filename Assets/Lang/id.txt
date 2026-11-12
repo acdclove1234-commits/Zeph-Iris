@@ -1764,3 +1764,37 @@ fe39437d	Tips: setelah selesai, ukur di halaman "Penyiapan otomatis" untuk membu
 8d7a30b2	Buka pengaturan otomatis
 c66cfe16	Ruangan sekitar {0:F0}°C lebih hangat dibanding saat pengaturan otomatis mengukur.
 e595df6a	Mengemas log, pengaturan, dan daftar komponen ke dalam zip lalu membuka halaman laporan GitHub (tidak ada yang dikirim otomatis)
+00fadc54	Jangan kendalikan kipas atau LED yang sama di iCUE (kipas di hub Corsair boleh tetap di iCUE).
+04e9e205	Tutup SignalRGB, atau atur agar tidak mengendalikan perangkat yang sama.
+06127d5d	Tutup atau hapus instalan Polychrome RGB.
+1c36d60e	Matikan kontrol kipas otomatis (perangkat lunak) di Afterburner, atau matikan kontrol kipas kartu grafis di aplikasi ini.
+1d109c7e	{0}: kurva "{1}" tidak punya sensor suhu, jadi tidak diimpor
+1d429c5c	{0}: Mix "{1}" diimpor ke Zeph-Iris sebagai "pakai yang tertinggi"
+1fe20088	Matikan kontrol kipas di Argus Monitor, atau tutup aplikasinya.
+262a4a95	Impor dari FanControl…
+27bd2ad9	{0}: offset FanControl ({1:+0;-0}%) tidak ada di Zeph-Iris dan tidak diimpor (sesuaikan titik kurvanya)
+40d41833	Pengaturan FanControl (*.json)|*.json
+51a6a6c2	Tutup Mystic Light, atau matikan pencahayaannya.
+5d608685	Bagian pengaturan FanControl berikut tidak bisa diimpor apa adanya:
+6025be36	Berhenti memakai Fan Xpert (kontrol kipas) dan Aura (pencahayaan) di Armoury Crate, atau hapus instalannya.
+623b4fe3	Nyalakan "MB Sync" (sinkron dengan motherboard) di L-Connect agar kecepatan kipas dan LED diserahkan ke motherboard (aplikasi ini).
+6636279c	Ini bukan file pengaturan FanControl (Controls tidak ditemukan).
+675c60b0	Berhenti memakai Fan Xpert di AI Suite, atau tutup AI Suite.
+71dd4f9b	Tidak ditemukan kipas yang memakai kurva.
+949138bf	Keduanya berebut kecepatan kipas, sehingga kecepatan bisa berubah sendiri atau pengaturan tidak berlaku.
+94b33104	Hapus instalan Mystic Light dari MSI Center, atau matikan pencahayaannya.
+9e64c8b8	Keduanya berebut warna LED, sehingga warna bisa kembali atau berkedip.
+a4fa184c	Mengimpor kurva dan nama kipas dari FanControl (Rem0o) sebagai profil baru (pilih .json di folder Configurations-nya)
+ae03d42c	Tutup FanControl. Kurvanya bisa dipindahkan ke aplikasi ini dengan "Impor dari FanControl…".
+b2de1575	Berhenti memakai pengaturan kipas dan Mystic Light di MSI Center, atau hapus instalan MSI Center.
+b89b6d5d	Tutup dan hapus instalan {0} (pengaturannya sudah dipindahkan ke Zeph-Iris).
+bd5cc643	Tutup atau hapus instalan RGB Fusion.
+c8469f39	Keduanya berebut kecepatan kipas dan warna LED, sehingga kecepatan bisa berubah sendiri dan warna kembali atau berkedip.
+cb870dab	{0} sedang berjalan.
+d075bf5e	Tutup SpeedFan.
+d48dabb5	{0}: jenis kurva "{1}" tidak dikenal, jadi tidak diimpor
+d5a279cc	Impor pengaturan FanControl
+d74a156a	Jangan kendalikan kipas atau LED yang sama di CAM (perangkat di hub NZXT boleh tetap di CAM).
+f095a744	Ini bukan file pengaturan FanControl. Pilih .json di folder Configurations di dalam folder FanControl.
+f94ca8e1	Matikan Aura (pencahayaan) di pengaturan Armoury Crate, atau hapus instalan Armoury Crate.
+b9b79f98	FanControl ({0})

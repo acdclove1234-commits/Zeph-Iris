@@ -1,0 +1,23 @@
+# yaml-language-server: $schema=https://aka.ms/winget-manifest.locale.1.9.0.schema.json
+PackageIdentifier: acdclove1234-commits.Zeph-Iris
+PackageVersion: 6.12.0
+PackageLocale: ja-JP
+Publisher: Zeph-Iris contributors
+PackageName: Zeph-Iris
+License: MIT
+ShortDescription: Windows のデスクトップ PC のファンを静かに・安全に制御し、LED も光らせるアプリ。設定はボタン 1 つ。
+Description: |-
+  マザーボードのファン端子を温度に合わせて制御し、PC を見張り、LED を光らせます。
+  ボタン 1 つの自動セットアップで、ファンを測り、CPU とグラボに負荷をかけて、目標温度を守れるいちばん静かなカーブを作ります。
+  緊急全開・センサーの異常値の除外・ポンプの見張り・見張りプロセス・終了時に BIOS 制御へ戻すなどの安全機能があります。
+  LED（OpenRGB 連携）: 温度・レインボー・呼吸・テンポを追う音楽連動。
+  アカウント・テレメトリー・広告はありません。画面は 18 言語に対応しています。ハードウェアへのアクセスに、署名つきのドライバー PawnIO を入れます。
+Tags:
+- ファン制御
+- ファン
+- rgb
+- ライティング
+- 温度
+- 音楽連動
+ManifestType: locale
+ManifestVersion: 1.9.0

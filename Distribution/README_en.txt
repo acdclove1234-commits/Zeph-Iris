@@ -13,6 +13,16 @@ and Iris, the rainbow (the LEDs).
   for example: Settings [設定].
 
 
+■ What's new in v6.13.0 (easier to switch from other apps)
+  - Import from FanControl [FanControl から取り込む…]: reads the curves and fan names from FanControl (Rem0o) settings (the .json in its
+    Configurations folder) into a new profile. The button is on the Fan curves page and in Settings -> Safety &
+    backup. Headers and sensors are mapped to this PC first. Imported fans start with control off; check the curves,
+    then turn them on (Undo takes it back).
+  - Conflict warnings: when software that drives fans or LEDs is running (Armoury Crate, MSI Center, iCUE, L-Connect,
+    NZXT CAM, SignalRGB, FanControl and others), the app says what it fights over (fans or LEDs) and how to make
+    them work together. LED-only software is reported only while lighting is on. It checks every 2 minutes on any page.
+  - A "Hardware report" form on GitHub: reports from parts not tried yet help a lot, even when everything works.
+
 ■ What's new in v6.12.0 (lighter, season-aware, easier to report)
   - Lighter: direct LED writes to PNY graphics cards kept almost one CPU core busy. They are now limited to 10 per
     second (up to 30 in the settings), rest between writes, and skip LEDs whose colour barely changed. The

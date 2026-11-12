@@ -1764,3 +1764,37 @@ fe39437d	Suggerimento: dopo, misura nella pagina «Configurazione automatica» p
 8d7a30b2	Apri la configurazione automatica
 c66cfe16	La stanza è circa {0:F0}°C più calda di quando la configurazione automatica ha misurato.
 e595df6a	Raccoglie log, impostazioni ed elenco dei componenti in uno zip e apre la pagina di segnalazione GitHub (nulla viene inviato automaticamente)
+00fadc54	Non controllare le stesse ventole o LED in iCUE (le ventole su un hub Corsair possono restare a iCUE).
+04e9e205	Chiudi SignalRGB, oppure impostalo per non controllare gli stessi dispositivi.
+06127d5d	Chiudi o disinstalla Polychrome RGB.
+1c36d60e	Disattiva il controllo automatico (software) delle ventole di Afterburner, oppure il controllo delle ventole della scheda video in questa app.
+1d109c7e	{0}: la curva "{1}" non ha un sensore di temperatura, quindi non è stata importata
+1d429c5c	{0}: il mix "{1}" è stato importato in Zeph-Iris come "usa la più alta"
+1fe20088	Disattiva il controllo delle ventole in Argus Monitor, oppure chiudilo.
+262a4a95	Importa da FanControl…
+27bd2ad9	{0}: l'offset di FanControl ({1:+0;-0}%) non esiste in Zeph-Iris e non è stato importato (regola invece i punti della curva)
+40d41833	Impostazioni di FanControl (*.json)|*.json
+51a6a6c2	Chiudi Mystic Light, oppure spegni la sua illuminazione.
+5d608685	Queste parti delle impostazioni di FanControl non si sono potute importare così come sono:
+6025be36	Smetti di usare Fan Xpert (controllo ventole) e Aura (illuminazione) in Armoury Crate, oppure disinstallalo.
+623b4fe3	Attiva "MB Sync" (sincronizza con la scheda madre) in L-Connect per affidare velocità delle ventole e LED alla scheda madre (questa app).
+6636279c	Non è un file di impostazioni di FanControl (nessun Controls trovato).
+675c60b0	Smetti di usare Fan Xpert in AI Suite, oppure chiudi AI Suite.
+71dd4f9b	Nessuna ventola che usa una curva trovata.
+949138bf	Si contendono la velocità delle ventole: può cambiare da sola o le impostazioni non avere effetto.
+94b33104	Disinstalla Mystic Light da MSI Center, oppure spegni la sua illuminazione.
+9e64c8b8	Si contendono i colori dei LED: possono tornare indietro o sfarfallare.
+a4fa184c	Importa le curve e i nomi delle ventole da FanControl (Rem0o) come nuovo profilo (scegli il .json nella sua cartella Configurations)
+ae03d42c	Chiudi FanControl. Le sue curve si possono trasferire in questa app con "Importa da FanControl…".
+b2de1575	Smetti di usare le impostazioni delle ventole e Mystic Light in MSI Center, oppure disinstalla MSI Center.
+b89b6d5d	Chiudi e disinstalla {0} (le sue impostazioni sono state trasferite in Zeph-Iris).
+bd5cc643	Chiudi o disinstalla RGB Fusion.
+c8469f39	Si contendono la velocità delle ventole e i colori dei LED: la velocità può cambiare da sola e i colori tornare indietro o sfarfallare.
+cb870dab	{0} è in esecuzione.
+d075bf5e	Chiudi SpeedFan.
+d48dabb5	{0}: il tipo della curva "{1}" è sconosciuto, quindi non è stata importata
+d5a279cc	Importa le impostazioni di FanControl
+d74a156a	Non controllare le stesse ventole o LED in CAM (i dispositivi su un hub NZXT possono restare a CAM).
+f095a744	Non è un file di impostazioni di FanControl. Scegli un .json nella cartella Configurations dentro la cartella di FanControl.
+f94ca8e1	Disattiva Aura (illuminazione) nelle impostazioni di Armoury Crate, oppure disinstalla Armoury Crate.
+b9b79f98	FanControl ({0})

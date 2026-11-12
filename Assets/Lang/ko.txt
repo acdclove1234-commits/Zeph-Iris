@@ -1764,3 +1764,37 @@ fe39437d	팁: 완료 후 "자동 설정" 화면에서 측정하면 이 PC에 맞
 8d7a30b2	자동 설정 열기
 c66cfe16	방 온도가 자동 설정으로 측정했을 때보다 약 {0:F0}°C 높습니다.
 e595df6a	로그·설정·부품 목록을 zip으로 묶고 GitHub 신고 페이지를 엽니다 (자동으로 보내는 것은 없습니다)
+00fadc54	iCUE에서 같은 팬·LED를 제어하지 마세요 (Corsair 허브에 연결한 팬은 iCUE에 맡겨 두어도 됩니다).
+04e9e205	SignalRGB를 종료하거나 같은 장치를 제어하지 않도록 설정하세요.
+06127d5d	Polychrome RGB를 종료하거나 제거하세요.
+1c36d60e	Afterburner의 자동(소프트웨어) 팬 제어를 끄거나, 이 앱의 그래픽카드 팬 제어를 끄세요.
+1d109c7e	{0}: 커브 "{1}"에 온도 센서가 없어 가져오지 않았습니다
+1d429c5c	{0}: Mix "{1}"은(는) Zeph-Iris에서 "가장 높은 값 사용"으로 가져왔습니다
+1fe20088	Argus Monitor의 팬 제어를 끄거나 종료하세요.
+262a4a95	FanControl에서 가져오기…
+27bd2ad9	{0}: FanControl의 오프셋({1:+0;-0}%)은 Zeph-Iris에 없어 가져오지 않았습니다 (커브의 점으로 조정하세요)
+40d41833	FanControl 설정 (*.json)|*.json
+51a6a6c2	Mystic Light를 종료하거나 조명을 끄세요.
+5d608685	FanControl 설정 중 다음 항목은 그대로 가져올 수 없었습니다:
+6025be36	Armoury Crate의 Fan Xpert(팬 제어)와 Aura(조명)를 쓰지 않게 하거나 제거하세요.
+623b4fe3	L-Connect에서 "MB Sync"(메인보드와 동기화)를 켜면 팬 회전과 LED를 메인보드(이 앱)에 맡길 수 있습니다.
+6636279c	FanControl 설정 파일이 아닙니다 (Controls가 없습니다).
+675c60b0	AI Suite의 Fan Xpert를 쓰지 않게 하거나 AI Suite를 종료하세요.
+71dd4f9b	커브를 사용하는 팬을 찾지 못했습니다.
+949138bf	팬 회전을 서로 제어하려 해서, 회전수가 저절로 바뀌거나 설정이 반영되지 않을 수 있습니다.
+94b33104	MSI Center에서 Mystic Light를 제거하거나 조명을 끄세요.
+9e64c8b8	LED 색을 서로 제어하려 해서, 색이 되돌아가거나 깜박일 수 있습니다.
+a4fa184c	FanControl(Rem0o)의 커브와 팬 이름을 새 프로필로 가져옵니다 (Configurations 폴더의 .json을 선택)
+ae03d42c	FanControl을 종료하세요. 커브는 "FanControl에서 가져오기…"로 이 앱에 옮길 수 있습니다.
+b2de1575	MSI Center의 팬 설정과 Mystic Light를 쓰지 않게 하거나 MSI Center를 제거하세요.
+b89b6d5d	{0}을(를) 종료하고 제거하세요 (설정은 Zeph-Iris로 옮겨져 있습니다).
+bd5cc643	RGB Fusion을 종료하거나 제거하세요.
+c8469f39	팬 회전과 LED 색을 서로 제어하려 해서, 회전수가 저절로 바뀌거나 색이 되돌아가고 깜박일 수 있습니다.
+cb870dab	{0}이(가) 실행 중입니다.
+d075bf5e	SpeedFan을 종료하세요.
+d48dabb5	{0}: 커브 "{1}"의 종류를 알 수 없어 가져오지 않았습니다
+d5a279cc	FanControl 설정 가져오기
+d74a156a	CAM에서 같은 팬·LED를 제어하지 마세요 (NZXT 허브에 연결한 장치는 CAM에 맡겨 두어도 됩니다).
+f095a744	FanControl 설정 파일이 아닙니다. FanControl 폴더 안 Configurations 폴더의 .json을 선택하세요.
+f94ca8e1	Armoury Crate 설정에서 Aura(조명)를 끄거나 Armoury Crate를 제거하세요.
+b9b79f98	FanControl ({0})

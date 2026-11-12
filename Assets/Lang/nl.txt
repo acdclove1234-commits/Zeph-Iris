@@ -1764,3 +1764,37 @@ fe39437d	Tip: meet daarna op de pagina "Automatische instelling" om de stilste c
 8d7a30b2	Automatische instelling openen
 c66cfe16	De kamer is ongeveer {0:F0}°C warmer dan toen de automatische instelling mat.
 e595df6a	Bundelt logs, instellingen en de onderdelenlijst in een zip en opent de GitHub-meldpagina (er wordt niets automatisch verzonden)
+00fadc54	Regel dezelfde ventilatoren of leds niet in iCUE (ventilatoren op een Corsair-hub kunnen bij iCUE blijven).
+04e9e205	Sluit SignalRGB, of stel het zo in dat het dezelfde apparaten niet regelt.
+06127d5d	Sluit of verwijder Polychrome RGB.
+1c36d60e	Zet de automatische (software)ventilatorregeling van Afterburner uit, of de videokaartventilatorregeling van deze app.
+1d109c7e	{0}: curve "{1}" heeft geen temperatuursensor, dus die is niet geïmporteerd
+1d429c5c	{0}: Mix "{1}" is in Zeph-Iris geïmporteerd als "de hoogste gebruiken"
+1fe20088	Zet de ventilatorregeling in Argus Monitor uit, of sluit het.
+262a4a95	Importeren uit FanControl…
+27bd2ad9	{0}: de offset van FanControl ({1:+0;-0}%) bestaat niet in Zeph-Iris en is niet geïmporteerd (pas in plaats daarvan de curvepunten aan)
+40d41833	FanControl-instellingen (*.json)|*.json
+51a6a6c2	Sluit Mystic Light, of zet de verlichting uit.
+5d608685	Deze delen van de FanControl-instellingen konden niet ongewijzigd worden geïmporteerd:
+6025be36	Gebruik Fan Xpert (ventilatorregeling) en Aura (verlichting) in Armoury Crate niet meer, of verwijder het.
+623b4fe3	Zet "MB Sync" (synchroniseren met het moederbord) aan in L-Connect om ventilatorsnelheid en leds aan het moederbord (deze app) over te laten.
+6636279c	Dit is geen FanControl-instellingenbestand (geen Controls gevonden).
+675c60b0	Gebruik Fan Xpert in AI Suite niet meer, of sluit AI Suite.
+71dd4f9b	Er zijn geen ventilatoren met een curve gevonden.
+949138bf	Ze regelen allebei de ventilatorsnelheid, waardoor die vanzelf kan veranderen of instellingen niet werken.
+94b33104	Verwijder Mystic Light uit MSI Center, of zet de verlichting uit.
+9e64c8b8	Ze regelen allebei de ledkleuren, waardoor kleuren kunnen terugspringen of flikkeren.
+a4fa184c	Importeert de curves en ventilatornamen uit FanControl (Rem0o) als nieuw profiel (kies de .json in de map Configurations)
+ae03d42c	Sluit FanControl. De curves kun je met "Importeren uit FanControl…" naar deze app overzetten.
+b2de1575	Gebruik de ventilatorinstellingen en Mystic Light in MSI Center niet meer, of verwijder MSI Center.
+b89b6d5d	Sluit en verwijder {0} (de instellingen zijn overgezet naar Zeph-Iris).
+bd5cc643	Sluit of verwijder RGB Fusion.
+c8469f39	Ze regelen allebei de ventilatorsnelheid en ledkleuren, waardoor snelheden vanzelf kunnen veranderen en kleuren terugspringen of flikkeren.
+cb870dab	{0} is actief.
+d075bf5e	Sluit SpeedFan.
+d48dabb5	{0}: het type van curve "{1}" is onbekend, dus die is niet geïmporteerd
+d5a279cc	FanControl-instellingen importeren
+d74a156a	Regel dezelfde ventilatoren of leds niet in CAM (apparaten op een NZXT-hub kunnen bij CAM blijven).
+f095a744	Dit is geen FanControl-instellingenbestand. Kies een .json in de map Configurations in de map van FanControl.
+f94ca8e1	Zet Aura (verlichting) uit in de instellingen van Armoury Crate, of verwijder Armoury Crate.
+b9b79f98	FanControl ({0})

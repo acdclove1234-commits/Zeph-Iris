@@ -9,8 +9,32 @@ using System.Diagnostics;
 
 namespace ProFanController;
 
-/// <summary>LED やファンを取り合うソフト（プロセス名の一部 → 表示名）</summary>
-public sealed record ConflictingApp(string Process, string Label, bool Exact = false);
+/// <summary>そのソフトが、このアプリと何を取り合うか</summary>
+public enum ConflictKind
+{
+    /// <summary>LED の色（ライティングをオンにしているときだけ困る）</summary>
+    Led,
+    /// <summary>マザーボードなどのファンの回転</summary>
+    Fan,
+    /// <summary>ファンと LED の両方</summary>
+    Both,
+    /// <summary>グラボのファン（このアプリでグラボのファンを制御しているときだけ困る）</summary>
+    GpuFan,
+}
+
+/// <summary>LED やファンを取り合うソフト（プロセス名の一部 → 表示名・取り合うもの・いっしょに使うときのこつ）</summary>
+public sealed record ConflictingApp(string Process, string Label, bool Exact = false, ConflictKind Kind = ConflictKind.Led, string? Tip = null)
+{
+    /// <summary>いまの設定で困るか（LED だけのソフトは、ライティングがオフなら困らない）</summary>
+    public bool Matters(bool rgbEnabled, bool gpuFans) => Kind switch
+    {
+        ConflictKind.Led => rgbEnabled,
+        ConflictKind.GpuFan => gpuFans,
+        _ => true,
+    };
+
+    public bool FightsFans => Kind is ConflictKind.Fan or ConflictKind.Both or ConflictKind.GpuFan;
+}
 
 public static class InstallCheck
 {
@@ -21,29 +45,46 @@ public static class InstallCheck
     public static IReadOnlyList<ConflictingApp> KnownConflicts => _knownConflicts.Value;
     private static readonly PerLanguage<IReadOnlyList<ConflictingApp>> _knownConflicts = new(() => new ConflictingApp[]
     {
-        new("LightingService", L("ASUS Aura（Armoury Crate の LED）")),
-        new("ArmouryCrate", "ASUS Armoury Crate"),
-        new("LEDKeeper2", "MSI Mystic Light"),
-        new("MSI.CentralServer", "MSI Center"),
-        new("MysticLight", "MSI Mystic Light"),
-        new("RGBFusion", "GIGABYTE RGB Fusion"),
-        new("Polychrome", "ASRock Polychrome"),
-        new("iCUE", "Corsair iCUE"),
-        new("L-Connect", "Lian Li L-Connect"),
-        new("NZXT CAM", "NZXT CAM"),
-        new("SignalRgb", "SignalRGB"),
-        new("FanControl", "FanControl", Exact: true),
-        new("SpeedFan", "SpeedFan", Exact: true),
-        new("ArgusMonitor", "Argus Monitor"),
+        new("LightingService", L("ASUS Aura（Armoury Crate の LED）"), Kind: ConflictKind.Led,
+            Tip: L("Armoury Crate の設定で Aura（ライティング）をオフにするか、Armoury Crate をアンインストールしてください。")),
+        new("ArmouryCrate", "ASUS Armoury Crate", Kind: ConflictKind.Both,
+            Tip: L("Armoury Crate の Fan Xpert（ファンの制御）と Aura（ライティング）を使わない設定にするか、アンインストールしてください。")),
+        new("AISuite3", "ASUS AI Suite 3", Kind: ConflictKind.Fan,
+            Tip: L("AI Suite の Fan Xpert を使わない設定にするか、AI Suite を終了してください。")),
+        new("LEDKeeper2", "MSI Mystic Light", Kind: ConflictKind.Led,
+            Tip: L("MSI Center の Mystic Light をアンインストールするか、ライティングをオフにしてください。")),
+        new("MSI.CentralServer", "MSI Center", Kind: ConflictKind.Both,
+            Tip: L("MSI Center でファンの設定と Mystic Light を使わないようにするか、MSI Center をアンインストールしてください。")),
+        new("MysticLight", "MSI Mystic Light", Kind: ConflictKind.Led,
+            Tip: L("Mystic Light を終了するか、ライティングをオフにしてください。")),
+        new("RGBFusion", "GIGABYTE RGB Fusion", Kind: ConflictKind.Led,
+            Tip: L("RGB Fusion を終了するか、アンインストールしてください。")),
+        new("Polychrome", "ASRock Polychrome", Kind: ConflictKind.Led,
+            Tip: L("Polychrome RGB を終了するか、アンインストールしてください。")),
+        new("iCUE", "Corsair iCUE", Kind: ConflictKind.Both,
+            Tip: L("iCUE で、同じファン・LED を操作しないでください（Corsair のハブにつないだファンは、iCUE に任せたままにできます）。")),
+        new("L-Connect", "Lian Li L-Connect", Kind: ConflictKind.Both,
+            Tip: L("L-Connect で「MB Sync」（マザーボードと同期）をオンにすると、ファンの回転と LED をマザーボード（このアプリ）に任せられます。")),
+        new("NZXT CAM", "NZXT CAM", Kind: ConflictKind.Both,
+            Tip: L("CAM で、同じファン・LED を操作しないでください（NZXT のハブにつないだものは、CAM に任せたままにできます）。")),
+        new("SignalRgb", "SignalRGB", Kind: ConflictKind.Led,
+            Tip: L("SignalRGB を終了するか、同じデバイスを SignalRGB で操作しない設定にしてください。")),
+        new("FanControl", "FanControl", Exact: true, Kind: ConflictKind.Fan,
+            Tip: L("FanControl を終了してください。カーブは「FanControl から取り込む…」でこのアプリに移せます。")),
+        new("SpeedFan", "SpeedFan", Exact: true, Kind: ConflictKind.Fan, Tip: L("SpeedFan を終了してください。")),
+        new("ArgusMonitor", "Argus Monitor", Kind: ConflictKind.Fan, Tip: L("Argus Monitor のファンの制御をオフにするか、終了してください。")),
+        new("MSIAfterburner", "MSI Afterburner", Kind: ConflictKind.GpuFan,
+            Tip: L("Afterburner のファンの自動制御（ソフトウェアのファン制御）をオフにするか、このアプリのグラボのファンの制御をオフにしてください。")),
     }
     // 前の名前のこのアプリ（Fanlume・ProFanController）。新しい版と一緒に動くと、同じファンを 2 つのアプリが制御してしまう
-    .Concat(AppIdentity.LegacyApps.Select(a => new ConflictingApp(a.Name, L($"{a.Name}（前の版）"), Exact: true)))
+    .Concat(AppIdentity.LegacyApps.Select(a => new ConflictingApp(a.Name, L($"{a.Name}（前の版）"), Exact: true, Kind: ConflictKind.Both,
+        Tip: L($"{a.Name} を終了してアンインストールしてください（設定は Zeph-Iris に引き継いであります）。"))))
     .ToArray());
 
     /// <summary>プロセス名の一覧から、取り合いになるソフトを探す（同じソフトは 1 回だけ。このアプリ自身は除く）</summary>
-    public static List<string> FindConflicts(IEnumerable<string> processNames)
+    public static List<ConflictingApp> FindConflictApps(IEnumerable<string> processNames)
     {
-        var found = new List<string>();
+        var found = new List<ConflictingApp>();
         foreach (var name in processNames)
         {
             if (string.IsNullOrEmpty(name) || name.Contains(AppIdentity.Name, StringComparison.OrdinalIgnoreCase)) continue;
@@ -52,14 +93,22 @@ public static class InstallCheck
                 bool hit = app.Exact
                     ? name.Equals(app.Process, StringComparison.OrdinalIgnoreCase)
                     : name.Contains(app.Process, StringComparison.OrdinalIgnoreCase);
-                if (hit && !found.Contains(app.Label)) found.Add(app.Label);
+                if (hit && found.All(f => f.Label != app.Label)) found.Add(app);
             }
         }
         return found;
     }
 
-    /// <summary>いま動いている、取り合いになるソフト</summary>
-    public static List<string> FindRunningConflicts()
+    /// <summary>いま動いている、取り合いになるソフト（表示名・種類・こつ）</summary>
+    public static List<ConflictingApp> FindRunningConflictApps() => FindConflictApps(RunningProcessNames());
+
+    /// <summary>プロセス名の一覧から、取り合いになるソフトの表示名を探す</summary>
+    public static List<string> FindConflicts(IEnumerable<string> processNames) => FindConflictApps(processNames).Select(a => a.Label).ToList();
+
+    /// <summary>いま動いている、取り合いになるソフトの表示名</summary>
+    public static List<string> FindRunningConflicts() => FindConflicts(RunningProcessNames());
+
+    private static List<string> RunningProcessNames()
     {
         var names = new List<string>();
         foreach (var p in Process.GetProcesses())
@@ -68,7 +117,7 @@ public static class InstallCheck
             catch (InvalidOperationException) { /* 終わったプロセス */ }
             finally { p.Dispose(); }
         }
-        return FindConflicts(names);
+        return names;
     }
 
     /// <summary>

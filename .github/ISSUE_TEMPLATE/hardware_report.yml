@@ -1,0 +1,55 @@
+name: 動作報告 / Hardware report
+description: 自分の PC で動いた（動かなかった）部品を知らせる / Tell us which parts work (or not) on your PC
+labels: ["hardware-report"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ありがとうございます。問題がなくても、まだ試していない部品の報告はとても助かります。ここに集まった報告から、README の「動作確認済み」を増やします。
+        Thank you! Even when everything works, a report from hardware we have not seen yet helps a lot. Reports here grow the "verified hardware" list in the README.
+        型番だけで十分です（シリアル番号や PC の名前は書かないでください） / Model names are enough (please leave out serial numbers and PC names).
+  - type: input
+    id: version
+    attributes:
+      label: Zeph-Iris の版 / Zeph-Iris version
+      placeholder: "6.12.0"
+    validations:
+      required: true
+  - type: input
+    id: motherboard
+    attributes:
+      label: マザーボード / Motherboard
+      description: 「デバイス」の画面のマザーボードのカードに、Super I/O の名前も出ます / The Devices page also shows the Super I/O chip on the motherboard card
+      placeholder: "ASRock B860 Steel Legend WiFi (Nuvoton NCT6686D)"
+    validations:
+      required: true
+  - type: input
+    id: cpu
+    attributes:
+      label: CPU
+      placeholder: "Intel Core Ultra 5 245KF"
+  - type: input
+    id: gpu
+    attributes:
+      label: グラボ / Graphics card
+      placeholder: "PNY GeForce RTX 5070 Ti ARGB Epic-X OC"
+  - type: input
+    id: cooling
+    attributes:
+      label: ファン・水冷・ファンのハブ / Fans, AIO, fan hub
+      placeholder: "Lian Li UNI FAN SL-INF x6, 360 mm AIO"
+  - type: checkboxes
+    id: works
+    attributes:
+      label: 動いたもの / What works
+      options:
+        - label: 温度が読める / Temperatures are read
+        - label: ファンの回転数が変わる / Fan speeds change
+        - label: 自動セットアップが最後まで終わった / Auto setup finished
+        - label: LED が光る（OpenRGB） / LEDs light up (OpenRGB)
+        - label: 音楽連動 / Music sync
+  - type: textarea
+    id: notes
+    attributes:
+      label: 気づいたこと / Notes
+      description: 動かなかったもの、変な動き、うまくいったコツなど / Anything that did not work, odd behaviour, or tips

@@ -194,7 +194,12 @@ public partial class MainWindow
         }
     }
 
-    private void OnImportSettingsClick(object sender, RoutedEventArgs e)
+    private void OnImportSettingsClick(object sender, RoutedEventArgs e) => ImportSettingsFile(fromFanControl: false);
+
+    /// <summary>FanControl（Rem0o）の設定（Configurations フォルダーの *.json）を取り込む</summary>
+    public void OnImportFanControlClick(object sender, RoutedEventArgs e) => ImportSettingsFile(fromFanControl: true);
+
+    private void ImportSettingsFile(bool fromFanControl)
     {
         if (_catalog is null)
         {
@@ -202,23 +207,46 @@ public partial class MainWindow
             return;
         }
         FlushCommit();
-        var dialog = new OpenFileDialog
-        {
-            Title = L("設定を読み込む"),
-            Filter = L("Zeph-Iris の設定 (*.zeph-iris.json;*.json)|*.zeph-iris.json;*.json"),
-        };
+        var dialog = fromFanControl
+            ? new OpenFileDialog
+            {
+                Title = L("FanControl の設定を取り込む"),
+                Filter = L("FanControl の設定 (*.json)|*.json"),
+                InitialDirectory = FanControlImport.FindConfigFolder() ?? "",
+            }
+            : new OpenFileDialog
+            {
+                Title = L("設定を読み込む"),
+                Filter = L("Zeph-Iris の設定 (*.zeph-iris.json;*.json)|*.zeph-iris.json;*.json"),
+            };
         if (dialog.ShowDialog(this) != true) return;
 
         SettingsPackage pkg;
+        var notes = new List<string>();
         try
         {
-            pkg = ConfigTransfer.Load(dialog.FileName);
+            string json = File.ReadAllText(dialog.FileName);
+            // FanControl の設定なら、どちらのボタンから選んでも取り込む
+            if (FanControlImport.LooksLikeFanControl(json))
+            {
+                var r = FanControlImport.Convert(json, dialog.FileName, _catalog);
+                pkg = r.Package;
+                notes = r.Notes;
+                Logger.Info($"FanControl の設定を変換: {r.FanCount} 個のファン" + (notes.Count > 0 ? "\n  " + string.Join("\n  ", notes) : ""));   // no-loc（ログだけ）
+            }
+            else if (fromFanControl)
+                throw new InvalidDataException(L("FanControl の設定ファイルではありません。FanControl のフォルダーの Configurations の中の .json を選んでください。"));
+            else
+                pkg = ConfigTransfer.Load(dialog.FileName);
         }
         catch (Exception ex)
         {
             MessageBox.Show(this, L($"このファイルは読み込めません。\n{ex.Message}"), AppIdentity.Name, MessageBoxButton.OK, MessageBoxImage.Warning);
             return;
         }
+        if (notes.Count > 0)
+            MessageBox.Show(this, L("FanControl の設定のうち、次のものはそのままでは読み込めませんでした:") + "\n\n" + L("・") + string.Join("\n" + L("・"), notes),
+                AppIdentity.Name, MessageBoxButton.OK, MessageBoxImage.Information);
 
         var map = ConfigTransfer.ProposeMapping(pkg, _catalog);
         var remap = RemapDialog.ForImport(pkg, map, _catalog);
