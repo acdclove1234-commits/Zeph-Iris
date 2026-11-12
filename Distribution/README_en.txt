@@ -13,6 +13,10 @@ and Iris, the rainbow (the LEDs).
   for example: Settings [設定].
 
 
+■ What's new in v6.14.1
+  - The app icon now uses the author's artwork as is, at every size.
+  - After updating, shortcuts and the taskbar could keep showing the old icon; setup now rebuilds Windows' icon cache.
+
 ■ What's new in v6.14.0 (beat AI for music sync, remembered songs)
   - Beat AI (Beat This!, JKU Linz): every few seconds the AI checks the latest audio and fixes the lights if they follow the
     wrong tempo or the off-beat. Runs only on this PC. On 20 real songs: in sync 83% -> 91%, first lock 13.3 -> 8.2 s
@@ -25,7 +29,7 @@ and Iris, the rainbow (the LEDs).
   - AI cooling advisor: fixed the screen freezing while it answers. The app now computes the suggested numbers with fixed
     rules and the AI only explains them, so it no longer suggests faster fans when there is plenty of margin or changes
     to BIOS-controlled fans.
-  - New app icon (simplified fan at small sizes).
+  - New app icon.
   - The installer is about 13 MB larger because of the beat AI.
 
 ■ What's new in v6.13.0 (easier to switch from other apps)

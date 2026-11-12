@@ -133,7 +133,8 @@ public static class UpdaterTests
         // CreateProcess されてエラー 740 になる（2026-11 に実際に起きた）。起動する行は、どれもセットアップと同じ権限で
         var runLines = iss.Split('\n').SkipWhile(l => !l.StartsWith("[Run]")).Skip(1).TakeWhile(l => !l.StartsWith("["))
             .Where(l => l.StartsWith("Filename:")).ToList();
-        T.Check(runLines.Count == 2 && runLines.All(l => l.Contains("runascurrentuser")),
+        // アプリを起動する行は 2 つ（ふつうに入れたとき・画面を出さずに更新したとき）。ほかの行（アイコンのキャッシュの作り直し）も同じ権限で
+        T.Check(runLines.Count(l => l.Contains("{app}\\{#AppExe}")) == 2 && runLines.All(l => l.Contains("runascurrentuser")),
             $"every app launch after install runs with the installer's admin rights ({runLines.Count} lines)");
 
         var cfg = new AppConfig();

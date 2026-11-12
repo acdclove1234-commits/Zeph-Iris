@@ -55,6 +55,8 @@ WizardStyle=modern
 CloseApplications=no
 RestartApplications=no
 SetupMutex=Zeph-IrisSetup
+; 入れ終わったらエクスプローラーにアイコンが変わったことを知らせる（更新でアイコンを変えても、ショートカットやタスクバーに古いアイコンが残らないように）
+ChangesAssociations=yes
 ShowLanguageDialog=auto
 LanguageDetectionMethod=uilanguage
 ; 入れる前に、通信するものとプライバシーを見せる（SignPath の決まり・PRIVACY.md の要約）
@@ -206,6 +208,8 @@ Name: "{autoprograms}\{#AppName}"; Filename: "{app}\{#AppExe}"
 Name: "{autodesktop}\{#AppName}"; Filename: "{app}\{#AppExe}"; Tasks: desktopicon
 
 [Run]
+; Windows のアイコンのキャッシュを作り直す（exe を入れ替えても、ショートカット・タスクバーは古いアイコンを覚えたままのことがある）
+Filename: "{sys}\ie4uinit.exe"; Parameters: "-show"; Flags: runhidden waituntilterminated skipifdoesntexist runascurrentuser
 ; Zeph-Iris.exe は管理者権限が必要（app.manifest の requireAdministrator）。postinstall の項目は、何も付けないと
 ; ダブルクリックで起動した元の（管理者でない）ユーザーとして CreateProcess で起動され、エラー 740 で起動できない。
 ; そのため runascurrentuser で、管理者になったセットアップと同じ権限で起動する（UAC の確認はもう出ない）
