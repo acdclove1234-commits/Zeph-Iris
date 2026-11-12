@@ -658,10 +658,8 @@ fc54838c	# Pleine vitesse d'urgence : CPU, etc. {0:F0} °C / Hot Spot GPU {1:F0}
 64a1986f	({0} ont été exclus comme capteurs non branchés ou aux valeurs invalides. N'en parle pas)
 04258b8c	,
 e059f424	## Charge et autres (moyenne / max)
-3da93ace	## Réglages et mesures des ventilateurs
 3bd31dc4	- {0} ({1}, contrôle : {2})
 22f7e502	Pompe
-343d27f0	Laissé au BIOS
 e6a77abc	 Consigne moy. {0:F0} % / max {1:F0} %
 7a001c56	, vitesse moy. {0:F0} / max {1:F0} rpm
 9100819e	  - Courbe « {0} » capteur : {1} / {2} / hystérésis {3:F1} °C
@@ -1396,7 +1394,6 @@ e234c1c6	Connexion impossible (Ollama est-il lancé ?) : {0}
 490ac71b	[Contenu transmis à l'IA]\n\n
 9c8917d5	Choisissez d'abord un modèle avec « Actualiser la liste »
 30d9aac4	Trop peu d'enregistrements. Utilisez le PC quelques minutes puis relancez
-be68c30e	{0} analyse… (la première fois, le chargement du modèle prend du temps)
 3d4f2c52	Terminé ({0:HH:mm})
 dea2940c	Arrêté
 54fa54cb	Le modèle « {0} » n'est pas dans Ollama. Choisissez-en un autre avec « Actualiser la liste » ou exécutez « ollama pull {1} » dans PowerShell
@@ -1798,3 +1795,23 @@ d74a156a	Ne contrôlez pas les mêmes ventilateurs ou LED dans CAM (les appareil
 f095a744	Ce n'est pas un fichier de réglages FanControl. Choisissez un .json dans le dossier Configurations du dossier de FanControl.
 f94ca8e1	Désactivez Aura (éclairage) dans les réglages d'Armoury Crate, ou désinstallez Armoury Crate.
 b9b79f98	FanControl ({0})
+1dda0fb4	{0} analyse… (la première fois, le chargement du modèle prend du temps ; la carte graphique est alors très sollicitée et l'écran peut être un peu lent)
+2e1a67a7	  - Elle a {0} courbes ; la valeur la plus haute est utilisée
+427c4cc1	    Sur les températures enregistrées ({0:F0}–{1:F0} °C), cette courbe donne {2:F0}–{3:F0} %
+78be23e3	{0}, courbe « {1} » ({2}) : le maximum de {3:F0} °C ne laisse que {4:F0} °C jusqu'à la limite indicative, il faut donc accélérer plus tôt. Décaler les points sous {5:F0} % de {6:F0} °C vers la gauche → {7} (valeur à la température maximale {8:F0} % → {9:F0} %)
+a0e14853	## Suggestions calculées par l'application (améliorations uniquement à partir d'ici)
+a94350a2	({0} sont contrôlés par le BIOS ou le pilote et cette application ne peut pas les modifier. Ne les mentionnez ni dans les suggestions ni dans les remarques)
+bf70c08b	Synthèse des enregistrements…
+d69c93be	{0}, courbe « {1} » ({2}) : le maximum de {3:F0} °C laisse {4:F0} °C jusqu'à la limite indicative, on peut donc la rendre plus silencieuse. Décaler les points sous {5:F0} % de {6:F0} °C vers la droite → {7} (valeur à la température maximale {8:F0} % → {9:F0} %)
+e0338723	- Aucune (les réglages actuels conviennent)
+f1f22e7a	## Ventilateurs contrôlés par cette application : réglages et résultats
+f6280d14	 (limite indicative {0:F0} °C, marge jusqu'au maximum {1:F0} °C)
+1b4c8ef3	Mémoriser les morceaux déjà écoutés
+33f1fdda	Mémorise les temps trouvés par l'IA pour chaque morceau et les suit dès le début la prochaine fois (les morceaux sont distingués par un code créé à partir du titre dans Spotify et similaires ; ni les titres ni le son ne sont enregistrés)
+5ae7b468	Toutes les quelques secondes, l'IA (Beat This!) analyse le son récent et corrige l'éclairage s'il suit le mauvais tempo ou le contretemps. Fonctionne uniquement sur ce PC et utilise un peu de CPU
+83419666	Supprime tous les temps mémorisés (ils sont réappris pendant l'écoute)
+9050f432	Vérifier le tempo par IA
+959ac7af	Oublier les morceaux mémorisés
+b8946100	Morceaux mémorisés : {0}
+dfb02ca4	IA de tempo
+e8d98a10	Supprimer tous les temps mémorisés ? (Ils sont réappris pendant l'écoute)

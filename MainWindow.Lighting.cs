@@ -1710,6 +1710,21 @@ public partial class MainWindow
 
     private void OnAllSoundsClick(object sender, RoutedEventArgs e) => Config.Rgb.MusicSource = "";
 
+    /// <summary>覚えた曲の数を出す（ライティングの画面を開いたとき・消したとき）</summary>
+    private void UpdateSongMemoryInfo()
+    {
+        int n = CurrentApp.MusicAi?.Memory.Count ?? 0;
+        SongMemoryInfo.Text = L($"覚えた曲: {n} 曲");
+    }
+
+    private void OnClearSongMemoryClick(object sender, RoutedEventArgs e)
+    {
+        if (MessageBox.Show(this, L("覚えた曲の拍をすべて消しますか？（曲を聴けば、また覚えます）"), AppIdentity.Name, MessageBoxButton.OKCancel, MessageBoxImage.Question) != MessageBoxResult.OK) return;
+        CurrentApp.MusicAi?.Memory.Clear();
+        Logger.Info("覚えた曲を消しました");   // no-loc（ログだけ）
+        UpdateSongMemoryInfo();
+    }
+
     /// <summary>
     /// 音を出している（出せる）アプリの一覧から選ぶ。音が出ているアプリを上に並べる。
     /// アプリの一覧は別のスレッドで調べ（数百ミリ秒かかることがある）、その間も画面は止めない。メニューはすぐ開いて「探しています」と出す

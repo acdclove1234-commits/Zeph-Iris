@@ -827,6 +827,8 @@ public sealed class RgbConfig : ObservableObject
     private string _staticColor = "#6A00FF";
     private string _musicStyle = MusicStyles.BeatHue;
     private string _musicSource = "";
+    private bool _musicAi = true;
+    private bool _musicMemory = true;
     private double _sensitivity = 1.0;
     private bool _gamma = true;
     private bool _lightsOff;
@@ -876,6 +878,10 @@ public sealed class RgbConfig : ObservableObject
     public string MusicStyle { get => _musicStyle; set { if (!string.IsNullOrEmpty(value)) Set(ref _musicStyle, value); } }
     /// <summary>反応する音（空ならすべての音。アプリ名ならそのアプリの音が鳴っているときだけ）</summary>
     public string MusicSource { get => _musicSource; set => Set(ref _musicSource, value ?? ""); }
+    /// <summary>拍の AI（Beat This!）で、音楽連動の拍を確かめて直す（CPU を少し使う）</summary>
+    public bool MusicAi { get => _musicAi; set => Set(ref _musicAi, value); }
+    /// <summary>一度聴いた曲の拍を覚え、次に同じ曲が流れたら最初から合わせる（曲名は保存せず、印だけ）</summary>
+    public bool MusicMemory { get => _musicMemory; set => Set(ref _musicMemory, value); }
     /// <summary>音楽連動の感度（0.5〜3）</summary>
     public double Sensitivity { get => _sensitivity; set => Set(ref _sensitivity, value); }
     /// <summary>ガンマ補正（LED の色を画面の色に近い濃い色にする）</summary>

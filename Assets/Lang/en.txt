@@ -658,10 +658,8 @@ fc54838c	# Emergency full speed: CPU etc. {0:F0}°C / GPU hot spot {1:F0}°C
 64a1986f	({0} were excluded as unconnected sensors or sensors with invalid values. Do not mention them)
 04258b8c	,
 e059f424	## Load and more (average / max)
-3da93ace	## Fan settings and results
 3bd31dc4	- {0} ({1}, control: {2})
 22f7e502	Pump
-343d27f0	Left to BIOS
 e6a77abc	 Duty avg {0:F0}% / max {1:F0}%
 7a001c56	, speed avg {0:F0} / max {1:F0} rpm
 9100819e	  - Curve "{0}" sensor: {1} / {2} / hysteresis {3:F1}°C
@@ -1396,7 +1394,6 @@ e234c1c6	Can't connect (is Ollama running?): {0}
 490ac71b	[Content passed to the AI]\n\n
 9c8917d5	Choose a model with "Refresh list" first
 30d9aac4	Too few records. Use the PC for a few minutes and run it again
-be68c30e	{0} is analyzing… (the first time, loading the model takes a while)
 3d4f2c52	Done ({0:HH:mm})
 dea2940c	Stopped
 54fa54cb	Model "{0}" isn't in Ollama. Choose again with "Refresh list", or run "ollama pull {1}" in PowerShell
@@ -1798,3 +1795,23 @@ d74a156a	Do not control the same fans or LEDs in CAM (devices on an NZXT hub can
 f095a744	This is not a FanControl settings file. Choose a .json in the Configurations folder inside FanControl's folder.
 f94ca8e1	Turn off Aura (lighting) in Armoury Crate's settings, or uninstall Armoury Crate.
 b9b79f98	FanControl ({0})
+1dda0fb4	{0} is analysing… (the first time, loading the model takes a while; it uses the graphics card heavily meanwhile, so the screen may feel a little slow)
+2e1a67a7	  - It has {0} curves; the highest duty of them is used
+427c4cc1	    Over the recorded temperatures ({0:F0}–{1:F0}°C), this curve gives {2:F0}–{3:F0}% duty
+78be23e3	{0}, curve "{1}" ({2}): the maximum {3:F0}°C leaves only {4:F0}°C to the guide limit, so spin up earlier. Move the points below {5:F0}% duty {6:F0}°C to the left → {7} (duty at the maximum temperature {8:F0}% → {9:F0}%)
+a0e14853	## Suggestions calculated by the app (improvements only from these)
+a94350a2	({0} are controlled by the BIOS or the driver and cannot be changed by this app. Do not mention them in suggestions or notes)
+bf70c08b	Summarising the records…
+d69c93be	{0}, curve "{1}" ({2}): the maximum {3:F0}°C leaves {4:F0}°C to the guide limit, so it can be quieter. Move the points below {5:F0}% duty {6:F0}°C to the right → {7} (duty at the maximum temperature {8:F0}% → {9:F0}%)
+e0338723	- None (the current settings are fine)
+f1f22e7a	## Fans controlled by this app: settings and results
+f6280d14	 (guide limit {0:F0}°C, margin to the maximum {1:F0}°C)
+1b4c8ef3	Remember songs already heard
+33f1fdda	Remembers the beats the AI found for each song and matches them from the start the next time that song plays (songs are told apart by a code made from the title in Spotify and similar apps; titles and audio are not saved)
+5ae7b468	Every few seconds the AI (Beat This!) checks the latest audio and fixes the lights if they follow the wrong tempo or the off-beat. Runs only on this PC and uses a little CPU
+83419666	Deletes all remembered song beats (they are learned again as you listen)
+9050f432	Check the beat with AI
+959ac7af	Forget remembered songs
+b8946100	Remembered songs: {0}
+dfb02ca4	Beat AI
+e8d98a10	Delete all remembered song beats? (They are learned again as you listen)

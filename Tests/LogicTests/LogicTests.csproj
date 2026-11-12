@@ -14,4 +14,10 @@
   <ItemGroup>
     <Compile Include="../../Core/**/*.cs" Link="Core/%(RecursiveDir)%(Filename)%(Extension)" />
   </ItemGroup>
+  <ItemGroup>
+    <!-- 拍の AI（Core/Audio/BeatThis.cs）: 本体と同じ ONNX Runtime・NAudio の変換器・埋め込みモデル -->
+    <PackageReference Include="Microsoft.ML.OnnxRuntime" Version="1.31.1" />
+    <PackageReference Include="NAudio.Core" Version="2.2.1" />
+    <EmbeddedResource Include="../../Assets/Models/*.onnx" LogicalName="ProFanController.Models.%(Filename).onnx" />
+  </ItemGroup>
 </Project>

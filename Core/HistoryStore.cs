@@ -80,6 +80,30 @@ public sealed class HistoryStore
         arr[pos] = value;
     }
 
+    /// <summary>
+    /// いまの中身の写し（画面のスレッドで作り、重い集計は別のスレッドで写しに対して行う）。
+    /// 写しは記録のある分だけを古い順に詰めて持つ（24 時間分なら 1 系列 約 340 KB）
+    /// </summary>
+    public HistoryStore Snapshot()
+    {
+        var copy = new HistoryStore();
+        for (int i = 0; i < _count; i++) copy._times[i] = TimeAt(i);
+        foreach (var (key, src) in _series)
+        {
+            var dst = new float[Capacity];
+            int start = Physical(0);
+            int firstPart = Math.Min(_count, Capacity - start);
+            Array.Copy(src, start, dst, 0, firstPart);
+            if (firstPart < _count) Array.Copy(src, 0, dst, firstPart, _count - firstPart);
+            if (_count < Capacity) Array.Fill(dst, float.NaN, _count, Capacity - _count);
+            copy._series[key] = dst;
+        }
+        foreach (var (k, v) in _names) copy._names[k] = v;
+        copy._count = _count;
+        copy._head = _count % Capacity;
+        return copy;
+    }
+
     /// <summary>論理インデックス（0 = 最も古い）→ 物理位置</summary>
     private int Physical(int logical) => (_head - _count + logical + Capacity) % Capacity;
 

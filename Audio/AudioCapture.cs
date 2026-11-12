@@ -87,6 +87,30 @@ public sealed class AudioCapture : IDisposable
     public bool EventDriven { get; private set; }
     /// <summary>選んだアプリの音だけを直接取り込んでいる（false なら出力先の音をすべて取り込んでいる）</summary>
     public bool AppOnly { get; private set; }
+    /// <summary>アプリの音だけを取り込んでいるとき、そのアプリのプロセス ID（曲名を読むのに使う。全体の音なら 0）</summary>
+    public int SourcePid { get; private set; }
+
+    /// <summary>拍の AI を作る（サンプリング周波数を受け取る。null を返せば使わない）。音の分析を作り直すたびに呼ぶ</summary>
+    public Func<int, BeatAssist?>? AssistFactory { get; set; }
+
+    /// <summary>拍の AI を付け直す（設定を変えた・モデルの読み込みが終わった）</summary>
+    public void RefreshAssist()
+    {
+        lock (_feedGate)
+        {
+            Engine.Assist?.Dispose();
+            Engine.Assist = null;
+            AttachAssist();
+        }
+    }
+
+    /// <summary>_feedGate の中で呼ぶ</summary>
+    private void AttachAssist()
+    {
+        if (Engine.Assist is not null) return;
+        try { Engine.Assist = AssistFactory?.Invoke(Engine.SampleRate); }
+        catch (Exception ex) { Logger.Warn($"拍の AI を付けられません: {ex.Message}"); }   // no-loc（ログだけ）
+    }
     public bool Running => _thread is not null;
 
     /// <summary>同期テストのクリック音を記録させる（エンジンを作り直しても引き継ぐ）</summary>
@@ -155,6 +179,7 @@ public sealed class AudioCapture : IDisposable
         EndpointId = "";
         Output = OutputInfo.None;
         AppOnly = false;
+        SourcePid = 0;
     }
 
     /// <summary>取り込みをやり直す（スリープからの復帰後・出力先の切り替えなど）。止まっていれば何もしない</summary>
@@ -248,12 +273,14 @@ public sealed class AudioCapture : IDisposable
         {
             if (Engine.SampleRate != format.SampleRate)
             {
+                Engine.Assist?.Dispose();
                 Engine = new AudioEngine(format.SampleRate) { Settings = _settings, ClickDetect = _clickDetect, StatsLogging = true };
             }
             else
             {
                 Engine.Reset(); // 出力先が変わった・取り込み直した: テンポの記録などを最初から
             }
+            AttachAssist();
             _clock = new SampleClock(format.SampleRate);
             _lastArrival = double.NegativeInfinity;
             _nextSampleT = double.NegativeInfinity;
@@ -273,6 +300,7 @@ public sealed class AudioCapture : IDisposable
         Log($"音楽連動: 取り込み開始（{device.FriendlyName}・{format.SampleRate} Hz・{channels} ch・{kind}・{(polling ? "一定間隔" : "合図で読み取り")}）");
 
         AppOnly = false;
+        SourcePid = 0;
         var result = CaptureResult.Normal;
         using var scan = new AppScan();
         double appMissingSince = double.NaN;
@@ -531,6 +559,7 @@ public sealed class AudioCapture : IDisposable
         {
             if (Engine.SampleRate != ProcessLoopbackCapture.SampleRate)
             {
+                Engine.Assist?.Dispose();
                 Engine = new AudioEngine(ProcessLoopbackCapture.SampleRate) { Settings = _settings, ClickDetect = _clickDetect, StatsLogging = true };
             }
             else
@@ -539,6 +568,7 @@ public sealed class AudioCapture : IDisposable
             }
             // ほかのアプリの音は混ざらないので、反応の強さはそのまま（取り込みを始める前に 1 にしておく）
             Engine.AppGate = 1;
+            AttachAssist();
             _clock = new SampleClock(ProcessLoopbackCapture.SampleRate);
             _lastArrival = double.NegativeInfinity;
             _nextSampleT = double.NegativeInfinity;
@@ -567,6 +597,7 @@ public sealed class AudioCapture : IDisposable
         EndpointId = id;
         EventDriven = true;
         AppOnly = true;
+        SourcePid = pid;
         Status = L("アプリの音だけを取り込み中");
         _planLogged = "";
         Log($"音楽連動: {SourceName(source)} の音だけを取り込み開始（PID {pid} とその子プロセス・{ProcessLoopbackCapture.SampleRate} Hz・{ProcessLoopbackCapture.Channels} ch・{PcmKind.Float32}・聞いている出力先: {device.FriendlyName}）");
@@ -656,6 +687,7 @@ public sealed class AudioCapture : IDisposable
         finally
         {
             AppOnly = false;
+        SourcePid = 0;
             capture.Stop();
         }
 

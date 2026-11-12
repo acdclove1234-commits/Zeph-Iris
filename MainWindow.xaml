@@ -1281,7 +1281,7 @@
                                 <Button Style="{StaticResource GhostButton}" Content="AI に渡す内容を見る" Click="OnShowPromptClick"/>
                                 <TextBlock x:Name="AdvisorStatus" Style="{StaticResource Caption}" VerticalAlignment="Center" Margin="12,0,0,0"/>
                             </StackPanel>
-                            <TextBox x:Name="AdvisorOutput" Margin="0,12,0,0" MinHeight="320" IsReadOnly="True" TextWrapping="Wrap"
+                            <TextBox x:Name="AdvisorOutput" Margin="0,12,0,0" MinHeight="320" MaxHeight="640" IsUndoEnabled="False" IsReadOnly="True" TextWrapping="Wrap"
                                      VerticalScrollBarVisibility="Auto" AcceptsReturn="True" FontSize="14" VerticalContentAlignment="Top"/>
                         </StackPanel>
                     </Border>
@@ -2109,6 +2109,27 @@
                                                     ToolTip="アプリを指定せず、PC から出ているすべての音に反応します"/>
                                         </StackPanel>
                                     </DockPanel>
+
+                                    <!-- 拍の AI と曲の記憶（Audio/MusicAi.cs） -->
+                                    <CheckBox Style="{StaticResource Switch}" IsChecked="{Binding Rgb.MusicAi}" Margin="0,12,0,0">
+                                        <StackPanel>
+                                            <TextBlock Text="AI で拍を確かめる" FontWeight="SemiBold"/>
+                                            <TextBlock Style="{StaticResource Caption}" TextWrapping="Wrap"
+                                                       Text="数秒おきに直近の音を AI（Beat This!）で調べ、違うテンポや裏拍で光っていたら直します。PC の中だけで動き、CPU を少し使います"/>
+                                        </StackPanel>
+                                    </CheckBox>
+                                    <CheckBox Style="{StaticResource Switch}" IsChecked="{Binding Rgb.MusicMemory}" IsEnabled="{Binding Rgb.MusicAi}" Margin="0,10,0,0">
+                                        <StackPanel>
+                                            <TextBlock Text="一度聴いた曲を覚える" FontWeight="SemiBold"/>
+                                            <TextBlock Style="{StaticResource Caption}" TextWrapping="Wrap"
+                                                       Text="AI が見つけた拍を曲ごとに覚え、次に同じ曲が流れたら最初から合わせます（Spotify などの曲名から作った印で見分けます。曲名や音は保存しません）"/>
+                                        </StackPanel>
+                                    </CheckBox>
+                                    <StackPanel Orientation="Horizontal" Margin="0,6,0,0">
+                                        <TextBlock x:Name="SongMemoryInfo" Style="{StaticResource Caption}" VerticalAlignment="Center"/>
+                                        <Button Style="{StaticResource SmallGhost}" Content="覚えた曲を消す" Click="OnClearSongMemoryClick" Margin="10,0,0,0"
+                                                ToolTip="覚えた曲の拍をすべて消します（曲を聴けば、また覚えます）"/>
+                                    </StackPanel>
                                 </StackPanel>
 
                                 <!-- 詳しい設定 -->

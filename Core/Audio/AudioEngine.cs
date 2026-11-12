@@ -205,6 +205,9 @@ public sealed class AudioEngine
 
     /// <summary>テンポの追跡（テスト・調査用）</summary>
     internal BeatTracker Tracker => _tracker;
+
+    /// <summary>拍の AI で追跡を確かめて直す（null なら使わない。取り込みのスレッドで動かす）</summary>
+    public BeatAssist? Assist { get; set; }
     internal OnsetDetector Onsets => _onsets;
 
     /// <summary>テンポの追跡の状態（ロック中・予測を続けている・つかんでいない。表示・テスト用）</summary>
@@ -223,6 +226,7 @@ public sealed class AudioEngine
     public void Push(ReadOnlySpan<float> mono, double tFirst)
     {
         if (_resetRequested) ResetInternal();
+        Assist?.Push(mono, tFirst);
         bool click = ClickDetect;
         double invFs = 1.0 / SampleRate;
         var dec = _dec;
@@ -272,6 +276,7 @@ public sealed class AudioEngine
     private void ResetInternal()
     {
         _resetRequested = false;
+        Assist?.Reset();
         _resetTempoRequested = false;
         _dec?.Reset();
         Array.Clear(_ring);
@@ -434,6 +439,7 @@ public sealed class AudioEngine
             // 小節の頭の判定には、キックの包絡線の大きさ（振幅。強く叩いた拍ほど大きい）を使う
             double accent = Math.Pow(10, _kick.HopDb / 20);
             _tracker.Process(odf, low, accent, _onsets.LowFired, open, tHop, s.TempoFactor);
+            Assist?.Tick(tHop, _tracker, open, odf, low);
             var b = _tracker.Published;
             if (!ReferenceEquals(b, Beat)) Beat = b;
         }

@@ -658,10 +658,8 @@ fc54838c	# Noodvolle snelheid: CPU enz. {0:F0} °C / GPU-hotspot {1:F0} °C
 64a1986f	({0} zijn uitgesloten als niet-aangesloten sensoren of sensoren met ongeldige waarden. Noem ze niet)
 04258b8c	,
 e059f424	## Belasting en meer (gemiddeld / max)
-3da93ace	## Ventilatorinstellingen en resultaten
 3bd31dc4	- {0} ({1}, regeling: {2})
 22f7e502	Pomp
-343d27f0	Aan BIOS overgelaten
 e6a77abc	 Duty gem. {0:F0}% / max {1:F0}%
 7a001c56	, toerental gem. {0:F0} / max {1:F0} rpm
 9100819e	  - Curve "{0}" sensor: {1} / {2} / hysterese {3:F1} °C
@@ -1396,7 +1394,6 @@ e234c1c6	Kan geen verbinding maken (draait Ollama?): {0}
 490ac71b	[Inhoud die aan de AI wordt doorgegeven]\n\n
 9c8917d5	Kies eerst een model met "Lijst vernieuwen"
 30d9aac4	Te weinig metingen. Gebruik de pc een paar minuten en probeer het opnieuw
-be68c30e	{0} analyseert… (de eerste keer duurt het laden van het model even)
 3d4f2c52	Klaar ({0:HH:mm})
 dea2940c	Gestopt
 54fa54cb	Model "{0}" staat niet in Ollama. Kies opnieuw met "Lijst vernieuwen" of voer "ollama pull {1}" uit in PowerShell
@@ -1798,3 +1795,23 @@ d74a156a	Regel dezelfde ventilatoren of leds niet in CAM (apparaten op een NZXT-
 f095a744	Dit is geen FanControl-instellingenbestand. Kies een .json in de map Configurations in de map van FanControl.
 f94ca8e1	Zet Aura (verlichting) uit in de instellingen van Armoury Crate, of verwijder Armoury Crate.
 b9b79f98	FanControl ({0})
+1dda0fb4	{0} analyseert… (de eerste keer duurt het laden van het model even; de videokaart is dan zwaar belast, dus het scherm kan wat traag zijn)
+2e1a67a7	  - Heeft {0} curves; de hoogste waarde daarvan wordt gebruikt
+427c4cc1	    Over de gemeten temperaturen ({0:F0}–{1:F0} °C) geeft deze curve {2:F0}–{3:F0}%
+78be23e3	{0}, curve "{1}" ({2}): het maximum van {3:F0} °C laat maar {4:F0} °C tot de richtgrens, dus eerder opschalen. Verschuif de punten onder {5:F0}% {6:F0} °C naar links → {7} (waarde bij de hoogste temperatuur {8:F0}% → {9:F0}%)
+a0e14853	## Door de app berekende voorstellen (verbeteringen alleen hieruit)
+a94350a2	({0} worden door het BIOS of de driver geregeld en kunnen niet met deze app worden gewijzigd. Noem ze niet in voorstellen of opmerkingen)
+bf70c08b	Metingen samenvatten…
+d69c93be	{0}, curve "{1}" ({2}): het maximum van {3:F0} °C laat {4:F0} °C tot de richtgrens, dus het kan stiller. Verschuif de punten onder {5:F0}% {6:F0} °C naar rechts → {7} (waarde bij de hoogste temperatuur {8:F0}% → {9:F0}%)
+e0338723	- Geen (de huidige instellingen zijn prima)
+f1f22e7a	## Ventilatoren die deze app regelt: instellingen en resultaten
+f6280d14	 (richtgrens {0:F0} °C, marge tot het maximum {1:F0} °C)
+1b4c8ef3	Gehoorde nummers onthouden
+33f1fdda	Onthoudt de door de AI gevonden beats per nummer en volgt ze vanaf het begin als dat nummer weer speelt (nummers worden herkend aan een code gemaakt van de titel in Spotify en dergelijke; titels en geluid worden niet opgeslagen)
+5ae7b468	Elke paar seconden controleert de AI (Beat This!) het recente geluid en corrigeert het licht als het het verkeerde tempo of de offbeat volgt. Draait alleen op deze pc en gebruikt een beetje CPU
+83419666	Verwijdert alle onthouden beats (ze worden tijdens het luisteren opnieuw geleerd)
+9050f432	De beat met AI controleren
+959ac7af	Onthouden nummers vergeten
+b8946100	Onthouden nummers: {0}
+dfb02ca4	Beat-AI
+e8d98a10	Alle onthouden beats verwijderen? (Ze worden tijdens het luisteren opnieuw geleerd)

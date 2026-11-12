@@ -658,10 +658,8 @@ fc54838c	# Kecepatan penuh darurat: CPU dll. {0:F0}°C / GPU Hot Spot {1:F0}°C
 64a1986f	({0} dikecualikan karena sensor tidak tersambung atau nilainya tidak valid. Jangan sebutkan sensor-sensor ini)
 04258b8c	,
 e059f424	## Beban dan lainnya (rata-rata / maks)
-3da93ace	## Pengaturan dan hasil kipas
 3bd31dc4	- {0} ({1}, kendali: {2})
 22f7e502	Pompa
-343d27f0	Diserahkan ke BIOS
 e6a77abc	 Duty rata-rata {0:F0}% / maks {1:F0}%
 7a001c56	, putaran rata-rata {0:F0} / maks {1:F0} rpm
 9100819e	  - Kurva "{0}" sensor: {1} / {2} / histeresis {3:F1}°C
@@ -1396,7 +1394,6 @@ e234c1c6	Tidak bisa terhubung (apakah Ollama berjalan?): {0}
 490ac71b	[Isi yang diberikan ke AI]\n\n
 9c8917d5	Pilih model lewat "Perbarui daftar" terlebih dulu
 30d9aac4	Rekaman terlalu sedikit. Pakai PC beberapa menit lalu jalankan lagi
-be68c30e	{0} sedang menganalisis… (pertama kali, memuat model butuh waktu)
 3d4f2c52	Selesai ({0:HH:mm})
 dea2940c	Dihentikan
 54fa54cb	Model "{0}" tidak ada di Ollama. Pilih ulang lewat "Perbarui daftar" atau jalankan "ollama pull {1}" di PowerShell
@@ -1798,3 +1795,23 @@ d74a156a	Jangan kendalikan kipas atau LED yang sama di CAM (perangkat di hub NZX
 f095a744	Ini bukan file pengaturan FanControl. Pilih .json di folder Configurations di dalam folder FanControl.
 f94ca8e1	Matikan Aura (pencahayaan) di pengaturan Armoury Crate, atau hapus instalan Armoury Crate.
 b9b79f98	FanControl ({0})
+1dda0fb4	{0} sedang menganalisis… (pertama kali, memuat model butuh waktu; selama itu kartu grafis sangat sibuk sehingga layar bisa agak lambat)
+2e1a67a7	  - Ada {0} kurva; yang dipakai adalah duty tertinggi di antaranya
+427c4cc1	    Pada suhu yang tercatat ({0:F0}–{1:F0}°C), kurva ini memberi duty {2:F0}–{3:F0}%
+78be23e3	{0}, kurva "{1}" ({2}): maksimum {3:F0}°C hanya berjarak {4:F0}°C dari batas acuan, jadi putar lebih awal. Geser titik di bawah {5:F0}% sejauh {6:F0}°C ke kiri → {7} (duty pada suhu maksimum {8:F0}% → {9:F0}%)
+a0e14853	## Saran yang dihitung aplikasi (perbaikan hanya dari sini)
+a94350a2	({0} dikendalikan BIOS atau driver dan tidak bisa diubah aplikasi ini. Jangan sebutkan dalam saran maupun catatan)
+bf70c08b	Merangkum catatan…
+d69c93be	{0}, kurva "{1}" ({2}): maksimum {3:F0}°C masih berjarak {4:F0}°C dari batas acuan, jadi bisa dibuat lebih senyap. Geser titik di bawah {5:F0}% sejauh {6:F0}°C ke kanan → {7} (duty pada suhu maksimum {8:F0}% → {9:F0}%)
+e0338723	- Tidak ada (pengaturan saat ini sudah baik)
+f1f22e7a	## Kipas yang dikendalikan aplikasi ini: pengaturan dan hasil
+f6280d14	 (batas acuan {0:F0}°C, selisih ke maksimum {1:F0}°C)
+1b4c8ef3	Ingat lagu yang sudah didengar
+33f1fdda	Mengingat ketukan yang ditemukan AI untuk setiap lagu dan mencocokkannya sejak awal saat lagu itu diputar lagi (lagu dibedakan dengan kode dari judul di Spotify dan sejenisnya; judul dan audio tidak disimpan)
+5ae7b468	Setiap beberapa detik AI (Beat This!) memeriksa audio terbaru dan memperbaiki lampu jika mengikuti tempo yang salah atau ketukan sela. Hanya berjalan di PC ini dan memakai sedikit CPU
+83419666	Menghapus semua ketukan lagu yang diingat (akan dipelajari lagi saat mendengarkan)
+9050f432	Periksa ketukan dengan AI
+959ac7af	Lupakan lagu yang diingat
+b8946100	Lagu yang diingat: {0}
+dfb02ca4	AI ketukan
+e8d98a10	Hapus semua ketukan lagu yang diingat? (Akan dipelajari lagi saat mendengarkan)

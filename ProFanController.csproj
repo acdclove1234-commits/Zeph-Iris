@@ -18,7 +18,7 @@
     <!-- 画面は WPF なので、高 DPI の設定は app.manifest に書く（WinForms 用の ApplicationHighDpiMode を勧める警告は出さない） -->
     <NoWarn>$(NoWarn);WFAC010</NoWarn>
     <AssemblyName>Zeph-Iris</AssemblyName>
-    <Version>6.13.0</Version>
+    <Version>6.14.0</Version>
     <Product>Zeph-Iris</Product>
     <!-- exe のアイコン（エクスプローラー・デスクトップのショートカットに表示される） -->
     <ApplicationIcon>Assets\app.ico</ApplicationIcon>
@@ -56,6 +56,8 @@
     <!-- 自動セットアップ: GPU に負荷をかける（Direct3D 11 の計算シェーダー） -->
     <PackageReference Include="Vortice.D3DCompiler" Version="3.8.2" />
     <PackageReference Include="Vortice.Direct3D11" Version="3.8.2" />
+    <!-- 音楽連動: 曲の拍を AI（Beat This!・JKU Linz・MIT）で見つける。モデルは下で exe に埋め込む -->
+    <PackageReference Include="Microsoft.ML.OnnxRuntime" Version="1.31.1" />
   </ItemGroup>
 
   <ItemGroup>
@@ -68,6 +70,10 @@
   <ItemGroup>
     <!-- 画面の言葉の翻訳表（Core/Loc.cs が読む。1 行 1 件: 見出しのハッシュ TAB 訳） -->
     <EmbeddedResource Include="Assets\Lang\*.txt" LogicalName="ProFanController.Lang.%(Filename).txt" />
+    <!-- 拍の AI のモデル（Beat This! の小さいモデルと、音を mel スペクトログラムにする前処理。どちらも MIT・Core/Audio/BeatThis.cs が読む） -->
+    <EmbeddedResource Include="Assets\Models\*.onnx" LogicalName="ProFanController.Models.%(Filename).onnx" />
+    <!-- 通知領域・ウィンドウのアイコン（exe のアイコンと同じ。UI/TrayIcon.cs が読む） -->
+    <EmbeddedResource Include="Assets\app.ico" LogicalName="ProFanController.AppIcon.ico" />
   </ItemGroup>
 
   <ItemGroup>

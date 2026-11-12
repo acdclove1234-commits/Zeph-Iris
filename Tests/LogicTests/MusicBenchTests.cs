@@ -318,6 +318,9 @@ public static class MusicWavTests
     /// <summary>曲を流して、物差しの拍と比べる。スネアは、物差しの拍のうちキックの少ないほうの 1 拍おき（2・4 拍目）と比べる</summary>
     [ThreadStatic] public static double SnareFront, SnareHalf;
 
+    /// <summary>拍の AI のモデル（BEAT_AI=1 のとき、曲ごとに読み込み直さないよう共有する。ONNX Runtime の Run は並列に呼べる）</summary>
+    private static readonly Lazy<BeatThis?> SharedModel = new(() => BeatThis.TryCreate(out _));
+
     public static SongResult AnalyzeSong(string path, Action<AudioEngine>? setup = null)
     {
         var mono = ReadWavMono(path, out int fs);
@@ -327,8 +330,12 @@ public static class MusicWavTests
         var bands = new List<double[]>();
         // 物差しの強さは、アプリの重みを変えて比べるときも同じにする（重みを固定して 4 つの帯から作り直す）
         e.Onsets.DiagHop = (t, odf, bn) => { hops.Add((t, (1.0 * bn[0] + 0.8 * bn[1] + 0.35 * bn[2] + 0.15 * bn[3]) / 2.3)); bands.Add((double[])bn.Clone()); };
+        // BEAT_AI=1: 拍の AI で追跡を直す（アプリと同じ。結果はその場で使う）
+        BeatAssist? assist = null;
+        if (Environment.GetEnvironmentVariable("BEAT_AI") == "1" && SharedModel.Value is { } model) e.Assist = assist = new BeatAssist(model, fs) { Inline = true };
         setup?.Invoke(e);
         var run = new EngineRun(e).Feed(mono);
+        assist?.Dispose();
         var refBeats = BeatReference.Track(hops, out double refBpm);
         var beat = BeatEvaluator.Evaluate(run, hops, refBeats, refBpm);
         double halfBeat = BeatEvaluator.HalfBeatShare;

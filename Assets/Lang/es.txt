@@ -658,10 +658,8 @@ fc54838c	# Velocidad máxima de emergencia: CPU, etc. {0:F0} °C / Hot Spot de G
 64a1986f	({0} se excluyeron por ser sensores sin conectar o con valores no válidos. No los menciones)
 04258b8c	,
 e059f424	## Carga y otros (media / máx)
-3da93ace	## Ajustes de ventiladores y valores reales
 3bd31dc4	- {0} ({1}, control: {2})
 22f7e502	Bomba
-343d27f0	En manos de la BIOS
 e6a77abc	 Ciclo medio {0:F0} % / máx {1:F0} %
 7a001c56	, velocidad media {0:F0} / máx {1:F0} rpm
 9100819e	  - Curva «{0}» sensor: {1} / {2} / histéresis {3:F1} °C
@@ -1396,7 +1394,6 @@ e234c1c6	No se puede conectar (¿está Ollama en marcha?): {0}
 490ac71b	[Contenido que se pasa a la IA]\n\n
 9c8917d5	Primero elija un modelo con «Actualizar lista»
 30d9aac4	Hay muy pocos registros. Use el PC unos minutos y vuelva a ejecutarlo
-be68c30e	{0} está analizando… (la primera vez, cargar el modelo tarda un poco)
 3d4f2c52	Terminado ({0:HH:mm})
 dea2940c	Detenido
 54fa54cb	El modelo «{0}» no está en Ollama. Elija otro con «Actualizar lista» o ejecute «ollama pull {1}» en PowerShell
@@ -1798,3 +1795,23 @@ d74a156a	No controles los mismos ventiladores o LED en CAM (los dispositivos de 
 f095a744	No es un archivo de ajustes de FanControl. Elige un .json de la carpeta Configurations dentro de la carpeta de FanControl.
 f94ca8e1	Desactiva Aura (iluminación) en los ajustes de Armoury Crate o desinstala Armoury Crate.
 b9b79f98	FanControl ({0})
+1dda0fb4	{0} está analizando… (la primera vez tarda en cargar el modelo; mientras tanto usa mucho la tarjeta gráfica y la pantalla puede ir un poco lenta)
+2e1a67a7	  - Tiene {0} curvas; se usa el valor más alto de ellas
+427c4cc1	    En las temperaturas registradas ({0:F0}–{1:F0} °C), esta curva da {2:F0}–{3:F0} %
+78be23e3	{0}, curva «{1}» ({2}): el máximo de {3:F0} °C deja solo {4:F0} °C hasta el límite orientativo, así que conviene girar antes. Mover los puntos por debajo de {5:F0} % {6:F0} °C a la izquierda → {7} (valor en la temperatura máxima {8:F0} % → {9:F0} %)
+a0e14853	## Sugerencias calculadas por la aplicación (mejoras solo de aquí)
+a94350a2	({0} los controla la BIOS o el controlador y esta aplicación no puede cambiarlos. No los menciones en sugerencias ni notas)
+bf70c08b	Resumiendo los registros…
+d69c93be	{0}, curva «{1}» ({2}): el máximo de {3:F0} °C deja {4:F0} °C hasta el límite orientativo, así que puede ser más silencioso. Mover los puntos por debajo de {5:F0} % {6:F0} °C a la derecha → {7} (valor en la temperatura máxima {8:F0} % → {9:F0} %)
+e0338723	- Ninguna (los ajustes actuales están bien)
+f1f22e7a	## Ventiladores controlados por esta aplicación: ajustes y resultados
+f6280d14	 (límite orientativo {0:F0} °C, margen hasta el máximo {1:F0} °C)
+1b4c8ef3	Recordar canciones ya escuchadas
+33f1fdda	Recuerda los pulsos que la IA encontró en cada canción y los sigue desde el principio la próxima vez que suene (las canciones se distinguen por un código hecho a partir del título en Spotify y similares; no se guardan títulos ni audio)
+5ae7b468	Cada pocos segundos la IA (Beat This!) revisa el audio reciente y corrige las luces si siguen el tempo equivocado o el contratiempo. Funciona solo en este PC y usa un poco de CPU
+83419666	Borra todos los pulsos recordados (se aprenden de nuevo al escuchar)
+9050f432	Comprobar el pulso con IA
+959ac7af	Olvidar canciones recordadas
+b8946100	Canciones recordadas: {0}
+dfb02ca4	IA de pulso
+e8d98a10	¿Borrar todos los pulsos recordados? (Se aprenden de nuevo al escuchar)

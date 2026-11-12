@@ -23,6 +23,10 @@ Like any web request, the services above can see your IP address. Their own priv
 [Wikimedia](https://foundation.wikimedia.org/wiki/Policy:Privacy_policy),
 [ntfy.sh](https://ntfy.sh/docs/privacy/).
 
+## Music sync AI and remembered songs
+
+The beat AI (Beat This!) runs on your PC only; no audio leaves it. When "Remember songs already heard" is on, the app stores, per song, the beat times and a short beat-strength curve of the song's opening in `datasongs`. Songs are told apart by a SHA-256 code made from the player's window title (for example Spotify's "Artist - Song"); the title itself and the audio are never saved. "Forget remembered songs" on the Lighting page deletes them.
+
 ## Bug reports
 
 "Report a problem" makes a zip file with logs, settings and the list of detected parts **on your PC** and opens the GitHub issue page in your browser. Nothing is uploaded automatically: you read the zip and decide whether to attach it.
@@ -54,6 +58,10 @@ Zeph-Iris は、あなたの PC の中で動きます。アカウント・利用
 | OpenRGB の LED（自分で設定したときだけ） | 入力した OpenRGB の SDK サーバー（既定は `localhost`） | LED の色 | ライティングがオンの間 | ライティング → 連携をオフ |
 
 ふつうの Web の通信と同じく、上のサービスからはあなたの IP アドレスが見えます。それぞれのプライバシーポリシーが当てはまります（上の英語の欄のリンク）。
+
+## 音楽連動の AI と覚えた曲
+
+拍の AI（Beat This!）は PC の中だけで動き、音を外に出しません。「一度聴いた曲を覚える」がオンのときは、曲ごとに拍の時刻と、曲の始まりの立ち上がりの強さの並びを `datasongs` に保存します。曲は、再生アプリのウィンドウのタイトル（Spotify の「アーティスト - 曲名」など）から作った SHA-256 の印で見分け、タイトルそのものや音は保存しません。ライティングの画面の「覚えた曲を消す」で消せます。
 
 ## 不具合の報告
 

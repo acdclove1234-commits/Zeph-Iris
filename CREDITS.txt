@@ -21,6 +21,17 @@ LibreHardwareMonitorLib 0.9.6
   ※ 改変せずに使用しています。ソースコードは上記リポジトリで公開されています。
   依存: HidSharp (Apache-2.0), DiskInfoToolkit, RAMSPDToolkit-NDD
 
+Beat This!（音楽連動の拍の AI。小さいモデル beat_this_small と前処理 mel_spectrogram を exe に埋め込み）
+  License: MIT License（Distribution/licenses/BeatThis-LICENSE.txt）
+  Source : https://github.com/CPJKU/beat_this ・ ONNX 変換 https://github.com/danigb/beat-this-rs
+  Copyright (c) 2024 Institute of Computational Perception, JKU Linz, Austria / Copyright (c) 2025 danigb
+  ※ 論文: Foscarin, Schlüter, Widmer "Beat this! Accurate beat tracking without DBN postprocessing" (ISMIR 2024)
+
+ONNX Runtime 1.31.1（拍の AI を動かす）
+  License: MIT License
+  Source : https://github.com/microsoft/onnxruntime
+  Copyright (c) Microsoft Corporation
+
 NAudio.Wasapi / NAudio.Core 2.2.1（音楽連動の音の取り込み）
   License: MIT License
   Source : https://github.com/naudio/NAudio

@@ -43,6 +43,12 @@ public sealed class BeatTracker
     internal static class Tune
     {
         /// <summary>
+        /// 低音の立ち上がりがこの秒数ないとロックを外す。2 秒だと、キックが少し抜けるだけ（ほかの楽器は拍を刻んでいる）でロックが外れ、
+        /// テンポは合っているのに位置を取り直せないまま 20 秒以上光らないことがあった
+        /// （新しい実際の 29 曲で、拍に合っている時間 75% → 81%、ロックの切り替わり 1.5 → 0.7 回／分。合成音のテストは変わらない）
+        /// </summary>
+        internal static double NoOnsetUnlockSec = 4.0;
+        /// <summary>
         /// ロックできないまま、別のテンポを試すまでの時間（秒）。4.5 秒だと、付点・シャッフルの曲で正しいテンポを
         /// ロックする前に外してしまい、候補を渡り歩いて 1 分以上つかめないことがあった（実際の 12 曲で、つかむまで平均 26.6 → 13.7 秒）
         /// </summary>
@@ -84,7 +90,11 @@ public sealed class BeatTracker
         /// <summary>くし形のフィルターで、周期の何倍の自己相関を足すか</summary>
         internal static int[] CombMultiples = { 1, 2, 3, 4 };
         /// <summary>拍の位置の取り直しで、ちょうど半拍ずれた位置へ移るのに必要な、そろい方の比（今の位置の何倍か）</summary>
-        internal static double HalfShiftRatio = 2;
+        /// <remarks>
+        /// 2 倍だと、裏拍に張りついたあと表に戻りにくかった。新しい実際の 29 曲で 1.05〜1.25 は同じ結果になり、
+        /// いちばん控えめな 1.25 にした（光が拍の上 83% → 87%、裏拍 15% → 12%、一度もつかめない曲 1 → 0。切り替わりの回数は変わらない）
+        /// </remarks>
+        internal static double HalfShiftRatio = 1.25;
         /// <summary>付点 8 分の刻みの疑い: 4/3 倍の周期のくし形の値が、今の周期のこの倍以上なら疑う（0 = 疑わない）。疑うときの「音の多さ」の基準</summary>
         internal static double DottedSuspectRatio = 0.6, SuspectRatioZero = 1.0, SuspectRatioFull = 1.5;
         /// <summary>
@@ -181,7 +191,9 @@ public sealed class BeatTracker
     private const double UnlockConf = 0.30;
     private static int LockBeats => Tune.LockBeats;
     /// <summary>低音の立ち上がりがこの秒数ないとロックを外す</summary>
-    private const double NoOnsetUnlockSec = 2.0;
+    private static double NoOnsetUnlockSec => Tune.NoOnsetUnlockSec;
+    /// <summary>無音のときに、ロックを外すまでの秒数（低音の立ち上がりがない時間）</summary>
+    private const double NoOnsetSilentUnlockSec = 2.0;
     /// <summary>無音がこの秒数続いたらテンポの更新を止める</summary>
     private const double FreezeSec = 0.5;
     /// <summary>無音がこの秒数続いたらビートの位置を忘れる</summary>
@@ -206,7 +218,7 @@ public sealed class BeatTracker
     private readonly int _len;       // 記録の長さ（コマ）
     private readonly int _minFrames, _updateEvery, _maHalf, _minOverlap;
     private readonly int _tauMin, _tauMax, _m, _maxLagCap, _acfN, _minW;
-    private readonly int _freezeFrames, _silenceFrames, _noOnsetFrames;
+    private readonly int _freezeFrames, _silenceFrames, _noOnsetFrames, _noOnsetSilentFrames;
     private readonly double _glideDecay;
 
     private readonly double[] _odf, _low, _acc;
@@ -284,6 +296,7 @@ public sealed class BeatTracker
         _freezeFrames = (int)Math.Round(FreezeSec * frameRate);
         _silenceFrames = (int)Math.Round(SilenceResetSec * frameRate);
         _noOnsetFrames = (int)Math.Round(NoOnsetUnlockSec * frameRate);
+        _noOnsetSilentFrames = (int)Math.Round(NoOnsetSilentUnlockSec * frameRate);
         _glideDecay = Math.Exp(-1 / (frameRate * GlideSec));
 
         _odf = new double[_len];
@@ -345,6 +358,40 @@ public sealed class BeatTracker
     public double PhaseConfidence => _phaseConf;
     /// <summary>テンポの倍率を掛ける前の周期（秒。まだなければ 0）</summary>
     public double PeriodSec => _period > 0 ? _period / _f : 0;
+
+    /// <summary>テンポの倍率を掛ける前の、いちばん最近の拍の時刻（音の時刻。拍の並びがなければ NaN）</summary>
+    public double GridLastBeatT => _hasGrid && _period > 0 ? _tNow - (_n - (_nextBeat - _period)) / _f - BeatLatencySec : double.NaN;
+
+    /// <summary>外から拍の並びを入れた回数（調査用）</summary>
+    public int SteerCount { get; private set; }
+
+    /// <summary>
+    /// 外から分かった拍の並び（拍の AI・覚えた曲）に合わせる。周期は秒、beatT はその並びの拍の 1 つの時刻（音の時刻）。
+    /// 拍の番号は今の並びから引き継ぎ、すぐにロックする。そのあとはいつもどおり、立ち上がりに合わせて少しずつ直していく
+    /// </summary>
+    public void Steer(double periodSec, double beatT)
+    {
+        if (!(periodSec > 0) || !double.IsFinite(beatT)) return;
+        double period = Math.Clamp(periodSec * _f, _tauMin * 0.9, _tauMax * 1.1);
+        // 公開する時刻は「コマの時刻 − BeatLatencySec」なので、その逆でコマの位置にする
+        double pos = _n + (beatT + BeatLatencySec - _tNow) * _f;
+        double next = pos;
+        while (next <= _n) next += period;
+        while (next - period > _n) next -= period;
+        if (_hasGrid && _period > 0) _nextIdx += (long)Math.Round((next - _nextBeat) / period);
+        DiagLog?.Invoke($"steer t {_tNow:F2} period {60 / periodSec:F1} (was {(_period > 0 ? 60 * _f / _period : 0):F1})");
+        _period = period;
+        _nextBeat = next;
+        _hasGrid = true;
+        _glide = 0;
+        _pendCount = 0;
+        ClearHist();
+        _lock = BeatLock.Locked;
+        _goodBeats = LockBeats;
+        _badBeats = 0;
+        _stuckFrames = 0;
+        SteerCount++;
+    }
     /// <summary>くし形のフィルターの結果（テスト・調査用。添え字 j が周期 TauMin + j コマ）</summary>
     internal double[] CombScores => _r;
     internal int TauMin => _tauMin;
@@ -463,8 +510,9 @@ public sealed class BeatTracker
         }
         else if (_lock != BeatLock.Unlocked) _stuckFrames = 0;
 
-        // 2 秒間、低音の立ち上がりがなければロックを外す
-        if (_lock != BeatLock.Unlocked && _n - _lastLowOnset > _noOnsetFrames)
+        // 低音の立ち上がりがしばらくなければロックを外す。無音なら 2 秒（曲が止まったのに光り続けないように）、
+        // 音楽は鳴っていてキックだけが抜けているなら NoOnsetUnlockSec（ほかの楽器が拍を刻んでいる間は、拍の並びを保つ）
+        if (_lock != BeatLock.Unlocked && _n - _lastLowOnset > (gateOpen ? _noOnsetFrames : _noOnsetSilentFrames))
         {
             _lock = BeatLock.Unlocked;
             _goodBeats = 0;

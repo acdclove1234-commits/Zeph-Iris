@@ -13,6 +13,21 @@ and Iris, the rainbow (the LEDs).
   for example: Settings [設定].
 
 
+■ What's new in v6.14.0 (beat AI for music sync, remembered songs)
+  - Beat AI (Beat This!, JKU Linz): every few seconds the AI checks the latest audio and fixes the lights if they follow the
+    wrong tempo or the off-beat. Runs only on this PC. On 20 real songs: in sync 83% -> 91%, first lock 13.3 -> 8.2 s
+    (flashes on the beat unchanged at 80%).
+  - Remember songs already heard: the beats the AI found are remembered per song and matched from the start the next
+    time (second play 92%, 7.0 s, almost no AI work). Songs are told apart by a code made from the title in Spotify and
+    similar apps; titles and audio are not saved. Both can be turned off on the Lighting page [ライティング].
+  - Beat tracking keeps the beat when the kick drops out for a moment and returns from the off-beat more easily
+    (29 real songs: 75% -> 82%).
+  - AI cooling advisor: fixed the screen freezing while it answers. The app now computes the suggested numbers with fixed
+    rules and the AI only explains them, so it no longer suggests faster fans when there is plenty of margin or changes
+    to BIOS-controlled fans.
+  - New app icon (simplified fan at small sizes).
+  - The installer is about 13 MB larger because of the beat AI.
+
 ■ What's new in v6.13.0 (easier to switch from other apps)
   - Import from FanControl [FanControl から取り込む…]: reads the curves and fan names from FanControl (Rem0o) settings (the .json in its
     Configurations folder) into a new profile. The button is on the Fan curves page and in Settings -> Safety &

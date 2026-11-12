@@ -41,6 +41,8 @@ public partial class App : Application
     public RgbSync Rgb { get; } = new();
     /// <summary>音楽連動の音の取り込み</summary>
     public AudioCapture Audio { get; } = new();
+    /// <summary>音楽連動の拍の AI と曲の記憶</summary>
+    public MusicAi? MusicAi { get; private set; }
     /// <summary>音と光のずれを合わせる「同期テスト」のクリック音</summary>
     public SyncTestPlayer SyncTestPlayer { get; } = new();
 
@@ -639,6 +641,8 @@ public partial class App : Application
         Rgb.AudioSource ??= () => Audio.Running ? Audio.Engine : null;
         Rgb.Configure(copy);
         // 音楽連動のときだけ音を取り込む（それ以外のときは何も読み取らない）
+        MusicAi ??= new MusicAi(Audio);
+        MusicAi.Apply(copy.Enabled && copy.Mode == RgbModes.Music, copy.MusicAi, copy.MusicMemory);
         if (copy.Enabled && copy.Mode == RgbModes.Music)
         {
             Audio.Configure(copy.MusicSource, MusicTuning.EngineSettings(copy));
@@ -1047,6 +1051,7 @@ public partial class App : Application
         Try(L("記録の保存"), () => _window?.SaveReportData());
         Try(L("同期テスト"), () => SyncTestPlayer.Dispose());
         Try("LED", () => Rgb.Dispose());
+        Try(L("拍の AI"), () => MusicAi?.Dispose());
         Try(L("音の取り込み"), () => Audio.Dispose());
         Try(L("スマホ監視"), () => _web?.Stop());
         Try(L("設定"), () => _controller?.Dispose());

@@ -658,10 +658,8 @@ fc54838c	# Awaryjna pełna prędkość: CPU itp. {0:F0}°C / GPU Hot Spot {1:F0}
 64a1986f	({0} wykluczono jako niepodłączone czujniki lub czujniki z nieprawidłowymi wartościami. Nie wspominaj o nich)
 04258b8c	,
 e059f424	## Obciążenie i inne (średnia / maks)
-3da93ace	## Ustawienia i wyniki wentylatorów
 3bd31dc4	- {0} ({1}, sterowanie: {2})
 22f7e502	Pompa
-343d27f0	Pozostawione BIOS
 e6a77abc	 Wypełnienie śr. {0:F0}% / maks {1:F0}%
 7a001c56	, obroty śr. {0:F0} / maks {1:F0} rpm
 9100819e	  - Krzywa „{0}” czujnik: {1} / {2} / histereza {3:F1}°C
@@ -1396,7 +1394,6 @@ e234c1c6	Nie można połączyć (czy Ollama działa?): {0}
 490ac71b	[Treść przekazywana do AI]\n\n
 9c8917d5	Najpierw wybierz model przyciskiem „Odśwież listę”
 30d9aac4	Za mało zapisów. Używaj komputera przez kilka minut i uruchom ponownie
-be68c30e	{0} analizuje… (za pierwszym razem wczytanie modelu trwa dłużej)
 3d4f2c52	Gotowe ({0:HH:mm})
 dea2940c	Zatrzymano
 54fa54cb	Modelu „{0}” nie ma w Ollama. Wybierz ponownie przyciskiem „Odśwież listę” albo uruchom w PowerShell „ollama pull {1}”
@@ -1798,3 +1795,23 @@ d74a156a	Nie steruj tymi samymi wentylatorami ani diodami w CAM (urządzenia na 
 f095a744	To nie jest plik ustawień FanControl. Wybierz plik .json z folderu Configurations w folderze FanControl.
 f94ca8e1	Wyłącz Aura (podświetlenie) w ustawieniach Armoury Crate albo odinstaluj Armoury Crate.
 b9b79f98	FanControl ({0})
+1dda0fb4	{0} analizuje… (za pierwszym razem wczytanie modelu trwa dłużej; karta graficzna jest wtedy mocno obciążona, więc ekran może trochę zwalniać)
+2e1a67a7	  - Ma {0} krzywe; używana jest najwyższa wartość z nich
+427c4cc1	    W zarejestrowanych temperaturach ({0:F0}–{1:F0}°C) ta krzywa daje {2:F0}–{3:F0}%
+78be23e3	{0}, krzywa „{1}” ({2}): maksimum {3:F0}°C zostawia tylko {4:F0}°C do orientacyjnego limitu, więc trzeba wcześniej przyspieszyć. Przesuń punkty poniżej {5:F0}% o {6:F0}°C w lewo → {7} (wartość przy najwyższej temperaturze {8:F0}% → {9:F0}%)
+a0e14853	## Sugestie obliczone przez aplikację (ulepszenia tylko stąd)
+a94350a2	({0} są sterowane przez BIOS lub sterownik i ta aplikacja nie może ich zmienić. Nie wspominaj o nich w sugestiach ani uwagach)
+bf70c08b	Podsumowywanie zapisów…
+d69c93be	{0}, krzywa „{1}” ({2}): maksimum {3:F0}°C zostawia {4:F0}°C do orientacyjnego limitu, więc może być ciszej. Przesuń punkty poniżej {5:F0}% o {6:F0}°C w prawo → {7} (wartość przy najwyższej temperaturze {8:F0}% → {9:F0}%)
+e0338723	- Brak (obecne ustawienia są w porządku)
+f1f22e7a	## Wentylatory sterowane przez tę aplikację: ustawienia i wyniki
+f6280d14	 (orientacyjny limit {0:F0}°C, zapas do maksimum {1:F0}°C)
+1b4c8ef3	Zapamiętuj już słuchane utwory
+33f1fdda	Zapamiętuje uderzenia znalezione przez AI dla każdego utworu i trafia w nie od początku, gdy utwór zagra ponownie (utwory rozróżnia kod utworzony z tytułu w Spotify i podobnych; tytuły i dźwięk nie są zapisywane)
+5ae7b468	Co kilka sekund AI (Beat This!) sprawdza najnowszy dźwięk i poprawia światła, jeśli podążają za złym tempem lub słabą częścią taktu. Działa tylko na tym PC i używa trochę CPU
+83419666	Usuwa wszystkie zapamiętane uderzenia (zostaną nauczone ponownie podczas słuchania)
+9050f432	Sprawdzaj rytm za pomocą AI
+959ac7af	Zapomnij zapamiętane utwory
+b8946100	Zapamiętane utwory: {0}
+dfb02ca4	AI rytmu
+e8d98a10	Usunąć wszystkie zapamiętane uderzenia? (Zostaną nauczone ponownie podczas słuchania)

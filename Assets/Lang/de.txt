@@ -658,10 +658,8 @@ fc54838c	# Notfall-Volllast: CPU usw. {0:F0} °C / GPU-Hot-Spot {1:F0} °C
 64a1986f	({0} wurden als nicht angeschlossene Sensoren oder Sensoren mit ungültigen Werten ausgeschlossen. Erwähne sie nicht)
 04258b8c	,
 e059f424	## Last und mehr (Mittel / Max.)
-3da93ace	## Lüftereinstellungen und Messwerte
 3bd31dc4	- {0} ({1}, Steuerung: {2})
 22f7e502	Pumpe
-343d27f0	Dem BIOS überlassen
 e6a77abc	 Ansteuerung Ø {0:F0} % / max. {1:F0} %
 7a001c56	, Drehzahl Ø {0:F0} / max. {1:F0} rpm
 9100819e	  - Kurve „{0}“ Sensor: {1} / {2} / Hysterese {3:F1} °C
@@ -1396,7 +1394,6 @@ e234c1c6	Keine Verbindung (läuft Ollama?): {0}
 490ac71b	[An die KI übergebener Inhalt]\n\n
 9c8917d5	Wählen Sie zuerst mit „Liste aktualisieren“ ein Modell
 30d9aac4	Zu wenige Aufzeichnungen. Nutzen Sie den PC ein paar Minuten und starten Sie dann erneut
-be68c30e	{0} analysiert… (beim ersten Mal dauert das Laden des Modells etwas)
 3d4f2c52	Fertig ({0:HH:mm})
 dea2940c	Gestoppt
 54fa54cb	Das Modell „{0}“ ist nicht in Ollama. Wählen Sie mit „Liste aktualisieren“ neu oder führen Sie „ollama pull {1}“ in PowerShell aus
@@ -1798,3 +1795,23 @@ d74a156a	Steuere dieselben Lüfter oder LEDs nicht in CAM (Geräte an einem NZXT
 f095a744	Dies ist keine FanControl-Einstellungsdatei. Wähle eine .json im Ordner Configurations im FanControl-Ordner.
 f94ca8e1	Schalte Aura (Beleuchtung) in den Einstellungen von Armoury Crate aus oder deinstalliere Armoury Crate.
 b9b79f98	FanControl ({0})
+1dda0fb4	{0} analysiert… (beim ersten Mal dauert das Laden des Modells; dabei ist die Grafikkarte stark ausgelastet, der Bildschirm kann etwas träge sein)
+2e1a67a7	  - Hat {0} Kurven; der höchste Wert davon wird verwendet
+427c4cc1	    Im aufgezeichneten Bereich ({0:F0}–{1:F0} °C) liefert diese Kurve {2:F0}–{3:F0} %
+78be23e3	{0}, Kurve „{1}“ ({2}): Beim Maximum von {3:F0} °C bleiben nur {4:F0} °C bis zum Richtwert, also früher hochdrehen. Punkte unter {5:F0} % um {6:F0} °C nach links → {7} (Wert beim Höchstwert {8:F0} % → {9:F0} %)
+a0e14853	## Von der App berechnete Vorschläge (Verbesserungen nur hieraus)
+a94350a2	({0} werden vom BIOS oder Treiber gesteuert und lassen sich mit dieser App nicht ändern. Erwähne sie weder in Vorschlägen noch in Hinweisen)
+bf70c08b	Aufzeichnungen werden zusammengefasst…
+d69c93be	{0}, Kurve „{1}“ ({2}): Beim Maximum von {3:F0} °C bleiben {4:F0} °C bis zum Richtwert, also kann es leiser werden. Punkte unter {5:F0} % um {6:F0} °C nach rechts → {7} (Wert beim Höchstwert {8:F0} % → {9:F0} %)
+e0338723	- Keine (die aktuellen Einstellungen passen)
+f1f22e7a	## Von dieser App gesteuerte Lüfter: Einstellungen und Werte
+f6280d14	 (Richtwert {0:F0} °C, Abstand zum Maximum {1:F0} °C)
+1b4c8ef3	Gehörte Songs merken
+33f1fdda	Merkt sich die von der KI gefundenen Schläge pro Song und trifft sie beim nächsten Abspielen von Anfang an (Songs werden über einen aus dem Titel in Spotify u. Ä. erzeugten Code unterschieden; Titel und Ton werden nicht gespeichert)
+5ae7b468	Alle paar Sekunden prüft die KI (Beat This!) den neuesten Ton und korrigiert das Licht, wenn es dem falschen Tempo oder dem Offbeat folgt. Läuft nur auf diesem PC und braucht etwas CPU
+83419666	Löscht alle gemerkten Song-Schläge (sie werden beim Hören wieder gelernt)
+9050f432	Takt per KI prüfen
+959ac7af	Gemerkte Songs vergessen
+b8946100	Gemerkte Songs: {0}
+dfb02ca4	Takt-KI
+e8d98a10	Alle gemerkten Song-Schläge löschen? (Sie werden beim Hören wieder gelernt)

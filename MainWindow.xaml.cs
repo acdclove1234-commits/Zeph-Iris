@@ -504,6 +504,7 @@ public partial class MainWindow : Window
         SettingsPage.Visibility = NavSettings.IsChecked == true ? Visibility.Visible : Visibility.Collapsed;
         // ライティング: 見えている間だけ、音のスペクトラムや LED のプレビューを動かす（MainWindow.Lighting.cs）
         LightingPage.Visibility = NavLighting.IsChecked == true ? Visibility.Visible : Visibility.Collapsed;
+        if (LightingPage.Visibility == Visibility.Visible) UpdateSongMemoryInfo();
 
         DashboardActions.Visibility = DashboardPage.Visibility;
         CurvesActions.Visibility = CurvesPage.Visibility;

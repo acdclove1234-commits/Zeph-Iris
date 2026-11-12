@@ -227,50 +227,24 @@ public sealed class TrayIcon : IDisposable
         _icon.ShowBalloonTip(5000, title, message, icon);
     }
 
-    /// <summary>ウィンドウのタイトルバー用に、同じアイコンを WPF 形式で返す</summary>
+    /// <summary>
+    /// ウィンドウ（タイトルバー・Alt+Tab）用に、exe と同じアイコン（Assets/app.ico）を返す。
+    /// ICO のまま渡すと、WPF が大きさごとに合う絵（32 px 以下はファンの台・40 px 以上は全体の絵）を選ぶ
+    /// </summary>
     public System.Windows.Media.ImageSource CreateWindowIcon()
-        => Imaging.CreateBitmapSourceFromHIcon(_appIcon.Handle, System.Windows.Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
+        => BitmapFrame.Create(AppIconStream(), BitmapCreateOptions.None, BitmapCacheOption.OnLoad);
 
-    /// <summary>アイコンファイルを同梱しなくて済むよう、グラデーションのファン図形をその場で描く</summary>
+    /// <summary>exe に埋め込んだアイコン（Assets/app.ico。exe のアイコン・インストーラーと同じもの）</summary>
+    private static Stream AppIconStream()
+        => typeof(TrayIcon).Assembly.GetManifestResourceStream("ProFanController.AppIcon.ico")
+           ?? throw new FileNotFoundException("AppIcon.ico");
+
+    /// <summary>通知領域のアイコン: 画面の拡大率に合う小さいアイコンの大きさ（16〜32 px）の絵を、ICO から選ぶ</summary>
     private static Drawing.Icon CreateAppIcon()
     {
-        using var bmp = new Drawing.Bitmap(64, 64);
-        using (var g = Drawing.Graphics.FromImage(bmp))
-        {
-            g.SmoothingMode = Drawing.Drawing2D.SmoothingMode.AntiAlias;
-            g.Clear(Drawing.Color.Transparent);
-            using var bg = new Drawing.Drawing2D.LinearGradientBrush(
-                new Drawing.Rectangle(0, 0, 64, 64), Drawing.Color.FromArgb(0x7C, 0x5C, 0xFF), Drawing.Color.FromArgb(0x22, 0xC7, 0xFF), 45f);
-            g.FillEllipse(bg, 2, 2, 60, 60);
-
-            // 羽根 3 枚
-            using var white = new Drawing.SolidBrush(Drawing.Color.White);
-            for (int i = 0; i < 3; i++)
-            {
-                var state = g.Save();
-                g.TranslateTransform(32, 32);
-                g.RotateTransform(i * 120);
-                g.FillEllipse(white, -7, -26, 14, 24);
-                g.Restore(state);
-            }
-            using var hub = new Drawing.SolidBrush(Drawing.Color.FromArgb(0x10, 0x11, 0x1A));
-            g.FillEllipse(hub, 25, 25, 14, 14);
-        }
-
-        IntPtr hIcon = bmp.GetHicon();
-        try
-        {
-            // FromHandle は所有権を持たないので、コピーを作ってから元のハンドルを解放する
-            return (Drawing.Icon)Drawing.Icon.FromHandle(hIcon).Clone();
-        }
-        finally
-        {
-            DestroyIcon(hIcon);
-        }
+        using var s = AppIconStream();
+        return new Drawing.Icon(s, WinForms.SystemInformation.SmallIconSize);
     }
-
-    [DllImport("user32.dll", SetLastError = true)]
-    private static extern bool DestroyIcon(IntPtr hIcon);
 
     public void Dispose()
     {

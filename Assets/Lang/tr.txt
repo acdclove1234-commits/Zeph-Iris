@@ -658,10 +658,8 @@ fc54838c	# Acil tam hız: CPU vb. {0:F0}°C / GPU Hot Spot {1:F0}°C
 64a1986f	({0} bağlı olmayan veya geçersiz değerli sensörler olduğu için hariç tutuldu. Bunlardan bahsetme)
 04258b8c	,
 e059f424	## Yük ve diğerleri (ortalama / en yüksek)
-3da93ace	## Fan ayarları ve gerçekleşen değerler
 3bd31dc4	- {0} ({1}, kontrol: {2})
 22f7e502	Pompa
-343d27f0	BIOS'a bırakıldı
 e6a77abc	 Duty ort. {0:F0}% / en yüksek {1:F0}%
 7a001c56	, devir ort. {0:F0} / en yüksek {1:F0} rpm
 9100819e	  - Eğri "{0}" sensör: {1} / {2} / histerezis {3:F1}°C
@@ -1396,7 +1394,6 @@ e234c1c6	Bağlanılamıyor (Ollama çalışıyor mu?): {0}
 490ac71b	[Yapay zekâya verilen içerik]\n\n
 9c8917d5	Önce "Listeyi yenile" ile bir model seçin
 30d9aac4	Kayıt çok az. Birkaç dakika kullandıktan sonra tekrar çalıştırın
-be68c30e	{0} analiz ediyor… (ilk seferde modelin yüklenmesi zaman alır)
 3d4f2c52	Tamamlandı ({0:HH:mm})
 dea2940c	Durduruldu
 54fa54cb	"{0}" modeli Ollama'da yok. "Listeyi yenile" ile yeniden seçin veya PowerShell'de "ollama pull {1}" çalıştırın
@@ -1798,3 +1795,23 @@ d74a156a	CAM'de aynı fanları veya LED'leri kontrol etmeyin (NZXT hub'ına bağ
 f095a744	Bu bir FanControl ayar dosyası değil. FanControl klasöründeki Configurations klasöründen bir .json seçin.
 f94ca8e1	Armoury Crate ayarlarında Aura'yı (aydınlatma) kapatın veya Armoury Crate'i kaldırın.
 b9b79f98	FanControl ({0})
+1dda0fb4	{0} analiz ediyor… (ilk seferde modelin yüklenmesi zaman alır; bu sırada ekran kartı yoğun çalışır, ekran biraz yavaşlayabilir)
+2e1a67a7	  - {0} eğrisi var; bunların en yüksek değeri kullanılır
+427c4cc1	    Kaydedilen sıcaklıklarda ({0:F0}–{1:F0}°C) bu eğri %{2:F0}–%{3:F0} verir
+78be23e3	{0}, "{1}" eğrisi ({2}): en yüksek {3:F0}°C ile yol gösterici sınıra yalnızca {4:F0}°C pay var, yani daha erken hızlandır. %{5:F0} altındaki noktaları {6:F0}°C sola kaydır → {7} (en yüksek sıcaklıktaki değer %{8:F0} → %{9:F0})
+a0e14853	## Uygulamanın hesapladığı öneriler (iyileştirmeler yalnızca buradan)
+a94350a2	({0} BIOS veya sürücü tarafından kontrol ediliyor ve bu uygulama değiştiremez. Önerilerde ve notlarda bunlardan söz etme)
+bf70c08b	Kayıtlar özetleniyor…
+d69c93be	{0}, "{1}" eğrisi ({2}): en yüksek {3:F0}°C ile yol gösterici sınıra {4:F0}°C pay var, yani daha sessiz olabilir. %{5:F0} altındaki noktaları {6:F0}°C sağa kaydır → {7} (en yüksek sıcaklıktaki değer %{8:F0} → %{9:F0})
+e0338723	- Yok (mevcut ayarlar uygun)
+f1f22e7a	## Bu uygulamanın kontrol ettiği fanlar: ayarlar ve sonuçlar
+f6280d14	 (yol gösterici sınır {0:F0}°C, en yüksek değere pay {1:F0}°C)
+1b4c8ef3	Dinlenen şarkıları hatırla
+33f1fdda	Yapay zekânın her şarkıda bulduğu vuruşları hatırlar ve şarkı yeniden çaldığında baştan eşler (şarkılar Spotify gibi uygulamalardaki başlıktan üretilen bir kodla ayırt edilir; başlıklar ve ses kaydedilmez)
+5ae7b468	Birkaç saniyede bir yapay zekâ (Beat This!) son sesi inceler ve ışıklar yanlış tempoyu ya da ara vuruşu izliyorsa düzeltir. Yalnızca bu bilgisayarda çalışır ve biraz CPU kullanır
+83419666	Hatırlanan tüm vuruşları siler (dinledikçe yeniden öğrenilir)
+9050f432	Ritmi yapay zekâ ile denetle
+959ac7af	Hatırlanan şarkıları unut
+b8946100	Hatırlanan şarkılar: {0}
+dfb02ca4	Ritim yapay zekâsı
+e8d98a10	Hatırlanan tüm vuruşlar silinsin mi? (Dinledikçe yeniden öğrenilir)

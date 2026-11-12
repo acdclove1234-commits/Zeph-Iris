@@ -19,6 +19,8 @@ public partial class MainWindow
     private readonly ObservableCollection<FindingVm> _findings = new();
     private List<DiagnosticFinding> _lastFindings = new();
     private CancellationTokenSource? _advisorCts;
+    /// <summary>AI の回答を画面に入れ直す間隔（ミリ秒）</summary>
+    private const int AdvisorRefreshMs = 200;
     private CoolingTestRunner? _test;
     private CoolingTestReport? _lastTestReport;
 
@@ -130,26 +132,50 @@ public partial class MainWindow
         catch (Exception ex) { Logger.Warn($"モデルの一覧を読めません: {ex}"); ShowAlert(L($"モデルの一覧を読めませんでした: {ex.Message}"), AlertLevel.Warning); }
     }
 
-    private string BuildAdvisorPrompt(bool includeTest)
+    /// <summary>
+    /// AI に渡す内容を作る。画面の情報（カード・設定）は画面のスレッドで集め、
+    /// 24 時間分の集計（並べ替え・自動診断）は、記録の写しに対して別のスレッドで行う（画面が止まらないように）
+    /// </summary>
+    private async Task<string> BuildAdvisorPromptAsync(bool includeTest)
     {
-        var temps = _tempCards.Select(c => (c.SensorId, c.Title))
-            .Concat(_catalog?.Temperatures.Where(t => _tempCards.All(c => c.SensorId != t.Id) && t.HardwareType is "SuperIO" or "Storage")
-                        .Select(t => (t.Id, $"{t.Name} ({t.HardwareName})")) ?? Enumerable.Empty<(string, string)>())
-            .ToList();
-        if (_lastFindings.Count == 0 && _history.Count >= 120)
-        {
-            _lastFindings = Diagnostics.Run(_history, Config, _controller.EffectiveProfile, _catalog!.Temperatures, TimeSpan.FromHours(24));
-        }
+        string profile = _controller.EffectiveProfile;
+        var cfg = Config.Clone();
+        // 渡す温度: ダッシュボードのカード・このアプリのカーブが使うセンサー・SSD。
+        // マザーボードの生のセンサー（意味の分からない CPU Socket・壊れた値の VRM など）は、AI が飛びつくので渡さない
+        var used = (cfg.FindProfile(profile)?.Fans ?? new())
+            .Where(f => f.Enabled)
+            .SelectMany(f => f.Curves.Select(c => c.SensorId).Append(f.Mode == FanModes.Target ? f.TargetSensorId : ""))
+            .Where(id => id.Length > 0)
+            .ToHashSet(StringComparer.OrdinalIgnoreCase);
+        var temps = _tempCards.Select(c => (c.SensorId, c.Title)).ToList();
+        foreach (var t in _catalog?.Temperatures ?? Array.Empty<SensorInfo>())
+            if (temps.All(x => x.SensorId != t.Id) && (used.Contains(t.Id) || t.HardwareType == "Storage"))
+                temps.Add((t.Id, $"{t.Name} ({t.HardwareName})"));
         var trend = _healthItems.Where(h => h.Item.Level != HealthLevel.Collecting)
-            .Select(h => L($"{h.Title}: {h.Item.Level}（{h.Metric}）"));
-        return AdvisorPrompt.Build(_history, Config, _controller.EffectiveProfile, temps, MetricHistoryKeys.ToList(),
-            _lastFindings, includeTest ? _lastTestReport : null, QuestionBox.Text, trend);
+            .Select(h => L($"{h.Title}: {h.Item.Level}（{h.Metric}）")).ToList();
+        var metrics = MetricHistoryKeys.ToList();
+        var test = includeTest ? _lastTestReport : null;
+        string question = QuestionBox.Text;
+        var catalogTemps = _catalog?.Temperatures ?? Array.Empty<SensorInfo>();
+        var findings = _lastFindings;
+        var history = _history.Snapshot();
+
+        var (prompt, newFindings) = await Task.Run(() =>
+        {
+            var f = findings.Count == 0 && history.Count >= 120
+                ? Diagnostics.Run(history, cfg, profile, catalogTemps, TimeSpan.FromHours(24))
+                : findings;
+            return (AdvisorPrompt.Build(history, cfg, profile, temps, metrics, f, test, question, trend), f);
+        });
+        _lastFindings = newFindings;
+        return prompt;
     }
 
-    private void OnShowPromptClick(object sender, RoutedEventArgs e)
+    private async void OnShowPromptClick(object sender, RoutedEventArgs e)
     {
         if (_catalog is null) return;
-        AdvisorOutput.Text = L("【AI に渡す内容】\n\n") + AdvisorPrompt.System + "\n\n---\n\n" + BuildAdvisorPrompt(includeTest: _lastTestReport is not null);
+        string prompt = await BuildAdvisorPromptAsync(includeTest: _lastTestReport is not null);
+        AdvisorOutput.Text = L("【AI に渡す内容】\n\n") + AdvisorPrompt.System + "\n\n---\n\n" + prompt;
     }
 
     private void OnAnalyzeClick(object sender, RoutedEventArgs e) => _ = AnalyzeAsync(includeTest: _lastTestReport is not null);
@@ -170,21 +196,28 @@ public partial class MainWindow
             return;
         }
 
-        string prompt = BuildAdvisorPrompt(includeTest);
         _advisorCts = new CancellationTokenSource();
         AnalyzeButton.IsEnabled = false;
         StopAnalyzeButton.Visibility = Visibility.Visible;
         AdvisorOutput.Text = "";
-        AdvisorStatus.Text = L($"{model} が分析しています…（初回はモデルの読み込みに時間がかかります）");
         var sb = new StringBuilder();
         try
         {
+            AdvisorStatus.Text = L("記録をまとめています…");
+            string prompt = await BuildAdvisorPromptAsync(includeTest);
+            AdvisorStatus.Text = L($"{model} が分析しています…（初回はモデルの読み込みに時間がかかります。そのあいだグラボを多く使うので、画面が少し重くなります）");
+            // 回答は 1 秒に数十回少しずつ届く。届くたびに全文を入れ直すと、グラボが AI で忙しいときに画面が詰まって止まるので、
+            // 画面に出すのは 0.2 秒に 1 回までにする（最後に必ず全文を出す）
+            var shown = System.Diagnostics.Stopwatch.StartNew();
             await foreach (var piece in OllamaClient.ChatStreamAsync(Config.Advisor.OllamaUrl, model, AdvisorPrompt.System, prompt, _advisorCts.Token))
             {
                 sb.Append(piece);
+                if (shown.ElapsedMilliseconds < AdvisorRefreshMs) continue;
+                shown.Restart();
                 AdvisorOutput.Text = sb.ToString().TrimStart();
                 AdvisorOutput.ScrollToEnd();
             }
+            AdvisorOutput.Text = sb.ToString().TrimStart();
             AdvisorStatus.Text = L($"完了（{DateTime.Now:HH:mm}）");
             SaveAdvisorReport(sb.ToString());
         }

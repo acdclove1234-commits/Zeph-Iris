@@ -658,10 +658,8 @@ fc54838c	# Massima velocità di emergenza: CPU ecc. {0:F0} °C / Hot Spot GPU {1
 64a1986f	({0} sono stati esclusi perché non collegati o con valori non validi. Non menzionarli)
 04258b8c	,
 e059f424	## Carico e altro (media / max)
-3da93ace	## Impostazioni e risultati delle ventole
 3bd31dc4	- {0} ({1}, controllo: {2})
 22f7e502	Pompa
-343d27f0	Lasciato al BIOS
 e6a77abc	 Duty medio {0:F0}% / max {1:F0}%
 7a001c56	, velocità media {0:F0} / max {1:F0} rpm
 9100819e	  - Curva «{0}» sensore: {1} / {2} / isteresi {3:F1} °C
@@ -1396,7 +1394,6 @@ e234c1c6	Impossibile connettersi (Ollama è in esecuzione?): {0}
 490ac71b	[Contenuto passato all'IA]\n\n
 9c8917d5	Scegli prima un modello con «Aggiorna elenco»
 30d9aac4	Troppe poche registrazioni. Usa il PC per qualche minuto e riprova
-be68c30e	{0} sta analizzando… (la prima volta il caricamento del modello richiede tempo)
 3d4f2c52	Completato ({0:HH:mm})
 dea2940c	Interrotto
 54fa54cb	Il modello «{0}» non è presente in Ollama. Scegline un altro con «Aggiorna elenco» o esegui «ollama pull {1}» in PowerShell
@@ -1798,3 +1795,23 @@ d74a156a	Non controllare le stesse ventole o LED in CAM (i dispositivi su un hub
 f095a744	Non è un file di impostazioni di FanControl. Scegli un .json nella cartella Configurations dentro la cartella di FanControl.
 f94ca8e1	Disattiva Aura (illuminazione) nelle impostazioni di Armoury Crate, oppure disinstalla Armoury Crate.
 b9b79f98	FanControl ({0})
+1dda0fb4	{0} sta analizzando… (la prima volta il caricamento del modello richiede tempo; nel frattempo la scheda video lavora molto e lo schermo può essere un po' lento)
+2e1a67a7	  - Ha {0} curve; si usa il valore più alto tra queste
+427c4cc1	    Nelle temperature registrate ({0:F0}–{1:F0} °C), questa curva dà {2:F0}–{3:F0} %
+78be23e3	{0}, curva "{1}" ({2}): il massimo di {3:F0} °C lascia solo {4:F0} °C al limite indicativo, quindi conviene accelerare prima. Sposta i punti sotto {5:F0} % di {6:F0} °C a sinistra → {7} (valore alla temperatura massima {8:F0} % → {9:F0} %)
+a0e14853	## Suggerimenti calcolati dall'app (miglioramenti solo da qui)
+a94350a2	({0} sono controllate dal BIOS o dal driver e questa app non può cambiarle. Non menzionarle nei suggerimenti né nelle note)
+bf70c08b	Riepilogo delle registrazioni…
+d69c93be	{0}, curva "{1}" ({2}): il massimo di {3:F0} °C lascia {4:F0} °C al limite indicativo, quindi può essere più silenziosa. Sposta i punti sotto {5:F0} % di {6:F0} °C a destra → {7} (valore alla temperatura massima {8:F0} % → {9:F0} %)
+e0338723	- Nessuno (le impostazioni attuali vanno bene)
+f1f22e7a	## Ventole controllate da questa app: impostazioni e risultati
+f6280d14	 (limite indicativo {0:F0} °C, margine dal massimo {1:F0} °C)
+1b4c8ef3	Ricorda i brani già ascoltati
+33f1fdda	Ricorda i battiti trovati dall'IA per ogni brano e li segue dall'inizio la volta successiva (i brani si distinguono con un codice ricavato dal titolo in Spotify e simili; titoli e audio non vengono salvati)
+5ae7b468	Ogni pochi secondi l'IA (Beat This!) controlla l'audio recente e corregge le luci se seguono il tempo sbagliato o il controtempo. Funziona solo su questo PC e usa un po' di CPU
+83419666	Elimina tutti i battiti ricordati (vengono imparati di nuovo ascoltando)
+9050f432	Verifica il battito con l'IA
+959ac7af	Dimentica i brani ricordati
+b8946100	Brani ricordati: {0}
+dfb02ca4	IA del battito
+e8d98a10	Eliminare tutti i battiti ricordati? (Vengono imparati di nuovo ascoltando)

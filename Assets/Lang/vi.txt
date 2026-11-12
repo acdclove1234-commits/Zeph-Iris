@@ -658,10 +658,8 @@ fc54838c	# Tốc độ tối đa khẩn cấp: CPU… {0:F0}°C / GPU Hot Spot {
 64a1986f	({0} đã bị loại vì chưa kết nối hoặc giá trị không hợp lệ. Đừng nhắc đến chúng)
 04258b8c	,
 e059f424	## Tải và các mục khác (trung bình / lớn nhất)
-3da93ace	## Cài đặt và kết quả của quạt
 3bd31dc4	- {0} ({1}, điều khiển: {2})
 22f7e502	Bơm
-343d27f0	Giao cho BIOS
 e6a77abc	 Duty trung bình {0:F0}% / lớn nhất {1:F0}%
 7a001c56	, tốc độ quay trung bình {0:F0} / lớn nhất {1:F0} rpm
 9100819e	  - Đường cong "{0}" cảm biến: {1} / {2} / độ trễ {3:F1}°C
@@ -1396,7 +1394,6 @@ e234c1c6	Không kết nối được (Ollama đã chạy chưa?): {0}
 490ac71b	[Nội dung gửi cho AI]\n\n
 9c8917d5	Hãy chọn mô hình bằng "Làm mới danh sách" trước
 30d9aac4	Bản ghi quá ít. Hãy dùng máy vài phút rồi chạy lại
-be68c30e	{0} đang phân tích… (lần đầu sẽ mất thời gian tải mô hình)
 3d4f2c52	Xong ({0:HH:mm})
 dea2940c	Đã dừng
 54fa54cb	Mô hình "{0}" không có trong Ollama. Hãy chọn lại bằng "Làm mới danh sách" hoặc chạy "ollama pull {1}" trong PowerShell
@@ -1798,3 +1795,23 @@ d74a156a	Đừng điều khiển cùng quạt hay LED trong CAM (thiết bị c�
 f095a744	Đây không phải tệp cài đặt của FanControl. Hãy chọn tệp .json trong thư mục Configurations bên trong thư mục FanControl.
 f94ca8e1	Tắt Aura (đèn) trong cài đặt của Armoury Crate, hoặc gỡ Armoury Crate.
 b9b79f98	FanControl ({0})
+1dda0fb4	{0} đang phân tích… (lần đầu sẽ mất thời gian tải mô hình; trong lúc đó card đồ họa làm việc nhiều nên màn hình có thể hơi chậm)
+2e1a67a7	  - Có {0} đường cong; dùng giá trị Duty cao nhất trong số đó
+427c4cc1	    Trong khoảng nhiệt độ đã ghi ({0:F0}–{1:F0}°C), đường cong này cho Duty {2:F0}–{3:F0}%
+78be23e3	{0}, đường cong "{1}" ({2}): mức cao nhất {3:F0}°C chỉ còn cách giới hạn tham khảo {4:F0}°C nên cần quay sớm hơn. Dời các điểm dưới {5:F0}% sang trái {6:F0}°C → {7} (Duty ở nhiệt độ cao nhất {8:F0}% → {9:F0}%)
+a0e14853	## Đề xuất do ứng dụng tính (cải thiện chỉ lấy từ đây)
+a94350a2	({0} do BIOS hoặc driver điều khiển, ứng dụng này không thể thay đổi. Đừng nhắc đến trong đề xuất hay lưu ý)
+bf70c08b	Đang tổng hợp dữ liệu ghi…
+d69c93be	{0}, đường cong "{1}" ({2}): mức cao nhất {3:F0}°C còn cách giới hạn tham khảo {4:F0}°C nên có thể êm hơn. Dời các điểm dưới {5:F0}% sang phải {6:F0}°C → {7} (Duty ở nhiệt độ cao nhất {8:F0}% → {9:F0}%)
+e0338723	- Không có (cài đặt hiện tại ổn)
+f1f22e7a	## Quạt do ứng dụng này điều khiển: cài đặt và kết quả
+f6280d14	 (giới hạn tham khảo {0:F0}°C, còn cách mức cao nhất {1:F0}°C)
+1b4c8ef3	Ghi nhớ bài hát đã nghe
+33f1fdda	Ghi nhớ các nhịp AI tìm được cho từng bài và khớp ngay từ đầu khi bài đó phát lại (phân biệt bài bằng mã tạo từ tên bài trong Spotify và các ứng dụng tương tự; không lưu tên bài hay âm thanh)
+5ae7b468	Vài giây một lần, AI (Beat This!) kiểm tra âm thanh gần nhất và sửa đèn nếu đang theo sai tempo hoặc phách lệch. Chỉ chạy trên PC này và dùng một ít CPU
+83419666	Xóa tất cả nhịp đã nhớ (sẽ học lại khi nghe)
+9050f432	Kiểm tra nhịp bằng AI
+959ac7af	Quên các bài đã nhớ
+b8946100	Bài đã nhớ: {0}
+dfb02ca4	AI nhịp
+e8d98a10	Xóa tất cả nhịp đã nhớ? (Sẽ học lại khi nghe)
