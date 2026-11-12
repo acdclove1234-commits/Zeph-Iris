@@ -13,6 +13,9 @@ and Iris, the rainbow (the LEDs).
   for example: Settings [設定].
 
 
+■ What's new in v6.14.2
+  - The logo at the top left of the window is larger and drawn from the icon's largest image, so it no longer looks blurry.
+
 ■ What's new in v6.14.1
   - The app icon now uses the author's artwork as is, at every size.
   - After updating, shortcuts and the taskbar could keep showing the old icon; setup now rebuilds Windows' icon cache.

@@ -62,7 +62,10 @@ public partial class MainWindow : Window
         }
 
         Icon = icon;
-        LogoImage.Source = icon;
+        // サイドバーのロゴ: ICO のいちばん大きい絵（256 px）を縮めて描く（小さい 16 px の絵を引き伸ばすと荒くなる）
+        LogoImage.Source = icon is System.Windows.Media.Imaging.BitmapFrame { Decoder.Frames.Count: > 0 } bf
+            ? bf.Decoder.Frames.OrderByDescending(f => f.PixelWidth).First()
+            : icon;
         TempCards.ItemsSource = _tempCards;
         MetricTiles.ItemsSource = _metricTiles;
         FindingsList.ItemsSource = _findings;

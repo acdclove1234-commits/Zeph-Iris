@@ -107,7 +107,8 @@ internal static class Program
         ThemeManager.Apply(cfg.Appearance);
         var flags = BindingFlags.NonPublic | BindingFlags.Instance;
         typeof(App).GetField("_controller", flags)!.SetValue(app, controller);
-        typeof(App).GetField("_windowIcon", flags)!.SetValue(app, BitmapSource.Create(1, 1, 96, 96, PixelFormats.Bgra32, null, new byte[4], 4));
+        // 本物のアイコン（exe に埋め込んだ ICO）。サイドバーのロゴにも使われる
+        typeof(App).GetField("_windowIcon", flags)!.SetValue(app, BitmapFrame.Create(typeof(App).Assembly.GetManifestResourceStream("ProFanController.AppIcon.ico")!, BitmapCreateOptions.None, BitmapCacheOption.OnLoad));
         var w = (MainWindow)typeof(App).GetMethod("CreateMainWindow", flags)!.Invoke(app, new object?[] { controller, null })!;
         w.WindowStartupLocation = WindowStartupLocation.Manual;
         w.Left = -6000; w.Top = -6000; w.Width = 1280; w.Height = 860;

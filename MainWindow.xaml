@@ -328,8 +328,8 @@
         <!-- ================= サイドバー ================= -->
         <Border Background="{DynamicResource SidebarBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="0,0,1,0">
             <DockPanel LastChildFill="True">
-                <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="24,28,0,30">
-                    <Image x:Name="LogoImage" Width="34" Height="34"/>
+                <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="20,24,0,26">
+                    <Image x:Name="LogoImage" Width="46" Height="46" RenderOptions.BitmapScalingMode="HighQuality"/>
                     <StackPanel Margin="12,0,0,0" VerticalAlignment="Center">
                         <TextBlock Text="Zeph-Iris" FontSize="18" FontWeight="Bold"/>
                         <TextBlock Text="FAN &amp; LIGHT" FontSize="11" Foreground="{DynamicResource SubTextBrush}" Margin="1,-2,0,0"/>
