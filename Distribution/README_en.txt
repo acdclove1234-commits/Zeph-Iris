@@ -13,6 +13,11 @@ and Iris, the rainbow (the LEDs).
   for example: Settings [設定].
 
 
+■ What's new in v6.14.3
+  - The logo at the top left of the window no longer has the dark square behind it; only the artwork's light shows.
+  - "Remembered songs" on the Lighting page [ライティング] now goes up as soon as a song is remembered, even while the page
+    stays open (it used to change only when the page was opened again).
+
 ■ What's new in v6.14.2
   - The logo at the top left of the window is larger and drawn from the icon's largest image, so it no longer looks blurry.
 

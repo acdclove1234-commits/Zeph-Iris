@@ -160,6 +160,35 @@ public static class SongMemoryTests
         }
         finally { try { Directory.Delete(dir, true); } catch (IOException) { } }
     }
+
+    /// <summary>画面の「覚えた曲: N 曲」は Version が変わったときに出し直す: 保存・消去で変わり、覚えなかった曲では変わらない</summary>
+    public static void TestVersionTracksSaves()
+    {
+        string dir = Path.Combine(Path.GetTempPath(), "zeph-songmem-test-" + Guid.NewGuid().ToString("N"));
+        try
+        {
+            var mem = new SongMemory(dir);
+            void Listen(string title, double t0, double sec)
+            {
+                mem.BeginSong(SongMemory.KeyOf("test", title));
+                mem.Tick(t0, 0.5, true);
+                var beats = Enumerable.Range(0, (int)(sec / 0.5)).Select(i => t0 + 0.5 + i * 0.5).ToList();
+                mem.AddBeats(beats, beats.Where((_, i) => i % 4 == 0));
+                mem.BeginSong(null);
+                mem.Tick(t0 + sec, 0, false);   // 曲の終わり（ここで覚える）
+            }
+            int v0 = mem.Version;
+            Listen("short", 1000, 20);
+            T.Check(mem.Version == v0 && mem.Count == 0, "a song heard for only 20 s is not remembered and the count stays");
+            Listen("song A", 2000, 60);
+            T.Check(mem.Version == v0 + 1 && mem.Count == 1, $"saving a song bumps the version (count {mem.Count})");
+            Listen("song B", 3000, 60);
+            T.Check(mem.Version == v0 + 2 && mem.Count == 2, $"each saved song bumps it again (count {mem.Count})");
+            mem.Clear();
+            T.Check(mem.Version == v0 + 3 && mem.Count == 0, "clearing bumps the version and the count is 0");
+        }
+        finally { try { Directory.Delete(dir, true); } catch (IOException) { } }
+    }
 }
 
 /// <summary>

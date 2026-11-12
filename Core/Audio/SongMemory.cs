@@ -68,6 +68,10 @@ public sealed class SongMemory
     public int Saved { get; private set; }
     public int Recalled { get; private set; }
 
+    private int _version;
+    /// <summary>覚えた曲を保存した・消したたびに増える（画面がこれを見て、覚えた曲の数を出し直す。どのスレッドからでも読める）</summary>
+    public int Version => Volatile.Read(ref _version);
+
     public SongMemory(string dir)
     {
         _dir = dir;
@@ -292,6 +296,7 @@ public sealed class SongMemory
             File.WriteAllText(PathOf(r.Key), JsonSerializer.Serialize(r));
             _cache[r.Key] = r;
             Prune();
+            Interlocked.Increment(ref _version);
         }
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
         {
@@ -318,6 +323,7 @@ public sealed class SongMemory
     public void Clear()
     {
         _cache.Clear();
+        Interlocked.Increment(ref _version);
         if (!Directory.Exists(_dir)) return;
         foreach (var f in Directory.GetFiles(_dir, "*.json")) { try { File.Delete(f); } catch (IOException) { } }
     }

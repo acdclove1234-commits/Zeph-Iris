@@ -1710,10 +1710,14 @@ public partial class MainWindow
 
     private void OnAllSoundsClick(object sender, RoutedEventArgs e) => Config.Rgb.MusicSource = "";
 
-    /// <summary>覚えた曲の数を出す（ライティングの画面を開いたとき・消したとき）</summary>
+    private int _songMemoryVersion = -1;
+
+    /// <summary>覚えた曲の数を出す（ライティングの画面を開いたとき・消したとき・開いている間に曲を覚えたとき）</summary>
     private void UpdateSongMemoryInfo()
     {
-        int n = CurrentApp.MusicAi?.Memory.Count ?? 0;
+        var memory = CurrentApp.MusicAi?.Memory;
+        _songMemoryVersion = memory?.Version ?? 0;
+        int n = memory?.Count ?? 0;
         SongMemoryInfo.Text = L($"覚えた曲: {n} 曲");
     }
 
@@ -2066,6 +2070,8 @@ public partial class MainWindow
         RefreshRgbDevicesFromSync();
         UpdateRgbDeviceStatuses();
         UpdateAudioTexts();
+        // 画面を開いたまま曲を覚えたら、数を出し直す（フォルダーを数えるのは、増えたときだけ）
+        if ((CurrentApp.MusicAi?.Memory.Version ?? 0) != _songMemoryVersion) UpdateSongMemoryInfo();
         // App が同期テストを止めた（音楽連動をやめた・取り込みが止まった）ときは、ボタンも戻す
         // クリック音が止まった、または音の出力先が切り替わった（クリックが取り込まれない）ときはテストを終える
         var player = CurrentApp.SyncTestPlayer;

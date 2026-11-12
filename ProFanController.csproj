@@ -18,7 +18,7 @@
     <!-- 画面は WPF なので、高 DPI の設定は app.manifest に書く（WinForms 用の ApplicationHighDpiMode を勧める警告は出さない） -->
     <NoWarn>$(NoWarn);WFAC010</NoWarn>
     <AssemblyName>Zeph-Iris</AssemblyName>
-    <Version>6.14.2</Version>
+    <Version>6.14.3</Version>
     <Product>Zeph-Iris</Product>
     <!-- exe のアイコン（エクスプローラー・デスクトップのショートカットに表示される） -->
     <ApplicationIcon>Assets\app.ico</ApplicationIcon>
@@ -74,6 +74,8 @@
     <EmbeddedResource Include="Assets\Models\*.onnx" LogicalName="ProFanController.Models.%(Filename).onnx" />
     <!-- 通知領域・ウィンドウのアイコン（exe のアイコンと同じ。UI/TrayIcon.cs が読む） -->
     <EmbeddedResource Include="Assets\app.ico" LogicalName="ProFanController.AppIcon.ico" />
+    <!-- サイドバーのロゴ: アイコンの 256 px の絵から、紺の背景を透明にしたもの -->
+    <EmbeddedResource Include="Assets\logo.png" LogicalName="ProFanController.Logo.png" />
   </ItemGroup>
 
   <ItemGroup>

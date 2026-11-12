@@ -62,10 +62,11 @@ public partial class MainWindow : Window
         }
 
         Icon = icon;
-        // サイドバーのロゴ: ICO のいちばん大きい絵（256 px）を縮めて描く（小さい 16 px の絵を引き伸ばすと荒くなる）
-        LogoImage.Source = icon is System.Windows.Media.Imaging.BitmapFrame { Decoder.Frames.Count: > 0 } bf
+        // サイドバーのロゴ: 背景を透明にした 256 px の絵（Assets/logo.png）を縮めて描く。
+        // 読めなければ ICO のいちばん大きい絵（小さい 16 px の絵を引き伸ばすと荒くなる）
+        LogoImage.Source = LoadLogo() ?? (icon is System.Windows.Media.Imaging.BitmapFrame { Decoder.Frames.Count: > 0 } bf
             ? bf.Decoder.Frames.OrderByDescending(f => f.PixelWidth).First()
-            : icon;
+            : icon);
         TempCards.ItemsSource = _tempCards;
         MetricTiles.ItemsSource = _metricTiles;
         FindingsList.ItemsSource = _findings;
@@ -604,6 +605,20 @@ public partial class MainWindow : Window
             HiddenToTray?.Invoke(this, EventArgs.Empty);
         }
         base.OnClosing(e);
+    }
+
+    /// <summary>サイドバーのロゴ（exe に埋め込んだ、背景を透明にした PNG）を読む。なければ null</summary>
+    private static ImageSource? LoadLogo()
+    {
+        using var s = typeof(MainWindow).Assembly.GetManifestResourceStream("ProFanController.Logo.png");
+        if (s is null) return null;
+        var bmp = new System.Windows.Media.Imaging.BitmapImage();
+        bmp.BeginInit();
+        bmp.StreamSource = s;
+        bmp.CacheOption = System.Windows.Media.Imaging.BitmapCacheOption.OnLoad;
+        bmp.EndInit();
+        bmp.Freeze();
+        return bmp;
     }
 
     /// <summary>Windows 11 のタイトルバーをダークにして、背景色と合わせる</summary>
