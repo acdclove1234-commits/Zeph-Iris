@@ -1049,7 +1049,7 @@ a4d4ce26	Tùy chỉnh
 975db0d4	Đổi màu theo nhịp
 6f6c9db1	Mỗi nhịp chuyển sang màu kế tiếp, lóe sáng rồi tắt dần
 1acb0fe4	Nhịp đập
-3735677c	Màu đã chọn đập theo âm trầm và để lại vệt sáng mờ
+50e3646b	Đập theo âm trầm và để lại vệt sáng mờ kéo dài. Màu không đổi theo nhịp mà chuyển dần chậm rãi
 fac18e83	Pha trộn
 143bf4c6	Màu pha trộn theo độ mạnh của âm trầm, trung và cao
 d47d8919	Đồng hồ âm lượng
@@ -1642,15 +1642,15 @@ bf2c93a8	Giống toàn bộ
 c7218a33	Vàng
 cc601a2e	Cùng màu với toàn bộ
 2a367162	Tìm ảnh trong trình duyệt
-3ca8869d	Không tìm thấy ảnh của mẫu này trên Wikimedia Commons. Sao chép ảnh qua "Tìm ảnh trong trình duyệt" và đặt bằng "Dán ảnh đã sao chép" (ảnh từ trang của nhà sản xuất và tương tự chỉ dùng để tự xem).
-3d18f014	Chọn ảnh (ảnh từ Wikimedia Commons; tác giả và giấy phép hiển thị trên thẻ). Nếu không có ảnh phù hợp, bạn cũng có thể tìm trong trình duyệt rồi dán.
-55bd56ad	Khi bật, thiết bị chưa có ảnh sẽ được tìm theo mẫu trên Wikimedia Commons (trang chia sẻ ảnh dùng tự do), và chỉ những ảnh rõ ràng là cùng sản phẩm mới được dùng tự động. Chỉ gửi tên thiết bị
+0d4f2878	Không tìm thấy ảnh của mẫu này trên các trang chia sẻ ảnh dùng tự do (Wikimedia Commons và Openverse). Sao chép ảnh qua "Tìm ảnh trong trình duyệt" và đặt bằng "Dán ảnh đã sao chép" (ảnh từ trang của nhà sản xuất và tương tự chỉ dùng để tự xem).
+02c5893e	Chọn ảnh (ảnh dùng tự do từ Wikimedia Commons và Openverse; tác giả và giấy phép hiển thị trên thẻ). Nếu không có ảnh phù hợp, bạn cũng có thể tìm trong trình duyệt rồi dán.
+e195c30b	Khi bật, thiết bị chưa có ảnh sẽ được tìm theo mẫu trên các trang chia sẻ ảnh dùng tự do (Wikimedia Commons và Openverse), và chỉ những ảnh rõ ràng là cùng sản phẩm mới được dùng tự động. Nếu không tìm thấy, sẽ tìm lại sau mỗi 30 ngày. Chỉ gửi tên thiết bị
 6124e108	Với thiết bị không tìm thấy, dùng nút ảnh trên thẻ để dán ảnh bạn tìm được trong trình duyệt
-693c6982	Đang tìm ảnh của mẫu này trên Wikimedia Commons (trang chia sẻ ảnh dùng tự do)…
+871f648b	Đang tìm ảnh của mẫu này trên các trang chia sẻ ảnh dùng tự do (Wikimedia Commons và Openverse)…
 6d191ffc	Ảnh của "{0}"
 6db944ec	Mở tìm kiếm hình ảnh theo mẫu. Nhấp chuột phải vào ảnh bạn thích → "Sao chép hình ảnh", rồi nhấn "Dán ảnh đã sao chép" bên dưới
 7c80ba3a	Không dán được ảnh.\n{0}
-8b4ed662	Tác giả và giấy phép của ảnh Wikimedia Commons
+09a1ab78	Tác giả và giấy phép của ảnh
 a55323f3	Không tải được ảnh. Hãy chọn ảnh khác hoặc dán ảnh.
 aeaca01b	Tự động tìm ảnh thiết bị trên mạng
 b0dd9531	Không có ảnh trong bảng tạm. Trong trình duyệt, nhấp chuột phải vào ảnh, chọn "Sao chép hình ảnh" rồi nhấn lại.

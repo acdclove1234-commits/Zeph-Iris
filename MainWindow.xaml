@@ -690,7 +690,7 @@
             <ScrollViewer x:Name="DevicesPage" Grid.Row="2" VerticalScrollBarVisibility="Auto" Padding="36,0,22,30" Visibility="Collapsed">
                 <StackPanel>
                 <CheckBox x:Name="DevicePhotoSwitch" Style="{StaticResource Switch}" Margin="0,0,14,14" Click="OnDevicePhotoSwitchClick"
-                          ToolTip="オンなら、写真のないデバイスを型番で Wikimedia Commons（自由に使える写真の共有サイト）から探し、同じ製品と分かる写真だけ自動で使います。送るのはデバイスの名前だけです">
+                          ToolTip="オンなら、写真のないデバイスを型番で、自由に使える写真の共有サイト（Wikimedia Commons と Openverse）から探し、同じ製品と分かる写真だけ自動で使います。見つからなければ 30 日ごとに探し直します。送るのはデバイスの名前だけです">
                     <StackPanel>
                         <TextBlock Text="デバイスの写真をネットで自動で探す" FontWeight="SemiBold"/>
                         <TextBlock Text="見つからないデバイスは、カードの画像のボタンから、ブラウザーで探した画像を貼り付けられます" Style="{StaticResource Caption}"/>
@@ -715,7 +715,7 @@
                                         <ctl:DeviceArt Kind="{Binding Kind}" Source="{Binding Image}" DeviceName="{Binding Name}" Margin="8"/>
                                     </Border>
                                         <TextBlock Text="{Binding Credit}" Style="{StaticResource Caption}" FontSize="10" TextWrapping="Wrap" Width="130" Margin="0,4,0,0"
-                                                   Visibility="{Binding HasCredit, Converter={StaticResource BoolToVis}}" ToolTip="Wikimedia Commons の写真の作者とライセンス"/>
+                                                   Visibility="{Binding HasCredit, Converter={StaticResource BoolToVis}}" ToolTip="写真の作者とライセンス"/>
                                     </StackPanel>
                                     <DockPanel Grid.Column="1" Margin="16,2,0,0">
                                         <DockPanel DockPanel.Dock="Bottom">

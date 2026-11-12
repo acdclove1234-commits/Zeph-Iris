@@ -1049,7 +1049,7 @@ a4d4ce26	Personalizado
 975db0d4	Troca de cor na batida
 6f6c9db1	A cada batida muda para a próxima cor, acende forte e se apaga
 1acb0fe4	Pulso
-3735677c	A cor escolhida pulsa com os graves e deixa um brilho residual suave
+50e3646b	Pulsa com os graves e deixa um brilho residual longo e suave. A cor não muda na batida; vai mudando aos poucos
 fac18e83	Mistura
 143bf4c6	As cores se misturam conforme a força dos graves, médios e agudos
 d47d8919	Medidor de volume
@@ -1642,15 +1642,15 @@ bf2c93a8	Igual ao geral
 c7218a33	Amarelo
 cc601a2e	Mesma cor do geral
 2a367162	Procurar imagens no navegador
-3ca8869d	Nenhuma foto deste modelo foi encontrada no Wikimedia Commons. Copie uma imagem com "Procurar imagens no navegador" e defina-a com "Colar imagem copiada" (use fotos de sites de fabricantes e afins só para você).
-3d18f014	Escolha uma foto (fotos do Wikimedia Commons; o autor e a licença aparecem no cartão). Se nenhuma servir, você também pode procurar no navegador e colar.
-55bd56ad	Se ativado, os dispositivos sem foto são procurados pelo modelo no Wikimedia Commons (um site de fotos de uso livre), e só as fotos que mostram claramente o mesmo produto são usadas automaticamente. Só os nomes dos dispositivos são enviados
+0d4f2878	Nenhuma foto deste modelo foi encontrada nos sites de fotos de uso livre (Wikimedia Commons e Openverse). Copie uma imagem com "Procurar imagens no navegador" e defina-a com "Colar imagem copiada" (use fotos de sites de fabricantes e afins só para você).
+02c5893e	Escolha uma foto (fotos de uso livre do Wikimedia Commons e do Openverse; o autor e a licença aparecem no cartão). Se nenhuma servir, você também pode procurar no navegador e colar.
+e195c30b	Se ativado, os dispositivos sem foto são procurados pelo modelo em sites de fotos de uso livre (Wikimedia Commons e Openverse), e só as fotos que mostram claramente o mesmo produto são usadas automaticamente. Se nada for encontrado, a busca é repetida a cada 30 dias. Só os nomes dos dispositivos são enviados
 6124e108	Para dispositivos sem resultado, use o botão de imagem do cartão para colar uma imagem que você encontrou no navegador
-693c6982	Procurando fotos deste modelo no Wikimedia Commons (um site de fotos de uso livre)…
+871f648b	Procurando fotos deste modelo em sites de fotos de uso livre (Wikimedia Commons e Openverse)…
 6d191ffc	Foto de "{0}"
 6db944ec	Abre uma busca de imagens do modelo. Clique com o botão direito em uma imagem de que gostar → "Copiar imagem" e pressione "Colar imagem copiada" abaixo
 7c80ba3a	Não foi possível colar a imagem.\n{0}
-8b4ed662	Autor e licença da foto do Wikimedia Commons
+09a1ab78	Autor e licença da foto
 a55323f3	Não foi possível baixar a foto. Escolha outra ou cole uma imagem.
 aeaca01b	Procurar fotos dos dispositivos na internet automaticamente
 b0dd9531	Não há imagem na área de transferência. No navegador, clique com o botão direito em uma imagem, escolha "Copiar imagem" e pressione de novo.

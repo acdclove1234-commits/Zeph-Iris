@@ -1049,7 +1049,7 @@ a4d4ce26	Aangepast
 975db0d4	Kleurwissel op de beat
 6f6c9db1	Wisselt bij elke beat naar de volgende kleur, licht fel op en dooft
 1acb0fe4	Puls
-3735677c	De gekozen kleur pulseert met de bas en laat een zachte nagloed achter
+50e3646b	Pulseert met de bas en laat een lange, zachte nagloed achter. De kleur wisselt niet op de beat, maar verloopt langzaam
 fac18e83	Mix
 143bf4c6	Kleuren mengen op basis van de sterkte van lage, midden- en hoge tonen
 d47d8919	VU-meter
@@ -1642,15 +1642,15 @@ bf2c93a8	Zelfde als geheel
 c7218a33	Geel
 cc601a2e	Zelfde kleur als geheel
 2a367162	Afbeeldingen zoeken in de browser
-3ca8869d	Er is geen foto van dit model gevonden op Wikimedia Commons. Kopieer een afbeelding via ‘Afbeeldingen zoeken in de browser’ en stel die in met ‘Gekopieerde afbeelding plakken’ (gebruik foto's van sites van fabrikanten en dergelijke alleen voor uzelf).
-3d18f014	Kies een foto (foto's van Wikimedia Commons; maker en licentie staan op de kaart). Past er geen, dan kunt u ook in de browser zoeken en plakken.
-55bd56ad	Indien aan, worden apparaten zonder foto op model gezocht op Wikimedia Commons (een site met vrij te gebruiken foto's), en worden alleen foto's die duidelijk hetzelfde product tonen automatisch gebruikt. Alleen de apparaatnamen worden verstuurd
+0d4f2878	Er is geen foto van dit model gevonden op de sites met vrij te gebruiken foto's (Wikimedia Commons en Openverse). Kopieer een afbeelding via ‘Afbeeldingen zoeken in de browser’ en stel die in met ‘Gekopieerde afbeelding plakken’ (gebruik foto's van sites van fabrikanten en dergelijke alleen voor uzelf).
+02c5893e	Kies een foto (vrij te gebruiken foto's van Wikimedia Commons en Openverse; maker en licentie staan op de kaart). Past er geen, dan kunt u ook in de browser zoeken en plakken.
+e195c30b	Indien aan, worden apparaten zonder foto op model gezocht op sites met vrij te gebruiken foto's (Wikimedia Commons en Openverse), en worden alleen foto's die duidelijk hetzelfde product tonen automatisch gebruikt. Wordt er niets gevonden, dan wordt elke 30 dagen opnieuw gezocht. Alleen de apparaatnamen worden verstuurd
 6124e108	Voor apparaten zonder resultaat kunt u via de afbeeldingsknop op de kaart een afbeelding plakken die u in de browser vond
-693c6982	Foto's van dit model zoeken op Wikimedia Commons (een site met vrij te gebruiken foto's)…
+871f648b	Foto's van dit model zoeken op sites met vrij te gebruiken foto's (Wikimedia Commons en Openverse)…
 6d191ffc	Foto van ‘{0}’
 6db944ec	Opent een afbeeldingenzoekopdracht voor het model. Klik met rechts op een afbeelding die u bevalt → ‘Afbeelding kopiëren’ en druk hieronder op ‘Gekopieerde afbeelding plakken’
 7c80ba3a	De afbeelding kon niet worden geplakt.\n{0}
-8b4ed662	Maker en licentie van de Wikimedia Commons-foto
+09a1ab78	Maker en licentie van de foto
 a55323f3	De foto kon niet worden gedownload. Kies een andere of plak een afbeelding.
 aeaca01b	Apparaatfoto's automatisch online zoeken
 b0dd9531	Er staat geen afbeelding op het klembord. Klik in de browser met rechts op een afbeelding, kies ‘Afbeelding kopiëren’ en druk opnieuw.

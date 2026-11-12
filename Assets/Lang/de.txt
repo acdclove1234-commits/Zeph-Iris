@@ -1049,7 +1049,7 @@ a4d4ce26	Benutzerdefiniert
 975db0d4	Farbwechsel im Beat
 6f6c9db1	Wechselt bei jedem Beat zur nächsten Farbe, leuchtet kurz hell auf und verblasst
 1acb0fe4	Puls
-3735677c	Die gewählte Farbe pulsiert mit dem Bass und hinterlässt ein sanftes Nachleuchten
+50e3646b	Pulsiert mit dem Bass und hinterlässt ein langes, sanftes Nachleuchten. Die Farbe wechselt nicht im Takt, sondern verändert sich langsam
 fac18e83	Mix
 143bf4c6	Farben mischen sich nach der Stärke von Bässen, Mitten und Höhen
 d47d8919	Pegelanzeige
@@ -1642,15 +1642,15 @@ bf2c93a8	Wie insgesamt
 c7218a33	Gelb
 cc601a2e	Gleiche Farbe wie insgesamt
 2a367162	Bilder im Browser suchen
-3ca8869d	Auf Wikimedia Commons wurde kein Foto dieses Modells gefunden. Kopieren Sie ein Bild über „Bilder im Browser suchen“ und setzen Sie es mit „Kopiertes Bild einfügen“ (Fotos von Herstellerseiten u. Ä. bitte nur für sich selbst verwenden).
-3d18f014	Wählen Sie ein Foto (Fotos von Wikimedia Commons; Urheber und Lizenz werden auf der Karte angezeigt). Passt keines, können Sie auch im Browser suchen und einfügen.
-55bd56ad	Wenn an, werden Geräte ohne Foto anhand des Modells auf Wikimedia Commons (einer Seite mit frei nutzbaren Fotos) gesucht, und nur Fotos, die eindeutig dasselbe Produkt zeigen, werden automatisch verwendet. Gesendet werden nur die Gerätenamen
+0d4f2878	Auf den Seiten mit frei nutzbaren Fotos (Wikimedia Commons und Openverse) wurde kein Foto dieses Modells gefunden. Kopieren Sie ein Bild über „Bilder im Browser suchen“ und setzen Sie es mit „Kopiertes Bild einfügen“ (Fotos von Herstellerseiten u. Ä. bitte nur für sich selbst verwenden).
+02c5893e	Wählen Sie ein Foto (frei nutzbare Fotos von Wikimedia Commons und Openverse; Urheber und Lizenz werden auf der Karte angezeigt). Passt keines, können Sie auch im Browser suchen und einfügen.
+e195c30b	Wenn an, werden Geräte ohne Foto anhand des Modells auf Seiten mit frei nutzbaren Fotos (Wikimedia Commons und Openverse) gesucht, und nur Fotos, die eindeutig dasselbe Produkt zeigen, werden automatisch verwendet. Wird nichts gefunden, wird alle 30 Tage erneut gesucht. Gesendet werden nur die Gerätenamen
 6124e108	Für Geräte ohne Treffer können Sie über die Bildschaltfläche der Karte ein im Browser gefundenes Bild einfügen
-693c6982	Fotos dieses Modells werden auf Wikimedia Commons (einer Seite mit frei nutzbaren Fotos) gesucht…
+871f648b	Fotos dieses Modells werden auf Seiten mit frei nutzbaren Fotos (Wikimedia Commons und Openverse) gesucht…
 6d191ffc	Foto von „{0}“
 6db944ec	Öffnet eine Bildersuche nach dem Modell. Klicken Sie mit der rechten Maustaste auf ein passendes Bild → „Bild kopieren“ und drücken Sie unten „Kopiertes Bild einfügen“
 7c80ba3a	Das Bild konnte nicht eingefügt werden.\n{0}
-8b4ed662	Urheber und Lizenz des Wikimedia-Commons-Fotos
+09a1ab78	Urheber und Lizenz des Fotos
 a55323f3	Das Foto konnte nicht heruntergeladen werden. Wählen Sie ein anderes oder fügen Sie ein Bild ein.
 aeaca01b	Gerätefotos automatisch online suchen
 b0dd9531	In der Zwischenablage ist kein Bild. Klicken Sie im Browser mit der rechten Maustaste auf ein Bild, wählen Sie „Bild kopieren“ und drücken Sie dann erneut.

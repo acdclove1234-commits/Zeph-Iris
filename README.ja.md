@@ -152,7 +152,7 @@ powershell -ExecutionPolicy Bypass -File Distribution/make-dist.ps1
 
 ## プライバシーとコード署名
 
-- [プライバシーポリシー](PRIVACY.md): アカウントもテレメトリーもありません。アプリが自分から通信するのは GitHub（新しい版の確認）と Wikimedia Commons（デバイスの写真）だけで、どちらも止められます。
+- [プライバシーポリシー](PRIVACY.md): アカウントもテレメトリーもありません。アプリが自分から通信するのは GitHub（新しい版の確認）と Wikimedia Commons・Openverse（デバイスの写真）だけで、どちらも止められます。
 - [コード署名の方針](CODE_SIGNING.md): SignPath の審査が通ったら、リリースに署名します。
 
 ## 謝辞

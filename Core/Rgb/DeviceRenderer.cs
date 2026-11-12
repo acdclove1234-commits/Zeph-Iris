@@ -218,11 +218,12 @@ public sealed class DeviceRenderer
     public const double IdleFlushAfterSec = 0.5;
 
     /// <summary>
-    /// ビートの色替えを描く光り方か（共有の色を描く: ビートで色替え・パルス・エナジー・流れる波・波紋・ストロボ、
-    /// 小さなゾーンでパルスを描く音量メーター、2 拍ごとに色の段を進めるテンポ追従）
+    /// ビートの色替えを描く光り方か（共有の色を描く: ビートで色替え・エナジー・流れる波・波紋・ストロボ、
+    /// 小さなゾーンでパルスを描く音量メーター、2 拍ごとに色の段を進めるテンポ追従）。
+    /// パルスは色を時刻でゆっくり変える（ビートで切り替えない）ので入れない
     /// </summary>
     public static bool UsesColorSteps(EffectVariant v) => v is EffectVariant.BeatHue or EffectVariant.BeatHueSlow
-        or EffectVariant.Pulse or EffectVariant.PulseSlow or EffectVariant.PulseLoudSlow
+        or EffectVariant.PulseLoudSlow
         or EffectVariant.Energy or EffectVariant.Scroll or EffectVariant.Ripple or EffectVariant.Strobe
         or EffectVariant.Meter or EffectVariant.Chase;
 

@@ -1049,7 +1049,7 @@ a4d4ce26	Özel
 975db0d4	Vuruşta renk değiştir
 6f6c9db1	Her vuruşta sonraki renge geçer, parlayıp söner
 1acb0fe4	Nabız
-3735677c	Seçilen renk basla birlikte atar ve yumuşak bir iz bırakır
+50e3646b	Basla birlikte atar ve uzun, yumuşak bir iz bırakır. Renk vuruşta değişmez, yavaşça geçiş yapar
 fac18e83	Karışım
 143bf4c6	Renkler bas, orta ve tiz seslerin gücüne göre karışır
 d47d8919	Ses seviyesi göstergesi
@@ -1642,15 +1642,15 @@ bf2c93a8	Genel ile aynı
 c7218a33	Sarı
 cc601a2e	Genel ile aynı renk
 2a367162	Tarayıcıda resim ara
-3ca8869d	Wikimedia Commons'ta bu modelin fotoğrafı bulunamadı. "Tarayıcıda resim ara" ile bir resim kopyalayıp "Kopyalanan resmi yapıştır" ile ayarlayabilirsiniz (üretici siteleri ve benzerlerindeki fotoğrafları yalnızca kendiniz için kullanın).
-3d18f014	Bir fotoğraf seçin (Wikimedia Commons fotoğrafları; yazar ve lisans kartta gösterilir). Uygun olan yoksa tarayıcıda arayıp yapıştırabilirsiniz.
-55bd56ad	Açıksa fotoğrafı olmayan cihazlar modele göre Wikimedia Commons'ta (serbestçe kullanılabilen fotoğraflar sitesi) aranır ve yalnızca açıkça aynı ürünü gösteren fotoğraflar otomatik kullanılır. Yalnızca cihaz adları gönderilir
+0d4f2878	Serbestçe kullanılabilen fotoğraf sitelerinde (Wikimedia Commons ve Openverse) bu modelin fotoğrafı bulunamadı. "Tarayıcıda resim ara" ile bir resim kopyalayıp "Kopyalanan resmi yapıştır" ile ayarlayabilirsiniz (üretici siteleri ve benzerlerindeki fotoğrafları yalnızca kendiniz için kullanın).
+02c5893e	Bir fotoğraf seçin (Wikimedia Commons ve Openverse'ten serbestçe kullanılabilen fotoğraflar; yazar ve lisans kartta gösterilir). Uygun olan yoksa tarayıcıda arayıp yapıştırabilirsiniz.
+e195c30b	Açıksa fotoğrafı olmayan cihazlar modele göre serbestçe kullanılabilen fotoğraf sitelerinde (Wikimedia Commons ve Openverse) aranır ve yalnızca açıkça aynı ürünü gösteren fotoğraflar otomatik kullanılır. Bulunamazsa 30 günde bir yeniden aranır. Yalnızca cihaz adları gönderilir
 6124e108	Sonuç bulunamayan cihazlar için karttaki resim düğmesiyle tarayıcıda bulduğunuz bir resmi yapıştırabilirsiniz
-693c6982	Bu modelin fotoğrafları Wikimedia Commons'ta (serbestçe kullanılabilen fotoğraflar sitesi) aranıyor…
+871f648b	Bu modelin fotoğrafları serbestçe kullanılabilen fotoğraf sitelerinde (Wikimedia Commons ve Openverse) aranıyor…
 6d191ffc	"{0}" fotoğrafı
 6db944ec	Model için resim aramasını açar. Beğendiğiniz resme sağ tıklayıp → "Resmi kopyala", ardından aşağıdaki "Kopyalanan resmi yapıştır"a basın
 7c80ba3a	Resim yapıştırılamadı.\n{0}
-8b4ed662	Wikimedia Commons fotoğrafının yazarı ve lisansı
+09a1ab78	Fotoğrafın yazarı ve lisansı
 a55323f3	Fotoğraf indirilemedi. Başka birini seçin ya da bir resim yapıştırın.
 aeaca01b	Cihaz fotoğraflarını internette otomatik ara
 b0dd9531	Panoda resim yok. Tarayıcıda bir resme sağ tıklayıp "Resmi kopyala"yı seçin, sonra tekrar basın.

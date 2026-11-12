@@ -1,5 +1,5 @@
 // ==================================================
-// DevicePhotos.cs - デバイスの写真を型番で探す (Wikimedia Commons の自由に使える写真。作者・ライセンスも持ってくる)
+// DevicePhotos.cs - デバイスの写真を型番で探す (Wikimedia Commons と Openverse の自由に使える写真。作者・ライセンスも持ってくる)
 // Dependencies: .NET 8 / System.Text.Json (MIT License)
 // See CREDITS.txt for full license details.
 // ==================================================
@@ -10,18 +10,26 @@ using System.Text.RegularExpressions;
 
 namespace ProFanController;
 
-/// <summary>写真の候補 1 枚（Wikimedia Commons のファイル）</summary>
+/// <summary>写真の候補 1 枚（Wikimedia Commons のファイル、または Openverse の画像）</summary>
 public sealed record PhotoCandidate(string Title, string ThumbUrl, string ImageUrl, string PageUrl, string Author, string License, int Score);
 
+/// <summary>探した結果。Complete が false なら、つながらなかったサイトがある（あとで探し直す）</summary>
+public sealed record PhotoSearchResult(IReadOnlyList<PhotoCandidate> Found, bool Complete);
+
 /// <summary>
-/// デバイスの写真を、型番で Wikimedia Commons から探す。Commons の写真は自由に使えるライセンス（CC BY-SA など）なので、
-/// 作者とライセンスを一緒に保存して画面に出す。メーカーの製品写真や画像検索の結果は自動では使わない（著作権・利用規約のため。
-/// 利用者が自分でブラウザから貼り付けるのは自由）。
+/// デバイスの写真を、型番で Wikimedia Commons と Openverse（Flickr などの、自由に使えるライセンスの写真を集めた検索）から探す。
+/// どちらも自由に使えるライセンス（CC BY-SA など）の写真だけなので、作者とライセンスを一緒に保存して画面に出す。
+/// メーカーの製品写真や画像検索の結果は自動では使わない（著作権・利用規約のため。利用者が自分でブラウザから貼り付けるのは自由）。
 /// 送るのはデバイスの名前（型番）だけ
 /// </summary>
 public static class DevicePhotos
 {
     private const string Api = "https://commons.wikimedia.org/w/api.php";
+    private const string OpenverseApi = "https://api.openverse.org/v1/images/";
+    /// <summary>Openverse で使ってよいライセンス（Commons と同じく、改変・再配布できるもの。NC・ND は使わない）</summary>
+    private const string OpenverseLicenses = "cc0,pdm,by,by-sa";
+    /// <summary>写真が見つからなかったデバイスを、この日数がたったら探し直す（あとから写真が増えることがある）</summary>
+    public const int ResearchDays = 30;
     /// <summary>1 枚の写真の大きさの上限（バイト）</summary>
     public const int MaxImageBytes = 15 * 1024 * 1024;
     /// <summary>画面に出す大きさ（横のピクセル）</summary>
@@ -66,13 +74,23 @@ public static class DevicePhotos
     /// </summary>
     public static int Score(string title, string deviceName)
     {
-        string t = Normalize(title);
+        string t = Normalize(SplitTier(title));
         var keys = KeyTerms(deviceName);
         if (keys.Count == 0) return 0;
         foreach (var k in keys)
             if (!Variants(k).Any(v => ContainsWord(t, Normalize(v)))) return 0;
+        // 型番の格の言葉（Ti・Pro など）が片方にしかなければ別の製品（"980" の SSD と "980 PRO"、"5070 Ti" と "5070"）
+        string d = Normalize(SplitTier(deviceName));
+        foreach (var w in TierWords)
+            if (ContainsWord(t, w) != ContainsWord(d, w)) return 0;
         return Terms(deviceName).Count(w => ContainsWord(t, Normalize(w)));
     }
+
+    /// <summary>"5070Ti" → "5070 Ti"（数字にくっついた格の言葉を分ける）</summary>
+    private static string SplitTier(string s) => Regex.Replace(s, @"(\d)(Ti|Super|XTX|XT|GRE)\b", "$1 $2", RegexOptions.IgnoreCase);
+
+    /// <summary>同じ数字の型番で、別の製品になる言葉（グラボの格・SSD やマザーボードの上位版など）</summary>
+    private static readonly string[] TierWords = { "ti", "super", "xt", "xtx", "gre", "pro", "plus", "evo", "max" };
 
     /// <summary>
     /// 型番の言い換え: CPU の末尾の F（内蔵 GPU なし）は同じ写真でよいので、"245KF" は "245K" でも合う
@@ -120,12 +138,36 @@ public static class DevicePhotos
     public static bool IsConfident(PhotoCandidate c, string deviceName)
         => c.Score >= KeyTerms(deviceName).Count + 1;
 
-    /// <summary>候補を探す（よく合うものから並べる。合わないものは入れない）</summary>
-    public static async Task<IReadOnlyList<PhotoCandidate>> SearchAsync(string deviceName, CancellationToken ct)
+    /// <summary>前に探したのが last（探していなければ null）のデバイスを、いま探すか（ResearchDays ごとに探し直す）</summary>
+    public static bool IsSearchDue(DateTime? last, DateTime now) => last is not { } t || now - t >= TimeSpan.FromDays(ResearchDays) || t > now;
+
+    /// <summary>
+    /// Commons と Openverse を同時に探して、候補をよく合う順に並べる（合わないものは入れない）。
+    /// 片方につながらなくても、もう片方の候補は返す（Complete = false）。両方ともつながらなければ例外
+    /// </summary>
+    public static async Task<PhotoSearchResult> SearchAsync(string deviceName, CancellationToken ct)
     {
-        var terms = Terms(deviceName);
-        if (KeyTerms(deviceName).Count == 0) return Array.Empty<PhotoCandidate>();
-        string query = string.Join(' ', terms);
+        if (KeyTerms(deviceName).Count == 0) return new(Array.Empty<PhotoCandidate>(), true);
+        var commons = SearchCommonsAsync(deviceName, ct);
+        var openverse = SearchOpenverseAsync(deviceName, ct);
+        try { await Task.WhenAll(commons, openverse).ConfigureAwait(false); }
+        catch (Exception) when (commons.IsCompletedSuccessfully || openverse.IsCompletedSuccessfully) { }
+        var found = new List<PhotoCandidate>();
+        if (commons.IsCompletedSuccessfully) found.AddRange(commons.Result);
+        if (openverse.IsCompletedSuccessfully) found.AddRange(openverse.Result);
+        return new(Merge(found), commons.IsCompletedSuccessfully && openverse.IsCompletedSuccessfully);
+    }
+
+    /// <summary>候補をまとめる: 同じ画像（URL）は 1 つに、よく合う順（同じなら先に入れたもの = Commons を先に）</summary>
+    public static IReadOnlyList<PhotoCandidate> Merge(IEnumerable<PhotoCandidate> candidates)
+        => candidates.Select((c, i) => (c, i))
+            .GroupBy(x => x.c.ImageUrl, StringComparer.Ordinal).Select(g => g.First())
+            .OrderByDescending(x => x.c.Score).ThenBy(x => x.i)
+            .Select(x => x.c).ToList();
+
+    private static async Task<IReadOnlyList<PhotoCandidate>> SearchCommonsAsync(string deviceName, CancellationToken ct)
+    {
+        string query = string.Join(' ', Terms(deviceName));
         string url = Api + "?action=query&format=json&generator=search&gsrnamespace=6&gsrlimit=20"
                      + "&prop=imageinfo&iiprop=url|extmetadata|mime|size&iiextmetadatafilter=Artist|LicenseShortName"
                      + $"&iiurlwidth={ImageWidth}&gsrsearch={Uri.EscapeDataString(query)}";
@@ -168,7 +210,67 @@ public static class DevicePhotos
         return list.OrderByDescending(c => c.Score).ThenBy(c => c.Title, StringComparer.Ordinal).ToList();
     }
 
-    /// <summary>画像を取ってくる（Commons の画像・利用者が貼り付けた URL）。大きすぎるもの・画像でないものは null</summary>
+    // ---------------------------------------------------------------------
+    // Openverse（https://openverse.org: Flickr などの CC ライセンスの写真をまとめて探せる。キーは要らない）
+    // ---------------------------------------------------------------------
+
+    private static async Task<IReadOnlyList<PhotoCandidate>> SearchOpenverseAsync(string deviceName, CancellationToken ct)
+    {
+        string query = string.Join(' ', Terms(deviceName));
+        // Commons の写真は上で探しているので外す（同じ写真が 2 つ並ばないように）
+        string url = OpenverseApi + $"?q={Uri.EscapeDataString(query)}&page_size=20&license={OpenverseLicenses}&excluded_source=wikimedia&mature=false";
+        using var res = await Http.GetAsync(url, ct).ConfigureAwait(false);
+        res.EnsureSuccessStatusCode();
+        await using var stream = await res.Content.ReadAsStreamAsync(ct).ConfigureAwait(false);
+        using var doc = await JsonDocument.ParseAsync(stream, cancellationToken: ct).ConfigureAwait(false);
+        return ParseOpenverse(doc.RootElement, deviceName);
+    }
+
+    /// <summary>Openverse の返事から候補を作る（テストでも使う）。Commons と同じ決まりで、型番が合う写真だけ</summary>
+    public static IReadOnlyList<PhotoCandidate> ParseOpenverse(JsonElement root, string deviceName)
+    {
+        var list = new List<PhotoCandidate>();
+        if (!root.TryGetProperty("results", out var results) || results.ValueKind != JsonValueKind.Array) return list;
+        foreach (var r in results.EnumerateArray())
+        {
+            if (r.TryGetProperty("mature", out var m) && m.ValueKind == JsonValueKind.True) continue;
+            if (Str(r, "source").Equals("wikimedia", StringComparison.OrdinalIgnoreCase)) continue;
+            string license = OpenverseLicense(Str(r, "license"), Str(r, "license_version"));
+            if (license.Length == 0) continue;   // NC・ND など、使わないライセンス
+            string mime = Str(r, "filetype").ToLowerInvariant() switch
+            {
+                "jpg" or "jpeg" => "image/jpeg", "png" => "image/png", "webp" => "image/webp", "" => "", _ => "other",
+            };
+            if (mime == "other") continue;   // GIF・SVG など
+            string title = Str(r, "title");
+            int width = r.TryGetProperty("width", out var wv) && wv.ValueKind == JsonValueKind.Number ? wv.GetInt32() : 0;
+            int height = r.TryGetProperty("height", out var hv) && hv.ValueKind == JsonValueKind.Number ? hv.GetInt32() : 0;
+            if (IsUnsuitableTitle(title) || IsVideoFrame(mime, width, height)) continue;
+            int score = Score(title, deviceName);
+            if (score == 0) continue;
+            // 画像は Openverse の縮小画像（api.openverse.org）から取る。元の画像の置き場所（Flickr など、いろいろなサイト）へは
+            // 問い合わせない（アプリが通信する先を、プライバシーポリシーに書いた所だけにするため）
+            string thumb = Str(r, "thumbnail"), page = Str(r, "foreign_landing_url");
+            if (!IsOpenverseUrl(thumb) || !IsHttps(page)) continue;
+            list.Add(new PhotoCandidate(title.Trim(), thumb, thumb, page, StripHtml(Str(r, "creator")), license, score));
+        }
+        return list.OrderByDescending(c => c.Score).ThenBy(c => c.Title, StringComparer.Ordinal).ToList();
+    }
+
+    /// <summary>Openverse のライセンス（"by-sa" と "2.0"）を表示の形（"CC BY-SA 2.0"）に。使わないライセンスなら ""</summary>
+    public static string OpenverseLicense(string license, string version) => license.ToLowerInvariant() switch
+    {
+        "cc0" => "CC0 " + (version.Length > 0 ? version : "1.0"),
+        "pdm" => "Public Domain Mark",
+        "by" or "by-sa" => ("CC " + license.ToUpperInvariant() + " " + version).Trim(),
+        _ => "",
+    };
+
+    private static bool IsHttps(string url) => Uri.TryCreate(url, UriKind.Absolute, out var u) && u.Scheme == Uri.UriSchemeHttps;
+
+    private static bool IsOpenverseUrl(string url) => Uri.TryCreate(url, UriKind.Absolute, out var u) && u.Scheme == Uri.UriSchemeHttps && u.Host == "api.openverse.org";
+
+    /// <summary>画像を取ってくる（Commons・Openverse の画像・利用者が貼り付けた URL）。大きすぎるもの・画像でないものは null</summary>
     public static async Task<byte[]?> DownloadAsync(string url, CancellationToken ct)
     {
         if (!Uri.TryCreate(url, UriKind.Absolute, out var uri) || uri.Scheme is not ("https" or "http")) return null;

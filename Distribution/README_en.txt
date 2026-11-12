@@ -13,6 +13,14 @@ and Iris, the rainbow (the LEDs).
   for example: Settings [設定].
 
 
+■ What's new in v6.14.4
+  - Music sync: "Pulse" [パルス] now looks clearly different from "Beat color change" [ビートで色替え]: its color no longer
+    switches on the beat but shifts slowly, and its afterglow lasts longer.
+  - Device photos are now also looked up on Openverse (a search for freely usable photos), not only Wikimedia Commons.
+    Devices with no photo found are searched again every 30 days.
+  - Photos of a different product with the same model number (such as "980" vs "980 PRO", "5070" vs "5070 Ti") are no
+    longer used.
+
 ■ What's new in v6.14.3
   - The logo at the top left of the window no longer has the dark square behind it; only the artwork's light shows.
   - "Remembered songs" on the Lighting page [ライティング] now goes up as soon as a song is remembered, even while the page

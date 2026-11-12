@@ -4,7 +4,7 @@ Zeph-Iris は、あなたの PC の中で動きます。アカウント・テレ
 
 アプリが自分から通信するのは、次の 2 つだけです:
 - GitHub（api.github.com）: 新しい版があるかを確かめる（1 日 1 回まで）。止め方: 設定 →「新しい版を自動で確かめる」
-- Wikimedia Commons（commons.wikimedia.org）: 部品の型番で、部品の写真を探す。止め方: デバイス →「デバイスの写真をネットで自動で探す」
+- Wikimedia Commons（commons.wikimedia.org）と Openverse（api.openverse.org）: 部品の型番で、部品の写真を探す。止め方: デバイス →「デバイスの写真をネットで自動で探す」
 
 スマホ通知（ntfy）・スマホやブラウザーからの操作・AI の助言（Ollama）・OpenRGB の LED は、自分で設定するまで何もしません。
 「不具合を報告…」は、PC の中で zip を作って GitHub の報告ページを開くだけで、自動では何も送りません。

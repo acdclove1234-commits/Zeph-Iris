@@ -114,8 +114,8 @@ public static class EffectCatalog
     /// <summary>光り方を作る（デバイスごとに 1 回だけ。毎コマは作らない）</summary>
     public static IMusicEffect Create(EffectVariant v) => v switch
     {
-        EffectVariant.Pulse => new PulseEffect(),
-        EffectVariant.PulseSlow => new PulseEffect(slow: true),
+        EffectVariant.Pulse => new PulseEffect(steadyColor: true),
+        EffectVariant.PulseSlow => new PulseEffect(slow: true, steadyColor: true),
         EffectVariant.PulseLoudSlow => new PulseEffect(slow: true, source: PulseEffect.Source.Loudness),
         EffectVariant.BeatHueSlow => new BeatHueEffect(slow: true),
         EffectVariant.Spectrum => new SpectrumEffect(),

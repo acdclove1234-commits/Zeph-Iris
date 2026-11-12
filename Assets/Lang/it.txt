@@ -1049,7 +1049,7 @@ a4d4ce26	Personalizzato
 975db0d4	Cambio colore a ritmo
 6f6c9db1	A ogni battito passa al colore successivo, si accende di colpo e svanisce
 1acb0fe4	Pulsazione
-3735677c	Il colore scelto pulsa con i bassi e lascia un morbido bagliore residuo
+50e3646b	Pulsa con i bassi e lascia un lungo e morbido bagliore residuo. Il colore non cambia a ritmo, ma si trasforma lentamente
 fac18e83	Mix
 143bf4c6	I colori si mescolano in base all'intensità di bassi, medi e alti
 d47d8919	VU meter
@@ -1642,15 +1642,15 @@ bf2c93a8	Come in generale
 c7218a33	Giallo
 cc601a2e	Stesso colore generale
 2a367162	Cerca immagini nel browser
-3ca8869d	Su Wikimedia Commons non è stata trovata nessuna foto di questo modello. Copia un'immagine con «Cerca immagini nel browser» e impostala con «Incolla immagine copiata» (usa le foto dei siti dei produttori e simili solo per te).
-3d18f014	Scegli una foto (foto di Wikimedia Commons; autore e licenza sono mostrati sulla scheda). Se nessuna va bene, puoi anche cercare nel browser e incollare.
-55bd56ad	Se attivo, i dispositivi senza foto vengono cercati per modello su Wikimedia Commons (un sito di foto di libero utilizzo) e vengono usate automaticamente solo le foto che mostrano chiaramente lo stesso prodotto. Vengono inviati solo i nomi dei dispositivi
+0d4f2878	Sui siti di foto di libero utilizzo (Wikimedia Commons e Openverse) non è stata trovata nessuna foto di questo modello. Copia un'immagine con «Cerca immagini nel browser» e impostala con «Incolla immagine copiata» (usa le foto dei siti dei produttori e simili solo per te).
+02c5893e	Scegli una foto (foto di libero utilizzo da Wikimedia Commons e Openverse; autore e licenza sono mostrati sulla scheda). Se nessuna va bene, puoi anche cercare nel browser e incollare.
+e195c30b	Se attivo, i dispositivi senza foto vengono cercati per modello su siti di foto di libero utilizzo (Wikimedia Commons e Openverse) e vengono usate automaticamente solo le foto che mostrano chiaramente lo stesso prodotto. Se non si trova nulla, la ricerca viene ripetuta ogni 30 giorni. Vengono inviati solo i nomi dei dispositivi
 6124e108	Per i dispositivi senza risultato, usa il pulsante immagine della scheda per incollare un'immagine trovata nel browser
-693c6982	Ricerca di foto di questo modello su Wikimedia Commons (un sito di foto di libero utilizzo)…
+871f648b	Ricerca di foto di questo modello su siti di foto di libero utilizzo (Wikimedia Commons e Openverse)…
 6d191ffc	Foto di «{0}»
 6db944ec	Apre una ricerca di immagini del modello. Fai clic destro su un'immagine che ti piace → «Copia immagine», poi premi «Incolla immagine copiata» qui sotto
 7c80ba3a	Impossibile incollare l'immagine.\n{0}
-8b4ed662	Autore e licenza della foto di Wikimedia Commons
+09a1ab78	Autore e licenza della foto
 a55323f3	Impossibile scaricare la foto. Scegline un'altra o incolla un'immagine.
 aeaca01b	Cerca automaticamente online le foto dei dispositivi
 b0dd9531	Negli appunti non c'è nessuna immagine. Nel browser fai clic destro su un'immagine, scegli «Copia immagine» e premi di nuovo.

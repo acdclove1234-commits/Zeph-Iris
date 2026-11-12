@@ -139,9 +139,9 @@ public static class LightingReviewTests
 
     public static void TestGpuReceivesEveryColourStep()
     {
-        // 自動（ビートで色替え・パルスの遅い版）: どの色替えも、差が小さくてもグラボに届く。
-        // （「激しい」のパルスは小節の頭の強調が少しずつ消えるので、消え残りのわずかな差（12 以下）は数えない）
-        foreach (var style in new[] { MusicStyles.BeatHue, MusicStyles.Pulse })
+        // 自動（ビートで色替えの遅い版）: どの色替えも、差が小さくてもグラボに届く。
+        // （パルスは色をビートで切り替えず、時刻でゆっくり変えるので、ここでは数えない）
+        foreach (var style in new[] { MusicStyles.BeatHue })
         foreach (var intensity in new[] { Intensities.Moderate, Intensities.Intense })
         foreach (var dev in new[] { Pny(), Rx() })
         {

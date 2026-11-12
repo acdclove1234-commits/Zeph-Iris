@@ -5,6 +5,7 @@
 // ==================================================
 
 using System.Collections.ObjectModel;
+using System.Net.Http;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -166,7 +167,7 @@ public partial class MainWindow
         foreach (var i in bad)
         {
             Config.DeviceImages.Remove(i);
-            Config.DevicePhotoSearched.Remove(i.DeviceKey);
+            Config.DevicePhotoSearchedAt.Remove(i.DeviceKey);
             Logger.Info($"製品の写真ではない画像を外しました（{i.DeviceKey}）: {i.SourceUrl}");
         }
         if (bad.Count > 0) ScheduleCommit();
@@ -198,7 +199,7 @@ public partial class MainWindow
     }
 
     // =====================================================================
-    // 写真を探す（Wikimedia Commons）
+    // 写真を探す（Wikimedia Commons・Openverse）
     // =====================================================================
 
     private void OnDevicePhotoSwitchClick(object sender, RoutedEventArgs e)
@@ -209,13 +210,15 @@ public partial class MainWindow
     }
 
     /// <summary>
-    /// 画像のないデバイスの写真を、型番で自動で探す（デバイスごとに 1 回だけ）。確かに同じ製品と分かる写真があれば使い、
-    /// なければイラストのまま（カードの「画像を変更」から候補を見たり、貼り付けたりできる）
+    /// 画像のないデバイスの写真を、型番で自動で探す（見つからなければ DevicePhotos.ResearchDays 日ごとに探し直す）。
+    /// 確かに同じ製品と分かる写真があれば使い、なければイラストのまま（カードの「画像を変更」から候補を見たり、貼り付けたりできる）
     /// </summary>
     private async Task AutoFindPhotosAsync()
     {
         if (!Config.AutoDevicePhotos || _photoSearchRunning) return;
-        var todo = _deviceCards.Where(c => c.Image is null && !Config.DevicePhotoSearched.Contains(c.Info.Key)).ToList();
+        var now = DateTime.Now;
+        var todo = _deviceCards.Where(c => c.Image is null
+            && DevicePhotos.IsSearchDue(Config.DevicePhotoSearchedAt.TryGetValue(c.Info.Key, out var t) ? t : null, now)).ToList();
         if (todo.Count == 0) return;
         _photoSearchRunning = true;
         try
@@ -224,20 +227,34 @@ public partial class MainWindow
             {
                 PhotoCandidate? best = null;
                 byte[]? bytes = null;
+                bool complete;
                 try
                 {
                     using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(30));
-                    var found = await DevicePhotos.SearchAsync(card.Name, cts.Token);
-                    best = found.FirstOrDefault(c => DevicePhotos.IsConfident(c, card.Name));
-                    if (best is not null) bytes = await DevicePhotos.DownloadAsync(best.ImageUrl, cts.Token);
+                    var result = await DevicePhotos.SearchAsync(card.Name, cts.Token);
+                    complete = result.Complete;
+                    // 自動で使う写真は、よく合う順に、取ってこられたものを使う（1 枚目のサイトが重いときも次を試す）
+                    foreach (var c in result.Found.Where(c => DevicePhotos.IsConfident(c, card.Name)).Take(3))
+                    {
+                        try { bytes = await DevicePhotos.DownloadAsync(c.ImageUrl, cts.Token); }
+                        catch (HttpRequestException) { bytes = null; }
+                        if (bytes is not null) { best = c; break; }
+                    }
                 }
                 catch (Exception ex)
                 {
-                    // つながらないときは、次に起動したときにもう一度探す（探し終えた印を付けない）
+                    // つながらないときは、次に起動したときにもう一度探す（探した印を付けない）
                     Logger.Info($"デバイスの写真を探せません（{card.Name}）: {ex.Message}");
                     continue;
                 }
-                Config.DevicePhotoSearched.Add(card.Info.Key);
+                // 一部のサイトにつながらず、写真も見つからなかったときは、次に起動したときにもう一度探す
+                if (best is null && !complete)
+                {
+                    Logger.Info($"デバイスの写真: 一部のサイトにつながらなかったので、あとで探し直します（{card.Name}）");
+                    continue;
+                }
+                Config.DevicePhotoSearchedAt[card.Info.Key] = DateTime.Now;
+                if (best is null) Logger.Info($"デバイスの写真: 同じ製品と分かる写真はありませんでした（{card.Name}）。{DevicePhotos.ResearchDays} 日後に探し直します");
                 if (best is not null && bytes is not null && DevicePhotos.ImageExtension(bytes) is { } ext
                     && card.Image is null && _deviceCards.Contains(card))
                 {
@@ -267,7 +284,7 @@ public partial class MainWindow
         };
         var root = new DockPanel { Margin = new Thickness(18) };
         var status = new TextBlock { TextWrapping = TextWrapping.Wrap, Foreground = (Brush)FindResource("SubTextBrush"), Margin = new Thickness(0, 0, 0, 10) };
-        status.Text = L("Wikimedia Commons（自由に使える写真の共有サイト）で、型番の写真を探しています…");
+        status.Text = L("自由に使える写真の共有サイト（Wikimedia Commons と Openverse）で、型番の写真を探しています…");
         DockPanel.SetDock(status, Dock.Top);
         root.Children.Add(status);
 
@@ -305,13 +322,13 @@ public partial class MainWindow
             try
             {
                 using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(30));
-                var found = await DevicePhotos.SearchAsync(card.Name, cts.Token);
+                var found = (await DevicePhotos.SearchAsync(card.Name, cts.Token)).Found;
                 if (found.Count == 0)
                 {
-                    status.Text = L("Wikimedia Commons に、この型番の写真は見つかりませんでした。「ブラウザーで画像を探す」で画像をコピーして、「コピーした画像を貼り付け」で設定できます（メーカーのサイトの写真などは、自分で見るためだけに使ってください）。");
+                    status.Text = L("自由に使える写真の共有サイト（Wikimedia Commons と Openverse）に、この型番の写真は見つかりませんでした。「ブラウザーで画像を探す」で画像をコピーして、「コピーした画像を貼り付け」で設定できます（メーカーのサイトの写真などは、自分で見るためだけに使ってください）。");
                     return;
                 }
-                status.Text = L("使う写真を選んでください（Wikimedia Commons の写真です。作者とライセンスはカードに表示します）。見つからなければ、ブラウザーで探して貼り付けることもできます。");
+                status.Text = L("使う写真を選んでください（Wikimedia Commons と Openverse の、自由に使える写真です。作者とライセンスはカードに表示します）。見つからなければ、ブラウザーで探して貼り付けることもできます。");
                 foreach (var c in found.Take(12)) list.Children.Add(PhotoTile(c, async () =>
                 {
                     status.Text = L("写真を取ってきています…");

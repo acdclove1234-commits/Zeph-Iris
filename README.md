@@ -153,7 +153,7 @@ Press **Report a problem…** at the bottom of the sidebar (or in the tray icon'
 
 ## Privacy and code signing
 
-- [Privacy policy](PRIVACY.md): no account and no telemetry. On its own the app only contacts GitHub (update check) and Wikimedia Commons (device photos), and both can be turned off.
+- [Privacy policy](PRIVACY.md): no account and no telemetry. On its own the app only contacts GitHub (update check) and Wikimedia Commons and Openverse (device photos), and both can be turned off.
 - [Code signing policy](CODE_SIGNING.md): releases will be signed through SignPath once the application is accepted.
 
 ## Thanks

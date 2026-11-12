@@ -1,5 +1,5 @@
 // ==================================================
-// PulseEffect.cs - 光り方 E1「パルス」 (選んだ色が低音に合わせて脈打ち、ふわっと残光が残る)
+// PulseEffect.cs - 光り方 E1「パルス」 (色はゆっくり移り変わり、低音に合わせてふくらむように脈打つ)
 // Dependencies: .NET 8 (MIT License)
 // See CREDITS.txt for full license details.
 // ==================================================
@@ -11,11 +11,19 @@ namespace ProFanController;
 ///   I = max(低音 BassE, ビートの光 Fl)
 ///   G = max(I, 前のコマの G × exp(−dt/τg))   … 残光（τg = 0.25 秒。遅いデバイスは 0.45 秒）
 ///   色 = いまの色（ビートで進む）× Ilin(G)
+/// 光り方「パルス」として使うとき（steadyColor）は、「ビートで色替え」と見分けがつくように:
+///   色はビートで切り替えず、時刻でゆっくり移り変わる（パレットの 1 色ぶんに ColorHoldSec 秒。全デバイスで同じ色）
+///   残光を長くする（τg = SwellGlowSec 秒。遅いデバイスは SlowSwellGlowSec 秒）。光り始めは拍に遅れないよう、すぐ明るくする
 /// 「激しい」では、小節の頭のビートで白へ 0.4 × Fl だけ寄せる（OKLab で混ぜる）。
-/// 音量メーター・流れる波・波紋の「小さいゾーン」用の代わりとしても使う（音量で光る・色を外から決める）
+/// 音量メーター・流れる波・波紋の「小さいゾーン」用の代わりとしても使う（音量で光る・色を外から決める。色はビートで進む）
 /// </summary>
 public sealed class PulseEffect : IMusicEffect
 {
+    /// <summary>光り方「パルス」で、パレットの 1 色ぶん進むのにかける秒数</summary>
+    public const double ColorHoldSec = 8.0;
+    /// <summary>光り方「パルス」の残光の時定数（秒）</summary>
+    public const double SwellGlowSec = 0.40;
+    public const double SlowSwellGlowSec = 0.55;
     /// <summary>何に合わせて明るくするか</summary>
     public enum Source
     {
@@ -37,16 +45,22 @@ public sealed class PulseEffect : IMusicEffect
     public const float DownbeatWhiteMix = 0.4f;
 
     private readonly bool _slow;
+    private readonly bool _steady;
     private readonly Source _source;
     private float _g;        // 残光
     private float _att;      // 立ち上がりを遅らせた強さ（遅いデバイス）
     private LinColor _color; // このコマの色
 
-    public PulseEffect(bool slow = false, Source source = Source.Bass)
+    /// <param name="steadyColor">光り方「パルス」として使う（色を時刻でゆっくり変え、ふくらむように光る）。小さいゾーン用の代わりは false</param>
+    public PulseEffect(bool slow = false, Source source = Source.Bass, bool steadyColor = false)
     {
         _slow = slow;
         _source = source;
+        _steady = steadyColor;
     }
+
+    /// <summary>光り方「パルス」として使っている（色がビートで切り替わらない）</summary>
+    public bool SteadyColor => _steady;
 
     public string Name => MusicStyles.Pulse;
 
@@ -65,7 +79,7 @@ public sealed class PulseEffect : IMusicEffect
     public void Update(EffectContext c)
     {
         var f = c.Frame;
-        double tau = _slow ? SlowGlowTauSec : GlowTauSec;
+        double tau = _steady ? (_slow ? SlowSwellGlowSec : SwellGlowSec) : _slow ? SlowGlowTauSec : GlowTauSec;
         float now, peak;
         // 今の値は、本当の時刻（分析結果の時刻）からの経過時間だけ減らしておく（古い値を何度も拾い直さない）
         float age = (float)Math.Exp(-(c.T - c.FrameTime) / tau);
@@ -91,9 +105,15 @@ public sealed class PulseEffect : IMusicEffect
         float i = Math.Max(x, Math.Max(c.Fl, flPeak));
         _g = Math.Max(i, _g * EffectContext.Decay(c.Dt, tau));
 
-        if (ColorOverride is LinColor over) _color = over;
-        else if (c.Music.DownbeatAccent && c.Downbeat && c.Fl > 0)
-            _color = OkLab.ToLed(Lab.Lerp(c.ColorLabAt(0), Lab.White, DownbeatWhiteMix * c.Fl), c.Gamma);
+        if (ColorOverride is LinColor over) { _color = over; return; }
+        bool accent = c.Music.DownbeatAccent && c.Downbeat && c.Fl > 0;
+        if (_steady)
+        {
+            // 色はビートで切り替えず、時刻でゆっくり移り変わる（どのデバイスも同じ時刻なので同じ色）
+            double pos = c.T / ColorHoldSec * c.Pal.Step;
+            _color = accent ? OkLab.ToLed(Lab.Lerp(c.Pal.LabAt(pos), Lab.White, DownbeatWhiteMix * c.Fl), c.Gamma) : c.PalAt(pos);
+        }
+        else if (accent) _color = OkLab.ToLed(Lab.Lerp(c.ColorLabAt(0), Lab.White, DownbeatWhiteMix * c.Fl), c.Gamma);
         else _color = c.ColorAt(0);
     }
 

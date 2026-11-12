@@ -45,10 +45,10 @@ e3edb67b	削除	MainWindow.xaml:563
 b4255600	直近 10 分 ／ 実線 = 温度（左軸） ・ 破線 = 回転数（右軸）	MainWindow.xaml:605
 0a88e8cb	リアルタイム	MainWindow.xaml:606
 c5ebcb9c	ファン / ポンプ（クリックでカーブを編集）	MainWindow.xaml:629
-55bd56ad	オンなら、写真のないデバイスを型番で Wikimedia Commons（自由に使える写真の共有サイト）から探し、同じ製品と分かる写真だけ自動で使います。送るのはデバイスの名前だけです	MainWindow.xaml:693
+e195c30b	オンなら、写真のないデバイスを型番で、自由に使える写真の共有サイト（Wikimedia Commons と Openverse）から探し、同じ製品と分かる写真だけ自動で使います。見つからなければ 30 日ごとに探し直します。送るのはデバイスの名前だけです	MainWindow.xaml:693
 aeaca01b	デバイスの写真をネットで自動で探す	MainWindow.xaml:695
 6124e108	見つからないデバイスは、カードの画像のボタンから、ブラウザーで探した画像を貼り付けられます	MainWindow.xaml:696
-8b4ed662	Wikimedia Commons の写真の作者とライセンス	MainWindow.xaml:718
+09a1ab78	写真の作者とライセンス	MainWindow.xaml:718
 a7377177	回転中のファンの数	MainWindow.xaml:723
 0ee2f2ba	画像を変更	MainWindow.xaml:728
 1606ea26	センサーを表示	MainWindow.xaml:730
@@ -779,17 +779,17 @@ e0338723	- なし（いまの設定のままで問題ありません）	Core/Adv
 b0bc7eac	目標温度 {0:F0}°C	Core/Advisor.cs:321
 7d5e41f2	固定 {0:F0}%	Core/Advisor.cs:322
 f87c3ac9	他のファンに連動	Core/Advisor.cs:323
-1b56d605	config.json が空です。	Core/AppConfig.cs:106
-c8d58466	標準	Core/AppConfig.cs:160
-52ed0fe4	最大値	Core/AppConfig.cs:595
-91302315	差分	Core/AppConfig.cs:598
-8e4f9981	起動時	Core/AppConfig.cs:1425
-b6d7dbf8	自動	Core/AppConfig.cs:1426
-ae81cf8d	手動	Core/AppConfig.cs:1427
-7aebcb13	読み込み前	Core/AppConfig.cs:1428
-44fc16c5	部品交換の対応付け前	Core/AppConfig.cs:1429
-f32b8618	復元前	Core/AppConfig.cs:1430
-4db25563	{0:yyyy/MM/dd HH:mm}（{1}）	Core/AppConfig.cs:1438
+1b56d605	config.json が空です。	Core/AppConfig.cs:109
+c8d58466	標準	Core/AppConfig.cs:165
+52ed0fe4	最大値	Core/AppConfig.cs:600
+91302315	差分	Core/AppConfig.cs:603
+8e4f9981	起動時	Core/AppConfig.cs:1430
+b6d7dbf8	自動	Core/AppConfig.cs:1431
+ae81cf8d	手動	Core/AppConfig.cs:1432
+7aebcb13	読み込み前	Core/AppConfig.cs:1433
+44fc16c5	部品交換の対応付け前	Core/AppConfig.cs:1434
+f32b8618	復元前	Core/AppConfig.cs:1435
+4db25563	{0:yyyy/MM/dd HH:mm}（{1}）	Core/AppConfig.cs:1443
 7dc6c4d8	ワンタッチ静音	Core/AppController.cs:97
 c7f7bdf4	自動: {0}	Core/AppController.cs:98
 ab7eac67	ブースト中（残り {0}）	Core/AppController.cs:120
@@ -1209,7 +1209,7 @@ a4d4ce26	カスタム	Core/Rgb/MusicTuning.cs:82
 975db0d4	ビートで色替え	Core/Rgb/MusicTuning.cs:329
 6f6c9db1	ビートのたびに次の色へ切り替わり、ぱっと光って消えていく	Core/Rgb/MusicTuning.cs:329
 1acb0fe4	パルス	Core/Rgb/MusicTuning.cs:330
-3735677c	選んだ色が低音に合わせて脈打ち、ふわっと残光が残る	Core/Rgb/MusicTuning.cs:330
+50e3646b	低音に合わせて脈打ち、ふわっと長く残光が残る。色はビートでは変わらず、ゆっくり移り変わる	Core/Rgb/MusicTuning.cs:330
 fac18e83	ミックス	Core/Rgb/MusicTuning.cs:331
 143bf4c6	低音・中音・高音の強さで色が混ざる	Core/Rgb/MusicTuning.cs:331
 d47d8919	音量メーター	Core/Rgb/MusicTuning.cs:332
@@ -1353,27 +1353,27 @@ e158d65b	・追加した直後は「このツールで制御する」がオフ�
 d66864fa	ケース内	MainWindow.Dashboard.cs:37
 1eef08cf	編集を終了	MainWindow.Dashboard.cs:155
 653d9443	カードは最低 1 枚必要です。	MainWindow.Dashboard.cs:188
-d57e0ef7	写真: {0}（{1}）	MainWindow.Devices.cs:49
-e2890741	作者不明	MainWindow.Devices.cs:49
-e29499f3	ネットで写真を探す…	MainWindow.Devices.cs:86
-ed0f43c5	コピーした画像を貼り付け	MainWindow.Devices.cs:87
-b3cec96e	ファイルから選ぶ…	MainWindow.Devices.cs:88
-44dceb5c	イラストに戻す	MainWindow.Devices.cs:89
-30ef4ec2	「{0}」の画像を選ぶ	MainWindow.Devices.cs:97
-3d493cb5	画像ファイル (*.png;*.jpg;*.jpeg;*.bmp;*.webp)|*.png;*.jpg;*.jpeg;*.bmp;*.webp	MainWindow.Devices.cs:98
-927e8083	画像を設定できませんでした。\n{0}	MainWindow.Devices.cs:113
-b0dd9531	クリップボードに画像がありません。ブラウザーで画像を右クリックして「画像をコピー」を選んでから、もう一度押してください。	MainWindow.Devices.cs:146
-7c80ba3a	画像を貼り付けられませんでした。\n{0}	MainWindow.Devices.cs:155
-6d191ffc	「{0}」の写真	MainWindow.Devices.cs:264
-693c6982	Wikimedia Commons（自由に使える写真の共有サイト）で、型番の写真を探しています…	MainWindow.Devices.cs:270
-2a367162	ブラウザーで画像を探す	MainWindow.Devices.cs:283
-6db944ec	型番で画像検索を開きます。気に入った画像を右クリック →「画像をコピー」して、下の「コピーした画像を貼り付け」を押してください	MainWindow.Devices.cs:284
-3ca8869d	Wikimedia Commons に、この型番の写真は見つかりませんでした。「ブラウザーで画像を探す」で画像をコピーして、「コピーした画像を貼り付け」で設定できます（メーカーのサイトの写真などは、自分で見るためだけに使ってください）。	MainWindow.Devices.cs:311
-3d18f014	使う写真を選んでください（Wikimedia Commons の写真です。作者とライセンスはカードに表示します）。見つからなければ、ブラウザーで探して貼り付けることもできます。	MainWindow.Devices.cs:314
-b45d8636	写真を取ってきています…	MainWindow.Devices.cs:317
-a55323f3	写真を取ってこられませんでした。別の写真を選ぶか、貼り付けてください。	MainWindow.Devices.cs:322
-ec74b9eb	写真を探せませんでした（{0}）。「ブラウザーで画像を探す」で探して、貼り付けることもできます。	MainWindow.Devices.cs:331
-0a0e4a97	{0} ・ {1}	MainWindow.Devices.cs:355
+d57e0ef7	写真: {0}（{1}）	MainWindow.Devices.cs:50
+e2890741	作者不明	MainWindow.Devices.cs:50
+e29499f3	ネットで写真を探す…	MainWindow.Devices.cs:87
+ed0f43c5	コピーした画像を貼り付け	MainWindow.Devices.cs:88
+b3cec96e	ファイルから選ぶ…	MainWindow.Devices.cs:89
+44dceb5c	イラストに戻す	MainWindow.Devices.cs:90
+30ef4ec2	「{0}」の画像を選ぶ	MainWindow.Devices.cs:98
+3d493cb5	画像ファイル (*.png;*.jpg;*.jpeg;*.bmp;*.webp)|*.png;*.jpg;*.jpeg;*.bmp;*.webp	MainWindow.Devices.cs:99
+927e8083	画像を設定できませんでした。\n{0}	MainWindow.Devices.cs:114
+b0dd9531	クリップボードに画像がありません。ブラウザーで画像を右クリックして「画像をコピー」を選んでから、もう一度押してください。	MainWindow.Devices.cs:147
+7c80ba3a	画像を貼り付けられませんでした。\n{0}	MainWindow.Devices.cs:156
+6d191ffc	「{0}」の写真	MainWindow.Devices.cs:281
+871f648b	自由に使える写真の共有サイト（Wikimedia Commons と Openverse）で、型番の写真を探しています…	MainWindow.Devices.cs:287
+2a367162	ブラウザーで画像を探す	MainWindow.Devices.cs:300
+6db944ec	型番で画像検索を開きます。気に入った画像を右クリック →「画像をコピー」して、下の「コピーした画像を貼り付け」を押してください	MainWindow.Devices.cs:301
+0d4f2878	自由に使える写真の共有サイト（Wikimedia Commons と Openverse）に、この型番の写真は見つかりませんでした。「ブラウザーで画像を探す」で画像をコピーして、「コピーした画像を貼り付け」で設定できます（メーカーのサイトの写真などは、自分で見るためだけに使ってください）。	MainWindow.Devices.cs:328
+02c5893e	使う写真を選んでください（Wikimedia Commons と Openverse の、自由に使える写真です。作者とライセンスはカードに表示します）。見つからなければ、ブラウザーで探して貼り付けることもできます。	MainWindow.Devices.cs:331
+b45d8636	写真を取ってきています…	MainWindow.Devices.cs:334
+a55323f3	写真を取ってこられませんでした。別の写真を選ぶか、貼り付けてください。	MainWindow.Devices.cs:339
+ec74b9eb	写真を探せませんでした（{0}）。「ブラウザーで画像を探す」で探して、貼り付けることもできます。	MainWindow.Devices.cs:348
+0a0e4a97	{0} ・ {1}	MainWindow.Devices.cs:372
 5119fa5e	ワットチェッカーの値を数字で入れてください	MainWindow.Energy.cs:26
 c0bf5633	合わせ込みました: CPU・GPU 以外 {0:F0} W・電源の効率 {1:F0}%（アイドル中と負荷中の 2 回から）	MainWindow.Energy.cs:67
 c91890c4	合わせ込みました: CPU・GPU 以外 {0:F0} W（電源の効率は {1:F0}% のまま。負荷中も記録すると効率も求めます）	MainWindow.Energy.cs:68
@@ -1526,39 +1526,39 @@ f8d56f66	オフ（「OpenRGB と連携する」をオンにすると、LED の�
 dabf7260	デバイスの一覧を読み込んでから選べます。上の「接続テスト」を押してください	MainWindow.Lighting.cs:1618
 70f103b7	少なくとも 1 つは選んでください（LED を消したいときは、上の「OpenRGB と連携する」をオフにします）	MainWindow.Lighting.cs:1645
 355efac9	いま見つからないデバイスの設定も残してあります（つなぎ直すと元どおりに使えます）: {0}	MainWindow.Lighting.cs:1693
-b8946100	覚えた曲: {0} 曲	MainWindow.Lighting.cs:1717
-e8d98a10	覚えた曲の拍をすべて消しますか？（曲を聴けば、また覚えます）	MainWindow.Lighting.cs:1722
-49610d95	音を出しているアプリを探しています…	MainWindow.Lighting.cs:1735
-937d0bba	　（音が出ています）	MainWindow.Lighting.cs:1761
-bd2b75f3	　（再生中）	MainWindow.Lighting.cs:1761
-e197ab2d	アプリが見つかりません。曲を再生してから、もう一度押してください	MainWindow.Lighting.cs:1772
-8dc805b8	同期テストは、「OpenRGB と連携する」がオンで、光り方が「音楽連動」のときに使えます。	MainWindow.Lighting.cs:1841
-1071825a	クリック音を鳴らせませんでした	MainWindow.Lighting.cs:1848
-9fb33dc5	0.6 秒ごとに「カチッ」と鳴り、LED が白く光ります。光が音より早ければ「+」、遅ければ「−」で、音と光がそろうところを探してください。	MainWindow.Lighting.cs:1856
-462dc044	もう一度押すか、この画面を離れると止まります。	MainWindow.Lighting.cs:1857
-8cd7762f	{0} が動いています。同じ LED を操作するので、色が勝手に戻る・ちらつく・ほかのデバイスとそろわない原因になります。	MainWindow.Lighting.cs:1931
-55b403e0	そのソフトの LED の制御（ライティング）を止めるか、終了してください（Lian Li の L-Connect は、ファンの回転だけ使う設定にできます）。	MainWindow.Lighting.cs:1932
-caf81aa5	OpenRGB の設定で「Shared SMBus Access」（SMBus をほかのソフトと共有する）がオフになっています。	MainWindow.Lighting.cs:1935
-7051883b	このアプリはメモリの温度を同じ配線（SMBus）で読むので、ぶつかって温度が読めなくなることがあります。	MainWindow.Lighting.cs:1936
-2810f408	OpenRGB の Settings で「Shared SMBus Access」をオンにして、OpenRGB を起動し直してください（または、設定 →「メモリの温度を読む」をオフに）。	MainWindow.Lighting.cs:1937
-0b102823	\n設定ファイル: {0}	MainWindow.Lighting.cs:1938
-7c87a784	 ・ 	MainWindow.Lighting.cs:2094
-cde5d20f	「OpenRGB と連携する」をオンにすると、音の取り込みが始まります	MainWindow.Lighting.cs:2106
-37b53bcd	{0}（{1} の音だけに反応）	MainWindow.Lighting.cs:2108
-8e13b3ed	\n聞いている出力先: {0}	MainWindow.Lighting.cs:2114
-67520391	+{0} ms にする	MainWindow.Lighting.cs:2124
-a33ee710	音の取り込みを準備しています…	MainWindow.Lighting.cs:2137
-aeb57d02	音楽連動で OpenRGB と連携しているときに表示します	MainWindow.Lighting.cs:2137
-6a7d3717	テンポ: 使わない	MainWindow.Lighting.cs:2145
-d9cb0d66	音の大きさだけで光っています	MainWindow.Lighting.cs:2146
-8d9ab8cc	キックに合わせて光っています	MainWindow.Lighting.cs:2152
-58c9b655	テンポをつかんでいます（確かさ {0:F0}%）	MainWindow.Lighting.cs:2153
-7ddda7d0	テンポ検出中…	MainWindow.Lighting.cs:2157
-12235fc4	候補 {0:F0} BPM（確かさ {1:F0}%）	MainWindow.Lighting.cs:2159
-f689911d	ビートがはっきりした曲なら、数秒でテンポをつかみます	MainWindow.Lighting.cs:2160
-64ff1784	音量 {0} ・ 基準 {1:F0} dBFS	MainWindow.Lighting.cs:2169
-87c8c605	● 音を検出しています	MainWindow.Lighting.cs:2170
-eafa50be	○ 無音（音が鳴ると反応します）	MainWindow.Lighting.cs:2170
+b8946100	覚えた曲: {0} 曲	MainWindow.Lighting.cs:1721
+e8d98a10	覚えた曲の拍をすべて消しますか？（曲を聴けば、また覚えます）	MainWindow.Lighting.cs:1726
+49610d95	音を出しているアプリを探しています…	MainWindow.Lighting.cs:1739
+937d0bba	　（音が出ています）	MainWindow.Lighting.cs:1765
+bd2b75f3	　（再生中）	MainWindow.Lighting.cs:1765
+e197ab2d	アプリが見つかりません。曲を再生してから、もう一度押してください	MainWindow.Lighting.cs:1776
+8dc805b8	同期テストは、「OpenRGB と連携する」がオンで、光り方が「音楽連動」のときに使えます。	MainWindow.Lighting.cs:1845
+1071825a	クリック音を鳴らせませんでした	MainWindow.Lighting.cs:1852
+9fb33dc5	0.6 秒ごとに「カチッ」と鳴り、LED が白く光ります。光が音より早ければ「+」、遅ければ「−」で、音と光がそろうところを探してください。	MainWindow.Lighting.cs:1860
+462dc044	もう一度押すか、この画面を離れると止まります。	MainWindow.Lighting.cs:1861
+8cd7762f	{0} が動いています。同じ LED を操作するので、色が勝手に戻る・ちらつく・ほかのデバイスとそろわない原因になります。	MainWindow.Lighting.cs:1935
+55b403e0	そのソフトの LED の制御（ライティング）を止めるか、終了してください（Lian Li の L-Connect は、ファンの回転だけ使う設定にできます）。	MainWindow.Lighting.cs:1936
+caf81aa5	OpenRGB の設定で「Shared SMBus Access」（SMBus をほかのソフトと共有する）がオフになっています。	MainWindow.Lighting.cs:1939
+7051883b	このアプリはメモリの温度を同じ配線（SMBus）で読むので、ぶつかって温度が読めなくなることがあります。	MainWindow.Lighting.cs:1940
+2810f408	OpenRGB の Settings で「Shared SMBus Access」をオンにして、OpenRGB を起動し直してください（または、設定 →「メモリの温度を読む」をオフに）。	MainWindow.Lighting.cs:1941
+0b102823	\n設定ファイル: {0}	MainWindow.Lighting.cs:1942
+7c87a784	 ・ 	MainWindow.Lighting.cs:2100
+cde5d20f	「OpenRGB と連携する」をオンにすると、音の取り込みが始まります	MainWindow.Lighting.cs:2112
+37b53bcd	{0}（{1} の音だけに反応）	MainWindow.Lighting.cs:2114
+8e13b3ed	\n聞いている出力先: {0}	MainWindow.Lighting.cs:2120
+67520391	+{0} ms にする	MainWindow.Lighting.cs:2130
+a33ee710	音の取り込みを準備しています…	MainWindow.Lighting.cs:2143
+aeb57d02	音楽連動で OpenRGB と連携しているときに表示します	MainWindow.Lighting.cs:2143
+6a7d3717	テンポ: 使わない	MainWindow.Lighting.cs:2151
+d9cb0d66	音の大きさだけで光っています	MainWindow.Lighting.cs:2152
+8d9ab8cc	キックに合わせて光っています	MainWindow.Lighting.cs:2158
+58c9b655	テンポをつかんでいます（確かさ {0:F0}%）	MainWindow.Lighting.cs:2159
+7ddda7d0	テンポ検出中…	MainWindow.Lighting.cs:2163
+12235fc4	候補 {0:F0} BPM（確かさ {1:F0}%）	MainWindow.Lighting.cs:2165
+f689911d	ビートがはっきりした曲なら、数秒でテンポをつかみます	MainWindow.Lighting.cs:2166
+64ff1784	音量 {0} ・ 基準 {1:F0} dBFS	MainWindow.Lighting.cs:2175
+87c8c605	● 音を検出しています	MainWindow.Lighting.cs:2176
+eafa50be	○ 無音（音が鳴ると反応します）	MainWindow.Lighting.cs:2176
 8117844a	CPU ・ {0}	MainWindow.Monitoring.cs:41
 2a0c461e	GPU ・ {0}	MainWindow.Monitoring.cs:68
 7df797d5	VRAM（ビデオメモリ）	MainWindow.Monitoring.cs:94
@@ -1684,33 +1684,33 @@ f2252901	前の版（{0}）に戻します。\n\nGitHub から前の版のイン
 98b3be1a	ダウンロードしています… {0:P0}	MainWindow.Update.cs:60
 c1f570b8	\n\nリリースのページから、インストーラーを手で実行して更新することもできます。	MainWindow.Update.cs:70
 b6e4f6c5	Zeph-Iris {0} に更新します。\n\nインストーラー（{1:F0} MB）をダウンロードして確かめたあと、アプリが一度終了します。入れ替えが終わるまでの十数秒、ファンは BIOS の設定で回り、終わるとアプリが起動し直します。\n\n更新しますか？	MainWindow.Update.cs:106
-6451d704	ハードウェアアクセス: LibreHardwareMonitor + PawnIO\n	MainWindow.xaml.cs:99
-6c7b6a5b	設定ファイル: {0}	MainWindow.xaml.cs:100
-7f8ae76b	Zeph-Iris は、LibreHardwareMonitor・PawnIO・OpenRGB・NAudio・QRCoder・Montserrat・Zen Maru Gothic・Inno Setup などのオープンソースのおかげで動いています。作ってくださった皆さんに感謝します（ライセンスはアプリのフォルダーの licenses にあります）。	MainWindow.xaml.cs:101
-1ffe58b3	温度が上限に達しています	MainWindow.xaml.cs:410
-4eed19a9	ブースト中	MainWindow.xaml.cs:412
-8052eef4	ポンプ以外を 100% で回しています	MainWindow.xaml.cs:412
-732c5446	BIOS 制御（ポンプ監視は継続）	MainWindow.xaml.cs:414
-9903c467	計算だけで、ファンには書き込んでいません（ポンプ保護は働きます）。下のボタンで制御を始めます	MainWindow.xaml.cs:416
-138d15fc	制御中（要確認）	MainWindow.xaml.cs:418
-9a955596	見つからないセンサーがあります（部品の交換など）	MainWindow.xaml.cs:418
-cde39c73	値が固まっているセンサーがあります	MainWindow.xaml.cs:420
-c347c56a	{0} 個を制御中	MainWindow.xaml.cs:422
-cbfa5900	制御を開始する（DRY RUN を解除）	MainWindow.xaml.cs:425
-559e78f2	制御を再開する	MainWindow.xaml.cs:426
-f1198e29	警告	MainWindow.xaml.cs:446
-b47a04b8	お知らせ	MainWindow.xaml.cs:448
-d3ec144f	仮想（{0}）	MainWindow.xaml.cs:477
-f45a5a37	検出したハードウェアの一覧です。画像のボタンから、自分で撮った写真などに差し替えられます	MainWindow.xaml.cs:516
-31e94c42	ファンごとに温度と回転数の関係を設定します。変更はすぐに反映・保存されます	MainWindow.xaml.cs:517
-b5ccd0c3	記録からの自動診断と、ファンのホコリ・劣化のチェック（AI のアドバイスはオプション）	MainWindow.xaml.cs:518
-ee9c1f57	ファンの特性と、CPU・GPU に負荷をかけたときの温度を測って、カーブを自動で作ります。今の設定でどこまで冷えるかも確かめられます	MainWindow.xaml.cs:519
-73339fb8	最大 24 時間分の温度と回転数（アプリを閉じていた間を除く。再起動前の分は 1 分ごとの平均）	MainWindow.xaml.cs:520
-389ce2cc	電気代の目安・異常の記録	MainWindow.xaml.cs:521
-4bd55735	OpenRGB 連携で、PC の LED を温度・レインボー・音楽などに合わせて光らせます	MainWindow.xaml.cs:522
-acea69f7	このPCで検出されたすべての温度・回転数・制御チャネルと、仮想センサー	MainWindow.xaml.cs:523
-7626e5f7	プロファイル・自動切り替え・起動方法・制御全体の動作	MainWindow.xaml.cs:524
-d3bf5d86	DRY RUN を解除しました。ファンの制御を始めています。	MainWindow.xaml.cs:561
+6451d704	ハードウェアアクセス: LibreHardwareMonitor + PawnIO\n	MainWindow.xaml.cs:103
+6c7b6a5b	設定ファイル: {0}	MainWindow.xaml.cs:104
+7f8ae76b	Zeph-Iris は、LibreHardwareMonitor・PawnIO・OpenRGB・NAudio・QRCoder・Montserrat・Zen Maru Gothic・Inno Setup などのオープンソースのおかげで動いています。作ってくださった皆さんに感謝します（ライセンスはアプリのフォルダーの licenses にあります）。	MainWindow.xaml.cs:105
+1ffe58b3	温度が上限に達しています	MainWindow.xaml.cs:414
+4eed19a9	ブースト中	MainWindow.xaml.cs:416
+8052eef4	ポンプ以外を 100% で回しています	MainWindow.xaml.cs:416
+732c5446	BIOS 制御（ポンプ監視は継続）	MainWindow.xaml.cs:418
+9903c467	計算だけで、ファンには書き込んでいません（ポンプ保護は働きます）。下のボタンで制御を始めます	MainWindow.xaml.cs:420
+138d15fc	制御中（要確認）	MainWindow.xaml.cs:422
+9a955596	見つからないセンサーがあります（部品の交換など）	MainWindow.xaml.cs:422
+cde39c73	値が固まっているセンサーがあります	MainWindow.xaml.cs:424
+c347c56a	{0} 個を制御中	MainWindow.xaml.cs:426
+cbfa5900	制御を開始する（DRY RUN を解除）	MainWindow.xaml.cs:429
+559e78f2	制御を再開する	MainWindow.xaml.cs:430
+f1198e29	警告	MainWindow.xaml.cs:450
+b47a04b8	お知らせ	MainWindow.xaml.cs:452
+d3ec144f	仮想（{0}）	MainWindow.xaml.cs:481
+f45a5a37	検出したハードウェアの一覧です。画像のボタンから、自分で撮った写真などに差し替えられます	MainWindow.xaml.cs:520
+31e94c42	ファンごとに温度と回転数の関係を設定します。変更はすぐに反映・保存されます	MainWindow.xaml.cs:521
+b5ccd0c3	記録からの自動診断と、ファンのホコリ・劣化のチェック（AI のアドバイスはオプション）	MainWindow.xaml.cs:522
+ee9c1f57	ファンの特性と、CPU・GPU に負荷をかけたときの温度を測って、カーブを自動で作ります。今の設定でどこまで冷えるかも確かめられます	MainWindow.xaml.cs:523
+73339fb8	最大 24 時間分の温度と回転数（アプリを閉じていた間を除く。再起動前の分は 1 分ごとの平均）	MainWindow.xaml.cs:524
+389ce2cc	電気代の目安・異常の記録	MainWindow.xaml.cs:525
+4bd55735	OpenRGB 連携で、PC の LED を温度・レインボー・音楽などに合わせて光らせます	MainWindow.xaml.cs:526
+acea69f7	このPCで検出されたすべての温度・回転数・制御チャネルと、仮想センサー	MainWindow.xaml.cs:527
+7626e5f7	プロファイル・自動切り替え・起動方法・制御全体の動作	MainWindow.xaml.cs:528
+d3bf5d86	DRY RUN を解除しました。ファンの制御を始めています。	MainWindow.xaml.cs:565
 81d7e612	Zeph-Iris 見張り	Program.cs:31
 0788f8eb	背面	UI/Controls/CasePreview.cs:59
 c85ab318	前	UI/Controls/CasePreview.cs:60

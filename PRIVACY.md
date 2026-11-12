@@ -11,7 +11,7 @@ Only the items below. Each one can be turned off, and the ones marked *opt-in* d
 | Feature | Sent to | What is sent | When | Turn it off |
 |---|---|---|---|---|
 | Update check | `api.github.com` (GitHub) | A request for the latest release of this repository, with `Zeph-Iris/<version>` as the user agent | At start and every 6 hours, at most once a day | Settings → "Check for new versions automatically" |
-| Device photos | `commons.wikimedia.org` (Wikimedia Commons) | The model names of your parts (for example "GeForce RTX 5070 Ti") as a search term, with `Zeph-Iris/<version>` and this repository's URL as the user agent | When a part has no photo yet | Devices → "Find device photos online automatically" |
+| Device photos | `commons.wikimedia.org` (Wikimedia Commons) and `api.openverse.org` (Openverse; photos are fetched through Openverse, not from the sites that host them) | The model names of your parts (for example "GeForce RTX 5070 Ti") as a search term, with `Zeph-Iris/<version>` and this repository's URL as the user agent | When a part has no photo yet, and again every 30 days while none is found | Devices → "Find device photos online automatically" |
 | Downloading an update | `github.com` | A download of the new installer | Only when you choose to update | Do not press Update |
 | Phone notifications (*opt-in*) | The ntfy server you enter (`ntfy.sh` by default) | The alert text (for example "CPU 95°C") to the topic you choose | Only after you turn it on | Settings → phone notifications off |
 | Phone / web remote (*opt-in*) | Nothing leaves your network; the app listens on your local network | Status and controls for devices that know the access code | Only after you turn it on | Settings → phone access off |
@@ -21,6 +21,7 @@ Only the items below. Each one can be turned off, and the ones marked *opt-in* d
 Like any web request, the services above can see your IP address. Their own privacy policies apply:
 [GitHub](https://docs.github.com/site-policy/privacy-policies/github-general-privacy-statement),
 [Wikimedia](https://foundation.wikimedia.org/wiki/Policy:Privacy_policy),
+[Openverse](https://openverse.org/privacy),
 [ntfy.sh](https://ntfy.sh/docs/privacy/).
 
 ## Music sync AI and remembered songs
@@ -50,7 +51,7 @@ Zeph-Iris は、あなたの PC の中で動きます。アカウント・利用
 | 機能 | 送り先 | 送るもの | いつ | 止め方 |
 |---|---|---|---|---|
 | 新しい版の確認 | `api.github.com`（GitHub） | このリポジトリの最新リリースの問い合わせ（User-Agent は `Zeph-Iris/<版>`） | 起動時と 6 時間ごと（1 日 1 回まで） | 設定 →「新しい版を自動で確かめる」 |
-| デバイスの写真 | `commons.wikimedia.org`（Wikimedia Commons） | 部品の型番（例「GeForce RTX 5070 Ti」）を検索語として。User-Agent は `Zeph-Iris/<版>` とこのリポジトリの URL | 写真のない部品があるとき | デバイス →「デバイスの写真をネットで自動で探す」 |
+| デバイスの写真 | `commons.wikimedia.org`（Wikimedia Commons）と `api.openverse.org`（Openverse。写真は Openverse を通して取り、元の置き場所のサイトには問い合わせません） | 部品の型番（例「GeForce RTX 5070 Ti」）を検索語として。User-Agent は `Zeph-Iris/<版>` とこのリポジトリの URL | 写真のない部品があるとき（見つからなければ 30 日ごとにもう一度） | デバイス →「デバイスの写真をネットで自動で探す」 |
 | 更新のダウンロード | `github.com` | 新しいインストーラーのダウンロード | 更新を選んだときだけ | 更新を押さない |
 | スマホ通知（自分で設定したときだけ） | 入力した ntfy サーバー（既定は `ntfy.sh`） | お知らせの文（例「CPU 95°C」）を、決めたトピックへ | オンにしたあとだけ | 設定 → スマホ通知をオフ |
 | スマホ・ブラウザーからの操作（自分で設定したときだけ） | 家のネットワークの外へは出ません（家の中のネットワークで待ち受けます） | 状態と操作（アクセスコードを知っている機器だけ） | オンにしたあとだけ | 設定 → スマホからの操作をオフ |

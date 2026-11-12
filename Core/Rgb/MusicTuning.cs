@@ -327,7 +327,7 @@ public static class MusicTuning
     public static (string Label, string Description) Describe(string effect) => effect switch
     {
         MusicStyles.BeatHue => (L("ビートで色替え"), L("ビートのたびに次の色へ切り替わり、ぱっと光って消えていく")),
-        MusicStyles.Pulse => (L("パルス"), L("選んだ色が低音に合わせて脈打ち、ふわっと残光が残る")),
+        MusicStyles.Pulse => (L("パルス"), L("低音に合わせて脈打ち、ふわっと長く残光が残る。色はビートでは変わらず、ゆっくり移り変わる")),
         MusicStyles.Mix => (L("ミックス"), L("低音・中音・高音の強さで色が混ざる")),
         MusicStyles.Meter => (L("音量メーター"), L("音量の分だけ端から点き、ピークの点がゆっくり落ちてくる")),
         MusicStyles.Spectrum => (L("スペクトラム"), L("LED の並びに低音〜高音を並べ、それぞれの強さで光る")),

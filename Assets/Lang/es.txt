@@ -1049,7 +1049,7 @@ a4d4ce26	Personalizado
 975db0d4	Cambio de color con el ritmo
 6f6c9db1	Cambia al siguiente color en cada golpe, destella y se apaga
 1acb0fe4	Pulso
-3735677c	El color elegido late con los graves y deja un suave resplandor
+50e3646b	Late con los graves y deja un resplandor largo y suave. El color no cambia con el ritmo, sino que va cambiando poco a poco
 fac18e83	Mezcla
 143bf4c6	Los colores se mezclan según la fuerza de graves, medios y agudos
 d47d8919	Vúmetro
@@ -1642,15 +1642,15 @@ bf2c93a8	Igual que el general
 c7218a33	Amarillo
 cc601a2e	Mismo color que el general
 2a367162	Buscar imágenes en el navegador
-3ca8869d	No se encontró ninguna foto de este modelo en Wikimedia Commons. Copia una imagen con «Buscar imágenes en el navegador» y ponla con «Pegar imagen copiada» (usa las fotos de sitios de fabricantes y similares solo para ti).
-3d18f014	Elige una foto (son fotos de Wikimedia Commons; el autor y la licencia se muestran en la tarjeta). Si ninguna sirve, también puedes buscar en el navegador y pegar.
-55bd56ad	Si está activado, los dispositivos sin foto se buscan por modelo en Wikimedia Commons (un sitio de fotos de uso libre) y solo se usan automáticamente las fotos que muestran claramente el mismo producto. Solo se envían los nombres de los dispositivos
+0d4f2878	No se encontró ninguna foto de este modelo en los sitios de fotos de uso libre (Wikimedia Commons y Openverse). Copia una imagen con «Buscar imágenes en el navegador» y ponla con «Pegar imagen copiada» (usa las fotos de sitios de fabricantes y similares solo para ti).
+02c5893e	Elige una foto (fotos de uso libre de Wikimedia Commons y Openverse; el autor y la licencia se muestran en la tarjeta). Si ninguna sirve, también puedes buscar en el navegador y pegar.
+e195c30b	Si está activado, los dispositivos sin foto se buscan por modelo en sitios de fotos de uso libre (Wikimedia Commons y Openverse) y solo se usan automáticamente las fotos que muestran claramente el mismo producto. Si no se encuentra ninguna, se vuelve a buscar cada 30 días. Solo se envían los nombres de los dispositivos
 6124e108	Para los dispositivos sin resultado, usa el botón de imagen de la tarjeta para pegar una imagen que encuentres en el navegador
-693c6982	Buscando fotos de este modelo en Wikimedia Commons (un sitio de fotos de uso libre)…
+871f648b	Buscando fotos de este modelo en sitios de fotos de uso libre (Wikimedia Commons y Openverse)…
 6d191ffc	Foto de «{0}»
 6db944ec	Abre una búsqueda de imágenes del modelo. Haz clic derecho en una imagen que te guste → «Copiar imagen» y pulsa «Pegar imagen copiada» abajo
 7c80ba3a	No se pudo pegar la imagen.\n{0}
-8b4ed662	Autor y licencia de la foto de Wikimedia Commons
+09a1ab78	Autor y licencia de la foto
 a55323f3	No se pudo descargar la foto. Elige otra o pega una imagen.
 aeaca01b	Buscar fotos de dispositivos en internet automáticamente
 b0dd9531	No hay ninguna imagen en el portapapeles. En el navegador, haz clic derecho en una imagen, elige «Copiar imagen» y vuelve a pulsar.

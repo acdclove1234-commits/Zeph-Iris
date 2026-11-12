@@ -417,14 +417,15 @@ public static class EffectsTests
         foreach (bool slow in new[] { false, true })
         {
             var x = new Manual(slow ? Strip(5, slow: true) : Strip(5), cfg, m);
-            double tau = slow ? 0.45 : 0.25;
+            // 光り方「パルス」は残光を長くして、「ビートで色替え」より、ふわっと残るようにしてある
+            double tau = slow ? PulseEffect.SlowSwellGlowSec : PulseEffect.SwellGlowSec;
             double t = 0;
             for (; t < 1.0; t += 0.01) { x.In.Frame.BassE = 0; x.Step(t); }
             for (; t < 1.1; t += 0.01) { x.In.Frame.BassE = 1; x.Step(t); }
             double tEnd = t - 0.01;
             float top = x.R.LastLight[0].R;
             double at1 = 0, at2 = 0;
-            for (; t < 2.0; t += 0.01)
+            for (; t < tEnd + 2 * tau + 0.05; t += 0.01)
             {
                 x.In.Frame.BassE = 0;
                 x.Step(t);
@@ -438,8 +439,47 @@ public static class EffectsTests
             double f0 = slow ? DeviceRenderer.SlowMinBrightness : 0;
             T.Near((at1 - f0) / (top - f0), Math.Exp(-1), 0.03, $"Pulse ({v}): afterglow after τg = {tau}s is e^-1");
             T.Near((at2 - f0) / (top - f0), Math.Exp(-2), 0.03, $"Pulse ({v}): afterglow after 2τg is e^-2");
-            T.Check(x.R.LastLight[0].G < 0.01f && x.R.LastLight[0].B < 0.01f, $"Pulse ({v}): colour is the palette's first colour (Fire = red)");
+            // 色はビートで切り替えず、時刻でゆっくり進む（2 秒では Fire の最初の赤から、まだ少ししか進まない）
+            var last = x.R.LastLight[0];
+            var want = ColorPalette.Get(Palettes.Fire, null).At((t - 0.01) / PulseEffect.ColorHoldSec * ColorPalette.Get(Palettes.Fire, null).Step, false);
+            T.Check(last.B < 0.01f && last.R > 0 && Math.Abs(last.G / last.R - want.G / want.R) < 0.03f,
+                $"Pulse ({v}): colour drifts slowly with time from the palette's first colour (G/R {last.G / Math.Max(last.R, 1e-6f):F3}, expected {want.G / want.R:F3})");
         }
+    }
+
+    /// <summary>
+    /// パルスの色は、強いキックが続いてもビートでは切り替わらない（ビートで色替えとの違い）。
+    /// どのデバイスも同じ時刻なら同じ色（デバイスごとにずれない）
+    /// </summary>
+    public static void TestPulseColorIgnoresBeats()
+    {
+        var cfg = MusicCfg(gamma: false);
+        var m = Music(MusicStyles.Pulse, Palettes.Neon) with { TempoMode = TempoModes.Auto, MinBrightness = 0 };
+        var a = new Manual(Strip(5), cfg, m);
+        var b = new Manual(Strip(8), cfg, m);
+        long id = 0;
+        var hues = new List<LinColor>();
+        for (double t = 0; t < 4; t += 1 / 60.0)
+        {
+            bool kick = Math.Floor(t * 2) > Math.Floor((t - 1 / 60.0) * 2);
+            foreach (var x in new[] { a, b })
+            {
+                x.In.Events.Clear();
+                if (kick) x.In.Events.Add(new AudioEvent(++id, AudioEventKind.Kick, t, 2.5f));
+                x.In.Frame.BassE = 0.8f;
+                x.Step(t);
+            }
+            var c = a.R.LastLight[0];
+            if (c.MaxChannel > 0.05f) hues.Add(c * (1f / c.MaxChannel));
+        }
+        float maxJump = 0;
+        for (int i = 1; i < hues.Count; i++)
+            maxJump = Math.Max(maxJump, Math.Max(Math.Abs(hues[i].R - hues[i - 1].R), Math.Max(Math.Abs(hues[i].G - hues[i - 1].G), Math.Abs(hues[i].B - hues[i - 1].B))));
+        T.Check(maxJump < 0.05f, $"Pulse: 8 strong kicks do not switch the colour at once (largest change per frame {maxJump:F3})");
+        var ca = a.R.LastLight[0];
+        var cb = b.R.LastLight[0];
+        T.Check(Math.Abs(ca.R / ca.MaxChannel - cb.R / cb.MaxChannel) < 0.01f && Math.Abs(ca.B / ca.MaxChannel - cb.B / cb.MaxChannel) < 0.01f,
+            "Pulse: two devices show the same colour at the same time");
     }
 
     public static void TestSpectrumFollowsBands()

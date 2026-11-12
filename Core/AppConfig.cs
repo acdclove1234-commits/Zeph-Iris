@@ -69,10 +69,13 @@ public sealed class AppConfig : ObservableObject
     public bool RestorePowerPlanOnExit { get; set; } = true;
     /// <summary>デバイス画面で使う自分で用意した画像（exe と同じフォルダの images\ にコピーして保存）</summary>
     public ObservableCollection<DeviceImageConfig> DeviceImages { get; set; } = new();
-    /// <summary>デバイスの写真を、型番で Wikimedia Commons から自動で探す（確かに同じ製品と分かる写真だけ自動で使う）</summary>
+    /// <summary>デバイスの写真を、型番で Wikimedia Commons・Openverse から自動で探す（確かに同じ製品と分かる写真だけ自動で使う）</summary>
     public bool AutoDevicePhotos { get; set; } = true;
-    /// <summary>写真を自動で探し終えたデバイスのキー（毎回ネットに問い合わせないため）</summary>
-    public List<string> DevicePhotoSearched { get; set; } = new();
+    /// <summary>写真を自動で探したデバイスのキーと、探した日時（毎回ネットに問い合わせない。見つからなければ DevicePhotos.ResearchDays ごとに探し直す）</summary>
+    public Dictionary<string, DateTime> DevicePhotoSearchedAt { get; set; } = new();
+    /// <summary>6.14.3 までの「探し終えたデバイス」（読み込み専用。保存しない。新しい探し先で、もう一度探す）</summary>
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public List<string>? DevicePhotoSearched { get; set; }
     public SafetyConfig Safety { get; set; } = new();
     public NotifyConfig Notify { get; set; } = new();
     public EnergyConfig Energy { get; set; } = new();
@@ -130,7 +133,9 @@ public sealed class AppConfig : ObservableObject
         Calibrations ??= new();
         DashboardCards ??= new();
         DeviceImages ??= new();
-        DevicePhotoSearched ??= new();
+        DevicePhotoSearchedAt ??= new();
+        // 前の版の「探し終えた」印は捨てる（Openverse も探すようになったので、次に起動したときに探し直す）
+        DevicePhotoSearched = null;
         Widget ??= new();
         Appearance ??= new();
         Appearance.Normalize();
