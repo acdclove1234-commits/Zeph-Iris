@@ -178,7 +178,6 @@ a16411bf	Buat nilai maksimum atau rata-rata dari beberapa sensor, atau selisih d
 fcf52b91	Buat
 bc3cb03d	Warna yang sedang dikirim ke LED (yang pertama jika berbeda-beda)
 9c4008ce	Koneksi
-01f82432	Mengubah warna motherboard, memori, kipas, strip LED, dan lainnya melalui OpenRGB yang gratis. Jalankan OpenRGB dan aktifkan "SDK Server" (jika tidak tersambung, tambahkan --server ke opsi mulai OpenRGB).
 8f1d5969	Jika aktif, tersambung ke OpenRGB dan mewarnai LED dengan efek yang dipilih di bawah. Jika nonaktif, aplikasi ini tidak mengirim apa pun ke LED
 49aac369	Gunakan OpenRGB
 6305fed9	Berlaku untuk LED yang didukung OpenRGB. Jangan gunakan bersamaan dengan perangkat lunak RGB pabrikan seperti ASRock Polychrome (saling berebut kendali dan berkedip)
@@ -1275,7 +1274,6 @@ e3c74af7	Santai dan tenang. Warna berganti perlahan setiap birama
 91f616cf	 Jika merasa tidak enak badan, segera nyalakan lagi "Kurangi kedipan".
 165c4145	Terhubung. {0} perangkat ditemukan.
 3757a4b4	Dimulai saat "Gunakan OpenRGB" dinyalakan
-d7b2f046	Tidak bisa terhubung: {0}\nJalankan OpenRGB, tekan "Start Server" di tab "SDK Server", lalu coba lagi.
 23ecbb88	"Gunakan OpenRGB" mati. Nyalakan untuk terhubung
 f8d56f66	Mati (saat "Gunakan OpenRGB" dinyalakan, warna LED mulai diubah)
 dabf7260	Bisa dipilih setelah daftar perangkat dimuat. Tekan "Uji koneksi" di atas
@@ -1815,3 +1813,82 @@ f6280d14	 (batas acuan {0:F0}°C, selisih ke maksimum {1:F0}°C)
 b8946100	Lagu yang diingat: {0}
 dfb02ca4	AI ketukan
 e8d98a10	Hapus semua ketukan lagu yang diingat? (Akan dipelajari lagi saat mendengarkan)
+e59863c1	Mengubah warna motherboard, memori, kipas, strip LED, dan lainnya lewat OpenRGB yang gratis. Jika OpenRGB tidak berjalan, aplikasi ini menjalankannya dengan "SDK Server" menyala (sakelar di bawah).
+2df46840	Jika koneksi terus gagal, layanan OpenRGB dijalankan bila OpenRGB terpasang sebagai layanan; jika tidak, OpenRGB di Program Files dijalankan dengan "--server --startminimized". OpenRGB yang sudah berjalan tidak pernah dihentikan atau dijalankan ulang
+858ce626	Jalankan OpenRGB jika belum berjalan
+7c3107e5	Hanya OpenRGB di PC ini. Demi keamanan, hanya OpenRGB yang dipasang di Program Files yang dijalankan (jalankan sendiri OpenRGB yang diekstrak dari zip)
+98887878	Layanan OpenRGB dijalankan. Menunggu sebentar sampai selesai mencari perangkat…
+afa11876	OpenRGB dijalankan (server SDK juga menyala). Menunggu sebentar sampai selesai mencari perangkat…
+dfa4bc90	Tunggu beberapa detik, lalu tekan "Uji koneksi" lagi.
+63c6c61a	Tidak dapat terhubung: {0}
+08b50e4e	Jalankan OpenRGB di PC yang Anda hubungkan, tekan "Start Server" di tab "SDK Server", lalu coba lagi.
+d54dd85f	OpenRGB berjalan, tetapi server SDK-nya tidak merespons. Tekan "Start Server" di tab "SDK Server" OpenRGB, atau tunggu sampai selesai mencari perangkat, lalu coba lagi.
+ed4a4a84	Layanan OpenRGB dinonaktifkan. Jalankan OpenRGB, tekan "Start Server" di tab "SDK Server", lalu coba lagi.
+23f992d4	OpenRGB tidak ditemukan. Silakan pasang OpenRGB (gratis). Jika dipasang di Program Files, aplikasi ini menjalankannya otomatis (jalankan sendiri OpenRGB yang diekstrak dari zip).
+fe396d5d	Jalankan OpenRGB, tekan "Start Server" di tab "SDK Server", lalu coba lagi.
+888c48dd	Haluskan
+5126ccb6	Menggambar garis sebagai rata-rata waktu di sekitarnya, agar sensor yang naik-turun per 2°C dan lonjakan singkat CPU lebih mudah dibaca. Hanya tampilan: catatan, CSV, dan nilai di bawah tetikus tetap sama
+28cf181a	Atur ulang min/maks
+0d4a4da5	Mulai hitung ulang minimum, maksimum, dan rata-rata dari sekarang (misalnya sebelum mulai bermain gim)
+6ae383a5	Minimum, maksimum, dan rata-rata sejak aplikasi dimulai (tetap dihitung saat layar ini ditutup)
+7a5c0197	Sekarang
+e8a96130	Min
+10b17f28	Maks
+78bdf61f	Rata-rata
+a5a18898	Minimum, maksimum, dan rata-rata sejak {0:HH:mm}
+286f135b	Laporan perangkat keras…
+96d19994	Membuka halaman GitHub untuk memberi tahu bahwa PC ini berfungsi, sudah diisi model komponen dan hal yang diperiksa aplikasi (jumlah saja)
+2f719799	Jika aplikasi berfungsi di PC ini, beri tahu kami lewat "Laporan perangkat keras…". Laporan yang masuk menambah daftar "perangkat keras teruji" di README.
+f0a34e2b	Membuka halaman GitHub untuk memberi tahu bahwa PC ini berfungsi, sudah diisi model komponen dan hal yang diperiksa aplikasi (jumlah saja). Meski tidak ada masalah, laporan tentang komponen yang belum diperiksa sangat membantu
+1a26a15b	Halaman laporan perangkat keras GitHub akan dibuka dengan isi berikut:
+cd8d1af7	Versi
+ac1de92a	Kartu grafis
+88de0d44	Hanya nama model dan jumlah yang diisi (tanpa nama PC, nama pengguna, pengaturan, atau log). Aplikasi tidak mengirim apa pun. Periksa halamannya, tambahkan apa yang berfungsi dan yang tidak, lalu kirim (perlu akun GitHub).
+9ed8c43f	Laporan perangkat keras
+153d2bd9	Tidak dapat membuka peramban.\n{0}
+4afe1df2	Catatan game (FPS dan suhu)
+ba856364	Setiap kali bermain, menyimpan satu catatan berisi FPS rata-rata, 1% low (patah-patah), suhu CPU dan GPU, serta kecepatan kipas. Bandingkan perubahan suhu dan FPS sebelum dan sesudah mengatur kipas.
+ac0fb61e	Catat FPS dan suhu saat bermain game
+01f5728d	Memakai Intel PresentMon bawaan (MIT License) dan hanya melihat aplikasi mana yang menggambar frame dan berapa ms setelah frame sebelumnya (tidak pernah melihat isi layar atau input). Aplikasi di depan yang terus menggambar sekitar satu menit dianggap game; browser, aplikasi chat, dan video dikecualikan. Catatan tetap di PC ini.
+de7074fc	Belum ada catatan.
+04adc800	Detail
+4549282a	Hapus
+4668d319	Bukan game
+97077d12	Berhenti mencatat aplikasi ini (juga menghapus catatannya)
+070b3c61	{0} jam {1} mnt
+dd408447	{0} mnt
+2f16f690	{0}, {1}
+829b2e33	Rata-rata {0:0} fps · 1% low {1:0} fps · 0,1% low {2:0} fps
+d8cf90d7	CPU maks {0:0}°C (rata-rata {1:0}°C)
+cc8dbf23	GPU maks {0:0}°C (rata-rata {1:0}°C)
+e2bb4ae7	Kipas rata-rata {0:0} rpm
+e19b1126	PresentMon berhenti (kode keluar {0})
+b419c5cc	Mati. Nyalakan untuk mencatat FPS dan suhu saat bermain.
+3bb71d5d	PresentMon tidak ditemukan (folder PresentMon di folder aplikasi). Pasang ulang aplikasi untuk memperbaikinya.
+8204e45d	Mencatat: {0} · sekarang {1:0} fps
+83ecfa1a	Menunggu game (bawa game ke depan dan mainkan sekitar satu menit untuk mulai mencatat).
+0fe39ffc	Menunggu untuk memulai ulang PresentMon ({0}).
+5afb6e9d	{0} – {1} (menggambar {2}, {3} frame)
+c4454de4	Beban CPU rata-rata {0:0}%
+c401f258	Beban GPU rata-rata {0:0}%
+6caecaec	Daya GPU rata-rata {0:0} W
+47dae337	FPS rata-rata per 10 detik: terendah {0:0} fps · tertinggi {1:0} fps
+debb413f	1% low adalah kecepatan 1% frame paling lambat. Makin besar selisihnya dengan rata-rata, makin terasa patah-patah.
+73a40039	Berhenti mencatat {0} mulai sekarang? (Untuk saat aplikasi yang bukan game tercatat. Catatannya sejauh ini juga dihapus.)
+e16c0947	Catatan game
+4184034d	Tidak bisa kalibrasi karena suhu yang diawasi tidak terbaca. Coba lagi setelah sensor suhu bisa dibaca.
+d1c5f5ab	Versi baru {0} tidak berjalan dengan baik, jadi otomatis dikembalikan ke {1} (pengaturan juga dari sebelum pembaruan). {2}
+534656cb	Tanda tangan digital penginstal tidak valid (rusak atau diubah). Pembaruan dihentikan.
+0f0feb7a	Aplikasi ini bertanda tangan digital, tetapi penginstal yang diunduh tidak. Pembaruan dihentikan.
+01889f11	Penginstal yang diunduh ditandatangani oleh pihak lain, bukan penanda tangan aplikasi ini. Pembaruan dihentikan.
+198beb10	Tanda tangan digital PresentMon tidak bisa dipastikan (tidak ada tanda tangan Intel). Pasang ulang aplikasi.
+4702ef4e	Salinan versi sebelumnya (folder previous) tidak ditemukan.
+6b87e136	Tidak bisa mengembalikan exe versi sebelumnya ({0}).
+bba9cc48	Versi sebelumnya sudah kembali, tetapi pengaturan tidak bisa dikembalikan ({0}).
+cd083e7b	Versi baru {0} tidak mulai mengatur kipas dalam {1:F0} menit.
+17d6b1ee	Zeph-Iris tidak bisa ditutup, jadi versi sebelumnya tidak bisa dikembalikan. Keluar dari Zeph-Iris lewat area notifikasi (atau mulai ulang PC), kipas akan kembali ke pengaturan BIOS. Lalu klik dua kali file ini untuk kembali ke versi sebelumnya:\n{0}
+ad924bfa	Pemulihan Zeph-Iris
+97339d69	Kembali ke versi sebelumnya hanya bisa dari ZephIrisRecovery.exe di folder previous dalam folder aplikasi.
+df560c03	Kembalikan Zeph-Iris ke versi sebelumnya {0}? (versi sekarang {1})\n\nZeph-Iris yang berjalan ditutup (kipas kembali ke BIOS), exe sebelumnya dan pengaturan dari sebelum pembaruan dikembalikan, lalu dijalankan lagi.
+e988c5bd	Dikembalikan ke versi sebelumnya secara manual.
+d3cc94cf	Tidak bisa kembali ke versi sebelumnya ({0}).

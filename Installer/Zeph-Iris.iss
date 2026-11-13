@@ -203,6 +203,10 @@ Source: "{#SourceDir}\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs 
 Source: "{#PawnIoSetup}"; Flags: dontcopy
 #endif
 
+[UninstallDelete]
+; 更新の前に取っておいた前の版と設定（Core/UpdateRecovery.cs）。アプリが作るのでインストーラーは知らないが、アンインストールでは残さない
+Type: filesandordirs; Name: "{app}\previous"
+
 [Icons]
 Name: "{autoprograms}\{#AppName}"; Filename: "{app}\{#AppExe}"
 Name: "{autodesktop}\{#AppName}"; Filename: "{app}\{#AppExe}"; Tasks: desktopicon

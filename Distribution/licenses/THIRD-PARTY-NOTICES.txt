@@ -46,6 +46,14 @@ ProFan Maru（フォント・Zen Maru Gothic の改変版）
   Source : https://github.com/googlefonts/zen-marugothic
   Copyright 2021 The Zen Maru Gothic Project Authors
 
+PresentMon 2.6.0（ゲームの記録で FPS とフレーム時間を測る・PresentMon\PresentMon.exe）
+  License: MIT License（PresentMon-LICENSE.txt）  Copyright (C) 2017-2024 Intel Corporation
+  Source : https://github.com/GameTechDev/PresentMon
+  ※ 公式のリリースの exe（PresentMon-2.6.0-x64.exe・Intel の署名つき）を、改変せずにそのまま入れています。
+     「ゲームの記録」をオンにしたときだけ動きます。
+  The official, unmodified, Intel-signed PresentMon 2.6.0 console exe is included and runs only
+  while game recording is turned on.
+
 Inno Setup 6（インストーラーとアンインストーラー）
   License: Inno Setup License  https://jrsoftware.org/files/is/license.txt
   Copyright (C) 1997-2026 Jordan Russell, Portions Copyright (C) 2000-2026 Martijn Laan

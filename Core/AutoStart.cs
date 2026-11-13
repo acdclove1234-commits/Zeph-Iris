@@ -112,6 +112,9 @@ public static class AutoStart
 
     public static bool Disable() => RunSchtasks($"/Delete /TN \"{TaskName}\" /F") == 0;
 
+    /// <summary>自動起動のタスクを、いま動かす（前の版に戻したあと、ふだんと同じ権限・同じ場所で起動するため）</summary>
+    public static bool RunTask() => RunSchtasks($"/Run /TN \"{TaskName}\"") == 0;
+
     /// <summary>前の名前で登録した自動起動のタスクがあるか（タスクの定義ファイルがあるかを見る）</summary>
     public static bool TaskExists(string taskName)
     {

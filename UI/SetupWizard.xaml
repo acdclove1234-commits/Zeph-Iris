@@ -126,8 +126,8 @@
                             <ColumnDefinition/>
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="44"/>
-                            <RowDefinition Height="44"/>
+                            <RowDefinition Height="Auto" MinHeight="44"/>
+                            <RowDefinition Height="Auto" MinHeight="44"/>
                         </Grid.RowDefinitions>
                         <TextBlock Text="CPU の温度センサー" Style="{StaticResource Label}"/>
                         <ComboBox x:Name="CpuSensorCombo" Grid.Column="1" DisplayMemberPath="Display"/>

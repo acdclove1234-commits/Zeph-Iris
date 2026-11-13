@@ -54,6 +54,22 @@ public partial class MainWindow
         HistoryGraph.Refresh();
     }
 
+    /// <summary>「なめらかに」: 履歴のグラフの線を前後の平均で描く（設定に覚える）</summary>
+    private void OnHistorySmoothClick(object sender, RoutedEventArgs e)
+    {
+        Config.Appearance.SmoothHistory = HistorySmoothToggle.IsChecked == true;
+        ApplyHistorySmooth();
+    }
+
+    /// <summary>設定の「なめらかに」を、ボタンとグラフに反映する（起動時・設定が入れ替わったとき）</summary>
+    private void ApplyHistorySmooth()
+    {
+        bool on = Config.Appearance.SmoothHistory;
+        HistorySmoothToggle.IsChecked = on;
+        HistoryGraph.Smooth = on;
+        HistoryGraph.Refresh();
+    }
+
     private void OnExportCsvClick(object sender, RoutedEventArgs e)
     {
         if (_history.Count == 0)

@@ -57,6 +57,12 @@ SharpGen.Runtime / SharpGen.Runtime.COM 2.4.2-beta（Vortice が使う COM の�
   Source : https://github.com/dotnet/runtime ・ https://github.com/dotnet/wpf ・ https://github.com/dotnet/winforms
   Copyright (c) .NET Foundation and Contributors
 
+PresentMon 2.6.0（ゲームの記録で FPS とフレーム時間を測る。アプリのフォルダーの PresentMon\PresentMon.exe・改変なし）
+  License: MIT License（PresentMon-LICENSE.txt）
+  Source : https://github.com/GameTechDev/PresentMon
+  Copyright (C) 2017-2024 Intel Corporation
+  ※ 公式のリリースの exe（Intel の署名つき）をそのまま同梱しています。「ゲームの記録」をオンにしたときだけ動きます。
+
 Montserrat（フォント）
   License: SIL Open Font License 1.1（Montserrat-OFL.txt）
   Source : https://github.com/JulietaUla/Montserrat

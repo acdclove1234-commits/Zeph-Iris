@@ -178,7 +178,6 @@ a16411bf	Build the maximum or average of several sensors, or the difference of t
 fcf52b91	Create
 bc3cb03d	Color being sent to the LEDs now (the first one if they differ)
 9c4008ce	Connection
-01f82432	Changes the colors of the motherboard, memory, fans, LED strips and more through the free OpenRGB. Start OpenRGB and turn on its "SDK Server" (if it does not connect, add --server to OpenRGB's start options).
 8f1d5969	When on, connects to OpenRGB and colors the LEDs with the effect chosen below. When off, this app sends nothing to the LEDs
 49aac369	Use OpenRGB
 6305fed9	Works with LEDs that OpenRGB supports. Do not use a maker's RGB software such as ASRock Polychrome at the same time (they fight and flicker)
@@ -1275,7 +1274,6 @@ e3c74af7	Relaxed and calm. Colors change slowly every bar
 91f616cf	 If you feel unwell, turn "Reduce flashing" back on immediately.
 165c4145	Connected. {0} devices found.
 3757a4b4	Starts when "Use OpenRGB" is turned on
-d7b2f046	Can't connect: {0}\nStart OpenRGB, press "Start Server" on the "SDK Server" tab, and try again.
 23ecbb88	"Use OpenRGB" is off. Turn it on to connect
 f8d56f66	Off (turning on "Use OpenRGB" starts changing the LED colors)
 dabf7260	You can choose after the device list is loaded. Press "Test connection" above
@@ -1815,3 +1813,82 @@ f6280d14	 (guide limit {0:F0}°C, margin to the maximum {1:F0}°C)
 b8946100	Remembered songs: {0}
 dfb02ca4	Beat AI
 e8d98a10	Delete all remembered song beats? (They are learned again as you listen)
+e59863c1	Changes the colors of the motherboard, memory, fans, LED strips and more through the free OpenRGB. If OpenRGB is not running, this app starts it with its "SDK Server" turned on (switch below).
+2df46840	If it keeps failing to connect, this starts the OpenRGB service if OpenRGB is installed as a service, otherwise OpenRGB in Program Files with "--server --startminimized". It never stops or restarts an OpenRGB that is already running
+858ce626	Start OpenRGB if it is not running
+7c3107e5	Only OpenRGB on this PC. For safety, only OpenRGB installed in Program Files is started (start an OpenRGB unpacked from a zip yourself)
+98887878	Started the OpenRGB service. Waiting a moment while it finds your devices…
+afa11876	Started OpenRGB (with the SDK server on). Waiting a moment while it finds your devices…
+dfa4bc90	Wait a few seconds, then press "Test connection" again.
+63c6c61a	Can't connect: {0}
+08b50e4e	Start OpenRGB on the PC you connect to, press "Start Server" on the "SDK Server" tab, and try again.
+d54dd85f	OpenRGB is running, but its SDK server does not answer. Press "Start Server" on OpenRGB's "SDK Server" tab, or wait until it has finished finding devices, and try again.
+ed4a4a84	The OpenRGB service is disabled. Start OpenRGB, press "Start Server" on the "SDK Server" tab, and try again.
+23f992d4	OpenRGB was not found. Please install OpenRGB (free). If it is installed in Program Files, this app starts it for you (start an OpenRGB unpacked from a zip yourself).
+fe396d5d	Start OpenRGB, press "Start Server" on the "SDK Server" tab, and try again.
+888c48dd	Smooth
+5126ccb6	Draws lines as the average over nearby time, so sensors that read in 2°C steps flipping back and forth, and brief CPU spikes, are easier to read. Display only: the records, the CSV and the values shown under the mouse stay as they are
+28cf181a	Reset min/max
+0d4a4da5	Start counting min, max and average again from now (for example, before starting a game)
+6ae383a5	Min, max and average since the app started (counted even while this screen is closed)
+7a5c0197	Now
+e8a96130	Min
+10b17f28	Max
+78bdf61f	Average
+a5a18898	Min, max and average since {0:HH:mm}
+286f135b	Hardware report…
+96d19994	Opens the GitHub page for telling us this PC works, filled in with the part models and what the app has checked (counts only)
+2f719799	If the app works on this PC, please tell us with "Hardware report…". The reports we get grow the "verified hardware" list in the README.
+f0a34e2b	Opens the GitHub page for telling us this PC works, filled in with the part models and what the app has checked (counts only). Even when nothing is wrong, a report about parts we have not checked yet helps a lot
+1a26a15b	This opens the GitHub hardware report page, filled in with the following:
+cd8d1af7	Version
+ac1de92a	Graphics card
+88de0d44	Only model names and counts are filled in (no PC name, user name, settings or logs). The app sends nothing. Check the page, add what worked and what did not, then submit it (a GitHub account is needed).
+9ed8c43f	Hardware report
+153d2bd9	Could not open the browser.\n{0}
+4afe1df2	Game records (FPS and temperatures)
+ba856364	Each time you play, saves one record with average FPS, 1% low (stutter), CPU and GPU temperatures, and fan speed. Compare how temperatures and FPS changed before and after you adjust your fans.
+ac0fb61e	Record FPS and temperatures while gaming
+01f5728d	Uses the bundled Intel PresentMon (MIT License) to see only which app drew a frame and how many ms apart (it never sees screen contents or input). An app in the foreground that keeps drawing for about a minute counts as a game; browsers, chat and video apps are left out. Records stay on this PC.
+de7074fc	No records yet.
+04adc800	Details
+4549282a	Delete
+4668d319	Not a game
+97077d12	Stop recording this app (also deletes its records so far)
+070b3c61	{0} h {1} min
+dd408447	{0} min
+2f16f690	{0}, {1}
+829b2e33	Avg {0:0} fps · 1% low {1:0} fps · 0.1% low {2:0} fps
+d8cf90d7	CPU max {0:0}°C (avg {1:0}°C)
+cc8dbf23	GPU max {0:0}°C (avg {1:0}°C)
+e2bb4ae7	Fans avg {0:0} rpm
+e19b1126	PresentMon stopped (exit code {0})
+b419c5cc	Off. Turn it on to record FPS and temperatures while you play.
+3bb71d5d	PresentMon not found (PresentMon folder in the app folder). Reinstalling the app fixes this.
+8204e45d	Recording: {0} · now {1:0} fps
+83ecfa1a	Waiting for a game (bring a game to the front and play for about a minute to start recording).
+0fe39ffc	Waiting to restart PresentMon ({0}).
+5afb6e9d	{0} – {1} (drawing for {2}, {3} frames)
+c4454de4	CPU load avg {0:0}%
+c401f258	GPU load avg {0:0}%
+6caecaec	GPU power avg {0:0} W
+47dae337	Average FPS per 10 seconds: lowest {0:0} fps · highest {1:0} fps
+debb413f	1% low is the speed of the slowest 1% of frames. The bigger the gap to the average, the more stutter you notice.
+73a40039	Stop recording {0} from now on? (For when an app that isn't a game was recorded. Its records so far are deleted too.)
+e16c0947	Game records
+4184034d	Can't calibrate because the temperatures to watch can't be read. Try again once the temperature sensors can be read.
+d1c5f5ab	The new version {0} did not start properly, so it was automatically put back to {1} (settings are from before the update too). {2}
+534656cb	The installer's digital signature is not valid (damaged or altered). The update was stopped.
+0f0feb7a	This app is digitally signed, but the downloaded installer is not. The update was stopped.
+01889f11	The downloaded installer was signed by someone other than the signer of this app. The update was stopped.
+198beb10	PresentMon's digital signature could not be confirmed (no Intel signature). Please reinstall the app.
+4702ef4e	The kept copy of the previous version (previous folder) was not found.
+6b87e136	Could not put back the previous version's exe ({0}).
+bba9cc48	The previous version is back, but the settings could not be put back ({0}).
+cd083e7b	The new version {0} did not start controlling the fans within {1:F0} minutes.
+17d6b1ee	Zeph-Iris could not be closed, so the previous version could not be put back. Exit Zeph-Iris from the notification area (or restart the PC) and the fans go back to the BIOS settings. Then double-click this file to go back to the previous version:\n{0}
+ad924bfa	Zeph-Iris recovery
+97339d69	Going back to the previous version only works from ZephIrisRecovery.exe in the previous folder of the app folder.
+df560c03	Go back to the previous version {0} of Zeph-Iris? (current version {1})\n\nThe running Zeph-Iris is closed (fans back to the BIOS settings), the previous exe and the settings from before the update are put back, and it starts again.
+e988c5bd	Went back to the previous version by hand.
+d3cc94cf	Could not go back to the previous version ({0}).

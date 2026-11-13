@@ -55,7 +55,7 @@
 - A Windows 10 / 11 (64-bit) desktop PC
 - [PawnIO](https://pawnio.eu/) (the signed driver used for fan control; required by LibreHardwareMonitor 0.9.6 and later). The installer includes the official PawnIO installer and sets it up for you
 - Administrator rights (needed for the Super I/O chip; Windows asks for confirmation at start)
-- For LEDs: [OpenRGB](https://openrgb.org/) running with its SDK server turned on
+- For LEDs: [OpenRGB](https://openrgb.org/) (if it is installed in Program Files, Zeph-Iris starts it with the SDK server on when it is not running; start an OpenRGB unpacked from a zip yourself and turn on its SDK server)
 
 Laptops and motherboards without fan control support are not supported.
 

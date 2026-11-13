@@ -431,11 +431,10 @@ public partial class App : Application
             string exe = InstallCheck.CopyInstall(AppContext.BaseDirectory, InstallCheck.RecommendedFolder);
             if (registerAutoStart && !AutoStart.Enable(exe)) Logger.Warn("移した先に自動起動を登録し直せませんでした");
             Logger.Info($"{InstallCheck.RecommendedFolder} へ移しました（自動起動の登録し直し: {(registerAutoStart ? "あり" : "なし")}）。移した先で起動し直します");
-            // このアプリが終わるのを待ってから（二重には起動できないので、約 5 秒あける）、移した先のアプリを起動する
-            var psi = new System.Diagnostics.ProcessStartInfo("cmd.exe", $"/c ping -n 6 127.0.0.1 >nul & start \"\" \"{exe}\"")
+            // 移した先のアプリを --restart で起動する（このアプリが終わって二重起動の印が空くまで、向こうが最大 30 秒待つ）
+            var psi = new System.Diagnostics.ProcessStartInfo(exe, RestartArgument)
             {
                 UseShellExecute = false,
-                CreateNoWindow = true,
                 WorkingDirectory = InstallCheck.RecommendedFolder,
             };
             System.Diagnostics.Process.Start(psi)?.Dispose();

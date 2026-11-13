@@ -199,6 +199,11 @@ public static class AppUpdater
                 var fileVersion = InstallCheck.FileVersion(path);
                 if (fileVersion is null || !fileVersion.ToString(3).Equals(info.Version.ToString(3), StringComparison.Ordinal))
                     throw new InvalidDataException(L($"インストーラーの版（{fileVersion?.ToString(3) ?? "?"}）が、リリースの版（{info.Version.ToString(3)}）と違います。"));
+                // 電子署名: いまのアプリが署名つきなら、同じ発行元の署名がないインストーラーは使わない
+                var current = Environment.ProcessPath is { } self ? Authenticode.Inspect(self) : SignInfo.None;
+                var signed = Authenticode.Inspect(path);
+                Logger.Info($"インストーラーの署名: {signed.State}（{signed.Subject ?? "なし"}）・いまのアプリ: {current.State}");
+                if (SignaturePolicy.Problem(current, signed) is { } problem) throw new InvalidDataException(problem);
                 return new VerifiedInstaller(path, held);
             }
             catch

@@ -1418,8 +1418,28 @@ public partial class MainWindow
         catch (Exception ex)
         {
             var inner = ex is AggregateException { InnerException: { } x } ? x : ex;
-            ShowRgbMessage(L($"接続できません: {inner.Message}\nOpenRGB を起動して「SDK Server」タブの「Start Server」を押してから、もう一度試してください。"));
+            // OpenRGB が動いていなければ、ここで起動する（待たずに）
+            var cfg = Config.Rgb;
+            string? launched = await Task.Run(() => CurrentApp.Rgb.AutoStart.OnFailure(cfg, AudioClock.Now, force: true));
+            ShowRgbMessage(launched is not null
+                ? launched + "\n" + L("数秒たってから、もう一度「接続テスト」を押してください。")
+                : L($"接続できません: {inner.Message}") + "\n" + OpenRgbHint(cfg));
         }
+    }
+
+    /// <summary>つながらないときの案内（OpenRGB が動いているか・入っているかで変える）</summary>
+    private static string OpenRgbHint(RgbConfig cfg)
+    {
+        if (!OpenRgbAutoStart.IsLocal(cfg.Host))
+            return L("接続先の PC で OpenRGB を起動して「SDK Server」タブの「Start Server」を押してから、もう一度試してください。");
+        var facts = OpenRgbAutoStart.Inspect();
+        if (facts.Running)
+            return L("OpenRGB は動いていますが、SDK サーバーが応えません。OpenRGB の「SDK Server」タブで「Start Server」を押すか、デバイスを探し終わるまで待ってから、もう一度試してください。");
+        if (facts.ServiceInstalled && facts.ServiceDisabled)
+            return L("OpenRGB のサービスが無効になっています。OpenRGB を起動して「SDK Server」タブの「Start Server」を押してから、もう一度試してください。");
+        if (facts.Exe is null)
+            return L("OpenRGB が見つかりません。OpenRGB（無料）をインストールしてください。Program Files に入れると、このアプリが自動で起動します（zip を展開した OpenRGB は、自分で起動してください）。");
+        return L("OpenRGB を起動して「SDK Server」タブの「Start Server」を押してから、もう一度試してください。");
     }
 
     /// <summary>「今すぐ再接続」: 待たずに OpenRGB へ繋ぎ直す</summary>

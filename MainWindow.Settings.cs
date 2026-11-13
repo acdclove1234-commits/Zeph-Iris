@@ -17,6 +17,16 @@ public partial class MainWindow
 {
     private readonly ObservableCollection<SensorGroupVm> _sensorGroups = new();
     private readonly Dictionary<string, SensorRowVm> _sensorRows = new(StringComparer.OrdinalIgnoreCase);
+    /// <summary>センサーごとの最小・最大・平均（起動・リセットしてから）</summary>
+    private readonly SensorStats _sensorStats = new();
+
+    /// <summary>「最小・最大をリセット」</summary>
+    private void OnResetSensorStatsClick(object sender, RoutedEventArgs e)
+    {
+        _sensorStats.Reset(DateTime.Now);
+        foreach (var row in _sensorRows.Values) row.Update(null);
+        SensorStatsSince.Text = L($"最小・最大・平均は {_sensorStats.Since:HH:mm} から");
+    }
     private readonly ObservableCollection<VirtualRowVm> _virtualRows = new();
 
     // =====================================================================

@@ -13,6 +13,28 @@ and Iris, the rainbow (the LEDs).
   for example: Settings [設定].
 
 
+■ What's new in v6.15.0 (game records, automatic rollback after a failed update, safety review)
+  - Game records (Report [レポート] page, off at first): each time you play, one record is kept with the average FPS,
+    1% low (stutter), CPU and GPU temperatures and fan speed. FPS is measured with the bundled Intel PresentMon
+    (MIT License, Intel-signed). It never sees screen contents or input. Records stay on this PC.
+  - If an updated version does not start (for updates from 6.15.0 on): before updating, the current version and settings are kept in the previous
+    folder, and if the new version has not started controlling the fans after 8 minutes, the previous version is put
+    back automatically. Double-click previous\ZephIrisRecovery.exe to go back by hand.
+  - The update installer's digital signature is checked (a signed version is never replaced by an unsigned one or one
+    from another publisher).
+  - If OpenRGB is not running, Zeph-Iris starts it with the SDK server on (OpenRGB installed in Program Files, or the
+    OpenRGB service).
+  - History [履歴] graph: new "Smooth" [なめらかに] toggle (display only; records are unchanged).
+  - Sensors [センサー] page: min, max and average, with "Reset min/max".
+  - "Hardware report…" [動作報告…]: opens a GitHub hardware report filled with the part names and the number of sensors
+    and fans read (you send it yourself).
+  - Calibrating a fixed-speed fan without a temperature curve stops as soon as any watched temperature can no longer
+    be read, and does not start when no temperature can be read at all.
+  - With two GPUs of the same model, the second one's temperatures are watched for emergency full speed too.
+  - Music sync: after audio capture restarts, beat-AI results from the earlier audio are not used.
+  - PNY graphics card LEDs are written directly only on verified boards (by PCI ID).
+  - Settings rows no longer cut off long translations.
+
 ■ What's new in v6.14.5
   - Music sync, "Parts play their roles" [パーツごとの役割]: with several fan headers, every header used to get the bass
     (and the same color). Zones of one device that get the same sound are now given bass, mids and treble in turn
@@ -369,6 +391,14 @@ and Iris, the rainbow (the LEDs).
        "Exit (hand back to BIOS)", then run the installer again.
 
 
+  If the new version does not start properly (from 6.15.0 on):
+    Before updating, the current exe and settings are kept in C:\Program Files\Zeph-Iris\previous.
+    If the new version has not started controlling the fans after 8 minutes, the previous version and
+    settings are put back and started automatically.
+    To go back by hand, double-click C:\Program Files\Zeph-Iris\previous\ZephIrisRecovery.exe -> "Yes".
+    (This works even when the app does not start, and without an internet connection.)
+
+
 ■ Uninstalling
   Use either of these:
   A. Windows Settings -> Apps -> Installed apps -> "..." next to Zeph-Iris -> Uninstall.
@@ -405,6 +435,7 @@ and Iris, the rainbow (the LEDs).
 ■ Files created in the app folder (C:\Program Files\Zeph-Iris)
   config.json ... settings        backups ... automatic setting backups
   logs        ... logs            data    ... per-minute records and energy (up to 180 days)
+  previous    ... the version before the last update, to go back (ZephIrisRecovery.exe)
   records     ... records around incidents (CSV)    reports ... AI advisor answers
   images      ... images you replaced on the Devices page
 

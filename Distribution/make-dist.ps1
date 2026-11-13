@@ -49,6 +49,25 @@ try {
     # このスクリプト自身は入れない
     Get-ChildItem $PSScriptRoot | Where-Object { $_.Name -ne 'make-dist.ps1' } | Copy-Item -Destination $package -Recurse
 
+    # ゲームの記録に使う Intel の PresentMon（MIT License・Intel の署名つき）を、公式のリリースから取ってくる。
+    # 版と SHA-256 を決めておき、違えば止める。アプリのフォルダーの PresentMon\PresentMon.exe に置く（ライセンスは licenses\PresentMon-LICENSE.txt）
+    $pmVersion = '2.6.0'
+    $pmSha256 = 'B2A706BC6AD475749E3B7E3409263AA1E6906D45BDCF993F6DBC0F660188F1AF'
+    $pmCache = Join-Path $root "obj\PresentMon\$pmVersion\PresentMon.exe"
+    if (-not (Test-Path $pmCache) -or (Get-FileHash $pmCache -Algorithm SHA256).Hash -ne $pmSha256) {
+        Write-Host "PresentMon $pmVersion を公式のリリースから取ってきています..." -ForegroundColor Cyan
+        New-Item -ItemType Directory -Force (Split-Path $pmCache -Parent) | Out-Null
+        [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+        Invoke-WebRequest -UseBasicParsing -Uri "https://github.com/GameTechDev/PresentMon/releases/download/v$pmVersion/PresentMon-$pmVersion-x64.exe" -OutFile $pmCache
+        $got = (Get-FileHash $pmCache -Algorithm SHA256).Hash
+        if ($got -ne $pmSha256) {
+            Remove-Item $pmCache -Force
+            throw "PresentMon の SHA-256 が違います（$got）。公式のリリースが変わっていないか確かめてください"
+        }
+    }
+    New-Item -ItemType Directory -Force (Join-Path $package 'PresentMon') | Out-Null
+    Copy-Item $pmCache (Join-Path $package 'PresentMon\PresentMon.exe')
+
     # PawnIO の公式のインストーラーを、公式のリリースから取ってくる（版と SHA-256 を決めておき、違えば止める）。
     # setup.exe に入れるだけで、アプリのフォルダーには置かない。取ってきたものは obj\PawnIO\<版> に残し、次からはそれを使う
     $pawnVersion = '2.2.0'

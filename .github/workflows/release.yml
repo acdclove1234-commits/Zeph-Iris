@@ -12,6 +12,7 @@
 #   variable SIGNPATH_SIGNING_POLICY_SLUG     e.g. release-signing
 #   variable SIGNPATH_EXE_CONFIGURATION       artifact configuration for the zip with Zeph-Iris.exe
 #   variable SIGNPATH_SETUP_CONFIGURATION     artifact configuration for the zip with Zeph-Iris-<version>-setup.exe
+#   variable REQUIRE_SIGNING                  true = stop when the build would be unsigned (set it once signing is live)
 # Without the token the workflow still builds, but the installer is unsigned (a warning says so).
 name: Release build
 
@@ -132,6 +133,14 @@ jobs:
             $sig = Get-AuthenticodeSignature $_.FullName
             "{0}  {1} bytes  sha256 {2}  signature: {3} {4}" -f $_.Name, $_.Length, (Get-FileHash $_.FullName -Algorithm SHA256).Hash, $sig.Status, $sig.SignerCertificate.Subject
           }
+
+      - name: Stop when a build that should be signed is not
+        if: env.SIGN == 'true' || vars.REQUIRE_SIGNING == 'true'
+        shell: pwsh
+        run: |
+          $files = @(Get-ChildItem out/signed-exe/*.exe) + @(Get-ChildItem out/signed-setup/*.exe)
+          $bad = $files | Where-Object { (Get-AuthenticodeSignature $_.FullName).Status -ne 'Valid' }
+          if ($bad) { throw "These files are not validly signed: $($bad.Name -join ', ')" }
 
       - name: Upload the installer
         uses: actions/upload-artifact@v4

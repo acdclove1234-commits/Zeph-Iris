@@ -178,7 +178,6 @@ a16411bf	Utwórz maksimum lub średnią kilku czujników albo różnicę dwóch 
 fcf52b91	Utwórz
 bc3cb03d	Kolor wysyłany teraz do LED-ów (pierwszy, jeśli się różnią)
 9c4008ce	Połączenie
-01f82432	Zmienia kolory płyty głównej, pamięci, wentylatorów, taśm LED i innych przez darmowy OpenRGB. Uruchom OpenRGB i włącz „SDK Server” (jeśli nie łączy, dodaj --server do opcji uruchamiania OpenRGB).
 8f1d5969	Po włączeniu łączy się z OpenRGB i koloruje LED-y efektem wybranym poniżej. Po wyłączeniu aplikacja nic nie wysyła do LED-ów
 49aac369	Używaj OpenRGB
 6305fed9	Działa z LED-ami obsługiwanymi przez OpenRGB. Nie używaj jednocześnie oprogramowania RGB producenta, np. ASRock Polychrome (przejmują sterowanie i migoczą)
@@ -1275,7 +1274,6 @@ e3c74af7	Spokojnie i łagodnie. Kolory zmieniają się powoli co takt
 91f616cf	 W razie złego samopoczucia od razu włącz ponownie „Ogranicz miganie”.
 165c4145	Połączono. Znaleziono urządzenia: {0}.
 3757a4b4	Rozpocznie się po włączeniu „Używaj OpenRGB”
-d7b2f046	Nie można połączyć: {0}\nUruchom OpenRGB, kliknij „Start Server” na karcie „SDK Server” i spróbuj ponownie.
 23ecbb88	„Używaj OpenRGB” jest wyłączone. Włącz, aby się połączyć
 f8d56f66	Wył. (po włączeniu „Używaj OpenRGB” rozpocznie się zmiana koloru LED)
 dabf7260	Wybór będzie możliwy po wczytaniu listy urządzeń. Kliknij „Testuj połączenie” powyżej
@@ -1815,3 +1813,82 @@ f6280d14	 (orientacyjny limit {0:F0}°C, zapas do maksimum {1:F0}°C)
 b8946100	Zapamiętane utwory: {0}
 dfb02ca4	AI rytmu
 e8d98a10	Usunąć wszystkie zapamiętane uderzenia? (Zostaną nauczone ponownie podczas słuchania)
+e59863c1	Zmienia kolory płyty głównej, pamięci, wentylatorów, taśm LED i innych przez darmowy OpenRGB. Jeśli OpenRGB nie działa, ta aplikacja uruchomi go z włączonym „SDK Server” (przełącznik poniżej).
+2df46840	Jeśli połączenie nadal się nie udaje, uruchamia usługę OpenRGB, jeśli OpenRGB jest zainstalowany jako usługa, a w przeciwnym razie OpenRGB z Program Files z „--server --startminimized”. Nigdy nie zatrzymuje ani nie uruchamia ponownie działającego już OpenRGB
+858ce626	Uruchamiaj OpenRGB, jeśli nie działa
+7c3107e5	Tylko OpenRGB na tym PC. Ze względów bezpieczeństwa uruchamiany jest tylko OpenRGB zainstalowany w Program Files (OpenRGB rozpakowany z zip uruchom sam)
+98887878	Uruchomiono usługę OpenRGB. Chwila czekania, aż znajdzie urządzenia…
+afa11876	Uruchomiono OpenRGB (z włączonym serwerem SDK). Chwila czekania, aż znajdzie urządzenia…
+dfa4bc90	Odczekaj kilka sekund i ponownie naciśnij „Testuj połączenie”.
+63c6c61a	Nie można połączyć: {0}
+08b50e4e	Uruchom OpenRGB na komputerze, z którym się łączysz, naciśnij „Start Server” na karcie „SDK Server” i spróbuj ponownie.
+d54dd85f	OpenRGB działa, ale jego serwer SDK nie odpowiada. Naciśnij „Start Server” na karcie „SDK Server” w OpenRGB lub poczekaj, aż skończy wyszukiwać urządzenia, i spróbuj ponownie.
+ed4a4a84	Usługa OpenRGB jest wyłączona. Uruchom OpenRGB, naciśnij „Start Server” na karcie „SDK Server” i spróbuj ponownie.
+23f992d4	Nie znaleziono OpenRGB. Zainstaluj OpenRGB (darmowy). Jeśli zostanie zainstalowany w Program Files, ta aplikacja uruchomi go sama (OpenRGB rozpakowany z zip uruchom sam).
+fe396d5d	Uruchom OpenRGB, naciśnij „Start Server” na karcie „SDK Server” i spróbuj ponownie.
+888c48dd	Wygładź
+5126ccb6	Rysuje linie jako średnią z sąsiedniego czasu, aby czujniki skaczące co 2°C i krótkie skoki CPU były czytelniejsze. Tylko widok: zapis, CSV i wartości pod kursorem pozostają bez zmian
+28cf181a	Wyzeruj min./maks.
+0d4a4da5	Zaczyna liczyć minimum, maksimum i średnią od nowa (na przykład przed uruchomieniem gry)
+6ae383a5	Minimum, maksimum i średnia od uruchomienia aplikacji (liczone także, gdy ten ekran jest zamknięty)
+7a5c0197	Teraz
+e8a96130	Min.
+10b17f28	Maks.
+78bdf61f	Średnia
+a5a18898	Minimum, maksimum i średnia od {0:HH:mm}
+286f135b	Raport sprzętu…
+96d19994	Otwiera stronę GitHub do zgłoszenia, że ten komputer działa, z wypełnionymi modelami podzespołów i tym, co sprawdziła aplikacja (tylko liczby)
+2f719799	Jeśli aplikacja działa na tym komputerze, daj nam znać przez „Raport sprzętu…”. Ze zgłoszeń powiększamy listę „sprawdzonego sprzętu” w README.
+f0a34e2b	Otwiera stronę GitHub do zgłoszenia, że ten komputer działa, z wypełnionymi modelami podzespołów i tym, co sprawdziła aplikacja (tylko liczby). Nawet gdy wszystko działa, raport o niesprawdzonych jeszcze podzespołach bardzo pomaga
+1a26a15b	Otworzy się strona raportów sprzętu na GitHubie z następującą treścią:
+cd8d1af7	Wersja
+ac1de92a	Karta graficzna
+88de0d44	Wpisywane są tylko nazwy modeli i liczby (bez nazwy komputera, użytkownika, ustawień i dzienników). Aplikacja niczego nie wysyła. Sprawdź stronę, dopisz, co działało, a co nie, i wyślij (potrzebne jest konto GitHub).
+9ed8c43f	Raport sprzętu
+153d2bd9	Nie udało się otworzyć przeglądarki.\n{0}
+4afe1df2	Zapis gier (FPS i temperatury)
+ba856364	Po każdej grze zapisuje jeden wpis ze średnim FPS, 1% low (przycięcia), temperaturami CPU i GPU oraz obrotami wentylatorów. Porównaj temperatury i FPS przed i po zmianie ustawień wentylatorów.
+ac0fb61e	Zapisuj FPS i temperatury podczas gry
+01f5728d	Korzysta z dołączonego Intel PresentMon (MIT License) i widzi tylko, która aplikacja narysowała klatkę i ile ms po poprzedniej (nigdy nie widzi zawartości ekranu ani wprowadzanych danych). Aplikacja na pierwszym planie rysująca przez około minutę jest uznawana za grę; przeglądarki, komunikatory i odtwarzacze wideo są pomijane. Zapisy zostają na tym komputerze.
+de7074fc	Brak zapisów.
+04adc800	Szczegóły
+4549282a	Usuń
+4668d319	To nie gra
+97077d12	Nie zapisuj już tej aplikacji (usuwa też jej dotychczasowe wpisy)
+070b3c61	{0} godz. {1} min
+dd408447	{0} min
+2f16f690	{0}, {1}
+829b2e33	Śr. {0:0} fps · 1% low {1:0} fps · 0,1% low {2:0} fps
+d8cf90d7	CPU maks. {0:0}°C (śr. {1:0}°C)
+cc8dbf23	GPU maks. {0:0}°C (śr. {1:0}°C)
+e2bb4ae7	Wentylatory śr. {0:0} rpm
+e19b1126	PresentMon zakończył działanie (kod wyjścia {0})
+b419c5cc	Wyłączone. Włącz, aby zapisywać FPS i temperatury podczas gry.
+3bb71d5d	Nie znaleziono PresentMon (folder PresentMon w folderze aplikacji). Ponowna instalacja aplikacji to naprawi.
+8204e45d	Zapis: {0} · teraz {1:0} fps
+83ecfa1a	Czekam na grę (przenieś grę na pierwszy plan i graj około minuty, aby zacząć zapis).
+0fe39ffc	Czekam na ponowne uruchomienie PresentMon ({0}).
+5afb6e9d	{0} – {1} (rysowanie {2}, {3} klatek)
+c4454de4	Obciążenie CPU śr. {0:0}%
+c401f258	Obciążenie GPU śr. {0:0}%
+6caecaec	Moc GPU śr. {0:0} W
+47dae337	Średni FPS co 10 sekund: najniższy {0:0} fps · najwyższy {1:0} fps
+debb413f	1% low to szybkość najwolniejszego 1% klatek. Im większa różnica względem średniej, tym bardziej odczuwalne przycięcia.
+73a40039	Od teraz nie zapisywać {0}? (Gdy zapisano aplikację, która nie jest grą. Jej dotychczasowe wpisy też zostaną usunięte.)
+e16c0947	Zapis gier
+4184034d	Nie można skalibrować, bo nie da się odczytać temperatur do pilnowania. Spróbuj ponownie, gdy czujniki temperatury będą czytelne.
+d1c5f5ab	Nowa wersja {0} nie uruchomiła się prawidłowo, więc automatycznie przywrócono {1} (ustawienia także sprzed aktualizacji). {2}
+534656cb	Podpis cyfrowy instalatora jest nieprawidłowy (uszkodzony lub zmieniony). Aktualizację przerwano.
+0f0feb7a	Ta aplikacja ma podpis cyfrowy, ale pobrany instalator nie. Aktualizację przerwano.
+01889f11	Pobrany instalator podpisał ktoś inny niż podpisujący tę aplikację. Aktualizację przerwano.
+198beb10	Nie można potwierdzić podpisu cyfrowego PresentMon (brak podpisu Intel). Zainstaluj aplikację ponownie.
+4702ef4e	Nie znaleziono zachowanej kopii poprzedniej wersji (folder previous).
+6b87e136	Nie można przywrócić pliku exe poprzedniej wersji ({0}).
+bba9cc48	Przywrócono poprzednią wersję, ale nie można przywrócić ustawień ({0}).
+cd083e7b	Nowa wersja {0} nie zaczęła sterować wentylatorami w ciągu {1:F0} min.
+17d6b1ee	Nie można zamknąć Zeph-Iris, więc nie przywrócono poprzedniej wersji. Zamknij Zeph-Iris w obszarze powiadomień (albo uruchom ponownie komputer), a wentylatory wrócą do ustawień BIOS. Potem kliknij dwukrotnie ten plik, aby wrócić do poprzedniej wersji:\n{0}
+ad924bfa	Przywracanie Zeph-Iris
+97339d69	Powrót do poprzedniej wersji działa tylko z ZephIrisRecovery.exe w folderze previous folderu aplikacji.
+df560c03	Przywrócić poprzednią wersję {0} Zeph-Iris? (obecna wersja {1})\n\nDziałający Zeph-Iris zostanie zamknięty (wentylatory wrócą do BIOS), poprzedni plik exe i ustawienia sprzed aktualizacji zostaną przywrócone, a program uruchomi się ponownie.
+e988c5bd	Ręcznie przywrócono poprzednią wersję.
+d3cc94cf	Nie można wrócić do poprzedniej wersji ({0}).

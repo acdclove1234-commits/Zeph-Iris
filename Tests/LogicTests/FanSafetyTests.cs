@@ -798,6 +798,9 @@ public static class FanSafetyTests
         var fan = hw.AddControl(Fan0, 40);
         var other = hw.AddControl("/lpc/nct6686d/0/control/2", 40);
         hw.Values[Rpm0] = 1500;
+        // 測定は、見張る温度（ここでは CPU）が読めるときだけ始められる
+        hw.Values["/intelcpu/0/temperature/16"] = 45;
+        hw.Temps.Add(new SensorInfo("/intelcpu/0/temperature/16", "CPU Package", "Intel Core", "Cpu", "Temperature"));
         var cfg = Config(FixedFan(Fan0, 50, Rpm0), FixedFan("/lpc/nct6686d/0/control/2", 50));
         var rig = new Rig(cfg, hw);
         string? calMessage = null;

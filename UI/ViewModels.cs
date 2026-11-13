@@ -312,22 +312,32 @@ public sealed class SensorRowVm : ObservableObject
         _ => Info.SensorType,
     };
     public string ValueText { get => _valueText; private set => Set(ref _valueText, value); }
+    private string _minText = "--", _maxText = "--", _avgText = "--";
+    /// <summary>起動・リセットしてからの最小・最大・平均</summary>
+    public string MinText { get => _minText; private set => Set(ref _minText, value); }
+    public string MaxText { get => _maxText; private set => Set(ref _maxText, value); }
+    public string AvgText { get => _avgText; private set => Set(ref _avgText, value); }
 
-    public void Update(float? v)
+    public void Update(float? v, SensorStats.Entry? stats = null)
     {
-        ValueText = v is null
-            ? "--"
-            : Info.SensorType switch
-            {
-                "Temperature" or "Virtual" => $"{v:F1} °C",
-                "Fan" => $"{v:N0} rpm",
-                "Clock" => $"{v:N0} MHz",
-                "Power" => $"{v:F1} W",
-                "Data" => $"{v:F1} GB",
-                "SmallData" => $"{v:N0} MB",
-                _ => $"{v:F0} %",
-            };
+        ValueText = Format(v);
+        MinText = Format(stats?.Min);
+        MaxText = Format(stats?.Max);
+        AvgText = Format(stats?.Average);
     }
+
+    private string Format(float? v) => v is not float f || float.IsNaN(f)
+        ? "--"
+        : Info.SensorType switch
+        {
+            "Temperature" or "Virtual" => $"{f:F1} °C",
+            "Fan" => $"{f:N0} rpm",
+            "Clock" => $"{f:N0} MHz",
+            "Power" => $"{f:F1} W",
+            "Data" => $"{f:F1} GB",
+            "SmallData" => $"{f:N0} MB",
+            _ => $"{f:F0} %",
+        };
 }
 
 public sealed class SensorGroupVm

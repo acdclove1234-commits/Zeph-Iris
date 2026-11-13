@@ -178,7 +178,6 @@ a16411bf	Birden çok sensörün en yüksek veya ortalama değerini ya da iki sen
 fcf52b91	Oluştur
 bc3cb03d	Şu anda LED'lere gönderilen renk (farklıysa ilki)
 9c4008ce	Bağlantı
-01f82432	Ücretsiz OpenRGB aracılığıyla anakart, bellek, fanlar, LED şeritler ve daha fazlasının renklerini değiştirir. OpenRGB'yi başlatın ve "SDK Server"ı açın (bağlanmazsa OpenRGB'nin başlatma seçeneklerine --server ekleyin).
 8f1d5969	Açıkken OpenRGB'ye bağlanır ve LED'leri aşağıda seçilen efektle renklendirir. Kapalıyken bu uygulama LED'lere hiçbir şey göndermez
 49aac369	OpenRGB'yi kullan
 6305fed9	OpenRGB'nin desteklediği LED'lerle çalışır. ASRock Polychrome gibi bir üreticinin RGB yazılımını aynı anda kullanmayın (kontrol için çekişir ve titrerler)
@@ -1275,7 +1274,6 @@ e3c74af7	Rahat ve sakin. Renkler her ölçüde yavaşça değişir
 91f616cf	 Kendinizi kötü hissederseniz hemen "Yanıp sönmeyi azalt"ı yeniden açın.
 165c4145	Bağlanıldı. {0} cihaz bulundu.
 3757a4b4	"OpenRGB'yi kullan" açılınca başlar
-d7b2f046	Bağlanılamıyor: {0}\nOpenRGB'yi başlatın, "SDK Server" sekmesinde "Start Server"a basın ve tekrar deneyin.
 23ecbb88	"OpenRGB'yi kullan" kapalı. Bağlanmak için açın
 f8d56f66	Kapalı ("OpenRGB'yi kullan" açılınca LED renklerini değiştirmeye başlar)
 dabf7260	Cihaz listesi yüklendikten sonra seçebilirsiniz. Yukarıdaki "Bağlantıyı test et"e basın
@@ -1815,3 +1813,82 @@ f6280d14	 (yol gösterici sınır {0:F0}°C, en yüksek değere pay {1:F0}°C)
 b8946100	Hatırlanan şarkılar: {0}
 dfb02ca4	Ritim yapay zekâsı
 e8d98a10	Hatırlanan tüm vuruşlar silinsin mi? (Dinledikçe yeniden öğrenilir)
+e59863c1	Ücretsiz OpenRGB üzerinden anakart, bellek, fan, LED şerit ve daha fazlasının renklerini değiştirir. OpenRGB çalışmıyorsa bu uygulama onu "SDK Server" açık olarak başlatır (aşağıdaki anahtar).
+2df46840	Bağlantı kurulamamaya devam ederse, OpenRGB hizmet olarak kuruluysa hizmeti, değilse Program Files'taki OpenRGB'yi "--server --startminimized" ile başlatır. Zaten çalışan bir OpenRGB'yi asla durdurmaz veya yeniden başlatmaz
+858ce626	OpenRGB çalışmıyorsa başlat
+7c3107e5	Yalnızca bu bilgisayardaki OpenRGB. Güvenlik için yalnızca Program Files'a kurulu OpenRGB başlatılır (zip'ten çıkarılmış bir OpenRGB'yi kendiniz başlatın)
+98887878	OpenRGB hizmeti başlatıldı. Aygıtlarınızı bulması bekleniyor…
+afa11876	OpenRGB başlatıldı (SDK sunucusu da açık). Aygıtlarınızı bulması bekleniyor…
+dfa4bc90	Birkaç saniye bekleyip "Bağlantıyı test et"e yeniden basın.
+63c6c61a	Bağlanılamıyor: {0}
+08b50e4e	Bağlandığınız bilgisayarda OpenRGB'yi başlatın, "SDK Server" sekmesinde "Start Server"a basın ve yeniden deneyin.
+d54dd85f	OpenRGB çalışıyor ancak SDK sunucusu yanıt vermiyor. OpenRGB'nin "SDK Server" sekmesinde "Start Server"a basın veya aygıt aramasının bitmesini bekleyin ve yeniden deneyin.
+ed4a4a84	OpenRGB hizmeti devre dışı. OpenRGB'yi başlatın, "SDK Server" sekmesinde "Start Server"a basın ve yeniden deneyin.
+23f992d4	OpenRGB bulunamadı. Lütfen OpenRGB'yi (ücretsiz) kurun. Program Files'a kurulursa bu uygulama onu otomatik başlatır (zip'ten çıkarılmış bir OpenRGB'yi kendiniz başlatın).
+fe396d5d	OpenRGB'yi başlatın, "SDK Server" sekmesinde "Start Server"a basın ve yeniden deneyin.
+888c48dd	Yumuşat
+5126ccb6	Çizgileri yakın zamanın ortalaması olarak çizer; 2°C adımlarla gidip gelen sensörler ve CPU'nun kısa sıçramaları daha kolay okunur. Yalnızca görünüm değişir: kayıt, CSV ve fare altındaki değerler aynı kalır
+28cf181a	Min./maks. sıfırla
+0d4a4da5	Minimum, maksimum ve ortalamayı şimdiden itibaren yeniden saymaya başlar (örneğin bir oyuna başlamadan önce)
+6ae383a5	Uygulama başladığından beri minimum, maksimum ve ortalama (bu ekran kapalıyken de sayılır)
+7a5c0197	Şimdi
+e8a96130	Min.
+10b17f28	Maks.
+78bdf61f	Ortalama
+a5a18898	{0:HH:mm} itibarıyla minimum, maksimum ve ortalama
+286f135b	Donanım raporu…
+96d19994	Bu bilgisayarın çalıştığını bildirmek için GitHub sayfasını, parça modelleri ve uygulamanın kontrol ettikleri (yalnızca sayılar) doldurulmuş olarak açar
+2f719799	Uygulama bu bilgisayarda çalışıyorsa lütfen "Donanım raporu…" ile bize bildirin. Gelen raporlarla README içindeki "doğrulanmış donanım" listesini büyütüyoruz.
+f0a34e2b	Bu bilgisayarın çalıştığını bildirmek için GitHub sayfasını, parça modelleri ve uygulamanın kontrol ettikleri (yalnızca sayılar) doldurulmuş olarak açar. Sorun olmasa bile henüz denenmemiş parçalar hakkında bir rapor çok yardımcı olur
+1a26a15b	GitHub donanım raporu sayfası şu bilgilerle açılacak:
+cd8d1af7	Sürüm
+ac1de92a	Ekran kartı
+88de0d44	Yalnızca model adları ve sayılar doldurulur (bilgisayar adı, kullanıcı adı, ayarlar veya günlükler yok). Uygulama hiçbir şey göndermez. Sayfayı kontrol edin, neyin çalışıp neyin çalışmadığını ekleyin ve gönderin (GitHub hesabı gerekir).
+9ed8c43f	Donanım raporu
+153d2bd9	Tarayıcı açılamadı.\n{0}
+4afe1df2	Oyun kayıtları (FPS ve sıcaklıklar)
+ba856364	Her oynadığınızda ortalama FPS, %1 low (takılma), CPU ve GPU sıcaklıkları ve fan hızıyla bir kayıt saklar. Fanları ayarlamadan önce ve sonra sıcaklıkların ve FPS'in nasıl değiştiğini karşılaştırın.
+ac0fb61e	Oyun sırasında FPS ve sıcaklıkları kaydet
+01f5728d	Birlikte gelen Intel PresentMon'u (MIT License) kullanır ve yalnızca hangi uygulamanın bir kare çizdiğini ve öncekinden kaç ms sonra çizdiğini görür (ekran içeriğini ve girdileri asla görmez). Önde yaklaşık bir dakika çizmeye devam eden uygulama oyun sayılır; tarayıcılar, sohbet ve video uygulamaları hariç tutulur. Kayıtlar bu bilgisayarda kalır.
+de7074fc	Henüz kayıt yok.
+04adc800	Ayrıntılar
+4549282a	Sil
+4668d319	Oyun değil
+97077d12	Bu uygulamayı artık kaydetme (şimdiye kadarki kayıtlarını da siler)
+070b3c61	{0} sa {1} dk
+dd408447	{0} dk
+2f16f690	{0}, {1}
+829b2e33	Ort. {0:0} fps · %1 low {1:0} fps · %0,1 low {2:0} fps
+d8cf90d7	CPU en yüksek {0:0}°C (ort. {1:0}°C)
+cc8dbf23	GPU en yüksek {0:0}°C (ort. {1:0}°C)
+e2bb4ae7	Fanlar ort. {0:0} rpm
+e19b1126	PresentMon kapandı (çıkış kodu {0})
+b419c5cc	Kapalı. Oynarken FPS ve sıcaklıkları kaydetmek için açın.
+3bb71d5d	PresentMon bulunamadı (uygulama klasöründeki PresentMon klasörü). Uygulamayı yeniden yüklemek bunu düzeltir.
+8204e45d	Kaydediliyor: {0} · şu an {1:0} fps
+83ecfa1a	Oyun bekleniyor (kaydı başlatmak için bir oyunu öne getirip yaklaşık bir dakika oynayın).
+0fe39ffc	PresentMon'un yeniden başlatılması bekleniyor ({0}).
+5afb6e9d	{0} – {1} (çizim süresi {2}, {3} kare)
+c4454de4	CPU yükü ort. %{0:0}
+c401f258	GPU yükü ort. %{0:0}
+6caecaec	GPU gücü ort. {0:0} W
+47dae337	10 saniyelik ortalama FPS: en düşük {0:0} fps · en yüksek {1:0} fps
+debb413f	%1 low, en yavaş %1'lik karelerin hızıdır. Ortalamayla fark büyüdükçe takılmalar daha çok hissedilir.
+73a40039	{0} bundan sonra kaydedilmesin mi? (Oyun olmayan bir uygulama kaydedildiğinde kullanın. Şimdiye kadarki kayıtları da silinir.)
+e16c0947	Oyun kayıtları
+4184034d	İzlenecek sıcaklıklar okunamadığı için kalibrasyon yapılamıyor. Sıcaklık sensörleri okunabilir olduğunda tekrar deneyin.
+d1c5f5ab	Yeni sürüm {0} düzgün başlamadı, bu yüzden otomatik olarak {1} sürümüne dönüldü (ayarlar da güncellemeden öncekiler). {2}
+534656cb	Yükleyicinin dijital imzası geçersiz (bozuk veya değiştirilmiş). Güncelleme durduruldu.
+0f0feb7a	Bu uygulama dijital olarak imzalı, ancak indirilen yükleyici imzasız. Güncelleme durduruldu.
+01889f11	İndirilen yükleyici, bu uygulamayı imzalayandan farklı biri tarafından imzalanmış. Güncelleme durduruldu.
+198beb10	PresentMon'un dijital imzası doğrulanamadı (Intel imzası yok). Lütfen uygulamayı yeniden yükleyin.
+4702ef4e	Önceki sürümün saklanan kopyası (previous klasörü) bulunamadı.
+6b87e136	Önceki sürümün exe dosyası geri yüklenemedi ({0}).
+bba9cc48	Önceki sürüme dönüldü ama ayarlar geri yüklenemedi ({0}).
+cd083e7b	Yeni sürüm {0}, {1:F0} dakika içinde fanları kontrol etmeye başlamadı.
+17d6b1ee	Zeph-Iris kapatılamadığı için önceki sürüme dönülemedi. Zeph-Iris'ten bildirim alanından çıkın (veya bilgisayarı yeniden başlatın), fanlar BIOS ayarlarına döner. Ardından önceki sürüme dönmek için bu dosyaya çift tıklayın:\n{0}
+ad924bfa	Zeph-Iris kurtarma
+97339d69	Önceki sürüme dönmek yalnızca uygulama klasöründeki previous klasöründe bulunan ZephIrisRecovery.exe ile yapılabilir.
+df560c03	Zeph-Iris önceki sürüm {0} sürümüne döndürülsün mü? (şu anki sürüm {1})\n\nÇalışan Zeph-Iris kapatılır (fanlar BIOS'a döner), önceki exe ve güncellemeden önceki ayarlar geri yüklenir ve yeniden başlar.
+e988c5bd	Önceki sürüme elle dönüldü.
+d3cc94cf	Önceki sürüme dönülemedi ({0}).

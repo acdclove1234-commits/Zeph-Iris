@@ -205,6 +205,7 @@ public partial class MainWindow
         _longTerm.Flush();
         _energy.Save();
         _recorder.Flush(_history);
+        SaveGamesOnExit();
     }
 
     // =====================================================================
@@ -215,6 +216,7 @@ public partial class MainWindow
     {
         RefreshEnergy();
         RefreshRecords();
+        RefreshGames();
     }
 
     private bool ShowYen => EnergyYen?.IsChecked == true;

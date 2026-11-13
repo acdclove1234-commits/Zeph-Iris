@@ -54,7 +54,7 @@
 - Windows 10 / 11（64bit）のデスクトップ PC
 - [PawnIO](https://pawnio.eu/)（ファンの制御用の署名つきドライバー。LibreHardwareMonitor 0.9.6 以降で必要）。インストーラーに PawnIO の公式のインストーラーが入っていて、自動で入れます
 - 管理者権限（Super I/O にアクセスするため、起動時に UAC の確認が出ます）
-- LED を使う場合: [OpenRGB](https://openrgb.org/)（起動しておき、SDK サーバーをオンにする）
+- LED を使う場合: [OpenRGB](https://openrgb.org/)（Program Files に入れておけば、動いていないときは Zeph-Iris が SDK サーバーをオンにして起動します。zip を展開した OpenRGB は、自分で起動して SDK サーバーをオンにしてください）
 
 ノート PC と、ファン制御に対応していないマザーボードでは使えません。
 

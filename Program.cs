@@ -37,9 +37,61 @@ internal static class Program
         // アンインストーラー（Inno Setup）から: Windows に登録したものを消す（選んだときは設定・ログ・記録も）。画面は出さない
         if (args.Contains(InstallerCleanup.Argument, StringComparer.OrdinalIgnoreCase)) return InstallerCleanup.Run(args);
 
+        // 更新の見守り・前の版に戻す（previous\ZephIrisRecovery.exe として動く。画面の部品は読み込まない）
+        if (RecoveryMode(args) is { } recovery) return recovery;
+
         var app = new App();
         app.InitializeComponent();
         return app.Run();
+    }
+
+    /// <summary>
+    /// 「--update-guard アプリのフォルダー」: 更新の見守り。
+    /// 「--restore-previous」か、ZephIrisRecovery.exe を引数なしで起動した（ダブルクリック）: 確かめてから前の版に戻す（--yes なら確かめない）。
+    /// どちらでもなければ null（ふつうに起動する）
+    /// </summary>
+    private static int? RecoveryMode(string[] args)
+    {
+        int g = Array.IndexOf(args, UpdateRecovery.GuardArgument);
+        bool asRecovery = string.Equals(Path.GetFileName(Environment.ProcessPath), UpdateRecovery.RecoveryExe, StringComparison.OrdinalIgnoreCase);
+        bool restore = args.Contains(UpdateRecovery.RestoreArgument, StringComparer.OrdinalIgnoreCase) || (asRecovery && args.Length == 0);
+        if (g < 0 && !restore) return null;
+
+        Logger.FileSuffix = "recovery";
+        Localization.Init(ConfigStore.ReadLanguage());
+        string caption = L("Zeph-Iris の復旧");
+        void Tell(string text) => NativeMessageBox.Warn(text, caption);
+        try
+        {
+            if (g >= 0)
+            {
+                if (g + 1 >= args.Length || !Directory.Exists(args[g + 1])) return 2;
+                return UpdateRecovery.RunGuard(args[g + 1], Logger.Info, Tell);
+            }
+            // 手で戻す: この exe は アプリのフォルダー\previous にあるはず
+            string appDir = Path.GetDirectoryName(AppContext.BaseDirectory.TrimEnd(Path.DirectorySeparatorChar))!;
+            if (!asRecovery || !File.Exists(UpdateRecovery.AppExe(appDir)))
+            {
+                Tell(L("前の版に戻せるのは、アプリのフォルダーの previous にある ZephIrisRecovery.exe からだけです。"));
+                return 2;
+            }
+            string previous = UpdateRecovery.BackupVersion(appDir)?.ToString(3) ?? "?";
+            string now = InstallCheck.FileVersion(UpdateRecovery.AppExe(appDir))?.ToString(3) ?? "?";
+            if (!args.Contains("--yes", StringComparer.OrdinalIgnoreCase) &&
+                !NativeMessageBox.AskYesNo(L($"Zeph-Iris を前の版 {previous} に戻しますか？（いまの版 {now}）\n\n動いている Zeph-Iris を終了し（ファンは BIOS の設定に戻ります）、前の版の exe と、更新する前の設定に戻してから起動します。"), caption))
+                return 0;
+            return UpdateRecovery.RestoreAndStart(appDir, L("手で前の版に戻しました。"), Logger.Info, Tell);
+        }
+        catch (Exception ex)
+        {
+            Logger.Error($"復旧で例外: {ex}");
+            Tell(L($"前の版に戻せませんでした（{ex.Message}）。"));
+            return 1;
+        }
+        finally
+        {
+            Logger.Flush();
+        }
     }
 }
 
@@ -52,4 +104,10 @@ internal static class NativeMessageBox
     private static extern int MessageBoxW(IntPtr hWnd, string text, string caption, uint type);
 
     public static void Warn(string text, string caption) => MessageBoxW(IntPtr.Zero, text, caption, MbOk | MbIconWarning | MbSetForeground | MbTopMost);
+
+    private const uint MbYesNo = 0x4, MbIconQuestion = 0x20;
+    private const int IdYes = 6;
+
+    public static bool AskYesNo(string text, string caption) =>
+        MessageBoxW(IntPtr.Zero, text, caption, MbYesNo | MbIconQuestion | MbSetForeground | MbTopMost) == IdYes;
 }

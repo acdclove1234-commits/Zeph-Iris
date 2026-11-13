@@ -162,7 +162,26 @@ public sealed class PnyEpicXGpu
 
     private static readonly Regex NvApiLocation = new(@"NvAPI I2C on GPU (\d+), address 0x60", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
     private static readonly Dictionary<int, PnyEpicXGpu> Opened = new();
+    /// <summary>開いてみたら、確かめた基板ではなかったグラボ（NvAPI の番号）。確かめていない型番を使う設定でなければ、開き直さない</summary>
+    private static readonly HashSet<int> NotVerifiedBoards = new();
     private static readonly object OpenGate = new();
+
+    /// <summary>NVIDIA の PCI のベンダー番号</summary>
+    public const ushort NvidiaVendor = 0x10DE;
+
+    /// <summary>
+    /// 実機で直接書き込みを確かめた基板（PCI のデバイス番号と、サブシステムの基板の番号。サブシステムのベンダーは PNY 0x196E）。
+    /// 名前（5070Ti）・LED の並び・PNY の番号だけでは、同じ名前の別の基板を見分けられないので、開いたあとにこれで確かめる
+    /// </summary>
+    public static readonly IReadOnlyList<(ushort Device, ushort Board, string Model)> VerifiedBoards = new[]
+    {
+        ((ushort)0x2C05, (ushort)0x143A, "PNY GeForce RTX 5070 Ti Epic-X ARGB"),
+    };
+
+    /// <summary>PCI の番号（NvApiI2c.DeviceId・SubSystemId の形）が、確かめた基板のどれかと同じか</summary>
+    public static bool IsVerifiedBoard(uint deviceId, uint subSystemId) =>
+        (deviceId & 0xFFFF) == NvidiaVendor && (subSystemId & 0xFFFF) == PnySubVendor &&
+        VerifiedBoards.Any(b => (deviceId >> 16) == b.Device && (subSystemId >> 16) == b.Board);
 
     private readonly II2cBlockWriter _bus;
     private readonly PnyEpicXEncoder _encoder = new();
@@ -187,6 +206,9 @@ public sealed class PnyEpicXGpu
 
     /// <summary>書き込みに失敗し続けたので、もう直接は書かない（OpenRGB を通す）</summary>
     public bool Faulted => _faulted;
+
+    /// <summary>PCI の番号で、確かめた基板だと分かった（確かめていない型番を使う設定で開いたときは false のことがある）</summary>
+    public bool BoardVerified { get; private init; }
 
     /// <summary>
     /// 1 コマを書くのにかかる時間の平均（ミリ秒。書き込んだコマだけをならす。まだ書いていなければ null）。
@@ -234,21 +256,33 @@ public sealed class PnyEpicXGpu
     /// <summary>直接書いてよいか: 書き方が分かっているグラボで、確かめた型番か、確かめていない型番も使う設定のとき</summary>
     public static bool Allowed(RgbDevice d, bool allowUnverified) => IsCandidate(d, out _) && (allowUnverified || IsVerified(d));
 
-    /// <summary>直接書けるグラボなら開く（同じグラボは前に開いたものを返す）。書けなければ null（OpenRGB を通して送る）</summary>
-    public static PnyEpicXGpu? TryOpen(RgbDevice d)
+    /// <summary>
+    /// 直接書けるグラボなら開く（同じグラボは前に開いたものを返す）。書けなければ null（OpenRGB を通して送る）。
+    /// allowUnverified でなければ、開いたあとに PCI の番号で確かめた基板かを見て、違えば閉じる
+    /// </summary>
+    public static PnyEpicXGpu? TryOpen(RgbDevice d, bool allowUnverified = false)
     {
         if (!IsCandidate(d, out int index)) return null;
         lock (OpenGate)
         {
             if (Opened.TryGetValue(index, out var gpu))
             {
-                if (gpu.Faulted) return null;
+                if (gpu.Faulted || (!allowUnverified && !gpu.BoardVerified)) return null;
                 gpu.Invalidate();
                 return gpu;
             }
+            if (!allowUnverified && NotVerifiedBoards.Contains(index)) return null;
             var bus = NvApiI2c.Open(index, Address, PnySubVendor);
             if (bus is null) return null;
-            gpu = new PnyEpicXGpu(bus, d.Name);
+            bool verified = IsVerifiedBoard(bus.DeviceId, bus.SubSystemId);
+            if (!verified && !allowUnverified)
+            {
+                NotVerifiedBoards.Add(index);
+                Logger.Info($"{d.Name}: 名前は確かめた型番ですが、基板の番号（{bus.DeviceId >> 16:X4}・{bus.SubSystemId:X8}）が確かめたものと違うため、OpenRGB を通して光らせます");
+                bus.Dispose();
+                return null;
+            }
+            gpu = new PnyEpicXGpu(bus, d.Name) { BoardVerified = verified };
             Opened[index] = gpu;
             return gpu;
         }

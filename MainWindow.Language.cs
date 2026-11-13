@@ -106,6 +106,9 @@ public partial class MainWindow
         StopSyncTest();
         StopWhiteTest();
         _advisorCts?.Cancel();
+        // 前の画面のタイマー・補助のプロセスを残さない（新しい画面が自分のものを動かし直す）
+        _conflictTimer?.Stop();
+        SaveGamesOnExit();
         return carry;
     }
 

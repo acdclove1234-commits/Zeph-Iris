@@ -178,7 +178,6 @@ a16411bf	Créez le maximum ou la moyenne de plusieurs capteurs, ou la différenc
 fcf52b91	Créer
 bc3cb03d	Couleur envoyée aux LED en ce moment (la première si elles diffèrent)
 9c4008ce	Connexion
-01f82432	Change les couleurs de la carte mère, de la mémoire, des ventilateurs, des bandes LED, etc. via le logiciel gratuit OpenRGB. Lancez OpenRGB et activez son « SDK Server » (si la connexion échoue, ajoutez --server aux options de démarrage d'OpenRGB).
 8f1d5969	Activé, se connecte à OpenRGB et colore les LED avec l'effet choisi ci-dessous. Désactivé, cette application n'envoie rien aux LED
 49aac369	Utiliser OpenRGB
 6305fed9	Fonctionne avec les LED prises en charge par OpenRGB. N'utilisez pas en même temps un logiciel RGB de fabricant comme ASRock Polychrome (ils se disputent le contrôle et clignotent)
@@ -1275,7 +1274,6 @@ e3c74af7	Calme et posé. Les couleurs changent lentement à chaque mesure
 91f616cf	 En cas de malaise, réactivez immédiatement « Réduire les flashs ».
 165c4145	Connecté. {0} appareils trouvés.
 3757a4b4	Démarre lorsque « Utiliser OpenRGB » est activé
-d7b2f046	Connexion impossible : {0}\nLancez OpenRGB, cliquez sur « Start Server » dans l'onglet « SDK Server », puis réessayez.
 23ecbb88	« Utiliser OpenRGB » est désactivé. Activez-le pour vous connecter
 f8d56f66	Désactivé (activez « Utiliser OpenRGB » pour commencer à changer la couleur des LED)
 dabf7260	Le choix est possible une fois la liste des appareils chargée. Cliquez sur « Tester la connexion » ci-dessus
@@ -1815,3 +1813,82 @@ f6280d14	 (limite indicative {0:F0} °C, marge jusqu'au maximum {1:F0} °C)
 b8946100	Morceaux mémorisés : {0}
 dfb02ca4	IA de tempo
 e8d98a10	Supprimer tous les temps mémorisés ? (Ils sont réappris pendant l'écoute)
+e59863c1	Change les couleurs de la carte mère, de la mémoire, des ventilateurs, des rubans LED, etc. via OpenRGB (gratuit). Si OpenRGB n'est pas lancé, cette appli le démarre avec son « SDK Server » activé (interrupteur ci-dessous).
+2df46840	Si la connexion échoue de façon prolongée, démarre le service OpenRGB s'il est installé comme service, sinon OpenRGB dans Program Files avec « --server --startminimized ». Un OpenRGB déjà lancé n'est jamais arrêté ni redémarré
+858ce626	Démarrer OpenRGB s'il n'est pas lancé
+7c3107e5	Uniquement OpenRGB sur ce PC. Par sécurité, seul un OpenRGB installé dans Program Files est démarré (lancez vous-même un OpenRGB décompressé d'un zip)
+98887878	Service OpenRGB démarré. Attente pendant qu'il détecte vos périphériques…
+afa11876	OpenRGB démarré (serveur SDK activé). Attente pendant qu'il détecte vos périphériques…
+dfa4bc90	Patientez quelques secondes, puis appuyez de nouveau sur « Tester la connexion ».
+63c6c61a	Connexion impossible : {0}
+08b50e4e	Lancez OpenRGB sur le PC auquel vous vous connectez, appuyez sur « Start Server » dans l'onglet « SDK Server », puis réessayez.
+d54dd85f	OpenRGB est lancé, mais son serveur SDK ne répond pas. Appuyez sur « Start Server » dans l'onglet « SDK Server » d'OpenRGB, ou attendez la fin de la détection des périphériques, puis réessayez.
+ed4a4a84	Le service OpenRGB est désactivé. Lancez OpenRGB, appuyez sur « Start Server » dans l'onglet « SDK Server », puis réessayez.
+23f992d4	OpenRGB est introuvable. Installez OpenRGB (gratuit). S'il est installé dans Program Files, cette appli le démarre automatiquement (lancez vous-même un OpenRGB décompressé d'un zip).
+fe396d5d	Lancez OpenRGB, appuyez sur « Start Server » dans l'onglet « SDK Server », puis réessayez.
+888c48dd	Lisser
+5126ccb6	Trace les courbes comme la moyenne sur le temps voisin, pour mieux lire les capteurs qui oscillent par pas de 2 °C et les pics brefs du CPU. Affichage seulement : l’historique, le CSV et les valeurs sous la souris ne changent pas
+28cf181a	Réinitialiser min./max.
+0d4a4da5	Recommence à compter le minimum, le maximum et la moyenne à partir de maintenant (par exemple avant de lancer un jeu)
+6ae383a5	Minimum, maximum et moyenne depuis le lancement de l’application (comptés même quand cet écran est fermé)
+7a5c0197	Actuel
+e8a96130	Min.
+10b17f28	Max.
+78bdf61f	Moyenne
+a5a18898	Minimum, maximum et moyenne depuis {0:HH:mm}
+286f135b	Rapport matériel…
+96d19994	Ouvre la page GitHub pour signaler que ce PC fonctionne, préremplie avec les modèles des composants et ce que l’application a vérifié (des nombres seulement)
+2f719799	Si l’application fonctionne sur ce PC, dites-le-nous avec « Rapport matériel… ». Les rapports reçus enrichissent la liste du « matériel vérifié » dans le README.
+f0a34e2b	Ouvre la page GitHub pour signaler que ce PC fonctionne, préremplie avec les modèles des composants et ce que l’application a vérifié (des nombres seulement). Même sans problème, un rapport sur des composants pas encore vérifiés aide beaucoup
+1a26a15b	La page GitHub des rapports matériels va s’ouvrir avec le contenu suivant :
+cd8d1af7	Version
+ac1de92a	Carte graphique
+88de0d44	Seuls les modèles et des nombres sont remplis (ni nom du PC, ni nom d’utilisateur, ni réglages, ni journaux). L’application n’envoie rien. Vérifiez la page, ajoutez ce qui a fonctionné ou non, puis envoyez-la (un compte GitHub est nécessaire).
+9ed8c43f	Rapport matériel
+153d2bd9	Impossible d’ouvrir le navigateur.\n{0}
+4afe1df2	Historique des jeux (FPS et températures)
+ba856364	À chaque partie, enregistre une entrée avec les FPS moyens, le 1 % low (saccades), les températures CPU et GPU et la vitesse des ventilateurs. Comparez températures et FPS avant et après un réglage des ventilateurs.
+ac0fb61e	Enregistrer FPS et températures en jeu
+01f5728d	Utilise Intel PresentMon fourni (MIT License) pour voir seulement quelle application a dessiné une image et combien de ms après la précédente (jamais le contenu de l’écran ni les saisies). Une application au premier plan qui dessine pendant environ une minute est considérée comme un jeu ; navigateurs, messageries et lecteurs vidéo sont exclus. Les données restent sur ce PC.
+de7074fc	Aucun enregistrement pour l’instant.
+04adc800	Détails
+4549282a	Supprimer
+4668d319	Pas un jeu
+97077d12	Ne plus enregistrer cette application (supprime aussi ses entrées)
+070b3c61	{0} h {1} min
+dd408447	{0} min
+2f16f690	{0}, {1}
+829b2e33	Moy. {0:0} fps · 1 % low {1:0} fps · 0,1 % low {2:0} fps
+d8cf90d7	CPU max. {0:0}°C (moy. {1:0}°C)
+cc8dbf23	GPU max. {0:0}°C (moy. {1:0}°C)
+e2bb4ae7	Ventilateurs moy. {0:0} rpm
+e19b1126	PresentMon s’est arrêté (code de sortie {0})
+b419c5cc	Désactivé. Activez-le pour enregistrer FPS et températures pendant vos parties.
+3bb71d5d	PresentMon introuvable (dossier PresentMon dans le dossier de l’application). Réinstaller l’application corrige ce problème.
+8204e45d	Enregistrement : {0} · actuellement {1:0} fps
+83ecfa1a	En attente d’un jeu (mettez un jeu au premier plan et jouez environ une minute pour lancer l’enregistrement).
+0fe39ffc	En attente du redémarrage de PresentMon ({0}).
+5afb6e9d	{0} – {1} (affichage pendant {2}, {3} images)
+c4454de4	Charge CPU moy. {0:0} %
+c401f258	Charge GPU moy. {0:0} %
+6caecaec	Puissance GPU moy. {0:0} W
+47dae337	FPS moyens par 10 secondes : min. {0:0} fps · max. {1:0} fps
+debb413f	Le 1 % low est la vitesse des 1 % d’images les plus lentes. Plus l’écart avec la moyenne est grand, plus les saccades se remarquent.
+73a40039	Ne plus enregistrer {0} désormais ? (Si une application qui n’est pas un jeu a été enregistrée. Ses entrées seront aussi supprimées.)
+e16c0947	Historique des jeux
+4184034d	Calibrage impossible : les températures à surveiller ne peuvent pas être lues. Réessayez quand les capteurs de température seront lisibles.
+d1c5f5ab	La nouvelle version {0} n’a pas démarré correctement ; retour automatique à {1} (les réglages sont aussi ceux d’avant la mise à jour). {2}
+534656cb	La signature numérique du programme d’installation n’est pas valide (endommagée ou modifiée). La mise à jour a été arrêtée.
+0f0feb7a	Cette application est signée numériquement, mais pas le programme d’installation téléchargé. La mise à jour a été arrêtée.
+01889f11	Le programme d’installation téléchargé a été signé par quelqu’un d’autre que le signataire de cette application. La mise à jour a été arrêtée.
+198beb10	Impossible de confirmer la signature numérique de PresentMon (pas de signature Intel). Réinstallez l’application.
+4702ef4e	La copie conservée de la version précédente (dossier previous) est introuvable.
+6b87e136	Impossible de remettre l’exe de la version précédente ({0}).
+bba9cc48	La version précédente est revenue, mais les réglages n’ont pas pu être remis ({0}).
+cd083e7b	La nouvelle version {0} n’a pas commencé à piloter les ventilateurs en {1:F0} minutes.
+17d6b1ee	Impossible de fermer Zeph-Iris, donc impossible de revenir à la version précédente. Quittez Zeph-Iris depuis la zone de notification (ou redémarrez le PC) : les ventilateurs reviennent aux réglages du BIOS. Ensuite, double-cliquez sur ce fichier pour revenir à la version précédente :\n{0}
+ad924bfa	Récupération de Zeph-Iris
+97339d69	Le retour à la version précédente ne fonctionne qu’avec ZephIrisRecovery.exe du dossier previous du dossier de l’application.
+df560c03	Revenir à la version précédente {0} de Zeph-Iris ? (version actuelle {1})\n\nZeph-Iris est fermé (ventilateurs rendus au BIOS), l’exe précédent et les réglages d’avant la mise à jour sont remis, puis il redémarre.
+e988c5bd	Retour manuel à la version précédente effectué.
+d3cc94cf	Impossible de revenir à la version précédente ({0}).

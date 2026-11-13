@@ -178,7 +178,6 @@ a16411bf	Maak het maximum of gemiddelde van meerdere sensoren, of het verschil t
 fcf52b91	Maken
 bc3cb03d	Kleur die nu naar de leds gaat (de eerste als ze verschillen)
 9c4008ce	Verbinding
-01f82432	Verandert de kleuren van moederbord, geheugen, ventilatoren, ledstrips en meer via het gratis OpenRGB. Start OpenRGB en zet de "SDK Server" aan (lukt de verbinding niet, voeg dan --server toe aan de startopties van OpenRGB).
 8f1d5969	Aan: maakt verbinding met OpenRGB en kleurt de leds met het effect dat je hieronder kiest. Uit: deze app stuurt niets naar de leds
 49aac369	OpenRGB gebruiken
 6305fed9	Werkt met leds die OpenRGB ondersteunt. Gebruik niet tegelijk RGB-software van een fabrikant zoals ASRock Polychrome (ze vechten om de regeling en flikkeren)
@@ -1275,7 +1274,6 @@ e3c74af7	Rustig en kalm. De kleuren wisselen langzaam per maat
 91f616cf	 Voel je je niet goed, zet "Flitsen beperken" dan meteen weer aan.
 165c4145	Verbonden. {0} apparaten gevonden.
 3757a4b4	Start zodra "OpenRGB gebruiken" aan staat
-d7b2f046	Kan geen verbinding maken: {0}\nStart OpenRGB, klik op "Start Server" op het tabblad "SDK Server" en probeer het opnieuw.
 23ecbb88	"OpenRGB gebruiken" staat uit. Zet het aan om te verbinden
 f8d56f66	Uit (met "OpenRGB gebruiken" aan begint de app de ledkleuren te wijzigen)
 dabf7260	Je kunt kiezen zodra de apparatenlijst is geladen. Klik hierboven op "Verbinding testen"
@@ -1815,3 +1813,82 @@ f6280d14	 (richtgrens {0:F0} °C, marge tot het maximum {1:F0} °C)
 b8946100	Onthouden nummers: {0}
 dfb02ca4	Beat-AI
 e8d98a10	Alle onthouden beats verwijderen? (Ze worden tijdens het luisteren opnieuw geleerd)
+e59863c1	Verandert de kleuren van moederbord, geheugen, ventilatoren, ledstrips en meer via het gratis OpenRGB. Draait OpenRGB niet, dan start deze app het met de "SDK Server" aan (schakelaar hieronder).
+2df46840	Blijft verbinden mislukken, dan wordt de OpenRGB-service gestart als OpenRGB als service is geïnstalleerd, anders OpenRGB uit Program Files met "--server --startminimized". Een OpenRGB dat al draait wordt nooit gestopt of herstart
+858ce626	OpenRGB starten als het niet draait
+7c3107e5	Alleen OpenRGB op deze pc. Voor de veiligheid wordt alleen een in Program Files geïnstalleerd OpenRGB gestart (start een uit een zip uitgepakt OpenRGB zelf)
+98887878	OpenRGB-service gestart. Even wachten tot hij je apparaten heeft gevonden…
+afa11876	OpenRGB gestart (met de SDK-server aan). Even wachten tot het je apparaten heeft gevonden…
+dfa4bc90	Wacht een paar seconden en klik dan opnieuw op "Verbinding testen".
+63c6c61a	Kan geen verbinding maken: {0}
+08b50e4e	Start OpenRGB op de pc waarmee je verbindt, klik op "Start Server" op het tabblad "SDK Server" en probeer het opnieuw.
+d54dd85f	OpenRGB draait, maar de SDK-server antwoordt niet. Klik op "Start Server" op het tabblad "SDK Server" van OpenRGB, of wacht tot het zoeken naar apparaten klaar is, en probeer het opnieuw.
+ed4a4a84	De OpenRGB-service is uitgeschakeld. Start OpenRGB, klik op "Start Server" op het tabblad "SDK Server" en probeer het opnieuw.
+23f992d4	OpenRGB is niet gevonden. Installeer OpenRGB (gratis). Is het in Program Files geïnstalleerd, dan start deze app het automatisch (start een uit een zip uitgepakt OpenRGB zelf).
+fe396d5d	Start OpenRGB, klik op "Start Server" op het tabblad "SDK Server" en probeer het opnieuw.
+888c48dd	Vloeiend
+5126ccb6	Tekent de lijnen als gemiddelde over de omliggende tijd, zodat sensoren die in stappen van 2 °C heen en weer springen en korte CPU-pieken beter leesbaar zijn. Alleen de weergave: de opname, de CSV en de waarden onder de muis blijven gelijk
+28cf181a	Min./max. resetten
+0d4a4da5	Begint minimum, maximum en gemiddelde vanaf nu opnieuw te tellen (bijvoorbeeld voordat je een game start)
+6ae383a5	Minimum, maximum en gemiddelde sinds de app is gestart (wordt ook geteld als dit scherm dicht is)
+7a5c0197	Nu
+e8a96130	Min.
+10b17f28	Max.
+78bdf61f	Gemiddeld
+a5a18898	Minimum, maximum en gemiddelde sinds {0:HH:mm}
+286f135b	Hardwarerapport…
+96d19994	Opent de GitHub-pagina om te melden dat deze pc werkt, ingevuld met de modellen van de onderdelen en wat de app heeft gecontroleerd (alleen aantallen)
+2f719799	Werkt de app op deze pc? Laat het ons weten met "Hardwarerapport…". Met de rapporten breiden we de lijst "geteste hardware" in de README uit.
+f0a34e2b	Opent de GitHub-pagina om te melden dat deze pc werkt, ingevuld met de modellen van de onderdelen en wat de app heeft gecontroleerd (alleen aantallen). Ook als alles goed gaat, helpt een rapport over nog niet geteste onderdelen veel
+1a26a15b	De GitHub-pagina voor hardwarerapporten wordt geopend met het volgende:
+cd8d1af7	Versie
+ac1de92a	Videokaart
+88de0d44	Alleen modelnamen en aantallen worden ingevuld (geen pc-naam, gebruikersnaam, instellingen of logboeken). De app verstuurt niets. Controleer de pagina, vul aan wat wel en niet werkte en verstuur hem dan (een GitHub-account is nodig).
+9ed8c43f	Hardwarerapport
+153d2bd9	Kan de browser niet openen.\n{0}
+4afe1df2	Spelregistratie (FPS en temperaturen)
+ba856364	Bewaart bij elke speelsessie één record met gemiddelde FPS, 1% low (haperingen), CPU- en GPU-temperaturen en ventilatortoerental. Vergelijk temperaturen en FPS vóór en na het aanpassen van je ventilatoren.
+ac0fb61e	FPS en temperaturen tijdens het gamen opnemen
+01f5728d	Gebruikt het meegeleverde Intel PresentMon (MIT License) en ziet alleen welke app een frame tekende en hoeveel ms na het vorige (nooit de scherminhoud of invoer). Een app op de voorgrond die ongeveer een minuut blijft tekenen geldt als spel; browsers, chat- en video-apps worden overgeslagen. De gegevens blijven op deze pc.
+de7074fc	Nog geen records.
+04adc800	Details
+4549282a	Verwijderen
+4668d319	Geen spel
+97077d12	Deze app niet meer opnemen (verwijdert ook de records tot nu toe)
+070b3c61	{0} u {1} min
+dd408447	{0} min
+2f16f690	{0}, {1}
+829b2e33	Gem. {0:0} fps · 1% low {1:0} fps · 0,1% low {2:0} fps
+d8cf90d7	CPU max. {0:0}°C (gem. {1:0}°C)
+cc8dbf23	GPU max. {0:0}°C (gem. {1:0}°C)
+e2bb4ae7	Ventilatoren gem. {0:0} rpm
+e19b1126	PresentMon is gestopt (afsluitcode {0})
+b419c5cc	Uit. Zet aan om FPS en temperaturen tijdens het spelen op te nemen.
+3bb71d5d	PresentMon niet gevonden (map PresentMon in de app-map). Opnieuw installeren lost dit op.
+8204e45d	Opname: {0} · nu {1:0} fps
+83ecfa1a	Wachten op een spel (zet een spel op de voorgrond en speel ongeveer een minuut om de opname te starten).
+0fe39ffc	Wachten om PresentMon opnieuw te starten ({0}).
+5afb6e9d	{0} – {1} (tekende {2}, {3} frames)
+c4454de4	CPU-belasting gem. {0:0}%
+c401f258	GPU-belasting gem. {0:0}%
+6caecaec	GPU-vermogen gem. {0:0} W
+47dae337	Gemiddelde FPS per 10 seconden: laagste {0:0} fps · hoogste {1:0} fps
+debb413f	1% low is de snelheid van de traagste 1% van de frames. Hoe groter het verschil met het gemiddelde, hoe meer haperingen je merkt.
+73a40039	{0} vanaf nu niet meer opnemen? (Voor als een app die geen spel is werd opgenomen. De records tot nu toe worden ook verwijderd.)
+e16c0947	Spelregistratie
+4184034d	Kalibreren kan niet omdat de te bewaken temperaturen niet te lezen zijn. Probeer het opnieuw zodra de temperatuursensoren te lezen zijn.
+d1c5f5ab	De nieuwe versie {0} startte niet goed, dus er is automatisch teruggegaan naar {1} (ook de instellingen zijn van vóór de update). {2}
+534656cb	De digitale handtekening van het installatieprogramma is ongeldig (beschadigd of gewijzigd). De update is gestopt.
+0f0feb7a	Deze app is digitaal ondertekend, maar het gedownloade installatieprogramma niet. De update is gestopt.
+01889f11	Het gedownloade installatieprogramma is door iemand anders ondertekend dan deze app. De update is gestopt.
+198beb10	De digitale handtekening van PresentMon kon niet worden bevestigd (geen Intel-handtekening). Installeer de app opnieuw.
+4702ef4e	De bewaarde kopie van de vorige versie (map previous) is niet gevonden.
+6b87e136	De exe van de vorige versie kon niet worden teruggezet ({0}).
+bba9cc48	De vorige versie is terug, maar de instellingen konden niet worden teruggezet ({0}).
+cd083e7b	De nieuwe versie {0} begon niet binnen {1:F0} minuten met het regelen van de ventilatoren.
+17d6b1ee	Zeph-Iris kon niet worden afgesloten, dus de vorige versie kon niet worden teruggezet. Sluit Zeph-Iris af via het systeemvak (of start de pc opnieuw), dan draaien de ventilatoren weer volgens het BIOS. Dubbelklik daarna op dit bestand om terug te gaan naar de vorige versie:\n{0}
+ad924bfa	Zeph-Iris-herstel
+97339d69	Teruggaan naar de vorige versie kan alleen met ZephIrisRecovery.exe in de map previous van de app-map.
+df560c03	Zeph-Iris terugzetten naar de vorige versie {0}? (huidige versie {1})\n\nZeph-Iris wordt afgesloten (ventilatoren terug naar BIOS), de vorige exe en de instellingen van vóór de update worden teruggezet en het start opnieuw.
+e988c5bd	Met de hand teruggezet naar de vorige versie.
+d3cc94cf	Kon niet terug naar de vorige versie ({0}).

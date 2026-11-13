@@ -178,7 +178,6 @@ a16411bf	Crie o máximo ou a média de vários sensores, ou a diferença entre d
 fcf52b91	Criar
 bc3cb03d	Cor enviada aos LEDs agora (a primeira, se forem diferentes)
 9c4008ce	Conexão
-01f82432	Muda as cores da placa-mãe, memória, ventoinhas, fitas de LED e mais por meio do OpenRGB gratuito. Abra o OpenRGB e ative o "SDK Server" (se não conectar, adicione --server às opções de inicialização do OpenRGB).
 8f1d5969	Ligado, conecta ao OpenRGB e colore os LEDs com o efeito escolhido abaixo. Desligado, este app não envia nada aos LEDs
 49aac369	Usar o OpenRGB
 6305fed9	Funciona com os LEDs que o OpenRGB suporta. Não use ao mesmo tempo um software RGB de fabricante como o ASRock Polychrome (eles disputam o controle e piscam)
@@ -1275,7 +1274,6 @@ e3c74af7	Tranquilo e calmo. As cores mudam devagar a cada compasso
 91f616cf	 Se você se sentir mal, ligue "Reduzir piscadas" de novo imediatamente.
 165c4145	Conectado. {0} dispositivos encontrados.
 3757a4b4	Começa quando "Usar o OpenRGB" é ligado
-d7b2f046	Não é possível conectar: {0}\nAbra o OpenRGB, clique em "Start Server" na aba "SDK Server" e tente de novo.
 23ecbb88	"Usar o OpenRGB" está desligado. Ligue para conectar
 f8d56f66	Desligado (ao ligar "Usar o OpenRGB", começa a mudar a cor dos LEDs)
 dabf7260	Dá para escolher depois que a lista de dispositivos carregar. Clique em "Testar conexão" acima
@@ -1815,3 +1813,82 @@ f6280d14	 (limite de referência {0:F0} °C, folga até o máximo {1:F0} °C)
 b8946100	Músicas lembradas: {0}
 dfb02ca4	IA de batida
 e8d98a10	Apagar todas as batidas lembradas? (Elas são aprendidas de novo ao ouvir)
+e59863c1	Muda as cores da placa-mãe, memória, ventoinhas, fitas de LED e mais por meio do OpenRGB gratuito. Se o OpenRGB não estiver em execução, este app o inicia com o "SDK Server" ligado (chave abaixo).
+2df46840	Se a conexão continuar falhando, inicia o serviço do OpenRGB se ele estiver instalado como serviço; senão, o OpenRGB da pasta Program Files com "--server --startminimized". Nunca para nem reinicia um OpenRGB que já esteja em execução
+858ce626	Iniciar o OpenRGB se não estiver em execução
+7c3107e5	Só o OpenRGB deste PC. Por segurança, só é iniciado um OpenRGB instalado em Program Files (inicie você mesmo um OpenRGB extraído de um zip)
+98887878	Serviço do OpenRGB iniciado. Aguardando enquanto ele encontra seus dispositivos…
+afa11876	OpenRGB iniciado (com o servidor SDK ligado). Aguardando enquanto ele encontra seus dispositivos…
+dfa4bc90	Aguarde alguns segundos e clique em "Testar conexão" de novo.
+63c6c61a	Não foi possível conectar: {0}
+08b50e4e	Inicie o OpenRGB no PC ao qual você se conecta, clique em "Start Server" na aba "SDK Server" e tente de novo.
+d54dd85f	O OpenRGB está em execução, mas o servidor SDK dele não responde. Clique em "Start Server" na aba "SDK Server" do OpenRGB, ou aguarde ele terminar de procurar dispositivos, e tente de novo.
+ed4a4a84	O serviço do OpenRGB está desativado. Inicie o OpenRGB, clique em "Start Server" na aba "SDK Server" e tente de novo.
+23f992d4	OpenRGB não encontrado. Instale o OpenRGB (gratuito). Se ele for instalado em Program Files, este app o inicia automaticamente (inicie você mesmo um OpenRGB extraído de um zip).
+fe396d5d	Inicie o OpenRGB, clique em "Start Server" na aba "SDK Server" e tente de novo.
+888c48dd	Suavizar
+5126ccb6	Desenha as linhas como a média do tempo próximo, para que sensores que oscilam em passos de 2 °C e picos rápidos da CPU fiquem mais fáceis de ler. Só a exibição: o registro, o CSV e os valores sob o mouse não mudam
+28cf181a	Zerar mín./máx.
+0d4a4da5	Recomeça a contar mínimo, máximo e média a partir de agora (por exemplo, antes de começar um jogo)
+6ae383a5	Mínimo, máximo e média desde que o app foi iniciado (contados mesmo com esta tela fechada)
+7a5c0197	Agora
+e8a96130	Mín.
+10b17f28	Máx.
+78bdf61f	Média
+a5a18898	Mínimo, máximo e média desde {0:HH:mm}
+286f135b	Relatório de hardware…
+96d19994	Abre a página do GitHub para avisar que este PC funciona, preenchida com os modelos das peças e o que o app verificou (só contagens)
+2f719799	Se o app funciona neste PC, avise-nos com "Relatório de hardware…". Os relatórios aumentam a lista de "hardware verificado" no README.
+f0a34e2b	Abre a página do GitHub para avisar que este PC funciona, preenchida com os modelos das peças e o que o app verificou (só contagens). Mesmo sem problemas, um relatório sobre peças ainda não verificadas ajuda muito
+1a26a15b	Será aberta a página de relatórios de hardware do GitHub com o seguinte:
+cd8d1af7	Versão
+ac1de92a	Placa de vídeo
+88de0d44	Só são preenchidos modelos e contagens (sem nome do PC, nome de usuário, configurações ou logs). O app não envia nada. Confira a página, acrescente o que funcionou e o que não funcionou e envie (é preciso uma conta no GitHub).
+9ed8c43f	Relatório de hardware
+153d2bd9	Não foi possível abrir o navegador.\n{0}
+4afe1df2	Registro de jogos (FPS e temperaturas)
+ba856364	A cada vez que você joga, salva um registro com FPS médio, 1% low (travadas), temperaturas de CPU e GPU e rotação das ventoinhas. Compare como temperaturas e FPS mudaram antes e depois de ajustar as ventoinhas.
+ac0fb61e	Registrar FPS e temperaturas durante jogos
+01f5728d	Usa o Intel PresentMon incluído (MIT License) para ver apenas qual app desenhou um quadro e quantos ms após o anterior (nunca vê o conteúdo da tela nem entradas). Um app em primeiro plano que desenha por cerca de um minuto conta como jogo; navegadores, chats e apps de vídeo ficam de fora. Os registros ficam neste PC.
+de7074fc	Nenhum registro ainda.
+04adc800	Detalhes
+4549282a	Excluir
+4668d319	Não é jogo
+97077d12	Parar de registrar este app (também exclui os registros dele)
+070b3c61	{0} h {1} min
+dd408447	{0} min
+2f16f690	{0}, {1}
+829b2e33	Média {0:0} fps · 1% low {1:0} fps · 0,1% low {2:0} fps
+d8cf90d7	CPU máx. {0:0}°C (média {1:0}°C)
+cc8dbf23	GPU máx. {0:0}°C (média {1:0}°C)
+e2bb4ae7	Ventoinhas média {0:0} rpm
+e19b1126	O PresentMon foi encerrado (código de saída {0})
+b419c5cc	Desligado. Ligue para registrar FPS e temperaturas enquanto joga.
+3bb71d5d	PresentMon não encontrado (pasta PresentMon na pasta do app). Reinstalar o app resolve.
+8204e45d	Registrando: {0} · agora {1:0} fps
+83ecfa1a	Aguardando um jogo (traga um jogo para a frente e jogue por cerca de um minuto para começar a registrar).
+0fe39ffc	Aguardando para reiniciar o PresentMon ({0}).
+5afb6e9d	{0} – {1} (desenhando por {2}, {3} quadros)
+c4454de4	Uso de CPU médio {0:0}%
+c401f258	Uso de GPU médio {0:0}%
+6caecaec	Potência da GPU média {0:0} W
+47dae337	FPS médio a cada 10 segundos: menor {0:0} fps · maior {1:0} fps
+debb413f	1% low é a velocidade do 1% de quadros mais lentos. Quanto maior a diferença para a média, mais travadas você percebe.
+73a40039	Parar de registrar {0} a partir de agora? (Para quando um app que não é jogo foi registrado. Os registros dele também serão excluídos.)
+e16c0947	Registro de jogos
+4184034d	Não é possível calibrar porque as temperaturas a vigiar não podem ser lidas. Tente de novo quando os sensores de temperatura puderem ser lidos.
+d1c5f5ab	A nova versão {0} não iniciou direito, então voltou automaticamente para a {1} (as configurações também são as de antes da atualização). {2}
+534656cb	A assinatura digital do instalador não é válida (danificada ou alterada). A atualização foi interrompida.
+0f0feb7a	Este app tem assinatura digital, mas o instalador baixado não. A atualização foi interrompida.
+01889f11	O instalador baixado foi assinado por outra pessoa que não o signatário deste app. A atualização foi interrompida.
+198beb10	Não foi possível confirmar a assinatura digital do PresentMon (sem assinatura da Intel). Reinstale o app.
+4702ef4e	A cópia guardada da versão anterior (pasta previous) não foi encontrada.
+6b87e136	Não foi possível restaurar o exe da versão anterior ({0}).
+bba9cc48	A versão anterior voltou, mas não foi possível restaurar as configurações ({0}).
+cd083e7b	A nova versão {0} não começou a controlar as ventoinhas em {1:F0} minutos.
+17d6b1ee	Não foi possível fechar o Zeph-Iris, então não deu para voltar à versão anterior. Saia do Zeph-Iris pela área de notificação (ou reinicie o PC) e as ventoinhas voltam às configurações da BIOS. Depois, clique duas vezes neste arquivo para voltar à versão anterior:\n{0}
+ad924bfa	Recuperação do Zeph-Iris
+97339d69	Voltar à versão anterior só funciona pelo ZephIrisRecovery.exe na pasta previous da pasta do app.
+df560c03	Voltar o Zeph-Iris para a versão anterior {0}? (versão atual {1})\n\nO Zeph-Iris em execução é fechado (ventoinhas voltam à BIOS), o exe anterior e as configurações de antes da atualização são restaurados e ele inicia de novo.
+e988c5bd	Voltou à versão anterior manualmente.
+d3cc94cf	Não foi possível voltar à versão anterior ({0}).

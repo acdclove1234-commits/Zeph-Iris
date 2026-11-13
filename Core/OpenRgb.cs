@@ -1032,6 +1032,11 @@ public sealed class RgbSync : IDisposable
     private static int _timerLogged;
     /// <summary>これだけ続いた接続は「正常だった」とみなし、次に切れたときの待ち時間を 1 秒から数え直す（秒）</summary>
     private const double HealthySessionSec = 10;
+    /// <summary>OpenRGB を起動したあと、つながるまで試す間隔（秒。デバイスを探しているあいだは SDK サーバーが応えないことがある）</summary>
+    private const int AfterLaunchRetrySec = 3;
+
+    /// <summary>つながらないとき OpenRGB を起動する（描画スレッドと「接続テスト」から使う）</summary>
+    public OpenRgbAutoStart AutoStart { get; } = new();
 
     /// <summary>設定・温度を守る鍵（描画スレッドと画面のスレッドの両方から使う）</summary>
     private readonly object _gate = new();
@@ -1441,6 +1446,7 @@ public sealed class RgbSync : IDisposable
                     }
                     lastLogged = "";
                     sessionStart = AudioClock.Now;
+                    AutoStart.Connected(sessionStart);
                     RunSession(h, client, clock, devices, cfg.Host, cfg.Port);
                     failures = 0; // 繋ぎ直しの依頼で戻った（Kick・一覧の変化など）→ すぐ繋ぎ直す
                 }
@@ -1452,9 +1458,17 @@ public sealed class RgbSync : IDisposable
                     failures++;
                     int delay = ReconnectBackoff.DelaySec(failures);
                     string msg = OpenRgbClient.Describe(ex);
-                    SetStatus(h, connected
+                    AutoStart.Disconnected(AudioClock.Now);
+                    // OpenRGB が動いていなければ起動する（起動したら、短い間隔で繋ぎ直す）
+                    string? launched = connected ? null : AutoStart.OnFailure(cfg, AudioClock.Now);
+                    if (launched is not null)
+                    {
+                        failures = 0;
+                        delay = AfterLaunchRetrySec;
+                    }
+                    SetStatus(h, launched ?? (connected
                         ? L($"OpenRGB との接続が切れました（{delay} 秒後に繋ぎ直します）: {msg}")
-                        : L($"接続できません（{delay} 秒後に再試行）: {msg}"));
+                        : L($"接続できません（{delay} 秒後に再試行）: {msg}")));
                     PublishDisconnected(h, msg);
                     if (msg != lastLogged)
                     {
@@ -1707,7 +1721,7 @@ public sealed class RgbSync : IDisposable
                 if (c.Device.Index == d.Index) { ch = c; break; }
             }
             // 直接書き込みをオフにした・失敗し続けたグラボは、OpenRGB を通すデバイスとして作り直す
-            if (ch?.Direct is { } old && (!cfg.DirectGpuWrite || old.Faulted || !PnyEpicXGpu.Allowed(d, cfg.DirectGpuUnverified)))
+            if (ch?.Direct is { } old && (!cfg.DirectGpuWrite || old.Faulted || !PnyEpicXGpu.Allowed(d, cfg.DirectGpuUnverified) || (!cfg.DirectGpuUnverified && !old.BoardVerified)))
             {
                 old.Flush(StopFlushMs);   // 書きかけのコマを書き終えてから OpenRGB に任せる（同時に書かない）
                 ch = null;
@@ -1716,7 +1730,7 @@ public sealed class RgbSync : IDisposable
             if (ch is { Direct: null } && cfg.DirectGpuWrite && PnyEpicXGpu.Allowed(d, cfg.DirectGpuUnverified)) ch = null;
             if (ch is null && cfg.DirectGpuWrite && !PnyEpicXGpu.Allowed(d, cfg.DirectGpuUnverified) && PnyEpicXGpu.IsCandidate(d, out _) && _unverifiedLogged.Add(d.Name))
                 Logger.Info($"OpenRGB: {d.Name} は直接書き込みを確かめていない型番なので、OpenRGB を通して光らせます（ライティング →「詳細」で直接書き込みを試せます）");
-            if (ch is null && cfg.DirectGpuWrite && PnyEpicXGpu.Allowed(d, cfg.DirectGpuUnverified) && PnyEpicXGpu.TryOpen(d) is { } gpu)
+            if (ch is null && cfg.DirectGpuWrite && PnyEpicXGpu.Allowed(d, cfg.DirectGpuUnverified) && PnyEpicXGpu.TryOpen(d, cfg.DirectGpuUnverified) is { } gpu)
             {
                 // PNY Epic-X のグラボは OpenRGB を通さず NvAPI で直接書く（OpenRGB は LED 1 個ずつ 41 回書くので遅い）。
                 // OpenRGB にはモードも色も送らない（OpenRGB がこのグラボに書き込まないようにする）

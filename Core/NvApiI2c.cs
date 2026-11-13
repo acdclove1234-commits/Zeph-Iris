@@ -76,6 +76,10 @@ public sealed class NvApiI2c : II2cBlockWriter, IDisposable
     /// <summary>グラボの PCI のサブシステムのベンダー番号（PNY = 0x196E など。開いたときに確かめた値）</summary>
     public ushort SubVendor { get; private init; }
 
+    /// <summary>PCI の番号（上位 16 ビット = デバイス、下位 = ベンダー 0x10DE）と、サブシステムの番号（上位 = 基板、下位 = ベンダー）</summary>
+    public uint DeviceId { get; private init; }
+    public uint SubSystemId { get; private init; }
+
     /// <summary>
     /// NvAPI の gpuIndex 番目のグラボ（OpenRGB の「Nvidia NvAPI I2C on GPU n」と同じ番号）の、I2C アドレス address を開く。
     /// サブシステムのベンダー番号が subVendor と違う・NvAPI が使えないときは null
@@ -91,8 +95,8 @@ public sealed class NvApiI2c : II2cBlockWriter, IDisposable
             if (init is null || enumGpus is null || pci is null || write is null || init() != 0) return null;
             var handles = new IntPtr[MaxGpus];
             if (enumGpus(handles, out int count) != 0 || gpuIndex < 0 || gpuIndex >= count) return null;
-            if (pci(handles[gpuIndex], out _, out uint sub, out _, out _) != 0 || (sub & 0xFFFF) != subVendor) return null;
-            return new NvApiI2c(handles[gpuIndex], address, write) { SubVendor = (ushort)(sub & 0xFFFF) };
+            if (pci(handles[gpuIndex], out uint dev, out uint sub, out _, out _) != 0 || (sub & 0xFFFF) != subVendor) return null;
+            return new NvApiI2c(handles[gpuIndex], address, write) { SubVendor = (ushort)(sub & 0xFFFF), DeviceId = dev, SubSystemId = sub };
         }
         catch (Exception ex) when (ex is DllNotFoundException or EntryPointNotFoundException or BadImageFormatException)
         {

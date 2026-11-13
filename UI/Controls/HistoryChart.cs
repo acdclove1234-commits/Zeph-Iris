@@ -39,6 +39,11 @@ public sealed class HistoryChart : FrameworkElement
     public TimeSpan Range { get; set; } = TimeSpan.FromMinutes(10);
     /// <summary>false のときは目盛りや凡例を省いた小さめの表示</summary>
     public bool ShowRpmAxis { get; set; } = true;
+    /// <summary>
+    /// 線をなめらかにする（前後の時間の平均で描く）。2°C 刻みのセンサーの行ったり来たりや、CPU の一瞬のトゲを見やすくする。
+    /// 表示だけで、マウスを乗せたときの値は記録のまま（計算は ChartSmooth）
+    /// </summary>
+    public bool Smooth { get; set; }
 
     public HistoryChart()
     {
@@ -121,10 +126,12 @@ public sealed class HistoryChart : FrameworkElement
             Text(dc, label, new Point(x, r.Bottom + 6), dpi, LabelBrush, center: true);
         }
 
-        // 線
+        // 線（なめらかにするなら、前後の時間の平均で描く。軸の範囲とマウスの値は記録のまま）
+        int half = Smooth ? ChartSmooth.HalfColumns(Range, secPerCol) : 0;
         dc.PushClip(new RectangleGeometry(r));
-        foreach (var (s, avg) in buckets)
+        foreach (var (s, raw) in buckets)
         {
+            var avg = half > 0 ? ChartSmooth.Columns(raw, half) : raw;
             double lo = s.IsRpm ? 0 : tMin, hi = s.IsRpm ? rMax : tMax;
             var geo = new StreamGeometry();
             using (var ctx = geo.Open())

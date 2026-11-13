@@ -178,7 +178,6 @@ a16411bf	Tạo giá trị lớn nhất, trung bình của nhiều cảm biến h
 fcf52b91	Tạo
 bc3cb03d	Màu đang gửi tới LED (màu đầu tiên nếu các LED khác nhau)
 9c4008ce	Kết nối
-01f82432	Đổi màu bo mạch chủ, RAM, quạt, dải LED… thông qua phần mềm miễn phí OpenRGB. Hãy mở OpenRGB và bật "SDK Server" (nếu không kết nối được, thêm --server vào tùy chọn khởi động của OpenRGB).
 8f1d5969	Khi bật, ứng dụng kết nối với OpenRGB và đổi màu LED theo hiệu ứng chọn bên dưới. Khi tắt, ứng dụng không gửi gì tới LED
 49aac369	Liên kết với OpenRGB
 6305fed9	Áp dụng cho các LED mà OpenRGB hỗ trợ. Không dùng cùng lúc phần mềm RGB của hãng như ASRock Polychrome (chúng tranh quyền điều khiển và nhấp nháy)
@@ -1275,7 +1274,6 @@ e3c74af7	Thư thái, êm ả. Màu đổi chậm theo từng ô nhịp
 91f616cf	 Nếu thấy khó chịu, hãy bật lại "Giảm nhấp nháy" ngay.
 165c4145	Đã kết nối. Tìm thấy {0} thiết bị.
 3757a4b4	Bắt đầu khi bật "Liên kết với OpenRGB"
-d7b2f046	Không kết nối được: {0}\nHãy mở OpenRGB, nhấn "Start Server" ở thẻ "SDK Server" rồi thử lại.
 23ecbb88	"Liên kết với OpenRGB" đang tắt. Bật lên để kết nối
 f8d56f66	Tắt (bật "Liên kết với OpenRGB" sẽ bắt đầu đổi màu LED)
 dabf7260	Có thể chọn sau khi tải danh sách thiết bị. Hãy nhấn "Kiểm tra kết nối" ở trên
@@ -1815,3 +1813,82 @@ f6280d14	 (giới hạn tham khảo {0:F0}°C, còn cách mức cao nhất {1:F0
 b8946100	Bài đã nhớ: {0}
 dfb02ca4	AI nhịp
 e8d98a10	Xóa tất cả nhịp đã nhớ? (Sẽ học lại khi nghe)
+e59863c1	Đổi màu bo mạch chủ, RAM, quạt, dải LED và hơn thế nữa qua OpenRGB miễn phí. Nếu OpenRGB chưa chạy, ứng dụng này sẽ khởi động nó với "SDK Server" được bật (công tắc bên dưới).
+2df46840	Nếu vẫn không kết nối được, sẽ khởi động dịch vụ OpenRGB nếu OpenRGB được cài dưới dạng dịch vụ, nếu không thì khởi động OpenRGB trong Program Files với "--server --startminimized". Không bao giờ dừng hay khởi động lại OpenRGB đang chạy
+858ce626	Khởi động OpenRGB nếu nó chưa chạy
+7c3107e5	Chỉ OpenRGB trên PC này. Để an toàn, chỉ khởi động OpenRGB được cài trong Program Files (OpenRGB giải nén từ zip thì hãy tự khởi động)
+98887878	Đã khởi động dịch vụ OpenRGB. Đang chờ nó tìm xong thiết bị…
+afa11876	Đã khởi động OpenRGB (bật cả máy chủ SDK). Đang chờ nó tìm xong thiết bị…
+dfa4bc90	Hãy đợi vài giây rồi bấm "Kiểm tra kết nối" lần nữa.
+63c6c61a	Không thể kết nối: {0}
+08b50e4e	Hãy khởi động OpenRGB trên PC bạn kết nối tới, bấm "Start Server" ở thẻ "SDK Server" rồi thử lại.
+d54dd85f	OpenRGB đang chạy nhưng máy chủ SDK của nó không phản hồi. Hãy bấm "Start Server" ở thẻ "SDK Server" của OpenRGB, hoặc đợi nó tìm xong thiết bị, rồi thử lại.
+ed4a4a84	Dịch vụ OpenRGB đang bị tắt. Hãy khởi động OpenRGB, bấm "Start Server" ở thẻ "SDK Server" rồi thử lại.
+23f992d4	Không tìm thấy OpenRGB. Hãy cài OpenRGB (miễn phí). Nếu cài trong Program Files, ứng dụng này sẽ tự khởi động nó (OpenRGB giải nén từ zip thì hãy tự khởi động).
+fe396d5d	Hãy khởi động OpenRGB, bấm "Start Server" ở thẻ "SDK Server" rồi thử lại.
+888c48dd	Làm mượt
+5126ccb6	Vẽ đường bằng giá trị trung bình của khoảng thời gian lân cận, để dễ đọc các cảm biến dao động theo bước 2°C và các đỉnh nhọn ngắn của CPU. Chỉ thay đổi cách hiển thị: bản ghi, CSV và giá trị khi rê chuột vẫn giữ nguyên
+28cf181a	Đặt lại thấp nhất/cao nhất
+0d4a4da5	Bắt đầu đếm lại giá trị thấp nhất, cao nhất và trung bình từ bây giờ (ví dụ trước khi bắt đầu chơi game)
+6ae383a5	Thấp nhất, cao nhất và trung bình kể từ khi mở ứng dụng (vẫn đếm khi màn hình này đang đóng)
+7a5c0197	Hiện tại
+e8a96130	Thấp nhất
+10b17f28	Cao nhất
+78bdf61f	Trung bình
+a5a18898	Thấp nhất, cao nhất và trung bình từ {0:HH:mm}
+286f135b	Báo cáo phần cứng…
+96d19994	Mở trang GitHub để báo rằng máy này chạy được, đã điền sẵn mẫu linh kiện và những gì ứng dụng đã kiểm tra (chỉ số lượng)
+2f719799	Nếu ứng dụng chạy được trên máy này, hãy báo cho chúng tôi bằng "Báo cáo phần cứng…". Các báo cáo nhận được sẽ bổ sung danh sách "phần cứng đã kiểm chứng" trong README.
+f0a34e2b	Mở trang GitHub để báo rằng máy này chạy được, đã điền sẵn mẫu linh kiện và những gì ứng dụng đã kiểm tra (chỉ số lượng). Kể cả khi không có lỗi, báo cáo về linh kiện chưa được kiểm tra cũng rất hữu ích
+1a26a15b	Trang báo cáo phần cứng trên GitHub sẽ mở với nội dung sau:
+cd8d1af7	Phiên bản
+ac1de92a	Card đồ họa
+88de0d44	Chỉ điền tên mẫu và số lượng (không có tên máy, tên người dùng, cài đặt hay nhật ký). Ứng dụng không gửi gì cả. Hãy kiểm tra trang, ghi thêm những gì chạy được và không chạy được, rồi gửi (cần tài khoản GitHub).
+9ed8c43f	Báo cáo phần cứng
+153d2bd9	Không mở được trình duyệt.\n{0}
+4afe1df2	Bản ghi game (FPS và nhiệt độ)
+ba856364	Mỗi lần chơi sẽ lưu một bản ghi gồm FPS trung bình, 1% low (giật), nhiệt độ CPU và GPU, tốc độ quạt. So sánh nhiệt độ và FPS trước và sau khi chỉnh quạt.
+ac0fb61e	Ghi FPS và nhiệt độ khi chơi game
+01f5728d	Dùng Intel PresentMon kèm theo (MIT License) và chỉ xem ứng dụng nào vẽ khung hình và cách khung trước bao nhiêu ms (không bao giờ xem nội dung màn hình hay thao tác nhập). Ứng dụng ở phía trước vẽ liên tục khoảng một phút được coi là game; trình duyệt, ứng dụng chat và video được loại trừ. Bản ghi chỉ nằm trên PC này.
+de7074fc	Chưa có bản ghi.
+04adc800	Chi tiết
+4549282a	Xóa
+4668d319	Không phải game
+97077d12	Ngừng ghi ứng dụng này (cũng xóa các bản ghi của nó)
+070b3c61	{0} giờ {1} phút
+dd408447	{0} phút
+2f16f690	{0}, {1}
+829b2e33	TB {0:0} fps · 1% low {1:0} fps · 0,1% low {2:0} fps
+d8cf90d7	CPU cao nhất {0:0}°C (TB {1:0}°C)
+cc8dbf23	GPU cao nhất {0:0}°C (TB {1:0}°C)
+e2bb4ae7	Quạt TB {0:0} rpm
+e19b1126	PresentMon đã dừng (mã thoát {0})
+b419c5cc	Tắt. Bật để ghi FPS và nhiệt độ khi bạn chơi.
+3bb71d5d	Không tìm thấy PresentMon (thư mục PresentMon trong thư mục ứng dụng). Cài lại ứng dụng sẽ khắc phục.
+8204e45d	Đang ghi: {0} · hiện {1:0} fps
+83ecfa1a	Đang chờ game (đưa game lên phía trước và chơi khoảng một phút để bắt đầu ghi).
+0fe39ffc	Đang chờ khởi động lại PresentMon ({0}).
+5afb6e9d	{0} – {1} (vẽ trong {2}, {3} khung hình)
+c4454de4	Tải CPU TB {0:0}%
+c401f258	Tải GPU TB {0:0}%
+6caecaec	Công suất GPU TB {0:0} W
+47dae337	FPS trung bình mỗi 10 giây: thấp nhất {0:0} fps · cao nhất {1:0} fps
+debb413f	1% low là tốc độ của 1% khung hình chậm nhất. Chênh lệch với mức trung bình càng lớn thì càng dễ thấy giật.
+73a40039	Ngừng ghi {0} từ bây giờ? (Dùng khi một ứng dụng không phải game bị ghi. Các bản ghi của nó cũng sẽ bị xóa.)
+e16c0947	Bản ghi game
+4184034d	Không thể hiệu chỉnh vì không đọc được nhiệt độ cần theo dõi. Hãy thử lại khi đọc được cảm biến nhiệt độ.
+d1c5f5ab	Phiên bản mới {0} không khởi động được bình thường, nên đã tự động quay về {1} (cài đặt cũng là từ trước khi cập nhật). {2}
+534656cb	Chữ ký số của trình cài đặt không hợp lệ (bị hỏng hoặc bị sửa). Đã dừng cập nhật.
+0f0feb7a	Ứng dụng này có chữ ký số, nhưng trình cài đặt đã tải về thì không. Đã dừng cập nhật.
+01889f11	Trình cài đặt đã tải về được ký bởi người khác với người ký ứng dụng này. Đã dừng cập nhật.
+198beb10	Không xác nhận được chữ ký số của PresentMon (không có chữ ký của Intel). Hãy cài lại ứng dụng.
+4702ef4e	Không tìm thấy bản lưu của phiên bản trước (thư mục previous).
+6b87e136	Không thể khôi phục exe của phiên bản trước ({0}).
+bba9cc48	Đã quay về phiên bản trước nhưng không khôi phục được cài đặt ({0}).
+cd083e7b	Phiên bản mới {0} không bắt đầu điều khiển quạt trong {1:F0} phút.
+17d6b1ee	Không thể đóng Zeph-Iris nên không quay về được phiên bản trước. Hãy thoát Zeph-Iris ở vùng thông báo (hoặc khởi động lại PC), quạt sẽ trở về cài đặt BIOS. Sau đó nhấp đúp vào tệp này để quay về phiên bản trước:\n{0}
+ad924bfa	Khôi phục Zeph-Iris
+97339d69	Chỉ có thể quay về phiên bản trước từ ZephIrisRecovery.exe trong thư mục previous của thư mục ứng dụng.
+df560c03	Quay Zeph-Iris về phiên bản trước {0}? (phiên bản hiện tại {1})\n\nZeph-Iris đang chạy sẽ được đóng (quạt về BIOS), exe trước và cài đặt từ trước khi cập nhật sẽ được khôi phục, rồi khởi động lại.
+e988c5bd	Đã quay về phiên bản trước theo cách thủ công.
+d3cc94cf	Không thể quay về phiên bản trước ({0}).

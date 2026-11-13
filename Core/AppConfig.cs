@@ -81,6 +81,8 @@ public sealed class AppConfig : ObservableObject
     public EnergyConfig Energy { get; set; } = new();
     public RgbConfig Rgb { get; set; } = new();
     public MaintenanceConfig Maintenance { get; set; } = new();
+    /// <summary>ゲームの記録（FPS と温度）</summary>
+    public GamesConfig Games { get; set; } = new();
     /// <summary>自動セットアップを適用したときの様子（季節で室温が上がったら測り直しを勧めるため。適用していなければ null）</summary>
     public SetupBaselineConfig? SetupBaseline { get; set; }
     /// <summary>アプリの中からの更新（新しい版の確認）</summary>
@@ -843,6 +845,9 @@ public sealed class RgbConfig : ObservableObject
     public bool LightsOff { get => _lightsOff; set => Set(ref _lightsOff, value); }
     public string Host { get => _host; set => Set(ref _host, value); }
     public int Port { get => _port; set => Set(ref _port, value); }
+    /// <summary>つながらないとき、同じ PC の OpenRGB（サービス、または Program Files の OpenRGB.exe）を SDK サーバーをオンにして起動する</summary>
+    public bool AutoStartOpenRgb { get => _autoStartOpenRgb; set => Set(ref _autoStartOpenRgb, value); }
+    private bool _autoStartOpenRgb = true;
     /// <summary>色を決める温度センサー（空なら CPU と GPU の高いほう）</summary>
     public string SensorId { get => _sensorId; set => Set(ref _sensorId, value ?? ""); }
     public double LowTemp { get => _lowTemp; set => Set(ref _lowTemp, value); }
@@ -1244,6 +1249,9 @@ public sealed class AppearanceConfig : ObservableObject
     public string FontFamily { get => _fontFamily; set => Set(ref _fontFamily, value ?? ""); }
     /// <summary>文字と画面の大きさ（%）</summary>
     public int TextScale { get => _textScale; set => Set(ref _textScale, Math.Clamp(value, MinTextScale, MaxTextScale)); }
+    /// <summary>履歴のグラフの線をなめらかにする（表示だけ。記録・CSV・マウスを乗せたときの値はそのまま）</summary>
+    public bool SmoothHistory { get => _smoothHistory; set => Set(ref _smoothHistory, value); }
+    private bool _smoothHistory = true;
 
     public void Normalize()
     {
@@ -1441,4 +1449,15 @@ public static class ConfigStore
 public sealed record ConfigBackupInfo(string Path, DateTime Time, string Reason)
 {
     public string Display => L($"{Time:yyyy/MM/dd HH:mm}（{Reason}）");
+}
+
+/// <summary>ゲームの記録: ゲーム中の FPS（PresentMon）と温度を、1 回遊ぶごとに残す</summary>
+public sealed class GamesConfig : ObservableObject
+{
+    private bool _enabled;
+
+    /// <summary>記録する（初めは切。PresentMon を動かすので、使う人が選んで入れる）</summary>
+    public bool Enabled { get => _enabled; set => Set(ref _enabled, value); }
+    /// <summary>ゲームではないので記録しないアプリ（exe の名前。.exe はなくてもよい）</summary>
+    public List<string> Excluded { get; set; } = new();
 }

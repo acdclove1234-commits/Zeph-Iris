@@ -178,7 +178,6 @@ a16411bf	Bilden Sie Maximum oder Mittelwert mehrerer Sensoren oder die Differenz
 fcf52b91	Erstellen
 bc3cb03d	Farbe, die gerade an die LEDs geht (bei unterschiedlichen die erste)
 9c4008ce	Verbindung
-01f82432	Ändert die Farben von Mainboard, Arbeitsspeicher, Lüftern, LED-Streifen und mehr über das kostenlose OpenRGB. Starten Sie OpenRGB und schalten Sie den „SDK Server“ ein (falls keine Verbindung zustande kommt, --server zu den Startoptionen von OpenRGB hinzufügen).
 8f1d5969	Wenn aktiv, verbindet sich die App mit OpenRGB und färbt die LEDs mit dem unten gewählten Effekt. Wenn aus, sendet diese App nichts an die LEDs
 49aac369	OpenRGB verwenden
 6305fed9	Funktioniert mit LEDs, die OpenRGB unterstützt. Verwenden Sie nicht gleichzeitig RGB-Software eines Herstellers wie ASRock Polychrome (sie streiten sich und flackern)
@@ -1275,7 +1274,6 @@ e3c74af7	Ruhig und gelassen. Die Farben wechseln langsam mit jedem Takt
 91f616cf	 Wenn Ihnen unwohl wird, schalten Sie „Blitzen reduzieren“ sofort wieder ein.
 165c4145	Verbunden. {0} Geräte gefunden.
 3757a4b4	Startet, wenn „OpenRGB verwenden“ eingeschaltet wird
-d7b2f046	Keine Verbindung: {0}\nStarten Sie OpenRGB, klicken Sie im Tab „SDK Server“ auf „Start Server“ und versuchen Sie es erneut.
 23ecbb88	„OpenRGB verwenden“ ist aus. Schalten Sie es ein, um zu verbinden
 f8d56f66	Aus (mit „OpenRGB verwenden“ beginnt die App, die LED-Farben zu ändern)
 dabf7260	Auswählbar, sobald die Geräteliste geladen ist. Klicken Sie oben auf „Verbindung testen“
@@ -1815,3 +1813,82 @@ f6280d14	 (Richtwert {0:F0} °C, Abstand zum Maximum {1:F0} °C)
 b8946100	Gemerkte Songs: {0}
 dfb02ca4	Takt-KI
 e8d98a10	Alle gemerkten Song-Schläge löschen? (Sie werden beim Hören wieder gelernt)
+e59863c1	Ändert die Farben von Mainboard, Arbeitsspeicher, Lüftern, LED-Streifen und mehr über das kostenlose OpenRGB. Läuft OpenRGB nicht, startet diese App es mit eingeschaltetem „SDK Server“ (Schalter unten).
+2df46840	Schlägt die Verbindung weiter fehl, wird der OpenRGB-Dienst gestartet, wenn OpenRGB als Dienst installiert ist, sonst OpenRGB aus Program Files mit „--server --startminimized“. Ein bereits laufendes OpenRGB wird nie beendet oder neu gestartet
+858ce626	OpenRGB starten, wenn es nicht läuft
+7c3107e5	Nur OpenRGB auf diesem PC. Aus Sicherheitsgründen wird nur ein in Program Files installiertes OpenRGB gestartet (ein aus einer ZIP entpacktes OpenRGB bitte selbst starten)
+98887878	OpenRGB-Dienst gestartet. Kurz warten, bis er die Geräte gefunden hat…
+afa11876	OpenRGB gestartet (mit eingeschaltetem SDK-Server). Kurz warten, bis es die Geräte gefunden hat…
+dfa4bc90	Warte ein paar Sekunden und drücke dann erneut „Verbindung testen“.
+63c6c61a	Keine Verbindung: {0}
+08b50e4e	Starte OpenRGB auf dem PC, mit dem du dich verbindest, drücke im Tab „SDK Server“ auf „Start Server“ und versuche es erneut.
+d54dd85f	OpenRGB läuft, aber sein SDK-Server antwortet nicht. Drücke im Tab „SDK Server“ von OpenRGB auf „Start Server“ oder warte, bis die Gerätesuche fertig ist, und versuche es erneut.
+ed4a4a84	Der OpenRGB-Dienst ist deaktiviert. Starte OpenRGB, drücke im Tab „SDK Server“ auf „Start Server“ und versuche es erneut.
+23f992d4	OpenRGB wurde nicht gefunden. Bitte installiere OpenRGB (kostenlos). Ist es in Program Files installiert, startet diese App es automatisch (ein aus einer ZIP entpacktes OpenRGB bitte selbst starten).
+fe396d5d	Starte OpenRGB, drücke im Tab „SDK Server“ auf „Start Server“ und versuche es erneut.
+888c48dd	Glätten
+5126ccb6	Zeichnet die Linien als Mittelwert über die umliegende Zeit, damit Sensoren, die in 2-°C-Schritten hin und her springen, und kurze CPU-Spitzen besser lesbar sind. Nur die Anzeige: Aufzeichnung, CSV und die Werte unter der Maus bleiben unverändert
+28cf181a	Min./Max. zurücksetzen
+0d4a4da5	Minimum, Maximum und Mittelwert ab jetzt neu zählen (zum Beispiel vor dem Start eines Spiels)
+6ae383a5	Minimum, Maximum und Mittelwert seit dem Start der App (wird auch gezählt, während diese Seite geschlossen ist)
+7a5c0197	Jetzt
+e8a96130	Min.
+10b17f28	Max.
+78bdf61f	Mittel
+a5a18898	Minimum, Maximum und Mittelwert seit {0:HH:mm}
+286f135b	Hardware-Bericht…
+96d19994	Öffnet die GitHub-Seite, auf der du meldest, dass dieser PC funktioniert – ausgefüllt mit den Modellen der Teile und dem, was die App geprüft hat (nur Anzahlen)
+2f719799	Wenn die App auf diesem PC funktioniert, melde es bitte mit „Hardware-Bericht…“. Aus den Berichten wächst die Liste „getestete Hardware“ in der README.
+f0a34e2b	Öffnet die GitHub-Seite, auf der du meldest, dass dieser PC funktioniert – ausgefüllt mit den Modellen der Teile und dem, was die App geprüft hat (nur Anzahlen). Auch ohne Probleme hilft ein Bericht über noch nicht geprüfte Teile sehr
+1a26a15b	Die GitHub-Seite für Hardware-Berichte wird mit folgendem Inhalt geöffnet:
+cd8d1af7	Version
+ac1de92a	Grafikkarte
+88de0d44	Eingetragen werden nur Modellnamen und Anzahlen (kein PC-Name, Benutzername, keine Einstellungen oder Protokolle). Die App sendet nichts. Prüfe die Seite, ergänze, was funktioniert hat und was nicht, und sende sie dann ab (ein GitHub-Konto ist nötig).
+9ed8c43f	Hardware-Bericht
+153d2bd9	Der Browser konnte nicht geöffnet werden.\n{0}
+4afe1df2	Spielaufzeichnungen (FPS und Temperaturen)
+ba856364	Bei jedem Spielen wird ein Eintrag mit durchschnittlichen FPS, 1% Low (Ruckler), CPU- und GPU-Temperaturen und Lüfterdrehzahl gespeichert. So vergleichen Sie Temperaturen und FPS vor und nach dem Ändern der Lüfter.
+ac0fb61e	FPS und Temperaturen beim Spielen aufzeichnen
+01f5728d	Nutzt das mitgelieferte Intel PresentMon (MIT License) und sieht nur, welche App wie viele ms nach dem letzten Bild gezeichnet hat (keine Bildschirminhalte, keine Eingaben). Eine App im Vordergrund, die etwa eine Minute lang zeichnet, gilt als Spiel; Browser, Chat- und Video-Apps sind ausgenommen. Die Aufzeichnungen bleiben auf diesem PC.
+de7074fc	Noch keine Aufzeichnungen.
+04adc800	Details
+4549282a	Löschen
+4668d319	Kein Spiel
+97077d12	Diese App nicht mehr aufzeichnen (löscht auch ihre bisherigen Einträge)
+070b3c61	{0} Std. {1} Min.
+dd408447	{0} Min.
+2f16f690	{0}, {1}
+829b2e33	Ø {0:0} fps · 1% Low {1:0} fps · 0,1% Low {2:0} fps
+d8cf90d7	CPU max. {0:0}°C (Ø {1:0}°C)
+cc8dbf23	GPU max. {0:0}°C (Ø {1:0}°C)
+e2bb4ae7	Lüfter Ø {0:0} rpm
+e19b1126	PresentMon wurde beendet (Exitcode {0})
+b419c5cc	Aus. Einschalten, um FPS und Temperaturen beim Spielen aufzuzeichnen.
+3bb71d5d	PresentMon nicht gefunden (Ordner PresentMon im App-Ordner). Eine Neuinstallation der App behebt das.
+8204e45d	Aufzeichnung: {0} · jetzt {1:0} fps
+83ecfa1a	Warte auf ein Spiel (holen Sie ein Spiel in den Vordergrund und spielen Sie etwa eine Minute, dann beginnt die Aufzeichnung).
+0fe39ffc	Warte auf den Neustart von PresentMon ({0}).
+5afb6e9d	{0} – {1} (gezeichnet {2}, {3} Bilder)
+c4454de4	CPU-Last Ø {0:0}%
+c401f258	GPU-Last Ø {0:0}%
+6caecaec	GPU-Leistung Ø {0:0} W
+47dae337	Durchschnittliche FPS je 10 Sekunden: niedrigste {0:0} fps · höchste {1:0} fps
+debb413f	1% Low ist das Tempo der langsamsten 1% der Bilder. Je größer der Abstand zum Durchschnitt, desto eher spürt man Ruckler.
+73a40039	{0} ab jetzt nicht mehr aufzeichnen? (Für den Fall, dass eine App aufgezeichnet wurde, die kein Spiel ist. Ihre bisherigen Einträge werden auch gelöscht.)
+e16c0947	Spielaufzeichnungen
+4184034d	Kalibrierung nicht möglich, weil die zu überwachenden Temperaturen nicht gelesen werden können. Versuchen Sie es erneut, sobald die Temperatursensoren lesbar sind.
+d1c5f5ab	Die neue Version {0} ist nicht richtig gestartet, daher wurde automatisch auf {1} zurückgesetzt (auch die Einstellungen sind von vor dem Update). {2}
+534656cb	Die digitale Signatur des Installers ist ungültig (beschädigt oder verändert). Das Update wurde abgebrochen.
+0f0feb7a	Diese App ist digital signiert, der heruntergeladene Installer aber nicht. Das Update wurde abgebrochen.
+01889f11	Der heruntergeladene Installer wurde von jemand anderem signiert als diese App. Das Update wurde abgebrochen.
+198beb10	Die digitale Signatur von PresentMon konnte nicht bestätigt werden (keine Intel-Signatur). Bitte installieren Sie die App neu.
+4702ef4e	Die aufbewahrte Kopie der vorherigen Version (Ordner previous) wurde nicht gefunden.
+6b87e136	Die exe der vorherigen Version konnte nicht zurückgespielt werden ({0}).
+bba9cc48	Die vorherige Version ist zurück, aber die Einstellungen konnten nicht zurückgespielt werden ({0}).
+cd083e7b	Die neue Version {0} hat innerhalb von {1:F0} Minuten nicht mit der Lüftersteuerung begonnen.
+17d6b1ee	Zeph-Iris konnte nicht beendet werden, daher konnte die vorherige Version nicht zurückgespielt werden. Beenden Sie Zeph-Iris im Infobereich (oder starten Sie den PC neu), dann laufen die Lüfter wieder nach BIOS. Doppelklicken Sie danach auf diese Datei, um zur vorherigen Version zurückzukehren:\n{0}
+ad924bfa	Zeph-Iris-Wiederherstellung
+97339d69	Zurück zur vorherigen Version geht nur mit ZephIrisRecovery.exe im Ordner previous des App-Ordners.
+df560c03	Zeph-Iris auf die vorherige Version {0} zurücksetzen? (aktuelle Version {1})\n\nDas laufende Zeph-Iris wird beendet (Lüfter zurück auf BIOS), die vorherige exe und die Einstellungen von vor dem Update werden zurückgespielt und es startet neu.
+e988c5bd	Von Hand auf die vorherige Version zurückgesetzt.
+d3cc94cf	Zurücksetzen auf die vorherige Version nicht möglich ({0}).

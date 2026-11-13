@@ -9,6 +9,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:ctl="clr-namespace:ProFanController.UI.Controls"
         xmlns:ui="clr-namespace:ProFanController.UI"
+        xmlns:app="clr-namespace:ProFanController"
         Title="Zeph-Iris" Width="1360" Height="900" MinWidth="1120" MinHeight="700"
         WindowStartupLocation="CenterScreen"
         Background="{DynamicResource BgBrush}" Foreground="{DynamicResource TextBrush}"
@@ -493,6 +494,8 @@
                         <RadioButton Style="{StaticResource Segment}" Content="1時間" Tag="60" GroupName="Range" Checked="OnRangeChanged"/>
                         <RadioButton Style="{StaticResource Segment}" Content="6時間" Tag="360" GroupName="Range" Checked="OnRangeChanged"/>
                         <RadioButton Style="{StaticResource Segment}" Content="24時間" Tag="1440" GroupName="Range" Checked="OnRangeChanged" Margin="0,0,14,0"/>
+                        <ToggleButton x:Name="HistorySmoothToggle" Style="{StaticResource ToggleChip}" Content="なめらかに" Click="OnHistorySmoothClick" Margin="0,0,14,0"
+                                      ToolTip="線を前後の時間の平均で描いて、2°C 刻みのセンサーの行ったり来たりや、CPU の一瞬のトゲを見やすくします。表示だけで、記録・CSV・マウスを乗せたときの値はそのままです"/>
                         <Button Style="{StaticResource AccentButton}" Content="CSV に書き出す" Click="OnExportCsvClick" Padding="14,7"/>
                     </StackPanel>
                 </Grid>
@@ -696,6 +699,12 @@
                         <TextBlock Text="見つからないデバイスは、カードの画像のボタンから、ブラウザーで探した画像を貼り付けられます" Style="{StaticResource Caption}"/>
                     </StackPanel>
                 </CheckBox>
+                <DockPanel Margin="0,0,14,14">
+                    <Button DockPanel.Dock="Right" Style="{StaticResource GhostButton}" Content="動作報告…" Click="OnHardwareReportClick" Padding="12,5" VerticalAlignment="Center"
+                            ToolTip="この PC で動いたことを知らせる GitHub のページを、部品の型番と、アプリが確かめたこと（数だけ）を入れた状態で開きます"/>
+                    <TextBlock Style="{StaticResource Caption}" TextWrapping="Wrap" VerticalAlignment="Center" Margin="0,0,12,0"
+                               Text="この PC で動いたら、「動作報告…」で知らせてもらえると助かります。集まった報告から、README の「動作確認済み」を増やします。"/>
+                </DockPanel>
                 <ItemsControl x:Name="DeviceCards">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
@@ -896,9 +905,9 @@
                                                 <ColumnDefinition Width="70"/>
                                             </Grid.ColumnDefinitions>
                                             <Grid.RowDefinitions>
-                                                <RowDefinition Height="42"/>
-                                                <RowDefinition Height="34"/>
-                                                <RowDefinition Height="34"/>
+                                                <RowDefinition Height="Auto" MinHeight="42"/>
+                                                <RowDefinition Height="Auto" MinHeight="34"/>
+                                                <RowDefinition Height="Auto" MinHeight="34"/>
                                             </Grid.RowDefinitions>
                                             <TextBlock Text="見る温度" Style="{StaticResource Label}"/>
                                             <ComboBox x:Name="TargetSensorCombo" Grid.Column="1" Grid.ColumnSpan="2" DisplayMemberPath="Display" SelectedValuePath="Id"
@@ -927,8 +936,8 @@
                                                 <ColumnDefinition Width="70"/>
                                             </Grid.ColumnDefinitions>
                                             <Grid.RowDefinitions>
-                                                <RowDefinition Height="42"/>
-                                                <RowDefinition Height="34"/>
+                                                <RowDefinition Height="Auto" MinHeight="42"/>
+                                                <RowDefinition Height="Auto" MinHeight="34"/>
                                             </Grid.RowDefinitions>
                                             <TextBlock Text="合わせる相手" Style="{StaticResource Label}"/>
                                             <ComboBox x:Name="FollowCombo" Grid.Column="1" Grid.ColumnSpan="2" DisplayMemberPath="Name" SelectedValuePath="ControlId"
@@ -964,10 +973,10 @@
                                         <ColumnDefinition Width="60"/>
                                     </Grid.ColumnDefinitions>
                                     <Grid.RowDefinitions>
-                                        <RowDefinition Height="34"/>
+                                        <RowDefinition Height="Auto" MinHeight="34"/>
                                         <RowDefinition Height="Auto"/>
-                                        <RowDefinition Height="34"/>
-                                        <RowDefinition Height="34"/>
+                                        <RowDefinition Height="Auto" MinHeight="34"/>
+                                        <RowDefinition Height="Auto" MinHeight="34"/>
                                     </Grid.RowDefinitions>
                                     <TextBlock Text="最低回転数" Style="{StaticResource Label}"/>
                                     <Slider Grid.Column="1" Minimum="0" Maximum="100" Value="{Binding MinDuty}" IsSnapToTickEnabled="True" TickFrequency="1"/>
@@ -1138,10 +1147,10 @@
 
                                         <StackPanel Orientation="Horizontal" Margin="0,14,0,0">
                                             <TextBlock Text="プリセット" Style="{StaticResource Label}" Margin="0,0,12,0"/>
-                                            <Button Style="{StaticResource SmallGhost}" Content="静音" Tag="静音" Click="OnPresetClick" Margin="0,0,6,0"/>
-                                            <Button Style="{StaticResource SmallGhost}" Content="バランス" Tag="バランス" Click="OnPresetClick" Margin="0,0,6,0"/>
-                                            <Button Style="{StaticResource SmallGhost}" Content="冷却重視" Tag="冷却重視" Click="OnPresetClick" Margin="0,0,6,0"/>
-                                            <Button Style="{StaticResource SmallGhost}" Content="全開" Tag="全開" Click="OnPresetClick"/>
+                                            <Button Style="{StaticResource SmallGhost}" Content="静音" Tag="{x:Static app:CurvePresets.Silent}" Click="OnPresetClick" Margin="0,0,6,0"/>
+                                            <Button Style="{StaticResource SmallGhost}" Content="バランス" Tag="{x:Static app:CurvePresets.Balanced}" Click="OnPresetClick" Margin="0,0,6,0"/>
+                                            <Button Style="{StaticResource SmallGhost}" Content="冷却重視" Tag="{x:Static app:CurvePresets.Performance}" Click="OnPresetClick" Margin="0,0,6,0"/>
+                                            <Button Style="{StaticResource SmallGhost}" Content="全開" Tag="{x:Static app:CurvePresets.Full}" Click="OnPresetClick"/>
                                         </StackPanel>
 
                                         <ctl:CurveEditor x:Name="CurveGraph" Height="340" Margin="0,14,0,0" PointsChanged="OnCurvePointsChanged"/>
@@ -1176,8 +1185,8 @@
                                                 <ColumnDefinition Width="60"/>
                                             </Grid.ColumnDefinitions>
                                             <Grid.RowDefinitions>
-                                                <RowDefinition Height="34"/>
-                                                <RowDefinition Height="34"/>
+                                                <RowDefinition Height="Auto" MinHeight="34"/>
+                                                <RowDefinition Height="Auto" MinHeight="34"/>
                                             </Grid.RowDefinitions>
                                             <TextBlock Text="ヒステリシス" Style="{StaticResource Label}"
                                                        ToolTip="温度が下がるとき、この温度差だけ遅れて回転を下げます（うなり防止）"/>
@@ -1411,8 +1420,8 @@
                                     <ColumnDefinition Width="70"/>
                                 </Grid.ColumnDefinitions>
                                 <Grid.RowDefinitions>
-                                    <RowDefinition Height="38"/>
-                                    <RowDefinition Height="38"/>
+                                    <RowDefinition Height="Auto" MinHeight="38"/>
+                                    <RowDefinition Height="Auto" MinHeight="38"/>
                                     <RowDefinition Height="Auto"/>
                                     <RowDefinition Height="Auto"/>
                                     <RowDefinition Height="Auto"/>
@@ -1605,6 +1614,53 @@
                         </StackPanel>
                     </Border>
 
+                    <!-- ゲームの記録（MainWindow.Games.cs） -->
+                    <Border Style="{StaticResource Card}" Margin="0,0,0,14">
+                        <StackPanel>
+                            <DockPanel>
+                                <Button DockPanel.Dock="Right" Style="{StaticResource GhostButton}" Content="フォルダを開く" Click="OnOpenGamesFolderClick" VerticalAlignment="Top"/>
+                                <StackPanel Margin="0,0,16,0">
+                                    <TextBlock Text="ゲームの記録（FPS と温度）" Style="{StaticResource H2}"/>
+                                    <TextBlock Style="{StaticResource Caption}" TextWrapping="Wrap"
+                                               Text="ゲームを遊ぶたびに、平均 FPS・1% Low（カクつき）と、CPU・GPU の温度、ファンの回転数を 1 件ずつ残します。ファンの設定を変える前と後で、温度と FPS がどう変わったかを比べられます。"/>
+                                </StackPanel>
+                            </DockPanel>
+                            <CheckBox x:Name="GamesSwitch" Style="{StaticResource Switch}" Margin="0,14,0,0" Click="OnGamesSwitchClick">
+                                <StackPanel>
+                                    <TextBlock Text="ゲーム中の FPS と温度を記録する" FontWeight="SemiBold"/>
+                                    <TextBlock Style="{StaticResource Caption}" TextWrapping="Wrap"
+                                               Text="同梱の Intel PresentMon（MIT License）で、どのアプリが何 ms ごとに画面を描いたかだけを見ます（画面の中身・入力は見ません）。手前で 1 分ほど描き続けたアプリをゲームとみなし、ブラウザー・チャット・動画のアプリは除きます。記録はこの PC の中だけに置きます。"/>
+                                </StackPanel>
+                            </CheckBox>
+                            <TextBlock x:Name="GamesStatus" Style="{StaticResource Caption}" TextWrapping="Wrap" Margin="0,10,0,0" Foreground="{DynamicResource Accent2Brush}"/>
+                            <TextBlock x:Name="GamesEmpty" Style="{StaticResource Caption}" Margin="0,10,0,0" Text="まだ記録はありません。"/>
+                            <ItemsControl x:Name="GamesList" Margin="0,12,0,0">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Background="{DynamicResource InputBrush}" CornerRadius="10" Padding="14,10" Margin="0,0,0,8">
+                                            <DockPanel>
+                                                <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" VerticalAlignment="Center">
+                                                    <Button Style="{StaticResource SmallGhost}" Content="詳しく" Tag="{Binding}" Click="OnGameDetailsClick" Margin="0,0,6,0"/>
+                                                    <Button Style="{StaticResource SmallGhost}" Content="消す" Tag="{Binding}" Click="OnGameDeleteClick" Margin="0,0,6,0"/>
+                                                    <Button Style="{StaticResource SmallGhost}" Content="ゲームではない" Tag="{Binding}" Click="OnGameExcludeClick"
+                                                            ToolTip="このアプリを、これからは記録しません（これまでの記録も消します）"/>
+                                                </StackPanel>
+                                                <StackPanel>
+                                                    <TextBlock Style="{StaticResource Caption}" FontSize="12">
+                                                        <Run Text="{Binding TimeText, Mode=OneWay}"/>
+                                                    </TextBlock>
+                                                    <TextBlock Text="{Binding App}" FontWeight="SemiBold" Margin="0,2,12,0"/>
+                                                    <TextBlock Text="{Binding FpsText}" Margin="0,2,12,0" TextWrapping="Wrap"/>
+                                                    <TextBlock Text="{Binding TempText}" Style="{StaticResource Caption}" FontSize="12" Margin="0,2,12,0" TextWrapping="Wrap"/>
+                                                </StackPanel>
+                                            </DockPanel>
+                                        </Border>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </StackPanel>
+                    </Border>
+
                     <!-- 異常の記録 -->
                     <Border Style="{StaticResource Card}">
                         <StackPanel>
@@ -1722,6 +1778,13 @@
                         </StackPanel>
                     </Border>
 
+                    <!-- 最小・最大・平均（起動・リセットしてから） -->
+                    <DockPanel Margin="0,0,0,10">
+                        <Button DockPanel.Dock="Right" Style="{StaticResource GhostButton}" Content="最小・最大をリセット" Click="OnResetSensorStatsClick" Padding="12,5"
+                                ToolTip="最小・最大・平均を、いまから数え直します（ゲームを始める前などに）"/>
+                        <TextBlock x:Name="SensorStatsSince" Style="{StaticResource Caption}" VerticalAlignment="Center" TextWrapping="Wrap"
+                                   Text="最小・最大・平均は、アプリを起動してから（画面を開いていないあいだも数えます）"/>
+                    </DockPanel>
                     <ItemsControl x:Name="SensorGroups">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
@@ -1731,20 +1794,41 @@
                                             <TextBlock Text="{Binding Name}" Style="{StaticResource H2}"/>
                                             <TextBlock Text="{Binding HardwareType}" Style="{StaticResource Caption}" Margin="10,0,0,0" VerticalAlignment="Center"/>
                                         </StackPanel>
+                                        <Grid Margin="0,0,0,4">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="70"/>
+                                                <ColumnDefinition Width="230"/>
+                                                <ColumnDefinition Width="100"/>
+                                                <ColumnDefinition Width="100"/>
+                                                <ColumnDefinition Width="100"/>
+                                                <ColumnDefinition Width="100"/>
+                                                <ColumnDefinition/>
+                                            </Grid.ColumnDefinitions>
+                                            <TextBlock Grid.Column="2" Text="いま" Style="{StaticResource Caption}" HorizontalAlignment="Right" Margin="0,0,16,0"/>
+                                            <TextBlock Grid.Column="3" Text="最小" Style="{StaticResource Caption}" HorizontalAlignment="Right" Margin="0,0,16,0"/>
+                                            <TextBlock Grid.Column="4" Text="最大" Style="{StaticResource Caption}" HorizontalAlignment="Right" Margin="0,0,16,0"/>
+                                            <TextBlock Grid.Column="5" Text="平均" Style="{StaticResource Caption}" HorizontalAlignment="Right" Margin="0,0,16,0"/>
+                                        </Grid>
                                         <ItemsControl ItemsSource="{Binding Rows}">
                                             <ItemsControl.ItemTemplate>
                                                 <DataTemplate>
                                                     <Grid Margin="0,3">
                                                         <Grid.ColumnDefinitions>
                                                             <ColumnDefinition Width="70"/>
-                                                            <ColumnDefinition Width="260"/>
-                                                            <ColumnDefinition Width="110"/>
+                                                            <ColumnDefinition Width="230"/>
+                                                            <ColumnDefinition Width="100"/>
+                                                            <ColumnDefinition Width="100"/>
+                                                            <ColumnDefinition Width="100"/>
+                                                            <ColumnDefinition Width="100"/>
                                                             <ColumnDefinition/>
                                                         </Grid.ColumnDefinitions>
                                                         <TextBlock Text="{Binding TypeText}" Style="{StaticResource Caption}"/>
-                                                        <TextBlock Grid.Column="1" Text="{Binding Name}"/>
-                                                        <TextBlock Grid.Column="2" Text="{Binding ValueText}" FontWeight="SemiBold" HorizontalAlignment="Right" Margin="0,0,24,0"/>
-                                                        <TextBox Grid.Column="3" Text="{Binding Id, Mode=OneWay}" IsReadOnly="True" BorderThickness="0"
+                                                        <TextBlock Grid.Column="1" Text="{Binding Name}" TextTrimming="CharacterEllipsis" ToolTip="{Binding Name}"/>
+                                                        <TextBlock Grid.Column="2" Text="{Binding ValueText}" FontWeight="SemiBold" HorizontalAlignment="Right" Margin="0,0,16,0"/>
+                                                        <TextBlock Grid.Column="3" Text="{Binding MinText}" Foreground="{DynamicResource MutedBrush}" HorizontalAlignment="Right" Margin="0,0,16,0"/>
+                                                        <TextBlock Grid.Column="4" Text="{Binding MaxText}" Foreground="{DynamicResource MutedBrush}" HorizontalAlignment="Right" Margin="0,0,16,0"/>
+                                                        <TextBlock Grid.Column="5" Text="{Binding AvgText}" Foreground="{DynamicResource MutedBrush}" HorizontalAlignment="Right" Margin="0,0,16,0"/>
+                                                        <TextBox Grid.Column="6" Text="{Binding Id, Mode=OneWay}" IsReadOnly="True" BorderThickness="0"
                                                                  Background="Transparent" Foreground="{DynamicResource MutedBrush}" Padding="0" FontSize="13"/>
                                                     </Grid>
                                                 </DataTemplate>
@@ -1773,7 +1857,7 @@
                                 <StackPanel Margin="0,0,16,0">
                                     <TextBlock Text="接続" Style="{StaticResource H2}"/>
                                     <TextBlock Style="{StaticResource Caption}" TextWrapping="Wrap"
-                                               Text="無料の OpenRGB を通して、マザーボード・メモリ・ファン・LED テープなどの色を変えます。OpenRGB を起動して「SDK Server」を開始しておいてください（つながらないときは、OpenRGB の起動オプションに --server を付けます）。"/>
+                                               Text="無料の OpenRGB を通して、マザーボード・メモリ・ファン・LED テープなどの色を変えます。OpenRGB が動いていなければ、このアプリが「SDK Server」をオンにして起動します（下のスイッチ）。"/>
                                 </StackPanel>
                             </DockPanel>
                             <CheckBox Style="{StaticResource Switch}" IsChecked="{Binding Rgb.Enabled}" Margin="0,16,0,0"
@@ -1804,6 +1888,14 @@
                                             ToolTip="OpenRGB を起動し直したときや、デバイスを付け外ししたときに押すと、待たずにすぐ繋ぎ直します"/>
                                 </StackPanel>
                             </DockPanel>
+                            <CheckBox Style="{StaticResource Switch}" IsChecked="{Binding Rgb.AutoStartOpenRgb}" Margin="0,12,0,0"
+                                      IsEnabled="{Binding Rgb.Enabled}"
+                                      ToolTip="つながらない状態が続くと、OpenRGB がサービスとして入っていればサービスを、なければ Program Files の OpenRGB を「--server --startminimized」で起動します。動いている OpenRGB を止めたり起動し直したりはしません">
+                                <StackPanel>
+                                    <TextBlock Text="OpenRGB が動いていなければ起動する" FontWeight="SemiBold"/>
+                                    <TextBlock Text="同じ PC の OpenRGB だけです。安全のため、Program Files に入れた OpenRGB だけを起動します（zip を展開した OpenRGB は、自分で起動してください）" Style="{StaticResource Caption}" TextWrapping="Wrap"/>
+                                </StackPanel>
+                            </CheckBox>
                             <TextBlock x:Name="RgbStatus" Style="{StaticResource Caption}" Margin="0,8,0,0" TextWrapping="Wrap"/>
                         </StackPanel>
                     </Border>
@@ -2694,9 +2786,9 @@
                                         <ColumnDefinition Width="80"/>
                                     </Grid.ColumnDefinitions>
                                     <Grid.RowDefinitions>
-                                        <RowDefinition Height="36"/>
-                                        <RowDefinition Height="36"/>
-                                        <RowDefinition Height="36"/>
+                                        <RowDefinition Height="Auto" MinHeight="36"/>
+                                        <RowDefinition Height="Auto" MinHeight="36"/>
+                                        <RowDefinition Height="Auto" MinHeight="36"/>
                                         <RowDefinition Height="Auto"/>
                                     </Grid.RowDefinitions>
                                     <TextBlock Text="更新間隔" Style="{StaticResource Label}"/>
@@ -2965,8 +3057,8 @@
                                                 <ColumnDefinition Width="Auto"/>
                                             </Grid.ColumnDefinitions>
                                             <Grid.RowDefinitions>
-                                                <RowDefinition Height="38"/>
-                                                <RowDefinition Height="38"/>
+                                                <RowDefinition Height="Auto" MinHeight="38"/>
+                                                <RowDefinition Height="Auto" MinHeight="38"/>
                                             </Grid.RowDefinitions>
                                             <TextBlock Text="トピック名" Style="{StaticResource Label}"/>
                                             <TextBox Grid.Column="1" Text="{Binding Notify.NtfyTopic}" LostFocus="OnNotifySettingLostFocus"/>
@@ -3024,9 +3116,9 @@
                                         <ColumnDefinition/>
                                     </Grid.ColumnDefinitions>
                                     <Grid.RowDefinitions>
-                                        <RowDefinition Height="40"/>
-                                        <RowDefinition Height="40"/>
-                                        <RowDefinition Height="40"/>
+                                        <RowDefinition Height="Auto" MinHeight="40"/>
+                                        <RowDefinition Height="Auto" MinHeight="40"/>
+                                        <RowDefinition Height="Auto" MinHeight="40"/>
                                     </Grid.RowDefinitions>
                                     <TextBlock Text="1 kWh あたりの電気代" Style="{StaticResource Label}"/>
                                     <TextBox Grid.Column="1" Text="{Binding Energy.PricePerKwh}" TextAlignment="Right"/>
@@ -3056,8 +3148,8 @@
                                         <ColumnDefinition/>
                                     </Grid.ColumnDefinitions>
                                     <Grid.RowDefinitions>
-                                        <RowDefinition Height="44"/>
-                                        <RowDefinition Height="44"/>
+                                        <RowDefinition Height="Auto" MinHeight="44"/>
+                                        <RowDefinition Height="Auto" MinHeight="44"/>
                                     </Grid.RowDefinitions>
                                     <TextBlock Text="アイドル中のワットチェッカーの値" Style="{StaticResource Label}" TextWrapping="Wrap"/>
                                     <TextBox x:Name="IdleWallBox" Grid.Column="1" TextAlignment="Right" VerticalAlignment="Center"/>
@@ -3094,7 +3186,7 @@
                                         <ColumnDefinition Width="60"/>
                                     </Grid.ColumnDefinitions>
                                     <Grid.RowDefinitions>
-                                        <RowDefinition Height="34"/>
+                                        <RowDefinition Height="Auto" MinHeight="34"/>
                                         <RowDefinition Height="Auto"/>
                                     </Grid.RowDefinitions>
                                     <TextBlock Text="そのときの回転数" Style="{StaticResource Label}" ToolTip="ポンプは常に 100% にします"/>
@@ -3126,7 +3218,7 @@
                                         <ColumnDefinition Width="60"/>
                                     </Grid.ColumnDefinitions>
                                     <Grid.RowDefinitions>
-                                        <RowDefinition Height="34"/>
+                                        <RowDefinition Height="Auto" MinHeight="34"/>
                                         <RowDefinition Height="Auto"/>
                                     </Grid.RowDefinitions>
                                     <TextBlock Text="センサーがないときの回転数" Style="{StaticResource Label}"/>
@@ -3189,6 +3281,8 @@
                                     <Button Style="{StaticResource GhostButton}" Content="ログフォルダを開く" Click="OnOpenLogsClick" Margin="0,0,8,8"/>
                                     <Button Style="{StaticResource GhostButton}" Content="不具合を報告…" Click="OnReportProblemClick" Margin="0,0,8,8"
                                             ToolTip="ログ・設定・部品の一覧をまとめた zip を作り、GitHub の報告ページを開きます（個人的な情報は伏せます）"/>
+                                    <Button Style="{StaticResource GhostButton}" Content="動作報告…" Click="OnHardwareReportClick" Margin="0,0,8,8"
+                                            ToolTip="この PC で動いたことを知らせる GitHub のページを、部品の型番と、アプリが確かめたこと（数だけ）を入れた状態で開きます。問題がなくても、まだ確かめていない部品の報告はとても助かります"/>
                                 </WrapPanel>
                             </StackPanel>
                         </Border>

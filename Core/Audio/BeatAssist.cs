@@ -38,8 +38,14 @@ public sealed class BeatAssist : IDisposable
     private volatile bool _stop;
     private float[]? _job;
     private double _jobStartT;
-    private volatile Result? _result;
+    private volatile Tagged? _result;
     private bool _busy;
+    /// <summary>取り込みの回（Reset のたびに 1 つ進める）。前の回の音で出た AI の結果は使わない</summary>
+    private int _gen;
+    private int _jobGen;
+
+    /// <summary>AI の結果と、それを頼んだときの取り込みの回</summary>
+    private sealed record Tagged(Result R, int Gen);
     private double _lastStartT = double.NegativeInfinity;
     private int _disagree;
     private bool _lastAgreed;
@@ -107,6 +113,11 @@ public sealed class BeatAssist : IDisposable
     /// <summary>今の曲の頭からやり直す（出力先が変わった・取り込み直した）</summary>
     public void Reset()
     {
+        // 前の音で頼んだ AI の結果（もう出ているもの・これから出るもの）を捨てる
+        Interlocked.Increment(ref _gen);
+        Interlocked.Exchange(ref _job, null);
+        _result = null;
+        _busy = false;
         _ringCount = 0;
         _ringEndT = double.NaN;
         _disagree = 0;
@@ -121,12 +132,15 @@ public sealed class BeatAssist : IDisposable
         _lowV[_lowPos] = double.IsFinite(low) ? low : 0;
         _lowPos = (_lowPos + 1) % _lowT.Length;
         Memory?.Tick(tNow, odf, gateOpen);
-        if (_result is { } r)
+        if (_result is { } tagged)
         {
             _result = null;
             _busy = false;
-            Learn(r);
-            if (!_memoryGrid) Decide(r, tracker);
+            if (tagged.Gen == Volatile.Read(ref _gen))
+            {
+                Learn(tagged.R);
+                if (!_memoryGrid) Decide(tagged.R, tracker);
+            }
         }
         // 覚えた曲: 覚えた拍の並びと追跡を比べ、ロックしていなければすぐ、ロック中なら 2 回続けて食い違ったら合わせる
         // （1 回で合わせると、覚えた拍が少しずれている部分で、正しく追えている追跡を動かしてしまう曲があった）。
@@ -172,9 +186,24 @@ public sealed class BeatAssist : IDisposable
             if (Memory?.Aligned != true) Decide(res, tracker);
             return;
         }
+        _jobGen = Volatile.Read(ref _gen);
         Volatile.Write(ref _job, job);
         _busy = true;
         _wake.Set();
+    }
+
+    /// <summary>いまの取り込みの回（テスト用）</summary>
+    internal int Generation => Volatile.Read(ref _gen);
+
+    /// <summary>
+    /// AI の結果を渡す（分析のスレッド・テストから）。頼んだあとに取り込み直していたら（回が違えば）捨てる。
+    /// 覚えた曲の記録（Analyzed）にも、前の音の結果は入れない
+    /// </summary>
+    internal void Deliver(Result res, int gen)
+    {
+        if (gen != Volatile.Read(ref _gen)) return;
+        Analyzed?.Invoke(res);
+        _result = new Tagged(res, gen);
     }
 
     private void WorkerLoop()
@@ -186,19 +215,19 @@ public sealed class BeatAssist : IDisposable
             var job = Interlocked.Exchange(ref _job, null);
             if (job is null) continue;
             double t0 = _jobStartT;
+            int gen = Volatile.Read(ref _jobGen);
             try
             {
                 var sw = System.Diagnostics.Stopwatch.StartNew();
                 var (beats, downs) = _model.Analyze(job);
                 var res = new Result(beats.Select(b => t0 + b).ToList(), downs.Select(b => t0 + b).ToList(),
                     t0 + job.Length / (double)BeatThis.SampleRate, sw.Elapsed.TotalSeconds);
-                Analyzed?.Invoke(res);
-                _result = res;
+                Deliver(res, gen);
             }
             catch (Exception ex)
             {
                 Log?.Invoke("拍の AI に失敗: " + ex.Message);   // no-loc（ログだけ）
-                _result = new Result(new(), new(), t0, 0);
+                if (gen == Volatile.Read(ref _gen)) _result = new Tagged(new Result(new(), new(), t0, 0), gen);
             }
         }
     }

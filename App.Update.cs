@@ -33,6 +33,14 @@ public partial class App
     {
         var cfg = controller.Config.Update;
         string now = AppUpdater.CurrentVersion.ToString(3);
+        // 更新の見守りが前の版（この版）に戻したとき: 知らせて、同じ版を自動では勧めない
+        if (RunningFromInstalledFolder && UpdateRecovery.TakeRolledBack(AppFolder) is { } rb)
+        {
+            Logger.Warn($"更新した版 {rb.Failed} が起動しなかったため、{rb.Restored} に戻しました（{rb.Reason}）");
+            _window?.ShowAlert(L($"新しい版 {rb.Failed} がうまく起動しなかったため、自動で {rb.Restored} に戻しました（設定も更新する前のものです）。{rb.Reason}"), AlertLevel.Warning);
+            cfg.NotifiedVersion = "v" + rb.Failed;
+            controller.Commit(recordUndo: false);
+        }
         if (cfg.LastRunVersion is { Length: > 0 } before && before != now)
         {
             Logger.Info($"更新されました: {before} → {now}");
@@ -72,6 +80,29 @@ public partial class App
     {
         if (_controller is null || !CanRollBack || AppUpdater.ParseTag(_controller.Config.Update.PreviousVersion) is not { } previous)
             return L("前の版が分からないため、戻せません。");
+        // 更新の前に取っておいた前の版（previous フォルダー）があれば、ネットにつながずにそれで戻す
+        if (RunningFromInstalledFolder && UpdateRecovery.BackupVersion(AppFolder) is { } kept && kept.ToString(3) == previous.ToString(3))
+        {
+            try
+            {
+                _controller.Commit(recordUndo: false);
+                var psi = new System.Diagnostics.ProcessStartInfo(UpdateRecovery.RecoveryPath(AppFolder))
+                {
+                    UseShellExecute = false,
+                    CreateNoWindow = true,
+                    WorkingDirectory = UpdateRecovery.BackupDir(AppFolder),
+                };
+                psi.ArgumentList.Add(UpdateRecovery.RestoreArgument);
+                psi.ArgumentList.Add("--yes");
+                System.Diagnostics.Process.Start(psi)?.Dispose();
+                Logger.Info($"取っておいた前の版 {previous.ToString(3)} に戻します（このアプリは、まもなく終了の合図を受けて終わります）");
+                return null;
+            }
+            catch (Exception ex)
+            {
+                Logger.Warn($"取っておいた前の版で戻せませんでした。GitHub から取ってきます: {ex.Message}");
+            }
+        }
         UpdateInfo? info;
         try { info = await AppUpdater.FindReleaseAsync(previous, CancellationToken.None); }
         catch (Exception ex)
@@ -148,6 +179,7 @@ public partial class App
             Logger.Info($"更新を始めます: {AppUpdater.CurrentVersion.ToString(3)} → {info.Version.ToString(3)}（{info.DownloadUrl}）");
             var installer = await AppUpdater.DownloadAsync(info, progress, CancellationToken.None);
             _controller?.Commit(recordUndo: false); // 終了する前に、いまの設定を書き出しておく
+            StartUpdateGuard(info.Version);         // 新しい版が起動しなかったら、外から前の版に戻す
             bool showApp = _window?.IsVisible == true;
             AppUpdater.StartInstaller(installer, showApp);
             _verifiedInstaller = installer;
@@ -161,5 +193,49 @@ public partial class App
             Logger.Warn($"更新できませんでした: {ex}");
             return L($"更新できませんでした（{ex.Message}）。");
         }
+    }
+
+    /// <summary>インストーラーが入れる場所（C:\Program Files\Zeph-Iris）で動いているか（ほかの場所なら、更新で入れ替わるのはこのフォルダーではない）</summary>
+    private static bool RunningFromInstalledFolder =>
+        string.Equals(AppFolder, Path.GetFullPath(InstallCheck.RecommendedFolder).TrimEnd(Path.DirectorySeparatorChar), StringComparison.OrdinalIgnoreCase);
+
+    private static string AppFolder => Path.GetFullPath(AppContext.BaseDirectory).TrimEnd(Path.DirectorySeparatorChar);
+
+    /// <summary>
+    /// 更新の前: いまの exe と設定を previous フォルダーに写し、そこから「見守り」を起動する（Core/UpdateRecovery.cs）。
+    /// 用意できなくても更新は続ける（これまでと同じ。前の版にはアプリの中から戻せる）
+    /// </summary>
+    private static void StartUpdateGuard(Version to)
+    {
+        try
+        {
+            if (!RunningFromInstalledFolder || Environment.ProcessPath is not { } exe)
+            {
+                Logger.Info("インストールした場所の外で動いているので、更新の見守りは使いません");
+                return;
+            }
+            string guard = UpdateRecovery.Prepare(AppFolder, exe, AppUpdater.CurrentVersion, to, DateTime.Now);
+            var psi = new System.Diagnostics.ProcessStartInfo(guard)
+            {
+                UseShellExecute = false,
+                CreateNoWindow = true,
+                WorkingDirectory = Path.GetDirectoryName(guard)!,
+            };
+            psi.ArgumentList.Add(UpdateRecovery.GuardArgument);
+            psi.ArgumentList.Add(AppFolder);
+            System.Diagnostics.Process.Start(psi)?.Dispose();
+            Logger.Info($"更新の見守りを起動しました（{UpdateRecovery.GuardTimeout.TotalMinutes:F0} 分のうちに新しい版が制御を始めなければ、{AppUpdater.CurrentVersion.ToString(3)} に戻します）");
+        }
+        catch (Exception ex)
+        {
+            Logger.Warn($"更新の見守りを用意できませんでした（更新は続けます）: {ex.Message}");
+        }
+    }
+
+    /// <summary>新しい版がファンの制御を始めたとき（MainWindow の最初のスナップショット）: 見守りに知らせる</summary>
+    public static void MarkUpdateStarted()
+    {
+        if (RunningFromInstalledFolder && UpdateRecovery.MarkStarted(AppFolder, AppUpdater.CurrentVersion))
+            Logger.Info("更新した版でファンの制御を始めたことを、更新の見守りに知らせました");
     }
 }

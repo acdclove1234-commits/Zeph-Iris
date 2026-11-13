@@ -33,6 +33,37 @@ public partial class MainWindow
 
     private void OnReportProblemClick(object sender, RoutedEventArgs e) => ShowReportDialog();
 
+    /// <summary>
+    /// 「動作報告…」: 版・部品の型番と、アプリが確かめたこと（数だけ）を入れた GitHub の動作報告のページを開く。
+    /// アプリからは送らない（送るかどうかは、ページで内容を見てから決めてもらう）
+    /// </summary>
+    private void OnHardwareReportClick(object sender, RoutedEventArgs e)
+    {
+        FlushCommit();
+        var info = CollectSupportInfo();
+        var facts = new HardwareReportFacts(
+            Config.Profiles.FirstOrDefault(p => p.Name == _controller.EffectiveProfile)?.Fans.Count(f => f.Enabled) ?? 0,
+            Config.SetupCompleted,
+            Config.Rgb.Enabled && !Config.Rgb.LightsOff,
+            Config.Rgb.Mode == RgbModes.Music);
+        string preview = L("次の内容を入れた、GitHub の動作報告のページを開きます。") + "\n\n"
+                         + L("版") + ": " + info.AppVersion + "\n"
+                         + L("マザーボード") + ": " + (HardwareReport.Motherboard(info) ?? "—") + "\n"
+                         + "CPU: " + (info.Devices.FirstOrDefault(d => d.Kind == "Cpu")?.Name ?? "—") + "\n"
+                         + L("グラボ") + ": " + (info.Devices.FirstOrDefault(d => d.Kind == "Gpu")?.Name ?? "—") + "\n\n"
+                         + HardwareReport.Notes(info, facts).TrimEnd() + "\n\n"
+                         + L("入れるのは型番と数だけです（PC の名前・ユーザー名・設定・ログは入れません）。アプリからは送りません。ページで内容を確かめて、動いたもの・動かなかったものを書き足してから送ってください（GitHub のアカウントが必要です）。");
+        if (MessageBox.Show(this, preview, L("動作報告"), MessageBoxButton.OKCancel, MessageBoxImage.Information) != MessageBoxResult.OK) return;
+        try
+        {
+            SystemTool.OpenUrl(HardwareReport.Url(info, facts));
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show(this, L($"ブラウザーを開けませんでした。\n{ex.Message}"), AppIdentity.Name, MessageBoxButton.OK, MessageBoxImage.Warning);
+        }
+    }
+
     /// <summary>画面の外（トレイのメニュー）から報告の画面を開く</summary>
     public void ShowReportDialogFromOutside() => ShowReportDialog();
 

@@ -141,6 +141,8 @@ public partial class MainWindow : Window
         UpdateProfileIndicators();
         UpdateUndoButtons();
         WidgetSwitch.IsChecked = Config.Widget.Visible;
+        ApplyHistorySmooth();
+        ApplyGamesConfig();
         LoadPlainSettings();
     }
 
@@ -367,9 +369,17 @@ public partial class MainWindow : Window
         UpdateDriverStatus(catalog); // PawnIO がなければ、インストールの案内を出す（MainWindow.Setup.cs）
     }
 
+    /// <summary>更新の見守りに「制御を始めた」と知らせた（1 回だけ）</summary>
+    private static bool _updateMarked;
+
     public void OnSnapshot(EngineSnapshot s)
     {
         _lastSnapshot = s;
+        if (!_updateMarked && s.Health == EngineHealth.Ok)
+        {
+            _updateMarked = true;
+            App.MarkUpdateStarted();
+        }
 
         foreach (var card in _tempCards)
         {
@@ -380,18 +390,21 @@ public partial class MainWindow : Window
         foreach (var m in _metricTiles) m.Update(s.Values);
         RecordHistory(s);
         RecordLongTerm(s);
+        TickGames(s);
         UpdateTest(s);
         UpdateTune(s);
         UpdateSeasonCheck(s);
         UpdateListen(s);
         foreach (var card in _tempCards) card.SetSuspect(s.Suspects is { } sus && sus.TryGetValue(card.SensorId, out var why) ? why : null);
 
+        _sensorStats.Add(s.Values);   // 画面を開いていなくても、最小・最大・平均は数える
         if (SensorsPage.Visibility == Visibility.Visible)
         {
             foreach (var (id, row) in _sensorRows)
             {
-                row.Update(s.Values.TryGetValue(id, out var v) ? v : null);
+                row.Update(s.Values.TryGetValue(id, out var v) ? v : null, _sensorStats.Get(id));
             }
+            SensorStatsSince.Text = L($"最小・最大・平均は {_sensorStats.Since:HH:mm} から");
             foreach (var row in _virtualRows) row.Update(s.Values);
         }
 

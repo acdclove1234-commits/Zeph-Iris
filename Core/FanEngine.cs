@@ -179,6 +179,11 @@ public sealed class FanEngine : IDisposable
     /// <summary>処理する順番（ポンプが先。表示は _fans の順のまま）</summary>
     private FanRuntime[] _order = Array.Empty<FanRuntime>();
     private Calibrator? _calibration;
+    /// <summary>
+    /// キャリブレーション中に見張る温度（自分の温度カーブがないファン）。始めたときに読めていた、緊急全開で見る温度のすべて。
+    /// どれか 1 つでも読めなくなったら中止する（ほかの部品の温度が読めても、代わりにしない）
+    /// </summary>
+    private List<string> _calibrationWatch = new();
     private bool _paused;
     private bool _emergency;
     private long _emergencySinceMs;
@@ -377,6 +382,12 @@ public sealed class FanEngine : IDisposable
             CalibrationFinished?.Invoke(controlId, null, L("ハードウェアの準備ができていないため、今はキャリブレーションできません。"));
             return;
         }
+        if (CalibrationWatch(fan) is not { } watch)
+        {
+            CalibrationFinished?.Invoke(controlId, null, L("見張る温度を読めないため、キャリブレーションできません。温度センサーが読めるようになってから、もう一度実行してください。"));
+            return;
+        }
+        _calibrationWatch = watch;
         _calibration = new Calibrator(controlId, fan.Cfg.Name, Mono(ClockMs()));
         Logger.Info($"キャリブレーション開始: {fan.Cfg.Name}");
     });
@@ -826,12 +837,24 @@ public sealed class FanEngine : IDisposable
     {
         if (temps.Count == 0) yield break;
         if (SensorNames.CpuTemperature(temps) is { } cpu) yield return cpu.Id;
-        foreach (var gpu in temps.Where(t => t.HardwareType.StartsWith("Gpu", StringComparison.Ordinal)).Select(t => t.HardwareName).Distinct())
+        // GPU は機器ごと（センサーの ID の機器の部分）に分ける。同じ型番の GPU を 2 枚使っていても、両方を見る
+        var gpus = temps.Where(t => t.HardwareType.StartsWith("Gpu", StringComparison.Ordinal)).ToList();
+        foreach (var key in gpus.Select(HardwareKey).Distinct(StringComparer.OrdinalIgnoreCase))
         {
-            var own = temps.Where(t => t.HardwareName == gpu).ToList();
-            if (SensorNames.GpuCoreTemperature(own, gpu) is { } core) yield return core.Id;
+            var own = gpus.Where(t => string.Equals(HardwareKey(t), key, StringComparison.OrdinalIgnoreCase)).ToList();
+            if (SensorNames.GpuCoreTemperature(own) is { } core) yield return core.Id;
             if (SensorNames.GpuHotSpotTemperature(own) is { } hot) yield return hot.Id;
         }
+    }
+
+    /// <summary>
+    /// センサーの機器: ID「/gpu-nvidia/0/temperature/2」の「/gpu-nvidia/0」（種類と番号の 2 段を除いたもの）。
+    /// その形でない ID は、部品の名前で分ける
+    /// </summary>
+    internal static string HardwareKey(SensorInfo s)
+    {
+        var parts = s.Id.Split('/', StringSplitOptions.RemoveEmptyEntries);
+        return parts.Length >= 3 ? "/" + string.Join('/', parts[..^2]) : "name:" + s.HardwareName;
     }
 
     /// <summary>センサーの名前と、そのセンサーの緊急温度を決める（Hot Spot は別のしきい値）</summary>
@@ -1132,9 +1155,23 @@ public sealed class FanEngine : IDisposable
             _hub!.GpuTemps(cfg.ControlId, out float? core, out _);
             if (!FanSafety.IsPlausibleTemp(core)) return true;
         }
-        if (!hasOwn && _emergencySensors.Count > 0)
-            return _emergencySensors.All(s => ReadPhysicalTemp(s.Id) is null);
+        if (!hasOwn)
+            return _calibrationWatch.Count == 0 || _calibrationWatch.Any(id => ReadPhysicalTemp(id) is null);
         return false;
+    }
+
+    /// <summary>
+    /// キャリブレーションを始めてよいか: 見張る温度がいま読めるか。
+    /// 自分の温度（カーブ・目標温度・GPU のファンなら GPU のコア）があれば、それがすべて読めること（返すのは空の一覧）。
+    /// なければ、緊急全開で見る温度のうち、いま読めるものの一覧（1 つもなければ null = 始めない）
+    /// </summary>
+    private List<string>? CalibrationWatch(FanRuntime fan)
+    {
+        var cfg = fan.Cfg;
+        bool hasOwn = fan.Curves.Count > 0 || (cfg.Mode == FanModes.Target && cfg.TargetSensorId.Length > 0) || cfg.IsGpuFan;
+        if (hasOwn) return CalibrationTempLost(fan) ? null : new List<string>();
+        var readable = _emergencySensors.Select(s => s.Id).Where(id => ReadPhysicalTemp(id) is not null).ToList();
+        return readable.Count > 0 ? readable : null;
     }
 
     /// <summary>キャリブレーション中なら中止して結果を知らせる（スリープなど）</summary>
