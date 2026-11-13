@@ -49,9 +49,11 @@ public partial class MainWindow
         app.ShowMainWindow();
         OpenSettingsTab("general");
         string previous = Config.Update.PreviousVersion ?? "";
-        var answer = MessageBox.Show(this,
-            L($"前の版（{previous}）に戻します。\n\nGitHub から前の版のインストーラーをダウンロードして確かめたあと、アプリが一度終了します。入れ替えが終わるまでの十数秒、ファンは BIOS の設定で回り、終わるとアプリが起動し直します。設定・ログ・記録はそのまま残ります。\n\n戻しますか？"),
-            AppIdentity.Name, MessageBoxButton.OKCancel, MessageBoxImage.Question, MessageBoxResult.Cancel);
+        string question = app.CanRestoreLocally
+            // 更新の前に取っておいた前の版を使う（ネットにつながない。設定も更新する前のものに戻る）
+            ? L($"前の版（{previous}）に戻します。\n\n更新の前に取っておいた前の版を使います（ダウンロードはしません）。アプリが一度終了し、十数秒、ファンは BIOS の設定で回り、終わるとアプリが起動し直します。設定は更新する前のものに戻ります。いまの設定は backups フォルダーに取っておくので、設定 →「安全・バックアップ」の「復元前」のバックアップから戻せます。ログ・記録はそのまま残ります。\n\n戻しますか？")
+            : L($"前の版（{previous}）に戻します。\n\nGitHub から前の版のインストーラーをダウンロードして確かめたあと、アプリが一度終了します。入れ替えが終わるまでの十数秒、ファンは BIOS の設定で回り、終わるとアプリが起動し直します。設定・ログ・記録はそのまま残ります。\n\n戻しますか？");
+        var answer = MessageBox.Show(this, question, AppIdentity.Name, MessageBoxButton.OKCancel, MessageBoxImage.Question, MessageBoxResult.Cancel);
         if (answer != MessageBoxResult.OK) return;
 
         RollbackButton.IsEnabled = false;

@@ -1873,7 +1873,6 @@ c4454de4	CPU-Last Ø {0:0}%
 c401f258	GPU-Last Ø {0:0}%
 6caecaec	GPU-Leistung Ø {0:0} W
 47dae337	Durchschnittliche FPS je 10 Sekunden: niedrigste {0:0} fps · höchste {1:0} fps
-debb413f	1% Low ist das Tempo der langsamsten 1% der Bilder. Je größer der Abstand zum Durchschnitt, desto eher spürt man Ruckler.
 73a40039	{0} ab jetzt nicht mehr aufzeichnen? (Für den Fall, dass eine App aufgezeichnet wurde, die kein Spiel ist. Ihre bisherigen Einträge werden auch gelöscht.)
 e16c0947	Spielaufzeichnungen
 4184034d	Kalibrierung nicht möglich, weil die zu überwachenden Temperaturen nicht gelesen werden können. Versuchen Sie es erneut, sobald die Temperatursensoren lesbar sind.
@@ -1889,7 +1888,16 @@ cd083e7b	Die neue Version {0} hat innerhalb von {1:F0} Minuten nicht mit der Lü
 17d6b1ee	Zeph-Iris konnte nicht beendet werden, daher konnte die vorherige Version nicht zurückgespielt werden. Beenden Sie Zeph-Iris im Infobereich (oder starten Sie den PC neu), dann laufen die Lüfter wieder nach BIOS. Doppelklicken Sie danach auf diese Datei, um zur vorherigen Version zurückzukehren:\n{0}
 ad924bfa	Zeph-Iris-Wiederherstellung
 97339d69	Zurück zur vorherigen Version geht nur mit ZephIrisRecovery.exe im Ordner previous des App-Ordners.
-df560c03	Zeph-Iris auf die vorherige Version {0} zurücksetzen? (aktuelle Version {1})\n\nDas laufende Zeph-Iris wird beendet (Lüfter zurück auf BIOS), die vorherige exe und die Einstellungen von vor dem Update werden zurückgespielt und es startet neu.
 e988c5bd	Von Hand auf die vorherige Version zurückgesetzt.
 d3cc94cf	Zurücksetzen auf die vorherige Version nicht möglich ({0}).
 ab6781dc	Die Temperatur von {0} kann nicht gelesen werden (die Karte wird gefunden, aber Temperaturen und Lüfter lassen sich nicht aus dem Grafiktreiber lesen). Das kann passieren, nachdem der Treiber ausgetauscht wurde. Den neuesten Treiber von der Herstellerseite (AMD Software, NVIDIA-Treiber usw.) neu installieren und den PC neu starten hilft oft. Bis dahin funktionieren die Steuerung nach GPU-Temperatur und der Notfall-Volllast für die GPU nicht.
+70775abe	Zur vorherigen Version {0} zurückgekehrt (auch die Einstellungen sind von vor dem Update).
+1f1867fa	Die Einstellungen von direkt vor dem Zurücksetzen lassen sich über die Sicherung „Vor der Wiederherstellung“ unter Einstellungen → „Sicherheit & Sicherung“ wiederherstellen.
+a6619a29	Das Update wurde abgebrochen, weil die Vorbereitung für die Rückkehr zur vorherigen Version fehlschlug ({0}). Prüfen Sie den freien Speicherplatz oder führen Sie den Installer von der Release-Seite von Hand aus.
+b148d60e	Das Überwachungsprogramm konnte nicht gestartet werden.
+27271310	Sie haben kürzlich auf diese Version aktualisiert. Wenn die neue Version immer wieder beendet wird, doppelklicken Sie auf die folgende Datei, um zur vorherigen Version ({0}) und den Einstellungen von vor dem Update zurückzukehren (die aktuellen Einstellungen werden im Ordner backups aufbewahrt).\n{1}
+381eb861	Länger als 1 s angehalten: {0}-mal, insgesamt {1:0} s (Laden, Pause, minimiert usw. Nicht in FPS und Zeichenzeit enthalten)
+836a6b89	1% Low und 0,1% Low sind die Bildzeiten bei den langsamsten 1% bzw. 0,1% (99. und 99,9. Perzentil), als FPS angegeben. Bilder, die länger als 1 s angehalten haben, werden nicht gezählt. Je größer der Abstand zum Durchschnitt, desto eher spürt man Ruckler (manche Programme nutzen den Durchschnitt der langsamsten 1% der Bilder, daher weichen die Werte etwas ab).
+c5f9ace5	Temperaturen, Auslastung und Lüfter decken denselben Zeitraum ab wie die FPS: ab dem ersten Bild, solange gezeichnet wurde.
+17f1a7c2	Zurück zur vorherigen Version ({0}).\n\nEs wird die vor dem Update aufbewahrte Kopie verwendet (nichts wird heruntergeladen). Die App wird einmal beendet, die Lüfter laufen einige Sekunden nach BIOS-Einstellungen, danach startet die App neu. Die Einstellungen kehren zum Stand vor dem Update zurück. Die aktuellen Einstellungen werden im Ordner backups aufbewahrt und lassen sich über die Sicherung „Vor der Wiederherstellung“ unter Einstellungen → „Sicherheit & Sicherung“ wiederherstellen. Protokolle und Aufzeichnungen bleiben.\n\nZurücksetzen?
+ff6a2182	Zeph-Iris auf die vorherige Version {0} zurücksetzen? (aktuelle Version {1})\n\nDas laufende Zeph-Iris wird beendet (Lüfter zurück auf BIOS), die vorherige exe und die Einstellungen von vor dem Update werden zurückgespielt und es startet neu. Die aktuellen Einstellungen werden vorher im Ordner backups aufbewahrt (wiederherstellbar unter Einstellungen → „Sicherheit & Sicherung“).

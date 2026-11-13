@@ -1873,7 +1873,6 @@ c4454de4	Tải CPU TB {0:0}%
 c401f258	Tải GPU TB {0:0}%
 6caecaec	Công suất GPU TB {0:0} W
 47dae337	FPS trung bình mỗi 10 giây: thấp nhất {0:0} fps · cao nhất {1:0} fps
-debb413f	1% low là tốc độ của 1% khung hình chậm nhất. Chênh lệch với mức trung bình càng lớn thì càng dễ thấy giật.
 73a40039	Ngừng ghi {0} từ bây giờ? (Dùng khi một ứng dụng không phải game bị ghi. Các bản ghi của nó cũng sẽ bị xóa.)
 e16c0947	Bản ghi game
 4184034d	Không thể hiệu chỉnh vì không đọc được nhiệt độ cần theo dõi. Hãy thử lại khi đọc được cảm biến nhiệt độ.
@@ -1889,7 +1888,16 @@ cd083e7b	Phiên bản mới {0} không bắt đầu điều khiển quạt trong
 17d6b1ee	Không thể đóng Zeph-Iris nên không quay về được phiên bản trước. Hãy thoát Zeph-Iris ở vùng thông báo (hoặc khởi động lại PC), quạt sẽ trở về cài đặt BIOS. Sau đó nhấp đúp vào tệp này để quay về phiên bản trước:\n{0}
 ad924bfa	Khôi phục Zeph-Iris
 97339d69	Chỉ có thể quay về phiên bản trước từ ZephIrisRecovery.exe trong thư mục previous của thư mục ứng dụng.
-df560c03	Quay Zeph-Iris về phiên bản trước {0}? (phiên bản hiện tại {1})\n\nZeph-Iris đang chạy sẽ được đóng (quạt về BIOS), exe trước và cài đặt từ trước khi cập nhật sẽ được khôi phục, rồi khởi động lại.
 e988c5bd	Đã quay về phiên bản trước theo cách thủ công.
 d3cc94cf	Không thể quay về phiên bản trước ({0}).
 ab6781dc	Không đọc được nhiệt độ của {0} (vẫn thấy card, nhưng không đọc được nhiệt độ và quạt từ driver đồ họa). Điều này có thể xảy ra sau khi driver bị thay. Cài lại driver mới nhất từ trang của hãng (AMD Software, driver NVIDIA, v.v.) rồi khởi động lại PC thường sẽ khắc phục được. Cho đến lúc đó, điều khiển theo nhiệt độ GPU và chạy hết tốc độ khẩn cấp cho GPU sẽ không hoạt động.
+70775abe	Đã quay về phiên bản trước {0} (cài đặt cũng là từ trước khi cập nhật).
+1f1867fa	Cài đặt ngay trước khi quay về có thể khôi phục từ bản sao lưu "Trước khi khôi phục" trong Cài đặt → "An toàn & sao lưu".
+a6619a29	Đã dừng cập nhật vì chuẩn bị để quay về phiên bản trước không thành công ({0}). Hãy kiểm tra dung lượng trống, hoặc chạy trình cài đặt thủ công từ trang phát hành.
+b148d60e	Không thể khởi động chương trình giám sát.
+27271310	Bạn vừa cập nhật lên phiên bản này. Nếu phiên bản mới cứ bị đóng, hãy nhấp đúp vào tệp dưới đây để quay về phiên bản trước ({0}) và cài đặt từ trước khi cập nhật (cài đặt hiện tại được giữ trong thư mục backups).\n{1}
+381eb861	Dừng hơn 1 giây: {0} lần, tổng {1:0} giây (tải, tạm dừng, thu nhỏ, v.v. Không tính vào FPS và thời gian vẽ)
+836a6b89	1% low và 0,1% low là thời gian khung hình ở mức 1% và 0,1% chậm nhất (phân vị 99 và 99,9) quy ra FPS. Các khung hình dừng hơn 1 giây không được tính. Chênh lệch với trung bình càng lớn thì càng dễ thấy giật (một số phần mềm khác dùng trung bình của 1% khung hình chậm nhất nên giá trị hơi khác).
+c5f9ace5	Nhiệt độ, tải và quạt cùng một khoảng thời gian với FPS: từ khung hình đầu tiên, trong lúc vẽ.
+17f1a7c2	Quay về phiên bản trước ({0}).\n\nDùng bản đã giữ lại trước khi cập nhật (không tải gì). Ứng dụng đóng một lần, quạt chạy theo BIOS vài giây rồi ứng dụng khởi động lại. Cài đặt trở về như trước khi cập nhật. Cài đặt hiện tại được giữ trong thư mục backups; có thể khôi phục từ bản sao lưu "Trước khi khôi phục" trong Cài đặt → "An toàn & sao lưu". Nhật ký và bản ghi vẫn giữ nguyên.\n\nQuay về?
+ff6a2182	Quay Zeph-Iris về phiên bản trước {0}? (phiên bản hiện tại {1})\n\nZeph-Iris đang chạy sẽ được đóng (quạt về BIOS), exe trước và cài đặt từ trước khi cập nhật sẽ được khôi phục, rồi khởi động lại. Trước đó, cài đặt hiện tại được giữ trong thư mục backups (khôi phục trong Cài đặt → "An toàn & sao lưu").

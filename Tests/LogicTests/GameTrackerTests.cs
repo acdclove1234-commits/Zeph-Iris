@@ -81,7 +81,7 @@ public static class GameTrackerTests
         T.Near(g.PlayedSeconds, 121, 1, "描いていた時間");
         T.Near(g.AvgFps, (61 * 120 + 60 * 60) / 121.0, 0.5, "平均 FPS");
         T.Near(g.Low1Fps, 60, 0.5, "1% Low");
-        T.Check(g.CpuTempMax == 80 && g.GpuTempMax == 75, "最高温度は記録を始めてから");
+        T.Check(g.CpuTempMax == 80 && g.GpuTempMax == 75, "最高温度（FPS と同じく最初に描いたときから）");
         T.Check(g.FanRpmAvg == 1100 && g.GpuLoadAvg == 90, "ファン・GPU 使用率");
         T.Check(g.Timeline.Count >= 6 && g.Timeline[^1].Fps > 55 && g.Timeline[^1].Fps < 65, "10 秒ごとの点");
         T.Check(t.CurrentApp is null && double.IsNaN(t.CurrentFps), "締めたら記録中ではない");
@@ -145,5 +145,69 @@ public static class GameTrackerTests
         {
             if (Directory.Exists(dir)) Directory.Delete(dir, true);
         }
+    }
+}
+
+public static class GameRecordPeriodTests
+{
+    private static readonly DateTime T0 = new(2026, 11, 14, 20, 0, 0);
+
+    /// <summary>温度は FPS と同じ期間（最初に描いたときから）。1 秒を超える止まりは回数と時間を残す</summary>
+    public static void TestPeriodsAlignedAndStallsCounted()
+    {
+        var t = new GameTracker();
+        var now = T0;
+        t.Tick(new GameTick(now, null));
+        // 記録が始まるまでの 60 秒は 50°C、そのあと 60 秒は 70°C
+        for (int s = 0; s < 120; s++)
+        {
+            for (int i = 0; i < 100; i++) t.AddFrame(new PresentFrame("SpaceGame.exe", 100, 10));
+            if (s == 70) t.AddFrame(new PresentFrame("SpaceGame.exe", 100, 4000));   // ロードで 4 秒止まった
+            now = now.AddSeconds(1);
+            t.Tick(new GameTick(now, 100, CpuTemp: s < 60 ? 50 : 70));
+        }
+        var g = t.Finish()!;
+        T.Near(g.CpuTempAvg ?? 0, 60, 0.6, "average CPU temperature covers the same period as FPS (50 °C before recording started counts too)");
+        T.Check(g.Stalls == 1 && Math.Abs(g.StalledSeconds - 4) < 0.05, $"the 4 s stall is counted ({g.Stalls}, {g.StalledSeconds} s)");
+        T.Near(g.AvgFps, 100, 0.5, "the stall does not change the average FPS");
+        T.Check(g.Timeline.All(p => p.Fps < 101), "timeline points do not count the stall frame as a fast frame");
+    }
+
+    public static void TestOldRecordsStillLoad()
+    {
+        var s = GameLog.FromLine("{\"App\":\"OldGame\",\"Start\":\"2026-11-13T20:00:00\",\"PlayedSeconds\":120,\"Frames\":7200,\"AvgFps\":60}");
+        T.Check(s is { App: "OldGame", Stalls: 0, StalledSeconds: 0 }, "records saved before stalls were counted still load");
+    }
+}
+
+public static class GameRecordEdgeTests
+{
+    private static readonly DateTime T0 = new(2026, 11, 14, 22, 0, 0);
+
+    /// <summary>最小化のあとにまた遊んだ: 新しい記録の最初の 1 枚（長い空き）は止まりに数えない</summary>
+    public static void TestResumedGameDoesNotCountGapAsStall()
+    {
+        var t = new GameTracker();
+        var now = T0;
+        t.Tick(new GameTick(now, null));
+        void Play(int seconds, double firstMs = 10)
+        {
+            for (int s = 0; s < seconds; s++)
+            {
+                for (int i = 0; i < 100; i++) t.AddFrame(new PresentFrame("SpaceGame.exe", 100, s == 0 && i == 0 ? firstMs : 10));
+                now = now.AddSeconds(1);
+                t.Tick(new GameTick(now, 100, CpuTemp: 60));
+            }
+        }
+        Play(70);
+        for (int s = 0; s < 61; s++) { now = now.AddSeconds(1); t.Tick(new GameTick(now, 100)); }   // 最小化して 1 分（1 回目の記録が締まる）
+        Play(70, firstMs: 120_000);   // 戻ってきた最初の 1 枚は、空いていた 2 分ぶん
+        var g = t.Finish()!;
+        T.Check(g.Stalls == 0, $"the gap before the new record is not counted as a stall ({g.Stalls}, {g.StalledSeconds} s)");
+    }
+
+    public static void TestTimelineIsCapped()
+    {
+        T.Check(GameTracker.MaxTimelinePoints == 8640, "24 hours of 10 s points at most");
     }
 }

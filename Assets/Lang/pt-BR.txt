@@ -1873,7 +1873,6 @@ c4454de4	Uso de CPU médio {0:0}%
 c401f258	Uso de GPU médio {0:0}%
 6caecaec	Potência da GPU média {0:0} W
 47dae337	FPS médio a cada 10 segundos: menor {0:0} fps · maior {1:0} fps
-debb413f	1% low é a velocidade do 1% de quadros mais lentos. Quanto maior a diferença para a média, mais travadas você percebe.
 73a40039	Parar de registrar {0} a partir de agora? (Para quando um app que não é jogo foi registrado. Os registros dele também serão excluídos.)
 e16c0947	Registro de jogos
 4184034d	Não é possível calibrar porque as temperaturas a vigiar não podem ser lidas. Tente de novo quando os sensores de temperatura puderem ser lidos.
@@ -1889,7 +1888,16 @@ cd083e7b	A nova versão {0} não começou a controlar as ventoinhas em {1:F0} mi
 17d6b1ee	Não foi possível fechar o Zeph-Iris, então não deu para voltar à versão anterior. Saia do Zeph-Iris pela área de notificação (ou reinicie o PC) e as ventoinhas voltam às configurações da BIOS. Depois, clique duas vezes neste arquivo para voltar à versão anterior:\n{0}
 ad924bfa	Recuperação do Zeph-Iris
 97339d69	Voltar à versão anterior só funciona pelo ZephIrisRecovery.exe na pasta previous da pasta do app.
-df560c03	Voltar o Zeph-Iris para a versão anterior {0}? (versão atual {1})\n\nO Zeph-Iris em execução é fechado (ventoinhas voltam à BIOS), o exe anterior e as configurações de antes da atualização são restaurados e ele inicia de novo.
 e988c5bd	Voltou à versão anterior manualmente.
 d3cc94cf	Não foi possível voltar à versão anterior ({0}).
 ab6781dc	Não é possível ler a temperatura de {0} (a placa é encontrada, mas as temperaturas e ventoinhas não podem ser lidas pelo driver de vídeo). Isso pode acontecer depois que o driver é substituído. Reinstalar o driver mais recente no site do fabricante (AMD Software, driver NVIDIA etc.) e reiniciar o PC costuma resolver. Até lá, o controle pela temperatura da GPU e a velocidade máxima de emergência para a GPU não funcionam.
+70775abe	Voltou à versão anterior {0} (as configurações também são as de antes da atualização).
+1f1867fa	As configurações de logo antes de voltar podem ser restauradas pelo backup "Antes de restaurar" em Configurações → "Segurança e backup".
+a6619a29	A atualização foi interrompida porque a preparação para voltar à versão anterior falhou ({0}). Verifique o espaço livre ou execute o instalador manualmente pela página de versões.
+b148d60e	Não foi possível iniciar o programa de vigilância.
+27271310	Você atualizou para esta versão há pouco. Se a nova versão continuar fechando, clique duas vezes no arquivo abaixo para voltar à versão anterior ({0}) e às configurações de antes da atualização (as configurações atuais ficam guardadas na pasta backups).\n{1}
+381eb861	Parado por mais de 1 s: {0} vezes, {1:0} s no total (carregamento, pausa, minimizado etc. Não conta nos FPS nem no tempo desenhando)
+836a6b89	O 1% low e o 0,1% low são os tempos de quadro no 1% e 0,1% mais lentos (percentis 99 e 99,9) mostrados como FPS. Quadros parados por mais de 1 s não entram. Quanto maior a diferença para a média, mais travadas você percebe (outros programas usam a média do 1% de quadros mais lentos, então os valores diferem um pouco).
+c5f9ace5	Temperaturas, uso e ventoinhas cobrem o mesmo período que os FPS: desde o primeiro quadro, enquanto desenhava.
+17f1a7c2	Voltando à versão anterior ({0}).\n\nÉ usada a cópia guardada antes da atualização (nada é baixado). O app fecha uma vez, as ventoinhas seguem a BIOS por alguns segundos e depois o app reinicia. As configurações voltam às de antes da atualização. As configurações atuais ficam guardadas na pasta backups; dá para restaurá-las pelo backup "Antes de restaurar" em Configurações → "Segurança e backup". Logs e registros ficam.\n\nVoltar?
+ff6a2182	Voltar o Zeph-Iris para a versão anterior {0}? (versão atual {1})\n\nO Zeph-Iris em execução é fechado (ventoinhas voltam à BIOS), o exe anterior e as configurações de antes da atualização são restaurados e ele inicia de novo. Antes, as configurações atuais são guardadas na pasta backups (restaure em Configurações → "Segurança e backup").

@@ -208,8 +208,11 @@ public partial class MainWindow
             lines.Add("");
             lines.Add(L($"10 秒ごとの平均 FPS: いちばん低い {worst:0} fps ・ いちばん高い {best:0} fps"));
         }
+        if (g.Stalls > 0)
+            lines.Add(L($"1 秒以上止まった: {g.Stalls} 回・合計 {g.StalledSeconds:0} 秒（ロード・一時停止・最小化など。FPS と描いていた時間には入れていません）"));
         lines.Add("");
-        lines.Add(L("1% Low は、遅かったほうから 1% のフレームの速さです。平均との差が大きいほど、カクつきを感じやすくなります。"));
+        lines.Add(L("1% Low・0.1% Low は、遅かったほうから 1%・0.1% のところのフレーム時間（99・99.9 パーセンタイル）を FPS にしたものです。1 秒を超えて止まったフレームは入れません。平均との差が大きいほど、カクつきを感じやすくなります（ほかのソフトは、遅いほうから 1% のフレームの平均で出すことがあり、値が少し違います）。"));
+        lines.Add(L("温度・使用率・ファンは、FPS と同じく、最初に描いたときから描いていたあいだの値です。"));
         MessageBox.Show(this, string.Join("\n", lines), g.App, MessageBoxButton.OK, MessageBoxImage.Information);
     }
 

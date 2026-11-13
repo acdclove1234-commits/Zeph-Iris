@@ -1873,7 +1873,6 @@ c4454de4	Charge CPU moy. {0:0} %
 c401f258	Charge GPU moy. {0:0} %
 6caecaec	Puissance GPU moy. {0:0} W
 47dae337	FPS moyens par 10 secondes : min. {0:0} fps · max. {1:0} fps
-debb413f	Le 1 % low est la vitesse des 1 % d’images les plus lentes. Plus l’écart avec la moyenne est grand, plus les saccades se remarquent.
 73a40039	Ne plus enregistrer {0} désormais ? (Si une application qui n’est pas un jeu a été enregistrée. Ses entrées seront aussi supprimées.)
 e16c0947	Historique des jeux
 4184034d	Calibrage impossible : les températures à surveiller ne peuvent pas être lues. Réessayez quand les capteurs de température seront lisibles.
@@ -1889,7 +1888,16 @@ cd083e7b	La nouvelle version {0} n’a pas commencé à piloter les ventilateurs
 17d6b1ee	Impossible de fermer Zeph-Iris, donc impossible de revenir à la version précédente. Quittez Zeph-Iris depuis la zone de notification (ou redémarrez le PC) : les ventilateurs reviennent aux réglages du BIOS. Ensuite, double-cliquez sur ce fichier pour revenir à la version précédente :\n{0}
 ad924bfa	Récupération de Zeph-Iris
 97339d69	Le retour à la version précédente ne fonctionne qu’avec ZephIrisRecovery.exe du dossier previous du dossier de l’application.
-df560c03	Revenir à la version précédente {0} de Zeph-Iris ? (version actuelle {1})\n\nZeph-Iris est fermé (ventilateurs rendus au BIOS), l’exe précédent et les réglages d’avant la mise à jour sont remis, puis il redémarre.
 e988c5bd	Retour manuel à la version précédente effectué.
 d3cc94cf	Impossible de revenir à la version précédente ({0}).
 ab6781dc	Impossible de lire la température de {0} (la carte est détectée, mais ses températures et ventilateurs ne peuvent pas être lus depuis le pilote graphique). Cela peut arriver après un remplacement du pilote. Réinstaller le dernier pilote depuis le site du fabricant (AMD Software, pilote NVIDIA, etc.) puis redémarrer le PC règle souvent le problème. En attendant, le pilotage selon la température du GPU et la pleine vitesse d’urgence pour le GPU ne fonctionnent pas.
+70775abe	Retour à la version précédente {0} effectué (les réglages sont aussi ceux d’avant la mise à jour).
+1f1867fa	Les réglages d’avant le retour peuvent être rétablis avec la sauvegarde « Avant restauration » dans Paramètres → « Sécurité et sauvegarde ».
+a6619a29	La mise à jour a été arrêtée car la préparation du retour à la version précédente a échoué ({0}). Vérifiez l’espace disque libre ou lancez l’installateur à la main depuis la page des versions.
+b148d60e	Impossible de lancer le programme de surveillance.
+27271310	Vous avez mis à jour vers cette version récemment. Si la nouvelle version se ferme sans cesse, double-cliquez sur le fichier ci-dessous pour revenir à la version précédente ({0}) et aux réglages d’avant la mise à jour (les réglages actuels sont gardés dans le dossier backups).\n{1}
+381eb861	Arrêts de plus de 1 s : {0} fois, {1:0} s au total (chargements, pause, réduction, etc. Non comptés dans les FPS ni dans le temps d’affichage)
+836a6b89	Le 1 % low et le 0,1 % low sont les durées d’image aux 1 % et 0,1 % les plus lents (99e et 99,9e centiles), exprimées en FPS. Les images arrêtées plus de 1 s ne sont pas comptées. Plus l’écart avec la moyenne est grand, plus les saccades se remarquent (certains logiciels utilisent la moyenne des 1 % d’images les plus lentes, leurs valeurs diffèrent donc un peu).
+c5f9ace5	Températures, charges et ventilateurs couvrent la même période que les FPS : depuis la première image, pendant l’affichage.
+17f1a7c2	Retour à la version précédente ({0}).\n\nLa copie gardée avant la mise à jour est utilisée (rien n’est téléchargé). L’application se ferme une fois, les ventilateurs suivent le BIOS quelques secondes, puis elle redémarre. Les réglages reviennent à ceux d’avant la mise à jour. Les réglages actuels sont gardés dans le dossier backups ; vous pouvez les rétablir avec la sauvegarde « Avant restauration » dans Paramètres → « Sécurité et sauvegarde ». Journaux et enregistrements sont conservés.\n\nRevenir ?
+ff6a2182	Revenir à la version précédente {0} de Zeph-Iris ? (version actuelle {1})\n\nZeph-Iris est fermé (ventilateurs rendus au BIOS), l’exe précédent et les réglages d’avant la mise à jour sont remis, puis il redémarre. Les réglages actuels sont d’abord gardés dans le dossier backups (à rétablir depuis Paramètres → « Sécurité et sauvegarde »).

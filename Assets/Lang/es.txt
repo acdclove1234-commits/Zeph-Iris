@@ -1873,7 +1873,6 @@ c4454de4	Uso de CPU medio {0:0}%
 c401f258	Uso de GPU medio {0:0}%
 6caecaec	Potencia de GPU media {0:0} W
 47dae337	FPS medios cada 10 segundos: mínimo {0:0} fps · máximo {1:0} fps
-debb413f	El 1% low es la velocidad del 1% de fotogramas más lentos. Cuanto mayor sea la diferencia con la media, más tirones notarás.
 73a40039	¿Dejar de registrar {0} a partir de ahora? (Para cuando se registró una aplicación que no es un juego. También se borran sus registros.)
 e16c0947	Registro de juegos
 4184034d	No se puede calibrar porque no se pueden leer las temperaturas que hay que vigilar. Vuelve a intentarlo cuando se puedan leer los sensores de temperatura.
@@ -1889,7 +1888,16 @@ cd083e7b	La nueva versión {0} no empezó a controlar los ventiladores en {1:F0}
 17d6b1ee	No se pudo cerrar Zeph-Iris, así que no se pudo volver a la versión anterior. Sal de Zeph-Iris desde el área de notificación (o reinicia el PC) y los ventiladores volverán a la BIOS. Después, haz doble clic en este archivo para volver a la versión anterior:\n{0}
 ad924bfa	Recuperación de Zeph-Iris
 97339d69	Solo se puede volver a la versión anterior desde ZephIrisRecovery.exe en la carpeta previous de la carpeta de la aplicación.
-df560c03	¿Volver a la versión anterior {0} de Zeph-Iris? (versión actual {1})\n\nSe cierra Zeph-Iris (los ventiladores vuelven a la BIOS), se restauran el exe anterior y la configuración de antes de actualizar, y se vuelve a iniciar.
 e988c5bd	Se volvió a la versión anterior a mano.
 d3cc94cf	No se pudo volver a la versión anterior ({0}).
 ab6781dc	No se puede leer la temperatura de {0} (la tarjeta se detecta, pero no se pueden leer sus temperaturas ni ventiladores desde el controlador gráfico). Puede pasar después de que se reemplace el controlador. Reinstalar el controlador más reciente desde la web del fabricante (AMD Software, controlador de NVIDIA, etc.) y reiniciar el PC suele solucionarlo. Mientras tanto, no funcionan el control por temperatura de la GPU ni la velocidad máxima de emergencia para la GPU.
+70775abe	Se volvió a la versión anterior {0} (la configuración también es la de antes de actualizar).
+1f1867fa	La configuración de justo antes de volver se puede restaurar con la copia «Antes de restaurar» en Configuración → «Seguridad y copia de seguridad».
+a6619a29	Se canceló la actualización porque falló la preparación para volver a la versión anterior ({0}). Comprueba el espacio libre o ejecuta el instalador a mano desde la página de versiones.
+b148d60e	No se pudo iniciar el programa de vigilancia.
+27271310	Actualizaste a esta versión hace poco. Si la nueva versión se sigue cerrando, haz doble clic en este archivo para volver a la versión anterior ({0}) y a la configuración de antes de actualizar (la configuración actual se guarda en la carpeta backups).\n{1}
+381eb861	Detenido más de 1 s: {0} veces, {1:0} s en total (cargas, pausa, minimizado, etc. No cuenta en los FPS ni en el tiempo dibujando)
+836a6b89	El 1% low y el 0,1% low son los tiempos de fotograma del 1% y 0,1% más lentos (percentiles 99 y 99,9) expresados en FPS. No se cuentan los fotogramas que se detuvieron más de 1 s. Cuanto mayor sea la diferencia con la media, más tirones notarás (otros programas usan la media del 1% de fotogramas más lentos, así que sus valores difieren un poco).
+c5f9ace5	Las temperaturas, cargas y ventiladores cubren el mismo periodo que los FPS: desde el primer fotograma, mientras se dibujaba.
+17f1a7c2	Se volverá a la versión anterior ({0}).\n\nSe usa la copia guardada antes de actualizar (no se descarga nada). La app se cierra una vez, los ventiladores siguen la BIOS unos segundos y luego la app se reinicia. La configuración vuelve a la de antes de actualizar. La configuración actual se guarda en la carpeta backups y puedes restaurarla con la copia «Antes de restaurar» en Configuración → «Seguridad y copia de seguridad». Los registros se conservan.\n\n¿Volver?
+ff6a2182	¿Volver Zeph-Iris a la versión anterior {0}? (versión actual {1})\n\nSe cierra Zeph-Iris (los ventiladores vuelven a la BIOS), se restauran el exe anterior y la configuración de antes de actualizar, y se vuelve a iniciar. Antes se guarda la configuración actual en la carpeta backups (restáurala desde Configuración → «Seguridad y copia de seguridad»).

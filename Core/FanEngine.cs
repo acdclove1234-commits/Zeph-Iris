@@ -1302,9 +1302,12 @@ public sealed class FanEngine : IDisposable
                 // 値が読めない・固まった・おかしい（センサーはある）ときは、何が起きているか分からないので全開
                 if (IsMissing(ev.Config.SensorId))
                 {
+                    // この起動のあいだに読めていたセンサーが消えた（ドライバーの不調・スリープ明けに見つからない など）ときは、
+                    // 温度が分からないあいだ、最後に必要だった回転より下げない（熱いときに消えても、回転が落ちていかないように）
                     sensorMissing = true;
-                    curveStatuses.Add(new CurveStatus(ev.Config.Name, null, null, missingDuty, false, Missing: true));
-                    demand = Math.Max(demand, missingDuty);
+                    double hold = Math.Max(missingDuty, ev.LastRequest ?? missingDuty);
+                    curveStatuses.Add(new CurveStatus(ev.Config.Name, null, null, hold, false, Missing: true));
+                    demand = Math.Max(demand, hold);
                 }
                 else
                 {
@@ -1330,10 +1333,12 @@ public sealed class FanEngine : IDisposable
                 double? output = TargetControl(f, hwDuty);
                 float? t = ReadTemp(cfg.TargetSensorId);
                 bool missing = output is null && IsMissing(cfg.TargetSensorId);
-                curveStatuses.Insert(0, new CurveStatus(L($"目標 {cfg.TargetTemp:F0}°C"), t, f.Pi.Ema, output ?? (missing ? missingDuty : 100), output is null && !missing, missing));
-                if (missing) { demand = missingDuty; state = FanState.SensorMissing; }
+                // センサーが途中で消えたら、温度が読めていたときの最後の PI の出力より下げない（はじめから無ければ MissingSensorDuty）
+                double hold = Math.Max(missingDuty, f.Pi.LastOutput ?? missingDuty);
+                curveStatuses.Insert(0, new CurveStatus(L($"目標 {cfg.TargetTemp:F0}°C"), t, f.Pi.Ema, output ?? (missing ? hold : 100), output is null && !missing, missing));
+                if (missing) { demand = hold; state = FanState.SensorMissing; }
                 else if (output is null) { demand = 100; state = FanState.SensorError; }
-                else demand = output.Value;
+                else { demand = output.Value; f.Pi.LastOutput = output.Value; }
                 break;
             }
 
@@ -1493,6 +1498,7 @@ public sealed class FanEngine : IDisposable
     private void WriteDuty(FanRuntime f, double duty, double floor, bool force, bool reassert)
     {
         var c = f.Control!;
+        if (!double.IsFinite(duty)) duty = 100;   // 計算のどこかで NaN・無限大になっても、低い値を書かない（安全側の全開）
         float value = (float)Math.Clamp(duty, 0, 100);
         if (f.LastWritten is double w && !FanSafety.NeedsWrite(w, value, floor, force)) return;
         float send = value;
@@ -2066,6 +2072,8 @@ public sealed class PiState
     public double? Ema { get; set; }
     public double Integral { get; set; }
     public bool Ready { get; set; }
+    /// <summary>温度が読めていたときに最後に出した値（%）。センサーが途中で消えたとき、これより下げない</summary>
+    public double? LastOutput { get; set; }
 }
 
 /// <summary>

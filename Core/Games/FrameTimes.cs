@@ -21,9 +21,18 @@ public sealed class FrameTimes
 
     public long Count { get; private set; }
     public double TotalMs { get; private set; }
+    /// <summary>1 秒を超えて止まったフレームの数と合計（FPS・パーセンタイルには入れないが、何回止まったかは残す）</summary>
+    public long Stalls { get; private set; }
+    public double StallMs { get; private set; }
 
     public void Add(double ms)
     {
+        if (double.IsFinite(ms) && ms > MaxFrameMs)
+        {
+            Stalls++;
+            StallMs += ms;
+            return;
+        }
         if (double.IsNaN(ms) || ms <= 0 || ms > MaxFrameMs) return;
         _bins[Math.Min(_bins.Length - 1, (int)(ms / BinMs))]++;
         Count++;
@@ -35,6 +44,8 @@ public sealed class FrameTimes
         for (int i = 0; i < _bins.Length; i++) _bins[i] += other._bins[i];
         Count += other.Count;
         TotalMs += other.TotalMs;
+        Stalls += other.Stalls;
+        StallMs += other.StallMs;
     }
 
     public double AverageFps => TotalMs > 0 ? Count * 1000.0 / TotalMs : double.NaN;

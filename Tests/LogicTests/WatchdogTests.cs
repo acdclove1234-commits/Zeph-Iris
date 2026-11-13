@@ -24,7 +24,8 @@ public static class WatchdogTests
             loadConfig ?? (() => new AppConfig()),
             recordCrash ?? (() => 1),
             restart ?? (() => c.Restarts++),
-            showStopped ?? ((_, recent) => { c.Shown++; c.LastRecent = recent; }));
+            showStopped ?? ((_, recent) => { c.Shown++; c.LastRecent = recent; }),
+            _ => { });   // テストでは、起動し直すまで待たない
 
     public static void TestWatchdogRecoverAlwaysTriesRestart()
     {

@@ -13,6 +13,21 @@ and Iris, the rainbow (the LEDs).
   for example: Settings [設定].
 
 
+■ What's new in v6.15.2 (update safeguards, safety review)
+  - Updates: if the preparation for going back to the previous version fails, the update is not started (the current
+    version keeps controlling the fans).
+  - Updates: a new version counts as working after 90 s of continuous fan control. A new version that hangs and does
+    not exit is closed by force, fans are set to the safe speed, and the previous version is put back. A sleep in
+    between no longer rolls back a working version.
+  - Going back to the previous version keeps the current settings in the backups folder first ("Before restore" in
+    Settings [設定] -> "Safety & backup" [安全・バックアップ]).
+  - Watchdog: after repeated crashes it waits a little before restarting (for example during a graphics driver swap),
+    and it sets the motherboard fans to the safe speed first.
+  - When a temperature sensor disappears while hot, the fan no longer slows below what it last needed.
+  - Game records: temperatures cover the same period as FPS, stalls over 1 s are counted and shown, and the 1% low
+    method is explained.
+  - Phone remote: the access key is removed from the address bar, and failed-key counting is stronger.
+
 ■ What's new in v6.15.1
   - When a graphics card is found but none of its temperatures can be read (this can happen after the graphics driver
     was replaced), a notice is shown at start. Reinstalling the latest driver from the maker's site and restarting the

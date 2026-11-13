@@ -56,6 +56,8 @@ public sealed class CurveEvaluator
 
     public CurveConfig Config { get; }
     public double? EffectiveTemp => _effective;
+    /// <summary>温度が読めていたときに最後に出した要求 Duty(%)（まだなければ null）。センサーが途中で消えたとき、これより下げない</summary>
+    public double? LastRequest { get; private set; }
 
     public CurveEvaluator(CurveConfig cfg)
     {
@@ -72,6 +74,7 @@ public sealed class CurveEvaluator
         _r0 = old._r0;
         _r1 = old._r1;
         _samples = old._samples;
+        LastRequest = old.LastRequest;
     }
 
     /// <summary>直近の生温度を受け取り、要求 Duty(%) を返す。dtSeconds は前の周期から経った時間</summary>
@@ -94,6 +97,8 @@ public sealed class CurveEvaluator
         double ema = _ema.Value;
         _effective = Math.Clamp(_effective ?? ema, ema, ema + Config.HysteresisCelsius);
 
-        return CurveMath.Interpolate(_points, _effective.Value);
+        double req = CurveMath.Interpolate(_points, _effective.Value);
+        LastRequest = req;
+        return req;
     }
 }

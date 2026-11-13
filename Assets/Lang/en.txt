@@ -1873,7 +1873,6 @@ c4454de4	CPU load avg {0:0}%
 c401f258	GPU load avg {0:0}%
 6caecaec	GPU power avg {0:0} W
 47dae337	Average FPS per 10 seconds: lowest {0:0} fps · highest {1:0} fps
-debb413f	1% low is the speed of the slowest 1% of frames. The bigger the gap to the average, the more stutter you notice.
 73a40039	Stop recording {0} from now on? (For when an app that isn't a game was recorded. Its records so far are deleted too.)
 e16c0947	Game records
 4184034d	Can't calibrate because the temperatures to watch can't be read. Try again once the temperature sensors can be read.
@@ -1889,7 +1888,16 @@ cd083e7b	The new version {0} did not start controlling the fans within {1:F0} mi
 17d6b1ee	Zeph-Iris could not be closed, so the previous version could not be put back. Exit Zeph-Iris from the notification area (or restart the PC) and the fans go back to the BIOS settings. Then double-click this file to go back to the previous version:\n{0}
 ad924bfa	Zeph-Iris recovery
 97339d69	Going back to the previous version only works from ZephIrisRecovery.exe in the previous folder of the app folder.
-df560c03	Go back to the previous version {0} of Zeph-Iris? (current version {1})\n\nThe running Zeph-Iris is closed (fans back to the BIOS settings), the previous exe and the settings from before the update are put back, and it starts again.
 e988c5bd	Went back to the previous version by hand.
 d3cc94cf	Could not go back to the previous version ({0}).
 ab6781dc	Can't read the temperature of {0} (the card is found, but its temperatures and fans can't be read from the graphics driver). This can happen after the driver was replaced. Reinstalling the latest driver from the maker's site (AMD Software, NVIDIA driver, etc.) and restarting the PC often fixes it. Until then, control by GPU temperature and emergency full speed for the GPU don't work.
+70775abe	Went back to the previous version {0} (settings are from before the update too).
+1f1867fa	The settings from just before going back can be restored from the "Before restore" backup in Settings → "Safety & backup".
+a6619a29	The update was stopped because the preparation for going back to the previous version failed ({0}). Check the free disk space, or run the installer by hand from the releases page.
+b148d60e	Could not start the guard program.
+27271310	You updated to this version recently. If the new version keeps closing, double-click the file below to go back to the previous version ({0}) and the settings from before the update (the current settings are kept in the backups folder).\n{1}
+381eb861	Stopped for more than 1 s: {0} times, {1:0} s in total (loading, pause, minimized, etc. Not counted in FPS or drawing time)
+836a6b89	1% low and 0.1% low are the frame times at the slowest 1% and 0.1% (99th and 99.9th percentile) shown as FPS. Frames that stopped for more than 1 s are left out. The bigger the gap to the average, the more stutter you notice (some other tools use the average of the slowest 1% of frames, so their values differ a little).
+c5f9ace5	Temperatures, loads and fans cover the same period as FPS: from the first frame, while drawing.
+17f1a7c2	Going back to the previous version ({0}).\n\nThe copy kept before the update is used (nothing is downloaded). The app closes once, the fans run on the BIOS settings for a few seconds, and then the app starts again. Settings go back to the ones from before the update. The current settings are kept in the backups folder, so you can restore them from the "Before restore" backup in Settings → "Safety & backup". Logs and records stay.\n\nGo back?
+ff6a2182	Go back to the previous version {0} of Zeph-Iris? (current version {1})\n\nThe running Zeph-Iris is closed (fans back to the BIOS settings), the previous exe and the settings from before the update are put back, and it starts again. The current settings are kept in the backups folder first (restore them from Settings → "Safety & backup").

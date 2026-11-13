@@ -179,10 +179,13 @@ public static class Watchdog
             if (!seenBeat) continue; // ハードウェアの初期化に失敗している本体は見張らない
             silentWaits++;
             var silent = TimeSpan.FromSeconds(silentWaits * 5);
-            if (silent >= HangSafeAfter && !safeApplied)
+            // 30 秒止まったら安全な回転数にする。止まり続けているあいだは 30 秒ごとに書き直す
+            // （チップを本体が使っている最中で、書き込みが届かなかったときのため。再起動がオフでも、いつかは届くように）
+            if (silent >= HangSafeAfter && silentWaits % (int)(HangSafeAfter.TotalSeconds / 5) == 0)
             {
+                if (!safeApplied) Logger.Error($"見張り: 本体の制御ループが {silent.TotalSeconds:F0} 秒止まっています。ファンを安全な回転数にします");
+                else Logger.Warn($"見張り: 本体の制御ループが {silent.TotalSeconds:F0} 秒止まったままです。安全な回転数を書き直します");
                 safeApplied = true;
-                Logger.Error($"見張り: 本体の制御ループが {silent.TotalSeconds:F0} 秒止まっています。ファンを安全な回転数にします");
                 ApplySafeDuties();
             }
             if (silent >= HangRestartAfter && LoadConfig().Safety.WatchdogRestart)
@@ -211,7 +214,7 @@ public static class Watchdog
     /// 起動し直したら true
     /// </summary>
     internal static bool Recover(Action? applySafe, Func<AppConfig> loadConfig, Func<int> recordCrash,
-                                 Action restart, Action<AppConfig, int> showStopped)
+                                 Action restart, Action<AppConfig, int> showStopped, Action<TimeSpan>? wait = null)
     {
         if (applySafe is not null)
         {
@@ -233,6 +236,16 @@ public static class Watchdog
 
         if (cfg.Safety.WatchdogRestart && recent <= MaxCrashesInWindow)
         {
+            // 続けて落ちたら、起動し直すまで少し待つ（2 回目は 30 秒・3 回目は 60 秒）。
+            // グラボのドライバーの入れ替えなどで落ちたとき、すぐ起動し直すとまた同じところで落ちることがある。
+            // 待つあいだも、ファンは安全な回転数（ポンプは 100%）のまま
+            var delay = RestartDelay(recent);
+            if (delay > TimeSpan.Zero)
+            {
+                Logger.Warn($"見張り: {CrashWindow.TotalMinutes:F0} 分間に {recent} 回終了したので、{delay.TotalSeconds:F0} 秒待ってから起動し直します");
+                try { (wait ?? Thread.Sleep)(delay); }
+                catch (Exception ex) { Logger.Warn($"見張り: 待てませんでした: {ex.Message}"); }
+            }
             try
             {
                 restart();
@@ -250,6 +263,9 @@ public static class Watchdog
         catch (Exception ex) { Logger.Error($"見張り: 案内を出せません: {ex.Message}"); }
         return false;
     }
+
+    /// <summary>続けて落ちたときに、起動し直すまで待つ時間（1 回目はすぐ、2 回目 30 秒、3 回目 60 秒）</summary>
+    internal static TimeSpan RestartDelay(int recent) => recent >= 2 ? TimeSpan.FromSeconds(30 * (recent - 1)) : TimeSpan.Zero;
 
     private static void RestartApp()
     {
@@ -277,6 +293,10 @@ public static class Watchdog
         {
             if (!AppUpdater.CanRollBack(cfg.Update, current ?? AppUpdater.CurrentVersion, now)) return "";
             string previous = cfg.Update.PreviousVersion ?? "";
+            // 更新の前に取っておいた前の版があれば、それをダブルクリックするだけで戻せる（ネットにつながなくてよい）
+            string kept = UpdateRecovery.RecoveryPath(AppContext.BaseDirectory.TrimEnd(Path.DirectorySeparatorChar));
+            if (UpdateRecovery.BackupVersion(AppContext.BaseDirectory.TrimEnd(Path.DirectorySeparatorChar))?.ToString(3) == previous)
+                return "\n\n" + L($"この版には最近更新したばかりです。新しい版で落ち続けるときは、次のファイルをダブルクリックすると、前の版（{previous}）と更新する前の設定に戻せます（いまの設定は backups フォルダーに取っておきます）。\n{kept}");
             return "\n\n" + L($"この版には最近更新したばかりです。新しい版で落ち続けるときは、リリースのページ（{AppUpdater.ReleasesPage}）から {previous} のインストーラー（Zeph-Iris-{previous}-setup.exe）を実行すると、前の版に戻せます。");
         }
         catch
@@ -325,6 +345,16 @@ public static class Watchdog
     /// </summary>
     private static AppConfig LoadConfig()
     {
+        // 更新の見守りから使うときは、まずアプリのフォルダーの設定（強制終了した版が使っていたもの）を読む
+        if (_configPath is { } path)
+        {
+            var own = ReadConfig(() => File.ReadAllText(path), null, out bool ok);
+            if (ok)
+            {
+                _lastGoodConfig = own;
+                return own;
+            }
+        }
         var cfg = ReadConfig(() => File.ReadAllText(ConfigStore.FilePath), _lastGoodConfig, out bool fresh);
         if (fresh) _lastGoodConfig = cfg;
         return cfg;
@@ -354,11 +384,28 @@ public static class Watchdog
         return def;
     }
 
-    /// <summary>安全な回転数を書くための Computer（何度も作ると、そのたびにドライバーの資源を使うので 1 つを使い回す）</summary>
-    private static Computer? _computer;
+    /// <summary>
+    /// 安全な回転数を書くための Computer（何度も作ると、そのたびにドライバーの資源を使うので使い回す）。
+    /// マザーボードの端子用と、グラボのファン用を分ける（グラボのドライバーが不安定なときに見張りまで落ちても、
+    /// マザーボードのファンは先に書き終わっているように）
+    /// </summary>
+    private static Computer? _boardComputer, _gpuComputer;
+
+    /// <summary>設定を読む場所（null なら ConfigStore.FilePath。更新の見守りから使うときは、アプリのフォルダーの設定）</summary>
+    private static string? _configPath;
 
     /// <summary>
-    /// 本体が制御していた端子に、安全な回転数を書き込む。
+    /// 更新の見守り（previous\ZephIrisRecovery.exe）から: 固まった新しい版を強制終了したあと、安全な回転数を書く。
+    /// 強制終了した版が使っていた設定（アプリのフォルダーの config.json）の端子に書く。読めなければ previous の設定
+    /// </summary>
+    internal static void ApplySafeDutiesNow(string appDir)
+    {
+        _configPath = Path.Combine(appDir, "config.json");
+        ApplySafeDuties();
+    }
+
+    /// <summary>
+    /// 本体が制御していた端子に、安全な回転数を書き込む。マザーボードの端子を先に、グラボのファンをあとに書く。
     /// わざと Computer を閉じない（閉じると LHM が「開いたときの値」＝落ちた本体が最後に書いた値に戻してしまうため）
     /// </summary>
     private static void ApplySafeDuties()
@@ -377,47 +424,73 @@ public static class Watchdog
                 .ToList();
             if (fans.Count == 0) return;
 
-            var computer = _computer;
-            if (computer is null)
+            // 1. マザーボードの端子（グラボのドライバーを呼ばない）
+            var board = fans.Where(f => !f.Fan.IsGpuFan).ToList();
+            if (board.Count > 0)
             {
-                computer = new Computer
-                {
-                    IsMotherboardEnabled = true,
-                    IsGpuEnabled = fans.Any(f => f.Fan.IsGpuFan),
-                };
-                computer.Open();
-                _computer = computer;
+                _boardComputer ??= Open(new Computer { IsMotherboardEnabled = true });
+                Write(board, Controls(_boardComputer, updateGpu: false), cfg);
             }
-            var controls = new Dictionary<string, IControl>(StringComparer.OrdinalIgnoreCase);
-            void Collect(IHardware hw)
+            // 2. グラボのファン（ドライバーを呼ぶ。読み取りの更新はせず、書き込みだけにして呼ぶ回数を減らす）
+            var gpu = fans.Where(f => f.Fan.IsGpuFan).ToList();
+            if (gpu.Count > 0)
             {
-                hw.Update();
-                foreach (var s in hw.Sensors.Where(s => s.Control is not null)) controls[s.Identifier.ToString()] = s.Control;
-                foreach (var sub in hw.SubHardware) Collect(sub);
-            }
-            foreach (var hw in computer.Hardware) Collect(hw);
-
-            foreach (var (f, isPump) in fans)
-            {
-                if (!controls.TryGetValue(f.ControlId, out var c)) continue;
-                float duty = isPump ? 100f : (float)cfg.Safety.WatchdogSafeDuty;
                 try
                 {
-                    // LHM は「前と同じ値」の書き込みを省くので、少しずらした値を書いてから本来の値を書く
-                    // （本体がその間に別の値を書いていても、必ずチップまで届くように）
-                    c.SetSoftware(duty >= 100f ? duty - 0.001f : duty + 0.001f);
-                    c.SetSoftware(duty);
-                    Logger.Info($"見張り: {f.Name} を {duty:F0}% にしました");
+                    _gpuComputer ??= Open(new Computer { IsGpuEnabled = true });
+                    Write(gpu, Controls(_gpuComputer, updateGpu: false), cfg);
                 }
                 catch (Exception ex)
                 {
-                    Logger.Error($"見張り: {f.Name} に書き込めません: {ex.Message}");
+                    Logger.Error($"見張り: グラボのファンに安全な回転数を書けません（グラボは自分の保護で守られます）: {ex.Message}");
                 }
             }
         }
         catch (Exception ex)
         {
             Logger.Error($"見張り: 安全な回転数を設定できません: {ex}");
+        }
+    }
+
+    private static Computer Open(Computer c)
+    {
+        c.Open();
+        return c;
+    }
+
+    /// <summary>端子の ID → 書き込み口。グラボは読み取りの更新をしない（updateGpu = false。書き込み口は開いたときからある）</summary>
+    private static Dictionary<string, IControl> Controls(Computer computer, bool updateGpu)
+    {
+        var controls = new Dictionary<string, IControl>(StringComparer.OrdinalIgnoreCase);
+        void Collect(IHardware hw)
+        {
+            bool isGpu = hw.HardwareType is HardwareType.GpuNvidia or HardwareType.GpuAmd or HardwareType.GpuIntel;
+            if (!isGpu || updateGpu) hw.Update();
+            foreach (var s in hw.Sensors.Where(s => s.Control is not null)) controls[s.Identifier.ToString()] = s.Control;
+            foreach (var sub in hw.SubHardware) Collect(sub);
+        }
+        foreach (var hw in computer.Hardware) Collect(hw);
+        return controls;
+    }
+
+    private static void Write(IEnumerable<(FanConfig Fan, bool IsPump)> fans, Dictionary<string, IControl> controls, AppConfig cfg)
+    {
+        foreach (var (f, isPump) in fans)
+        {
+            if (!controls.TryGetValue(f.ControlId, out var c)) continue;
+            float duty = isPump ? 100f : (float)cfg.Safety.WatchdogSafeDuty;
+            try
+            {
+                // LHM は「前と同じ値」の書き込みを省くので、少しずらした値を書いてから本来の値を書く
+                // （本体がその間に別の値を書いていても、必ずチップまで届くように）
+                c.SetSoftware(duty >= 100f ? duty - 0.001f : duty + 0.001f);
+                c.SetSoftware(duty);
+                Logger.Info($"見張り: {f.Name} を {duty:F0}% にしました");
+            }
+            catch (Exception ex)
+            {
+                Logger.Error($"見張り: {f.Name} に書き込めません: {ex.Message}");
+            }
         }
     }
 }

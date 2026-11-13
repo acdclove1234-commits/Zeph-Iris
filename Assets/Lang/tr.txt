@@ -1873,7 +1873,6 @@ c4454de4	CPU yükü ort. %{0:0}
 c401f258	GPU yükü ort. %{0:0}
 6caecaec	GPU gücü ort. {0:0} W
 47dae337	10 saniyelik ortalama FPS: en düşük {0:0} fps · en yüksek {1:0} fps
-debb413f	%1 low, en yavaş %1'lik karelerin hızıdır. Ortalamayla fark büyüdükçe takılmalar daha çok hissedilir.
 73a40039	{0} bundan sonra kaydedilmesin mi? (Oyun olmayan bir uygulama kaydedildiğinde kullanın. Şimdiye kadarki kayıtları da silinir.)
 e16c0947	Oyun kayıtları
 4184034d	İzlenecek sıcaklıklar okunamadığı için kalibrasyon yapılamıyor. Sıcaklık sensörleri okunabilir olduğunda tekrar deneyin.
@@ -1889,7 +1888,16 @@ cd083e7b	Yeni sürüm {0}, {1:F0} dakika içinde fanları kontrol etmeye başlam
 17d6b1ee	Zeph-Iris kapatılamadığı için önceki sürüme dönülemedi. Zeph-Iris'ten bildirim alanından çıkın (veya bilgisayarı yeniden başlatın), fanlar BIOS ayarlarına döner. Ardından önceki sürüme dönmek için bu dosyaya çift tıklayın:\n{0}
 ad924bfa	Zeph-Iris kurtarma
 97339d69	Önceki sürüme dönmek yalnızca uygulama klasöründeki previous klasöründe bulunan ZephIrisRecovery.exe ile yapılabilir.
-df560c03	Zeph-Iris önceki sürüm {0} sürümüne döndürülsün mü? (şu anki sürüm {1})\n\nÇalışan Zeph-Iris kapatılır (fanlar BIOS'a döner), önceki exe ve güncellemeden önceki ayarlar geri yüklenir ve yeniden başlar.
 e988c5bd	Önceki sürüme elle dönüldü.
 d3cc94cf	Önceki sürüme dönülemedi ({0}).
 ab6781dc	{0} sıcaklığı okunamıyor (kart bulunuyor ama sıcaklıkları ve fanları grafik sürücüsünden okunamıyor). Bu, sürücü değiştirildikten sonra olabilir. Üreticinin sitesinden en yeni sürücüyü (AMD Software, NVIDIA sürücüsü vb.) yeniden yükleyip bilgisayarı yeniden başlatmak çoğu zaman sorunu çözer. O zamana kadar GPU sıcaklığına göre kontrol ve GPU için acil tam hız çalışmaz.
+70775abe	Önceki sürüm {0} sürümüne dönüldü (ayarlar da güncellemeden öncekiler).
+1f1867fa	Geri dönmeden hemen önceki ayarlar, Ayarlar → "Güvenlik ve yedekleme" içindeki "Geri yüklemeden önce" yedeğinden geri alınabilir.
+a6619a29	Önceki sürüme dönüş hazırlığı başarısız olduğu için güncelleme durduruldu ({0}). Boş alanı kontrol edin veya yükleyiciyi sürümler sayfasından elle çalıştırın.
+b148d60e	Gözetim programı başlatılamadı.
+27271310	Bu sürüme yakın zamanda güncellediniz. Yeni sürüm kapanmaya devam ederse, önceki sürüme ({0}) ve güncellemeden önceki ayarlara dönmek için aşağıdaki dosyaya çift tıklayın (mevcut ayarlar backups klasöründe saklanır).\n{1}
+381eb861	1 sn'den uzun durma: {0} kez, toplam {1:0} sn (yükleme, duraklatma, simge durumu vb. FPS'e ve çizim süresine dahil edilmez)
+836a6b89	%1 low ve %0,1 low, en yavaş %1 ve %0,1'deki kare süreleridir (99. ve 99,9. yüzdelik), FPS olarak gösterilir. 1 sn'den uzun duran kareler sayılmaz. Ortalamayla fark büyüdükçe takılmalar daha çok hissedilir (bazı programlar en yavaş %1 karenin ortalamasını kullanır, bu yüzden değerleri biraz farklıdır).
+c5f9ace5	Sıcaklıklar, yük ve fanlar FPS ile aynı dönemi kapsar: ilk kareden itibaren, çizim sürerken.
+17f1a7c2	Önceki sürüme ({0}) dönülüyor.\n\nGüncellemeden önce saklanan kopya kullanılır (hiçbir şey indirilmez). Uygulama bir kez kapanır, fanlar birkaç saniye BIOS ayarlarıyla döner, sonra uygulama yeniden başlar. Ayarlar güncellemeden önceki haline döner. Mevcut ayarlar backups klasöründe saklanır; Ayarlar → "Güvenlik ve yedekleme" içindeki "Geri yüklemeden önce" yedeğinden geri alabilirsiniz. Günlükler ve kayıtlar kalır.\n\nDönülsün mü?
+ff6a2182	Zeph-Iris önceki sürüm {0} sürümüne döndürülsün mü? (şu anki sürüm {1})\n\nÇalışan Zeph-Iris kapatılır (fanlar BIOS'a döner), önceki exe ve güncellemeden önceki ayarlar geri yüklenir ve yeniden başlar. Önce mevcut ayarlar backups klasöründe saklanır (Ayarlar → "Güvenlik ve yedekleme"den geri alın).

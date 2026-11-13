@@ -1873,7 +1873,6 @@ c4454de4	Beban CPU rata-rata {0:0}%
 c401f258	Beban GPU rata-rata {0:0}%
 6caecaec	Daya GPU rata-rata {0:0} W
 47dae337	FPS rata-rata per 10 detik: terendah {0:0} fps · tertinggi {1:0} fps
-debb413f	1% low adalah kecepatan 1% frame paling lambat. Makin besar selisihnya dengan rata-rata, makin terasa patah-patah.
 73a40039	Berhenti mencatat {0} mulai sekarang? (Untuk saat aplikasi yang bukan game tercatat. Catatannya sejauh ini juga dihapus.)
 e16c0947	Catatan game
 4184034d	Tidak bisa kalibrasi karena suhu yang diawasi tidak terbaca. Coba lagi setelah sensor suhu bisa dibaca.
@@ -1889,7 +1888,16 @@ cd083e7b	Versi baru {0} tidak mulai mengatur kipas dalam {1:F0} menit.
 17d6b1ee	Zeph-Iris tidak bisa ditutup, jadi versi sebelumnya tidak bisa dikembalikan. Keluar dari Zeph-Iris lewat area notifikasi (atau mulai ulang PC), kipas akan kembali ke pengaturan BIOS. Lalu klik dua kali file ini untuk kembali ke versi sebelumnya:\n{0}
 ad924bfa	Pemulihan Zeph-Iris
 97339d69	Kembali ke versi sebelumnya hanya bisa dari ZephIrisRecovery.exe di folder previous dalam folder aplikasi.
-df560c03	Kembalikan Zeph-Iris ke versi sebelumnya {0}? (versi sekarang {1})\n\nZeph-Iris yang berjalan ditutup (kipas kembali ke BIOS), exe sebelumnya dan pengaturan dari sebelum pembaruan dikembalikan, lalu dijalankan lagi.
 e988c5bd	Dikembalikan ke versi sebelumnya secara manual.
 d3cc94cf	Tidak bisa kembali ke versi sebelumnya ({0}).
 ab6781dc	Suhu {0} tidak bisa dibaca (kartu terdeteksi, tetapi suhu dan kipasnya tidak bisa dibaca dari driver grafis). Ini bisa terjadi setelah driver diganti. Memasang ulang driver terbaru dari situs pembuat (AMD Software, driver NVIDIA, dll.) lalu memulai ulang PC sering kali memperbaikinya. Sampai itu, pengaturan berdasarkan suhu GPU dan kecepatan penuh darurat untuk GPU tidak berjalan.
+70775abe	Sudah kembali ke versi sebelumnya {0} (pengaturan juga dari sebelum pembaruan).
+1f1867fa	Pengaturan tepat sebelum kembali bisa dipulihkan dari cadangan "Sebelum pemulihan" di Pengaturan → "Keamanan & cadangan".
+a6619a29	Pembaruan dihentikan karena persiapan untuk kembali ke versi sebelumnya gagal ({0}). Periksa ruang kosong, atau jalankan penginstal secara manual dari halaman rilis.
+b148d60e	Program pengawas tidak bisa dijalankan.
+27271310	Anda baru saja memperbarui ke versi ini. Jika versi baru terus menutup, klik dua kali file di bawah untuk kembali ke versi sebelumnya ({0}) dan pengaturan dari sebelum pembaruan (pengaturan saat ini disimpan di folder backups).\n{1}
+381eb861	Berhenti lebih dari 1 dtk: {0} kali, total {1:0} dtk (memuat, jeda, diminimalkan, dll. Tidak dihitung dalam FPS dan waktu menggambar)
+836a6b89	1% low dan 0,1% low adalah waktu frame pada 1% dan 0,1% paling lambat (persentil ke-99 dan ke-99,9) yang ditampilkan sebagai FPS. Frame yang berhenti lebih dari 1 dtk tidak dihitung. Makin besar selisihnya dengan rata-rata, makin terasa patah-patah (program lain memakai rata-rata 1% frame paling lambat, jadi nilainya sedikit berbeda).
+c5f9ace5	Suhu, beban, dan kipas mencakup periode yang sama dengan FPS: dari frame pertama, selama menggambar.
+17f1a7c2	Kembali ke versi sebelumnya ({0}).\n\nSalinan yang disimpan sebelum pembaruan dipakai (tidak ada yang diunduh). Aplikasi tertutup sekali, kipas mengikuti BIOS beberapa detik, lalu aplikasi berjalan lagi. Pengaturan kembali ke sebelum pembaruan. Pengaturan saat ini disimpan di folder backups; bisa dipulihkan dari cadangan "Sebelum pemulihan" di Pengaturan → "Keamanan & cadangan". Log dan catatan tetap ada.\n\nKembali?
+ff6a2182	Kembalikan Zeph-Iris ke versi sebelumnya {0}? (versi sekarang {1})\n\nZeph-Iris yang berjalan ditutup (kipas kembali ke BIOS), exe sebelumnya dan pengaturan dari sebelum pembaruan dikembalikan, lalu dijalankan lagi. Pengaturan saat ini disimpan dulu di folder backups (pulihkan dari Pengaturan → "Keamanan & cadangan").

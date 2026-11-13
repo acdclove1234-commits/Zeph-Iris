@@ -689,21 +689,25 @@ d6750fd2	\n・	App.Uninstall.cs:298
 bf71d238	\n…ほか {0} 個	App.Uninstall.cs:298
 df6134ea	\n\nこのお知らせを閉じたあと、次のフォルダーをフォルダーごと削除してください:\n{0}	App.Uninstall.cs:299
 9c469322	Zeph-Iris のお片付け	App.Uninstall.cs:304
-d1c5f5ab	新しい版 {0} がうまく起動しなかったため、自動で {1} に戻しました（設定も更新する前のものです）。{2}	App.Update.cs:40
-9f2b9221	Zeph-Iris を {0} から {1} に更新しました。	App.Update.cs:47
-d256382b	{0} に更新しました。	App.Update.cs:48
-1f0a60f2	更新したばかりの版（{0}）が予期せず終了しました。何度も続くときは、前の版（{1}）に戻せます。	App.Update.cs:62
-ee455e9f	前の版に戻す	App.Update.cs:63
-c1d1f65d	前の版が分からないため、戻せません。	App.Update.cs:82
-a8c3ec6f	前の版を GitHub から読めませんでした（{0}）。インターネットにつながっているか確かめてください。	App.Update.cs:111
-87370a47	前の版（{0}）のインストーラーが GitHub に見つかりませんでした。	App.Update.cs:113
-042a94f0	確認しています…	App.Update.cs:133
-de427ef4	新しい版 Zeph-Iris {0} があります。「更新する」を押すと、ダウンロードして入れ替えます（そのあいだ十数秒、ファンは BIOS の設定で回ります）。	App.Update.cs:147
-bb0f9e93	新しい版 {0} があります。	App.Update.cs:149
-ebc47f06	最新の版です（{0}）。	App.Update.cs:155
-993c451d	新しい版を確かめられませんでした（{0}）。インターネットにつながっているか確かめてください。	App.Update.cs:160
-31eb4f99	アプリを終了しているところなので、更新しません。	App.Update.cs:175
-b79b5ccf	更新できませんでした（{0}）。	App.Update.cs:194
+70775abe	前の版 {0} に戻しました（設定も更新する前のものです）。	App.Update.cs:42
+d1c5f5ab	新しい版 {0} がうまく起動しなかったため、自動で {1} に戻しました（設定も更新する前のものです）。{2}	App.Update.cs:43
+1f1867fa	戻す直前の設定は、設定 →「安全・バックアップ」の「復元前」のバックアップから戻せます。	App.Update.cs:44
+9f2b9221	Zeph-Iris を {0} から {1} に更新しました。	App.Update.cs:52
+d256382b	{0} に更新しました。	App.Update.cs:53
+1f0a60f2	更新したばかりの版（{0}）が予期せず終了しました。何度も続くときは、前の版（{1}）に戻せます。	App.Update.cs:67
+ee455e9f	前の版に戻す	App.Update.cs:68
+c1d1f65d	前の版が分からないため、戻せません。	App.Update.cs:96
+a8c3ec6f	前の版を GitHub から読めませんでした（{0}）。インターネットにつながっているか確かめてください。	App.Update.cs:127
+87370a47	前の版（{0}）のインストーラーが GitHub に見つかりませんでした。	App.Update.cs:129
+042a94f0	確認しています…	App.Update.cs:149
+de427ef4	新しい版 Zeph-Iris {0} があります。「更新する」を押すと、ダウンロードして入れ替えます（そのあいだ十数秒、ファンは BIOS の設定で回ります）。	App.Update.cs:163
+bb0f9e93	新しい版 {0} があります。	App.Update.cs:165
+ebc47f06	最新の版です（{0}）。	App.Update.cs:171
+993c451d	新しい版を確かめられませんでした（{0}）。インターネットにつながっているか確かめてください。	App.Update.cs:176
+31eb4f99	アプリを終了しているところなので、更新しません。	App.Update.cs:191
+a6619a29	前の版に戻すための準備ができなかったため、更新を中止しました（{0}）。空き容量を確かめるか、リリースのページからインストーラーを手で実行してください。	App.Update.cs:206
+b79b5ccf	更新できませんでした（{0}）。	App.Update.cs:219
+b148d60e	見守りのプログラムを起動できませんでした。	App.Update.cs:256
 13b0e2e6	Zeph-Iris はすでに起動しています。\nタスクトレイのアイコンから開いてください。	App.xaml.cs:104
 ec6a9bb6	記録の保存	App.xaml.cs:190
 813ce530	Zeph-Iris: 回復しました	App.xaml.cs:254
@@ -1010,14 +1014,14 @@ d65b89e2	GPU の温度が高いため中止しました（GPU 保護で全開に
 1dcd95cd	キャリブレーション完了: 最大 {0:N0} rpm / 停止 {1:F0}% 未満 / 始動 {2:F0}%	Core/FanEngine.cs:1191
 a486c5b7	'{0}' の制御でエラーが続いています。安全のため全開（できなければ BIOS 制御）にしています。ログを確認してください。	Core/FanEngine.cs:1218
 4ec5ec9c	'{0}' に書き込んだ回転数が反映されていません（指示 {1:F0}% / 実際 {2:F0}%）。ほかのファン制御ソフトが動いていないか確認してください。	Core/FanEngine.cs:1280
-f9ccaf79	目標 {0:F0}°C	Core/FanEngine.cs:1333
-47a60245	連動	Core/FanEngine.cs:1351
-bb366b6c	'{0}' が回転していません。配線やファンを確認してください。	Core/FanEngine.cs:1473
-2ba4b838	GPU の温度が高いため、'{0}' を 100% にしています（GPU ファンの保護）。	Core/FanEngine.cs:1622
-e6825d4b	（テストモード中ですが、ポンプの保護のため 100% を書き込みました）	Core/FanEngine.cs:1653
-14f61819	ポンプ '{0}' の回転数が読めません。回っているか確認できないため、100% で保護運転にしています。すぐに確認してください。{1}	Core/FanEngine.cs:1674
-06027eff	ポンプ '{0}' の回転数が {1:F0} rpm に低下しています。100% で保護運転中です。すぐに確認してください。{2}	Core/FanEngine.cs:1691
-fab09721	ポンプ '{0}' の回転数が回復しました ({1:F0} rpm)。	Core/FanEngine.cs:1701
+f9ccaf79	目標 {0:F0}°C	Core/FanEngine.cs:1338
+47a60245	連動	Core/FanEngine.cs:1356
+bb366b6c	'{0}' が回転していません。配線やファンを確認してください。	Core/FanEngine.cs:1478
+2ba4b838	GPU の温度が高いため、'{0}' を 100% にしています（GPU ファンの保護）。	Core/FanEngine.cs:1628
+e6825d4b	（テストモード中ですが、ポンプの保護のため 100% を書き込みました）	Core/FanEngine.cs:1659
+14f61819	ポンプ '{0}' の回転数が読めません。回っているか確認できないため、100% で保護運転にしています。すぐに確認してください。{1}	Core/FanEngine.cs:1680
+06027eff	ポンプ '{0}' の回転数が {1:F0} rpm に低下しています。100% で保護運転中です。すぐに確認してください。{2}	Core/FanEngine.cs:1697
+fab09721	ポンプ '{0}' の回転数が回復しました ({1:F0} rpm)。	Core/FanEngine.cs:1707
 9b226151	発生: {0:yyyy/MM/dd HH:mm:ss} ／ プロファイル: {1}	Core/FlightRecorder.cs:93
 ecc04ddd	記録: {0:HH:mm:ss} 〜 {1:HH:mm:ss}（{2:N0} 行）	Core/FlightRecorder.cs:94
 f7957ed6	この間に起きたこと:	Core/FlightRecorder.cs:98
@@ -1274,24 +1278,25 @@ b599c0f6	高音（ハイハット）	Core/Rgb/MusicTuning.cs:375
 afa11876	OpenRGB を起動しました（SDK サーバーもオン）。デバイスを探し終わるまで、少し待ちます…	Core/Rgb/OpenRgbAutoStart.cs:132
 1e73f52b	使用率が {0:F0}〜{1:F0}% と変わっているのに、{2:F0} 分以上 {3:F1}°C のまま変化していません	Core/SensorGuard.cs:98
 f898c734	https のアドレスではありません: {0}	Core/SystemTool.cs:50
-4702ef4e	前の版の控え（previous フォルダー）が見つかりません。	Core/UpdateRecovery.cs:136
-6b87e136	前の版の exe を戻せませんでした（{0}）。	Core/UpdateRecovery.cs:154
-bba9cc48	前の版には戻しましたが、設定を戻せませんでした（{0}）。	Core/UpdateRecovery.cs:162
-cd083e7b	新しい版 {0} が、{1:F0} 分のうちにファンの制御を始めませんでした。	Core/UpdateRecovery.cs:236
-17d6b1ee	Zeph-Iris を終わらせられないため、前の版に戻せませんでした。タスクトレイの Zeph-Iris を終了する（または PC を再起動する）と、ファンは BIOS の設定に戻ります。そのあと、次のファイルをダブルクリックすると前の版に戻せます。\n{0}	Core/UpdateRecovery.cs:247
-9181a7c0	{0:F0} 分間に {1} 回終了したため、自動での再起動はやめました。	Core/Watchdog.cs:265
-abf150b9	自動での再起動はオフになっています。	Core/Watchdog.cs:266
-82655ed5	Zeph-Iris が予期せず終了しました。\n\nファンは安全な回転数（{0:F0}%、ポンプは 100%）に固定しています。{1}\n	Core/Watchdog.cs:268
-91122f58	PC を再起動すると BIOS の制御に戻ります（Zeph-Iris を起動し直すと、アプリの制御で動きます）。\n\nログ: 	Core/Watchdog.cs:269
-874d775f	この版には最近更新したばかりです。新しい版で落ち続けるときは、リリースのページ（{0}）から {1} のインストーラー（Zeph-Iris-{2}-setup.exe）を実行すると、前の版に戻せます。	Core/Watchdog.cs:280
+4702ef4e	前の版の控え（previous フォルダー）が見つかりません。	Core/UpdateRecovery.cs:159
+6b87e136	前の版の exe を戻せませんでした（{0}）。	Core/UpdateRecovery.cs:177
+bba9cc48	前の版には戻しましたが、設定を戻せませんでした（{0}）。	Core/UpdateRecovery.cs:194
+cd083e7b	新しい版 {0} が、{1:F0} 分のうちにファンの制御を始めませんでした。	Core/UpdateRecovery.cs:304
+17d6b1ee	Zeph-Iris を終わらせられないため、前の版に戻せませんでした。タスクトレイの Zeph-Iris を終了する（または PC を再起動する）と、ファンは BIOS の設定に戻ります。そのあと、次のファイルをダブルクリックすると前の版に戻せます。\n{0}	Core/UpdateRecovery.cs:327
+9181a7c0	{0:F0} 分間に {1} 回終了したため、自動での再起動はやめました。	Core/Watchdog.cs:281
+abf150b9	自動での再起動はオフになっています。	Core/Watchdog.cs:282
+82655ed5	Zeph-Iris が予期せず終了しました。\n\nファンは安全な回転数（{0:F0}%、ポンプは 100%）に固定しています。{1}\n	Core/Watchdog.cs:284
+91122f58	PC を再起動すると BIOS の制御に戻ります（Zeph-Iris を起動し直すと、アプリの制御で動きます）。\n\nログ: 	Core/Watchdog.cs:285
+27271310	この版には最近更新したばかりです。新しい版で落ち続けるときは、次のファイルをダブルクリックすると、前の版（{0}）と更新する前の設定に戻せます（いまの設定は backups フォルダーに取っておきます）。\n{1}	Core/Watchdog.cs:299
+874d775f	この版には最近更新したばかりです。新しい版で落ち続けるときは、リリースのページ（{0}）から {1} のインストーラー（Zeph-Iris-{2}-setup.exe）を実行すると、前の版に戻せます。	Core/Watchdog.cs:300
 5e11c7bc	このネットワークからは使えません。	Core/WebServer.cs:78
-3540eeb1	鍵の間違いが続いたため、しばらく受け付けません。1 分ほど待ってください。	Core/WebServer.cs:91
-aacf373e	アクセス用の鍵が違います。PC の設定画面に表示されている URL を使ってください。	Core/WebServer.cs:99
-1e1ddced	接続中…	Core/WebServer.cs:273
-6b1221b3	システム	Core/WebServer.cs:275
-73dd9d77	全開 5分	Core/WebServer.cs:277
-f27c7942	 更新 ・ 	Core/WebServer.cs:280
-908c69fa	PC に接続できません	Core/WebServer.cs:281
+3540eeb1	鍵の間違いが続いたため、しばらく受け付けません。1 分ほど待ってください。	Core/WebServer.cs:98
+aacf373e	アクセス用の鍵が違います。PC の設定画面に表示されている URL を使ってください。	Core/WebServer.cs:106
+1e1ddced	接続中…	Core/WebServer.cs:308
+6b1221b3	システム	Core/WebServer.cs:310
+73dd9d77	全開 5分	Core/WebServer.cs:312
+f27c7942	 更新 ・ 	Core/WebServer.cs:315
+908c69fa	PC に接続できません	Core/WebServer.cs:316
 88209a5b	（なし）	Core/Winget.cs:71
 59d07259	winget.exe が見つかりません	Core/Winget.cs:203
 f20bb342	winget を起動できませんでした	Core/Winget.cs:240
@@ -1438,9 +1443,11 @@ c4454de4	CPU 使用率 平均 {0:0}%	MainWindow.Games.cs:202
 c401f258	GPU 使用率 平均 {0:0}%	MainWindow.Games.cs:203
 6caecaec	GPU の電力 平均 {0:0} W	MainWindow.Games.cs:204
 47dae337	10 秒ごとの平均 FPS: いちばん低い {0:0} fps ・ いちばん高い {1:0} fps	MainWindow.Games.cs:209
-debb413f	1% Low は、遅かったほうから 1% のフレームの速さです。平均との差が大きいほど、カクつきを感じやすくなります。	MainWindow.Games.cs:212
-73a40039	{0} を、これからは記録しないようにしますか？（ゲームではないアプリが記録されたとき用です。これまでの記録も消します）	MainWindow.Games.cs:219
-e16c0947	ゲームの記録	MainWindow.Games.cs:220
+381eb861	1 秒以上止まった: {0} 回・合計 {1:0} 秒（ロード・一時停止・最小化など。FPS と描いていた時間には入れていません）	MainWindow.Games.cs:212
+836a6b89	1% Low・0.1% Low は、遅かったほうから 1%・0.1% のところのフレーム時間（99・99.9 パーセンタイル）を FPS にしたものです。1 秒を超えて止まったフレームは入れません。平均との差が大きいほど、カクつきを感じやすくなります（ほかのソフトは、遅いほうから 1% のフレームの平均で出すことがあり、値が少し違います）。	MainWindow.Games.cs:214
+c5f9ace5	温度・使用率・ファンは、FPS と同じく、最初に描いたときから描いていたあいだの値です。	MainWindow.Games.cs:215
+73a40039	{0} を、これからは記録しないようにしますか？（ゲームではないアプリが記録されたとき用です。これまでの記録も消します）	MainWindow.Games.cs:222
+e16c0947	ゲームの記録	MainWindow.Games.cs:223
 1c845124	記録期間: {0:hh\\:mm\\:ss}（{1:N0} サンプル）  ／  グラフにマウスを乗せると、その時刻の値を表示します	MainWindow.History.cs:32
 67fc1b84	{0} (仮想) [°C]	MainWindow.History.cs:41
 7f375751	まだ記録がありません。	MainWindow.History.cs:77
@@ -1753,43 +1760,44 @@ e1525ed0	新しい版 {0} があります（{1:yyyy/MM/dd} 公開・{2:F0} MB）
 7d2bdd2c	最新の版です（{0:M/d HH:mm} に確認）。	MainWindow.Update.cs:33
 a94ca4e7	まだ確認していません。	MainWindow.Update.cs:34
 72959f2c	前の版（{0}）に戻す	MainWindow.Update.cs:39
-f2252901	前の版（{0}）に戻します。\n\nGitHub から前の版のインストーラーをダウンロードして確かめたあと、アプリが一度終了します。入れ替えが終わるまでの十数秒、ファンは BIOS の設定で回り、終わるとアプリが起動し直します。設定・ログ・記録はそのまま残ります。\n\n戻しますか？	MainWindow.Update.cs:53
-98b3be1a	ダウンロードしています… {0:P0}	MainWindow.Update.cs:60
-c1f570b8	\n\nリリースのページから、インストーラーを手で実行して更新することもできます。	MainWindow.Update.cs:70
-b6e4f6c5	Zeph-Iris {0} に更新します。\n\nインストーラー（{1:F0} MB）をダウンロードして確かめたあと、アプリが一度終了します。入れ替えが終わるまでの十数秒、ファンは BIOS の設定で回り、終わるとアプリが起動し直します。\n\n更新しますか？	MainWindow.Update.cs:106
+17f1a7c2	前の版（{0}）に戻します。\n\n更新の前に取っておいた前の版を使います（ダウンロードはしません）。アプリが一度終了し、十数秒、ファンは BIOS の設定で回り、終わるとアプリが起動し直します。設定は更新する前のものに戻ります。いまの設定は backups フォルダーに取っておくので、設定 →「安全・バックアップ」の「復元前」のバックアップから戻せます。ログ・記録はそのまま残ります。\n\n戻しますか？	MainWindow.Update.cs:54
+f2252901	前の版（{0}）に戻します。\n\nGitHub から前の版のインストーラーをダウンロードして確かめたあと、アプリが一度終了します。入れ替えが終わるまでの十数秒、ファンは BIOS の設定で回り、終わるとアプリが起動し直します。設定・ログ・記録はそのまま残ります。\n\n戻しますか？	MainWindow.Update.cs:55
+98b3be1a	ダウンロードしています… {0:P0}	MainWindow.Update.cs:62
+c1f570b8	\n\nリリースのページから、インストーラーを手で実行して更新することもできます。	MainWindow.Update.cs:72
+b6e4f6c5	Zeph-Iris {0} に更新します。\n\nインストーラー（{1:F0} MB）をダウンロードして確かめたあと、アプリが一度終了します。入れ替えが終わるまでの十数秒、ファンは BIOS の設定で回り、終わるとアプリが起動し直します。\n\n更新しますか？	MainWindow.Update.cs:108
 6451d704	ハードウェアアクセス: LibreHardwareMonitor + PawnIO\n	MainWindow.xaml.cs:103
 6c7b6a5b	設定ファイル: {0}	MainWindow.xaml.cs:104
 7f8ae76b	Zeph-Iris は、LibreHardwareMonitor・PawnIO・OpenRGB・NAudio・QRCoder・Montserrat・Zen Maru Gothic・Inno Setup などのオープンソースのおかげで動いています。作ってくださった皆さんに感謝します（ライセンスはアプリのフォルダーの licenses にあります）。	MainWindow.xaml.cs:105
-1ffe58b3	温度が上限に達しています	MainWindow.xaml.cs:427
-4eed19a9	ブースト中	MainWindow.xaml.cs:429
-8052eef4	ポンプ以外を 100% で回しています	MainWindow.xaml.cs:429
-732c5446	BIOS 制御（ポンプ監視は継続）	MainWindow.xaml.cs:431
-9903c467	計算だけで、ファンには書き込んでいません（ポンプ保護は働きます）。下のボタンで制御を始めます	MainWindow.xaml.cs:433
-138d15fc	制御中（要確認）	MainWindow.xaml.cs:435
-9a955596	見つからないセンサーがあります（部品の交換など）	MainWindow.xaml.cs:435
-cde39c73	値が固まっているセンサーがあります	MainWindow.xaml.cs:437
-c347c56a	{0} 個を制御中	MainWindow.xaml.cs:439
-cbfa5900	制御を開始する（DRY RUN を解除）	MainWindow.xaml.cs:442
-559e78f2	制御を再開する	MainWindow.xaml.cs:443
-f1198e29	警告	MainWindow.xaml.cs:463
-b47a04b8	お知らせ	MainWindow.xaml.cs:465
-d3ec144f	仮想（{0}）	MainWindow.xaml.cs:494
-f45a5a37	検出したハードウェアの一覧です。画像のボタンから、自分で撮った写真などに差し替えられます	MainWindow.xaml.cs:533
-31e94c42	ファンごとに温度と回転数の関係を設定します。変更はすぐに反映・保存されます	MainWindow.xaml.cs:534
-b5ccd0c3	記録からの自動診断と、ファンのホコリ・劣化のチェック（AI のアドバイスはオプション）	MainWindow.xaml.cs:535
-ee9c1f57	ファンの特性と、CPU・GPU に負荷をかけたときの温度を測って、カーブを自動で作ります。今の設定でどこまで冷えるかも確かめられます	MainWindow.xaml.cs:536
-73339fb8	最大 24 時間分の温度と回転数（アプリを閉じていた間を除く。再起動前の分は 1 分ごとの平均）	MainWindow.xaml.cs:537
-389ce2cc	電気代の目安・異常の記録	MainWindow.xaml.cs:538
-4bd55735	OpenRGB 連携で、PC の LED を温度・レインボー・音楽などに合わせて光らせます	MainWindow.xaml.cs:539
-acea69f7	このPCで検出されたすべての温度・回転数・制御チャネルと、仮想センサー	MainWindow.xaml.cs:540
-7626e5f7	プロファイル・自動切り替え・起動方法・制御全体の動作	MainWindow.xaml.cs:541
-d3bf5d86	DRY RUN を解除しました。ファンの制御を始めています。	MainWindow.xaml.cs:578
+1ffe58b3	温度が上限に達しています	MainWindow.xaml.cs:420
+4eed19a9	ブースト中	MainWindow.xaml.cs:422
+8052eef4	ポンプ以外を 100% で回しています	MainWindow.xaml.cs:422
+732c5446	BIOS 制御（ポンプ監視は継続）	MainWindow.xaml.cs:424
+9903c467	計算だけで、ファンには書き込んでいません（ポンプ保護は働きます）。下のボタンで制御を始めます	MainWindow.xaml.cs:426
+138d15fc	制御中（要確認）	MainWindow.xaml.cs:428
+9a955596	見つからないセンサーがあります（部品の交換など）	MainWindow.xaml.cs:428
+cde39c73	値が固まっているセンサーがあります	MainWindow.xaml.cs:430
+c347c56a	{0} 個を制御中	MainWindow.xaml.cs:432
+cbfa5900	制御を開始する（DRY RUN を解除）	MainWindow.xaml.cs:435
+559e78f2	制御を再開する	MainWindow.xaml.cs:436
+f1198e29	警告	MainWindow.xaml.cs:456
+b47a04b8	お知らせ	MainWindow.xaml.cs:458
+d3ec144f	仮想（{0}）	MainWindow.xaml.cs:487
+f45a5a37	検出したハードウェアの一覧です。画像のボタンから、自分で撮った写真などに差し替えられます	MainWindow.xaml.cs:526
+31e94c42	ファンごとに温度と回転数の関係を設定します。変更はすぐに反映・保存されます	MainWindow.xaml.cs:527
+b5ccd0c3	記録からの自動診断と、ファンのホコリ・劣化のチェック（AI のアドバイスはオプション）	MainWindow.xaml.cs:528
+ee9c1f57	ファンの特性と、CPU・GPU に負荷をかけたときの温度を測って、カーブを自動で作ります。今の設定でどこまで冷えるかも確かめられます	MainWindow.xaml.cs:529
+73339fb8	最大 24 時間分の温度と回転数（アプリを閉じていた間を除く。再起動前の分は 1 分ごとの平均）	MainWindow.xaml.cs:530
+389ce2cc	電気代の目安・異常の記録	MainWindow.xaml.cs:531
+4bd55735	OpenRGB 連携で、PC の LED を温度・レインボー・音楽などに合わせて光らせます	MainWindow.xaml.cs:532
+acea69f7	このPCで検出されたすべての温度・回転数・制御チャネルと、仮想センサー	MainWindow.xaml.cs:533
+7626e5f7	プロファイル・自動切り替え・起動方法・制御全体の動作	MainWindow.xaml.cs:534
+d3bf5d86	DRY RUN を解除しました。ファンの制御を始めています。	MainWindow.xaml.cs:571
 81d7e612	Zeph-Iris 見張り	Program.cs:31
 ad924bfa	Zeph-Iris の復旧	Program.cs:62
-97339d69	前の版に戻せるのは、アプリのフォルダーの previous にある ZephIrisRecovery.exe からだけです。	Program.cs:75
-df560c03	Zeph-Iris を前の版 {0} に戻しますか？（いまの版 {1}）\n\n動いている Zeph-Iris を終了し（ファンは BIOS の設定に戻ります）、前の版の exe と、更新する前の設定に戻してから起動します。	Program.cs:81
-e988c5bd	手で前の版に戻しました。	Program.cs:83
-d3cc94cf	前の版に戻せませんでした（{0}）。	Program.cs:88
+97339d69	前の版に戻せるのは、アプリのフォルダーの previous にある ZephIrisRecovery.exe からだけです。	Program.cs:76
+ff6a2182	Zeph-Iris を前の版 {0} に戻しますか？（いまの版 {1}）\n\n動いている Zeph-Iris を終了し（ファンは BIOS の設定に戻ります）、前の版の exe と、更新する前の設定に戻してから起動します。いまの設定は、戻す前に backups フォルダーに取っておきます（設定 →「安全・バックアップ」から戻せます）。	Program.cs:82
+e988c5bd	手で前の版に戻しました。	Program.cs:84
+d3cc94cf	前の版に戻せませんでした（{0}）。	Program.cs:89
 0788f8eb	背面	UI/Controls/CasePreview.cs:59
 c85ab318	前	UI/Controls/CasePreview.cs:60
 0f616edd	上	UI/Controls/CasePreview.cs:61

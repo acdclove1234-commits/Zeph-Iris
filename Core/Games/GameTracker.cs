@@ -26,8 +26,13 @@ public sealed class GameSession
     public double PlayedSeconds { get; set; }
     public long Frames { get; set; }
     public double AvgFps { get; set; }
+    /// <summary>遅いほうから 1%・0.1% のところのフレーム時間（99・99.9 パーセンタイル）を FPS にしたもの。1 秒を超える止まりは入れない</summary>
     public double Low1Fps { get; set; }
     public double Low01Fps { get; set; }
+    /// <summary>1 秒を超えて止まった回数と合計の時間（ロード・一時停止・最小化など。FPS と描いていた時間には入れない）</summary>
+    public long Stalls { get; set; }
+    public double StalledSeconds { get; set; }
+    /// <summary>温度・使用率・ファンは、FPS と同じ期間（最初に描いたときから、描いていたあいだ）の値</summary>
     public float? CpuTempAvg { get; set; }
     public float? CpuTempMax { get; set; }
     public float? GpuTempAvg { get; set; }
@@ -94,14 +99,19 @@ public sealed class GameTracker
         public DateTime FirstSeen;
         public DateTime LastFrame;
         public double Busy;
+        /// <summary>前の Tick から描いたフレーム（1 秒以下のもの）の数と時間</summary>
         public int PendingFrames;
         public double PendingMs;
+        /// <summary>前の Tick から 1 枚でも描いた（1 秒を超える止まりのあとの 1 枚も含む）</summary>
+        public bool Presented;
         public readonly FrameTimes Frames = new();
+        /// <summary>温度・使用率・10 秒ごとの点。FPS と同じ期間（最初に描いたときから）を数える</summary>
+        public readonly Totals Totals = new();
     }
 
-    private sealed class Active
+    /// <summary>描いていたあいだの温度・使用率・ファンと、10 秒ごとの点</summary>
+    private sealed class Totals
     {
-        public required Candidate Game;
         public readonly SensorStats.Entry Cpu = new(), Gpu = new(), CpuLoad = new(), GpuLoad = new(), GpuPower = new(), Fan = new();
         public readonly List<GameSample> Timeline = new();
         public double StepSec, StepMs;
@@ -118,7 +128,7 @@ public sealed class GameTracker
     private readonly object _gate = new();
     private readonly Dictionary<int, Candidate> _candidates = new();
     private HashSet<string> _excluded = new(StringComparer.OrdinalIgnoreCase);
-    private Active? _active;
+    private Candidate? _active;
     private DateTime? _lastTick;
     private double _lastFps = double.NaN;
 
@@ -137,7 +147,7 @@ public sealed class GameTracker
         lock (_gate)
         {
             _excluded = set;
-            foreach (var pid in _candidates.Where(c => set.Contains(c.Value.App) && _active?.Game != c.Value).Select(c => c.Key).ToList())
+            foreach (var pid in _candidates.Where(c => set.Contains(c.Value.App) && _active != c.Value).Select(c => c.Key).ToList())
                 _candidates.Remove(pid);
         }
     }
@@ -147,23 +157,31 @@ public sealed class GameTracker
         string app = Normalize(f.App);
         lock (_gate)
         {
+            bool created = false;
             if (!_candidates.TryGetValue(f.ProcessId, out var c))
             {
                 if (NotGames.Contains(app) || _excluded.Contains(app)) return;
                 DateTime now = _lastTick ?? DateTime.Now;
                 c = new Candidate { App = app, Pid = f.ProcessId, FirstSeen = now, LastFrame = now };
                 _candidates[f.ProcessId] = c;
+                created = true;
             }
-            c.PendingFrames++;
-            if (f.Ms > 0 && f.Ms <= FrameTimes.MaxFrameMs) c.PendingMs += f.Ms;
-            c.Frames.Add(f.Ms);
+            c.Presented = true;
+            // FPS・10 秒ごとの点は、FrameTimes と同じく 1 秒以下のフレームだけで数える（止まっていた時間を入れない）
+            if (f.Ms > 0 && f.Ms <= FrameTimes.MaxFrameMs)
+            {
+                c.PendingFrames++;
+                c.PendingMs += f.Ms;
+            }
+            // 新しく数え始めた最初の 1 枚が長いのは、数え始める前（前の記録のあと・最小化していたあいだ）の空きなので、止まりに数えない
+            if (!(created && f.Ms > FrameTimes.MaxFrameMs)) c.Frames.Add(f.Ms);
         }
     }
 
     /// <summary>いま記録しているゲーム（なければ null）</summary>
     public string? CurrentApp
     {
-        get { lock (_gate) return _active?.Game.App; }
+        get { lock (_gate) return _active?.App; }
     }
 
     /// <summary>直近の 1 秒（くらい）の FPS（記録中のゲーム。なければ NaN）</summary>
@@ -182,15 +200,16 @@ public sealed class GameTracker
 
             foreach (var c in _candidates.Values.ToList())
             {
-                bool drew = c.PendingFrames > 0;
+                bool drew = c.Presented;
                 if (drew) c.LastFrame = t.Time;
                 bool busy = dt > 0 && c.PendingFrames / dt >= MinBusyFps && t.ForegroundPid == c.Pid;
                 c.Busy = busy ? c.Busy + dt : Math.Max(0, c.Busy - dt);
 
-                if (_active?.Game == c)
+                // 温度なども、描いていた周期だけ、最初に描いたときから数える（記録を始める前の分も、FPS と同じ期間にそろえる）
+                if (drew) Accumulate(c.Totals, t, dt, c.PendingFrames, c.PendingMs);
+                if (_active == c)
                 {
                     _lastFps = c.PendingMs > 0 ? c.PendingFrames * 1000.0 / c.PendingMs : double.NaN;
-                    if (drew) Accumulate(_active, t, dt, c.PendingFrames, c.PendingMs);
                 }
                 else if ((t.Time - c.LastFrame).TotalSeconds >= ForgetAfterSec)
                 {
@@ -198,15 +217,15 @@ public sealed class GameTracker
                 }
                 c.PendingFrames = 0;
                 c.PendingMs = 0;
+                c.Presented = false;
             }
 
             if (_active is null)
             {
-                var start = _candidates.Values.Where(c => c.Busy >= StartAfterSec).OrderByDescending(c => c.Busy).FirstOrDefault();
-                if (start is not null) _active = new Active { Game = start };
+                _active = _candidates.Values.Where(c => c.Busy >= StartAfterSec).OrderByDescending(c => c.Busy).FirstOrDefault();
                 return null;
             }
-            if ((t.Time - _active.Game.LastFrame).TotalSeconds >= EndAfterIdleSec) return FinishLocked();
+            if ((t.Time - _active.LastFrame).TotalSeconds >= EndAfterIdleSec) return FinishLocked();
             return null;
         }
     }
@@ -217,7 +236,7 @@ public sealed class GameTracker
         lock (_gate) return _active is null ? null : FinishLocked();
     }
 
-    private static void Accumulate(Active a, GameTick t, double dt, int frames, double ms)
+    private static void Accumulate(Totals a, GameTick t, double dt, int frames, double ms)
     {
         Add(a.Cpu, t.CpuTemp);
         Add(a.Gpu, t.GpuTemp);
@@ -233,7 +252,7 @@ public sealed class GameTracker
         if (a.StepSec >= TimelineStepSec) FlushStep(a);
     }
 
-    private static void FlushStep(Active a)
+    private static void FlushStep(Totals a)
     {
         if (a.StepSec <= 0) return;
         a.Timeline.Add(new GameSample
@@ -242,27 +261,35 @@ public sealed class GameTracker
             CpuTemp = Value(a.StepCpu),
             GpuTemp = Value(a.StepGpu),
         });
+        // ゲームとして記録しないまま描き続けるアプリ（手前に来ないもの）でも、メモリが増え続けないように、直近 24 時間ぶんまで
+        if (a.Timeline.Count > MaxTimelinePoints) a.Timeline.RemoveRange(0, a.Timeline.Count - MaxTimelinePoints);
         a.ResetStep();
     }
 
+    /// <summary>10 秒ごとの点を残す数の上限（24 時間ぶん）</summary>
+    public const int MaxTimelinePoints = 8640;
+
     private GameSession FinishLocked()
     {
-        var a = _active!;
+        var game = _active!;
         _active = null;
         _lastFps = double.NaN;
-        _candidates.Remove(a.Game.Pid);
+        _candidates.Remove(game.Pid);
+        var a = game.Totals;
         FlushStep(a);
-        var f = a.Game.Frames;
+        var f = game.Frames;
         return new GameSession
         {
-            App = a.Game.App,
-            Start = a.Game.FirstSeen,
-            End = a.Game.LastFrame,
+            App = game.App,
+            Start = game.FirstSeen,
+            End = game.LastFrame,
             PlayedSeconds = Math.Round(f.TotalMs / 1000, 1),
             Frames = f.Count,
             AvgFps = Round(f.AverageFps),
             Low1Fps = Round(f.LowFps(0.01)),
             Low01Fps = Round(f.LowFps(0.001)),
+            Stalls = f.Stalls,
+            StalledSeconds = Math.Round(f.StallMs / 1000, 1),
             CpuTempAvg = Value(a.Cpu), CpuTempMax = Max(a.Cpu),
             GpuTempAvg = Value(a.Gpu), GpuTempMax = Max(a.Gpu),
             CpuLoadAvg = Value(a.CpuLoad), GpuLoadAvg = Value(a.GpuLoad),

@@ -40,17 +40,20 @@ public static class UpdateRecoveryTests
             // 新しい版が入り、設定を書き換えた
             File.WriteAllText(exe, "new exe");
             File.WriteAllText(Path.Combine(app, "config.json"), "{\"new\":true}");
-            T.Check(!UpdateRecovery.MarkStarted(app, From), "another version does not report for the new one");
+            T.Check(UpdateRecovery.MarkStarted(app, From) && !UpdateRecovery.IsMarkedOk(app, UpdateRecovery.ReadPending(app)!), "another version writes nothing (and need not retry)");
             T.Check(!UpdateRecovery.IsMarkedOk(app, UpdateRecovery.ReadPending(app)!), "not marked yet");
             T.Check(UpdateRecovery.MarkStarted(app, To) && UpdateRecovery.IsMarkedOk(app, UpdateRecovery.ReadPending(app)!), "new version reports control");
-            T.Check(!UpdateRecovery.MarkStarted(app, To), "reported only once");
+            T.Check(UpdateRecovery.MarkStarted(app, To) && UpdateRecovery.IsMarkedOk(app, UpdateRecovery.ReadPending(app)!), "already marked → done (no rewrite needed)");
 
             // 見守りが戻す
-            T.Check(UpdateRecovery.Restore(app, "test", P.Started.AddMinutes(9)) is null, "restore succeeds");
+            var res = UpdateRecovery.Restore(app, "test", P.Started.AddMinutes(9));
+            T.Check(res is { ExeRestored: true, Problem: null }, "restore succeeds");
+            string kept = Path.Combine(app, "backups", $"config_{P.Started.AddMinutes(9):yyyyMMdd_HHmmss}_restore.json");
+            T.Check(File.Exists(kept) && File.ReadAllText(kept) == "{\"new\":true}", "the settings from the new version are kept in backups before restoring (listed as 復元前)");
             T.Check(File.ReadAllText(exe) == "old exe" && File.ReadAllText(Path.Combine(app, "config.json")) == "{\"old\":true}", "old exe and old settings are back");
             T.Check(UpdateRecovery.ReadPending(app) is null, "pending record removed");
             var rb = UpdateRecovery.TakeRolledBack(app);
-            T.Check(rb is { Reason: "test" } && UpdateRecovery.TakeRolledBack(app) is null, "rolled-back note read once by the restored version");
+            T.Check(rb is { Reason: "test", Manual: false } && rb.SettingsBackup == kept && UpdateRecovery.TakeRolledBack(app) is null, "rolled-back note read once by the restored version (with where the settings were kept)");
             T.Check(File.Exists(guard), "the kept copy stays for a manual restore");
 
             // 次の更新の準備で、前の印は消える
@@ -58,8 +61,8 @@ public static class UpdateRecoveryTests
             T.Check(!UpdateRecovery.IsMarkedOk(app, UpdateRecovery.ReadPending(app)!), "a new update starts without the old ok mark");
 
             Directory.Delete(UpdateRecovery.BackupDir(app), true);
-            T.Check(UpdateRecovery.Restore(app, "x", DateTime.Now) is not null, "no kept copy → cannot restore (says why)");
-            T.Check(UpdateRecovery.ReadPending(app) is null && !UpdateRecovery.MarkStarted(app, To), "no pending update → nothing to report");
+            T.Check(UpdateRecovery.Restore(app, "x", DateTime.Now) is { ExeRestored: false, Problem: not null }, "no kept copy → cannot restore (says why)");
+            T.Check(UpdateRecovery.ReadPending(app) is null && UpdateRecovery.MarkStarted(app, To), "no pending update → nothing to report (done)");
         }
         finally
         {

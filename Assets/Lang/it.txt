@@ -1873,7 +1873,6 @@ c4454de4	Carico CPU medio {0:0}%
 c401f258	Carico GPU medio {0:0}%
 6caecaec	Potenza GPU media {0:0} W
 47dae337	FPS medi ogni 10 secondi: minimo {0:0} fps · massimo {1:0} fps
-debb413f	L’1% low è la velocità dell’1% di fotogrammi più lenti. Più è grande la differenza dalla media, più si notano gli scatti.
 73a40039	Non registrare più {0} da ora in poi? (Per quando è stata registrata un’app che non è un gioco. Anche le sue voci verranno eliminate.)
 e16c0947	Registro dei giochi
 4184034d	Impossibile calibrare perché non è possibile leggere le temperature da controllare. Riprova quando i sensori di temperatura saranno leggibili.
@@ -1889,7 +1888,16 @@ cd083e7b	La nuova versione {0} non ha iniziato a controllare le ventole entro {1
 17d6b1ee	Impossibile chiudere Zeph-Iris, quindi non è stato possibile tornare alla versione precedente. Esci da Zeph-Iris dall’area di notifica (o riavvia il PC) e le ventole tornano alle impostazioni del BIOS. Poi fai doppio clic su questo file per tornare alla versione precedente:\n{0}
 ad924bfa	Ripristino di Zeph-Iris
 97339d69	Il ritorno alla versione precedente funziona solo da ZephIrisRecovery.exe nella cartella previous della cartella dell’app.
-df560c03	Tornare alla versione precedente {0} di Zeph-Iris? (versione attuale {1})\n\nZeph-Iris viene chiuso (ventole al BIOS), vengono ripristinati l’exe precedente e le impostazioni di prima dell’aggiornamento, poi si riavvia.
 e988c5bd	Tornato a mano alla versione precedente.
 d3cc94cf	Impossibile tornare alla versione precedente ({0}).
 ab6781dc	Impossibile leggere la temperatura di {0} (la scheda viene trovata, ma temperature e ventole non si possono leggere dal driver grafico). Può succedere dopo la sostituzione del driver. Reinstallare il driver più recente dal sito del produttore (AMD Software, driver NVIDIA, ecc.) e riavviare il PC spesso risolve. Fino ad allora non funzionano il controllo in base alla temperatura della GPU e la massima velocità di emergenza per la GPU.
+70775abe	Tornato alla versione precedente {0} (anche le impostazioni sono quelle di prima dell’aggiornamento).
+1f1867fa	Le impostazioni di subito prima del ritorno si possono ripristinare dal backup «Prima del ripristino» in Impostazioni → «Sicurezza e backup».
+a6619a29	L’aggiornamento è stato interrotto perché la preparazione per tornare alla versione precedente non è riuscita ({0}). Controlla lo spazio libero o esegui a mano il programma di installazione dalla pagina delle versioni.
+b148d60e	Impossibile avviare il programma di sorveglianza.
+27271310	Hai aggiornato a questa versione di recente. Se la nuova versione continua a chiudersi, fai doppio clic sul file qui sotto per tornare alla versione precedente ({0}) e alle impostazioni di prima dell’aggiornamento (le impostazioni attuali vengono conservate nella cartella backups).\n{1}
+381eb861	Fermo per più di 1 s: {0} volte, {1:0} s in totale (caricamenti, pausa, ridotto a icona, ecc. Non conteggiato negli FPS né nel tempo di disegno)
+836a6b89	L’1% low e lo 0,1% low sono i tempi dei fotogrammi all’1% e allo 0,1% più lenti (99° e 99,9° percentile) espressi in FPS. I fotogrammi fermi per più di 1 s non sono contati. Più è grande la differenza dalla media, più si notano gli scatti (altri programmi usano la media dell’1% dei fotogrammi più lenti, quindi i valori differiscono un po’).
+c5f9ace5	Temperature, carichi e ventole coprono lo stesso periodo degli FPS: dal primo fotogramma, mentre si disegnava.
+17f1a7c2	Ritorno alla versione precedente ({0}).\n\nViene usata la copia conservata prima dell’aggiornamento (non si scarica nulla). L’app si chiude una volta, le ventole seguono il BIOS per qualche secondo, poi l’app si riavvia. Le impostazioni tornano a quelle di prima dell’aggiornamento. Le impostazioni attuali vengono conservate nella cartella backups e si possono ripristinare dal backup «Prima del ripristino» in Impostazioni → «Sicurezza e backup». Log e registrazioni restano.\n\nTornare indietro?
+ff6a2182	Riportare Zeph-Iris alla versione precedente {0}? (versione attuale {1})\n\nZeph-Iris viene chiuso (ventole al BIOS), vengono ripristinati l’exe precedente e le impostazioni di prima dell’aggiornamento, poi si riavvia. Prima le impostazioni attuali vengono conservate nella cartella backups (ripristinabili da Impostazioni → «Sicurezza e backup»).

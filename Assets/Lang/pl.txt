@@ -1873,7 +1873,6 @@ c4454de4	Obciążenie CPU śr. {0:0}%
 c401f258	Obciążenie GPU śr. {0:0}%
 6caecaec	Moc GPU śr. {0:0} W
 47dae337	Średni FPS co 10 sekund: najniższy {0:0} fps · najwyższy {1:0} fps
-debb413f	1% low to szybkość najwolniejszego 1% klatek. Im większa różnica względem średniej, tym bardziej odczuwalne przycięcia.
 73a40039	Od teraz nie zapisywać {0}? (Gdy zapisano aplikację, która nie jest grą. Jej dotychczasowe wpisy też zostaną usunięte.)
 e16c0947	Zapis gier
 4184034d	Nie można skalibrować, bo nie da się odczytać temperatur do pilnowania. Spróbuj ponownie, gdy czujniki temperatury będą czytelne.
@@ -1889,7 +1888,16 @@ cd083e7b	Nowa wersja {0} nie zaczęła sterować wentylatorami w ciągu {1:F0} m
 17d6b1ee	Nie można zamknąć Zeph-Iris, więc nie przywrócono poprzedniej wersji. Zamknij Zeph-Iris w obszarze powiadomień (albo uruchom ponownie komputer), a wentylatory wrócą do ustawień BIOS. Potem kliknij dwukrotnie ten plik, aby wrócić do poprzedniej wersji:\n{0}
 ad924bfa	Przywracanie Zeph-Iris
 97339d69	Powrót do poprzedniej wersji działa tylko z ZephIrisRecovery.exe w folderze previous folderu aplikacji.
-df560c03	Przywrócić poprzednią wersję {0} Zeph-Iris? (obecna wersja {1})\n\nDziałający Zeph-Iris zostanie zamknięty (wentylatory wrócą do BIOS), poprzedni plik exe i ustawienia sprzed aktualizacji zostaną przywrócone, a program uruchomi się ponownie.
 e988c5bd	Ręcznie przywrócono poprzednią wersję.
 d3cc94cf	Nie można wrócić do poprzedniej wersji ({0}).
 ab6781dc	Nie można odczytać temperatury {0} (karta jest wykryta, ale jej temperatur i wentylatorów nie da się odczytać ze sterownika graficznego). Może się tak stać po wymianie sterownika. Ponowna instalacja najnowszego sterownika ze strony producenta (AMD Software, sterownik NVIDIA itp.) i ponowne uruchomienie komputera często pomaga. Do tego czasu nie działa sterowanie według temperatury GPU ani awaryjna pełna prędkość dla GPU.
+70775abe	Przywrócono poprzednią wersję {0} (ustawienia także sprzed aktualizacji).
+1f1867fa	Ustawienia sprzed samego przywrócenia można odtworzyć z kopii „Przed przywróceniem” w Ustawienia → „Bezpieczeństwo i kopie zapasowe”.
+a6619a29	Aktualizację przerwano, bo nie udało się przygotować powrotu do poprzedniej wersji ({0}). Sprawdź wolne miejsce albo uruchom instalator ręcznie ze strony wydań.
+b148d60e	Nie można uruchomić programu nadzoru.
+27271310	Niedawno zaktualizowano do tej wersji. Jeśli nowa wersja ciągle się zamyka, kliknij dwukrotnie poniższy plik, aby wrócić do poprzedniej wersji ({0}) i ustawień sprzed aktualizacji (obecne ustawienia zostaną zachowane w folderze backups).\n{1}
+381eb861	Zatrzymanie dłuższe niż 1 s: {0} razy, łącznie {1:0} s (ładowanie, pauza, minimalizacja itp. Nie wlicza się do FPS ani czasu rysowania)
+836a6b89	1% low i 0,1% low to czasy klatek przy najwolniejszym 1% i 0,1% (99. i 99,9. percentyl) podane jako FPS. Klatki zatrzymane dłużej niż 1 s nie są liczone. Im większa różnica względem średniej, tym bardziej odczuwalne przycięcia (inne programy używają średniej z najwolniejszego 1% klatek, więc ich wartości trochę się różnią).
+c5f9ace5	Temperatury, obciążenie i wentylatory obejmują ten sam okres co FPS: od pierwszej klatki, podczas rysowania.
+17f1a7c2	Powrót do poprzedniej wersji ({0}).\n\nUżyta zostanie kopia zachowana przed aktualizacją (nic nie jest pobierane). Aplikacja raz się zamknie, wentylatory przez kilka sekund pracują według BIOS, potem aplikacja uruchomi się ponownie. Ustawienia wrócą do stanu sprzed aktualizacji. Obecne ustawienia zostaną zachowane w folderze backups; można je odtworzyć z kopii „Przed przywróceniem” w Ustawienia → „Bezpieczeństwo i kopie zapasowe”. Logi i zapisy pozostają.\n\nPrzywrócić?
+ff6a2182	Przywrócić poprzednią wersję {0} Zeph-Iris? (obecna wersja {1})\n\nDziałający Zeph-Iris zostanie zamknięty (wentylatory wrócą do BIOS), poprzedni plik exe i ustawienia sprzed aktualizacji zostaną przywrócone, a program uruchomi się ponownie. Najpierw obecne ustawienia zostaną zachowane w folderze backups (do odtworzenia w Ustawienia → „Bezpieczeństwo i kopie zapasowe”).

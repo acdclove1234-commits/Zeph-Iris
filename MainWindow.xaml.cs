@@ -369,17 +369,10 @@ public partial class MainWindow : Window
         UpdateDriverStatus(catalog); // PawnIO がなければ、インストールの案内を出す（MainWindow.Setup.cs）
     }
 
-    /// <summary>更新の見守りに「制御を始めた」と知らせた（1 回だけ）</summary>
-    private static bool _updateMarked;
-
     public void OnSnapshot(EngineSnapshot s)
     {
         _lastSnapshot = s;
-        if (!_updateMarked && s.Health == EngineHealth.Ok)
-        {
-            _updateMarked = true;
-            App.MarkUpdateStarted();
-        }
+        App.OnSnapshotForUpdate();   // 更新した版が続けて制御していたら、更新の見守りに知らせる
 
         foreach (var card in _tempCards)
         {

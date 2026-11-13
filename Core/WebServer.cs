@@ -85,7 +85,14 @@ public sealed class WebServer : IDisposable
                 Write(ctx, 404, "text/plain", "not found");
                 return;
             }
-            var client = req.RemoteEndPoint?.Address ?? IPAddress.None;
+            // ページそのもの（データを含まない画面の枠）は、鍵なしで返す。鍵はページの中のスクリプトが API に付けて送る。
+            // ページは「?k=鍵」で開かれたら鍵をブラウザーに覚えて、アドレス欄から鍵を消す（履歴・画面共有で鍵が見えないように）
+            if (path == "/" && req.HttpMethod == "GET")
+            {
+                Write(ctx, 200, "text/html", WebPage.Html);
+                return;
+            }
+            var client = FailureKey(req.RemoteEndPoint?.Address ?? IPAddress.None);
             if (TooManyFailures(client))
             {
                 Write(ctx, 429, "text/plain", L("鍵の間違いが続いたため、しばらく受け付けません。1 分ほど待ってください。"));
@@ -139,17 +146,45 @@ public sealed class WebServer : IDisposable
         }
     }
 
-    private void RecordFailure(IPAddress client)
+    /// <summary>覚えておく端末の数の上限</summary>
+    internal const int MaxTrackedClients = 256;
+
+    private void RecordFailure(IPAddress client) => RecordFailure(_failures, _failGate, client, DateTime.Now);
+
+    /// <summary>
+    /// 鍵の間違いを記録する。表がいっぱいなら、1 分より前の記録を消し、まだいっぱいなら、間違いのいちばん少ない端末だけを消す
+    /// （全部は消さない。たくさんのアドレスから試して、締め出しを解かれないように）
+    /// </summary>
+    internal static void RecordFailure(Dictionary<IPAddress, Queue<DateTime>> failures, object gate, IPAddress client, DateTime now)
     {
-        lock (_failGate)
+        lock (gate)
         {
-            if (!_failures.TryGetValue(client, out var q))
+            if (!failures.TryGetValue(client, out var q))
             {
-                if (_failures.Count > 256) _failures.Clear(); // 記録が増えすぎないように
-                _failures[client] = q = new Queue<DateTime>();
+                if (failures.Count >= MaxTrackedClients)
+                {
+                    foreach (var old in failures.Where(e => e.Value.Count == 0 || now - e.Value.Last() > TimeSpan.FromMinutes(1)).Select(e => e.Key).ToList())
+                        failures.Remove(old);
+                    // まだいっぱいなら、間違いがいちばん少ない（締め出す手前から遠い）端末を消す。締め出し中の端末は最後まで残す
+                    if (failures.Count >= MaxTrackedClients)
+                        failures.Remove(failures.OrderBy(e => e.Value.Count).ThenBy(e => e.Value.Last()).First().Key);
+                }
+                failures[client] = q = new Queue<DateTime>();
             }
-            q.Enqueue(DateTime.Now);
+            q.Enqueue(now);
         }
+    }
+
+    /// <summary>
+    /// 間違いを数える単位: アドレスごと（IPv4 に包まれた IPv6 は IPv4 として、IPv6 はスコープの番号を除いて）。
+    /// LAN の中では、IPv6 の前半 64 ビットは家じゅうの機器で同じなので、そこでまとめると、ほかの機器の失敗で締め出されてしまう。
+    /// 鍵は 128 ビットの乱数なので、アドレスを変えながら試されても当たらない（表の大きさは MaxTrackedClients まで）
+    /// </summary>
+    internal static IPAddress FailureKey(IPAddress address)
+    {
+        if (address.IsIPv4MappedToIPv6) return address.MapToIPv4();
+        if (address.AddressFamily != AddressFamily.InterNetworkV6) return address;
+        return new IPAddress(address.GetAddressBytes());   // スコープの番号（%12 など）を落とす
     }
 
     /// <summary>プライベートアドレス（10.x・172.16〜31.x・192.168.x・169.254.x・IPv6 のローカル）か、この PC 自身か</summary>
@@ -315,13 +350,24 @@ button.accent{background:linear-gradient(135deg,var(--a1),var(--a2));border:0;fo
   </div>
 </div>
 <script>
-const k=new URLSearchParams(location.search).get('k')||'';
+// 「?k=鍵」で開かれたら、アドレス欄から鍵を消す（履歴・ブックマーク・画面共有に鍵を残さない）。
+// 鍵をこのブラウザーに覚えるのは、PC が正しい鍵だと答えてから（古いリンクで、覚えている正しい鍵を上書きしないように）
+const urlKey=new URLSearchParams(location.search).get('k')||'';
+let saved='';try{saved=localStorage.getItem('zk')||'';}catch(e){}
+let k=urlKey||saved;
+if(urlKey){try{history.replaceState(null,'','/');}catch(e){}}
+let stopped=false;
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const color=(v,w,d)=>v==null?'var(--sub)':v>=d?'var(--danger)':v>=w?'var(--warn)':'var(--ok)';
 async function act(a){await fetch('/api/action',{method:'POST',body:a,headers:{'X-Key':k}});load();}
 async function load(){
+  if(stopped)return;
   try{
-    const s=await (await fetch('/api/status',{headers:{'X-Key':k}})).json();
+    const r=await fetch('/api/status',{headers:{'X-Key':k}});
+    if(r.status===401&&k===urlKey&&saved&&saved!==urlKey){k=saved;return load();}   // 古いリンクの鍵 → 覚えている鍵で試す
+    if(r.status===401||r.status===429){stopped=true;document.getElementById('time').textContent=await r.text();return;}   // PC の言語の案内
+    if(r.ok&&urlKey&&k===urlKey&&saved!==urlKey){try{localStorage.setItem('zk',k);saved=k;}catch(e){}}
+    const s=await r.json();
     document.getElementById('time').textContent=s.time+' 更新 ・ '+s.state;
     const b=document.getElementById('banner');b.style.display=s.quick?'block':'none';b.textContent=s.quick||'';
     document.getElementById('temps').innerHTML=s.temps.map(t=>`<div class="card"><div class="sub">${esc(t.title)}</div><span class="big" style="color:${color(t.value,t.warn,t.danger)}">${t.value==null?'--':Math.round(t.value)}</span><span class="unit">°C</span></div>`).join('');

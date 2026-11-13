@@ -66,7 +66,8 @@ internal static class Program
             if (g >= 0)
             {
                 if (g + 1 >= args.Length || !Directory.Exists(args[g + 1])) return 2;
-                return UpdateRecovery.RunGuard(args[g + 1], Logger.Info, Tell);
+                string guardDir = args[g + 1];
+                return UpdateRecovery.RunGuard(guardDir, Logger.Info, Tell, () => Watchdog.ApplySafeDutiesNow(guardDir));
             }
             // 手で戻す: この exe は アプリのフォルダー\previous にあるはず
             string appDir = Path.GetDirectoryName(AppContext.BaseDirectory.TrimEnd(Path.DirectorySeparatorChar))!;
@@ -78,9 +79,9 @@ internal static class Program
             string previous = UpdateRecovery.BackupVersion(appDir)?.ToString(3) ?? "?";
             string now = InstallCheck.FileVersion(UpdateRecovery.AppExe(appDir))?.ToString(3) ?? "?";
             if (!args.Contains("--yes", StringComparer.OrdinalIgnoreCase) &&
-                !NativeMessageBox.AskYesNo(L($"Zeph-Iris を前の版 {previous} に戻しますか？（いまの版 {now}）\n\n動いている Zeph-Iris を終了し（ファンは BIOS の設定に戻ります）、前の版の exe と、更新する前の設定に戻してから起動します。"), caption))
+                !NativeMessageBox.AskYesNo(L($"Zeph-Iris を前の版 {previous} に戻しますか？（いまの版 {now}）\n\n動いている Zeph-Iris を終了し（ファンは BIOS の設定に戻ります）、前の版の exe と、更新する前の設定に戻してから起動します。いまの設定は、戻す前に backups フォルダーに取っておきます（設定 →「安全・バックアップ」から戻せます）。"), caption))
                 return 0;
-            return UpdateRecovery.RestoreAndStart(appDir, L("手で前の版に戻しました。"), Logger.Info, Tell);
+            return UpdateRecovery.RestoreAndStart(appDir, L("手で前の版に戻しました。"), Logger.Info, Tell, manual: true, applySafe: () => Watchdog.ApplySafeDutiesNow(appDir));
         }
         catch (Exception ex)
         {
