@@ -325,7 +325,7 @@ b0ba1b8f	Azul
 4cba9eab	Ajustes por zona (conector)
 d64827fc	Cambia el efecto, la dirección y el tono de cada conector de la placa base según lo que tenga conectado (ventiladores, fuente, bloque de refrigeración líquida, etc.). «Igual que el dispositivo» mantiene los ajustes de arriba. Lo que va encadenado en un mismo conector forma una zona
 41860c08	Cambia el efecto de sincronización musical solo para esta zona (p. ej. vúmetro para los ventiladores del radiador, color al ritmo para la fuente)
-2c70dff2	Con el efecto «Cada pieza en su papel», a qué sonido reacciona esta zona. «Según la pieza»: ventiladores graves, tarjeta gráfica medios, memoria y teclado agudos
+1642d09b	Con el efecto «Cada pieza en su papel», a qué sonido reacciona esta zona. «Según la pieza»: ventiladores graves, tarjeta gráfica medios, memoria y teclado agudos. Si varias zonas del mismo dispositivo quedan con el mismo sonido (como los conectores de ventilador), se les asignan graves, medios y agudos por turno
 ed5a9363	Dirección
 3d275c1f	Consejo: en los conectores ARGB de la placa base sin nada conectado, pon el número de LED en 0 en OpenRGB desde Devices → (placa base) → «Edit Device». Se envían menos datos y el movimiento es más fluido. Espejo e Invertir afectan a los efectos que usan el orden de los LED (espectro, vúmetro, etc.).
 6a1f71f3	Disposición en la caja
@@ -1065,7 +1065,7 @@ a8728d89	Onda que fluye
 5c1949b1	Destellos
 6ddfa1c0	Con el bombo todo brilla suavemente, con la caja una luz concentrada y con el charles destellan puntos blancos
 fa793be1	Cada pieza en su papel
-07493f35	Cada pieza se ilumina con su propio sonido: los ventiladores con los graves, la tarjeta gráfica con los medios y la memoria con los agudos (se cambia en el ajuste de zona «Sonido al que reaccionar»)
+2683fb56	Cada pieza se ilumina con su propio sonido: los ventiladores con los graves, la tarjeta gráfica con los medios y la memoria con los agudos. Si hay varios conectores de ventilador, se reparten entre graves, medios y agudos (se cambia en el ajuste de zona «Sonido al que reaccionar»)
 74a4376d	Seguir el tempo
 934997b6	Una banda de luz corre al ritmo
 5d88da90	Ambiente

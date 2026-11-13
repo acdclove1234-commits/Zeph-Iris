@@ -325,7 +325,7 @@ b0ba1b8f	Xanh dương
 4cba9eab	Cài đặt theo vùng (cổng)
 d64827fc	Có thể đổi hiệu ứng, hướng và tông màu theo từng cổng trên bo mạch chủ cho phù hợp với thứ được cắm (quạt, nguồn, đầu tản nước…). "Giống thiết bị" thì giữ cài đặt ở trên. Những thứ nối tiếp trên cùng một cổng là một vùng
 41860c08	Chỉ đổi hiệu ứng đồng bộ nhạc cho vùng này (VD: quạt két tản nhiệt dùng thanh âm lượng, nguồn dùng đổi màu theo nhịp)
-2c70dff2	Khi hiệu ứng là "Mỗi linh kiện một vai", vùng này sáng theo âm nào. "Theo linh kiện" thì quạt theo âm trầm, card đồ họa theo âm trung, RAM và bàn phím theo âm cao
+1642d09b	Khi hiệu ứng là "Mỗi linh kiện một vai", vùng này sáng theo âm nào. "Theo linh kiện" thì quạt theo âm trầm, card đồ họa theo âm trung, RAM và bàn phím theo âm cao. Nếu nhiều vùng của cùng một thiết bị có cùng một âm (như các cổng quạt), chúng lần lượt được gán âm trầm, âm trung và âm cao
 ed5a9363	Hướng
 3d275c1f	Mẹo: với cổng ARGB trên bo mạch chủ không cắm gì, hãy đặt số LED về 0 trong OpenRGB tại Devices → (bo mạch chủ) → "Edit Device" để giảm dữ liệu gửi đi và chuyển động mượt hơn. Đối xứng và Đảo ngược có tác dụng với các hiệu ứng dùng thứ tự LED (phổ âm, thanh âm lượng…).
 6a1f71f3	Bố trí trong thùng máy
@@ -1065,7 +1065,7 @@ a8728d89	Sóng chảy
 5c1949b1	Lấp lánh
 6ddfa1c0	Trống kick làm toàn bộ sáng dịu, trống snare cho chùm sáng gọn, hi-hat làm các hạt trắng lấp lánh
 fa793be1	Mỗi linh kiện một vai
-07493f35	Mỗi linh kiện sáng theo âm riêng, như quạt theo âm trầm, card đồ họa theo âm trung, RAM theo âm cao (đổi trong cài đặt vùng "Âm thanh để phản ứng")
+2683fb56	Mỗi linh kiện sáng theo âm riêng, như quạt theo âm trầm, card đồ họa theo âm trung, RAM theo âm cao. Nếu có nhiều cổng quạt, chúng được chia cho âm trầm, trung và cao (đổi trong cài đặt vùng "Âm thanh để phản ứng")
 74a4376d	Theo tempo
 934997b6	Dải sáng chạy theo nhịp
 5d88da90	Tâm trạng

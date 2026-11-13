@@ -325,7 +325,7 @@ b0ba1b8f	Blauw
 4cba9eab	Instellingen per zone (aansluiting)
 d64827fc	Wijzig per moederbordaansluiting effect, richting en tint passend bij wat er aangesloten is (ventilatoren, voeding, waterkoelingskop enz.). "Zelfde als apparaat" houdt de instellingen hierboven. Wat aan dezelfde aansluiting is doorgelust, vormt één zone
 41860c08	Wijzigt het muziekeffect alleen voor deze zone (bijv. niveaumeter voor de radiatorventilatoren, kleur op de maat voor de voeding)
-2c70dff2	Bij het effect "Elk onderdeel zijn rol": op welk geluid deze zone oplicht. "Passend bij het onderdeel": ventilatoren laag, videokaart midden, geheugen en toetsenbord hoog
+1642d09b	Bij het effect "Elk onderdeel zijn rol": op welk geluid deze zone oplicht. "Passend bij het onderdeel": ventilatoren laag, videokaart midden, geheugen en toetsenbord hoog. Krijgen meerdere zones van hetzelfde apparaat hetzelfde geluid (zoals ventilatoraansluitingen), dan krijgen ze om de beurt laag, midden en hoog
 ed5a9363	Richting
 3d275c1f	Tip: zet voor ARGB-aansluitingen op het moederbord waar niets op zit het aantal leds op 0 in OpenRGB via Devices → (moederbord) → "Edit Device". Er wordt dan minder data verstuurd en de beweging wordt vloeiender. Spiegelen en Omkeren werken bij effecten die de ledvolgorde gebruiken (spectrum, niveaumeter enz.).
 6a1f71f3	Indeling in de kast
@@ -1065,7 +1065,7 @@ a8728d89	Stromende golf
 5c1949b1	Fonkeling
 6ddfa1c0	Bij de kick gloeit alles zacht, bij de snare een gebundelde lichtflits, bij de hi-hat fonkelen witte puntjes
 fa793be1	Elk onderdeel zijn rol
-07493f35	Elk onderdeel licht op bij zijn eigen geluid, zoals ventilatoren bij de bas, de videokaart bij de middentonen en het geheugen bij de hoge tonen (te wijzigen in de zone-instelling "Geluid om op te reageren")
+2683fb56	Elk onderdeel licht op bij zijn eigen geluid, zoals ventilatoren bij de bas, de videokaart bij de middentonen en het geheugen bij de hoge tonen. Meerdere ventilatoraansluitingen worden verdeeld over laag, midden en hoog (te wijzigen in de zone-instelling "Geluid om op te reageren")
 74a4376d	Tempo volgen
 934997b6	Een lichtband loopt mee op de beat
 5d88da90	Sfeer

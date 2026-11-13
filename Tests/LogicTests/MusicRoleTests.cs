@@ -94,6 +94,67 @@ public static class MusicRoleTests
         T.Check(r.Avg(9, 8) < 0.1f && r.Avg(1, 8) < 0.1f, "both fade out when quiet");
     }
 
+    public static void TestRoleSpread()
+    {
+        var B = MusicRole.Bass; var M = MusicRole.Mid; var Tr = MusicRole.Treble; var A = MusicRole.All;
+        bool[] Auto(int n) => Enumerable.Repeat(true, n).ToArray();
+        string Show(MusicRole[] r) => string.Join(",", r);
+        // 12V の端子（LED 1 個）・ARGB の端子 3 つ・PCB。端子は全部低音になるので、ARGB の端子から低音・中音・高音に振り分ける
+        var r1 = MusicSounds.Spread(new[] { B, B, B, B, M }, Auto(5), new[] { 1, 8, 8, 8, 9 });
+        T.Check(r1.SequenceEqual(new[] { B, B, M, Tr, M }), $"three fan headers → bass / mid / treble, the 1-LED header goes last, the single PCB zone stays mid ({Show(r1)})");
+        // 自分で選んだゾーン（端子 2 = 高音）はそのまま。残りの端子だけで振り分ける
+        var r2 = MusicSounds.Spread(new[] { B, B, Tr, B, M }, new[] { true, true, false, true, true }, new[] { 1, 8, 8, 8, 9 });
+        T.Check(r2.SequenceEqual(new[] { Tr, B, Tr, M, M }), $"a zone with a chosen sound is kept, the others are spread ({Show(r2)})");
+        // 自分で選んで全部低音にしたら、変えない
+        var r3 = MusicSounds.Spread(new[] { B, B, B }, new bool[3], new[] { 8, 8, 8 });
+        T.Check(r3.All(x => x == B), $"zones the user set to bass all stay bass ({Show(r3)})");
+        // 音が重ならなければ変えない
+        var r4 = MusicSounds.Spread(new[] { B, M, Tr, A }, Auto(4), new[] { 8, 8, 8, 8 });
+        T.Check(r4.SequenceEqual(new[] { B, M, Tr, A }), $"no two zones share a sound → unchanged ({Show(r4)})");
+        // グラボのゾーン 2 つ（中音から）、テープ 2 本（音全体 → 低音から）
+        var r5 = MusicSounds.Spread(new[] { M, M }, Auto(2), new[] { 6, 6 });
+        var r6 = MusicSounds.Spread(new[] { A, A }, Auto(2), new[] { 30, 30 });
+        T.Check(r5.SequenceEqual(new[] { M, Tr }) && r6.SequenceEqual(new[] { B, M }), $"spread starts from the part's own sound ({Show(r5)} / {Show(r6)})");
+
+        // ほかのメーカーのマザーボードの端子の名前も、ファン（低音）とみなす
+        var board = Board();
+        foreach (var name in new[] { "Aura Addressable 1", "JRAINBOW1", "D_LED1 Bottom", "ARGB Header 2" })
+            T.Check(MusicSounds.Resolve(null, board, name, null) == MusicRole.Bass, $"motherboard zone \"{name}\" → bass");
+        T.Check(MusicSounds.Resolve(null, board, "Aura Mainboard", null) == MusicRole.Mid, "motherboard body lighting → mid");
+    }
+
+    /// <summary>端子 3 つとも「パーツに合わせる」のマザーボードで、ハイハット・スネア・キックがそれぞれ別の端子を光らせ、色も別になる</summary>
+    public static void TestRoleHeadersReactToDifferentSounds()
+    {
+        var m = ResolvedMusic.Default with { Effect = MusicStyles.Role, Palette = Palettes.Neon, MinBrightness = 0, TempoMode = TempoModes.Off };
+        var r = new Run(Board(), m, new RgbDeviceSettings { Name = "ASRock B860" });
+        // LED: 0 = 12V の端子、1〜8 = 端子 1、9〜16 = 端子 2、17〜24 = 端子 3、25〜33 = PCB
+        r.Step(1.0);
+        r.Step(2.5);
+        float h1 = r.Avg(1, 8), h2 = r.Avg(9, 8), h3 = r.Avg(17, 8);
+        var c1 = r.R.LastLight[1]; var c2 = r.R.LastLight[9]; var c3 = r.R.LastLight[17];
+        static float Diff(LinColor a, LinColor b)
+        {
+            float ma = Math.Max(a.MaxChannel, 1e-6f), mb = Math.Max(b.MaxChannel, 1e-6f);
+            return Math.Abs(a.R / ma - b.R / mb) + Math.Abs(a.G / ma - b.G / mb) + Math.Abs(a.B / ma - b.B / mb);
+        }
+        T.Check(Diff(c1, c2) > 0.3f && Diff(c2, c3) > 0.3f && Diff(c1, c3) > 0.3f,
+            $"the three headers have different colours ({c1} / {c2} / {c3})");
+        r.Step(2.51, new AudioEvent(1, AudioEventKind.Hat, 2.51, 2f));
+        float h1H = r.Avg(1, 8), h3H = r.Avg(17, 8);
+        T.Check(h3H > h3 + 0.3f && h1H < h1 + 0.05f, $"hi-hat lights header 3 (treble) only ({h3:F2} → {h3H:F2}, header 1 {h1:F2} → {h1H:F2})");
+        r.Step(4.0);
+        h1 = r.Avg(1, 8); h2 = r.Avg(9, 8);
+        r.Step(4.01, new AudioEvent(2, AudioEventKind.Snare, 4.01, 2f));
+        float h1S = r.Avg(1, 8), h2S = r.Avg(9, 8);
+        T.Check(h2S > h2 + 0.3f && h1S < h1 + 0.05f, $"snare lights header 2 (mid), not header 1 ({h2:F2} → {h2S:F2}, header 1 {h1:F2} → {h1S:F2})");
+        r.Step(5.5);
+        h1 = r.Avg(1, 8); h2 = r.Avg(9, 8);
+        r.Step(5.51, new AudioEvent(3, AudioEventKind.Kick, 5.51, 2f));
+        float h1K = r.Avg(1, 8), h2K = r.Avg(9, 8);
+        T.Check(h1K - h1 > 1.4f * (h2K - h2) && h1K > h1 + 0.3f, $"kick lights header 1 (bass) the most ({h1:F2} → {h1K:F2}, header 2 {h2:F2} → {h2K:F2})");
+    }
+
     public static void TestSolidPalette()
     {
         var p = ColorPalette.Get(Palettes.Solid, "#FF0000");

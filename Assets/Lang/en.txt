@@ -325,7 +325,7 @@ b0ba1b8f	Blue
 4cba9eab	Per-zone (header) settings
 d64827fc	Change the effect, direction and tint for each motherboard header to suit what is connected (fans, PSU, the water-cooling head and so on). "Same as device" keeps the settings above. Things daisy-chained on the same header form one zone
 41860c08	Changes the music sync effect for this zone only (e.g. a level meter for the radiator fans, beat-color for the PSU)
-2c70dff2	With the "Parts play their roles" effect, which sound this zone lights up to. "Match the part": fans bass, graphics card mids, memory and keyboard treble
+1642d09b	With the "Parts play their roles" effect, which sound this zone lights up to. "Match the part": fans bass, graphics card mids, memory and keyboard treble. If several zones of the same device get the same sound (such as fan headers), they are given bass, mids and treble in turn
 ed5a9363	Direction
 3d275c1f	Tip: for motherboard ARGB headers with nothing connected, set the LED count to 0 in OpenRGB under Devices → (motherboard) → "Edit Device". Less data is sent and motion gets smoother. Mirror and Reverse affect effects that use the LED order (spectrum, level meter and so on).
 6a1f71f3	Layout in the case
@@ -1065,7 +1065,7 @@ a8728d89	Flowing wave
 5c1949b1	Sparkle
 6ddfa1c0	Kicks make everything glow softly, snares give a burst of light, and hi-hats make white specks sparkle
 fa793be1	Parts play their roles
-07493f35	Each part lights up to its own sound, such as fans to the bass, the graphics card to the mids and memory to the highs (change it with the zone setting "Sound to react to")
+2683fb56	Each part lights up to its own sound, such as fans to the bass, the graphics card to the mids and memory to the highs. Several fan headers are split between bass, mids and highs (change it with the zone setting "Sound to react to")
 74a4376d	Tempo follow
 934997b6	A band of light runs to the beat
 5d88da90	Mood

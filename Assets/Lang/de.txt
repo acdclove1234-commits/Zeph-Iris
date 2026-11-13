@@ -325,7 +325,7 @@ b0ba1b8f	Blau
 4cba9eab	Einstellungen pro Zone (Anschluss)
 d64827fc	Ändern Sie Effekt, Richtung und Farbton für jeden Mainboard-Anschluss passend zum Angeschlossenen (Lüfter, Netzteil, Wasserkühlungskopf usw.). „Wie Gerät“ behält die Einstellungen oben. Was am selben Anschluss in Reihe hängt, ist eine Zone
 41860c08	Ändert den Musikeffekt nur für diese Zone (z. B. Pegelanzeige für die Radiatorlüfter, Farbwechsel im Takt für das Netzteil)
-2c70dff2	Beim Effekt „Bauteile in ihren Rollen“: auf welchen Ton diese Zone reagiert. „Zum Bauteil passend“: Lüfter Bass, Grafikkarte Mitten, Arbeitsspeicher und Tastatur Höhen
+1642d09b	Beim Effekt „Bauteile in ihren Rollen“: auf welchen Ton diese Zone reagiert. „Zum Bauteil passend“: Lüfter Bass, Grafikkarte Mitten, Arbeitsspeicher und Tastatur Höhen. Bekommen mehrere Zonen desselben Geräts denselben Ton (etwa Lüfteranschlüsse), werden ihnen der Reihe nach Bass, Mitten und Höhen zugeteilt
 ed5a9363	Richtung
 3d275c1f	Tipp: Für ARGB-Anschlüsse des Mainboards ohne angeschlossenes Gerät in OpenRGB unter Devices → (Mainboard) → „Edit Device“ die LED-Anzahl auf 0 setzen. So werden weniger Daten gesendet und Bewegungen werden flüssiger. Spiegeln und Umkehren wirken bei Effekten, die die LED-Reihenfolge nutzen (Spektrum, Pegelanzeige usw.).
 6a1f71f3	Anordnung im Gehäuse
@@ -1065,7 +1065,7 @@ a8728d89	Fließende Welle
 5c1949b1	Funkeln
 6ddfa1c0	Bei Kicks leuchtet alles sanft, bei Snares gebündeltes Licht, bei Hi-Hats funkeln weiße Punkte
 fa793be1	Bauteile in ihren Rollen
-07493f35	Jedes Bauteil leuchtet zu seinem eigenen Klang, etwa Lüfter zum Bass, Grafikkarte zu den Mitten und Arbeitsspeicher zu den Höhen (änderbar in der Zoneneinstellung „Ton, auf den reagiert wird“)
+2683fb56	Jedes Bauteil leuchtet zu seinem eigenen Klang, etwa Lüfter zum Bass, Grafikkarte zu den Mitten und Arbeitsspeicher zu den Höhen. Mehrere Lüfteranschlüsse werden auf Bass, Mitten und Höhen verteilt (änderbar in der Zoneneinstellung „Ton, auf den reagiert wird“)
 74a4376d	Tempo folgen
 934997b6	Ein Lichtband läuft im Takt
 5d88da90	Stimmung

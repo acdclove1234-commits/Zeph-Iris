@@ -325,7 +325,7 @@ b0ba1b8f	Bleu
 4cba9eab	Réglages par zone (connecteur)
 d64827fc	Changez l'effet, le sens et la teinte pour chaque connecteur de la carte mère selon ce qui y est branché (ventilateurs, alimentation, tête de watercooling, etc.). « Comme l'appareil » garde les réglages ci-dessus. Les éléments chaînés sur un même connecteur forment une zone
 41860c08	Change l'effet de synchro musicale pour cette zone seulement (ex. : vumètre pour les ventilateurs du radiateur, couleur au rythme pour l'alimentation)
-2c70dff2	Avec l'effet « Rôles des composants », le son auquel réagit cette zone. « Selon le composant » : ventilateurs graves, carte graphique médiums, mémoire et clavier aigus
+1642d09b	Avec l'effet « Rôles des composants », le son auquel réagit cette zone. « Selon le composant » : ventilateurs graves, carte graphique médiums, mémoire et clavier aigus. Si plusieurs zones d'un même appareil obtiennent le même son (comme les connecteurs de ventilateur), elles reçoivent tour à tour graves, médiums et aigus
 ed5a9363	Sens
 3d275c1f	Astuce : pour les connecteurs ARGB de la carte mère sans rien de branché, mettez le nombre de LED à 0 dans OpenRGB via Devices → (carte mère) → « Edit Device ». Moins de données sont envoyées et les mouvements sont plus fluides. Miroir et Inverser agissent sur les effets qui utilisent l'ordre des LED (spectre, vumètre, etc.).
 6a1f71f3	Disposition dans le boîtier
@@ -1065,7 +1065,7 @@ a8728d89	Vague qui défile
 5c1949b1	Scintillement
 6ddfa1c0	Avec la grosse caisse tout s'éclaire doucement, avec la caisse claire une lumière concentrée, avec le charleston des points blancs scintillent
 fa793be1	Rôles des composants
-07493f35	Chaque composant s'allume selon son propre son, par exemple les ventilateurs sur les basses, la carte graphique sur les médiums et la mémoire sur les aigus (modifiable dans le réglage de zone « Son à suivre »)
+2683fb56	Chaque composant s'allume selon son propre son, par exemple les ventilateurs sur les basses, la carte graphique sur les médiums et la mémoire sur les aigus. Plusieurs connecteurs de ventilateur se répartissent entre basses, médiums et aigus (modifiable dans le réglage de zone « Son à suivre »)
 74a4376d	Suivi du tempo
 934997b6	Une bande de lumière court au rythme
 5d88da90	Ambiance

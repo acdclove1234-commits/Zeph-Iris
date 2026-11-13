@@ -2395,7 +2395,7 @@
                                                                                 <TextBlock Text="反応する音" Style="{StaticResource Label}" FontSize="13" Margin="0,0,8,0"/>
                                                                                 <ComboBox Width="190" ItemsSource="{Binding SoundOptions}" DisplayMemberPath="Label" SelectedValuePath="Id"
                                                                                           SelectedValue="{Binding SoundId}"
-                                                                                          ToolTip="光り方「パーツごとの役割」のとき、このゾーンがどの音で光るか。「パーツに合わせる」なら、ファンは低音・グラボは中音・メモリやキーボードは高音"/>
+                                                                                          ToolTip="光り方「パーツごとの役割」のとき、このゾーンがどの音で光るか。「パーツに合わせる」なら、ファンは低音・グラボは中音・メモリやキーボードは高音。同じデバイスで同じ音になるゾーンがいくつもあれば（ファンの端子など）、低音・中音・高音に順に分けます"/>
                                                                             </StackPanel>
                                                                             <StackPanel Orientation="Horizontal" Margin="0,0,18,4">
                                                                                 <TextBlock Text="左右対称" Style="{StaticResource Label}" FontSize="13" Margin="0,0,8,0"/>

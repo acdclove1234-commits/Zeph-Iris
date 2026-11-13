@@ -325,7 +325,7 @@ b0ba1b8f	Niebieski
 4cba9eab	Ustawienia stref (złączy)
 d64827fc	Dla każdego złącza płyty głównej możesz zmienić efekt, kierunek i odcień zależnie od podłączonego sprzętu (wentylatory, zasilacz, głowica chłodzenia wodnego itp.). „Jak urządzenie” zachowuje ustawienia powyżej. Elementy połączone szeregowo do jednego złącza tworzą jedną strefę
 41860c08	Zmienia efekt synchronizacji z muzyką tylko dla tej strefy (np. wskaźnik głośności dla wentylatorów chłodnicy, kolor w rytm dla zasilacza)
-2c70dff2	Przy efekcie „Każda część w swojej roli”: na jaki dźwięk reaguje ta strefa. „Zgodnie z częścią”: wentylatory basy, karta graficzna środek, pamięć i klawiatura soprany
+1642d09b	Przy efekcie „Każda część w swojej roli”: na jaki dźwięk reaguje ta strefa. „Zgodnie z częścią”: wentylatory basy, karta graficzna środek, pamięć i klawiatura soprany. Jeśli kilka stref tego samego urządzenia dostaje ten sam dźwięk (np. złącza wentylatorów), przydziela się im kolejno basy, środek i soprany
 ed5a9363	Kierunek
 3d275c1f	Wskazówka: dla złączy ARGB płyty głównej, do których nic nie jest podłączone, ustaw w OpenRGB liczbę LED-ów na 0 (Devices → (płyta główna) → „Edit Device”). Wysyłanych jest mniej danych, a ruch staje się płynniejszy. Lustro i Odwróć działają przy efektach korzystających z kolejności LED-ów (spektrum, wskaźnik głośności itp.).
 6a1f71f3	Rozmieszczenie w obudowie
@@ -1065,7 +1065,7 @@ a8728d89	Płynąca fala
 5c1949b1	Iskrzenie
 6ddfa1c0	Przy stopie wszystko łagodnie świeci, przy werblu skupiony błysk, przy hi-hacie iskrzą białe punkty
 fa793be1	Każda część w swojej roli
-07493f35	Każda część świeci w rytm własnego dźwięku, np. wentylatory do basów, karta graficzna do średnich, pamięć do wysokich (zmienisz to w ustawieniu strefy „Dźwięk, na który reagować”)
+2683fb56	Każda część świeci w rytm własnego dźwięku, np. wentylatory do basów, karta graficzna do średnich, pamięć do wysokich. Kilka złączy wentylatorów dzieli się na basy, średnie i wysokie (zmienisz to w ustawieniu strefy „Dźwięk, na który reagować”)
 74a4376d	Podążanie za tempem
 934997b6	Pasmo światła biegnie w rytm
 5d88da90	Nastrój

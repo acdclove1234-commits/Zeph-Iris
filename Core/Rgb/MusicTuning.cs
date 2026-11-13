@@ -335,7 +335,7 @@ public static class MusicTuning
         MusicStyles.Scroll => (L("流れる波"), L("今の音の色が端から流れていく（ウォーターフォール）")),
         MusicStyles.Ripple => (L("波紋"), L("キックのたびに光の輪が広がる")),
         MusicStyles.Sparkle => (L("きらめき"), L("キックで全体がふわっと、スネアでまとまった光、ハイハットで白い粒が光る")),
-        MusicStyles.Role => (L("パーツごとの役割"), L("ファンは低音、グラボは中音、メモリは高音のように、パーツごとに決まった音で光る（ゾーンの設定「反応する音」で変えられる）")),
+        MusicStyles.Role => (L("パーツごとの役割"), L("ファンは低音、グラボは中音、メモリは高音のように、パーツごとに決まった音で光る。ファンの端子がいくつもあれば、低音・中音・高音に分ける（ゾーンの設定「反応する音」で変えられる）")),
         MusicStyles.Chase => (L("テンポ追従"), L("ビートに合わせて光の帯が走る")),
         MusicStyles.Mood => (L("ムード"), L("曲の雰囲気で色がゆっくり変わる（点滅しない）")),
         MusicStyles.Strobe => (L("ストロボ"), L("ビートで強く点滅する（「激しい点滅を抑える」をオフにしたときだけ）")),
@@ -359,7 +359,7 @@ public enum MusicRole : byte
 /// <summary>ゾーンの設定「反応する音」の値と、パーツに合わせた初期値</summary>
 public static class MusicSounds
 {
-    /// <summary>パーツに合わせて決める（ファンは低音、グラボは中音、メモリ・キーボードは高音 など）</summary>
+    /// <summary>パーツに合わせて決める（ファンは低音、グラボは中音、メモリ・キーボードは高音 など。同じデバイスで重なれば Spread で振り分ける）</summary>
     public const string Auto = "Auto";
     public const string Bass = "Bass";
     public const string Mid = "Mid";
@@ -406,9 +406,43 @@ public static class MusicSounds
             RgbDevice.TypeGpu => MusicRole.Mid,
             RgbDevice.TypeKeyboard or RgbDevice.TypeMouse or RgbDevice.TypeMousemat => MusicRole.Treble,
             RgbDevice.TypeCooler => MusicRole.Bass,
-            RgbDevice.TypeMotherboard => zoneName is not null && zoneName.Contains("Header", StringComparison.OrdinalIgnoreCase)
-                ? MusicRole.Bass : MusicRole.Mid,
+            RgbDevice.TypeMotherboard => IsHeader(zoneName) ? MusicRole.Bass : MusicRole.Mid,
             _ => MusicRole.All,
         };
+    }
+
+    /// <summary>
+    /// マザーボードのゾーンの名前が、ファンやテープをつなぐ端子か（OpenRGB での名前。ASRock「Addressable Header 1」・
+    /// ASUS「Aura Addressable 1」・MSI「JRAINBOW1」・Gigabyte「D_LED1」など）
+    /// </summary>
+    private static bool IsHeader(string? zoneName) =>
+        zoneName is not null && HeaderWords.Any(w => zoneName.Contains(w, StringComparison.OrdinalIgnoreCase));
+
+    private static readonly string[] HeaderWords = { "Header", "Addressable", "ARGB", "JRAINBOW", "JRGB", "D_LED" };
+
+    /// <summary>振り分けで割り当てる順</summary>
+    private static readonly MusicRole[] SpreadOrder = { MusicRole.Bass, MusicRole.Mid, MusicRole.Treble };
+
+    /// <summary>
+    /// 同じデバイスの中で「パーツに合わせる」のゾーンが 2 つ以上同じ音になったら、低音・中音・高音を順に割り当て直す
+    /// （ファンの端子が 3 つあるマザーボードで、全部が低音になって同じ色・同じ光り方にならないように）。
+    /// 順番は、もとの音から始めて、ゾーンの並び順（音全体は低音から）。LED が 1 個のゾーン（12V の RGB 端子など、
+    /// 何もつないでいないことが多い）は後に回す。「反応する音」を自分で選んだゾーンは変えない
+    /// </summary>
+    /// <param name="natural">ゾーンごとの、Resolve で決めた音</param>
+    /// <param name="auto">ゾーンの「反応する音」が「パーツに合わせる」か</param>
+    /// <param name="leds">ゾーンごとの LED の数</param>
+    public static MusicRole[] Spread(IReadOnlyList<MusicRole> natural, IReadOnlyList<bool> auto, IReadOnlyList<int> leds)
+    {
+        var roles = natural.ToArray();
+        foreach (var role in Enum.GetValues<MusicRole>())
+        {
+            var group = Enumerable.Range(0, roles.Length).Where(k => auto[k] && natural[k] == role)
+                .OrderBy(k => leds[k] <= 1 ? 1 : 0).ToList(); // OrderBy は並び順を保つ
+            if (group.Count < 2) continue;
+            int first = Math.Max(0, Array.IndexOf(SpreadOrder, role));
+            for (int i = 0; i < group.Count; i++) roles[group[i]] = SpreadOrder[(first + i) % SpreadOrder.Length];
+        }
+        return roles;
     }
 }

@@ -13,6 +13,12 @@ and Iris, the rainbow (the LEDs).
   for example: Settings [設定].
 
 
+■ What's new in v6.14.5
+  - Music sync, "Parts play their roles" [パーツごとの役割]: with several fan headers, every header used to get the bass
+    (and the same color). Zones of one device that get the same sound are now given bass, mids and treble in turn
+    (zones with a chosen "Sound to react to" [反応する音] are kept).
+  - ARGB headers on ASUS, MSI and Gigabyte motherboards are also treated as fans and start from the bass.
+
 ■ What's new in v6.14.4
   - Music sync: "Pulse" [パルス] now looks clearly different from "Beat color change" [ビートで色替え]: its color no longer
     switches on the beat but shifts slowly, and its afterglow lasts longer.

@@ -325,7 +325,7 @@ b0ba1b8f	Blu
 4cba9eab	Impostazioni per zona (connettore)
 d64827fc	Cambia effetto, direzione e tinta per ogni connettore della scheda madre in base a ciò che vi è collegato (ventole, alimentatore, testa del liquido ecc.). «Come il dispositivo» mantiene le impostazioni sopra. Ciò che è collegato in serie sullo stesso connettore forma una zona
 41860c08	Cambia l'effetto di sincronizzazione musicale solo per questa zona (es. VU meter per le ventole del radiatore, colore a tempo per l'alimentatore)
-2c70dff2	Con l'effetto «Ogni componente il suo ruolo», a quale suono reagisce questa zona. «In base al componente»: ventole i bassi, scheda video i medi, memoria e tastiera gli acuti
+1642d09b	Con l'effetto «Ogni componente il suo ruolo», a quale suono reagisce questa zona. «In base al componente»: ventole i bassi, scheda video i medi, memoria e tastiera gli acuti. Se più zone dello stesso dispositivo ricevono lo stesso suono (come i connettori delle ventole), vengono assegnati a turno bassi, medi e acuti
 ed5a9363	Direzione
 3d275c1f	Suggerimento: per i connettori ARGB della scheda madre senza nulla collegato, imposta a 0 il numero di LED in OpenRGB da Devices → (scheda madre) → «Edit Device». Si inviano meno dati e il movimento diventa più fluido. Specchio e Inverti agiscono sugli effetti che usano l'ordine dei LED (spettro, VU meter ecc.).
 6a1f71f3	Disposizione nel case
@@ -1065,7 +1065,7 @@ a8728d89	Onda che scorre
 5c1949b1	Scintillio
 6ddfa1c0	Con la cassa tutto si illumina dolcemente, con il rullante una luce concentrata, con l'hi-hat scintillano punti bianchi
 fa793be1	Ogni componente il suo ruolo
-07493f35	Ogni componente si illumina con il proprio suono, ad esempio le ventole con i bassi, la scheda video con i medi e la memoria con gli alti (modificabile nell'impostazione di zona «Suono da seguire»)
+2683fb56	Ogni componente si illumina con il proprio suono, ad esempio le ventole con i bassi, la scheda video con i medi e la memoria con gli alti. Più connettori delle ventole si dividono tra bassi, medi e alti (modificabile nell'impostazione di zona «Suono da seguire»)
 74a4376d	Segui il tempo
 934997b6	Una banda di luce corre a ritmo
 5d88da90	Atmosfera

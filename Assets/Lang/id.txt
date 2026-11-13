@@ -325,7 +325,7 @@ b0ba1b8f	Biru
 4cba9eab	Pengaturan per zona (konektor)
 d64827fc	Ubah efek, arah, dan rona tiap konektor motherboard sesuai yang tersambung (kipas, PSU, kepala water cooling, dll.). "Sama dengan perangkat" memakai pengaturan di atas. Yang dirangkai di konektor yang sama dihitung satu zona
 41860c08	Mengubah efek sinkron musik hanya untuk zona ini (mis. meter volume untuk kipas radiator, ganti warna per ketukan untuk PSU)
-2c70dff2	Pada efek "Setiap komponen dengan perannya", zona ini menyala mengikuti suara apa. "Sesuai komponen": kipas bas, kartu grafis nada tengah, memori dan keyboard treble
+1642d09b	Pada efek "Setiap komponen dengan perannya", zona ini menyala mengikuti suara apa. "Sesuai komponen": kipas bas, kartu grafis nada tengah, memori dan keyboard treble. Jika beberapa zona pada perangkat yang sama mendapat suara yang sama (misalnya header kipas), zona-zona itu diberi bas, nada tengah, dan treble secara bergiliran
 ed5a9363	Arah
 3d275c1f	Tips: untuk konektor ARGB motherboard yang tidak tersambung apa pun, setel jumlah LED ke 0 di OpenRGB pada Devices → (motherboard) → "Edit Device". Data yang dikirim berkurang dan gerakan jadi lebih halus. Cermin dan Balik berlaku pada efek yang memakai urutan LED (spektrum, meter volume, dll.).
 6a1f71f3	Tata letak di casing
@@ -1065,7 +1065,7 @@ a8728d89	Gelombang mengalir
 5c1949b1	Kilau
 6ddfa1c0	Pada kick semuanya menyala lembut, pada snare cahaya terkumpul, pada hi-hat butiran putih berkilau
 fa793be1	Setiap komponen dengan perannya
-07493f35	Setiap komponen menyala mengikuti suaranya sendiri, misalnya kipas pada nada rendah, kartu grafis pada nada tengah, dan memori pada nada tinggi (bisa diubah di pengaturan zona "Suara yang diikuti")
+2683fb56	Setiap komponen menyala mengikuti suaranya sendiri, misalnya kipas pada nada rendah, kartu grafis pada nada tengah, dan memori pada nada tinggi. Beberapa header kipas dibagi ke nada rendah, tengah, dan tinggi (bisa diubah di pengaturan zona "Suara yang diikuti")
 74a4376d	Ikuti tempo
 934997b6	Pita cahaya berlari mengikuti ketukan
 5d88da90	Suasana

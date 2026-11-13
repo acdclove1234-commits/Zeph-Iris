@@ -466,8 +466,10 @@ public sealed class DeviceRenderer
         {
             _segEffect = new string?[zoneSet.Length];
             _segVariant = new EffectVariant[zoneSet.Length];
-            _segRole = new MusicRole[zoneSet.Length];
         }
+        var natural = new MusicRole[zoneSet.Length];
+        var autoSound = new bool[zoneSet.Length];
+        var segLeds = new int[zoneSet.Length];
         for (int k = 0; k < zoneSet.Length; k++)
         {
             int zone = _segZones[k].Zone;
@@ -477,12 +479,16 @@ public sealed class DeviceRenderer
             zoneSet[k] = z;
             key.Append('|').Append(z?.Mirror?.ToString() ?? "-").Append(',').Append(z?.Reverse?.ToString() ?? "-").Append(',').Append(z?.Place ?? "");
             // 反応する音（光り方「パーツごとの役割」用。設定がなければパーツの種類・ケースの中の場所から決める）
-            _segRole[k] = MusicSounds.Resolve(z?.Sound, Device, _zx.Name(Math.Max(0, zone)), z?.Place);
-            key.Append(',').Append((int)_segRole[k]);
+            natural[k] = MusicSounds.Resolve(z?.Sound, Device, _zx.Name(Math.Max(0, zone)), z?.Place);
+            autoSound[k] = MusicSounds.Normalize(z?.Sound) == MusicSounds.Auto;
+            segLeds[k] = _segZones[k].Length;
             string? effect = z is null || z.Effect == RgbZoneSettings.SameAsDevice ? null : z.Effect;
             _segEffect[k] = effect;
             if (effect is not null) _hasZoneEffects = true;
         }
+        // 同じ音になった「パーツに合わせる」のゾーンが 2 つ以上あれば、低音・中音・高音に振り分ける
+        _segRole = MusicSounds.Spread(natural, autoSound, segLeds);
+        foreach (var role in _segRole) key.Append(',').Append((int)role);
         BuildGains(n, settings);
         BuildLightPlan(n, settings);
         string layoutKey = key.ToString();

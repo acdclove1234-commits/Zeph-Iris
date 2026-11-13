@@ -325,7 +325,7 @@ b0ba1b8f	Mavi
 4cba9eab	Bölge (konnektör) ayarları
 d64827fc	Her anakart konnektörü için bağlı olana (fanlar, PSU, su soğutma bloğu vb.) göre efekti, yönü ve tonu değiştirin. "Cihazla aynı" yukarıdaki ayarları korur. Aynı konnektöre zincirleme bağlananlar tek bir bölgedir
 41860c08	Müzik senkronu efektini yalnızca bu bölge için değiştirir (örn. radyatör fanları için ses seviyesi göstergesi, PSU için ritimle renk değiştirme)
-2c70dff2	"Her parça kendi rolünde" efektinde bu bölgenin hangi sese göre yanacağı. "Parçaya göre": fanlar bas, ekran kartı orta, bellek ve klavye tiz
+1642d09b	"Her parça kendi rolünde" efektinde bu bölgenin hangi sese göre yanacağı. "Parçaya göre": fanlar bas, ekran kartı orta, bellek ve klavye tiz. Aynı cihazdaki birden çok bölge aynı sese düşerse (fan başlıkları gibi), bunlara sırayla bas, orta ve tiz atanır
 ed5a9363	Yön
 3d275c1f	İpucu: hiçbir şey bağlı olmayan anakart ARGB konnektörlerinde OpenRGB'de Devices → (anakart) → "Edit Device" ile LED sayısını 0 yapın. Daha az veri gönderilir ve hareket akıcılaşır. Ayna ve Ters, LED sırasını kullanan efektlerde (spektrum, ses seviyesi göstergesi vb.) etkilidir.
 6a1f71f3	Kasa içi yerleşim
@@ -1065,7 +1065,7 @@ a8728d89	Akan dalga
 5c1949b1	Pırıltı
 6ddfa1c0	Kick'te her şey yumuşakça parlar, trampette toplu bir ışık, hi-hat'te beyaz noktalar pırıldar
 fa793be1	Her parça kendi rolünde
-07493f35	Fanlar basla, ekran kartı orta seslerle, bellek tiz seslerle olduğu gibi her parça kendi sesiyle yanar (bölge ayarındaki "Tepki verilecek ses" ile değiştirilebilir)
+2683fb56	Fanlar basla, ekran kartı orta seslerle, bellek tiz seslerle olduğu gibi her parça kendi sesiyle yanar. Birden çok fan başlığı bas, orta ve tiz arasında paylaştırılır (bölge ayarındaki "Tepki verilecek ses" ile değiştirilebilir)
 74a4376d	Tempo takibi
 934997b6	Vuruşa göre bir ışık şeridi koşar
 5d88da90	Ruh hâli
