@@ -13,6 +13,11 @@ and Iris, the rainbow (the LEDs).
   for example: Settings [設定].
 
 
+■ What's new in v6.15.1
+  - When a graphics card is found but none of its temperatures can be read (this can happen after the graphics driver
+    was replaced), a notice is shown at start. Reinstalling the latest driver from the maker's site and restarting the
+    PC often fixes it (built-in CPU graphics are not included).
+
 ■ What's new in v6.15.0 (game records, automatic rollback after a failed update, safety review)
   - Game records (Report [レポート] page, off at first): each time you play, one record is kept with the average FPS,
     1% low (stutter), CPU and GPU temperatures and fan speed. FPS is measured with the bundled Intel PresentMon

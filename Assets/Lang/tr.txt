@@ -1892,3 +1892,4 @@ ad924bfa	Zeph-Iris kurtarma
 df560c03	Zeph-Iris önceki sürüm {0} sürümüne döndürülsün mü? (şu anki sürüm {1})\n\nÇalışan Zeph-Iris kapatılır (fanlar BIOS'a döner), önceki exe ve güncellemeden önceki ayarlar geri yüklenir ve yeniden başlar.
 e988c5bd	Önceki sürüme elle dönüldü.
 d3cc94cf	Önceki sürüme dönülemedi ({0}).
+ab6781dc	{0} sıcaklığı okunamıyor (kart bulunuyor ama sıcaklıkları ve fanları grafik sürücüsünden okunamıyor). Bu, sürücü değiştirildikten sonra olabilir. Üreticinin sitesinden en yeni sürücüyü (AMD Software, NVIDIA sürücüsü vb.) yeniden yükleyip bilgisayarı yeniden başlatmak çoğu zaman sorunu çözer. O zamana kadar GPU sıcaklığına göre kontrol ve GPU için acil tam hız çalışmaz.

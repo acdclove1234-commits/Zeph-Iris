@@ -1892,3 +1892,4 @@ ad924bfa	Zeph-Iris recovery
 df560c03	Go back to the previous version {0} of Zeph-Iris? (current version {1})\n\nThe running Zeph-Iris is closed (fans back to the BIOS settings), the previous exe and the settings from before the update are put back, and it starts again.
 e988c5bd	Went back to the previous version by hand.
 d3cc94cf	Could not go back to the previous version ({0}).
+ab6781dc	Can't read the temperature of {0} (the card is found, but its temperatures and fans can't be read from the graphics driver). This can happen after the driver was replaced. Reinstalling the latest driver from the maker's site (AMD Software, NVIDIA driver, etc.) and restarting the PC often fixes it. Until then, control by GPU temperature and emergency full speed for the GPU don't work.

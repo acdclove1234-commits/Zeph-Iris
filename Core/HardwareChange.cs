@@ -362,12 +362,22 @@ public static class HardwareChange
     public static bool Remember(AppConfig cfg, HardwareCatalog catalog, bool force = false)
     {
         bool changed = false;
-        var devices = catalog.Devices.Select(d => new KnownDevice { Key = d.Key, Name = d.Name, Kind = d.Kind }).ToList();
+        // 温度を読めたことがあるかは、同じ部品なら前の記録を引き継ぐ（一時的に読めなくても忘れない）
+        bool HadBefore(DeviceInfo d) => cfg.KnownDevices.Any(k => k.Key == d.Key && k.Name == d.Name && k.HadTemps);
+        var devices = catalog.Devices.Select(d => new KnownDevice { Key = d.Key, Name = d.Name, Kind = d.Kind, HadTemps = d.TempCount > 0 || HadBefore(d) }).ToList();
         bool ready = force || NotReadyReason(cfg, catalog) is null;
         if (ready && !devices.Select(d => d.Key + d.Name).SequenceEqual(cfg.KnownDevices.Select(d => d.Key + d.Name)))
         {
             cfg.KnownDevices = devices;
             changed = true;
+        }
+        foreach (var d in catalog.Devices.Where(d => d.TempCount > 0))
+        {
+            if (cfg.KnownDevices.FirstOrDefault(k => k.Key == d.Key && k.Name == d.Name) is { HadTemps: false } k)
+            {
+                k.HadTemps = true;
+                changed = true;
+            }
         }
         foreach (var id in cfg.ReferencedSensorIds().Concat(cfg.ReferencedControlIds()).Distinct(StringComparer.OrdinalIgnoreCase))
         {

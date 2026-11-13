@@ -1892,3 +1892,4 @@ ad924bfa	Pemulihan Zeph-Iris
 df560c03	Kembalikan Zeph-Iris ke versi sebelumnya {0}? (versi sekarang {1})\n\nZeph-Iris yang berjalan ditutup (kipas kembali ke BIOS), exe sebelumnya dan pengaturan dari sebelum pembaruan dikembalikan, lalu dijalankan lagi.
 e988c5bd	Dikembalikan ke versi sebelumnya secara manual.
 d3cc94cf	Tidak bisa kembali ke versi sebelumnya ({0}).
+ab6781dc	Suhu {0} tidak bisa dibaca (kartu terdeteksi, tetapi suhu dan kipasnya tidak bisa dibaca dari driver grafis). Ini bisa terjadi setelah driver diganti. Memasang ulang driver terbaru dari situs pembuat (AMD Software, driver NVIDIA, dll.) lalu memulai ulang PC sering kali memperbaikinya. Sampai itu, pengaturan berdasarkan suhu GPU dan kecepatan penuh darurat untuk GPU tidak berjalan.

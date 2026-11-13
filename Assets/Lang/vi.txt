@@ -1892,3 +1892,4 @@ ad924bfa	Khôi phục Zeph-Iris
 df560c03	Quay Zeph-Iris về phiên bản trước {0}? (phiên bản hiện tại {1})\n\nZeph-Iris đang chạy sẽ được đóng (quạt về BIOS), exe trước và cài đặt từ trước khi cập nhật sẽ được khôi phục, rồi khởi động lại.
 e988c5bd	Đã quay về phiên bản trước theo cách thủ công.
 d3cc94cf	Không thể quay về phiên bản trước ({0}).
+ab6781dc	Không đọc được nhiệt độ của {0} (vẫn thấy card, nhưng không đọc được nhiệt độ và quạt từ driver đồ họa). Điều này có thể xảy ra sau khi driver bị thay. Cài lại driver mới nhất từ trang của hãng (AMD Software, driver NVIDIA, v.v.) rồi khởi động lại PC thường sẽ khắc phục được. Cho đến lúc đó, điều khiển theo nhiệt độ GPU và chạy hết tốc độ khẩn cấp cho GPU sẽ không hoạt động.

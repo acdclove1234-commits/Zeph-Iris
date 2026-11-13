@@ -686,7 +686,21 @@ public partial class App : Application
                 return;
             }
         }
+        WarnGpuWithoutTemps(catalog);
         if (HardwareChange.Remember(cfg, catalog)) _controller.Commit(recordUndo: false);
+    }
+
+    private bool _gpuTempWarned;
+
+    /// <summary>グラボは見えているのに温度が読めないとき、1 回だけ知らせる（Core/GpuTempCheck.cs）</summary>
+    private void WarnGpuWithoutTemps(HardwareCatalog catalog)
+    {
+        if (_gpuTempWarned || _controller is null) return;
+        var missing = GpuTempCheck.Missing(catalog.Devices, _controller.Config.KnownDevices);
+        if (missing.Count == 0) return;
+        _gpuTempWarned = true;
+        Logger.Warn($"グラボの温度を読めません（グラボは見えています）: {string.Join(", ", missing)}");
+        _window?.ShowAlert(GpuTempCheck.Message(missing), AlertLevel.Warning);
     }
 
     private int _hardwareNotReady;

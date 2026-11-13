@@ -1892,3 +1892,4 @@ ad924bfa	Ripristino di Zeph-Iris
 df560c03	Tornare alla versione precedente {0} di Zeph-Iris? (versione attuale {1})\n\nZeph-Iris viene chiuso (ventole al BIOS), vengono ripristinati l’exe precedente e le impostazioni di prima dell’aggiornamento, poi si riavvia.
 e988c5bd	Tornato a mano alla versione precedente.
 d3cc94cf	Impossibile tornare alla versione precedente ({0}).
+ab6781dc	Impossibile leggere la temperatura di {0} (la scheda viene trovata, ma temperature e ventole non si possono leggere dal driver grafico). Può succedere dopo la sostituzione del driver. Reinstallare il driver più recente dal sito del produttore (AMD Software, driver NVIDIA, ecc.) e riavviare il PC spesso risolve. Fino ad allora non funzionano il controllo in base alla temperatura della GPU e la massima velocità di emergenza per la GPU.

@@ -1892,3 +1892,4 @@ ad924bfa	Zeph-Iris-herstel
 df560c03	Zeph-Iris terugzetten naar de vorige versie {0}? (huidige versie {1})\n\nZeph-Iris wordt afgesloten (ventilatoren terug naar BIOS), de vorige exe en de instellingen van vóór de update worden teruggezet en het start opnieuw.
 e988c5bd	Met de hand teruggezet naar de vorige versie.
 d3cc94cf	Kon niet terug naar de vorige versie ({0}).
+ab6781dc	De temperatuur van {0} kan niet worden gelezen (de kaart wordt gevonden, maar temperaturen en ventilatoren zijn niet uit het grafische stuurprogramma te lezen). Dit kan gebeuren nadat het stuurprogramma is vervangen. Het nieuwste stuurprogramma van de site van de fabrikant (AMD Software, NVIDIA-driver enz.) opnieuw installeren en de pc herstarten lost het vaak op. Tot dan werken regeling op GPU-temperatuur en noodvol vermogen voor de GPU niet.

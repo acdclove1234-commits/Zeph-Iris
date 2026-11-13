@@ -1191,6 +1191,8 @@ public sealed class KnownDevice
     public string Key { get; set; } = "";
     public string Name { get; set; } = "";
     public string Kind { get; set; } = "";
+    /// <summary>温度を読めたことがある（グラボの温度が急に読めなくなったら知らせるため）</summary>
+    public bool HadTemps { get; set; }
 }
 
 /// <summary>センサーの名前（ID が変わったときに、同じ意味のセンサーを探すために使う）</summary>

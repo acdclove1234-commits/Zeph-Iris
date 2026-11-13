@@ -1892,3 +1892,4 @@ ad924bfa	Zeph-Iris-Wiederherstellung
 df560c03	Zeph-Iris auf die vorherige Version {0} zurücksetzen? (aktuelle Version {1})\n\nDas laufende Zeph-Iris wird beendet (Lüfter zurück auf BIOS), die vorherige exe und die Einstellungen von vor dem Update werden zurückgespielt und es startet neu.
 e988c5bd	Von Hand auf die vorherige Version zurückgesetzt.
 d3cc94cf	Zurücksetzen auf die vorherige Version nicht möglich ({0}).
+ab6781dc	Die Temperatur von {0} kann nicht gelesen werden (die Karte wird gefunden, aber Temperaturen und Lüfter lassen sich nicht aus dem Grafiktreiber lesen). Das kann passieren, nachdem der Treiber ausgetauscht wurde. Den neuesten Treiber von der Herstellerseite (AMD Software, NVIDIA-Treiber usw.) neu installieren und den PC neu starten hilft oft. Bis dahin funktionieren die Steuerung nach GPU-Temperatur und der Notfall-Volllast für die GPU nicht.

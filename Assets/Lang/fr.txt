@@ -1892,3 +1892,4 @@ ad924bfa	Récupération de Zeph-Iris
 df560c03	Revenir à la version précédente {0} de Zeph-Iris ? (version actuelle {1})\n\nZeph-Iris est fermé (ventilateurs rendus au BIOS), l’exe précédent et les réglages d’avant la mise à jour sont remis, puis il redémarre.
 e988c5bd	Retour manuel à la version précédente effectué.
 d3cc94cf	Impossible de revenir à la version précédente ({0}).
+ab6781dc	Impossible de lire la température de {0} (la carte est détectée, mais ses températures et ventilateurs ne peuvent pas être lus depuis le pilote graphique). Cela peut arriver après un remplacement du pilote. Réinstaller le dernier pilote depuis le site du fabricant (AMD Software, pilote NVIDIA, etc.) puis redémarrer le PC règle souvent le problème. En attendant, le pilotage selon la température du GPU et la pleine vitesse d’urgence pour le GPU ne fonctionnent pas.

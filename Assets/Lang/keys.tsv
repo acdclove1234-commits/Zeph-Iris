@@ -732,28 +732,28 @@ c08fb050	 ／ 	App.xaml.cs:680
 9c32a53a	ハードウェアの変更を検出しました	App.xaml.cs:682
 c1f02356	Zeph-Iris: ハードウェアの変更	App.xaml.cs:683
 646e0b57	{0}。PC の画面で、新しいセンサーへの置き換えを確認してください。	App.xaml.cs:683
-9dddc76a	ファン制御に問題があります	App.xaml.cs:713
-8ad6890e	{0}（安全のため BIOS の制御にしています。自動で復旧を試みます）	App.xaml.cs:713
-2820bd11	Zeph-Iris: ファン制御の問題	App.xaml.cs:714
-30b6b07e	一部の部品を読み取れません	App.xaml.cs:717
-465384a0	ファン制御が復旧しました	App.xaml.cs:720
-2a57fe9c	通常の制御に戻りました。	App.xaml.cs:720
-f1a9779a	Zeph-Iris: 復旧	App.xaml.cs:721
-a8e2e175	ファン制御が通常に戻りました。	App.xaml.cs:721
-0d78d54c	ほかのプログラムが config.json を開いたままにしているため読めませんでした（ファイルはそのままです）。	App.xaml.cs:737
-9b03cdae	元のファイルは config.broken_日時.json として残しました。	App.xaml.cs:738
-b07af289	config.json を読み込めず、バックアップからも復旧できませんでした。\n{0}\n\n{1}\n空の設定で起動します。	App.xaml.cs:739
-645b237e	ブースト	App.xaml.cs:801
-169abc6e	ポンプ以外の全ファンを {0} 分間 100% にします。	App.xaml.cs:801
-c342d519	「静音」で使うプロファイルが見つかりません。設定画面の「ワンタッチ操作」で選んでください。	App.xaml.cs:805
-77a0d0ea	スマホ用の Web サーバーを開始できませんでした（ポート {0}）: {1}	App.xaml.cs:931
-eec05191	緊急全開	App.xaml.cs:941
-0413f77c	一時停止中	App.xaml.cs:941
-45fadb4f	制御中	App.xaml.cs:941
-404e2134	ウィジェット	App.xaml.cs:1019
-1f2511a8	画面	App.xaml.cs:1023
-dfb02ca4	拍の AI	App.xaml.cs:1053
-0f13893a	タスクトレイ	App.xaml.cs:1076
+9dddc76a	ファン制御に問題があります	App.xaml.cs:727
+8ad6890e	{0}（安全のため BIOS の制御にしています。自動で復旧を試みます）	App.xaml.cs:727
+2820bd11	Zeph-Iris: ファン制御の問題	App.xaml.cs:728
+30b6b07e	一部の部品を読み取れません	App.xaml.cs:731
+465384a0	ファン制御が復旧しました	App.xaml.cs:734
+2a57fe9c	通常の制御に戻りました。	App.xaml.cs:734
+f1a9779a	Zeph-Iris: 復旧	App.xaml.cs:735
+a8e2e175	ファン制御が通常に戻りました。	App.xaml.cs:735
+0d78d54c	ほかのプログラムが config.json を開いたままにしているため読めませんでした（ファイルはそのままです）。	App.xaml.cs:751
+9b03cdae	元のファイルは config.broken_日時.json として残しました。	App.xaml.cs:752
+b07af289	config.json を読み込めず、バックアップからも復旧できませんでした。\n{0}\n\n{1}\n空の設定で起動します。	App.xaml.cs:753
+645b237e	ブースト	App.xaml.cs:815
+169abc6e	ポンプ以外の全ファンを {0} 分間 100% にします。	App.xaml.cs:815
+c342d519	「静音」で使うプロファイルが見つかりません。設定画面の「ワンタッチ操作」で選んでください。	App.xaml.cs:819
+77a0d0ea	スマホ用の Web サーバーを開始できませんでした（ポート {0}）: {1}	App.xaml.cs:945
+eec05191	緊急全開	App.xaml.cs:955
+0413f77c	一時停止中	App.xaml.cs:955
+45fadb4f	制御中	App.xaml.cs:955
+404e2134	ウィジェット	App.xaml.cs:1033
+1f2511a8	画面	App.xaml.cs:1037
+dfb02ca4	拍の AI	App.xaml.cs:1067
+0f13893a	タスクトレイ	App.xaml.cs:1090
 e6a34da2	停止中	Audio/AudioCapture.cs:79
 652c7b75	音を取り込めません（{0} 秒後に再試行）: {1}	Audio/AudioCapture.cs:225
 2674d6a9	音の出力先（スピーカー・ヘッドホン）が見つかりません	Audio/AudioCapture.cs:252
@@ -809,13 +809,13 @@ f87c3ac9	他のファンに連動	Core/Advisor.cs:323
 c8d58466	標準	Core/AppConfig.cs:167
 52ed0fe4	最大値	Core/AppConfig.cs:602
 91302315	差分	Core/AppConfig.cs:605
-8e4f9981	起動時	Core/AppConfig.cs:1438
-b6d7dbf8	自動	Core/AppConfig.cs:1439
-ae81cf8d	手動	Core/AppConfig.cs:1440
-7aebcb13	読み込み前	Core/AppConfig.cs:1441
-44fc16c5	部品交換の対応付け前	Core/AppConfig.cs:1442
-f32b8618	復元前	Core/AppConfig.cs:1443
-4db25563	{0:yyyy/MM/dd HH:mm}（{1}）	Core/AppConfig.cs:1451
+8e4f9981	起動時	Core/AppConfig.cs:1440
+b6d7dbf8	自動	Core/AppConfig.cs:1441
+ae81cf8d	手動	Core/AppConfig.cs:1442
+7aebcb13	読み込み前	Core/AppConfig.cs:1443
+44fc16c5	部品交換の対応付け前	Core/AppConfig.cs:1444
+f32b8618	復元前	Core/AppConfig.cs:1445
+4db25563	{0:yyyy/MM/dd HH:mm}（{1}）	Core/AppConfig.cs:1453
 7dc6c4d8	ワンタッチ静音	Core/AppController.cs:97
 c7f7bdf4	自動: {0}	Core/AppController.cs:98
 ab7eac67	ブースト中（残り {0}）	Core/AppController.cs:120
@@ -1023,6 +1023,8 @@ ecc04ddd	記録: {0:HH:mm:ss} 〜 {1:HH:mm:ss}（{2:N0} 行）	Core/FlightRecord
 f7957ed6	この間に起きたこと:	Core/FlightRecorder.cs:98
 2fadbaab	最高値:	Core/FlightRecorder.cs:102
 198beb10	PresentMon の電子署名を確かめられません（Intel の署名がありません）。アプリを入れ直してください。	Core/Games/PresentMonRunner.cs:56
+ab6781dc	{0} の温度を読めません（グラボは見えていますが、温度とファンの値がグラボのドライバーから取れません）。ドライバーが入れ替わったときに起きることがあります。メーカーのサイトから最新のドライバー（AMD Software・NVIDIA のドライバーなど）を入れ直して PC を再起動すると、直ることがあります。直るまでは、グラボの温度での制御と緊急全開は働きません。	Core/GpuTempCheck.cs:35
+7e24b89a	・	Core/GpuTempCheck.cs:35
 c0a45084	同じ名前のセンサー	Core/HardwareChange.cs:82
 7c829457	同じ役割のセンサー	Core/HardwareChange.cs:92
 6041718b	新しい GPU には Hot Spot がないため、GPU 温度（Core）を使います	Core/HardwareChange.cs:93
@@ -1357,7 +1359,6 @@ c8469f39	ファンの回転と LED の色を取り合うので、回転数が勝
 949138bf	ファンの回転を取り合うので、回転数が勝手に変わる・設定が反映されない原因になります。	MainWindow.Conflicts.cs:67
 9e64c8b8	LED の色を取り合うので、色が勝手に戻る・ちらつく原因になります。	MainWindow.Conflicts.cs:68
 cb870dab	{0} が動いています。	MainWindow.Conflicts.cs:69
-7e24b89a	・	MainWindow.Conflicts.cs:70
 c8043f0d	左下の「端子を追加」からファンを登録するか、設定画面のセットアップウィザードを使ってください	MainWindow.Curves.cs:57
 06dd8842	左の一覧からファンを選ぶか、端子を追加してください	MainWindow.Curves.cs:72
 02a68814	「{0}」にコピー	MainWindow.Curves.cs:155
