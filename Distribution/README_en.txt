@@ -13,6 +13,16 @@ and Iris, the rainbow (the LEDs).
   for example: Settings [設定].
 
 
+■ What's new in v6.15.7 (first-time setup)
+  - The setup wizard ends with "Start with Windows (recommended)", on for a first setup. Before, autostart stayed off,
+    so after a restart the fans silently went back to BIOS control.
+  - If no fan headers are found, the wizard explains why and what to try, and can finish with temperature monitoring
+    only (fans you already set up are kept).
+  - AIO pumps are harder to mistake: a fast-spinning "fan" gets a hint, and it is not slowed down too much until it is
+    measured.
+  - Headers at 0 rpm start as "Not used" but switch back to "Fan" when they spin (for example during "Test"); the
+    summary lists them too.
+
 ■ What's new in v6.15.6
   - Music sync, "Remember songs": a song now counts as the same song in any player app, so a song remembered in
     Spotify works right away in YouTube Music and others. Songs remembered before are moved over the next time they
