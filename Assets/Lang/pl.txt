@@ -502,7 +502,6 @@ ab449e0a	Witamy w Zeph-Iris
 80f88c90	Przygotowanie
 b1838111	• Bądź przy obudowie, żeby słyszeć i widzieć wentylatory.\n• Zamknij ciężkie programy (np. gry).\n• Obecne ustawienia zostaną nadpisane, ale potem możesz do nich wrócić przyciskiem „Cofnij”.
 90560324	Rozpoznanie złączy wentylatorów
-68879f49	„Test” uruchamia złącze na pełnych obrotach przez 8 sekund. Zobacz, który wentylator przyspieszył, i nadaj mu nazwę i rodzaj. Do złączy z 0 rpm nic nie jest podłączone.
 5c41906d	Nieużywane
 63d8f556	Za jaką temperaturą podąża ten wentylator
 7f1db4e4	Za CPU
@@ -1930,3 +1929,21 @@ fe29d679	Nie udało się zapisać zapisów sprzed i po zdarzeniu ({0}).
 e267eed2	Raport zapisany: {0}
 1236f4c4	Nie udało się zapisać raportu.\n{0}
 df96e04b	Ten plik nie zawiera jeszcze zapisanych krzywych. W FanControl utwórz krzywe i przypisz je do wentylatorów, następnie wybierz „⋮” → „Zapisz” w prawym górnym rogu i zaimportuj ponownie.
+3aa80f28	„Test” uruchamia złącze na pełnych obrotach przez 8 sekund. Sprawdź, który wentylator przyspiesza, a potem nadaj mu nazwę i typ.
+83340a4b	Złącze z 0 rpm nie ma nic podłączonego albo jego wentylator stoi (jest ustawione na „Nieużywane”; jeśli podczas „Test” zacznie się kręcić, samo wróci na „Wentylator”). Pompa chłodzenia wodnego typu AIO to złącze, do którego prowadzi kabel z części na górze CPU. Ustaw ją na „Pompa (AIO)”: jako „Wentylator” mogłaby zostać za bardzo spowolniona.
+1a2f6171	Uruchamiaj razem z Windows (zalecane)
+179b4a9a	Po wyłączeniu wentylatory po restarcie wracają pod sterowanie BIOS, dopóki nie otworzysz aplikacji. Możesz to później zmienić w Ustawienia → Ogólne
+0791f579	Nie udało się ustawić uruchamiania przy logowaniu. W Ustawienia → Ogólne włącz ponownie „Uruchamiaj automatycznie po zalogowaniu do Windows”.
+6b46df8f	⚠ Znaleziono sterownik PawnIO, ale nie znaleziono żadnego złącza wentylatora.
+c98fd0e4	Nie znaleziono żadnego złącza wentylatora.
+0c45458d	Bez sterownika PawnIO nie da się odczytać złączy wentylatorów. Zainstaluj go na poprzednim ekranie.
+171a3770	• Zamknij oprogramowanie producenta płyty głównej (Armoury Crate, MSI Center, iCUE itp.) lub FanControl, a potem uruchom aplikację ponownie.
+56bdfca3	• Na laptopach i płytach głównych, które nie są jeszcze obsługiwane, nie da się sterować wentylatorami. Monitorowanie temperatury nadal działa.
+84a7d55a	• Jeśli przejdziesz dalej przyciskiem „Dalej”, wentylatory zostaną pod sterowaniem BIOS, a aplikacja będzie tylko monitorować temperatury. Bardzo nam pomożesz, jeśli opowiesz nam o tym komputerze przez „Zgłoś problem…” na pasku bocznym.
+9bcba463	• Wentylatory nie są sterowane (zostają pod sterowaniem BIOS; aplikacja tylko monitoruje temperatury)
+79487bd2	Nieużywane złącza (pozostawione BIOS): {0}
+5b9856e9	Jeśli do któregoś z nich jest podłączony wentylator, wróć przyciskiem „Wstecz” i ustaw go na „Wentylator”.
+91deb44d	Kręci się szybko. Jeśli to pompa AIO, wybierz „Pompa (AIO)”
+a08b13cf	Nie udało się wyłączyć uruchamiania przy logowaniu. W Ustawienia → Ogólne wyłącz ponownie „Uruchamiaj automatycznie po zalogowaniu do Windows”.
+cd2d0b3c	• Obecne ustawienia wentylatorów pozostaną bez zmian. Zamknij to okno przyciskiem „Anuluj”.
+845000a1	Nie znaleziono złączy wentylatorów, więc obecne ustawienia wentylatorów pozostaną bez zmian. Zamknij inne oprogramowanie, uruchom ponownie aplikację, a potem jeszcze raz przeprowadź konfigurację.

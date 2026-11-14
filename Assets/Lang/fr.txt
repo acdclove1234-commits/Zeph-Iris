@@ -502,7 +502,6 @@ ab449e0a	Bienvenue dans Zeph-Iris
 80f88c90	Préparation
 b1838111	• Restez près du boîtier pour entendre et voir les ventilateurs.\n• Fermez les programmes lourds (comme les jeux).\n• Vos réglages actuels seront écrasés, mais « Annuler » permet d'y revenir ensuite.
 90560324	Identifier les connecteurs de ventilateurs
-68879f49	« Test » fait tourner un connecteur à pleine vitesse pendant 8 secondes. Repérez le ventilateur qui accélère, puis donnez-lui un nom et un type. Les connecteurs à 0 rpm n'ont rien de branché.
 5c41906d	Non utilisé
 63d8f556	La température que suit ce ventilateur
 7f1db4e4	Suivre le CPU
@@ -1930,3 +1929,21 @@ fe29d679	Impossible d'enregistrer les enregistrements d'avant et d'après l'inci
 e267eed2	Rapport enregistré : {0}
 1236f4c4	Impossible d'enregistrer le rapport.\n{0}
 df96e04b	Ce fichier ne contient encore aucune courbe enregistrée. Dans FanControl, créez les courbes et attribuez-les aux ventilateurs, puis choisissez « ⋮ » → « Enregistrer » en haut à droite et importez à nouveau.
+3aa80f28	« Test » fait tourner un connecteur à pleine vitesse pendant 8 secondes. Regardez quel ventilateur accélère, puis donnez-lui un nom et un type.
+83340a4b	Un connecteur à 0 rpm n'a rien de branché, ou son ventilateur est arrêté (il est réglé sur « Non utilisé » ; s'il tourne pendant « Test », il repasse tout seul sur « Ventilateur »). La pompe d'un watercooling tout-en-un (AIO) est le connecteur dont le câble vient de la pièce posée sur le CPU. Réglez-la sur « Pompe (AIO) » : en « Ventilateur », elle pourrait être trop ralentie.
+1a2f6171	Démarrer avec Windows (recommandé)
+179b4a9a	Si désactivé, les ventilateurs repassent sous le contrôle du BIOS après un redémarrage, jusqu'à ce que vous ouvriez l'application. Vous pourrez le changer plus tard dans Paramètres → « Général »
+0791f579	Impossible de configurer le démarrage à l'ouverture de session. Dans Paramètres → « Général », réactivez « Démarrer automatiquement à l'ouverture de session Windows ».
+6b46df8f	⚠ Le pilote PawnIO a été trouvé, mais aucun connecteur de ventilateur n'a été trouvé.
+c98fd0e4	Aucun connecteur de ventilateur n'a été trouvé.
+0c45458d	Sans le pilote PawnIO, les connecteurs de ventilateur ne peuvent pas être lus. Installez-le sur l'écran précédent.
+171a3770	• Fermez le logiciel du fabricant de la carte mère (Armoury Crate, MSI Center, iCUE, etc.) ou FanControl, puis redémarrez l'application.
+56bdfca3	• Sur les ordinateurs portables et les cartes mères pas encore prises en charge, les ventilateurs ne peuvent pas être contrôlés. La surveillance des températures fonctionne quand même.
+84a7d55a	• Si vous continuez avec « Suivant », les ventilateurs restent sous le contrôle du BIOS et l'application surveille seulement les températures. Ce serait très utile de nous parler de ce PC via « Signaler un problème… » dans la barre latérale.
+9bcba463	• Les ventilateurs ne sont pas contrôlés (ils restent sous le contrôle du BIOS ; l'application surveille seulement les températures)
+79487bd2	Connecteurs non utilisés (laissés au BIOS) : {0}
+5b9856e9	Si un ventilateur est branché sur l'un d'eux, revenez avec « Retour » et réglez-le sur « Ventilateur ».
+91deb44d	Tourne vite. Si c'est la pompe AIO, choisissez « Pompe (AIO) »
+a08b13cf	Impossible de désactiver le démarrage à l'ouverture de session. Dans Paramètres → « Général », désactivez à nouveau « Démarrer automatiquement à l'ouverture de session Windows ».
+cd2d0b3c	• Vos réglages actuels des ventilateurs sont conservés tels quels. Fermez cette fenêtre avec « Annuler ».
+845000a1	Aucun connecteur de ventilateur n'a été trouvé, vos réglages actuels des ventilateurs sont donc conservés tels quels. Fermez l'autre logiciel, redémarrez l'application, puis relancez la configuration.

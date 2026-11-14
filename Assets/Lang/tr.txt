@@ -502,7 +502,6 @@ ab449e0a	Zeph-Iris'e hoş geldiniz
 80f88c90	Hazırlık
 b1838111	• Fanları duyup görebilmek için kasanın yanında durun.\n• Ağır programları (oyunlar gibi) kapatın.\n• Mevcut ayarlarınızın üzerine yazılır, ancak sonra "Geri al" ile dönebilirsiniz.
 90560324	Fan konnektörlerini tanı
-68879f49	"Test" bir konnektörü 8 saniye tam hızda çalıştırır. Hangi fanın hızlandığına bakın, sonra ona bir ad ve tür verin. 0 rpm olan konnektörlerde hiçbir şey bağlı değildir.
 5c41906d	Kullanılmıyor
 63d8f556	Bu fanın izlediği sıcaklık
 7f1db4e4	CPU'yu izle
@@ -1930,3 +1929,21 @@ fe29d679	Olay öncesi ve sonrası kayıtlar kaydedilemedi ({0}).
 e267eed2	Rapor kaydedildi: {0}
 1236f4c4	Rapor kaydedilemedi.\n{0}
 df96e04b	Bu dosyada henüz kaydedilmiş eğri yok. FanControl'de eğrileri oluşturup fanlara atayın, ardından sağ üstte "⋮" → "Kaydet"i seçin ve yeniden içe aktarın.
+3aa80f28	"Test", bir konnektörü 8 saniye boyunca tam hızda çalıştırır. Hangi fanın hızlandığına bakın, sonra ona bir ad ve tür verin.
+83340a4b	0 rpm gösteren bir konnektöre hiçbir şey bağlı değildir ya da fanı durmuştur ("Kullanılmıyor" olarak ayarlanır; "Test" sırasında dönerse kendiliğinden "Fan"a geri döner). Sıvı soğutucunun (AIO) pompası, kablosu CPU'nun üstündeki parçadan gelen konnektördür. Onu "Pompa (AIO)" olarak ayarlayın: "Fan" olarak fazla yavaşlatılabilir.
+1a2f6171	Windows ile başlat (önerilir)
+179b4a9a	Kapalıysa, yeniden başlattıktan sonra uygulamayı açana kadar fanlar BIOS kontrolüne döner. Bunu daha sonra Ayarlar → Genel'den değiştirebilirsiniz
+0791f579	Oturum açılışında başlatma ayarlanamadı. Ayarlar → Genel'de "Windows oturumu açılınca otomatik başlat" seçeneğini yeniden açın.
+6b46df8f	⚠ PawnIO sürücüsü bulundu, ancak hiç fan konnektörü bulunamadı.
+c98fd0e4	Hiç fan konnektörü bulunamadı.
+0c45458d	PawnIO sürücüsü olmadan fan konnektörleri okunamaz. Önceki ekranda kurun.
+171a3770	• Anakart üreticisinin yazılımını (Armoury Crate, MSI Center, iCUE vb.) veya FanControl'ü kapatın, sonra uygulamayı yeniden başlatın.
+56bdfca3	• Dizüstü bilgisayarlarda ve henüz desteklenmeyen anakartlarda fanlar kontrol edilemez. Sıcaklık izleme yine çalışır.
+84a7d55a	• "İleri" ile devam ederseniz fanlar BIOS kontrolünde kalır ve uygulama yalnızca sıcaklıkları izler. Kenar çubuğundaki "Sorun bildir…" ile bize bu bilgisayardan bahsederseniz çok yardımcı olur.
+9bcba463	• Fanlar kontrol edilmez (BIOS kontrolünde kalırlar; uygulama yalnızca sıcaklıkları izler)
+79487bd2	Kullanılmayan konnektörler (BIOS'a bırakıldı): {0}
+5b9856e9	Bunlardan birine fan bağlıysa "Geri" ile dönüp onu "Fan" olarak ayarlayın.
+91deb44d	Hızlı dönüyor. Bu AIO pompasıysa "Pompa (AIO)" seçin
+a08b13cf	Oturum açılışında başlatma kapatılamadı. Ayarlar → Genel'de "Windows oturumu açılınca otomatik başlat" seçeneğini yeniden kapatın.
+cd2d0b3c	• Mevcut fan ayarlarınız olduğu gibi korunur. Bunu "İptal" ile kapatın.
+845000a1	Fan konnektörü bulunamadığından mevcut fan ayarlarınız olduğu gibi korunur. Diğer yazılımı kapatın, uygulamayı yeniden başlatın ve ardından kurulumu tekrar yapın.

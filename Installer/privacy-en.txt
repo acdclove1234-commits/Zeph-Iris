@@ -9,6 +9,6 @@ On its own, the app contacts only:
 Phone notifications (ntfy), phone/web remote, AI advice (Ollama) and OpenRGB lighting do nothing until you set them up.
 "Report a problem" only makes a zip on your PC and opens the GitHub issue page; nothing is uploaded automatically.
 
-Setup installs PawnIO (a signed driver for reading sensors and setting fan speeds) and an auto-start task. The uninstaller removes them.
+Setup installs PawnIO (a signed driver for reading sensors and setting fan speeds). The setup wizard in the app registers an auto-start task when you leave "Start with Windows" on. The uninstaller removes them.
 
 Full privacy policy: https://github.com/acdclove1234-commits/Zeph-Iris/blob/main/PRIVACY.md

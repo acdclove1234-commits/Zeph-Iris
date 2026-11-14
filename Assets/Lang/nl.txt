@@ -502,7 +502,6 @@ ab449e0a	Welkom bij Zeph-Iris
 80f88c90	Voorbereiding
 b1838111	• Blijf bij de kast zodat je de ventilatoren hoort en ziet.\n• Sluit zware programma's (zoals games).\n• Je huidige instellingen worden overschreven, maar met "Ongedaan maken" kun je daarna terug.
 90560324	Ventilatoraansluitingen herkennen
-68879f49	"Test" laat een aansluiting 8 seconden op volle snelheid draaien. Kijk welke ventilator sneller gaat en geef hem een naam en een soort. Aansluitingen op 0 rpm hebben niets aangesloten.
 5c41906d	Niet gebruikt
 63d8f556	Welke temperatuur deze ventilator volgt
 7f1db4e4	CPU volgen
@@ -1930,3 +1929,21 @@ fe29d679	De metingen van vóór en na het incident konden niet worden opgeslagen
 e267eed2	Rapport opgeslagen: {0}
 1236f4c4	Het rapport kon niet worden opgeslagen.\n{0}
 df96e04b	Dit bestand bevat nog geen opgeslagen curves. Maak in FanControl de curves aan en wijs ze toe aan ventilatoren, kies dan rechtsboven "⋮" → "Opslaan" en importeer opnieuw.
+3aa80f28	"Test" laat een aansluiting 8 seconden op volle snelheid draaien. Kijk welke ventilator sneller gaat en geef hem een naam en een type.
+83340a4b	Op een aansluiting met 0 rpm is niets aangesloten, of de ventilator staat stil (hij staat op "Niet gebruikt"; draait hij tijdens "Test", dan gaat hij vanzelf terug naar "Ventilator"). De pomp van een AIO-waterkoeler is de aansluiting waarvan de kabel uit het onderdeel boven op de CPU komt. Zet die op "Pomp (AIO)": als "Ventilator" kan hij te veel worden afgeremd.
+1a2f6171	Starten met Windows (aanbevolen)
+179b4a9a	Staat dit uit, dan gaan de ventilatoren na een herstart terug naar BIOS-regeling tot je de app opent. Je kunt dit later wijzigen in Instellingen → Algemeen
+0791f579	Opstarten bij aanmelden kon niet worden ingesteld. Zet in Instellingen → Algemeen "Automatisch starten bij aanmelden in Windows" opnieuw aan.
+6b46df8f	⚠ Het PawnIO-stuurprogramma is gevonden, maar er zijn geen ventilatoraansluitingen gevonden.
+c98fd0e4	Er zijn geen ventilatoraansluitingen gevonden.
+0c45458d	Zonder het PawnIO-stuurprogramma kunnen de ventilatoraansluitingen niet worden gelezen. Installeer het op het vorige scherm.
+171a3770	• Sluit de software van de moederbordfabrikant (Armoury Crate, MSI Center, iCUE enz.) of FanControl af en start de app daarna opnieuw.
+56bdfca3	• Op laptops en op moederborden die nog niet worden ondersteund, kunnen de ventilatoren niet worden geregeld. Temperaturen bewaken werkt wel.
+84a7d55a	• Ga je verder met "Volgende", dan blijven de ventilatoren onder BIOS-regeling en bewaakt de app alleen de temperaturen. Het helpt ons enorm als je ons via "Probleem melden…" in de zijbalk over deze pc vertelt.
+9bcba463	• De ventilatoren worden niet geregeld (ze blijven onder BIOS-regeling; de app bewaakt alleen de temperaturen)
+79487bd2	Niet gebruikte aansluitingen (aan BIOS overgelaten): {0}
+5b9856e9	Is er op een daarvan een ventilator aangesloten, ga dan "Terug" en zet hem op "Ventilator".
+91deb44d	Draait snel. Is dit de AIO-pomp, kies dan "Pomp (AIO)"
+a08b13cf	Opstarten bij aanmelden kon niet worden uitgeschakeld. Zet in Instellingen → Algemeen "Automatisch starten bij aanmelden in Windows" opnieuw uit.
+cd2d0b3c	• Je huidige ventilatorinstellingen blijven zoals ze zijn. Sluit dit met "Annuleren".
+845000a1	Er zijn geen ventilatoraansluitingen gevonden, dus je huidige ventilatorinstellingen blijven zoals ze zijn. Sluit de andere software, start de app opnieuw en voer de installatie daarna nog eens uit.

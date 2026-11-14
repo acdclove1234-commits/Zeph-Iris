@@ -502,7 +502,6 @@ ab449e0a	Chào mừng đến với Zeph-Iris
 80f88c90	Chuẩn bị
 b1838111	• Hãy ở cạnh thùng máy để nghe và thấy quạt quay.\n• Hãy tắt các tác vụ nặng (như game).\n• Cài đặt hiện tại sẽ bị ghi đè, nhưng sau khi xong có thể quay lại bằng "Hoàn tác".
 90560324	Nhận diện cổng quạt
-68879f49	Nhấn "Kiểm tra" sẽ cho cổng đó chạy tối đa trong 8 giây. Xem quạt nào quay nhanh lên rồi đặt tên và loại cho nó. Cổng 0 rpm là không cắm gì.
 5c41906d	Không dùng
 63d8f556	Quạt này quay theo nhiệt độ nào
 7f1db4e4	Theo CPU
@@ -1930,3 +1929,21 @@ fe29d679	Không thể lưu bản ghi trước và sau sự cố ({0}).
 e267eed2	Đã lưu báo cáo: {0}
 1236f4c4	Không thể lưu báo cáo.\n{0}
 df96e04b	Tệp này chưa có đường cong nào được lưu. Trong FanControl, hãy tạo đường cong và gán cho quạt, sau đó chọn "⋮" → "Lưu" ở góc trên bên phải rồi nhập lại.
+3aa80f28	"Kiểm tra" cho cổng chạy tối đa trong 8 giây. Xem quạt nào chạy nhanh lên, rồi đặt tên và loại cho nó.
+83340a4b	Cổng ở 0 rpm là cổng không cắm gì, hoặc quạt đang đứng yên (đã đặt là "Không dùng"; nếu quạt quay khi "Kiểm tra", nó sẽ tự chuyển lại thành "Quạt"). Bơm của tản nhiệt nước AIO là cổng có dây đi ra từ bộ phận nằm trên CPU. Hãy đặt nó là "Bơm (tản nhiệt nước AIO)": nếu để là "Quạt", bơm có thể bị chạy quá chậm.
+1a2f6171	Khởi động cùng Windows (khuyên dùng)
+179b4a9a	Nếu tắt, sau khi khởi động lại máy, quạt sẽ do BIOS điều khiển cho đến khi bạn mở ứng dụng. Có thể đổi sau trong Cài đặt → "Chung"
+0791f579	Không thể thiết lập tự khởi động khi đăng nhập. Trong Cài đặt → "Chung", hãy bật lại "Tự khởi động khi đăng nhập Windows".
+6b46df8f	⚠ Đã tìm thấy driver PawnIO, nhưng không tìm thấy cổng quạt nào.
+c98fd0e4	Không tìm thấy cổng quạt nào.
+0c45458d	Không có driver PawnIO nên không đọc được cổng quạt. Hãy cài đặt nó ở màn hình trước.
+171a3770	• Hãy thoát phần mềm của hãng bo mạch chủ (Armoury Crate, MSI Center, iCUE…) hoặc FanControl, rồi khởi động lại ứng dụng.
+56bdfca3	• Trên laptop và bo mạch chủ chưa được hỗ trợ, không thể điều khiển quạt. Vẫn có thể theo dõi nhiệt độ.
+84a7d55a	• Nếu tiếp tục bằng "Tiếp", quạt vẫn do BIOS điều khiển và ứng dụng chỉ theo dõi nhiệt độ. Sẽ rất hữu ích nếu bạn cho chúng tôi biết về máy này qua "Báo lỗi…" ở thanh bên.
+9bcba463	• Không điều khiển quạt (quạt vẫn do BIOS điều khiển; ứng dụng chỉ theo dõi nhiệt độ)
+79487bd2	Cổng không dùng (để BIOS điều khiển): {0}
+5b9856e9	Nếu có quạt cắm vào một trong các cổng này, hãy "Quay lại" và đặt nó là "Quạt".
+91deb44d	Đang quay nhanh. Nếu đây là bơm AIO, hãy chọn "Bơm (tản nhiệt nước AIO)"
+a08b13cf	Không thể tắt tự khởi động khi đăng nhập. Trong Cài đặt → "Chung", hãy tắt lại "Tự khởi động khi đăng nhập Windows".
+cd2d0b3c	• Cài đặt quạt hiện tại được giữ nguyên. Hãy đóng bằng "Hủy".
+845000a1	Không tìm thấy cổng quạt nên cài đặt quạt hiện tại được giữ nguyên. Hãy đóng phần mềm khác, khởi động lại ứng dụng rồi chạy thiết lập lần nữa.

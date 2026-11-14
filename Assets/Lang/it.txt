@@ -502,7 +502,6 @@ ab449e0a	Benvenuto in Zeph-Iris
 80f88c90	Preparazione
 b1838111	• Resta vicino al case per sentire e vedere le ventole.\n• Chiudi i programmi pesanti (come i giochi).\n• Le impostazioni attuali verranno sovrascritte, ma al termine puoi tornare indietro con «Annulla».
 90560324	Identifica i connettori delle ventole
-68879f49	«Test» porta un connettore alla massima velocità per 8 secondi. Guarda quale ventola accelera e assegnale nome e tipo. I connettori a 0 rpm non hanno nulla collegato.
 5c41906d	Non usato
 63d8f556	Quale temperatura segue questa ventola
 7f1db4e4	Segui la CPU
@@ -1930,3 +1929,21 @@ fe29d679	Non è stato possibile salvare le registrazioni prima e dopo l'incident
 e267eed2	Rapporto salvato: {0}
 1236f4c4	Non è stato possibile salvare il rapporto.\n{0}
 df96e04b	Questo file non contiene ancora curve salvate. In FanControl crea le curve e assegnale alle ventole, poi scegli "⋮" → "Salva" in alto a destra e importa di nuovo.
+3aa80f28	«Test» fa girare un connettore al massimo per 8 secondi. Guarda quale ventola accelera, poi dalle un nome e un tipo.
+83340a4b	Un connettore a 0 rpm non ha niente collegato, oppure la sua ventola è ferma (è impostato su «Non usato»; se gira durante il «Test», torna da solo a «Ventola»). La pompa di un raffreddamento a liquido all-in-one (AIO) è il connettore il cui cavo arriva dal pezzo sopra la CPU. Impostala su «Pompa (AIO)»: come «Ventola» potrebbe essere rallentata troppo.
+1a2f6171	Avvia con Windows (consigliato)
+179b4a9a	Se disattivato, dopo un riavvio le ventole tornano sotto il controllo del BIOS finché non apri l'app. Puoi cambiarlo più tardi in Impostazioni → «Generale»
+0791f579	Impossibile configurare l'avvio all'accesso. In Impostazioni → «Generale», riattiva «Avvia automaticamente all'accesso a Windows».
+6b46df8f	⚠ Il driver PawnIO è stato trovato, ma non è stato trovato nessun connettore delle ventole.
+c98fd0e4	Non è stato trovato nessun connettore delle ventole.
+0c45458d	Senza il driver PawnIO non è possibile leggere i connettori delle ventole. Installalo nella schermata precedente.
+171a3770	• Chiudi il software del produttore della scheda madre (Armoury Crate, MSI Center, iCUE e simili) o FanControl, poi riavvia l'app.
+56bdfca3	• Sui portatili e sulle schede madri non ancora supportate, le ventole non possono essere controllate. Il monitoraggio delle temperature funziona comunque.
+84a7d55a	• Se continui con «Avanti», le ventole restano sotto il controllo del BIOS e l'app monitora solo le temperature. Ci aiuterebbe molto se ci parlassi di questo PC con «Segnala un problema…» nella barra laterale.
+9bcba463	• Le ventole non vengono controllate (restano sotto il controllo del BIOS; l'app monitora solo le temperature)
+79487bd2	Connettori non usati (lasciati al BIOS): {0}
+5b9856e9	Se a uno di questi è collegata una ventola, torna «Indietro» e impostala su «Ventola».
+91deb44d	Gira veloce. Se è la pompa AIO, scegli «Pompa (AIO)»
+a08b13cf	Impossibile disattivare l'avvio all'accesso. In Impostazioni → «Generale», disattiva di nuovo «Avvia automaticamente all'accesso a Windows».
+cd2d0b3c	• Le impostazioni attuali delle ventole restano invariate. Chiudi questa finestra con «Annulla».
+845000a1	Non sono stati trovati connettori delle ventole, quindi le impostazioni attuali delle ventole restano invariate. Chiudi l'altro software, riavvia l'app e poi esegui di nuovo la configurazione.

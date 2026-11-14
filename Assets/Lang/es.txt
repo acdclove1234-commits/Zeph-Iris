@@ -502,7 +502,6 @@ ab449e0a	Te damos la bienvenida a Zeph-Iris
 80f88c90	Antes de empezar
 b1838111	• Quédate junto a la caja para oír y ver los ventiladores.\n• Cierra los programas pesados (como los juegos).\n• Tus ajustes actuales se sobrescribirán, pero después puedes volver atrás con «Deshacer».
 90560324	Identificar los conectores de ventilador
-68879f49	«Prueba» pone un conector a máxima velocidad durante 8 segundos. Mira qué ventilador acelera y ponle nombre y tipo. Los conectores a 0 rpm no tienen nada conectado.
 5c41906d	Sin usar
 63d8f556	Qué temperatura sigue este ventilador
 7f1db4e4	Seguir la CPU
@@ -1930,3 +1929,21 @@ fe29d679	No se pudieron guardar los registros de antes y después del incidente 
 e267eed2	Informe guardado: {0}
 1236f4c4	No se pudo guardar el informe.\n{0}
 df96e04b	Este archivo aún no tiene curvas guardadas. En FanControl, cree las curvas y asígnelas a los ventiladores; luego elija «⋮» → «Guardar» arriba a la derecha e importe de nuevo.
+3aa80f28	«Prueba» pone un conector a toda velocidad durante 8 segundos. Mira qué ventilador se acelera y luego ponle un nombre y un tipo.
+83340a4b	Un conector a 0 rpm no tiene nada conectado, o su ventilador está parado (está en «Sin usar»; si gira durante la «Prueba», vuelve solo a «Ventilador»). La bomba de una refrigeración líquida todo en uno (AIO) es el conector cuyo cable sale de la pieza que va sobre la CPU. Ponla en «Bomba (AIO)»: como «Ventilador» podría ir demasiado lenta.
+1a2f6171	Iniciar con Windows (recomendado)
+179b4a9a	Si está desactivado, tras reiniciar los ventiladores vuelven al control de la BIOS hasta que abras la app. Puedes cambiarlo más tarde en Ajustes → «General»
+0791f579	No se pudo configurar el inicio al iniciar sesión. En Ajustes → «General», vuelve a activar «Iniciar automáticamente al iniciar sesión en Windows».
+6b46df8f	⚠ Se encontró el controlador PawnIO, pero no se encontró ningún conector de ventilador.
+c98fd0e4	No se encontró ningún conector de ventilador.
+0c45458d	Sin el controlador PawnIO no se pueden leer los conectores de ventilador. Instálalo en la pantalla anterior.
+171a3770	• Cierra el software del fabricante de la placa base (Armoury Crate, MSI Center, iCUE, etc.) o FanControl y luego reinicia la app.
+56bdfca3	• En portátiles y en placas base que aún no son compatibles, no se pueden controlar los ventiladores. La supervisión de temperaturas sigue funcionando.
+84a7d55a	• Si continúas con «Siguiente», los ventiladores siguen bajo el control de la BIOS y la app solo supervisa las temperaturas. Nos ayudaría mucho que nos hablaras de este PC con «Informar de un problema…» en la barra lateral.
+9bcba463	• Los ventiladores no se controlan (siguen bajo el control de la BIOS; la app solo supervisa las temperaturas)
+79487bd2	Conectores sin usar (en manos de la BIOS): {0}
+5b9856e9	Si hay un ventilador conectado a alguno, pulsa «Atrás» y ponlo en «Ventilador».
+91deb44d	Gira rápido. Si es la bomba AIO, elige «Bomba (AIO)»
+a08b13cf	No se pudo desactivar el inicio al iniciar sesión. En Ajustes → «General», vuelve a desactivar «Iniciar automáticamente al iniciar sesión en Windows».
+cd2d0b3c	• Tus ajustes actuales de los ventiladores se mantienen tal como están. Cierra esta ventana con «Cancelar».
+845000a1	No se encontraron conectores de ventilador, así que tus ajustes actuales de los ventiladores se mantienen tal como están. Cierra el otro software, reinicia la app y vuelve a ejecutar la configuración.

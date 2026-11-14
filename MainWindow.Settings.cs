@@ -328,7 +328,10 @@ public partial class MainWindow
             return;
         }
         FlushCommit();
-        var wizard = new SetupWizard(_controller, _catalog, _sensorOptions.ToList()) { Owner = this, Icon = Icon };
+        // 自動起動のスイッチ: 初めてならオン（おすすめ）。やり直しなら、いまの状態から（自分でオフにしたのを勝手にオンにしない）
+        bool firstRun = !_controller.Config.SetupCompleted;
+        bool autoStartInitial = firstRun || AutoStartSwitch.IsChecked == true;
+        var wizard = new SetupWizard(_controller, _catalog, _sensorOptions.ToList(), autoStartInitial) { Owner = this, Icon = Icon };
         _wizard = wizard;
         try
         {
@@ -336,12 +339,36 @@ public partial class MainWindow
             {
                 ShowAlert(L("セットアップが完了しました。気に入らなければ、ファンカーブ画面の「元に戻す」で以前の設定に戻せます。"), AlertLevel.Info);
                 NavDashboard.IsChecked = true;
+                if (firstRun || wizard.AutoStartChanged) ApplyWizardAutoStart(wizard.AutoStartChosen);
             }
         }
         finally
         {
             _wizard = null;
         }
+    }
+
+    /// <summary>
+    /// ウィザードの「Windows の起動時に自動で起動する」に合わせる（オフだと、PC を起動し直したあと黙って BIOS の制御に戻るので、ふだんはオン）。
+    /// タスクスケジューラの問い合わせは少し時間がかかるので、画面を止めない
+    /// </summary>
+    private async void ApplyWizardAutoStart(bool want)
+    {
+        bool ok;
+        try
+        {
+            ok = await Task.Run(() => AutoStart.IsEnabled() == want || (want ? AutoStart.Enable() : AutoStart.Disable()));
+            AutoStartSwitch.IsChecked = await Task.Run(AutoStart.IsEnabled);
+        }
+        catch (Exception ex)
+        {
+            Logger.Warn($"セットアップのあとの自動起動の切り替えに失敗: {ex}");
+            ok = false;
+        }
+        if (ok) Logger.Info(want ? "セットアップ: ログオン時の自動起動をオンにしました" : "セットアップ: ログオン時の自動起動をオフにしました");   // no-loc（ログだけ）
+        else ShowAlert(want
+            ? L("ログオン時の自動起動を設定できませんでした。設定 →「一般」の「Windows ログオン時に自動で起動する」を、もう一度オンにしてください。")
+            : L("ログオン時の自動起動を外せませんでした。設定 →「一般」の「Windows ログオン時に自動で起動する」を、もう一度オフにしてください。"), AlertLevel.Warning);
     }
 
     private SetupWizard? _wizard;

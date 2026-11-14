@@ -230,7 +230,8 @@ public partial class App : Application
             // GPU ファンの設定を変えたときなどにも呼ばれるので、起動時の確認は 1 回だけ
             if (!_firstCatalog) return;
             _firstCatalog = false;
-            if (!controller.Config.SetupCompleted && controller.Config.Profiles.All(p => p.Fans.Count == 0))
+            // 端子が見つからず「温度の監視だけ」で終えた PC でも、あとで端子が見つかったら（ほかのソフトを止めた・対応した）、もう一度案内する
+            if ((!controller.Config.SetupCompleted || c.Controls.Count > 0) && controller.Config.Profiles.All(p => p.Fans.Count == 0))
             {
                 // 初回起動: ウィザードを案内する
                 ShowMainWindow();

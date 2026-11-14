@@ -502,7 +502,6 @@ ab449e0a	Boas-vindas ao Zeph-Iris
 80f88c90	Antes de começar
 b1838111	• Fique perto do gabinete para ouvir e ver as ventoinhas.\n• Feche programas pesados (como jogos).\n• Suas configurações atuais serão substituídas, mas dá para voltar com "Desfazer" depois.
 90560324	Identificar os conectores de ventoinha
-68879f49	"Teste" deixa um conector na velocidade máxima por 8 segundos. Veja qual ventoinha acelerou e dê a ela um nome e um tipo. Conectores com 0 rpm não têm nada ligado.
 5c41906d	Não usado
 63d8f556	Qual temperatura esta ventoinha segue
 7f1db4e4	Seguir a CPU
@@ -1930,3 +1929,21 @@ fe29d679	Não foi possível salvar os registros de antes e depois do incidente (
 e267eed2	Relatório salvo: {0}
 1236f4c4	Não foi possível salvar o relatório.\n{0}
 df96e04b	Este arquivo ainda não tem curvas salvas. No FanControl, crie as curvas e atribua-as às ventoinhas, depois escolha "⋮" → "Salvar" no canto superior direito e importe novamente.
+3aa80f28	"Teste" faz um conector girar na velocidade máxima por 8 segundos. Veja qual ventoinha acelera e depois dê um nome e um tipo a ela.
+83340a4b	Um conector a 0 rpm não tem nada ligado, ou a ventoinha está parada (ele fica como "Não usado"; se girar durante o "Teste", volta sozinho para "Ventoinha"). A bomba de um water cooler AIO é o conector cujo cabo sai da peça em cima da CPU. Coloque-a como "Bomba (water cooler AIO)": como "Ventoinha", ela poderia ficar lenta demais.
+1a2f6171	Iniciar com o Windows (recomendado)
+179b4a9a	Se desligado, depois de reiniciar o PC as ventoinhas voltam ao controle da BIOS até você abrir o app. Dá para mudar isso depois em Configurações → Geral
+0791f579	Não foi possível configurar a inicialização no login. Em Configurações → Geral, ative de novo "Iniciar automaticamente ao entrar no Windows".
+6b46df8f	⚠ O driver PawnIO foi encontrado, mas nenhum conector de ventoinha foi encontrado.
+c98fd0e4	Nenhum conector de ventoinha foi encontrado.
+0c45458d	Sem o driver PawnIO, não dá para ler os conectores de ventoinha. Instale-o na tela anterior.
+171a3770	• Feche o software do fabricante da placa-mãe (Armoury Crate, MSI Center, iCUE etc.) ou o FanControl e depois reinicie o app.
+56bdfca3	• Em notebooks e em placas-mãe ainda não suportadas, não dá para controlar as ventoinhas. O monitoramento de temperatura continua funcionando.
+84a7d55a	• Se você continuar com "Avançar", as ventoinhas ficam sob controle da BIOS e o app só monitora as temperaturas. Ajudaria muito se você nos contasse sobre este PC em "Relatar um problema…" na barra lateral.
+9bcba463	• As ventoinhas não são controladas (ficam sob controle da BIOS; o app só monitora as temperaturas)
+79487bd2	Conectores não usados (deixados com a BIOS): {0}
+5b9856e9	Se alguma ventoinha estiver ligada a um deles, use "Voltar" e coloque-a como "Ventoinha".
+91deb44d	Girando rápido. Se for a bomba do AIO, escolha "Bomba (water cooler AIO)"
+a08b13cf	Não foi possível desativar a inicialização no login. Em Configurações → Geral, desative de novo "Iniciar automaticamente ao entrar no Windows".
+cd2d0b3c	• As configurações atuais das ventoinhas ficam como estão. Feche com "Cancelar".
+845000a1	Nenhum conector de ventoinha foi encontrado, então as configurações atuais das ventoinhas ficam como estão. Feche o outro software, reinicie o app e faça a configuração de novo.

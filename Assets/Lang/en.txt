@@ -502,7 +502,6 @@ ab449e0a	Welcome to Zeph-Iris
 80f88c90	Before you start
 b1838111	• Stay next to the case so you can hear and see the fans.\n• Close heavy programs (such as games).\n• Your current settings will be overwritten, but you can go back with "Undo" afterwards.
 90560324	Identify fan headers
-68879f49	"Test" runs a header at full speed for 8 seconds. See which fan speeds up, then give it a name and a type. Headers at 0 rpm have nothing connected.
 5c41906d	Not used
 63d8f556	Which temperature this fan follows
 7f1db4e4	Follow CPU
@@ -1930,3 +1929,21 @@ fe29d679	The records before and after the incident could not be saved ({0}).
 e267eed2	Report saved: {0}
 1236f4c4	The report could not be saved.\n{0}
 df96e04b	This file has no curves saved yet. In FanControl, create the curves and assign them to fans, then choose "⋮" → "Save" at the top right and import again.
+3aa80f28	"Test" runs a header at full speed for 8 seconds. See which fan speeds up, then give it a name and a type.
+83340a4b	A header at 0 rpm has nothing connected, or its fan is stopped (it is set to "Not used"; if it spins during "Test", it switches back to "Fan" by itself). The pump of an all-in-one water cooler (AIO) is the header whose cable comes from the part on top of the CPU. Set it to "Pump (AIO)": as a "Fan" it could be slowed down too much.
+1a2f6171	Start with Windows (recommended)
+179b4a9a	If off, fans go back to BIOS control after a restart until you open the app. You can change this later in Settings → General
+0791f579	Could not set up starting at logon. In Settings → General, turn "Start automatically at Windows logon" on again.
+6b46df8f	⚠ The PawnIO driver was found, but no fan headers were found.
+c98fd0e4	No fan headers were found.
+0c45458d	Without the PawnIO driver, fan headers cannot be read. Install it on the previous screen.
+171a3770	• Close the motherboard maker's software (Armoury Crate, MSI Center, iCUE and so on) or FanControl, then restart the app.
+56bdfca3	• On laptops and on motherboards that are not supported yet, fans cannot be controlled. Temperature monitoring still works.
+84a7d55a	• If you continue with "Next", fans stay under BIOS control and the app only monitors temperatures. It would help a lot if you told us about this PC with "Report a problem…" in the sidebar.
+9bcba463	• Fans are not controlled (they stay under BIOS control; the app only monitors temperatures)
+79487bd2	Headers not used (left to BIOS): {0}
+5b9856e9	If a fan is connected to one of them, go "Back" and set it to "Fan".
+91deb44d	Spinning fast. If this is the AIO pump, choose "Pump (AIO)"
+a08b13cf	Could not turn off starting at logon. In Settings → General, turn "Start automatically at Windows logon" off again.
+cd2d0b3c	• Your current fan settings are kept as they are. Close this with "Cancel".
+845000a1	No fan headers were found, so your current fan settings are kept as they are. Close the other software, restart the app, then run the setup again.

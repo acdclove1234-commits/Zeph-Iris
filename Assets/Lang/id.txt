@@ -502,7 +502,6 @@ ab449e0a	Selamat datang di Zeph-Iris
 80f88c90	Persiapan
 b1838111	• Tetaplah di dekat casing agar bisa mendengar dan melihat kipas.\n• Tutup program berat (seperti gim).\n• Pengaturan saat ini akan ditimpa, tetapi setelah selesai bisa dikembalikan dengan "Urungkan".
 90560324	Kenali konektor kipas
-68879f49	"Uji" memutar konektor pada kecepatan penuh selama 8 detik. Lihat kipas mana yang makin cepat, lalu beri nama dan jenisnya. Konektor 0 rpm tidak tersambung apa pun.
 5c41906d	Tidak dipakai
 63d8f556	Suhu yang diikuti kipas ini
 7f1db4e4	Ikuti CPU
@@ -1930,3 +1929,21 @@ fe29d679	Rekaman sebelum dan sesudah insiden tidak bisa disimpan ({0}).
 e267eed2	Laporan disimpan: {0}
 1236f4c4	Laporan tidak bisa disimpan.\n{0}
 df96e04b	File ini belum berisi kurva yang disimpan. Di FanControl, buat kurva dan tetapkan ke kipas, lalu pilih "⋮" → "Simpan" di kanan atas dan impor lagi.
+3aa80f28	"Uji" memutar konektor pada kecepatan penuh selama 8 detik. Lihat kipas mana yang jadi lebih cepat, lalu beri nama dan jenisnya.
+83340a4b	Konektor di 0 rpm tidak tersambung ke apa pun, atau kipasnya berhenti (diatur ke "Tidak dipakai"; jika berputar saat "Uji", otomatis kembali ke "Kipas"). Pompa water cooler all-in-one (AIO) adalah konektor yang kabelnya berasal dari bagian di atas CPU. Atur ke "Pompa (AIO)": jika diatur sebagai "Kipas", putarannya bisa terlalu lambat.
+1a2f6171	Mulai bersama Windows (disarankan)
+179b4a9a	Jika nonaktif, setelah PC dinyalakan ulang kipas kembali dikendalikan BIOS sampai aplikasi dibuka. Bisa diubah nanti di Pengaturan → "Umum"
+0791f579	Tidak bisa mengatur mulai otomatis saat masuk. Di Pengaturan → "Umum", aktifkan lagi "Mulai otomatis saat masuk Windows".
+6b46df8f	⚠ Driver PawnIO ditemukan, tetapi tidak ada konektor kipas yang ditemukan.
+c98fd0e4	Tidak ada konektor kipas yang ditemukan.
+0c45458d	Tanpa driver PawnIO, konektor kipas tidak bisa dibaca. Pasang driver di layar sebelumnya.
+171a3770	• Tutup software dari pembuat motherboard (Armoury Crate, MSI Center, iCUE, dll.) atau FanControl, lalu mulai ulang aplikasi.
+56bdfca3	• Di laptop dan motherboard yang belum didukung, kipas tidak bisa dikendalikan. Pemantauan suhu tetap berfungsi.
+84a7d55a	• Jika lanjut dengan "Berikutnya", kipas tetap dikendalikan BIOS dan aplikasi hanya memantau suhu. Akan sangat membantu jika Anda memberi tahu kami tentang PC ini lewat "Laporkan masalah…" di bilah samping.
+9bcba463	• Kipas tidak dikendalikan (tetap dikendalikan BIOS; aplikasi hanya memantau suhu)
+79487bd2	Konektor tidak dipakai (diserahkan ke BIOS): {0}
+5b9856e9	Jika ada kipas yang tersambung ke salah satunya, tekan "Kembali" dan atur ke "Kipas".
+91deb44d	Berputar cepat. Jika ini pompa AIO, pilih "Pompa (AIO)"
+a08b13cf	Tidak bisa mematikan mulai otomatis saat masuk. Di Pengaturan → "Umum", nonaktifkan lagi "Mulai otomatis saat masuk Windows".
+cd2d0b3c	• Pengaturan kipas saat ini tetap dipertahankan. Tutup dengan "Batal".
+845000a1	Konektor kipas tidak ditemukan, jadi pengaturan kipas saat ini tetap dipertahankan. Tutup perangkat lunak lain, mulai ulang aplikasi, lalu jalankan penyiapan lagi.

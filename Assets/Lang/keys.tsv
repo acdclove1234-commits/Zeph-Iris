@@ -608,30 +608,33 @@ ab449e0a	Zeph-Iris へようこそ	UI/SetupWizard.xaml:33
 80f88c90	準備	UI/SetupWizard.xaml:38
 b1838111	・ケースの横で、ファンの音や回転が分かるようにしておいてください。\n・重い処理（ゲームなど）は終了しておいてください。\n・現在の設定は上書きされますが、完了後に「元に戻す」で戻せます。	UI/SetupWizard.xaml:42
 90560324	ファン端子の識別	UI/SetupWizard.xaml:51
-68879f49	「テスト」を押すと 8 秒間だけ全開になります。速くなったファンを確認して、名前と種類を付けてください。0 rpm の端子は何もつながっていません。	UI/SetupWizard.xaml:53
-5c41906d	使わない	UI/SetupWizard.xaml:78
-63d8f556	このファンを何の温度に合わせて回すか	UI/SetupWizard.xaml:81
-7f1db4e4	CPU に連動	UI/SetupWizard.xaml:82
-6e1fb818	GPU に連動	UI/SetupWizard.xaml:83
-78e6a15b	CPU と GPU	UI/SetupWizard.xaml:84
-fdc10db0	冷却方針	UI/SetupWizard.xaml:98
-78757193	3 つのプロファイルはすべて作成されます。ここでは普段使うものを選んでください。あとからトレイのメニューでいつでも切り替えられます。	UI/SetupWizard.xaml:100
-f0eeb34c	できるだけ静かに。高負荷時だけしっかり回す	UI/SetupWizard.xaml:105
-ff39d6e4	標準（おすすめ）	UI/SetupWizard.xaml:110
-a5f14a94	静かさと冷却のバランス	UI/SetupWizard.xaml:111
-107ae700	パフォーマンス	UI/SetupWizard.xaml:116
-062bd953	温度を低く保つことを優先	UI/SetupWizard.xaml:117
-7694e77b	CPU の温度センサー	UI/SetupWizard.xaml:132
-bf2333b7	GPU の温度センサー	UI/SetupWizard.xaml:134
-0b64da4f	ポンプをこのツールで制御する（固定 70%）	UI/SetupWizard.xaml:142
-c1db4c06	オフのときは BIOS に任せ、回転数の監視と異常時の保護だけを行います（おすすめ）	UI/SetupWizard.xaml:143
-b58afa04	準備ができました	UI/SetupWizard.xaml:152
-861676ec	すぐに制御を開始する	UI/SetupWizard.xaml:159
-01bcdd36	オフにすると DRY RUN（計算だけでファンには書き込まない）で始まります	UI/SetupWizard.xaml:160
-fe39437d	ヒント: 完了後、「自動セットアップ」の画面で測ると、この PC に合った、いちばん静かなカーブを作れます（約 20〜30 分）。	UI/SetupWizard.xaml:165
-aceb0a14	キャンセル	UI/SetupWizard.xaml:170
-f193a383	戻る	UI/SetupWizard.xaml:172
-303830fc	次へ	UI/SetupWizard.xaml:173
+3aa80f28	「テスト」を押すと 8 秒間だけ全開になります。速くなったファンを確認して、名前と種類を付けてください。	UI/SetupWizard.xaml:53
+83340a4b	0 rpm の端子は、何もつながっていないか、止まっているファンです（「使わない」にしてあります。「テスト」で回れば、自動で「ファン」に戻します）。簡易水冷（AIO）のポンプは、CPU の上の部品から出ているケーブルの端子です。ポンプを「ファン」にすると遅くしすぎることがあるので、「ポンプ」にしてください。	UI/SetupWizard.xaml:55
+5c41906d	使わない	UI/SetupWizard.xaml:85
+63d8f556	このファンを何の温度に合わせて回すか	UI/SetupWizard.xaml:88
+7f1db4e4	CPU に連動	UI/SetupWizard.xaml:89
+6e1fb818	GPU に連動	UI/SetupWizard.xaml:90
+78e6a15b	CPU と GPU	UI/SetupWizard.xaml:91
+fdc10db0	冷却方針	UI/SetupWizard.xaml:105
+78757193	3 つのプロファイルはすべて作成されます。ここでは普段使うものを選んでください。あとからトレイのメニューでいつでも切り替えられます。	UI/SetupWizard.xaml:107
+f0eeb34c	できるだけ静かに。高負荷時だけしっかり回す	UI/SetupWizard.xaml:112
+ff39d6e4	標準（おすすめ）	UI/SetupWizard.xaml:117
+a5f14a94	静かさと冷却のバランス	UI/SetupWizard.xaml:118
+107ae700	パフォーマンス	UI/SetupWizard.xaml:123
+062bd953	温度を低く保つことを優先	UI/SetupWizard.xaml:124
+7694e77b	CPU の温度センサー	UI/SetupWizard.xaml:139
+bf2333b7	GPU の温度センサー	UI/SetupWizard.xaml:141
+0b64da4f	ポンプをこのツールで制御する（固定 70%）	UI/SetupWizard.xaml:149
+c1db4c06	オフのときは BIOS に任せ、回転数の監視と異常時の保護だけを行います（おすすめ）	UI/SetupWizard.xaml:150
+b58afa04	準備ができました	UI/SetupWizard.xaml:160
+861676ec	すぐに制御を開始する	UI/SetupWizard.xaml:167
+01bcdd36	オフにすると DRY RUN（計算だけでファンには書き込まない）で始まります	UI/SetupWizard.xaml:168
+1a2f6171	Windows の起動時に自動で起動する（おすすめ）	UI/SetupWizard.xaml:175
+179b4a9a	オフにすると、PC を起動し直したあとはアプリを開くまで BIOS の制御に戻ります。あとから 設定 →「一般」でも変えられます	UI/SetupWizard.xaml:176
+fe39437d	ヒント: 完了後、「自動セットアップ」の画面で測ると、この PC に合った、いちばん静かなカーブを作れます（約 20〜30 分）。	UI/SetupWizard.xaml:181
+aceb0a14	キャンセル	UI/SetupWizard.xaml:187
+f193a383	戻る	UI/SetupWizard.xaml:189
+303830fc	次へ	UI/SetupWizard.xaml:190
 a7710fc4	アンインストール（お片付け） - Zeph-Iris	UI/UninstallDialog.xaml:9
 7e52ad37	Zeph-Iris を使うのをやめる前に、PC をこのアプリを入れる前の状態に戻します。「お片付けして終了する」を押すと、次のことを上から順に行います。	UI/UninstallDialog.xaml:43
 2ed98b28	あわせて行うこと（どちらも、選ばなければ行いません）	UI/UninstallDialog.xaml:52
@@ -712,67 +715,67 @@ b79b5ccf	更新できませんでした（{0}）。	App.Update.cs:219
 b148d60e	見守りのプログラムを起動できませんでした。	App.Update.cs:256
 13b0e2e6	Zeph-Iris はすでに起動しています。\nタスクトレイのアイコンから開いてください。	App.xaml.cs:104
 ec6a9bb6	記録の保存	App.xaml.cs:193
-813ce530	Zeph-Iris: 回復しました	App.xaml.cs:258
-977b8544	プロファイルを自動で切り替えました	App.xaml.cs:270
-790c11cc	{0} を検出 → {1}	App.xaml.cs:270
-2b78d413	設定を保存できませんでした（{0}）。変えた設定はいまは効いていますが、このままアプリを終了すると元に戻ります。config.json をほかのアプリが開いていないか、ディスクの空きがあるか確かめてください（30 秒ごとに保存し直します）。	App.xaml.cs:281
-7b249720	ログを開く	App.xaml.cs:282
-466cf7d7	設定を保存できました。	App.xaml.cs:283
-3edcb675	プロファイル「{0}」の電源プランに切り替えられませんでした。選んでいた電源プランが Windows から消えていないか確かめて、プロファイルの設定で選び直してください。	App.xaml.cs:288
-5b860ae3	DRY RUN（テストモード）で動いています。温度に応じた回転数を計算するだけで、ファンは動かしていません。	App.xaml.cs:328
-874003cc	制御を開始する	App.xaml.cs:329
-3f6a7367	前の版の設定を引き継げませんでした（{0}）。前の版の設定は消えずに残っています。設定を変える前にアプリを起動し直すと、もう一度引き継ぎを試します。	App.xaml.cs:340
-f7737c39	起動し直す	App.xaml.cs:341
-c4657a17	config.json をほかのアプリが開いていて読めなかったため、{0} のバックアップの設定で起動しました（config.json は壊れていません）。設定を変えると、このバックアップの内容で上書きされます。最新の設定に戻すには、アプリを起動し直してください。	App.xaml.cs:349
-4f3dd658	設定ファイルが壊れていたため、バックアップ（{0}）の設定で起動しましたが、config.json に書き戻せませんでした（{1}）。config.json が読み取り専用になっていないか確かめてください。	App.xaml.cs:352
-720c745a	設定ファイルが壊れていたため、バックアップ（{0}）から復旧しました。壊れたファイルは config.broken_*.json として残しています。	App.xaml.cs:354
-47b4365f	Zeph-Iris が予期せず終了したため、見張りプロセスが自動で起動し直しました。ファンは安全な回転数にしてから制御を再開しています。原因はログで確認できます。	App.xaml.cs:358
-3a7e2e72	予期せず終了したため、自動で起動し直しました。	App.xaml.cs:360
-c0fd45c5	タスクトレイで動作を続けています。終了するにはアイコンを右クリックしてください。	App.xaml.cs:390
-e586d56a	Zeph-Iris: メンテナンス	App.xaml.cs:393
-c51b6c55	Windows の起動時に自動で立ち上がるのは、別の場所のアプリです（{0}）。古い版が立ち上がっているかもしれません。	App.xaml.cs:415
-268b2432	このアプリは「{0}」フォルダーの中から動いています。整理したときに消えたり、別の版が増えたりしないよう、	App.xaml.cs:420
-80df7870	下のボタンで {0} に移してください（設定はそのまま持っていき、自動起動も移した先に登録し直して、起動し直します）。	App.xaml.cs:421
-8d7ede7f	{0} が動いています。同じ LED やファンを操作するので、色が勝手に戻る・ちらつく・回転数が反映されない原因になります。そのソフトの LED・ファンの制御を止めるか、終了してください。	App.xaml.cs:426
-0cac6658	{0} に移す	App.xaml.cs:433
-f8529664	自動起動をこの場所にする	App.xaml.cs:437
-c674f1d5	自動起動を、いま動いているこのアプリに登録し直しました。	App.xaml.cs:442
-f5c17fde	自動起動を登録し直せませんでした（ログを確認してください）。	App.xaml.cs:442
-467c4a19	{0} へ移せませんでした: {1}	App.xaml.cs:476
-14d2e005	音の取り込み	App.xaml.cs:509
-224fc585	見張りプロセスが 10 分間に {0} 回止まりました。ウイルス対策ソフトなどが止めていないか確かめてください（止まるたびに起動し直しています）。	App.xaml.cs:662
-cecb4968	OpenRGB につながらないため、LED の色を変えられていません（{0}）。OpenRGB が起動しているか、OpenRGB の「SDK サーバー」がオンになっているか確かめてください。	App.xaml.cs:680
-f06249d0	見張りプロセスを起動できませんでした（{0}）。アプリが急に止まったときにファンを安全な回転数にする仕組みが、いまは働いていません。アプリを起動し直してみてください。	App.xaml.cs:689
-c08fb050	 ／ 	App.xaml.cs:745
-48ccab47	使っていたセンサーが見つかりません	App.xaml.cs:745
-9c32a53a	ハードウェアの変更を検出しました	App.xaml.cs:747
-c1f02356	Zeph-Iris: ハードウェアの変更	App.xaml.cs:748
-646e0b57	{0}。PC の画面で、新しいセンサーへの置き換えを確認してください。	App.xaml.cs:748
-9dddc76a	ファン制御に問題があります	App.xaml.cs:792
-8ad6890e	{0}（安全のため BIOS の制御にしています。自動で復旧を試みます）	App.xaml.cs:792
-2820bd11	Zeph-Iris: ファン制御の問題	App.xaml.cs:793
-30b6b07e	一部の部品を読み取れません	App.xaml.cs:796
-465384a0	ファン制御が復旧しました	App.xaml.cs:799
-2a57fe9c	通常の制御に戻りました。	App.xaml.cs:799
-f1a9779a	Zeph-Iris: 復旧	App.xaml.cs:800
-a8e2e175	ファン制御が通常に戻りました。	App.xaml.cs:800
-0d78d54c	ほかのプログラムが config.json を開いたままにしているため読めませんでした（ファイルはそのままです）。	App.xaml.cs:816
-9b03cdae	元のファイルは config.broken_日時.json として残しました。	App.xaml.cs:817
-b07af289	config.json を読み込めず、バックアップからも復旧できませんでした。\n{0}\n\n{1}\n空の設定で起動します。	App.xaml.cs:818
-05539caa	操作の途中で問題が起きたため、最後まで行えなかったかもしれません（{0}）。ファンの制御は続いています。何度も出るときは、ログを開いて「不具合を報告…」から知らせてください。	App.xaml.cs:880
-645b237e	ブースト	App.xaml.cs:930
-169abc6e	ポンプ以外の全ファンを {0} 分間 100% にします。	App.xaml.cs:930
-c342d519	「静音」で使うプロファイルが見つかりません。設定画面の「ワンタッチ操作」で選んでください。	App.xaml.cs:934
-96f2c83a	ショートカットキー（{0}）を使えませんでした。ほかのアプリが同じキーを使っているようです。	App.xaml.cs:1028
-45001a5c	スマホ用の Web サーバーは動いていますが、Windows のファイアウォールに許可を追加できませんでした。スマホからつながらないときは、ファイアウォールでポート {0} への接続を許可してください。	App.xaml.cs:1076
-77a0d0ea	スマホ用の Web サーバーを開始できませんでした（ポート {0}）: {1}	App.xaml.cs:1082
-eec05191	緊急全開	App.xaml.cs:1092
-0413f77c	一時停止中	App.xaml.cs:1092
-45fadb4f	制御中	App.xaml.cs:1092
-404e2134	ウィジェット	App.xaml.cs:1170
-1f2511a8	画面	App.xaml.cs:1174
-dfb02ca4	拍の AI	App.xaml.cs:1204
-0f13893a	タスクトレイ	App.xaml.cs:1227
+813ce530	Zeph-Iris: 回復しました	App.xaml.cs:259
+977b8544	プロファイルを自動で切り替えました	App.xaml.cs:271
+790c11cc	{0} を検出 → {1}	App.xaml.cs:271
+2b78d413	設定を保存できませんでした（{0}）。変えた設定はいまは効いていますが、このままアプリを終了すると元に戻ります。config.json をほかのアプリが開いていないか、ディスクの空きがあるか確かめてください（30 秒ごとに保存し直します）。	App.xaml.cs:282
+7b249720	ログを開く	App.xaml.cs:283
+466cf7d7	設定を保存できました。	App.xaml.cs:284
+3edcb675	プロファイル「{0}」の電源プランに切り替えられませんでした。選んでいた電源プランが Windows から消えていないか確かめて、プロファイルの設定で選び直してください。	App.xaml.cs:289
+5b860ae3	DRY RUN（テストモード）で動いています。温度に応じた回転数を計算するだけで、ファンは動かしていません。	App.xaml.cs:329
+874003cc	制御を開始する	App.xaml.cs:330
+3f6a7367	前の版の設定を引き継げませんでした（{0}）。前の版の設定は消えずに残っています。設定を変える前にアプリを起動し直すと、もう一度引き継ぎを試します。	App.xaml.cs:341
+f7737c39	起動し直す	App.xaml.cs:342
+c4657a17	config.json をほかのアプリが開いていて読めなかったため、{0} のバックアップの設定で起動しました（config.json は壊れていません）。設定を変えると、このバックアップの内容で上書きされます。最新の設定に戻すには、アプリを起動し直してください。	App.xaml.cs:350
+4f3dd658	設定ファイルが壊れていたため、バックアップ（{0}）の設定で起動しましたが、config.json に書き戻せませんでした（{1}）。config.json が読み取り専用になっていないか確かめてください。	App.xaml.cs:353
+720c745a	設定ファイルが壊れていたため、バックアップ（{0}）から復旧しました。壊れたファイルは config.broken_*.json として残しています。	App.xaml.cs:355
+47b4365f	Zeph-Iris が予期せず終了したため、見張りプロセスが自動で起動し直しました。ファンは安全な回転数にしてから制御を再開しています。原因はログで確認できます。	App.xaml.cs:359
+3a7e2e72	予期せず終了したため、自動で起動し直しました。	App.xaml.cs:361
+c0fd45c5	タスクトレイで動作を続けています。終了するにはアイコンを右クリックしてください。	App.xaml.cs:391
+e586d56a	Zeph-Iris: メンテナンス	App.xaml.cs:394
+c51b6c55	Windows の起動時に自動で立ち上がるのは、別の場所のアプリです（{0}）。古い版が立ち上がっているかもしれません。	App.xaml.cs:416
+268b2432	このアプリは「{0}」フォルダーの中から動いています。整理したときに消えたり、別の版が増えたりしないよう、	App.xaml.cs:421
+80df7870	下のボタンで {0} に移してください（設定はそのまま持っていき、自動起動も移した先に登録し直して、起動し直します）。	App.xaml.cs:422
+8d7ede7f	{0} が動いています。同じ LED やファンを操作するので、色が勝手に戻る・ちらつく・回転数が反映されない原因になります。そのソフトの LED・ファンの制御を止めるか、終了してください。	App.xaml.cs:427
+0cac6658	{0} に移す	App.xaml.cs:434
+f8529664	自動起動をこの場所にする	App.xaml.cs:438
+c674f1d5	自動起動を、いま動いているこのアプリに登録し直しました。	App.xaml.cs:443
+f5c17fde	自動起動を登録し直せませんでした（ログを確認してください）。	App.xaml.cs:443
+467c4a19	{0} へ移せませんでした: {1}	App.xaml.cs:477
+14d2e005	音の取り込み	App.xaml.cs:510
+224fc585	見張りプロセスが 10 分間に {0} 回止まりました。ウイルス対策ソフトなどが止めていないか確かめてください（止まるたびに起動し直しています）。	App.xaml.cs:663
+cecb4968	OpenRGB につながらないため、LED の色を変えられていません（{0}）。OpenRGB が起動しているか、OpenRGB の「SDK サーバー」がオンになっているか確かめてください。	App.xaml.cs:681
+f06249d0	見張りプロセスを起動できませんでした（{0}）。アプリが急に止まったときにファンを安全な回転数にする仕組みが、いまは働いていません。アプリを起動し直してみてください。	App.xaml.cs:690
+c08fb050	 ／ 	App.xaml.cs:746
+48ccab47	使っていたセンサーが見つかりません	App.xaml.cs:746
+9c32a53a	ハードウェアの変更を検出しました	App.xaml.cs:748
+c1f02356	Zeph-Iris: ハードウェアの変更	App.xaml.cs:749
+646e0b57	{0}。PC の画面で、新しいセンサーへの置き換えを確認してください。	App.xaml.cs:749
+9dddc76a	ファン制御に問題があります	App.xaml.cs:793
+8ad6890e	{0}（安全のため BIOS の制御にしています。自動で復旧を試みます）	App.xaml.cs:793
+2820bd11	Zeph-Iris: ファン制御の問題	App.xaml.cs:794
+30b6b07e	一部の部品を読み取れません	App.xaml.cs:797
+465384a0	ファン制御が復旧しました	App.xaml.cs:800
+2a57fe9c	通常の制御に戻りました。	App.xaml.cs:800
+f1a9779a	Zeph-Iris: 復旧	App.xaml.cs:801
+a8e2e175	ファン制御が通常に戻りました。	App.xaml.cs:801
+0d78d54c	ほかのプログラムが config.json を開いたままにしているため読めませんでした（ファイルはそのままです）。	App.xaml.cs:817
+9b03cdae	元のファイルは config.broken_日時.json として残しました。	App.xaml.cs:818
+b07af289	config.json を読み込めず、バックアップからも復旧できませんでした。\n{0}\n\n{1}\n空の設定で起動します。	App.xaml.cs:819
+05539caa	操作の途中で問題が起きたため、最後まで行えなかったかもしれません（{0}）。ファンの制御は続いています。何度も出るときは、ログを開いて「不具合を報告…」から知らせてください。	App.xaml.cs:881
+645b237e	ブースト	App.xaml.cs:931
+169abc6e	ポンプ以外の全ファンを {0} 分間 100% にします。	App.xaml.cs:931
+c342d519	「静音」で使うプロファイルが見つかりません。設定画面の「ワンタッチ操作」で選んでください。	App.xaml.cs:935
+96f2c83a	ショートカットキー（{0}）を使えませんでした。ほかのアプリが同じキーを使っているようです。	App.xaml.cs:1029
+45001a5c	スマホ用の Web サーバーは動いていますが、Windows のファイアウォールに許可を追加できませんでした。スマホからつながらないときは、ファイアウォールでポート {0} への接続を許可してください。	App.xaml.cs:1077
+77a0d0ea	スマホ用の Web サーバーを開始できませんでした（ポート {0}）: {1}	App.xaml.cs:1083
+eec05191	緊急全開	App.xaml.cs:1093
+0413f77c	一時停止中	App.xaml.cs:1093
+45fadb4f	制御中	App.xaml.cs:1093
+404e2134	ウィジェット	App.xaml.cs:1171
+1f2511a8	画面	App.xaml.cs:1175
+dfb02ca4	拍の AI	App.xaml.cs:1205
+0f13893a	タスクトレイ	App.xaml.cs:1228
 e6a34da2	停止中	Audio/AudioCapture.cs:79
 652c7b75	音を取り込めません（{0} 秒後に再試行）: {1}	Audio/AudioCapture.cs:225
 2674d6a9	音の出力先（スピーカー・ヘッドホン）が見つかりません	Audio/AudioCapture.cs:252
@@ -1716,26 +1719,28 @@ abe0a99c	アプリ名とプロファイルを指定してください。	MainWin
 3be9c598	タスクスケジューラへの登録に失敗しました。ログを確認してください。	MainWindow.Settings.cs:305
 131665f4	開発用フォルダ（bin\\Debug）の exe を登録しました。\n	MainWindow.Settings.cs:311
 28fcc4bc	ビルドし直すと場所が変わることがあるため、「発行」した exe から登録し直すことをおすすめします。	MainWindow.Settings.cs:312
-9b94a7a0	セットアップが完了しました。気に入らなければ、ファンカーブ画面の「元に戻す」で以前の設定に戻せます。	MainWindow.Settings.cs:337
-31940460	電源プランを変えない	MainWindow.Settings.cs:379
-ef7d18bc	Windows に合わせる	MainWindow.Settings.cs:406
-639ba182	ダーク	MainWindow.Settings.cs:407
-37141fb8	ライト	MainWindow.Settings.cs:408
-8f4f452a	既定（英数字 Montserrat・日本語 ProFan Maru）	MainWindow.Settings.cs:424
-25ae07d9	ProFan Maru（同梱の丸ゴシック）	MainWindow.Settings.cs:425
-75788b92	自動（Windows の表示言語）	MainWindow.Settings.cs:428
-1755da21	やや控えめ	MainWindow.Settings.cs:463
-79a677b2	やや濃い	MainWindow.Settings.cs:463
-4bf63202	濃い	MainWindow.Settings.cs:463
-26559a27	灰色	MainWindow.Settings.cs:468
-77d49f1b	色相 {0}°	MainWindow.Settings.cs:468
-c96a6fad	{0}・{1}	MainWindow.Settings.cs:472
-3e7b80f4	白に近い	MainWindow.Settings.cs:482
-33e39538	淡い	MainWindow.Settings.cs:482
-ec6cb7af	黒に近い	MainWindow.Settings.cs:483
-82fa072a	終わってから、表示言語を選び直してください。	MainWindow.Settings.cs:526
-3036c063	この PC のネットワークアドレスが見つかりません	MainWindow.Settings.cs:650
-f028972c	Web サーバーを開始できませんでした。ポート番号を変えて試してください（ログに詳細があります）	MainWindow.Settings.cs:651
+9b94a7a0	セットアップが完了しました。気に入らなければ、ファンカーブ画面の「元に戻す」で以前の設定に戻せます。	MainWindow.Settings.cs:340
+0791f579	ログオン時の自動起動を設定できませんでした。設定 →「一般」の「Windows ログオン時に自動で起動する」を、もう一度オンにしてください。	MainWindow.Settings.cs:370
+a08b13cf	ログオン時の自動起動を外せませんでした。設定 →「一般」の「Windows ログオン時に自動で起動する」を、もう一度オフにしてください。	MainWindow.Settings.cs:371
+31940460	電源プランを変えない	MainWindow.Settings.cs:406
+ef7d18bc	Windows に合わせる	MainWindow.Settings.cs:433
+639ba182	ダーク	MainWindow.Settings.cs:434
+37141fb8	ライト	MainWindow.Settings.cs:435
+8f4f452a	既定（英数字 Montserrat・日本語 ProFan Maru）	MainWindow.Settings.cs:451
+25ae07d9	ProFan Maru（同梱の丸ゴシック）	MainWindow.Settings.cs:452
+75788b92	自動（Windows の表示言語）	MainWindow.Settings.cs:455
+1755da21	やや控えめ	MainWindow.Settings.cs:490
+79a677b2	やや濃い	MainWindow.Settings.cs:490
+4bf63202	濃い	MainWindow.Settings.cs:490
+26559a27	灰色	MainWindow.Settings.cs:495
+77d49f1b	色相 {0}°	MainWindow.Settings.cs:495
+c96a6fad	{0}・{1}	MainWindow.Settings.cs:499
+3e7b80f4	白に近い	MainWindow.Settings.cs:509
+33e39538	淡い	MainWindow.Settings.cs:509
+ec6cb7af	黒に近い	MainWindow.Settings.cs:510
+82fa072a	終わってから、表示言語を選び直してください。	MainWindow.Settings.cs:553
+3036c063	この PC のネットワークアドレスが見つかりません	MainWindow.Settings.cs:677
+f028972c	Web サーバーを開始できませんでした。ポート番号を変えて試してください（ログに詳細があります）	MainWindow.Settings.cs:678
 26d33196	PawnIO（ファン制御用のドライバー）が見つかりません。このままでは温度の表示だけで、ファンは制御できません。	MainWindow.Setup.cs:23
 233ed082	設定の「安全・バックアップ」から、ボタン 1 つでインストールできます。	MainWindow.Setup.cs:24
 5d6faa41	インストールの画面を開く	MainWindow.Setup.cs:25
@@ -1860,15 +1865,26 @@ cbfdf76e	（このファンを削除する）	UI/RemapDialog.xaml.cs:56
 ecf8e3b5	書き出した PC: {0}（{1:yyyy/MM/dd HH:mm}）	UI/RemapDialog.xaml.cs:94
 b44944a1	読み込む	UI/RemapDialog.xaml.cs:99
 39a0848e	読み込むプロファイルを 1 つ以上選んでください。	UI/RemapDialog.xaml.cs:108
-390affbd	✔ PawnIO ドライバ検出済み ／ ファン端子 {0} 個を検出しました	UI/SetupWizard.xaml.cs:29
-e92bc9eb	完了して適用	UI/SetupWizard.xaml.cs:115
-e051dd30	少なくとも 1 つの端子を「ファン」か「ポンプ」にしてください。	UI/SetupWizard.xaml.cs:123
-fb7c18a5	CPU の温度センサーを選んでください。	UI/SetupWizard.xaml.cs:128
-9fba3a25	・{0}（ポンプ）: {1}	UI/SetupWizard.xaml.cs:172
-fe5a2b13	固定 70% で制御	UI/SetupWizard.xaml.cs:172
-0c1d2ab2	BIOS 制御のまま監視	UI/SetupWizard.xaml.cs:172
-d6d4423a	・{0}（ファン）: {1} に連動	UI/SetupWizard.xaml.cs:173
-9833252d	作成するプロファイル: {0} ／ {1} ／ {2}\n普段使うプロファイル: {3}\n\n	UI/SetupWizard.xaml.cs:174
+6b46df8f	⚠ PawnIO ドライバは見つかりましたが、ファンの端子が 1 つも見つかりませんでした。	UI/SetupWizard.xaml.cs:33
+390affbd	✔ PawnIO ドライバ検出済み ／ ファン端子 {0} 個を検出しました	UI/SetupWizard.xaml.cs:38
+c98fd0e4	ファンの端子が見つかりませんでした。	UI/SetupWizard.xaml.cs:80
+0c45458d	PawnIO ドライバがないため、ファンの端子を読めません。前の画面でインストールしてください。	UI/SetupWizard.xaml.cs:81
+171a3770	・マザーボードのメーカーのソフト（Armoury Crate・MSI Center・iCUE など）や FanControl を終了してから、アプリを起動し直してください。	UI/SetupWizard.xaml.cs:141
+56bdfca3	・ノート PC や、まだ対応していないマザーボードでは、ファンを動かせません。温度の監視だけは使えます。	UI/SetupWizard.xaml.cs:142
+cd2d0b3c	・いまのファンの設定は消さずに、そのままにします。「キャンセル」で閉じてください。	UI/SetupWizard.xaml.cs:144
+84a7d55a	・このまま「次へ」で進むと、ファンは BIOS に任せたまま、温度の監視だけで始めます。サイドバーの「不具合を報告…」から、この PC のことを知らせてもらえると助かります。	UI/SetupWizard.xaml.cs:145
+e92bc9eb	完了して適用	UI/SetupWizard.xaml.cs:163
+845000a1	ファンの端子が見つからないので、いまのファンの設定はそのままにします。ほかのソフトを終了してアプリを起動し直してから、もう一度セットアップしてください。	UI/SetupWizard.xaml.cs:173
+e051dd30	少なくとも 1 つの端子を「ファン」か「ポンプ」にしてください。	UI/SetupWizard.xaml.cs:179
+fb7c18a5	CPU の温度センサーを選んでください。	UI/SetupWizard.xaml.cs:184
+9fba3a25	・{0}（ポンプ）: {1}	UI/SetupWizard.xaml.cs:240
+fe5a2b13	固定 70% で制御	UI/SetupWizard.xaml.cs:240
+0c1d2ab2	BIOS 制御のまま監視	UI/SetupWizard.xaml.cs:240
+d6d4423a	・{0}（ファン）: {1} に連動	UI/SetupWizard.xaml.cs:241
+9bcba463	・ファンは制御しません（BIOS に任せたまま、温度の監視だけを行います）	UI/SetupWizard.xaml.cs:242
+79487bd2	使わない端子（BIOS のまま）: {0}	UI/SetupWizard.xaml.cs:246
+5b9856e9	つながっているファンがあれば、「戻る」で「ファン」にしてください。	UI/SetupWizard.xaml.cs:247
+9833252d	作成するプロファイル: {0} ／ {1} ／ {2}\n普段使うプロファイル: {3}\n\n	UI/SetupWizard.xaml.cs:248
 892a3878	Zeph-Iris を開く	UI/TrayIcon.cs:85
 9a801bfe	ブースト（全開）15 分	UI/TrayIcon.cs:91
 46dbb6b6	静音 30 分	UI/TrayIcon.cs:92
@@ -1930,3 +1946,4 @@ a10ec68f	使用率	UI/ViewModels.cs:307
 ba90de43	クロック	UI/ViewModels.cs:308
 1044c343	データ	UI/ViewModels.cs:310
 f951f047	レベル	UI/ViewModels.cs:311
+91deb44d	速く回っています。簡易水冷のポンプなら「ポンプ」に	UI/ViewModels.cs:417

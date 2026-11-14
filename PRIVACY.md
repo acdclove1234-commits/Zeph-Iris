@@ -34,7 +34,7 @@ The beat AI (Beat This!) runs on your PC only; no audio leaves it. When "Remembe
 
 ## Changes to your PC
 
-- The installer adds PawnIO (a signed driver that lets the app read sensors and set fan speeds), an auto-start task, and Start menu shortcuts. The uninstaller removes the task, shortcuts and firewall rule, and asks whether to delete settings and logs.
+- The installer adds PawnIO (a signed driver that lets the app read sensors and set fan speeds) and Start menu shortcuts. The setup wizard in the app adds an auto-start task when you leave "Start with Windows" on. The uninstaller removes the task, shortcuts and firewall rule, and asks whether to delete settings and logs.
 - A profile can switch the Windows power plan only if you pick one for it (the default is "do not change"); the original plan is restored when the app exits.
 - While the app runs it sets fan speeds. When it exits, fans go back to BIOS control.
 
@@ -70,6 +70,6 @@ Zeph-Iris は、あなたの PC の中で動きます。アカウント・利用
 
 ## PC に加える変更
 
-- インストーラーは、PawnIO（センサーを読み、ファンの速さを変えるための署名つきドライバー）・自動起動のタスク・スタートメニューのショートカットを入れます。アンインストールすると、タスク・ショートカット・ファイアウォールの許可を消し、設定とログを消すかを尋ねます。
+- インストーラーは、PawnIO（センサーを読み、ファンの速さを変えるための署名つきドライバー）とスタートメニューのショートカットを入れます。自動起動のタスクは、アプリのセットアップの「Windows の起動時に自動で起動する」をオンのまま進めると登録します。アンインストールすると、タスク・ショートカット・ファイアウォールの許可を消し、設定とログを消すかを尋ねます。
 - 電源プランは、プロファイルにプランを選んだときだけ切り替えます（既定は「変更しない」）。アプリを終了すると、元のプランに戻します。
 - アプリが動いている間はファンの速さを変えます。終了すると、ファンは BIOS の制御に戻ります。

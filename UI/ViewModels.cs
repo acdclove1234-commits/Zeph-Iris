@@ -394,15 +394,36 @@ public sealed class WizardChannelVm : ObservableObject
     public required ControlInfo Control { get; init; }
     public string Name { get => _name; set => Set(ref _name, value); }
     /// <summary>"Fan" / "Pump" / "Unused"</summary>
-    public string Role { get => _role; set => Set(ref _role, value); }
+    public string Role
+    {
+        get => _role;
+        set
+        {
+            if (!Set(ref _role, value)) return;
+            GuessedUnused = false;   // 選び直した（またはアプリが決め直した）
+            Raise(nameof(PumpHint));
+        }
+    }
     /// <summary>"CPU" / "GPU" / "Both"</summary>
     public string Source { get => _source; set => Set(ref _source, value); }
     public string RpmText { get => _rpmText; private set => Set(ref _rpmText, value); }
     public double Rpm => _rpm;
+    /// <summary>最初に回転数を見たときの値（ポンプかもしれないファンの下限を決めるのに使う）</summary>
+    public double FirstRpm { get; set; }
+    /// <summary>0 rpm だったので、アプリが「使わない」にした（あとで回ったら「ファン」に戻す）</summary>
+    public bool GuessedUnused { get; set; }
+
+    /// <summary>「ファン」なのに速く回っている（簡易水冷のポンプかもしれない）ときの注意</summary>
+    public string PumpHint => !Testing && SetupGuess.MaybePump(_role, _rpm) ? L("速く回っています。簡易水冷のポンプなら「ポンプ」に") : "";
+
+    /// <summary>「テスト」で全開にしている間（この間の回転数は、ふだんの速さではない）</summary>
+    public DateTime TestUntilUtc { get; set; }
+    public bool Testing => DateTime.UtcNow < TestUntilUtc;
 
     public void UpdateRpm(float? rpm)
     {
         _rpm = rpm ?? 0;
         RpmText = rpm.HasValue ? $"{rpm.Value:N0} rpm" : "--";
+        Raise(nameof(PumpHint));
     }
 }

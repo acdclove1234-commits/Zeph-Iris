@@ -18,13 +18,22 @@ public partial class SetupWizard : Window
     private bool _rolesGuessed;
     private int _step = 1;
 
-    public SetupWizard(AppController controller, HardwareCatalog catalog, IReadOnlyList<SensorOption> temps)
+    /// <param name="autoStartOn">「Windows の起動時に自動で起動する」の最初の状態（初めてならオン。やり直しなら、いまの状態）</param>
+    public SetupWizard(AppController controller, HardwareCatalog catalog, IReadOnlyList<SensorOption> temps, bool autoStartOn = true)
     {
         InitializeComponent();
         _controller = controller;
         _temps = temps;
+        AutoStartWizardSwitch.IsChecked = autoStartOn;
+        _autoStartInitial = autoStartOn;
 
-        if (catalog.PawnIoInstalled)
+        if (catalog.PawnIoInstalled && catalog.Controls.Count == 0)
+        {
+            // ドライバーはあるのに、ファンの端子が見つからない（対応していないマザーボード・ノート PC・ほかのソフトが端子をつかんでいる など）
+            PawnIoStatus.Text = L("⚠ PawnIO ドライバは見つかりましたが、ファンの端子が 1 つも見つかりませんでした。") + "\n" + NoChannelsAdvice(controller.Config.Profiles.Any(p => p.Fans.Count > 0));
+            PawnIoStatus.Foreground = Palette.Warn;
+        }
+        else if (catalog.PawnIoInstalled)
         {
             PawnIoStatus.Text = L($"✔ PawnIO ドライバ検出済み ／ ファン端子 {catalog.Controls.Count} 個を検出しました");
             PawnIoStatus.Foreground = Palette.Ok;
@@ -65,6 +74,13 @@ public partial class SetupWizard : Window
             _channels.Add(vm);
         }
         ChannelList.ItemsSource = _channels;
+        if (_channels.Count == 0)
+        {
+            NoChannelsText.Text = (catalog.PawnIoInstalled
+                ? L("ファンの端子が見つかりませんでした。")
+                : L("PawnIO ドライバがないため、ファンの端子を読めません。前の画面でインストールしてください。")) + "\n" + NoChannelsAdvice(controller.Config.Profiles.Any(p => p.Fans.Count > 0));
+            NoChannelsText.Visibility = Visibility.Visible;
+        }
 
         var physical = temps.Where(t => !t.Id.StartsWith(VirtualSensorConfig.IdPrefix)).ToList();
         CpuSensorCombo.ItemsSource = physical;
@@ -85,16 +101,48 @@ public partial class SetupWizard : Window
         {
             ch.UpdateRpm(ch.Control.RpmSensorId is { } id && s.Values.TryGetValue(id, out var v) ? v : null);
         }
-        if (_rolesGuessed) return;
+        if (_rolesGuessed) { PromoteSpinning(); return; }
         _rolesGuessed = true;
 
-        // 0 rpm は未接続、名前に Pump を含むか 2200 rpm 超はポンプの可能性が高い
-        foreach (var ch in _channels.Where(c => !_controller.Config.Profiles.SelectMany(p => p.Fans).Any(f => f.ControlId == c.Control.Id)))
+        // 0 rpm は未接続か止まっているファン、名前にポンプと付いているか 2200 rpm 超はポンプの可能性が高い（SetupGuess）
+        foreach (var ch in _channels)
         {
-            if (ch.Rpm < 1) ch.Role = WizardChannelVm.RoleUnused;
-            else if (ch.Control.Name.Contains("Pump", StringComparison.OrdinalIgnoreCase) || ch.Rpm > 2200) ch.Role = FanRoles.Pump;
+            ch.FirstRpm = ch.Rpm;
+            if (_controller.Config.Profiles.SelectMany(p => p.Fans).Any(f => f.ControlId == ch.Control.Id)) continue;
+            ch.Role = SetupGuess.Role(ch.Control.Name, ch.Rpm);
+            ch.GuessedUnused = ch.Role == WizardChannelVm.RoleUnused;
         }
     }
+
+    /// <summary>
+    /// 「使わない」にした端子が、あとで回った（テストで回った・止まっていたファンが回り出した）ら、つながっているとみなす。
+    /// テストの間は全開なので、ふだんの速さとしては使わない（ファンにするだけ）。テストでなく回り出したら、その速さで選び直す（速ければポンプ）。
+    /// 端子を選ぶ画面にいる間だけ（あとの画面のまとめと食い違わないように）
+    /// </summary>
+    private void PromoteSpinning()
+    {
+        if (_step != 2) return;
+        foreach (var ch in _channels.Where(c => c.GuessedUnused && c.Rpm >= SetupGuess.SpinningRpm).ToList())
+        {
+            if (ch.Testing)
+            {
+                ch.Role = FanRoles.Fan;
+            }
+            else
+            {
+                ch.FirstRpm = ch.Rpm;
+                ch.Role = SetupGuess.Role(ch.Control.Name, ch.Rpm);
+            }
+        }
+    }
+
+    /// <summary>ファンの端子が見つからないときに、どうすればよいか</summary>
+    private static string NoChannelsAdvice(bool hasFans) =>
+        L("・マザーボードのメーカーのソフト（Armoury Crate・MSI Center・iCUE など）や FanControl を終了してから、アプリを起動し直してください。") + "\n" +
+        L("・ノート PC や、まだ対応していないマザーボードでは、ファンを動かせません。温度の監視だけは使えます。") + "\n" +
+        (hasFans
+            ? L("・いまのファンの設定は消さずに、そのままにします。「キャンセル」で閉じてください。")
+            : L("・このまま「次へ」で進むと、ファンは BIOS に任せたまま、温度の監視だけで始めます。サイドバーの「不具合を報告…」から、この PC のことを知らせてもらえると助かります。"));
 
     private void ShowStep()
     {
@@ -118,7 +166,15 @@ public partial class SetupWizard : Window
 
     private void OnNext(object sender, RoutedEventArgs e)
     {
-        if (_step == 2 && !_channels.Any(c => c.Role != WizardChannelVm.RoleUnused))
+        // 端子が 1 つもないときは、温度の監視だけで進める（行き止まりにしない）。
+        // ただし、もうファンを設定してあるときは、端子が一時的に見えないだけかもしれないので、今の設定を消さない
+        if (_step == 2 && _channels.Count == 0 && _controller.Config.Profiles.Any(p => p.Fans.Count > 0))
+        {
+            MessageBox.Show(this, L("ファンの端子が見つからないので、いまのファンの設定はそのままにします。ほかのソフトを終了してアプリを起動し直してから、もう一度セットアップしてください。"),
+                Title, MessageBoxButton.OK, MessageBoxImage.Information);
+            return;
+        }
+        if (_step == 2 && _channels.Count > 0 && !_channels.Any(c => c.Role != WizardChannelVm.RoleUnused))
         {
             MessageBox.Show(this, L("少なくとも 1 つの端子を「ファン」か「ポンプ」にしてください。"), Title, MessageBoxButton.OK, MessageBoxImage.Information);
             return;
@@ -146,11 +202,23 @@ public partial class SetupWizard : Window
         ShowStep();
     }
 
+    /// <summary>テストで全開にする 8 秒と、回転が落ち着くまで（全開の回転数を、ふだんの速さと取り違えない）</summary>
+    private const double TestSeconds = 14;
+
     private void OnCancel(object sender, RoutedEventArgs e) => DialogResult = false;
+
+    /// <summary>完了したとき、Windows の起動時に自動で起動するようにするか（オフなら、自動起動を外す）</summary>
+    public bool AutoStartChosen => AutoStartWizardSwitch.IsChecked == true;
+
+    /// <summary>自動起動のスイッチを、開いたときから変えたか（やり直しで変えていなければ、いまの状態に触らない）</summary>
+    public bool AutoStartChanged => AutoStartChosen != _autoStartInitial;
+    private readonly bool _autoStartInitial;
 
     private void OnTest(object sender, RoutedEventArgs e)
     {
-        if (sender is Button { Tag: WizardChannelVm ch }) _controller.Engine.Identify(ch.Control.Id);
+        if (sender is not Button { Tag: WizardChannelVm ch }) return;
+        ch.TestUntilUtc = DateTime.UtcNow.AddSeconds(TestSeconds);
+        _controller.Engine.Identify(ch.Control.Id);
     }
 
     private string SelectedPreset
@@ -170,7 +238,13 @@ public partial class SetupWizard : Window
         var used = _channels.Where(c => c.Role != WizardChannelVm.RoleUnused).ToList();
         var lines = used.Select(c => c.Role == FanRoles.Pump
             ? L($"・{c.Name}（ポンプ）: {(PumpControlSwitch.IsChecked == true ? L("固定 70% で制御") : L("BIOS 制御のまま監視"))}")
-            : L($"・{c.Name}（ファン）: {SourceText(c.Source)} に連動"));
+            : L($"・{c.Name}（ファン）: {SourceText(c.Source)} に連動")).ToList();
+        if (used.Count == 0) lines.Add(L("・ファンは制御しません（BIOS に任せたまま、温度の監視だけを行います）"));
+        // 「使わない」にした端子も見せる（止まっていたファンが外れたままにならないように）
+        var unused = _channels.Where(c => c.Role == WizardChannelVm.RoleUnused).Select(c => c.Name).ToList();
+        if (unused.Count > 0)
+            lines.Add("\n" + L($"使わない端子（BIOS のまま）: {string.Join(", ", unused)}") + "\n" +
+                      L("つながっているファンがあれば、「戻る」で「ファン」にしてください。"));
         return L($"作成するプロファイル: {ProfileNameFor(CurvePresets.Silent)} ／ {ProfileNameFor(CurvePresets.Balanced)} ／ {ProfileNameFor(CurvePresets.Performance)}\n普段使うプロファイル: {ProfileNameFor(SelectedPreset)}\n\n") +
                string.Join("\n", lines);
     }
@@ -227,8 +301,9 @@ public partial class SetupWizard : Window
             else
             {
                 // キャリブレーション済みなら「止まらない最低回転」を下限にする
+                // 測っていなくて速く回っていた（ポンプかもしれない）ファンは、ポンプの下限より下げない
                 var cal = cfg.FindCalibration(ch.Control.Id);
-                fan.MinDuty = cal is not null ? Math.Min(60, cal.StopDuty + 5) : 25;
+                fan.MinDuty = SetupGuess.FanMinDuty(cal?.StopDuty, ch.FirstRpm, FanEngine.PumpHardMinDuty);
                 fan.MaxStepUpPerTick = preset == CurvePresets.Silent ? 4 : 8;
                 fan.MaxStepDownPerTick = preset == CurvePresets.Silent ? 1.5 : 2;
 

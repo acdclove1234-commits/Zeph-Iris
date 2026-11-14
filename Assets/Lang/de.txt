@@ -502,7 +502,6 @@ ab449e0a	Willkommen bei Zeph-Iris
 80f88c90	Vorbereitung
 b1838111	• Bleiben Sie neben dem Gehäuse, damit Sie die Lüfter hören und sehen.\n• Schließen Sie anspruchsvolle Programme (etwa Spiele).\n• Ihre aktuellen Einstellungen werden überschrieben, lassen sich danach aber mit „Rückgängig“ wiederherstellen.
 90560324	Lüfteranschlüsse erkennen
-68879f49	„Test“ lässt einen Anschluss 8 Sekunden mit voller Drehzahl laufen. Sehen Sie, welcher Lüfter schneller wird, und geben Sie ihm Namen und Typ. An Anschlüssen mit 0 rpm hängt nichts.
 5c41906d	Nicht verwendet
 63d8f556	Nach welcher Temperatur sich dieser Lüfter richtet
 7f1db4e4	Nach CPU
@@ -1930,3 +1929,21 @@ fe29d679	Die Vorfallaufzeichnungen vor und nach dem Vorfall konnten nicht gespei
 e267eed2	Bericht gespeichert: {0}
 1236f4c4	Der Bericht konnte nicht gespeichert werden.\n{0}
 df96e04b	In dieser Datei sind noch keine Kurven gespeichert. Erstellen Sie die Kurven in FanControl, weisen Sie sie den Lüftern zu, wählen Sie oben rechts „⋮“ → „Speichern“ und importieren Sie dann erneut.
+3aa80f28	„Test“ lässt einen Anschluss 8 Sekunden lang mit voller Drehzahl laufen. Schauen Sie, welcher Lüfter schneller wird, und geben Sie ihm dann einen Namen und einen Typ.
+83340a4b	Ein Anschluss mit 0 rpm hat nichts angeschlossen, oder sein Lüfter steht still (er ist auf „Nicht verwendet“ gesetzt; dreht er sich bei „Test“, wechselt er von selbst zurück zu „Lüfter“). Die Pumpe einer AIO-Wasserkühlung ist der Anschluss, dessen Kabel vom Teil oben auf der CPU kommt. Stellen Sie sie auf „Pumpe (AIO)“: Als „Lüfter“ könnte sie zu stark gedrosselt werden.
+1a2f6171	Mit Windows starten (empfohlen)
+179b4a9a	Wenn aus, übernimmt nach einem Neustart wieder das BIOS die Lüfter, bis Sie die App öffnen. Sie können das später unter Einstellungen → „Allgemein“ ändern
+0791f579	Der Start bei der Anmeldung konnte nicht eingerichtet werden. Schalten Sie unter Einstellungen → „Allgemein“ die Option „Bei der Windows-Anmeldung automatisch starten“ erneut ein.
+6b46df8f	⚠ Der PawnIO-Treiber wurde gefunden, aber keine Lüfteranschlüsse.
+c98fd0e4	Es wurden keine Lüfteranschlüsse gefunden.
+0c45458d	Ohne den PawnIO-Treiber können die Lüfteranschlüsse nicht gelesen werden. Installieren Sie ihn auf dem vorherigen Bildschirm.
+171a3770	• Beenden Sie die Software des Mainboard-Herstellers (Armoury Crate, MSI Center, iCUE usw.) oder FanControl und starten Sie die App dann neu.
+56bdfca3	• Auf Laptops und auf noch nicht unterstützten Mainboards können die Lüfter nicht gesteuert werden. Die Temperaturüberwachung funktioniert trotzdem.
+84a7d55a	• Wenn Sie mit „Weiter“ fortfahren, bleiben die Lüfter unter BIOS-Steuerung und die App überwacht nur die Temperaturen. Es hilft uns sehr, wenn Sie uns über „Problem melden…“ in der Seitenleiste von diesem PC erzählen.
+9bcba463	• Die Lüfter werden nicht gesteuert (sie bleiben unter BIOS-Steuerung; die App überwacht nur die Temperaturen)
+79487bd2	Nicht verwendete Anschlüsse (beim BIOS belassen): {0}
+5b9856e9	Ist an einem davon ein Lüfter angeschlossen, gehen Sie „Zurück“ und stellen Sie ihn auf „Lüfter“.
+91deb44d	Dreht schnell. Ist das die AIO-Pumpe, wählen Sie „Pumpe (AIO)“
+a08b13cf	Der Start bei der Anmeldung konnte nicht ausgeschaltet werden. Schalten Sie unter Einstellungen → „Allgemein“ die Option „Bei der Windows-Anmeldung automatisch starten“ erneut aus.
+cd2d0b3c	• Ihre aktuellen Lüftereinstellungen bleiben unverändert. Schließen Sie dieses Fenster mit „Abbrechen“.
+845000a1	Es wurden keine Lüfteranschlüsse gefunden, daher bleiben Ihre aktuellen Lüftereinstellungen unverändert. Beenden Sie die andere Software, starten Sie die App neu und führen Sie die Einrichtung dann erneut durch.
