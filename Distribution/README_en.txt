@@ -13,6 +13,12 @@ and Iris, the rainbow (the LEDs).
   for example: Settings [設定].
 
 
+■ What's new in v6.15.6
+  - Music sync, "Remember songs": a song now counts as the same song in any player app, so a song remembered in
+    Spotify works right away in YouTube Music and others. Songs remembered before are moved over the next time they
+    play (no need to learn them again).
+  - If Windows' media info cannot be read for a while, the app tries again a minute later (no restart needed).
+
 ■ What's new in v6.15.5
   - Music sync: "Remember songs" now also works with YouTube Music, Apple Music, browser players and others, not only
     Spotify. Songs are told apart by Windows' media info (the name shown when you press a volume key); titles are

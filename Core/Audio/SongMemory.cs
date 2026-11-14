@@ -13,7 +13,7 @@ namespace ProFanController;
 /// <summary>覚えた曲 1 つ（曲名は持たない。曲名の SHA-256 と、拍の時刻・始まりの音の強さの並びだけ）</summary>
 public sealed class SongRecord
 {
-    /// <summary>曲を見分ける印（再生アプリ名と曲名の SHA-256 の先頭。元の曲名には戻せない）</summary>
+    /// <summary>曲を見分ける印（曲名の SHA-256 の先頭。元の曲名には戻せない）</summary>
     public string Key { get; set; } = "";
     /// <summary>拍の時刻（曲の始まりからの秒）・小節の頭</summary>
     public List<float> Beats { get; set; } = new();
@@ -24,6 +24,9 @@ public sealed class SongRecord
     public int Plays { get; set; }
     public DateTime UpdatedAt { get; set; }
 }
+
+/// <summary>流れている曲の印。Legacy は 6.15.5 までの印（再生アプリごと。なければ null）</summary>
+public readonly record struct SongId(string Key, string? Legacy);
 
 /// <summary>
 /// 曲の拍の記憶。曲が変わったこと（<see cref="BeginSong"/>）を知らされると、
@@ -49,7 +52,7 @@ public sealed class SongMemory
     private readonly Dictionary<string, SongRecord> _cache = new();
 
     // 今の曲
-    private volatile string? _pendingKey;
+    private volatile Pending? _pending;
     private string? _key;
     private double _songStartT = double.NaN;   // 曲名が変わったのに気づいた時刻（音の時刻）
     private double _offset;                     // 本当に流れ始めた時刻 = _songStartT + _offset
@@ -77,24 +80,40 @@ public sealed class SongMemory
         _dir = dir;
     }
 
-    /// <summary>再生アプリ名と曲名から、曲を見分ける印を作る（曲名そのものは持たない・保存しない）</summary>
-    public static string KeyOf(string app, string title)
+    /// <summary>
+    /// 曲名（「アーティスト - 曲名」）から、曲を見分ける印を作る（曲名そのものは持たない・保存しない）。
+    /// どの再生アプリで流しても同じ印になる（Spotify で覚えた曲を YouTube Music でも使える）
+    /// </summary>
+    public static string KeyOf(string title) => Hash(title);
+
+    /// <summary>6.15.5 までの印（再生アプリ名と曲名）。前に覚えた曲を、新しい印に移すときに探す</summary>
+    public static string LegacyKeyOf(string app, string title) => Hash(app.ToLowerInvariant() + "\n" + title);
+
+    /// <summary>流れている曲の印（いまの印と、前の版の印）</summary>
+    public static SongId IdOf(string app, string title) => new(KeyOf(title), LegacyKeyOf(app, title));
+
+    private static string Hash(string s)
     {
-        var h = SHA256.HashData(Encoding.UTF8.GetBytes(app.ToLowerInvariant() + "\n" + title));
+        var h = SHA256.HashData(Encoding.UTF8.GetBytes(s));
         return Convert.ToHexString(h, 0, 16).ToLowerInvariant();
     }
 
     /// <summary>曲が変わった（どのスレッドからでも。key が null なら曲名が分からない＝覚えない）</summary>
-    public void BeginSong(string? key) => _pendingKey = key ?? "";
+    public void BeginSong(string? key) => _pending = new Pending(key ?? "", null);
+
+    /// <summary>曲が変わった（どのスレッドからでも）。前の版の印（legacy）で覚えた曲があれば、いまの印に移す</summary>
+    public void BeginSong(string key, string? legacy) => _pending = new Pending(key, legacy);
+
+    private sealed record Pending(string Key, string? Legacy);
 
     /// <summary>分析のコマごとに呼ぶ（tHop は音の時刻、odf は立ち上がりの強さ）</summary>
     public void Tick(double tHop, double odf, bool gateOpen)
     {
         _lastT = tHop;
-        if (Interlocked.Exchange(ref _pendingKey, null) is { } next)
+        if (Interlocked.Exchange(ref _pending, null) is { } next)
         {
             EndSong(tHop);
-            if (next.Length > 0) StartSong(next, tHop);
+            if (next.Key.Length > 0) StartSong(next, tHop);
         }
         if (_key is null) return;
         // 始まりの EnvelopeSec 秒の強さを 50 コマ／秒に詰める
@@ -111,8 +130,9 @@ public sealed class SongMemory
         if (!_alignTried && _known is not null && tHop - _songStartT >= AlignSec + AlignMaxLag) Align();
     }
 
-    private void StartSong(string key, double t)
+    private void StartSong(Pending id, double t)
     {
+        string key = id.Key;
         _key = key;
         _songStartT = t;
         _offset = 0;
@@ -123,6 +143,29 @@ public sealed class SongMemory
         _downs.Clear();
         _aligned = _alignTried = false;
         _known = Load(key);
+        if (id.Legacy is { Length: > 0 } legacy && legacy != key) MoveLegacy(legacy, key);
+    }
+
+    /// <summary>
+    /// 前の版の印（再生アプリごと）で覚えた曲を、いまの印に移す（覚え直さなくてよい）。
+    /// いまの印でもう覚えていれば、前の版のほうは同じ曲の重なりなので消す
+    /// </summary>
+    private void MoveLegacy(string legacy, string key)
+    {
+        string oldPath = PathOf(legacy);
+        if (!File.Exists(oldPath)) return;
+        if (_known is null && Load(legacy) is { } old)
+        {
+            old.Key = key;
+            Save(old);
+            if (!File.Exists(PathOf(key))) return;   // 保存できなかった。前のほうを残す
+            _known = old;
+            Log?.Invoke("前の版で覚えた曲を、どのアプリでも使える形に移しました");   // no-loc（ログだけ）
+        }
+        else if (_known is null) return;   // 前のほうを読めなかった。そのまま残す
+        _cache.Remove(legacy);
+        try { File.Delete(oldPath); } catch (Exception ex) when (ex is IOException or UnauthorizedAccessException) { }
+        Interlocked.Increment(ref _version);
     }
 
     /// <summary>覚えた曲の始まりの強さと、いま流れている始まりを比べて、流れ始めた時刻のずれを決める</summary>

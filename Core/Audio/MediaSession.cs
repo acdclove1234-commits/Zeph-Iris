@@ -116,6 +116,12 @@ public static class MediaSession
                 if (pick < 0) return null;
                 return ReadSong(sessions[pick], entries[pick].AppId);
             }
+            catch
+            {
+                // メディアのサービスが起動し直すと、持っている manager はもう使えない（RPC_E_DISCONNECTED など）。次は取り直す
+                Reset(manager);
+                throw;
+            }
             finally
             {
                 foreach (var s in sessions) Marshal.Release(s);
@@ -126,6 +132,27 @@ public static class MediaSession
         finally
         {
             if (init >= 0) CoUninitialize();   // S_OK・S_FALSE のときだけ数を戻す
+        }
+    }
+
+    /// <summary>失敗したあと、次に試すまで待つ時間</summary>
+    public const long RetryMs = 60_000;
+
+    /// <summary>
+    /// 失敗したあと次に試す時刻（Environment.TickCount64）。
+    /// 必要なものが Windows にない（DLL・関数がない）ときは、もう試さない（long.MaxValue）。ほかは RetryMs 後に試し直す
+    /// </summary>
+    public static long NextTry(long now, Exception error) =>
+        error is DllNotFoundException or EntryPointNotFoundException ? long.MaxValue : now + RetryMs;
+
+    /// <summary>持っている manager を捨てる（ほかのスレッドが取り直していたら、そちらは残す）</summary>
+    private static void Reset(IntPtr stale)
+    {
+        lock (Gate)
+        {
+            if (_manager == IntPtr.Zero || _manager != stale) return;
+            Marshal.Release(_manager);
+            _manager = IntPtr.Zero;
         }
     }
 

@@ -26,7 +26,8 @@ public sealed class MusicAi : IDisposable
     private bool _wantAi, _wantMemory;
     private string? _lastKey = "";
     private bool _watching;
-    private volatile bool _mediaFailed;   // メディアの情報を使えない（古い Windows など）。一度分かったら、もう試さない
+    private long _mediaRetryAt;           // メディアの情報を次に試す時刻（Environment.TickCount64）。失敗したら少し待ってから試し直す
+    private bool _mediaDown;              // 読めない状態をログに出したか（同じことを何度も出さない）
 
     /// <summary>曲の記憶（data/songs）</summary>
     public SongMemory Memory { get; }
@@ -102,15 +103,16 @@ public sealed class MusicAi : IDisposable
         {
             _watching = false;
             if (!_wantMemory) return;   // 見ているあいだに曲の記憶をやめた
-            string? key = t.IsCompletedSuccessfully ? t.Result : null;
-            if (key == _lastKey) return;
-            _lastKey = key;
-            Memory.BeginSong(key);
+            SongId? id = t.IsCompletedSuccessfully ? t.Result : null;
+            if (id?.Key == _lastKey) return;
+            _lastKey = id?.Key;
+            if (id is { } s) Memory.BeginSong(s.Key, s.Legacy);
+            else Memory.BeginSong(null);
         }, TaskScheduler.FromCurrentSynchronizationContext());
     }
 
     /// <summary>いま流れている曲の印（分からなければ null）</summary>
-    private string? FindKey(bool appOnly, int pid)
+    private SongId? FindKey(bool appOnly, int pid)
     {
         string? source = null;
         if (appOnly)
@@ -122,25 +124,36 @@ public sealed class MusicAi : IDisposable
 
         // 1. Spotify のウィンドウのタイトル。前から覚えている曲と同じ印になるよう、先に見る
         //    （曲を流している間だけ「アーティスト - 曲名」の形になる。止めると「Spotify Premium」など）
-        if (spotify && WindowTitle(source) is { } w) return SongMemory.KeyOf(w.App, w.Title);
+        if (spotify && WindowTitle(source) is { } w) return SongMemory.IdOf(w.App, w.Title);
 
         // 2. Windows のメディアの情報（YouTube Music・Apple Music・ブラウザーなど。流れている曲だけ）
-        if (!_mediaFailed)
+        //    Windows のメディアのサービスが止まったときなども、少し待ってから試し直すので、アプリを起動し直さなくても戻る
+        long now = Environment.TickCount64;
+        if (now >= Interlocked.Read(ref _mediaRetryAt))
         {
             try
             {
                 var song = MediaSession.Current(appOnly ? source : null);
-                return song is { } s ? SongMemory.KeyOf(s.App, s.Title) : null;
+                if (_mediaDown)
+                {
+                    _mediaDown = false;
+                    Logger.Info("メディアの情報をまた読めるようになりました");   // no-loc（ログだけ）
+                }
+                return song is { } s ? SongMemory.IdOf(s.App, s.Title) : null;
             }
             catch (Exception ex) when (ex is InvalidOperationException or DllNotFoundException or EntryPointNotFoundException)
             {
-                _mediaFailed = true;
-                Logger.Info($"メディアの情報を読めないので、再生アプリのウィンドウのタイトルだけで曲を見分けます: {ex.Message}");   // no-loc（ログだけ）
+                Interlocked.Exchange(ref _mediaRetryAt, MediaSession.NextTry(now, ex));
+                if (!_mediaDown)
+                {
+                    _mediaDown = true;
+                    Logger.Info($"メディアの情報を読めないので、しばらく再生アプリのウィンドウのタイトルで曲を見分けます: {ex.Message}");   // no-loc（ログだけ）
+                }
             }
         }
 
         // 3. メディアの情報を使えないときは、前と同じく、音を取り込んでいるアプリのウィンドウのタイトル
-        if (appOnly && !spotify && WindowTitle(source) is { } a) return SongMemory.KeyOf(a.App, a.Title);
+        if (appOnly && !spotify && WindowTitle(source) is { } a) return SongMemory.IdOf(a.App, a.Title);
         return null;
     }
 

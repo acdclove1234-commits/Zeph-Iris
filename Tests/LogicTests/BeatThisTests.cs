@@ -149,7 +149,7 @@ public static class SongMemoryTests
         e.Assist = a;
         used = a;
         var tr = e.Tracker;
-        mem.BeginSong(SongMemory.KeyOf("test", "song A"));
+        mem.BeginSong(SongMemory.KeyOf("song A"));
         double firstGood = double.NaN;
         var kicks = g.KickTimes.Select(k => t0 + k).ToList();
         new EngineRun(e, t0).Feed(g.Buf, before: s =>
@@ -198,7 +198,7 @@ public static class SongMemoryTests
             var mem = new SongMemory(dir);
             void Listen(string title, double t0, double sec)
             {
-                mem.BeginSong(SongMemory.KeyOf("test", title));
+                mem.BeginSong(SongMemory.KeyOf(title));
                 mem.Tick(t0, 0.5, true);
                 var beats = Enumerable.Range(0, (int)(sec / 0.5)).Select(i => t0 + 0.5 + i * 0.5).ToList();
                 mem.AddBeats(beats, beats.Where((_, i) => i % 4 == 0));
@@ -237,7 +237,7 @@ public static class SongMemoryBenchTests
         {
             foreach (var f in Directory.GetFiles(dir, "*.wav").OrderBy(x => x))
             {
-                string key = SongMemory.KeyOf("bench", Path.GetFileName(f));
+                string key = SongMemory.KeyOf(Path.GetFileName(f));
                 var a = MusicWavTests.AnalyzeSong(f);
                 var mem = new SongMemory(memDir);
                 BeatAssist? asB = null, asC = null;
