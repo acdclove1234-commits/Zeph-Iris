@@ -13,6 +13,10 @@ and Iris, the rainbow (the LEDs).
   for example: Settings [設定].
 
 
+■ What's new in v6.15.4
+  - Music sync: the beat AI now gives back its working memory after each analysis. While music played, the app's
+    memory grew to about 1 GB; now it barely grows (the analysis is only about 10% slower).
+
 ■ What's new in v6.15.3 (failures shown on screen, FanControl import)
   - Failures that were only written to the log now appear as notices in the app (and as a tray notification while the
     window is closed): settings that cannot be saved (retried every 30 s, with a notice once saved), a power plan that

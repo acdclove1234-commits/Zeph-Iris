@@ -28,7 +28,21 @@ public sealed class BeatThis : IDisposable
 
     private readonly InferenceSession _mel, _beat;
 
+    /// <summary>
+    /// 1 回の解析が終わるたびに、ONNX Runtime が CPU で確保した作業用メモリ（アリーナ）を返す。
+    /// 返さないと、毎回少しずつ長さの違う音を渡すうちにアリーナが育ち、音楽連動中だけで約 1.2 GB に膨らむ
+    /// （返しても約 60 MB のまま。解析は 1 割ほど遅くなるだけ）
+    /// </summary>
+    private readonly RunOptions _run = ShrinkAfterRun();
+
     private BeatThis(InferenceSession mel, InferenceSession beat) { _mel = mel; _beat = beat; }
+
+    private static RunOptions ShrinkAfterRun()
+    {
+        var r = new RunOptions();
+        r.AddRunConfigEntry("memory.enable_memory_arena_shrinkage", "cpu:0");
+        return r;
+    }
 
     /// <summary>モデルを読み込む（少し時間とメモリを使うので、音楽連動で使うときだけ）。失敗したら null と理由</summary>
     public static BeatThis? TryCreate(out string? error)
@@ -70,7 +84,7 @@ public sealed class BeatThis : IDisposable
     private float[] Mel(ReadOnlySpan<float> audio, out int frames)
     {
         var input = new DenseTensor<float>(audio.ToArray(), new[] { 1, audio.Length });
-        using var res = _mel.Run(new[] { NamedOnnxValue.CreateFromTensor("audio_pcm", input) });
+        using var res = _mel.Run(new[] { NamedOnnxValue.CreateFromTensor("audio_pcm", input) }, _mel.OutputMetadata.Keys.ToList(), _run);
         var t = res.First().AsTensor<float>();
         frames = t.Dimensions[1];
         return t.ToArray();
@@ -102,7 +116,7 @@ public sealed class BeatThis : IDisposable
             var chunk = new float[len * bins];
             Array.Copy(mel, from * bins, chunk, padLeft * bins, (to - from) * bins);
             var input = new DenseTensor<float>(chunk, new[] { 1, len, bins });
-            using var res = _beat.Run(new[] { NamedOnnxValue.CreateFromTensor("spectrogram", input) });
+            using var res = _beat.Run(new[] { NamedOnnxValue.CreateFromTensor("spectrogram", input) }, _beat.OutputMetadata.Keys.ToList(), _run);
             var b = res.First(r => r.Name == "beat").AsTensor<float>();
             var d = res.First(r => r.Name == "downbeat").AsTensor<float>();
             for (int i = BorderFrames; i < len - BorderFrames; i++)
@@ -149,6 +163,7 @@ public sealed class BeatThis : IDisposable
     {
         _mel.Dispose();
         _beat.Dispose();
+        _run.Dispose();
     }
 }
 

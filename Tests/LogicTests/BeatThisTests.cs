@@ -98,6 +98,34 @@ public static class BeatThisTests
             T.Check(near >= kicks.Count * 0.9, $"beats land on the kicks ({near}/{kicks.Count})");
         }
     }
+
+    /// <summary>
+    /// 音楽連動中は、少しずつ長さの違う 20 秒前後の音を何度も解析する。ONNX Runtime の作業用メモリを毎回返さないと、
+    /// これで約 1.2 GB まで育った（実機のログで 120 MB → 1.1 GB）。返していれば、何度解析しても増えない
+    /// </summary>
+    public static void TestRepeatedAnalysisMemoryStaysFlat()
+    {
+        using var bt = BeatThis.TryCreate(out string? err);
+        T.Check(bt is not null, $"model loads ({err ?? "ok"})");
+        if (bt is null) return;
+        var g = new SignalGen(48000, 26, seed: 5);
+        g.Loop(120, 1, 25, hats: true, snare: true);
+        var a = To22k(g.Buf, 48000);
+        var rnd = new Random(3);
+        var p = Process.GetCurrentProcess();
+        long baseline = 0, peak = 0;
+        for (int k = 0; k < 16; k++)
+        {
+            int n = Math.Min(a.Length, 20 * BeatThis.SampleRate + rnd.Next(0, 4 * BeatThis.SampleRate));
+            bt.Analyze(a.AsSpan(0, n));
+            p.Refresh();
+            if (k == 1) baseline = p.PrivateMemorySize64;   // 1 回目・2 回目でモデルの準備が終わったあと
+            if (k > 1) peak = Math.Max(peak, p.PrivateMemorySize64);
+        }
+        long grew = (peak - baseline) / 1048576;
+        T.Info($"private memory after 2 runs {baseline / 1048576} MB, highest over the next 14 runs {peak / 1048576} MB");
+        T.Check(grew < 200, $"repeated analysis does not grow memory (+{grew} MB over 14 runs; was about +1 GB)");
+    }
 }
 
 public static class SongMemoryTests
