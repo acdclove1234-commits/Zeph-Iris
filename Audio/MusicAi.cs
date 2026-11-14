@@ -11,8 +11,8 @@ namespace ProFanController;
 
 /// <summary>
 /// 音楽連動を使っている間だけ、拍の AI のモデルを読み込む（約 0.8 秒・メモリを使うので、使わないときは外す）。
-/// 曲の記憶をオンにしていれば、再生アプリのウィンドウのタイトル（「アーティスト - 曲名」）が変わったのを 1 秒ごとに見て、
-/// 曲が変わったと知らせる。タイトルはその場で SHA-256 の印にするだけで、保存も記録もしない
+/// 曲の記憶をオンにしていれば、流れている曲（Spotify のウィンドウのタイトル、または Windows のメディアの情報の「アーティスト - 曲名」）が
+/// 変わったのを 1 秒ごとに見て、曲が変わったと知らせる。曲名はその場で SHA-256 の印にするだけで、保存も記録もしない
 /// </summary>
 public sealed class MusicAi : IDisposable
 {
@@ -25,6 +25,8 @@ public sealed class MusicAi : IDisposable
     private bool _loading;
     private bool _wantAi, _wantMemory;
     private string? _lastKey = "";
+    private bool _watching;
+    private volatile bool _mediaFailed;   // メディアの情報を使えない（古い Windows など）。一度分かったら、もう試さない
 
     /// <summary>曲の記憶（data/songs）</summary>
     public SongMemory Memory { get; }
@@ -89,33 +91,65 @@ public sealed class MusicAi : IDisposable
         };
     }
 
-    /// <summary>再生アプリのタイトルから、曲が変わったかを見る（1 秒ごと）</summary>
+    /// <summary>曲が変わったかを見る（1 秒ごと。メディアの情報は少し待つことがあるので、画面を止めないよう別のスレッドで読む）</summary>
     private void WatchTitle()
     {
-        string? key = null;
-        try
+        if (_watching) return;
+        _watching = true;
+        bool appOnly = _audio.AppOnly && _audio.SourcePid > 0;
+        int pid = _audio.SourcePid;
+        Task.Run(() => FindKey(appOnly, pid)).ContinueWith(t =>
         {
-            var (app, title) = CurrentTitle();
-            // 曲を流している間だけ「アーティスト - 曲名」の形になる（止めると「Spotify Premium」など）
-            if (title.Contains(" - ", StringComparison.Ordinal)) key = SongMemory.KeyOf(app, title);
-        }
-        catch (Exception ex) when (ex is InvalidOperationException or System.ComponentModel.Win32Exception) { }
-        if (key == _lastKey) return;
-        _lastKey = key;
-        Memory.BeginSong(key);
+            _watching = false;
+            if (!_wantMemory) return;   // 見ているあいだに曲の記憶をやめた
+            string? key = t.IsCompletedSuccessfully ? t.Result : null;
+            if (key == _lastKey) return;
+            _lastKey = key;
+            Memory.BeginSong(key);
+        }, TaskScheduler.FromCurrentSynchronizationContext());
     }
 
-    private (string App, string Title) CurrentTitle()
+    /// <summary>いま流れている曲の印（分からなければ null）</summary>
+    private string? FindKey(bool appOnly, int pid)
     {
-        IEnumerable<Process> procs;
-        if (_audio.AppOnly && _audio.SourcePid > 0)
+        string? source = null;
+        if (appOnly)
         {
-            string name;
-            try { using var p = Process.GetProcessById(_audio.SourcePid); name = p.ProcessName; }
-            catch (ArgumentException) { return ("", ""); }
-            procs = Process.GetProcessesByName(name);
+            try { using var p = Process.GetProcessById(pid); source = p.ProcessName; }
+            catch (Exception ex) when (ex is ArgumentException or InvalidOperationException) { return null; }
         }
-        else procs = Players.SelectMany(Process.GetProcessesByName);
+        bool spotify = !appOnly || string.Equals(source, MediaSession.SpotifyApp, StringComparison.OrdinalIgnoreCase);
+
+        // 1. Spotify のウィンドウのタイトル。前から覚えている曲と同じ印になるよう、先に見る
+        //    （曲を流している間だけ「アーティスト - 曲名」の形になる。止めると「Spotify Premium」など）
+        if (spotify && WindowTitle(source) is { } w) return SongMemory.KeyOf(w.App, w.Title);
+
+        // 2. Windows のメディアの情報（YouTube Music・Apple Music・ブラウザーなど。流れている曲だけ）
+        if (!_mediaFailed)
+        {
+            try
+            {
+                var song = MediaSession.Current(appOnly ? source : null);
+                return song is { } s ? SongMemory.KeyOf(s.App, s.Title) : null;
+            }
+            catch (Exception ex) when (ex is InvalidOperationException or DllNotFoundException or EntryPointNotFoundException)
+            {
+                _mediaFailed = true;
+                Logger.Info($"メディアの情報を読めないので、再生アプリのウィンドウのタイトルだけで曲を見分けます: {ex.Message}");   // no-loc（ログだけ）
+            }
+        }
+
+        // 3. メディアの情報を使えないときは、前と同じく、音を取り込んでいるアプリのウィンドウのタイトル
+        if (appOnly && !spotify && WindowTitle(source) is { } a) return SongMemory.KeyOf(a.App, a.Title);
+        return null;
+    }
+
+    /// <summary>アプリ（null なら Spotify）のウィンドウのタイトルが「アーティスト - 曲名」の形なら返す</summary>
+    private static (string App, string Title)? WindowTitle(string? processName)
+    {
+        Process[] procs;
+        try { procs = processName is null ? Players.SelectMany(Process.GetProcessesByName).ToArray() : Process.GetProcessesByName(processName); }
+        catch (InvalidOperationException) { return null; }
         string app = "", title = "";
         foreach (var p in procs)
         {
@@ -123,9 +157,10 @@ public sealed class MusicAi : IDisposable
             {
                 if (title.Length == 0 && p.MainWindowTitle is { Length: > 0 } t) { title = t; app = p.ProcessName; }
             }
+            catch (Exception ex) when (ex is InvalidOperationException or System.ComponentModel.Win32Exception) { }
             finally { p.Dispose(); }
         }
-        return (app, title);
+        return title.Contains(" - ", StringComparison.Ordinal) ? (app, title) : null;
     }
 
     public void Dispose()
