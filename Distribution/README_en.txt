@@ -13,6 +13,11 @@ and Iris, the rainbow (the LEDs).
   for example: Settings [設定].
 
 
+■ What's new in v6.15.5
+  - Music sync: "Remember songs" now also works with YouTube Music, Apple Music, browser players and others, not only
+    Spotify. Songs are told apart by Windows' media info (the name shown when you press a volume key); titles are
+    never saved. Songs Spotify already remembered keep working.
+
 ■ What's new in v6.15.4
   - Music sync: the beat AI now gives back its working memory after each analysis. While music played, the app's
     memory grew to about 1 GB; now it barely grows (the analysis is only about 10% slower).
