@@ -1458,6 +1458,9 @@ public partial class MainWindow
     /// <summary>設定の「通知・連携」からの案内</summary>
     private void OnOpenLightingClick(object sender, RoutedEventArgs e) => NavLighting.IsChecked = true;
 
+    /// <summary>ライティングの画面を開く（App のお知らせから）</summary>
+    public void OpenLightingPage() => NavLighting.IsChecked = true;
+
     /// <summary>ボタンの結果を、しばらく接続の状態の代わりに表示する</summary>
     private void ShowRgbMessage(string message)
     {

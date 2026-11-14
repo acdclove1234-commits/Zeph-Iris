@@ -275,7 +275,14 @@ public partial class MainWindow
 
     private void OnIdentifyClick(object sender, RoutedEventArgs e)
     {
-        if (SelectedFan is { } fan) _controller.Engine.Identify(fan.ControlId);
+        if (SelectedFan is not { } fan) return;
+        // 端子が見つからない（配線を変えた・BIOS で無効にした など）ときは、押しても何も起きないので知らせる
+        if (_catalog is not null && !_catalog.Controls.Any(c => string.Equals(c.Id, fan.ControlId, StringComparison.OrdinalIgnoreCase)))
+        {
+            ShowAlert(L($"「{fan.Name}」の端子が見つからないため、テスト（全開）できませんでした。配線や BIOS の設定を確かめてください。"), AlertLevel.Warning);
+            return;
+        }
+        _controller.Engine.Identify(fan.ControlId);
     }
 
     private void OnIdentifyNewClick(object sender, RoutedEventArgs e)

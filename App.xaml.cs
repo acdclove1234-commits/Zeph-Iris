@@ -124,6 +124,7 @@ public partial class App : Application
         // 前の名前（ProFanController）の版が動いていたら、正しく終了してもらってから（終了するときに設定も書き出される）、
         // ここに設定がなければ、前の版の設定と記録を引き継ぐ（Core/LegacyMigration.cs）
         string? migratedFrom = null;
+        string? migrationError = null;
         try
         {
             LegacyMigration.StopLegacyApp(TimeSpan.FromSeconds(20));
@@ -133,6 +134,7 @@ public partial class App : Application
         catch (Exception ex)
         {
             Logger.Warn($"前の版の設定を引き継げませんでした: {ex}");
+            migrationError = ex.Message;
         }
 
         // インストーラー・更新スクリプトからの「終了して」の合図を待つ（強制終了だとファンが BIOS 制御に戻らないため、正規の終了処理を通す）
@@ -164,6 +166,7 @@ public partial class App : Application
             }
             if (++_uiErrorCount <= 20) Logger.Error($"UI で例外: {a.Exception}");
             a.Handled = true;
+            NotifyUiError(a.Exception.Message);
         };
         AppDomain.CurrentDomain.UnhandledException += (_, a) =>
         {
@@ -242,6 +245,7 @@ public partial class App : Application
             if (w is null) return;
             w.OnSnapshot(s);
             if (controller.Config.Rgb.Enabled) Rgb.Update(w.RgbTemperature(s), s.Emergency);
+            CheckRgbConnection(controller.Config.Rgb);
             w.ForwardSnapshotToWizard(s);
             _widget?.SetProfile(s.Profile);
             tray.SetTooltip(w.TraySummary);
@@ -272,6 +276,17 @@ public partial class App : Application
         controller.Committed += UpdateTrayProfiles;
         controller.Committed += ApplyServiceSettings;
         controller.QuickChanged += UpdateQuickStatus;
+        // 設定を config.json に書けなかった・あとで書けた（黙っていると、終了したときに変更が消える）
+        controller.SaveFailed += reason => Dispatcher.BeginInvoke(DispatcherPriority.ApplicationIdle, () =>
+            Notify(L($"設定を保存できませんでした（{reason}）。変えた設定はいまは効いていますが、このままアプリを終了すると元に戻ります。config.json をほかのアプリが開いていないか、ディスクの空きがあるか確かめてください（30 秒ごとに保存し直します）。"),
+                AlertLevel.Warning, L("ログを開く"), OpenLogs));
+        controller.SaveRecovered += () => Dispatcher.BeginInvoke(() => Notify(L("設定を保存できました。"), AlertLevel.Info));
+        // 電源プランを切り替えられなかった（同じプランでは起動している間 1 回だけ）
+        controller.PowerPlanFailed += (profile, guid) => Dispatcher.BeginInvoke(() =>
+        {
+            if (!_powerPlanNotified.Add(guid)) return;
+            Notify(L($"プロファイル「{profile}」の電源プランに切り替えられませんでした。選んでいた電源プランが Windows から消えていないか確かめて、プロファイルの設定で選び直してください。"), AlertLevel.Warning);
+        });
         controller.ConfigReplaced += () =>
         {
             WatchAppearance(controller);
@@ -318,10 +333,25 @@ public partial class App : Application
                     Logger.Info("DRY RUN を解除しました（起動時のお知らせから）");
                 });
         }
+        if (migrationError is not null)
+        {
+            // 前の版の設定を引き継げなかった（前の版のフォルダーは消していない。起動し直すと、もう一度試す）
+            ShowMainWindow();
+            window.ShowAlert(L($"前の版の設定を引き継げませんでした（{migrationError}）。前の版の設定は消えずに残っています。設定を変える前にアプリを起動し直すと、もう一度引き継ぎを試します。"),
+                AlertLevel.Warning, L("起動し直す"), () => RestartApplication());
+        }
         if (ConfigStore.RecoveredFrom is { } from)
         {
             ShowMainWindow();
-            window.ShowAlert(L($"設定ファイルが壊れていたため、バックアップ（{File.GetLastWriteTime(from):yyyy/MM/dd HH:mm}）から復旧しました。壊れたファイルは config.broken_*.json として残しています。"), AlertLevel.Warning);
+            string when = File.GetLastWriteTime(from).ToString("yyyy/MM/dd HH:mm");
+            if (ConfigStore.RecoveredBecauseLocked)
+                // config.json は壊れていない（ほかのアプリが開いていて読めなかった）。起動し直せば最新の設定に戻る
+                window.ShowAlert(L($"config.json をほかのアプリが開いていて読めなかったため、{when} のバックアップの設定で起動しました（config.json は壊れていません）。設定を変えると、このバックアップの内容で上書きされます。最新の設定に戻すには、アプリを起動し直してください。"),
+                    AlertLevel.Warning, L("起動し直す"), () => RestartApplication());
+            else if (ConfigStore.WriteBackError is { } wb)
+                window.ShowAlert(L($"設定ファイルが壊れていたため、バックアップ（{when}）の設定で起動しましたが、config.json に書き戻せませんでした（{wb}）。config.json が読み取り専用になっていないか確かめてください。"), AlertLevel.Warning);
+            else
+                window.ShowAlert(L($"設定ファイルが壊れていたため、バックアップ（{when}）から復旧しました。壊れたファイルは config.broken_*.json として残しています。"), AlertLevel.Warning);
         }
         if (recovered)
         {
@@ -497,8 +527,8 @@ public partial class App : Application
                 Watchdog.UnexpectedExit += code => Dispatcher.InvokeAsync(() => RelaunchWatchdog(code));
             }
             _watchdogGeneration++;
-            Watchdog.Launch();
-            _watchdogRunning = true;
+            if (Watchdog.Launch() is { } why) NotifyWatchdogFailed(why);
+            else _watchdogRunning = true;
         }
         else if (!cfg.Safety.WatchdogEnabled && _watchdogRunning)
         {
@@ -553,7 +583,8 @@ public partial class App : Application
         }
     }
 
-    private static void StartSelf(string args)
+    /// <summary>このアプリをもう 1 つ起動する。起動できたら null、できなければ理由</summary>
+    private static string? StartSelf(string args)
     {
         try
         {
@@ -563,10 +594,12 @@ public partial class App : Application
                 UseShellExecute = false,
                 WorkingDirectory = AppContext.BaseDirectory,
             })?.Dispose();
+            return null;
         }
         catch (Exception ex)
         {
             Logger.Error($"起動し直せませんでした: {ex.Message}");
+            return ex.Message;
         }
     }
 
@@ -621,8 +654,40 @@ public partial class App : Application
         await Task.Delay(TimeSpan.FromSeconds(delay));
         if (_exiting || !_watchdogRunning || gen != _watchdogGeneration) return;
         _watchdogGeneration++;
-        try { await Task.Run(Watchdog.Launch); } // 起動前に少し待つことがあるので、画面を止めないよう別スレッドで
-        catch (Exception ex) { Logger.Error($"見張りプロセスを起動し直せません: {ex.Message}"); }
+        // 起動前に少し待つことがあるので、画面を止めないよう別スレッドで
+        if (await Task.Run(Watchdog.Launch) is { } why) NotifyWatchdogFailed(why);
+        else if (_watchdogRestarts.Count >= 3 && !_watchdogDiesShown)
+        {
+            _watchdogDiesShown = true;
+            Notify(L($"見張りプロセスが 10 分間に {_watchdogRestarts.Count} 回止まりました。ウイルス対策ソフトなどが止めていないか確かめてください（止まるたびに起動し直しています）。"),
+                AlertLevel.Warning, L("ログを開く"), OpenLogs);
+        }
+    }
+
+    private bool _watchdogFailShown, _watchdogDiesShown;
+    private bool _rgbDownShown;
+
+    /// <summary>
+    /// LED を使う設定なのに、OpenRGB に 2 分つながらないままなら知らせる（つながらないあいだ 1 回だけ。つながったら、次に切れたときにまた知らせる）
+    /// </summary>
+    private void CheckRgbConnection(RgbConfig cfg)
+    {
+        double since = Rgb.FailingSince;
+        if (double.IsNaN(since) || !cfg.Enabled || cfg.LightsOff) { _rgbDownShown = false; return; }
+        if (_rgbDownShown || AudioClock.Now - since < 120) return;
+        _rgbDownShown = true;
+        Logger.Warn($"OpenRGB に 2 分つながりません: {Rgb.LastError}");
+        Notify(L($"OpenRGB につながらないため、LED の色を変えられていません（{Rgb.LastError}）。OpenRGB が起動しているか、OpenRGB の「SDK サーバー」がオンになっているか確かめてください。"),
+            AlertLevel.Warning, L("ライティングを開く"), () => { ShowMainWindow(); _window?.OpenLightingPage(); });
+    }
+
+    /// <summary>見張りプロセスを起動できなかった（起動している間 1 回だけ知らせる）</summary>
+    private void NotifyWatchdogFailed(string why)
+    {
+        if (_watchdogFailShown) return;
+        _watchdogFailShown = true;
+        Notify(L($"見張りプロセスを起動できませんでした（{why}）。アプリが急に止まったときにファンを安全な回転数にする仕組みが、いまは働いていません。アプリを起動し直してみてください。"),
+            AlertLevel.Warning, L("ログを開く"), OpenLogs);
     }
 
     /// <summary>
@@ -772,6 +837,56 @@ public partial class App : Application
         _widget?.SetQuickStatus(_controller?.QuickStatusText);
     }
 
+    /// <summary>
+    /// 失敗などを知らせる: 画面のお知らせに出す。画面を開いていなければ（タスクトレイだけのとき）、トレイの吹き出しでも知らせる。
+    /// 知らせるところで例外が起きても、外へ出さない（知らせる処理の失敗で、別の問題を起こさないように）
+    /// </summary>
+    public void Notify(string message, AlertLevel level, string? actionLabel = null, Action? action = null)
+    {
+        try
+        {
+            _window?.ShowAlert(message, level, actionLabel, action);
+            if (level != AlertLevel.Info && _window?.IsVisible != true) _tray?.ShowBalloon(AppIdentity.Name, message, level);
+        }
+        catch (Exception ex)
+        {
+            Logger.Warn($"お知らせを出せません: {ex.Message}");
+        }
+    }
+
+    /// <summary>ログのフォルダーを開く（書きかけのログを書き出してから）</summary>
+    public static void OpenLogs()
+    {
+        Logger.Flush();
+        SystemTool.Open(Logger.Directory);
+    }
+
+    private DateTime _lastUiErrorNotice = DateTime.MinValue;
+    private bool _notifyingUiError;
+
+    /// <summary>
+    /// 画面の処理で拾えなかった例外を知らせる（操作が途中で止まったことを分かるように）。10 分に 1 回まで。
+    /// 描画の途中で起きた例外のこともあるので、すぐには出さず、手が空いたときに出す
+    /// </summary>
+    private void NotifyUiError(string message)
+    {
+        if (_notifyingUiError || DateTime.Now - _lastUiErrorNotice < TimeSpan.FromMinutes(10)) return;
+        _lastUiErrorNotice = DateTime.Now;
+        Dispatcher.BeginInvoke(DispatcherPriority.ApplicationIdle, () =>
+        {
+            _notifyingUiError = true;
+            try
+            {
+                Notify(L($"操作の途中で問題が起きたため、最後まで行えなかったかもしれません（{message}）。ファンの制御は続いています。何度も出るときは、ログを開いて「不具合を報告…」から知らせてください。"),
+                    AlertLevel.Warning, L("ログを開く"), OpenLogs);
+            }
+            finally
+            {
+                _notifyingUiError = false;
+            }
+        });
+    }
+
     public void ShowMainWindow()
     {
         if (_window is null) return;
@@ -816,7 +931,7 @@ public partial class App : Application
                 break;
             case "quiet" when int.TryParse(arg, out int m) && m is >= 1 and <= 720:
                 ok = _controller.StartQuiet(TimeSpan.FromMinutes(m));
-                if (!ok) _window?.ShowAlert(L("「静音」で使うプロファイルが見つかりません。設定画面の「ワンタッチ操作」で選んでください。"), AlertLevel.Warning);
+                if (!ok) Notify(L("「静音」で使うプロファイルが見つかりません。設定画面の「ワンタッチ操作」で選んでください。"), AlertLevel.Warning);
                 break;
             case "cancel":
                 _controller.CancelQuick();
@@ -895,13 +1010,28 @@ public partial class App : Application
         }
         if (!_controller.Config.Quick.HotkeysEnabled) return;
 
+        var failed = new List<string>();
         foreach (var h in Hotkeys)
         {
             if (!RegisterHotKey(handle, h.Id, MOD_CONTROL | MOD_ALT | MOD_NOREPEAT, h.Key))
+            {
                 Logger.Warn($"ホットキーを登録できません（他のアプリが使用中の可能性）: {h.Command}");
+                failed.Add($"Ctrl+Alt+{(char)h.Key}");
+            }
         }
         _hotkeysRegistered = true;
+        // 使えなかったキーを知らせる（同じキーの組み合わせは、起動している間 1 回だけ）
+        string keys = string.Join(", ", failed);
+        if (failed.Count > 0 && keys != _hotkeysNotified)
+        {
+            _hotkeysNotified = keys;
+            Notify(L($"ショートカットキー（{keys}）を使えませんでした。ほかのアプリが同じキーを使っているようです。"), AlertLevel.Warning);
+        }
     }
+
+    private string _hotkeysNotified = "";
+    private int _firewallNotified;
+    private readonly HashSet<string> _powerPlanNotified = new();
 
     private IntPtr HotkeyHook(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
     {
@@ -937,7 +1067,14 @@ public partial class App : Application
         {
             _web.Start(cfg.Port, cfg.Token);
             int port = cfg.Port;
-            Task.Run(() => WebServer.AllowFirewall(port));
+            // ファイアウォールに許可を足せなかったら知らせる（スマホからつながらない理由が分かるように。同じポートでは 1 回だけ）
+            Task.Run(() => WebServer.AllowFirewall(port)).ContinueWith(t =>
+            {
+                if (t.Result || _firewallNotified == port) return;
+                _firewallNotified = port;
+                Logger.Warn($"ファイアウォールに許可を追加できませんでした（ポート {port}）");
+                Notify(L($"スマホ用の Web サーバーは動いていますが、Windows のファイアウォールに許可を追加できませんでした。スマホからつながらないときは、ファイアウォールでポート {port} への接続を許可してください。"), AlertLevel.Warning);
+            }, TaskScheduler.FromCurrentSynchronizationContext());
         }
         catch (Exception ex)
         {

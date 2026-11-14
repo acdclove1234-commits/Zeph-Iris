@@ -37,6 +37,8 @@ public sealed class FlightRecorder
 
     public bool Pending => _first is not null;
     public event Action<FlightRecord>? Saved;
+    /// <summary>記録を保存できなかった（理由）</summary>
+    public event Action<string>? SaveFailed;
 
     /// <summary>異常が起きた（記録の予約）</summary>
     public void Trigger(string message, string profile, DateTime now)
@@ -117,16 +119,22 @@ public sealed class FlightRecorder
             File.WriteAllText(txt, sb.ToString(), new UTF8Encoding(true));
             Logger.Info($"異常の前後の記録を保存: {csv}");
 
-            foreach (var old in List().Skip(MaxRecords))
+            // 古い記録を消せなくても、いまの記録は保存できているので、保存できたとして知らせる
+            try
             {
-                File.Delete(old.CsvPath);
-                File.Delete(old.SummaryPath);
+                foreach (var old in List().Skip(MaxRecords))
+                {
+                    File.Delete(old.CsvPath);
+                    File.Delete(old.SummaryPath);
+                }
             }
+            catch (Exception ex) when (ex is IOException or UnauthorizedAccessException) { Logger.Warn($"古い異常の記録を消せません: {ex.Message}"); }
             Saved?.Invoke(new FlightRecord(csv, txt, first, events[0].Message, sb.ToString()));
         }
         catch (Exception ex)
         {
             Logger.Error($"異常の記録の保存に失敗: {ex.Message}");
+            SaveFailed?.Invoke(ex.Message);
         }
     }
 

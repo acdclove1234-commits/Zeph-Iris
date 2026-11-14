@@ -588,7 +588,6 @@ c0fd45c5	Continua a funzionare nell'area di notifica. Per uscire, fai clic destr
 e586d56a	Zeph-Iris: manutenzione
 5b860ae3	In esecuzione in DRY RUN (modalità di prova). Calcola solo le velocità in base alle temperature; le ventole non vengono comandate.
 874003cc	Avvia il controllo
-812bba50	Il file delle impostazioni era danneggiato ed è stato ripristinato da un backup ({0:yyyy/MM/dd HH:mm}). Il file danneggiato è conservato come config.broken_*.json.
 47b4365f	Zeph-Iris si è chiuso in modo inatteso, quindi il processo watchdog lo ha riavviato automaticamente. Il controllo è ripreso dopo aver portato le ventole a una velocità sicura. La causa è nel log.
 7b249720	Apri log
 3a7e2e72	Si è chiuso in modo inatteso ed è stato riavviato automaticamente.
@@ -1901,3 +1900,33 @@ b148d60e	Impossibile avviare il programma di sorveglianza.
 c5f9ace5	Temperature, carichi e ventole coprono lo stesso periodo degli FPS: dal primo fotogramma, mentre si disegnava.
 17f1a7c2	Ritorno alla versione precedente ({0}).\n\nViene usata la copia conservata prima dell’aggiornamento (non si scarica nulla). L’app si chiude una volta, le ventole seguono il BIOS per qualche secondo, poi l’app si riavvia. Le impostazioni tornano a quelle di prima dell’aggiornamento. Le impostazioni attuali vengono conservate nella cartella backups e si possono ripristinare dal backup «Prima del ripristino» in Impostazioni → «Sicurezza e backup». Log e registrazioni restano.\n\nTornare indietro?
 ff6a2182	Riportare Zeph-Iris alla versione precedente {0}? (versione attuale {1})\n\nZeph-Iris viene chiuso (ventole al BIOS), vengono ripristinati l’exe precedente e le impostazioni di prima dell’aggiornamento, poi si riavvia. Prima le impostazioni attuali vengono conservate nella cartella backups (ripristinabili da Impostazioni → «Sicurezza e backup»).
+0ce1e664	Non è stato possibile cambiare la lingua dell'interfaccia ({0}). Il controllo delle ventole continua. Riavviando l'app verrà mostrata nella lingua scelta. Riavviare ora?
+4aa4977a	L'app non è riuscita a riavviarsi da sola ({0}). Continua a funzionare così com'è. Chiudila una volta e poi riaprila.
+2b78d413	Non è stato possibile salvare le impostazioni ({0}). Le modifiche funzionano adesso, ma andranno perse se chiudi l'app così. Controlla che nessun'altra app abbia aperto config.json e che ci sia spazio libero sul disco (il salvataggio viene ritentato ogni 30 s).
+466cf7d7	Le impostazioni sono state salvate.
+3edcb675	Non è stato possibile passare alla combinazione di risparmio energia del profilo «{0}». Controlla che la combinazione scelta esista ancora in Windows e sceglila di nuovo nelle impostazioni del profilo.
+3f6a7367	Non è stato possibile trasferire le impostazioni della versione precedente ({0}). Le impostazioni della versione precedente sono ancora lì. Riavvia l'app prima di modificare le impostazioni per riprovare.
+f7737c39	Riavvia
+c4657a17	config.json era aperto in un'altra app e non è stato possibile leggerlo, quindi l'app è partita con il backup del {0} (config.json non è danneggiato). Se modifichi le impostazioni, verrà sovrascritto con questo backup. Riavvia l'app per recuperare le impostazioni più recenti.
+4f3dd658	Il file delle impostazioni era danneggiato, quindi l'app è partita con il backup ({0}), ma non è stato possibile riscriverlo in config.json ({1}). Controlla che config.json non sia di sola lettura.
+720c745a	Il file delle impostazioni era danneggiato ed è stato ripristinato dal backup ({0}). Il file danneggiato è conservato come config.broken_*.json.
+224fc585	Il processo watchdog si è fermato {0} volte in 10 minuti. Controlla che un antivirus o un programma simile non lo stia bloccando (viene riavviato ogni volta).
+cecb4968	I colori dei LED non vengono cambiati perché OpenRGB non è raggiungibile ({0}). Controlla che OpenRGB sia in esecuzione e che il suo «server SDK» sia attivo.
+f06249d0	Non è stato possibile avviare il processo watchdog ({0}). La protezione che porta le ventole a una velocità sicura se l'app si ferma all'improvviso al momento non funziona. Prova a riavviare l'app.
+05539caa	Qualcosa è andato storto durante un'operazione, quindi potrebbe non essere stata completata ({0}). Il controllo delle ventole continua. Se succede spesso, apri il log e invialo da «Segnala un problema…».
+96f2c83a	Non è stato possibile usare la scorciatoia da tastiera ({0}). Sembra che un'altra app usi gli stessi tasti.
+45001a5c	Il server web per il telefono è attivo, ma non è stato possibile aggiungere una regola al firewall di Windows. Se il telefono non riesce a connettersi, consenti le connessioni alla porta {0} nel firewall.
+0c6e9512	Non è stato possibile riportare «{0}» al controllo del BIOS. Potrebbe restare alla velocità attuale. Controlla che non sia in esecuzione un altro programma di controllo delle ventole.
+6b7ec6f2	Il connettore di «{0}» non è stato trovato, quindi non è stato possibile testarlo (velocità massima). Controlla i collegamenti e le impostazioni del BIOS.
+e4133a80	Non è stato possibile salvare il registro dei giochi ({0}).
+8360b734	Non è stato possibile eliminare il registro dei giochi ({0}).
+82c14b71	(Non è stato possibile fare un backup delle impostazioni prima della modifica: {0}. Finché non chiudi l'app, puoi tornare indietro con «Annulla».)
+f14b0cd2	Non è stato possibile fare il backup delle impostazioni ({0}).
+9e0504b2	Non c'è ancora niente di cui fare il backup, perché non è stata salvata nessuna impostazione.
+5ac0d44b	Non è stato possibile importare le impostazioni. Le impostazioni attuali non sono cambiate (se qualcosa è cambiato a metà, usa «Annulla»).\n{0}
+3270468e	Non è stato possibile adattare le impostazioni al nuovo hardware. Le impostazioni attuali non sono cambiate (se qualcosa è cambiato a metà, usa «Annulla»).\n{0}
+fe29d679	Non è stato possibile salvare le registrazioni prima e dopo l'incidente ({0}).
+7cd5754e	Il file della registrazione non è stato trovato (potrebbe essere stato eliminato o spostato).
+e267eed2	Rapporto salvato: {0}
+1236f4c4	Non è stato possibile salvare il rapporto.\n{0}
+df96e04b	Questo file non contiene ancora curve salvate. In FanControl crea le curve e assegnale alle ventole, poi scegli "⋮" → "Salva" in alto a destra e importa di nuovo.

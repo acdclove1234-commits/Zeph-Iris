@@ -588,7 +588,6 @@ c0fd45c5	Draait verder in het systeemvak. Klik met de rechtermuisknop op het pic
 e586d56a	Zeph-Iris: onderhoud
 5b860ae3	Draait in DRY RUN (testmodus). Berekent alleen de toerentallen bij de temperaturen; de ventilatoren worden niet aangestuurd.
 874003cc	Beginnen met regelen
-812bba50	Het instellingenbestand was beschadigd en is hersteld uit een back-up ({0:yyyy/MM/dd HH:mm}). Het beschadigde bestand is bewaard als config.broken_*.json.
 47b4365f	Zeph-Iris stopte onverwacht, dus het watchdog-proces heeft het automatisch herstart. De regeling ging verder nadat de ventilatoren op een veilig toerental zijn gezet. De oorzaak staat in de log.
 7b249720	Log openen
 3a7e2e72	De app stopte onverwacht en is automatisch herstart.
@@ -1901,3 +1900,33 @@ b148d60e	Het bewakingsprogramma kon niet worden gestart.
 c5f9ace5	Temperaturen, belasting en ventilatoren beslaan dezelfde periode als de FPS: vanaf het eerste frame, zolang er getekend werd.
 17f1a7c2	Terug naar de vorige versie ({0}).\n\nDe kopie die vóór de update is bewaard wordt gebruikt (er wordt niets gedownload). De app sluit één keer af, de ventilatoren volgen een paar seconden het BIOS en daarna start de app opnieuw. De instellingen gaan terug naar die van vóór de update. De huidige instellingen worden bewaard in de map backups; je kunt ze herstellen met de back-up "Vóór terugzetten" in Instellingen → "Veiligheid & back-up". Logboeken en opnames blijven.\n\nTerugzetten?
 ff6a2182	Zeph-Iris terugzetten naar de vorige versie {0}? (huidige versie {1})\n\nDe draaiende Zeph-Iris wordt afgesloten (ventilatoren terug naar BIOS), de vorige exe en de instellingen van vóór de update worden teruggezet en hij start opnieuw. De huidige instellingen worden eerst bewaard in de map backups (te herstellen via Instellingen → "Veiligheid & back-up").
+0ce1e664	De weergavetaal kon niet worden gewijzigd ({0}). De ventilatorregeling blijft gewoon werken. Na een herstart van de app verschijnt de gekozen taal. Nu opnieuw starten?
+4aa4977a	De app kon zichzelf niet opnieuw starten ({0}). Hij blijft gewoon draaien. Sluit de app af en start hem daarna opnieuw.
+2b78d413	De instellingen konden niet worden opgeslagen ({0}). De wijzigingen werken nu wel, maar gaan verloren als je de app zo afsluit. Controleer of geen andere app config.json open heeft en of er vrije schijfruimte is (opslaan wordt elke 30 s opnieuw geprobeerd).
+466cf7d7	De instellingen zijn opgeslagen.
+3edcb675	Kon niet overschakelen naar het energiebeheerschema van profiel "{0}". Controleer of het gekozen energiebeheerschema nog in Windows bestaat en kies het opnieuw in de profielinstellingen.
+3f6a7367	De instellingen van de vorige versie konden niet worden overgenomen ({0}). De instellingen van de vorige versie zijn nog aanwezig. Start de app opnieuw voordat je instellingen wijzigt om het nog eens te proberen.
+f7737c39	Opnieuw starten
+c4657a17	config.json was geopend in een andere app en kon niet worden gelezen, daarom is de app gestart met de back-up van {0} (config.json is niet beschadigd). Als je instellingen wijzigt, wordt het bestand overschreven met deze back-up. Start de app opnieuw om de nieuwste instellingen terug te krijgen.
+4f3dd658	Het instellingenbestand was beschadigd, daarom is de app gestart met de back-up ({0}), maar die kon niet worden teruggeschreven naar config.json ({1}). Controleer of config.json niet alleen-lezen is.
+720c745a	Het instellingenbestand was beschadigd en is hersteld uit de back-up ({0}). Het beschadigde bestand is bewaard als config.broken_*.json.
+224fc585	Het watchdog-proces is in 10 minuten {0} keer gestopt. Controleer of antivirussoftware of iets dergelijks het niet stopt (het wordt elke keer opnieuw gestart).
+cecb4968	De LED-kleuren worden niet gewijzigd omdat OpenRGB niet bereikbaar is ({0}). Controleer of OpenRGB draait en of de "SDK-server" van OpenRGB aan staat.
+f06249d0	Het watchdog-proces kon niet worden gestart ({0}). De beveiliging die de ventilatoren op een veilige snelheid zet als de app plotseling stopt, werkt nu niet. Probeer de app opnieuw te starten.
+05539caa	Er ging iets mis tijdens een handeling, waardoor die mogelijk niet is afgerond ({0}). De ventilatorregeling blijft werken. Gebeurt dit vaker, open dan het log en meld het via "Probleem melden…".
+96f2c83a	De sneltoetsen ({0}) konden niet worden gebruikt. Een andere app lijkt dezelfde toetsen te gebruiken.
+45001a5c	De webserver voor de telefoon draait, maar er kon geen regel worden toegevoegd aan de Windows-firewall. Als de telefoon geen verbinding krijgt, sta dan in de firewall verbindingen naar poort {0} toe.
+0c6e9512	"{0}" kon niet worden teruggegeven aan de BIOS-regeling. Mogelijk blijft hij op de huidige snelheid. Controleer of er geen andere ventilatorsoftware draait.
+6b7ec6f2	De aansluiting van "{0}" is niet gevonden, dus de test (volle snelheid) kon niet worden uitgevoerd. Controleer de bekabeling en de BIOS-instellingen.
+e4133a80	De spelregistratie kon niet worden opgeslagen ({0}).
+8360b734	De spelregistratie kon niet worden verwijderd ({0}).
+82c14b71	(Er kon geen back-up worden gemaakt van de instellingen van vóór de wijziging: {0}. Tot je de app afsluit, kun je het terugdraaien met "Ongedaan maken".)
+f14b0cd2	Er kon geen back-up van de instellingen worden gemaakt ({0}).
+9e0504b2	Er is nog niets om een back-up van te maken, omdat er nog geen instellingen zijn opgeslagen.
+5ac0d44b	De instellingen konden niet worden geïmporteerd. De huidige instellingen zijn ongewijzigd (als er halverwege toch iets is veranderd, gebruik dan "Ongedaan maken").\n{0}
+3270468e	De instellingen konden niet worden aangepast aan de nieuwe hardware. De huidige instellingen zijn ongewijzigd (als er halverwege toch iets is veranderd, gebruik dan "Ongedaan maken").\n{0}
+fe29d679	De metingen van vóór en na het incident konden niet worden opgeslagen ({0}).
+7cd5754e	Het meetbestand is niet gevonden (het is mogelijk verwijderd of verplaatst).
+e267eed2	Rapport opgeslagen: {0}
+1236f4c4	Het rapport kon niet worden opgeslagen.\n{0}
+df96e04b	Dit bestand bevat nog geen opgeslagen curves. Maak in FanControl de curves aan en wijs ze toe aan ventilatoren, kies dan rechtsboven "⋮" → "Opslaan" en importeer opnieuw.

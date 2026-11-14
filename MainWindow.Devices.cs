@@ -332,15 +332,24 @@ public partial class MainWindow
                 foreach (var c in found.Take(12)) list.Children.Add(PhotoTile(c, async () =>
                 {
                     status.Text = L("写真を取ってきています…");
-                    using var dl = new CancellationTokenSource(TimeSpan.FromSeconds(30));
-                    var bytes = await DevicePhotos.DownloadAsync(c.ImageUrl, dl.Token);
-                    if (bytes is null || DevicePhotos.ImageExtension(bytes) is not { } ext)
+                    try
                     {
-                        status.Text = L("写真を取ってこられませんでした。別の写真を選ぶか、貼り付けてください。");
-                        return;
+                        using var dl = new CancellationTokenSource(TimeSpan.FromSeconds(30));
+                        var bytes = await DevicePhotos.DownloadAsync(c.ImageUrl, dl.Token);
+                        if (bytes is null || DevicePhotos.ImageExtension(bytes) is not { } ext)
+                        {
+                            status.Text = L("写真を取ってこられませんでした。別の写真を選ぶか、貼り付けてください。");
+                            return;
+                        }
+                        SetDeviceImage(card, SaveImage(card, bytes, ext, c));
+                        win.Close();
                     }
-                    SetDeviceImage(card, SaveImage(card, bytes, ext, c));
-                    win.Close();
+                    catch (Exception ex)
+                    {
+                        // 時間切れ・保存の失敗など（画面は閉じずに、別の写真を選べるようにする）
+                        Logger.Warn($"写真の取得に失敗: {ex.Message}");
+                        status.Text = L("写真を取ってこられませんでした。別の写真を選ぶか、貼り付けてください。");
+                    }
                 }));
             }
             catch (Exception ex)

@@ -60,7 +60,14 @@ public partial class MainWindow
     /// <summary>劣化チェックで注意が見つかった（App が通知に使う）</summary>
     public event Action<string, AlertLevel>? MaintenanceNotice;
 
-    private void InitReport() => _recorder.Saved += OnRecordSaved;
+    private void InitReport()
+    {
+        _recorder.Saved += OnRecordSaved;
+        _recorder.SaveFailed += OnRecordSaveFailed;
+    }
+
+    private void OnRecordSaveFailed(string why) =>
+        ShowAlert(L($"異常の前後の記録を保存できませんでした（{why}）。"), AlertLevel.Warning);
 
     private void OnRecordSaved(FlightRecord r)
     {
@@ -355,7 +362,13 @@ public partial class MainWindow
 
     private void OnOpenRecordClick(object sender, RoutedEventArgs e)
     {
-        if (sender is not Button { Tag: FlightRecord r } || !File.Exists(r.CsvPath)) return;
+        if (sender is not Button { Tag: FlightRecord r }) return;
+        if (!File.Exists(r.CsvPath))
+        {
+            MessageBox.Show(this, L("記録のファイルが見つかりません（消されたか、移されたかもしれません）。"), AppIdentity.Name, MessageBoxButton.OK, MessageBoxImage.Information);
+            RefreshRecords();
+            return;
+        }
         try { SystemTool.Open(r.CsvPath); }
         catch (Exception ex) { MessageBox.Show(this, L($"開けませんでした: {ex.Message}"), AppIdentity.Name, MessageBoxButton.OK, MessageBoxImage.Warning); }
     }

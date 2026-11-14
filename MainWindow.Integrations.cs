@@ -132,12 +132,18 @@ public partial class MainWindow
     // バックアップ・書き出し・読み込み
     // =====================================================================
 
+    /// <summary>変える前の設定のバックアップを作れなかったときに、お知らせの後ろに足す文（作れたときは空）</summary>
+    private static string NoBackupNote(bool kept) =>
+        kept ? "" : L($"（変える前の設定のバックアップは作れませんでした: {ConfigStore.LastBackupError}。アプリを終了するまでは「元に戻す」で取り消せます）");
+
     private void OnBackupNowClick(object sender, RoutedEventArgs e)
     {
         FlushCommit();
         string? path = ConfigStore.Backup("manual");
         RefreshSettingsInfo();
         if (path is not null) ShowAlert(L($"設定をバックアップしました: {Path.GetFileName(path)}"), AlertLevel.Info);
+        else if (ConfigStore.LastBackupError is { } why) ShowAlert(L($"設定のバックアップを作れませんでした（{why}）。"), AlertLevel.Warning);
+        else ShowAlert(L("まだ保存された設定がないため、バックアップするものがありません。"), AlertLevel.Info);
     }
 
     private void OnRestoreBackupClick(object sender, RoutedEventArgs e)
@@ -162,9 +168,9 @@ public partial class MainWindow
         {
             FlushCommit();
             var cfg = AppConfig.FromJson(File.ReadAllText(backup.Path));
-            ConfigStore.Backup("restore");
+            bool kept = ConfigStore.Backup("restore") is not null || ConfigStore.LastBackupError is null;
             _controller.ReplaceConfig(cfg);
-            ShowAlert(L($"{backup.Display} の設定に戻しました（「元に戻す」で取り消せます）。"), AlertLevel.Info);
+            ShowAlert(L($"{backup.Display} の設定に戻しました（「元に戻す」で取り消せます）。") + NoBackupNote(kept), kept ? AlertLevel.Info : AlertLevel.Warning);
         }
         catch (Exception ex)
         {
@@ -254,12 +260,20 @@ public partial class MainWindow
         remap.Icon = Icon;
         if (remap.ShowDialog() != true) return;
 
-        ConfigStore.Backup("import");
-        var cfg = ConfigTransfer.Merge(Config, pkg, remap.SelectedProfiles, map, _catalog, remap.ReplaceSameName, out string summary);
-        _controller.ReplaceConfig(cfg);
-        Logger.Info($"設定を読み込み: {dialog.FileName}: {summary}");
-        ShowAlert(summary + L("。「元に戻す」で取り消せます。読み込んだファンは、カーブを確認してから使ってください。"), AlertLevel.Info,
-            L("カーブを確認"), () => NavCurves.IsChecked = true);
+        try
+        {
+            bool kept = ConfigStore.Backup("import") is not null || ConfigStore.LastBackupError is null;
+            var cfg = ConfigTransfer.Merge(Config, pkg, remap.SelectedProfiles, map, _catalog, remap.ReplaceSameName, out string summary);
+            _controller.ReplaceConfig(cfg);
+            Logger.Info($"設定を読み込み: {dialog.FileName}: {summary}");
+            ShowAlert(summary + L("。「元に戻す」で取り消せます。読み込んだファンは、カーブを確認してから使ってください。") + NoBackupNote(kept), kept ? AlertLevel.Info : AlertLevel.Warning,
+                L("カーブを確認"), () => NavCurves.IsChecked = true);
+        }
+        catch (Exception ex)
+        {
+            Logger.Warn($"設定の読み込みに失敗: {ex}");
+            MessageBox.Show(this, L($"設定を読み込めませんでした。いまの設定はそのままです（途中まで変わったときは「元に戻す」で戻せます）。\n{ex.Message}"), AppIdentity.Name, MessageBoxButton.OK, MessageBoxImage.Warning);
+        }
     }
 
     // =====================================================================
@@ -276,14 +290,22 @@ public partial class MainWindow
         if (dialog.ShowDialog() == true)
         {
             FlushCommit();
-            ConfigStore.Backup("remap");
-            var cfg = Config.Clone();
-            HardwareChange.Apply(cfg, report.Items, _catalog);
-            HardwareChange.Remember(cfg, _catalog, force: true);
-            _controller.ReplaceConfig(cfg);
-            Logger.Info("部品の交換に合わせて設定を置き換えました:\n" + string.Join("\n", report.Items.Select(i => $"  {i.OldDisplay} → {i.NewId ?? "(なし)"}")));
-            ShowAlert(L("新しいハードウェアに合わせて設定を置き換えました（「元に戻す」で戻せます）。念のため、ファンカーブを確認してください。"), AlertLevel.Info,
-                L("カーブを確認"), () => NavCurves.IsChecked = true);
+            try
+            {
+                bool kept = ConfigStore.Backup("remap") is not null || ConfigStore.LastBackupError is null;
+                var cfg = Config.Clone();
+                HardwareChange.Apply(cfg, report.Items, _catalog);
+                HardwareChange.Remember(cfg, _catalog, force: true);
+                _controller.ReplaceConfig(cfg);
+                Logger.Info("部品の交換に合わせて設定を置き換えました:\n" + string.Join("\n", report.Items.Select(i => $"  {i.OldDisplay} → {i.NewId ?? "(なし)"}")));
+                ShowAlert(L("新しいハードウェアに合わせて設定を置き換えました（「元に戻す」で戻せます）。念のため、ファンカーブを確認してください。") + NoBackupNote(kept), kept ? AlertLevel.Info : AlertLevel.Warning,
+                    L("カーブを確認"), () => NavCurves.IsChecked = true);
+            }
+            catch (Exception ex)
+            {
+                Logger.Warn($"部品の交換に合わせた置き換えに失敗: {ex}");
+                MessageBox.Show(this, L($"新しいハードウェアに合わせて設定を置き換えられませんでした。いまの設定はそのままです（途中まで変わったときは「元に戻す」で戻せます）。\n{ex.Message}"), AppIdentity.Name, MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
         }
         else if (dialog.WizardRequested)
         {

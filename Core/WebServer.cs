@@ -237,12 +237,13 @@ public sealed class WebServer : IDisposable
             .ToList();
 
     /// <summary>Windows ファイアウォールで、プライベートネットワーク（自宅の Wi-Fi など）からの接続だけを許可する</summary>
-    public static void AllowFirewall(int port)
+    /// <summary>許可を追加する。追加できたら true</summary>
+    public static bool AllowFirewall(int port)
     {
         RemoveFirewall();
         // 許可するのは、同じネットワーク（localsubnet）から・プライベートネットワークのときだけ。
         // （HttpListener の通信は Windows の http.sys が受けるので、program= でこのアプリに限定すると一致せず、つながらなくなる）
-        Netsh($"advfirewall firewall add rule name=\"{FirewallRuleName}\" dir=in action=allow protocol=TCP localport={port} profile=private remoteip=localsubnet");
+        return Netsh($"advfirewall firewall add rule name=\"{FirewallRuleName}\" dir=in action=allow protocol=TCP localport={port} profile=private remoteip=localsubnet");
     }
 
     public static void RemoveFirewall() => Netsh($"advfirewall firewall delete rule name=\"{FirewallRuleName}\"");
@@ -276,16 +277,18 @@ public sealed class WebServer : IDisposable
         }
     }
 
-    private static void Netsh(string args)
+    /// <summary>netsh を動かす。10 秒以内に終わって、うまくいったら（終了コード 0）true</summary>
+    private static bool Netsh(string args)
     {
         try
         {
             using var p = Process.Start(SystemTool.Start("netsh.exe", args))!;
-            p.WaitForExit(10_000);
+            return p.WaitForExit(10_000) && p.ExitCode == 0;
         }
         catch (Exception ex)
         {
             Logger.Warn($"ファイアウォールの設定に失敗: {ex.Message}");
+            return false;
         }
     }
 

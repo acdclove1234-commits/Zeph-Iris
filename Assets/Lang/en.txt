@@ -588,7 +588,6 @@ c0fd45c5	Still running in the tray. To exit, right-click the icon.
 e586d56a	Zeph-Iris: maintenance
 5b860ae3	Running in DRY RUN (test mode). It only calculates the speeds for the temperatures; the fans are not being driven.
 874003cc	Start controlling
-812bba50	The settings file was damaged, so it was restored from a backup ({0:yyyy/MM/dd HH:mm}). The damaged file is kept as config.broken_*.json.
 47b4365f	Zeph-Iris exited unexpectedly, so the watchdog process restarted it automatically. Control resumed after setting the fans to a safe speed. See the log for the cause.
 7b249720	Open log
 3a7e2e72	It exited unexpectedly and was restarted automatically.
@@ -1901,3 +1900,33 @@ b148d60e	Could not start the guard program.
 c5f9ace5	Temperatures, loads and fans cover the same period as FPS: from the first frame, while drawing.
 17f1a7c2	Going back to the previous version ({0}).\n\nThe copy kept before the update is used (nothing is downloaded). The app closes once, the fans run on the BIOS settings for a few seconds, and then the app starts again. Settings go back to the ones from before the update. The current settings are kept in the backups folder, so you can restore them from the "Before restore" backup in Settings → "Safety & backup". Logs and records stay.\n\nGo back?
 ff6a2182	Go back to the previous version {0} of Zeph-Iris? (current version {1})\n\nThe running Zeph-Iris is closed (fans back to the BIOS settings), the previous exe and the settings from before the update are put back, and it starts again. The current settings are kept in the backups folder first (restore them from Settings → "Safety & backup").
+0ce1e664	The display language could not be switched ({0}). Fan control keeps running. Restarting the app shows it in the chosen language. Restart now?
+4aa4977a	The app could not restart itself ({0}). It keeps running as is. Close it once and start it again.
+2b78d413	Settings could not be saved ({0}). The changes work now, but they are lost if you close the app like this. Check that no other app has config.json open and that there is free disk space (saving is retried every 30 s).
+466cf7d7	Settings were saved.
+3edcb675	Could not switch to the power plan of profile "{0}". Check that the chosen power plan still exists in Windows, and choose it again in the profile settings.
+3f6a7367	Settings from the previous version could not be carried over ({0}). The previous version's settings are still there. Restart the app before changing settings to try again.
+f7737c39	Restart
+c4657a17	config.json was open in another app and could not be read, so the app started with the backup from {0} (config.json is not damaged). Changing settings overwrites it with this backup. Restart the app to get the latest settings back.
+4f3dd658	The settings file was damaged, so the app started with the backup ({0}), but it could not be written back to config.json ({1}). Check that config.json is not read-only.
+720c745a	The settings file was damaged, so it was restored from the backup ({0}). The damaged file is kept as config.broken_*.json.
+224fc585	The watchdog process stopped {0} times in 10 minutes. Check that antivirus software or similar is not stopping it (it is restarted each time).
+cecb4968	The LED colors are not being changed because OpenRGB cannot be reached ({0}). Check that OpenRGB is running and that its "SDK Server" is on.
+f06249d0	The watchdog process could not be started ({0}). The safeguard that sets fans to a safe speed if the app stops suddenly is not working right now. Try restarting the app.
+05539caa	Something went wrong during an operation, so it may not have finished ({0}). Fan control keeps running. If this keeps happening, open the log and send it from "Report a problem…".
+96f2c83a	The shortcut keys ({0}) could not be used. Another app seems to use the same keys.
+45001a5c	The web server for the phone is running, but a rule could not be added to Windows Firewall. If the phone cannot connect, allow connections to port {0} in the firewall.
+0c6e9512	"{0}" could not be handed back to BIOS control. It may stay at its current speed. Check that no other fan control software is running.
+6b7ec6f2	The header of "{0}" was not found, so it could not be tested (full speed). Check the wiring and the BIOS settings.
+e4133a80	The game record could not be saved ({0}).
+8360b734	The game record could not be deleted ({0}).
+82c14b71	(A backup of the settings before the change could not be made: {0}. Until you close the app, you can undo it with "Undo".)
+f14b0cd2	Could not back up the settings ({0}).
+9e0504b2	There is nothing to back up yet, because no settings have been saved.
+5ac0d44b	The settings could not be imported. The current settings are unchanged (if something changed partway, use "Undo").\n{0}
+3270468e	The settings could not be adjusted to the new hardware. The current settings are unchanged (if something changed partway, use "Undo").\n{0}
+fe29d679	The records before and after the incident could not be saved ({0}).
+7cd5754e	The record file was not found (it may have been deleted or moved).
+e267eed2	Report saved: {0}
+1236f4c4	The report could not be saved.\n{0}
+df96e04b	This file has no curves saved yet. In FanControl, create the curves and assign them to fans, then choose "⋮" → "Save" at the top right and import again.

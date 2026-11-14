@@ -147,9 +147,18 @@ public partial class MainWindow
         catch (Exception ex)
         {
             Logger.Warn($"ゲームの記録を保存できません: {ex.Message}");
+            // 起動している間 1 回だけ知らせる（保存できなかった記録は、一覧にも出さない）
+            if (!_gameSaveWarned)
+            {
+                _gameSaveWarned = true;
+                ShowAlert(L($"ゲームの記録を保存できませんでした（{ex.Message}）。"), AlertLevel.Warning);
+            }
+            return;
         }
         if (_gamesLoaded) _gameSessions.Insert(0, new GameSessionVm { Session = g });
     }
+
+    private bool _gameSaveWarned;
 
     private void UpdateGamesStatus()
     {
@@ -242,6 +251,7 @@ public partial class MainWindow
         catch (Exception ex)
         {
             Logger.Warn($"ゲームの記録を消せません: {ex.Message}");
+            ShowAlert(L($"ゲームの記録を消せませんでした（{ex.Message}）。"), AlertLevel.Warning);
             return;
         }
         foreach (var vm in _gameSessions.Where(v => match(v.Session)).ToList()) _gameSessions.Remove(vm);

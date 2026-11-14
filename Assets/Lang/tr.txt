@@ -588,7 +588,6 @@ c0fd45c5	Sistem tepsisinde çalışmaya devam ediyor. Çıkmak için simgeye sa�
 e586d56a	Zeph-Iris: bakım
 5b860ae3	DRY RUN (test modu) ile çalışıyor. Yalnızca sıcaklıklara göre devirleri hesaplar; fanlar sürülmüyor.
 874003cc	Kontrole başla
-812bba50	Ayar dosyası bozuktu, bu yüzden bir yedekten ({0:yyyy/MM/dd HH:mm}) geri yüklendi. Bozuk dosya config.broken_*.json olarak saklandı.
 47b4365f	Zeph-Iris beklenmedik şekilde kapandı, gözetleyici işlem onu otomatik olarak yeniden başlattı. Fanlar güvenli bir devre alındıktan sonra kontrol sürdü. Nedeni günlükte görülebilir.
 7b249720	Günlüğü aç
 3a7e2e72	Beklenmedik şekilde kapandı ve otomatik olarak yeniden başlatıldı.
@@ -1901,3 +1900,33 @@ b148d60e	Gözetim programı başlatılamadı.
 c5f9ace5	Sıcaklıklar, yük ve fanlar FPS ile aynı dönemi kapsar: ilk kareden itibaren, çizim sürerken.
 17f1a7c2	Önceki sürüme ({0}) dönülüyor.\n\nGüncellemeden önce saklanan kopya kullanılır (hiçbir şey indirilmez). Uygulama bir kez kapanır, fanlar birkaç saniye BIOS ayarlarıyla döner, sonra uygulama yeniden başlar. Ayarlar güncellemeden önceki haline döner. Mevcut ayarlar backups klasöründe saklanır; Ayarlar → "Güvenlik ve yedekleme" içindeki "Geri yüklemeden önce" yedeğinden geri alabilirsiniz. Günlükler ve kayıtlar kalır.\n\nDönülsün mü?
 ff6a2182	Zeph-Iris önceki sürüm {0} sürümüne döndürülsün mü? (şu anki sürüm {1})\n\nÇalışan Zeph-Iris kapatılır (fanlar BIOS'a döner), önceki exe ve güncellemeden önceki ayarlar geri yüklenir ve yeniden başlar. Önce mevcut ayarlar backups klasöründe saklanır (Ayarlar → "Güvenlik ve yedekleme"den geri alın).
+0ce1e664	Görüntüleme dili değiştirilemedi ({0}). Fan kontrolü çalışmaya devam ediyor. Uygulamayı yeniden başlatınca seçtiğiniz dilde görünür. Şimdi yeniden başlatılsın mı?
+4aa4977a	Uygulama kendini yeniden başlatamadı ({0}). Olduğu gibi çalışmaya devam ediyor. Uygulamayı kapatıp yeniden başlatın.
+2b78d413	Ayarlar kaydedilemedi ({0}). Değişiklikler şu an geçerli, ancak uygulamayı bu hâlde kapatırsanız kaybolur. config.json dosyasını başka bir uygulamanın açık tutmadığını ve diskte boş yer olduğunu kontrol edin (kaydetme her 30 sn'de bir yeniden denenir).
+466cf7d7	Ayarlar kaydedildi.
+3edcb675	"{0}" profilinin güç planına geçilemedi. Seçilen güç planının Windows'ta hâlâ var olduğunu kontrol edin ve profil ayarlarından yeniden seçin.
+3f6a7367	Önceki sürümün ayarları aktarılamadı ({0}). Önceki sürümün ayarları yerinde duruyor. Yeniden denemek için ayarları değiştirmeden önce uygulamayı yeniden başlatın.
+f7737c39	Yeniden başlat
+c4657a17	config.json başka bir uygulamada açık olduğu için okunamadı, bu yüzden uygulama {0} tarihli yedekle başlatıldı (config.json bozuk değil). Ayarları değiştirirseniz dosyanın üzerine bu yedek yazılır. En son ayarlara dönmek için uygulamayı yeniden başlatın.
+4f3dd658	Ayar dosyası bozuk olduğu için uygulama yedekle ({0}) başlatıldı, ancak yedek config.json dosyasına geri yazılamadı ({1}). config.json dosyasının salt okunur olmadığını kontrol edin.
+720c745a	Ayar dosyası bozuk olduğu için yedekten ({0}) geri yüklendi. Bozuk dosya config.broken_*.json olarak saklandı.
+224fc585	Gözetleyici işlem 10 dakikada {0} kez durdu. Bir virüsten koruma yazılımının veya benzerinin onu durdurmadığını kontrol edin (her durduğunda yeniden başlatılıyor).
+cecb4968	OpenRGB'ye bağlanılamadığı için LED renkleri değiştirilmiyor ({0}). OpenRGB'nin çalıştığını ve "SDK sunucusu"nun açık olduğunu kontrol edin.
+f06249d0	Gözetleyici işlem başlatılamadı ({0}). Uygulama aniden durursa fanları güvenli hıza getiren koruma şu an çalışmıyor. Uygulamayı yeniden başlatmayı deneyin.
+05539caa	Bir işlem sırasında sorun oluştu, bu yüzden işlem tamamlanmamış olabilir ({0}). Fan kontrolü çalışmaya devam ediyor. Bu tekrar ederse günlüğü açın ve "Sorun bildir…" üzerinden gönderin.
+96f2c83a	Kısayol tuşları ({0}) kullanılamadı. Başka bir uygulama aynı tuşları kullanıyor gibi görünüyor.
+45001a5c	Telefon için web sunucusu çalışıyor, ancak Windows Güvenlik Duvarı'na kural eklenemedi. Telefon bağlanamazsa güvenlik duvarında {0} numaralı bağlantı noktasına bağlantılara izin verin.
+0c6e9512	"{0}" yeniden BIOS kontrolüne verilemedi. Şu anki hızında kalabilir. Başka bir fan kontrol yazılımının çalışmadığını kontrol edin.
+6b7ec6f2	"{0}" konnektörü bulunamadığı için test (tam hız) yapılamadı. Kablolamayı ve BIOS ayarlarını kontrol edin.
+e4133a80	Oyun kaydı kaydedilemedi ({0}).
+8360b734	Oyun kaydı silinemedi ({0}).
+82c14b71	(Değişiklikten önceki ayarların yedeği alınamadı: {0}. Uygulamayı kapatana kadar "Geri al" ile geri alabilirsiniz.)
+f14b0cd2	Ayarların yedeği alınamadı ({0}).
+9e0504b2	Henüz kaydedilmiş ayar olmadığı için yedeklenecek bir şey yok.
+5ac0d44b	Ayarlar içe aktarılamadı. Mevcut ayarlar değişmedi (yarıda bir şey değiştiyse "Geri al"ı kullanın).\n{0}
+3270468e	Ayarlar yeni donanıma uyarlanamadı. Mevcut ayarlar değişmedi (yarıda bir şey değiştiyse "Geri al"ı kullanın).\n{0}
+fe29d679	Olay öncesi ve sonrası kayıtlar kaydedilemedi ({0}).
+7cd5754e	Kayıt dosyası bulunamadı (silinmiş veya taşınmış olabilir).
+e267eed2	Rapor kaydedildi: {0}
+1236f4c4	Rapor kaydedilemedi.\n{0}
+df96e04b	Bu dosyada henüz kaydedilmiş eğri yok. FanControl'de eğrileri oluşturup fanlara atayın, ardından sağ üstte "⋮" → "Kaydet"i seçin ve yeniden içe aktarın.

@@ -52,8 +52,8 @@ public static class Watchdog
 
     // ----- 本体側 -----
 
-    /// <summary>本体から呼ぶ: 見張りプロセスを起動する</summary>
-    public static void Launch()
+    /// <summary>本体から呼ぶ: 見張りプロセスを起動する。起動できたら null、できなければ理由</summary>
+    public static string? Launch()
     {
         try
         {
@@ -82,10 +82,12 @@ public static class Watchdog
                 };
             }
             Logger.Info("見張りプロセスを起動しました");
+            return null;
         }
         catch (Exception ex)
         {
             Logger.Warn($"見張りプロセスを起動できません: {ex.Message}");
+            return ex.Message;
         }
     }
 

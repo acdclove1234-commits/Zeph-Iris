@@ -588,7 +588,6 @@ c0fd45c5	Läuft im Infobereich weiter. Zum Beenden mit der rechten Maustaste auf
 e586d56a	Zeph-Iris: Wartung
 5b860ae3	Läuft im DRY RUN (Testmodus). Es werden nur die Drehzahlen zu den Temperaturen berechnet; die Lüfter werden nicht angesteuert.
 874003cc	Steuerung starten
-812bba50	Die Einstellungsdatei war beschädigt und wurde aus einer Sicherung ({0:yyyy/MM/dd HH:mm}) wiederhergestellt. Die beschädigte Datei bleibt als config.broken_*.json erhalten.
 47b4365f	Zeph-Iris wurde unerwartet beendet, daher hat der Watchdog-Prozess es automatisch neu gestartet. Die Steuerung lief weiter, nachdem die Lüfter auf eine sichere Drehzahl gesetzt wurden. Die Ursache steht im Protokoll.
 7b249720	Protokoll öffnen
 3a7e2e72	Die App wurde unerwartet beendet und automatisch neu gestartet.
@@ -1901,3 +1900,33 @@ b148d60e	Das Überwachungsprogramm konnte nicht gestartet werden.
 c5f9ace5	Temperaturen, Auslastung und Lüfter decken denselben Zeitraum ab wie die FPS: ab dem ersten Bild, solange gezeichnet wurde.
 17f1a7c2	Zurück zur vorherigen Version ({0}).\n\nEs wird die vor dem Update aufbewahrte Kopie verwendet (nichts wird heruntergeladen). Die App wird einmal beendet, die Lüfter laufen einige Sekunden nach BIOS-Einstellungen, danach startet die App neu. Die Einstellungen kehren zum Stand vor dem Update zurück. Die aktuellen Einstellungen werden im Ordner backups aufbewahrt und lassen sich über die Sicherung „Vor der Wiederherstellung“ unter Einstellungen → „Sicherheit & Sicherung“ wiederherstellen. Protokolle und Aufzeichnungen bleiben.\n\nZurücksetzen?
 ff6a2182	Zeph-Iris auf die vorherige Version {0} zurücksetzen? (aktuelle Version {1})\n\nDas laufende Zeph-Iris wird beendet (Lüfter zurück auf BIOS), die vorherige exe und die Einstellungen von vor dem Update werden zurückgespielt und es startet neu. Die aktuellen Einstellungen werden vorher im Ordner backups aufbewahrt (wiederherstellbar unter Einstellungen → „Sicherheit & Sicherung“).
+0ce1e664	Die Anzeigesprache konnte nicht umgestellt werden ({0}). Die Lüftersteuerung läuft weiter. Nach einem Neustart der App wird die gewählte Sprache angezeigt. Jetzt neu starten?
+4aa4977a	Die App konnte sich nicht selbst neu starten ({0}). Sie läuft so weiter. Beenden Sie sie einmal und starten Sie sie dann erneut.
+2b78d413	Die Einstellungen konnten nicht gespeichert werden ({0}). Die Änderungen wirken jetzt, gehen aber verloren, wenn Sie die App so beenden. Prüfen Sie, ob keine andere App config.json geöffnet hat und ob genug freier Speicherplatz vorhanden ist (das Speichern wird alle 30 s erneut versucht).
+466cf7d7	Die Einstellungen wurden gespeichert.
+3edcb675	Es konnte nicht zum Energiesparplan des Profils „{0}“ gewechselt werden. Prüfen Sie, ob der gewählte Energiesparplan in Windows noch vorhanden ist, und wählen Sie ihn in den Profileinstellungen erneut aus.
+3f6a7367	Die Einstellungen der vorherigen Version konnten nicht übernommen werden ({0}). Die Einstellungen der vorherigen Version sind weiterhin vorhanden. Starten Sie die App neu, bevor Sie Einstellungen ändern, um es erneut zu versuchen.
+f7737c39	Neu starten
+c4657a17	config.json war in einer anderen App geöffnet und konnte nicht gelesen werden. Daher wurde die App mit der Sicherung vom {0} gestartet (config.json ist nicht beschädigt). Wenn Sie Einstellungen ändern, wird sie mit dieser Sicherung überschrieben. Starten Sie die App neu, um die neuesten Einstellungen zurückzubekommen.
+4f3dd658	Die Einstellungsdatei war beschädigt. Daher wurde die App mit der Sicherung ({0}) gestartet, aber sie konnte nicht in config.json zurückgeschrieben werden ({1}). Prüfen Sie, ob config.json schreibgeschützt ist.
+720c745a	Die Einstellungsdatei war beschädigt und wurde aus der Sicherung ({0}) wiederhergestellt. Die beschädigte Datei bleibt als config.broken_*.json erhalten.
+224fc585	Der Watchdog-Prozess wurde innerhalb von 10 Minuten {0}-mal beendet. Prüfen Sie, ob eine Antivirensoftware oder Ähnliches ihn stoppt (er wird jedes Mal neu gestartet).
+cecb4968	Die LED-Farben werden nicht geändert, weil OpenRGB nicht erreichbar ist ({0}). Prüfen Sie, ob OpenRGB läuft und ob der „SDK-Server“ von OpenRGB eingeschaltet ist.
+f06249d0	Der Watchdog-Prozess konnte nicht gestartet werden ({0}). Der Schutz, der die Lüfter auf eine sichere Drehzahl setzt, wenn die App plötzlich stoppt, ist gerade nicht aktiv. Versuchen Sie, die App neu zu starten.
+05539caa	Bei einem Vorgang ist ein Problem aufgetreten, daher wurde er möglicherweise nicht abgeschlossen ({0}). Die Lüftersteuerung läuft weiter. Wenn das öfter passiert, öffnen Sie das Protokoll und melden Sie es über „Problem melden…“.
+96f2c83a	Die Tastenkombination ({0}) konnte nicht verwendet werden. Offenbar nutzt eine andere App dieselben Tasten.
+45001a5c	Der Webserver für das Handy läuft, aber in der Windows-Firewall konnte keine Regel hinzugefügt werden. Wenn sich das Handy nicht verbinden kann, erlauben Sie in der Firewall Verbindungen zu Port {0}.
+0c6e9512	„{0}“ konnte nicht an die BIOS-Steuerung zurückgegeben werden. Er bleibt möglicherweise auf der aktuellen Drehzahl. Prüfen Sie, ob keine andere Lüftersteuerungssoftware läuft.
+6b7ec6f2	Der Anschluss von „{0}“ wurde nicht gefunden, daher konnte er nicht getestet werden (volle Drehzahl). Prüfen Sie die Verkabelung und die BIOS-Einstellungen.
+e4133a80	Die Spielaufzeichnung konnte nicht gespeichert werden ({0}).
+8360b734	Die Spielaufzeichnung konnte nicht gelöscht werden ({0}).
+82c14b71	(Eine Sicherung der Einstellungen vor der Änderung konnte nicht erstellt werden: {0}. Bis Sie die App beenden, können Sie die Änderung mit „Rückgängig“ zurücknehmen.)
+f14b0cd2	Die Einstellungen konnten nicht gesichert werden ({0}).
+9e0504b2	Es gibt noch nichts zu sichern, weil noch keine Einstellungen gespeichert wurden.
+5ac0d44b	Die Einstellungen konnten nicht importiert werden. Die aktuellen Einstellungen bleiben unverändert (falls sich teilweise etwas geändert hat, nutzen Sie „Rückgängig“).\n{0}
+3270468e	Die Einstellungen konnten nicht an die neue Hardware angepasst werden. Die aktuellen Einstellungen bleiben unverändert (falls sich teilweise etwas geändert hat, nutzen Sie „Rückgängig“).\n{0}
+fe29d679	Die Vorfallaufzeichnungen vor und nach dem Vorfall konnten nicht gespeichert werden ({0}).
+7cd5754e	Die Aufzeichnungsdatei wurde nicht gefunden (sie wurde möglicherweise gelöscht oder verschoben).
+e267eed2	Bericht gespeichert: {0}
+1236f4c4	Der Bericht konnte nicht gespeichert werden.\n{0}
+df96e04b	In dieser Datei sind noch keine Kurven gespeichert. Erstellen Sie die Kurven in FanControl, weisen Sie sie den Lüftern zu, wählen Sie oben rechts „⋮“ → „Speichern“ und importieren Sie dann erneut.

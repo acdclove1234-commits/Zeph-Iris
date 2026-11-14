@@ -136,6 +136,7 @@ public sealed class AppController : IDisposable
     /// <summary>1 秒ごとに呼ぶ。ワンタッチ操作の期限切れとスケジュールを確認する</summary>
     public void Tick(DateTime now)
     {
+        RetryUnsaved(now);
         string before = EffectiveProfile;
         bool quickChanged = false;
         if (_boostUntil is DateTime b && now >= b) { _boostUntil = null; quickChanged = true; }
@@ -280,9 +281,18 @@ public sealed class AppController : IDisposable
         if (guid.Length == 0 || guid == _appliedPowerPlanGuid) return;
         _appliedPowerPlanGuid = guid;
         _powerPlanChanged = true;
-        // powercfg は少し時間がかかるので、画面を止めないよう別スレッドで実行する
-        Task.Run(() => PowerPlans.SetActive(guid));
+        // powercfg は少し時間がかかるので、画面を止めないよう別スレッドで実行する。切り替えられなければ知らせる
+        string profile = EffectiveProfile;
+        Task.Run(() =>
+        {
+            if (PowerPlans.SetActive(guid)) return;
+            if (_appliedPowerPlanGuid == guid) _appliedPowerPlanGuid = null;
+            PowerPlanFailed?.Invoke(profile, guid);
+        });
     }
+
+    /// <summary>電源プランを切り替えられなかった（プロファイルの名前・プランの GUID）。別のスレッドで呼ばれる</summary>
+    public event Action<string, string>? PowerPlanFailed;
 
     private void Replace(string json)
     {
@@ -306,16 +316,42 @@ public sealed class AppController : IDisposable
         foreach (var s in keep) _undo.Push(s);
     }
 
-    private static void Persist(string json)
+    /// <summary>設定を config.json に書けなかった（書けなくなった最初の 1 回だけ。理由の文）。画面のスレッドで呼ばれる</summary>
+    public event Action<string>? SaveFailed;
+    /// <summary>書けなかった設定を、あとで書けた</summary>
+    public event Action? SaveRecovered;
+    /// <summary>まだ書けていない設定（書けたら null）。Tick で 30 秒ごとに書き直す</summary>
+    private string? _unsavedJson;
+    private DateTime _lastSaveRetry;
+
+    private void Persist(string json)
     {
         try
         {
             ConfigStore.SaveJson(json);
+            if (_unsavedJson is not null)
+            {
+                _unsavedJson = null;
+                Logger.Info("書けなかった設定を保存できました");
+                SaveRecovered?.Invoke();
+            }
         }
         catch (Exception ex)
         {
             Logger.Error($"設定の保存に失敗: {ex}");
+            bool first = _unsavedJson is null;
+            _unsavedJson = json;
+            _lastSaveRetry = DateTime.Now;
+            if (first) SaveFailed?.Invoke(ex.Message);
         }
+    }
+
+    /// <summary>書けなかった設定を、30 秒ごとに書き直す（Tick から）</summary>
+    private void RetryUnsaved(DateTime now)
+    {
+        if (_unsavedJson is not { } json || now - _lastSaveRetry < TimeSpan.FromSeconds(30)) return;
+        _lastSaveRetry = now;
+        Persist(json);
     }
 
     private bool _disposed;
@@ -324,6 +360,7 @@ public sealed class AppController : IDisposable
     {
         if (_disposed) return;
         _disposed = true;
+        if (_unsavedJson is { } unsaved) Persist(unsaved);   // 書けなかった設定を、終わる前にもう一度書く
         Switcher.Dispose();
         Engine.Stop();
         // 起動時の電源プランに戻す（このアプリが切り替えた場合のみ）

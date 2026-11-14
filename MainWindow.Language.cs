@@ -101,6 +101,7 @@ public partial class MainWindow
         if (_litMusic is not null) _litMusic.PropertyChanged -= OnLightingConfigChanged;
         if (_themeChanged is not null) ThemeManager.Changed -= _themeChanged;
         _recorder.Saved -= OnRecordSaved;
+        _recorder.SaveFailed -= OnRecordSaveFailed;
         LightingPage.IsVisibleChanged -= OnLightingPageVisibleChanged;
         StopLightingLive();
         StopSyncTest();

@@ -41,7 +41,13 @@ public partial class App
         if (_exiting || _cleanupStarted) return;
         Logger.Info("アプリを起動し直します（PawnIO の読み込みなど）");
         // 新しいアプリは、このアプリが終わる（二重起動の防止の印を離す）まで最大 30 秒待ってから始まる
-        StartSelf(extraArguments.Length > 0 ? $"{RestartArgument} {extraArguments}" : RestartArgument);
+        // 新しいアプリを起動できなかったら、終わらずに動き続ける（終わると、ファンが BIOS の設定のまま誰も起動し直さない）
+        if (StartSelf(extraArguments.Length > 0 ? $"{RestartArgument} {extraArguments}" : RestartArgument) is { } why)
+        {
+            MessageBox.Show(L($"アプリを起動し直せませんでした（{why}）。このまま動かし続けます。いったん終了してから、もう一度起動してください。"),
+                AppIdentity.Name, MessageBoxButton.OK, MessageBoxImage.Warning);
+            return;
+        }
         ExitApplication();
     }
 

@@ -1313,6 +1313,11 @@ public static class ConfigStore
     /// config.json を読む。壊れていたら壊れたファイルを退避し、新しいバックアップから順に読めるものを探す。
     /// どれも読めなければ例外を投げる（呼び出し側で空の設定にする）
     /// </summary>
+    /// <summary>config.json がほかのアプリに開かれていて読めず、バックアップで起動した（config.json は壊れていない）</summary>
+    public static bool RecoveredBecauseLocked { get; private set; }
+    /// <summary>壊れていた config.json をバックアップで直したが、書き戻せなかった理由（書き戻せたら null）</summary>
+    public static string? WriteBackError { get; private set; }
+
     public static AppConfig Load()
     {
         if (!File.Exists(FilePath))
@@ -1337,6 +1342,7 @@ public static class ConfigStore
                 {
                     var cfg = AppConfig.FromJson(File.ReadAllText(backup.Path));
                     RecoveredFrom = backup.Path;
+                    RecoveredBecauseLocked = true;
                     Logger.Warn($"config.json が使用中のため、バックアップで起動しました: {backup.Path}");
                     return cfg;
                 }
@@ -1360,7 +1366,13 @@ public static class ConfigStore
                     var cfg = AppConfig.FromJson(File.ReadAllText(backup.Path));
                     RecoveredFrom = backup.Path;
                     Logger.Warn($"バックアップから復旧しました: {backup.Path}");
-                    SaveJson(cfg.ToJson(), backup: false);
+                    // 書き戻せなくても、読めたバックアップで起動する（書き戻せなかったことは画面で知らせる）
+                    try { SaveJson(cfg.ToJson(), backup: false); }
+                    catch (Exception wx)
+                    {
+                        Logger.Error($"復旧した設定を config.json に書き戻せません: {wx.Message}");
+                        WriteBackError = wx.Message;
+                    }
                     return cfg;
                 }
                 catch
@@ -1398,8 +1410,12 @@ public static class ConfigStore
     }
 
     /// <summary>今の config.json をバックアップする（同じ内容の最新バックアップがあれば作らない）</summary>
+    /// <summary>最後のバックアップが作れなかった理由（作れた・まだ設定がないときは null）</summary>
+    public static string? LastBackupError { get; private set; }
+
     public static string? Backup(string reason)
     {
+        LastBackupError = null;
         try
         {
             if (!File.Exists(FilePath)) return null;
@@ -1417,6 +1433,7 @@ public static class ConfigStore
         catch (Exception ex)
         {
             Logger.Warn($"設定のバックアップに失敗: {ex.Message}");
+            LastBackupError = ex.Message;
             return null;
         }
     }

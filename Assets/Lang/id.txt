@@ -588,7 +588,6 @@ c0fd45c5	Tetap berjalan di baki sistem. Untuk keluar, klik kanan ikonnya.
 e586d56a	Zeph-Iris: pemeliharaan
 5b860ae3	Berjalan dalam DRY RUN (mode uji). Hanya menghitung putaran berdasarkan suhu; kipas tidak dikendalikan.
 874003cc	Mulai kendali
-812bba50	File pengaturan rusak, jadi dipulihkan dari cadangan ({0:yyyy/MM/dd HH:mm}). File yang rusak disimpan sebagai config.broken_*.json.
 47b4365f	Zeph-Iris berhenti tiba-tiba, jadi proses pengawas memulainya ulang secara otomatis. Kendali dilanjutkan setelah kipas disetel ke putaran aman. Penyebabnya bisa dilihat di log.
 7b249720	Buka log
 3a7e2e72	Berhenti tiba-tiba dan dimulai ulang secara otomatis.
@@ -1901,3 +1900,33 @@ b148d60e	Program pengawas tidak bisa dijalankan.
 c5f9ace5	Suhu, beban, dan kipas mencakup periode yang sama dengan FPS: dari frame pertama, selama menggambar.
 17f1a7c2	Kembali ke versi sebelumnya ({0}).\n\nSalinan yang disimpan sebelum pembaruan dipakai (tidak ada yang diunduh). Aplikasi tertutup sekali, kipas mengikuti BIOS beberapa detik, lalu aplikasi berjalan lagi. Pengaturan kembali ke sebelum pembaruan. Pengaturan saat ini disimpan di folder backups; bisa dipulihkan dari cadangan "Sebelum pemulihan" di Pengaturan → "Keamanan & cadangan". Log dan catatan tetap ada.\n\nKembali?
 ff6a2182	Kembalikan Zeph-Iris ke versi sebelumnya {0}? (versi sekarang {1})\n\nZeph-Iris yang berjalan ditutup (kipas kembali ke BIOS), exe sebelumnya dan pengaturan dari sebelum pembaruan dikembalikan, lalu dijalankan lagi. Pengaturan saat ini disimpan dulu di folder backups (pulihkan dari Pengaturan → "Keamanan & cadangan").
+0ce1e664	Bahasa tampilan tidak bisa diganti ({0}). Kontrol kipas tetap berjalan. Setelah aplikasi dimulai ulang, tampilan akan memakai bahasa yang dipilih. Mulai ulang sekarang?
+4aa4977a	Aplikasi tidak bisa memulai ulang dirinya sendiri ({0}). Aplikasi tetap berjalan seperti sekarang. Tutup dulu, lalu jalankan lagi.
+2b78d413	Pengaturan tidak bisa disimpan ({0}). Perubahan sudah berlaku sekarang, tetapi akan hilang jika aplikasi ditutup dalam keadaan ini. Pastikan config.json tidak sedang dibuka aplikasi lain dan ruang disk masih cukup (penyimpanan dicoba lagi setiap 30 detik).
+466cf7d7	Pengaturan berhasil disimpan.
+3edcb675	Tidak bisa beralih ke rencana daya profil "{0}". Pastikan rencana daya yang dipilih masih ada di Windows, lalu pilih lagi di pengaturan profil.
+3f6a7367	Pengaturan dari versi sebelumnya tidak bisa dipindahkan ({0}). Pengaturan versi sebelumnya masih tersimpan. Mulai ulang aplikasi sebelum mengubah pengaturan untuk mencobanya lagi.
+f7737c39	Mulai ulang
+c4657a17	config.json sedang dibuka aplikasi lain dan tidak bisa dibaca, jadi aplikasi dijalankan dengan cadangan dari {0} (config.json tidak rusak). Jika pengaturan diubah, config.json akan ditimpa dengan isi cadangan ini. Untuk kembali ke pengaturan terbaru, mulai ulang aplikasi.
+4f3dd658	File pengaturan rusak, jadi aplikasi dijalankan dengan cadangan ({0}), tetapi cadangan itu tidak bisa ditulis kembali ke config.json ({1}). Pastikan config.json tidak diatur hanya-baca.
+720c745a	File pengaturan rusak, jadi dipulihkan dari cadangan ({0}). File yang rusak disimpan sebagai config.broken_*.json.
+224fc585	Proses pengawas berhenti {0} kali dalam 10 menit. Pastikan antivirus atau program sejenis tidak menghentikannya (setiap kali berhenti, proses ini dijalankan lagi).
+cecb4968	Warna LED tidak diubah karena OpenRGB tidak bisa dihubungi ({0}). Pastikan OpenRGB berjalan dan "server SDK" di OpenRGB sudah menyala.
+f06249d0	Proses pengawas tidak bisa dijalankan ({0}). Pengaman yang mengatur kipas ke kecepatan aman saat aplikasi tiba-tiba berhenti sedang tidak bekerja. Coba mulai ulang aplikasi.
+05539caa	Terjadi masalah saat operasi berlangsung, jadi mungkin belum selesai sepenuhnya ({0}). Kontrol kipas tetap berjalan. Jika ini terus terjadi, buka log lalu kirimkan lewat "Laporkan masalah…".
+96f2c83a	Tombol pintasan ({0}) tidak bisa dipakai. Sepertinya aplikasi lain memakai tombol yang sama.
+45001a5c	Server web untuk ponsel berjalan, tetapi izin tidak bisa ditambahkan ke Windows Firewall. Jika ponsel tidak bisa terhubung, izinkan koneksi ke port {0} di firewall.
+0c6e9512	"{0}" tidak bisa dikembalikan ke kontrol BIOS. Kipas ini mungkin tetap di putaran sekarang. Pastikan tidak ada software kontrol kipas lain yang berjalan.
+6b7ec6f2	Konektor "{0}" tidak ditemukan, jadi tidak bisa diuji (kecepatan penuh). Periksa kabel dan pengaturan BIOS.
+e4133a80	Catatan game tidak bisa disimpan ({0}).
+8360b734	Catatan game tidak bisa dihapus ({0}).
+82c14b71	(Cadangan pengaturan sebelum perubahan tidak bisa dibuat: {0}. Selama aplikasi belum ditutup, perubahan bisa dibatalkan dengan "Urungkan".)
+f14b0cd2	Cadangan pengaturan tidak bisa dibuat ({0}).
+9e0504b2	Belum ada yang bisa dicadangkan karena belum ada pengaturan yang disimpan.
+5ac0d44b	Pengaturan tidak bisa diimpor. Pengaturan saat ini tidak berubah (jika ada yang sempat berubah, gunakan "Urungkan").\n{0}
+3270468e	Pengaturan tidak bisa disesuaikan dengan perangkat keras baru. Pengaturan saat ini tidak berubah (jika ada yang sempat berubah, gunakan "Urungkan").\n{0}
+fe29d679	Rekaman sebelum dan sesudah insiden tidak bisa disimpan ({0}).
+7cd5754e	File rekaman tidak ditemukan (mungkin sudah dihapus atau dipindahkan).
+e267eed2	Laporan disimpan: {0}
+1236f4c4	Laporan tidak bisa disimpan.\n{0}
+df96e04b	File ini belum berisi kurva yang disimpan. Di FanControl, buat kurva dan tetapkan ke kipas, lalu pilih "⋮" → "Simpan" di kanan atas dan impor lagi.

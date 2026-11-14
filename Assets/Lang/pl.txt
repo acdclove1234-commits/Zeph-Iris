@@ -588,7 +588,6 @@ c0fd45c5	Nadal działa w zasobniku. Aby zakończyć, kliknij ikonę prawym przyc
 e586d56a	Zeph-Iris: konserwacja
 5b860ae3	Działa w trybie DRY RUN (tryb testowy). Tylko oblicza obroty dla temperatur; wentylatory nie są sterowane.
 874003cc	Rozpocznij sterowanie
-812bba50	Plik ustawień był uszkodzony, więc przywrócono go z kopii ({0:yyyy/MM/dd HH:mm}). Uszkodzony plik zachowano jako config.broken_*.json.
 47b4365f	Zeph-Iris nieoczekiwanie się zamknął, więc proces nadzorczy automatycznie uruchomił go ponownie. Sterowanie wznowiono po ustawieniu bezpiecznych obrotów. Przyczynę znajdziesz w dzienniku.
 7b249720	Otwórz dziennik
 3a7e2e72	Aplikacja nieoczekiwanie się zamknęła i została automatycznie uruchomiona ponownie.
@@ -1901,3 +1900,33 @@ b148d60e	Nie można uruchomić programu nadzoru.
 c5f9ace5	Temperatury, obciążenie i wentylatory obejmują ten sam okres co FPS: od pierwszej klatki, podczas rysowania.
 17f1a7c2	Powrót do poprzedniej wersji ({0}).\n\nUżyta zostanie kopia zachowana przed aktualizacją (nic nie jest pobierane). Aplikacja raz się zamknie, wentylatory przez kilka sekund pracują według BIOS, potem aplikacja uruchomi się ponownie. Ustawienia wrócą do stanu sprzed aktualizacji. Obecne ustawienia zostaną zachowane w folderze backups; można je odtworzyć z kopii „Przed przywróceniem” w Ustawienia → „Bezpieczeństwo i kopie zapasowe”. Logi i zapisy pozostają.\n\nPrzywrócić?
 ff6a2182	Przywrócić poprzednią wersję {0} Zeph-Iris? (obecna wersja {1})\n\nDziałający Zeph-Iris zostanie zamknięty (wentylatory wrócą do BIOS), poprzedni plik exe i ustawienia sprzed aktualizacji zostaną przywrócone, a program uruchomi się ponownie. Najpierw obecne ustawienia zostaną zachowane w folderze backups (do odtworzenia w Ustawienia → „Bezpieczeństwo i kopie zapasowe”).
+0ce1e664	Nie udało się zmienić języka wyświetlania ({0}). Sterowanie wentylatorami działa dalej. Po ponownym uruchomieniu aplikacja pojawi się w wybranym języku. Uruchomić ponownie teraz?
+4aa4977a	Aplikacja nie mogła sama uruchomić się ponownie ({0}). Działa dalej bez zmian. Zamknij ją i uruchom jeszcze raz.
+2b78d413	Nie udało się zapisać ustawień ({0}). Zmiany działają teraz, ale przepadną, jeśli zamkniesz aplikację w tym stanie. Sprawdź, czy żadna inna aplikacja nie ma otwartego pliku config.json i czy na dysku jest wolne miejsce (zapis jest ponawiany co 30 s).
+466cf7d7	Ustawienia zostały zapisane.
+3edcb675	Nie udało się przełączyć na plan zasilania profilu „{0}”. Sprawdź, czy wybrany plan zasilania nadal istnieje w Windows, i wybierz go ponownie w ustawieniach profilu.
+3f6a7367	Nie udało się przenieść ustawień z poprzedniej wersji ({0}). Ustawienia poprzedniej wersji nadal są zachowane. Uruchom aplikację ponownie, zanim zmienisz ustawienia, aby spróbować jeszcze raz.
+f7737c39	Uruchom ponownie
+c4657a17	Plik config.json był otwarty w innej aplikacji i nie dało się go odczytać, więc aplikacja uruchomiła się z kopii zapasowej z {0} (config.json nie jest uszkodzony). Zmiana ustawień nadpisze go tą kopią zapasową. Uruchom aplikację ponownie, aby wrócić do najnowszych ustawień.
+4f3dd658	Plik ustawień był uszkodzony, więc aplikacja uruchomiła się z kopii zapasowej ({0}), ale nie udało się jej zapisać z powrotem do config.json ({1}). Sprawdź, czy config.json nie jest tylko do odczytu.
+720c745a	Plik ustawień był uszkodzony, więc został przywrócony z kopii zapasowej ({0}). Uszkodzony plik zachowano jako config.broken_*.json.
+224fc585	Proces nadzorczy zatrzymał się {0} razy w ciągu 10 minut. Sprawdź, czy nie zatrzymuje go program antywirusowy lub podobny (za każdym razem jest uruchamiany ponownie).
+cecb4968	Kolory LED nie są zmieniane, bo nie można połączyć się z OpenRGB ({0}). Sprawdź, czy OpenRGB jest uruchomiony i czy jego „serwer SDK” jest włączony.
+f06249d0	Nie udało się uruchomić procesu nadzorczego ({0}). Zabezpieczenie, które ustawia wentylatory na bezpieczną prędkość, gdy aplikacja nagle się zatrzyma, teraz nie działa. Spróbuj uruchomić aplikację ponownie.
+05539caa	Podczas operacji coś poszło nie tak, więc mogła się nie zakończyć ({0}). Sterowanie wentylatorami działa dalej. Jeśli to się powtarza, otwórz dziennik i wyślij go przez „Zgłoś problem…”.
+96f2c83a	Nie można użyć skrótu klawiszowego ({0}). Wygląda na to, że inna aplikacja używa tych samych klawiszy.
+45001a5c	Serwer WWW dla telefonu działa, ale nie udało się dodać reguły do Zapory Windows. Jeśli telefon nie może się połączyć, zezwól w zaporze na połączenia z portem {0}.
+0c6e9512	Nie udało się przekazać „{0}” z powrotem pod kontrolę BIOS. Może pozostać przy obecnej prędkości. Sprawdź, czy nie działa inny program do sterowania wentylatorami.
+6b7ec6f2	Nie znaleziono złącza „{0}”, więc nie udało się go przetestować (pełna prędkość). Sprawdź okablowanie i ustawienia BIOS.
+e4133a80	Nie udało się zapisać wpisu w Zapisie gier ({0}).
+8360b734	Nie udało się usunąć wpisu z Zapisu gier ({0}).
+82c14b71	(Nie udało się utworzyć kopii zapasowej ustawień sprzed zmiany: {0}. Do zamknięcia aplikacji możesz to cofnąć przyciskiem „Cofnij”.)
+f14b0cd2	Nie udało się utworzyć kopii zapasowej ustawień ({0}).
+9e0504b2	Nie ma jeszcze czego kopiować, bo żadne ustawienia nie zostały zapisane.
+5ac0d44b	Nie udało się zaimportować ustawień. Obecne ustawienia są bez zmian (jeśli coś zmieniło się w połowie, użyj „Cofnij”).\n{0}
+3270468e	Nie udało się dopasować ustawień do nowego sprzętu. Obecne ustawienia są bez zmian (jeśli coś zmieniło się w połowie, użyj „Cofnij”).\n{0}
+fe29d679	Nie udało się zapisać zapisów sprzed i po zdarzeniu ({0}).
+7cd5754e	Nie znaleziono pliku zapisu (mógł zostać usunięty lub przeniesiony).
+e267eed2	Raport zapisany: {0}
+1236f4c4	Nie udało się zapisać raportu.\n{0}
+df96e04b	Ten plik nie zawiera jeszcze zapisanych krzywych. W FanControl utwórz krzywe i przypisz je do wentylatorów, następnie wybierz „⋮” → „Zapisz” w prawym górnym rogu i zaimportuj ponownie.

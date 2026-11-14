@@ -588,7 +588,6 @@ c0fd45c5	Vẫn đang chạy trong khay hệ thống. Để thoát, hãy nhấp p
 e586d56a	Zeph-Iris: bảo trì
 5b860ae3	Đang chạy ở chế độ DRY RUN (chế độ thử). Chỉ tính tốc độ theo nhiệt độ, không điều khiển quạt.
 874003cc	Bắt đầu điều khiển
-812bba50	Tệp cài đặt bị hỏng nên đã khôi phục từ bản sao lưu ({0:yyyy/MM/dd HH:mm}). Tệp hỏng được giữ lại dưới tên config.broken_*.json.
 47b4365f	Zeph-Iris đã thoát bất ngờ nên tiến trình giám sát đã tự khởi động lại. Đã đặt quạt về tốc độ an toàn rồi tiếp tục điều khiển. Có thể xem nguyên nhân trong nhật ký.
 7b249720	Mở nhật ký
 3a7e2e72	Đã thoát bất ngờ nên được tự khởi động lại.
@@ -1901,3 +1900,33 @@ b148d60e	Không thể khởi động chương trình giám sát.
 c5f9ace5	Nhiệt độ, tải và quạt cùng một khoảng thời gian với FPS: từ khung hình đầu tiên, trong lúc vẽ.
 17f1a7c2	Quay về phiên bản trước ({0}).\n\nDùng bản đã giữ lại trước khi cập nhật (không tải gì). Ứng dụng đóng một lần, quạt chạy theo BIOS vài giây rồi ứng dụng khởi động lại. Cài đặt trở về như trước khi cập nhật. Cài đặt hiện tại được giữ trong thư mục backups; có thể khôi phục từ bản sao lưu "Trước khi khôi phục" trong Cài đặt → "An toàn & sao lưu". Nhật ký và bản ghi vẫn giữ nguyên.\n\nQuay về?
 ff6a2182	Quay Zeph-Iris về phiên bản trước {0}? (phiên bản hiện tại {1})\n\nZeph-Iris đang chạy sẽ được đóng (quạt về BIOS), exe trước và cài đặt từ trước khi cập nhật sẽ được khôi phục, rồi khởi động lại. Trước đó, cài đặt hiện tại được giữ trong thư mục backups (khôi phục trong Cài đặt → "An toàn & sao lưu").
+0ce1e664	Không thể chuyển ngôn ngữ hiển thị ({0}). Việc điều khiển quạt vẫn tiếp tục. Khởi động lại ứng dụng thì giao diện sẽ hiện bằng ngôn ngữ đã chọn. Khởi động lại ngay bây giờ?
+4aa4977a	Ứng dụng không thể tự khởi động lại ({0}). Ứng dụng vẫn tiếp tục chạy như hiện tại. Hãy thoát ứng dụng rồi mở lại.
+2b78d413	Không thể lưu cài đặt ({0}). Các thay đổi đang có hiệu lực, nhưng sẽ mất nếu bạn thoát ứng dụng lúc này. Hãy kiểm tra xem config.json có đang bị ứng dụng khác mở không và ổ đĩa còn chỗ trống không (cứ 30 giây sẽ thử lưu lại).
+466cf7d7	Đã lưu cài đặt.
+3edcb675	Không thể chuyển sang gói điện năng của cấu hình "{0}". Hãy kiểm tra gói điện năng đã chọn còn trong Windows không, rồi chọn lại trong cài đặt cấu hình.
+3f6a7367	Không thể chuyển cài đặt từ phiên bản trước sang ({0}). Cài đặt của phiên bản trước vẫn còn nguyên. Hãy khởi động lại ứng dụng trước khi thay đổi cài đặt để thử lại.
+f7737c39	Khởi động lại
+c4657a17	config.json đang được ứng dụng khác mở nên không đọc được, vì vậy ứng dụng đã khởi động bằng bản sao lưu từ {0} (config.json không bị hỏng). Nếu thay đổi cài đặt, config.json sẽ bị ghi đè bằng nội dung bản sao lưu này. Để lấy lại cài đặt mới nhất, hãy khởi động lại ứng dụng.
+4f3dd658	Tệp cài đặt bị hỏng nên ứng dụng đã khởi động bằng bản sao lưu ({0}), nhưng không thể ghi lại vào config.json ({1}). Hãy kiểm tra xem config.json có đang ở chế độ chỉ đọc không.
+720c745a	Tệp cài đặt bị hỏng nên đã được khôi phục từ bản sao lưu ({0}). Tệp bị hỏng được giữ lại với tên config.broken_*.json.
+224fc585	Tiến trình giám sát đã dừng {0} lần trong 10 phút. Hãy kiểm tra xem phần mềm diệt virus hay chương trình tương tự có đang chặn nó không (mỗi lần dừng, nó sẽ được khởi động lại).
+cecb4968	Màu LED không được thay đổi vì không kết nối được với OpenRGB ({0}). Hãy kiểm tra OpenRGB đang chạy và "máy chủ SDK" của OpenRGB đã được bật.
+f06249d0	Không thể khởi động tiến trình giám sát ({0}). Cơ chế đưa quạt về tốc độ an toàn khi ứng dụng dừng đột ngột hiện không hoạt động. Hãy thử khởi động lại ứng dụng.
+05539caa	Đã xảy ra sự cố trong lúc thao tác nên có thể chưa hoàn tất ({0}). Việc điều khiển quạt vẫn tiếp tục. Nếu lỗi cứ lặp lại, hãy mở nhật ký và gửi qua "Báo lỗi…".
+96f2c83a	Không thể dùng phím tắt ({0}). Có vẻ một ứng dụng khác đang dùng cùng tổ hợp phím.
+45001a5c	Máy chủ web cho điện thoại đang chạy, nhưng không thể thêm quy tắc vào Tường lửa Windows. Nếu điện thoại không kết nối được, hãy cho phép kết nối tới cổng {0} trong tường lửa.
+0c6e9512	Không thể trả "{0}" về cho BIOS điều khiển. Quạt có thể giữ nguyên tốc độ hiện tại. Hãy kiểm tra xem có phần mềm điều khiển quạt nào khác đang chạy không.
+6b7ec6f2	Không tìm thấy cổng của "{0}" nên không thể chạy thử (tốc độ tối đa). Hãy kiểm tra dây nối và cài đặt BIOS.
+e4133a80	Không thể lưu bản ghi game ({0}).
+8360b734	Không thể xóa bản ghi game ({0}).
+82c14b71	(Không thể tạo bản sao lưu cài đặt trước khi thay đổi: {0}. Cho đến khi thoát ứng dụng, bạn vẫn có thể hủy thay đổi bằng "Hoàn tác".)
+f14b0cd2	Không thể sao lưu cài đặt ({0}).
+9e0504b2	Chưa có gì để sao lưu vì chưa có cài đặt nào được lưu.
+5ac0d44b	Không thể nhập cài đặt. Cài đặt hiện tại vẫn giữ nguyên (nếu có gì đã thay đổi giữa chừng, hãy dùng "Hoàn tác").\n{0}
+3270468e	Không thể điều chỉnh cài đặt cho phần cứng mới. Cài đặt hiện tại vẫn giữ nguyên (nếu có gì đã thay đổi giữa chừng, hãy dùng "Hoàn tác").\n{0}
+fe29d679	Không thể lưu bản ghi trước và sau sự cố ({0}).
+7cd5754e	Không tìm thấy tệp bản ghi (có thể đã bị xóa hoặc bị di chuyển).
+e267eed2	Đã lưu báo cáo: {0}
+1236f4c4	Không thể lưu báo cáo.\n{0}
+df96e04b	Tệp này chưa có đường cong nào được lưu. Trong FanControl, hãy tạo đường cong và gán cho quạt, sau đó chọn "⋮" → "Lưu" ở góc trên bên phải rồi nhập lại.

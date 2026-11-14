@@ -6,6 +6,7 @@
 // See CREDITS.txt for full license details.
 // ==================================================
 
+using System.Windows;
 using System.Windows.Interop;
 using System.Windows.Threading;
 using ProFanController.UI;
@@ -64,8 +65,11 @@ public partial class App
         }
         catch (Exception ex)
         {
-            // 作り直せなくても制御は続ける（次に起動したときは新しい言語になる）
+            // 作り直せなくても制御は続ける（次に起動したときは新しい言語になる）。起動し直すかを尋ねる
             Logger.Error($"表示言語の切り替えで画面を作り直せませんでした: {ex}");
+            if (MessageBox.Show(L($"表示言語を切り替えられませんでした（{ex.Message}）。ファンの制御はそのまま続いています。アプリを起動し直すと、選んだ言語で表示されます。いま起動し直しますか？"),
+                    AppIdentity.Name, MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
+                RestartApplication();
         }
     }
 

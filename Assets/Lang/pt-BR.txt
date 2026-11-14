@@ -588,7 +588,6 @@ c0fd45c5	Continua rodando na bandeja. Para sair, clique com o botão direito no 
 e586d56a	Zeph-Iris: manutenção
 5b860ae3	Rodando em DRY RUN (modo de teste). Só calcula as rotações pela temperatura; as ventoinhas não estão sendo controladas.
 874003cc	Começar o controle
-812bba50	O arquivo de configurações estava corrompido e foi restaurado de um backup ({0:yyyy/MM/dd HH:mm}). O arquivo corrompido foi mantido como config.broken_*.json.
 47b4365f	O Zeph-Iris fechou inesperadamente, então o processo vigia o reiniciou automaticamente. O controle voltou depois de colocar as ventoinhas numa rotação segura. A causa está no log.
 7b249720	Abrir log
 3a7e2e72	Fechou inesperadamente e foi reiniciado automaticamente.
@@ -1901,3 +1900,33 @@ b148d60e	Não foi possível iniciar o programa de vigilância.
 c5f9ace5	Temperaturas, uso e ventoinhas cobrem o mesmo período que os FPS: desde o primeiro quadro, enquanto desenhava.
 17f1a7c2	Voltando à versão anterior ({0}).\n\nÉ usada a cópia guardada antes da atualização (nada é baixado). O app fecha uma vez, as ventoinhas seguem a BIOS por alguns segundos e depois o app reinicia. As configurações voltam às de antes da atualização. As configurações atuais ficam guardadas na pasta backups; dá para restaurá-las pelo backup "Antes de restaurar" em Configurações → "Segurança e backup". Logs e registros ficam.\n\nVoltar?
 ff6a2182	Voltar o Zeph-Iris para a versão anterior {0}? (versão atual {1})\n\nO Zeph-Iris em execução é fechado (ventoinhas voltam à BIOS), o exe anterior e as configurações de antes da atualização são restaurados e ele inicia de novo. Antes, as configurações atuais são guardadas na pasta backups (restaure em Configurações → "Segurança e backup").
+0ce1e664	Não foi possível trocar o idioma da interface ({0}). O controle das ventoinhas continua funcionando. Ao reiniciar o app, ele aparece no idioma escolhido. Reiniciar agora?
+4aa4977a	O app não conseguiu se reiniciar ({0}). Ele continua funcionando como está. Feche-o e abra de novo.
+2b78d413	Não foi possível salvar as configurações ({0}). As mudanças já estão valendo, mas serão perdidas se você fechar o app assim. Verifique se nenhum outro app está com o config.json aberto e se há espaço livre no disco (o salvamento é tentado de novo a cada 30 s).
+466cf7d7	As configurações foram salvas.
+3edcb675	Não foi possível mudar para o plano de energia do perfil "{0}". Verifique se o plano de energia escolhido ainda existe no Windows e escolha-o de novo nas configurações do perfil.
+3f6a7367	Não foi possível trazer as configurações da versão anterior ({0}). As configurações da versão anterior continuam guardadas. Reinicie o app antes de mudar as configurações para tentar de novo.
+f7737c39	Reiniciar
+c4657a17	O config.json estava aberto em outro app e não pôde ser lido, então o app iniciou com o backup de {0} (o config.json não está danificado). Se você mudar as configurações, ele será substituído por este backup. Reinicie o app para voltar às configurações mais recentes.
+4f3dd658	O arquivo de configurações estava danificado, então o app iniciou com o backup ({0}), mas não foi possível gravá-lo de volta no config.json ({1}). Verifique se o config.json não está como somente leitura.
+720c745a	O arquivo de configurações estava danificado, então foi restaurado a partir do backup ({0}). O arquivo danificado foi guardado como config.broken_*.json.
+224fc585	O processo vigia parou {0} vezes em 10 minutos. Verifique se um antivírus ou programa parecido não está parando ele (ele é reiniciado a cada vez).
+cecb4968	As cores dos LEDs não estão sendo alteradas porque não foi possível conectar ao OpenRGB ({0}). Verifique se o OpenRGB está aberto e se o "servidor SDK" dele está ligado.
+f06249d0	Não foi possível iniciar o processo vigia ({0}). A proteção que coloca as ventoinhas numa velocidade segura se o app parar de repente não está funcionando agora. Tente reiniciar o app.
+05539caa	Algo deu errado durante uma operação, e ela pode não ter terminado ({0}). O controle das ventoinhas continua funcionando. Se isso continuar acontecendo, abra o log e envie-o por "Relatar um problema…".
+96f2c83a	Não foi possível usar as teclas de atalho ({0}). Parece que outro app usa as mesmas teclas.
+45001a5c	O servidor web para o celular está funcionando, mas não foi possível adicionar uma regra ao Firewall do Windows. Se o celular não conseguir se conectar, permita no firewall as conexões à porta {0}.
+0c6e9512	Não foi possível devolver "{0}" ao controle do BIOS. Ela pode ficar na velocidade atual. Verifique se não há outro programa de controle de ventoinhas em execução.
+6b7ec6f2	O conector de "{0}" não foi encontrado, então não foi possível testá-lo (velocidade máxima). Verifique a ligação dos cabos e as configurações do BIOS.
+e4133a80	Não foi possível salvar o registro de jogos ({0}).
+8360b734	Não foi possível excluir o registro de jogos ({0}).
+82c14b71	(Não foi possível fazer um backup das configurações de antes da mudança: {0}. Até você fechar o app, dá para desfazer com "Desfazer".)
+f14b0cd2	Não foi possível fazer o backup das configurações ({0}).
+9e0504b2	Ainda não há nada para fazer backup, porque nenhuma configuração foi salva.
+5ac0d44b	Não foi possível importar as configurações. As configurações atuais não mudaram (se algo mudou pela metade, use "Desfazer").\n{0}
+3270468e	Não foi possível ajustar as configurações ao novo hardware. As configurações atuais não mudaram (se algo mudou pela metade, use "Desfazer").\n{0}
+fe29d679	Não foi possível salvar os registros de antes e depois do incidente ({0}).
+7cd5754e	O arquivo de registro não foi encontrado (pode ter sido excluído ou movido).
+e267eed2	Relatório salvo: {0}
+1236f4c4	Não foi possível salvar o relatório.\n{0}
+df96e04b	Este arquivo ainda não tem curvas salvas. No FanControl, crie as curvas e atribua-as às ventoinhas, depois escolha "⋮" → "Salvar" no canto superior direito e importe novamente.

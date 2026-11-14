@@ -106,6 +106,82 @@ public static class FanControlImportTests
         T.Check(added.Fans.SelectMany(f => f.Curves).All(c => !c.SensorId.StartsWith("NVApiWrapper")), "no NvAPI ids left after merge");
     }
 
+    // 今の FanControl（__VERSION__ 285）が保存する形: "FanControl" の下・HysteresisConfig・ステップ・線形の Minimum/Maximum
+    private const string Json285 = """
+    {
+      "__VERSION__": "285",
+      "FanControl": {
+        "Controls": [
+          { "NickName": "CPU Fan", "Identifier": "/lpc/it8686e/control/0", "Enable": true, "SelectedFanCurve": { "Name": "グラフ" },
+            "SelectedOffset": 0, "MinimumPercent": 0, "SelectedCommandStepUp": 8, "SelectedCommandStepDown": 6 },
+          { "NickName": "System Fan #1", "Identifier": "/lpc/it8686e/control/1", "Enable": true, "SelectedFanCurve": { "Name": "リニア" },
+            "SelectedOffset": 0, "MinimumPercent": 0, "SelectedCommandStepUp": 8, "SelectedCommandStepDown": 8 },
+          { "NickName": "System Fan #2", "Identifier": "/lpc/it8686e/control/2", "Enable": false, "SelectedFanCurve": null }
+        ],
+        "FanCurves": [
+          { "Name": "グラフ", "CommandMode": 0, "SelectedTempSource": { "Identifier": "/amdcpu/0/temperature/2" },
+            "Points": [ "40,20", "80,80" ], "MaximumTemperature": 120, "MinimumTemperature": 20, "MaximumCommand": 100,
+            "HysteresisConfig": { "ResponseTimeUp": 1, "ResponseTimeDown": 1, "HysteresisValueUp": 2, "HysteresisValueDown": 4 } },
+          { "Name": "リニア", "CommandMode": 0, "SelectedTempSource": { "Identifier": "NVApiWrapper/0-AD103-A/sensor/0" },
+            "MaximumFanSpeed": 80, "MaximumTemperature": 70, "MinimumFanSpeed": 50, "MinimumTemperature": 35,
+            "HysteresisConfig": { "HysteresisValueUp": 3, "HysteresisValueDown": 3 } }
+        ]
+      }
+    }
+    """;
+
+    public static void TestCurrentFormat()
+    {
+        var cat = Catalog();
+        T.Check(FanControlImport.LooksLikeFanControl(Json285), "current FanControl file is recognised");
+        var r = FanControlImport.Convert(Json285, "userConfig.json", cat);
+        var fans = r.Package.Profiles.Single().Fans;
+        T.Check(fans.Count == 2, $"two assigned fans, the unassigned one skipped ({fans.Count})");
+
+        var cpu = fans.First(f => f.Name == "CPU Fan");
+        var g = cpu.Curves.Single();
+        T.Check(g.Points.Count == 2 && g.Points[0].Temp == 40 && g.Points[0].Duty == 20 && g.Points[1].Temp == 80 && g.Points[1].Duty == 80,
+            "graph points win over the graph's Minimum/MaximumTemperature range");
+        T.Check(g.HysteresisCelsius == 4, $"HysteresisConfig read (larger of up/down) ({g.HysteresisCelsius})");
+        T.Check(cpu.MaxStepUpPerTick == 8 && cpu.MaxStepDownPerTick == 6, $"step up/down %/s kept ({cpu.MaxStepUpPerTick}/{cpu.MaxStepDownPerTick})");
+        T.Check(cpu.MinDuty == 20, $"no FanControl minimum: minimum lowered to the curve's lowest speed, not the 25% default ({cpu.MinDuty})");
+
+        var sys = fans.First(f => f.Name == "System Fan #1");
+        var lin = sys.Curves.Single();
+        T.Check(lin.Points.Count == 2 && lin.Points[0].Temp == 35 && lin.Points[0].Duty == 50 && lin.Points[1].Temp == 70 && lin.Points[1].Duty == 80,
+            "linear curve from Minimum/Maximum Temperature and FanSpeed");
+        T.Check(lin.HysteresisCelsius == 3, "linear HysteresisConfig read");
+        T.Check(sys.MinDuty == 25, $"curve never below the default: default minimum kept ({sys.MinDuty})");
+
+        var map = ConfigTransfer.ProposeMapping(r.Package, cat);
+        var nv = map.FirstOrDefault(m => !m.IsControl && m.OldId.StartsWith("NVApiWrapper"));
+        T.Check(nv?.NewId == "/gpu-nvidia/0/temperature/0", $"NvAPI sensor/0 maps to GPU Core ({nv?.NewId})");
+    }
+
+    public static void TestNotSavedYet()
+    {
+        var cat = Catalog();
+        // FanControl でカーブを作っても保存する前: カーブが 0 個・割り当てもない
+        const string unsaved = """
+        { "__VERSION__": "285", "FanControl": {
+            "Controls": [ { "NickName": "CPU Fan", "Identifier": "/lpc/it8686e/control/0", "Enable": false, "SelectedFanCurve": null } ],
+            "FanCurves": [] } }
+        """;
+        string? msg = null;
+        try { FanControlImport.Convert(unsaved, "userConfig.json", cat); } catch (InvalidDataException e) { msg = e.Message; }
+        T.Check(msg is not null && msg.Contains("保存"), $"no curves in the file: the error says to save in FanControl first ({msg})");
+
+        // カーブはあるが、どのファンにも割り当てていない
+        const string unassigned = """
+        { "FanControl": {
+            "Controls": [ { "NickName": "CPU Fan", "Identifier": "/lpc/it8686e/control/0", "SelectedFanCurve": null } ],
+            "FanCurves": [ { "Name": "g", "SelectedTempSource": { "Identifier": "/amdcpu/0/temperature/2" }, "Points": [ "40,20" ] } ] } }
+        """;
+        msg = null;
+        try { FanControlImport.Convert(unassigned, "userConfig.json", cat); } catch (InvalidDataException e) { msg = e.Message; }
+        T.Check(msg is not null && !msg.Contains("保存"), $"curves but none assigned: the 'no fans with curves' error ({msg})");
+    }
+
     public static void TestOddShapes()
     {
         var cat = Catalog();

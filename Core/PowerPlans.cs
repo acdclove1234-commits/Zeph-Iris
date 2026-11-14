@@ -36,17 +36,33 @@ public static partial class PowerPlans
 
     public static string? ActiveGuid() => List().FirstOrDefault(p => p.Active)?.Guid;
 
-    public static void SetActive(string guid)
+    /// <summary>電源プランを切り替える。切り替えられたら true</summary>
+    public static bool SetActive(string guid)
     {
         try
         {
-            Run($"/setactive {guid}");
+            int code = RunCode($"/setactive {guid}");
+            if (code != 0)
+            {
+                Logger.Warn($"電源プランの切り替えに失敗: {guid}（powercfg の終了コード {code}）");
+                return false;
+            }
             Logger.Info($"電源プランを切り替え: {guid}");
+            return true;
         }
         catch (Exception ex)
         {
             Logger.Warn($"電源プランの切り替えに失敗: {ex.Message}");
+            return false;
         }
+    }
+
+    private static int RunCode(string args)
+    {
+        var psi = SystemTool.Start("powercfg.exe", args);
+        using var p = Process.Start(psi)!;
+        if (!p.WaitForExit(10_000)) { try { p.Kill(); } catch { } return -1; }
+        return p.ExitCode;
     }
 
     private static string Run(string args)

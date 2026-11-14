@@ -1734,6 +1734,9 @@ public sealed class FanEngine : IDisposable
     /// いったん値を書いてから戻す。同じ値の書き込みも省略されるので、1 回おきに値を少しずらす）。
     /// さらに、あとの数周期でもう一度戻し直す（_pendingRestore）。最後の「戻す」が例外なく通れば true
     /// </summary>
+    /// <summary>BIOS の制御に戻せなかったと知らせた端子（同じ端子では 1 回だけ知らせる）</summary>
+    private readonly HashSet<string> _restoreWarned = new(StringComparer.OrdinalIgnoreCase);
+
     private bool Restore(IFanControl c)
     {
         // 最後に書いた値（分からなければ全開。戻す途中で失敗しても、低い回転のまま残らないように）
@@ -1746,8 +1749,21 @@ public sealed class FanEngine : IDisposable
             ok = ToggleRestore(c, last, attempt);
             if (!ok) failures++;
         }
-        if (ok) Logger.Info($"BIOS 制御に復帰: {c.Id}{(failures > 0 ? $"（{FanSafety.RestoreAttempts} 回中 {failures} 回失敗）" : "")}");
-        else Logger.Error($"BIOS 制御に戻せませんでした: {c.Id}");
+        if (ok)
+        {
+            Logger.Info($"BIOS 制御に復帰: {c.Id}{(failures > 0 ? $"（{FanSafety.RestoreAttempts} 回中 {failures} 回失敗）" : "")}");
+            _restoreWarned.Remove(c.Id);
+        }
+        else
+        {
+            Logger.Error($"BIOS 制御に戻せませんでした: {c.Id}");
+            // 動いているあいだ（終了・スリープの途中ではないとき）は、画面で知らせる（端子ごとに 1 回。戻せたらまた知らせられるようにする）
+            if (Volatile.Read(ref _stopFlag) == 0 && !_suspended && _restoreWarned.Add(c.Id))
+            {
+                string name = _fans.FirstOrDefault(f => ReferenceEquals(f.Control, c))?.Cfg.Name ?? c.Id;
+                RaiseAlert(L($"「{name}」を BIOS の制御に戻せませんでした。いまの回転数のままかもしれません。ほかのファン制御ソフトが動いていないか確かめてください。"), AlertLevel.Warning);
+            }
+        }
         _touched.Remove(c);
         // 戻す命令が黙って飛ばされていても、次の周期以降にもう一度戻す
         _pendingRestore[c] = (last, FanSafety.RestoreRepeatTicks);

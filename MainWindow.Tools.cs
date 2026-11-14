@@ -357,7 +357,17 @@ public partial class MainWindow
             Filter = L("テキスト (*.txt)|*.txt"),
             FileName = $"CoolingTest_{_lastTestReport.StartedAt:yyyyMMdd_HHmm}.txt",
         };
-        if (dialog.ShowDialog(this) == true) File.WriteAllText(dialog.FileName, _lastTestReport.ToText(), new UTF8Encoding(true));
+        if (dialog.ShowDialog(this) != true) return;
+        try
+        {
+            File.WriteAllText(dialog.FileName, _lastTestReport.ToText(), new UTF8Encoding(true));
+            ShowAlert(L($"レポートを保存しました: {Path.GetFileName(dialog.FileName)}"), AlertLevel.Info);
+        }
+        catch (Exception ex)
+        {
+            Logger.Warn($"冷却テストのレポートを保存できません: {ex.Message}");
+            MessageBox.Show(this, L($"レポートを保存できませんでした。\n{ex.Message}"), AppIdentity.Name, MessageBoxButton.OK, MessageBoxImage.Warning);
+        }
     }
 
     private void OnAnalyzeTestClick(object sender, RoutedEventArgs e)

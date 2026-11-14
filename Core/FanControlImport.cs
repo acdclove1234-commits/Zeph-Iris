@@ -96,20 +96,31 @@ public static class FanControlImport
 
             var fan = new FanConfig { Name = name, ControlId = MapControl(id, catalog), Enabled = false, Mode = FanModes.Curve };
             if (LooksLikePump(name) || LooksLikePump(Str(ctl, "Name"))) fan.Role = FanRoles.Pump;
-            if (Num(ctl, "MinimumPercent") is double min && min > 0) fan.MinDuty = Math.Clamp(min, 0, 100);
+            // 速さの変わり方（FanControl のステップアップ・ステップダウンは %/秒。Zeph-Iris も 1 秒ごと）
+            if (Num(ctl, "SelectedCommandStepUp") is double up && up > 0) fan.MaxStepUpPerTick = Math.Clamp(up, 0.5, 100);
+            if (Num(ctl, "SelectedCommandStepDown") is double down && down > 0) fan.MaxStepDownPerTick = Math.Clamp(down, 0.5, 100);
 
             if (!AddCurve(fan, curve, curves, catalog, result.Notes, depth: 0))
             {
                 result.Notes.Add(L($"{name}: カーブ「{Str(curve, "Name") ?? "?"}」の種類が分からないため、読み込んでいません"));
                 continue;
             }
+            // 最低回転数: FanControl の最小 % があればそれ。なければ、Zeph-Iris の初期値（25%）がカーブの低いところを持ち上げないよう、
+            // カーブのいちばん低い速さまで下げる（FanControl で回していたのと同じ速さにする）
+            if (Num(ctl, "MinimumPercent") is double min && min > 0) fan.MinDuty = Math.Clamp(min, 0, 100);
+            else if (fan.Mode == FanModes.Curve && fan.Curves.SelectMany(c => c.Points).Select(pt => pt.Duty).DefaultIfEmpty(fan.MinDuty).Min() is double low && low < fan.MinDuty)
+                fan.MinDuty = Math.Clamp(low, 0, 100);
             if (Num(ctl, "SelectedOffset") is double off && Math.Abs(off) > 0.5)
                 result.Notes.Add(L($"{name}: FanControl のオフセット（{off:+0;-0}%）は、Zeph-Iris にないので読み込んでいません（カーブの点で調整してください）"));
             fan.Normalize();
             profile.Fans.Add(fan);
             result.FanCount++;
         }
-        if (result.FanCount == 0) throw new InvalidDataException(L("カーブを使っているファンが見つかりませんでした。"));
+        if (result.FanCount == 0)
+            // カーブが 1 つもない: FanControl で作っても、保存するまではファイルに入らない（閉じても保存されないことがある）
+            throw new InvalidDataException(curves.Count == 0
+                ? L("このファイルにはカーブがまだ保存されていません。FanControl でカーブを作ってファンに割り当てたら、右上の「⋮」→「保存」を押してから、もう一度読み込んでください。")
+                : L("カーブを使っているファンが見つかりませんでした。"));
 
         // 名前の情報（この PC の部品が分かるものだけ。分からない ID は対応付けの画面で選ぶ）
         foreach (var f in profile.Fans)
@@ -173,7 +184,7 @@ public static class FanControlImport
             Name = curveName,
             SensorId = MapSensor(sensor, catalog),
             Points = points,
-            HysteresisCelsius = Math.Clamp(Num(c, "Deadband") ?? Num(c, "SelectedHysteresis") ?? 2, 0, 10),
+            HysteresisCelsius = Math.Clamp(Num(c, "Deadband") ?? Num(c, "SelectedHysteresis") ?? Hysteresis(c) ?? 2, 0, 10),
         };
         curve.SortPoints();
         fan.Curves.Add(curve);
@@ -236,6 +247,14 @@ public static class FanControlImport
     }
 
     private static double Clamp(double duty) => Math.Clamp(duty, 0, 100);
+
+    /// <summary>新しい FanControl のヒステリシス（HysteresisConfig の上げ・下げ。Zeph-Iris は 1 つなので大きいほう）</summary>
+    private static double? Hysteresis(JsonElement c)
+    {
+        if (!c.TryGetProperty("HysteresisConfig", out var h) || h.ValueKind != JsonValueKind.Object) return null;
+        double? up = Num(h, "HysteresisValueUp"), down = Num(h, "HysteresisValueDown");
+        return up is null ? down : down is null ? up : Math.Max(up.Value, down.Value);
+    }
 
     private static bool LooksLikePump(string? name)
         => name is not null && (name.Contains("pump", StringComparison.OrdinalIgnoreCase) || name.Contains("ポンプ") || name.Contains("AIO", StringComparison.Ordinal));

@@ -649,46 +649,48 @@ d45f8ae5	静音 1 時間	UI/WidgetWindow.xaml:23
 27ef87be	ワンタッチ操作を解除	UI/WidgetWindow.xaml:24
 0abff5dc	メイン画面を開く	UI/WidgetWindow.xaml:25
 ae8884f0	ウィジェットを閉じる	UI/WidgetWindow.xaml:26
+0ce1e664	表示言語を切り替えられませんでした（{0}）。ファンの制御はそのまま続いています。アプリを起動し直すと、選んだ言語で表示されます。いま起動し直しますか？	App.Language.cs:70
 6d39169b	前の版の設定と記録を {0} から引き継ぎました。前の版のフォルダーはもう使わないので、中身を確かめてから消してかまいません。	App.SelfInstall.cs:63
 8df0902c	フォルダーを開く	App.SelfInstall.cs:64
 31040161	{0} から {1} に入れて、そこから起動しました。これからはこの場所のアプリが動きます（ダウンロードしたファイルは消してかまいません）。	App.SelfInstall.cs:72
-bd7aaf0b	行っています…	App.Uninstall.cs:98
-8394b962	失敗しました: {0}	App.Uninstall.cs:106
-c6d96aae	お片付け: {0}: {1}: {2}	App.Uninstall.cs:110
-95db46c4	ファンの制御は動いていませんでした	App.Uninstall.cs:135
-362dcae4	すべてのファンを BIOS の自動制御に戻しました	App.Uninstall.cs:142
-3bd7ef7e	BIOS 制御に戻せなかったファンの端子があります（端子の名前はログにあります）。	App.Uninstall.cs:145
-63098690	{0:F0} 秒たっても、ファンを BIOS 制御に戻し終わりませんでした。	App.Uninstall.cs:146
-a9982b5a	見張りプロセスも終わらせました	App.Uninstall.cs:160
-4df819d3	ファンの制御を止めて、ハードウェアを閉じました	App.Uninstall.cs:162
-235f026e	（{0}）	App.Uninstall.cs:162
-81156e08	ファンの制御が 5 秒以内に止まりませんでした。ファンは BIOS 制御に戻してありますが、念のため	App.Uninstall.cs:163
-ef5acb7a	見張りプロセスが安全な回転数にしました	App.Uninstall.cs:164
-fb7db8c2	PC を再起動してください	App.Uninstall.cs:164
-fe1e7d87	（PC を再起動すると BIOS の制御に戻ります）。	App.Uninstall.cs:165
-e39402e8	ライティングの制御を止めて、デバイスを離しました	App.Uninstall.cs:171
-8008dbae	ライティングの制御は使っていませんでした（接続を閉じました）	App.Uninstall.cs:171
-775adf46	スマホ監視	App.Uninstall.cs:175
-7a5758ef	ファイアウォールの許可を消せませんでした。「Windows セキュリティ」→「ファイアウォールとネットワーク保護」→「詳細設定」→「受信の規則」から「Zeph-Iris Web」を削除してください。	App.Uninstall.cs:178
-629589af	スマホ監視を止めて、ファイアウォールの許可を消しました	App.Uninstall.cs:179
-855084fc	自動起動を消せませんでした。タスクスケジューラ（タスク スケジューラ ライブラリ）から「Zeph-Iris」を削除してください。	App.Uninstall.cs:185
-bc13583b	ログオン時の自動起動を消しました	App.Uninstall.cs:186
-22c99fc8	クラッシュしたときの記録の設定を消せませんでした（HKEY_LOCAL_MACHINE\\{0}）。そのままでも害はありません。	App.Uninstall.cs:192
-14dd713f	クラッシュしたときの記録の設定を消しました	App.Uninstall.cs:193
-f29a03c3	アンインストール	App.Uninstall.cs:204
-d66766d3	ここでは行いません	App.Uninstall.cs:208
-0f9a00ea	アンインストーラーを起動できませんでした（{0}）。\nアプリが終了したあとに、Windows の「設定」→「アプリ」→「インストールされているアプリ」から Zeph-Iris をアンインストールしてください。	App.Uninstall.cs:237
-1e82ca4a	実行ファイルのパスが分かりません。	App.Uninstall.cs:246
-eb8f4a4f	設定・ログ・記録を消す準備ができませんでした（{0}）。\nアプリが終了したあとに、フォルダーごと削除してください:\n{1}	App.Uninstall.cs:258
-94fb9fd8	Zeph-Iris がまだ動いているため、設定・ログ・記録は消しませんでした。\n	App.Uninstall.cs:283
-32a27012	アプリを終了してから、次のフォルダーをフォルダーごと削除してください:\n{0}	App.Uninstall.cs:284
-ecdec9de	{0}を消しました。\n\n	App.Uninstall.cs:292
-a261a21a	このお知らせを閉じると、エクスプローラーでアプリのフォルダーを開きます。フォルダーごと削除すれば、お片付けは終わりです:\n{0}	App.Uninstall.cs:293
-62664073	消せなかったものがあります（ほかのアプリが開いているかもしれません）:\n・	App.Uninstall.cs:297
-d6750fd2	\n・	App.Uninstall.cs:298
-bf71d238	\n…ほか {0} 個	App.Uninstall.cs:298
-df6134ea	\n\nこのお知らせを閉じたあと、次のフォルダーをフォルダーごと削除してください:\n{0}	App.Uninstall.cs:299
-9c469322	Zeph-Iris のお片付け	App.Uninstall.cs:304
+4aa4977a	アプリを起動し直せませんでした（{0}）。このまま動かし続けます。いったん終了してから、もう一度起動してください。	App.Uninstall.cs:47
+bd7aaf0b	行っています…	App.Uninstall.cs:104
+8394b962	失敗しました: {0}	App.Uninstall.cs:112
+c6d96aae	お片付け: {0}: {1}: {2}	App.Uninstall.cs:116
+95db46c4	ファンの制御は動いていませんでした	App.Uninstall.cs:141
+362dcae4	すべてのファンを BIOS の自動制御に戻しました	App.Uninstall.cs:148
+3bd7ef7e	BIOS 制御に戻せなかったファンの端子があります（端子の名前はログにあります）。	App.Uninstall.cs:151
+63098690	{0:F0} 秒たっても、ファンを BIOS 制御に戻し終わりませんでした。	App.Uninstall.cs:152
+a9982b5a	見張りプロセスも終わらせました	App.Uninstall.cs:166
+4df819d3	ファンの制御を止めて、ハードウェアを閉じました	App.Uninstall.cs:168
+235f026e	（{0}）	App.Uninstall.cs:168
+81156e08	ファンの制御が 5 秒以内に止まりませんでした。ファンは BIOS 制御に戻してありますが、念のため	App.Uninstall.cs:169
+ef5acb7a	見張りプロセスが安全な回転数にしました	App.Uninstall.cs:170
+fb7db8c2	PC を再起動してください	App.Uninstall.cs:170
+fe1e7d87	（PC を再起動すると BIOS の制御に戻ります）。	App.Uninstall.cs:171
+e39402e8	ライティングの制御を止めて、デバイスを離しました	App.Uninstall.cs:177
+8008dbae	ライティングの制御は使っていませんでした（接続を閉じました）	App.Uninstall.cs:177
+775adf46	スマホ監視	App.Uninstall.cs:181
+7a5758ef	ファイアウォールの許可を消せませんでした。「Windows セキュリティ」→「ファイアウォールとネットワーク保護」→「詳細設定」→「受信の規則」から「Zeph-Iris Web」を削除してください。	App.Uninstall.cs:184
+629589af	スマホ監視を止めて、ファイアウォールの許可を消しました	App.Uninstall.cs:185
+855084fc	自動起動を消せませんでした。タスクスケジューラ（タスク スケジューラ ライブラリ）から「Zeph-Iris」を削除してください。	App.Uninstall.cs:191
+bc13583b	ログオン時の自動起動を消しました	App.Uninstall.cs:192
+22c99fc8	クラッシュしたときの記録の設定を消せませんでした（HKEY_LOCAL_MACHINE\\{0}）。そのままでも害はありません。	App.Uninstall.cs:198
+14dd713f	クラッシュしたときの記録の設定を消しました	App.Uninstall.cs:199
+f29a03c3	アンインストール	App.Uninstall.cs:210
+d66766d3	ここでは行いません	App.Uninstall.cs:214
+0f9a00ea	アンインストーラーを起動できませんでした（{0}）。\nアプリが終了したあとに、Windows の「設定」→「アプリ」→「インストールされているアプリ」から Zeph-Iris をアンインストールしてください。	App.Uninstall.cs:243
+1e82ca4a	実行ファイルのパスが分かりません。	App.Uninstall.cs:252
+eb8f4a4f	設定・ログ・記録を消す準備ができませんでした（{0}）。\nアプリが終了したあとに、フォルダーごと削除してください:\n{1}	App.Uninstall.cs:264
+94fb9fd8	Zeph-Iris がまだ動いているため、設定・ログ・記録は消しませんでした。\n	App.Uninstall.cs:289
+32a27012	アプリを終了してから、次のフォルダーをフォルダーごと削除してください:\n{0}	App.Uninstall.cs:290
+ecdec9de	{0}を消しました。\n\n	App.Uninstall.cs:298
+a261a21a	このお知らせを閉じると、エクスプローラーでアプリのフォルダーを開きます。フォルダーごと削除すれば、お片付けは終わりです:\n{0}	App.Uninstall.cs:299
+62664073	消せなかったものがあります（ほかのアプリが開いているかもしれません）:\n・	App.Uninstall.cs:303
+d6750fd2	\n・	App.Uninstall.cs:304
+bf71d238	\n…ほか {0} 個	App.Uninstall.cs:304
+df6134ea	\n\nこのお知らせを閉じたあと、次のフォルダーをフォルダーごと削除してください:\n{0}	App.Uninstall.cs:305
+9c469322	Zeph-Iris のお片付け	App.Uninstall.cs:310
 70775abe	前の版 {0} に戻しました（設定も更新する前のものです）。	App.Update.cs:42
 d1c5f5ab	新しい版 {0} がうまく起動しなかったため、自動で {1} に戻しました（設定も更新する前のものです）。{2}	App.Update.cs:43
 1f1867fa	戻す直前の設定は、設定 →「安全・バックアップ」の「復元前」のバックアップから戻せます。	App.Update.cs:44
@@ -709,55 +711,68 @@ a6619a29	前の版に戻すための準備ができなかったため、更新�
 b79b5ccf	更新できませんでした（{0}）。	App.Update.cs:219
 b148d60e	見守りのプログラムを起動できませんでした。	App.Update.cs:256
 13b0e2e6	Zeph-Iris はすでに起動しています。\nタスクトレイのアイコンから開いてください。	App.xaml.cs:104
-ec6a9bb6	記録の保存	App.xaml.cs:190
-813ce530	Zeph-Iris: 回復しました	App.xaml.cs:254
-977b8544	プロファイルを自動で切り替えました	App.xaml.cs:266
-790c11cc	{0} を検出 → {1}	App.xaml.cs:266
-5b860ae3	DRY RUN（テストモード）で動いています。温度に応じた回転数を計算するだけで、ファンは動かしていません。	App.xaml.cs:313
-874003cc	制御を開始する	App.xaml.cs:314
-812bba50	設定ファイルが壊れていたため、バックアップ（{0:yyyy/MM/dd HH:mm}）から復旧しました。壊れたファイルは config.broken_*.json として残しています。	App.xaml.cs:324
-47b4365f	Zeph-Iris が予期せず終了したため、見張りプロセスが自動で起動し直しました。ファンは安全な回転数にしてから制御を再開しています。原因はログで確認できます。	App.xaml.cs:328
-7b249720	ログを開く	App.xaml.cs:329
-3a7e2e72	予期せず終了したため、自動で起動し直しました。	App.xaml.cs:330
-c0fd45c5	タスクトレイで動作を続けています。終了するにはアイコンを右クリックしてください。	App.xaml.cs:360
-e586d56a	Zeph-Iris: メンテナンス	App.xaml.cs:363
-c51b6c55	Windows の起動時に自動で立ち上がるのは、別の場所のアプリです（{0}）。古い版が立ち上がっているかもしれません。	App.xaml.cs:385
-268b2432	このアプリは「{0}」フォルダーの中から動いています。整理したときに消えたり、別の版が増えたりしないよう、	App.xaml.cs:390
-80df7870	下のボタンで {0} に移してください（設定はそのまま持っていき、自動起動も移した先に登録し直して、起動し直します）。	App.xaml.cs:391
-8d7ede7f	{0} が動いています。同じ LED やファンを操作するので、色が勝手に戻る・ちらつく・回転数が反映されない原因になります。そのソフトの LED・ファンの制御を止めるか、終了してください。	App.xaml.cs:396
-0cac6658	{0} に移す	App.xaml.cs:403
-f8529664	自動起動をこの場所にする	App.xaml.cs:407
-c674f1d5	自動起動を、いま動いているこのアプリに登録し直しました。	App.xaml.cs:412
-f5c17fde	自動起動を登録し直せませんでした（ログを確認してください）。	App.xaml.cs:412
-467c4a19	{0} へ移せませんでした: {1}	App.xaml.cs:446
-14d2e005	音の取り込み	App.xaml.cs:479
-c08fb050	 ／ 	App.xaml.cs:680
-48ccab47	使っていたセンサーが見つかりません	App.xaml.cs:680
-9c32a53a	ハードウェアの変更を検出しました	App.xaml.cs:682
-c1f02356	Zeph-Iris: ハードウェアの変更	App.xaml.cs:683
-646e0b57	{0}。PC の画面で、新しいセンサーへの置き換えを確認してください。	App.xaml.cs:683
-9dddc76a	ファン制御に問題があります	App.xaml.cs:727
-8ad6890e	{0}（安全のため BIOS の制御にしています。自動で復旧を試みます）	App.xaml.cs:727
-2820bd11	Zeph-Iris: ファン制御の問題	App.xaml.cs:728
-30b6b07e	一部の部品を読み取れません	App.xaml.cs:731
-465384a0	ファン制御が復旧しました	App.xaml.cs:734
-2a57fe9c	通常の制御に戻りました。	App.xaml.cs:734
-f1a9779a	Zeph-Iris: 復旧	App.xaml.cs:735
-a8e2e175	ファン制御が通常に戻りました。	App.xaml.cs:735
-0d78d54c	ほかのプログラムが config.json を開いたままにしているため読めませんでした（ファイルはそのままです）。	App.xaml.cs:751
-9b03cdae	元のファイルは config.broken_日時.json として残しました。	App.xaml.cs:752
-b07af289	config.json を読み込めず、バックアップからも復旧できませんでした。\n{0}\n\n{1}\n空の設定で起動します。	App.xaml.cs:753
-645b237e	ブースト	App.xaml.cs:815
-169abc6e	ポンプ以外の全ファンを {0} 分間 100% にします。	App.xaml.cs:815
-c342d519	「静音」で使うプロファイルが見つかりません。設定画面の「ワンタッチ操作」で選んでください。	App.xaml.cs:819
-77a0d0ea	スマホ用の Web サーバーを開始できませんでした（ポート {0}）: {1}	App.xaml.cs:945
-eec05191	緊急全開	App.xaml.cs:955
-0413f77c	一時停止中	App.xaml.cs:955
-45fadb4f	制御中	App.xaml.cs:955
-404e2134	ウィジェット	App.xaml.cs:1033
-1f2511a8	画面	App.xaml.cs:1037
-dfb02ca4	拍の AI	App.xaml.cs:1067
-0f13893a	タスクトレイ	App.xaml.cs:1090
+ec6a9bb6	記録の保存	App.xaml.cs:193
+813ce530	Zeph-Iris: 回復しました	App.xaml.cs:258
+977b8544	プロファイルを自動で切り替えました	App.xaml.cs:270
+790c11cc	{0} を検出 → {1}	App.xaml.cs:270
+2b78d413	設定を保存できませんでした（{0}）。変えた設定はいまは効いていますが、このままアプリを終了すると元に戻ります。config.json をほかのアプリが開いていないか、ディスクの空きがあるか確かめてください（30 秒ごとに保存し直します）。	App.xaml.cs:281
+7b249720	ログを開く	App.xaml.cs:282
+466cf7d7	設定を保存できました。	App.xaml.cs:283
+3edcb675	プロファイル「{0}」の電源プランに切り替えられませんでした。選んでいた電源プランが Windows から消えていないか確かめて、プロファイルの設定で選び直してください。	App.xaml.cs:288
+5b860ae3	DRY RUN（テストモード）で動いています。温度に応じた回転数を計算するだけで、ファンは動かしていません。	App.xaml.cs:328
+874003cc	制御を開始する	App.xaml.cs:329
+3f6a7367	前の版の設定を引き継げませんでした（{0}）。前の版の設定は消えずに残っています。設定を変える前にアプリを起動し直すと、もう一度引き継ぎを試します。	App.xaml.cs:340
+f7737c39	起動し直す	App.xaml.cs:341
+c4657a17	config.json をほかのアプリが開いていて読めなかったため、{0} のバックアップの設定で起動しました（config.json は壊れていません）。設定を変えると、このバックアップの内容で上書きされます。最新の設定に戻すには、アプリを起動し直してください。	App.xaml.cs:349
+4f3dd658	設定ファイルが壊れていたため、バックアップ（{0}）の設定で起動しましたが、config.json に書き戻せませんでした（{1}）。config.json が読み取り専用になっていないか確かめてください。	App.xaml.cs:352
+720c745a	設定ファイルが壊れていたため、バックアップ（{0}）から復旧しました。壊れたファイルは config.broken_*.json として残しています。	App.xaml.cs:354
+47b4365f	Zeph-Iris が予期せず終了したため、見張りプロセスが自動で起動し直しました。ファンは安全な回転数にしてから制御を再開しています。原因はログで確認できます。	App.xaml.cs:358
+3a7e2e72	予期せず終了したため、自動で起動し直しました。	App.xaml.cs:360
+c0fd45c5	タスクトレイで動作を続けています。終了するにはアイコンを右クリックしてください。	App.xaml.cs:390
+e586d56a	Zeph-Iris: メンテナンス	App.xaml.cs:393
+c51b6c55	Windows の起動時に自動で立ち上がるのは、別の場所のアプリです（{0}）。古い版が立ち上がっているかもしれません。	App.xaml.cs:415
+268b2432	このアプリは「{0}」フォルダーの中から動いています。整理したときに消えたり、別の版が増えたりしないよう、	App.xaml.cs:420
+80df7870	下のボタンで {0} に移してください（設定はそのまま持っていき、自動起動も移した先に登録し直して、起動し直します）。	App.xaml.cs:421
+8d7ede7f	{0} が動いています。同じ LED やファンを操作するので、色が勝手に戻る・ちらつく・回転数が反映されない原因になります。そのソフトの LED・ファンの制御を止めるか、終了してください。	App.xaml.cs:426
+0cac6658	{0} に移す	App.xaml.cs:433
+f8529664	自動起動をこの場所にする	App.xaml.cs:437
+c674f1d5	自動起動を、いま動いているこのアプリに登録し直しました。	App.xaml.cs:442
+f5c17fde	自動起動を登録し直せませんでした（ログを確認してください）。	App.xaml.cs:442
+467c4a19	{0} へ移せませんでした: {1}	App.xaml.cs:476
+14d2e005	音の取り込み	App.xaml.cs:509
+224fc585	見張りプロセスが 10 分間に {0} 回止まりました。ウイルス対策ソフトなどが止めていないか確かめてください（止まるたびに起動し直しています）。	App.xaml.cs:662
+cecb4968	OpenRGB につながらないため、LED の色を変えられていません（{0}）。OpenRGB が起動しているか、OpenRGB の「SDK サーバー」がオンになっているか確かめてください。	App.xaml.cs:680
+f06249d0	見張りプロセスを起動できませんでした（{0}）。アプリが急に止まったときにファンを安全な回転数にする仕組みが、いまは働いていません。アプリを起動し直してみてください。	App.xaml.cs:689
+c08fb050	 ／ 	App.xaml.cs:745
+48ccab47	使っていたセンサーが見つかりません	App.xaml.cs:745
+9c32a53a	ハードウェアの変更を検出しました	App.xaml.cs:747
+c1f02356	Zeph-Iris: ハードウェアの変更	App.xaml.cs:748
+646e0b57	{0}。PC の画面で、新しいセンサーへの置き換えを確認してください。	App.xaml.cs:748
+9dddc76a	ファン制御に問題があります	App.xaml.cs:792
+8ad6890e	{0}（安全のため BIOS の制御にしています。自動で復旧を試みます）	App.xaml.cs:792
+2820bd11	Zeph-Iris: ファン制御の問題	App.xaml.cs:793
+30b6b07e	一部の部品を読み取れません	App.xaml.cs:796
+465384a0	ファン制御が復旧しました	App.xaml.cs:799
+2a57fe9c	通常の制御に戻りました。	App.xaml.cs:799
+f1a9779a	Zeph-Iris: 復旧	App.xaml.cs:800
+a8e2e175	ファン制御が通常に戻りました。	App.xaml.cs:800
+0d78d54c	ほかのプログラムが config.json を開いたままにしているため読めませんでした（ファイルはそのままです）。	App.xaml.cs:816
+9b03cdae	元のファイルは config.broken_日時.json として残しました。	App.xaml.cs:817
+b07af289	config.json を読み込めず、バックアップからも復旧できませんでした。\n{0}\n\n{1}\n空の設定で起動します。	App.xaml.cs:818
+05539caa	操作の途中で問題が起きたため、最後まで行えなかったかもしれません（{0}）。ファンの制御は続いています。何度も出るときは、ログを開いて「不具合を報告…」から知らせてください。	App.xaml.cs:880
+645b237e	ブースト	App.xaml.cs:930
+169abc6e	ポンプ以外の全ファンを {0} 分間 100% にします。	App.xaml.cs:930
+c342d519	「静音」で使うプロファイルが見つかりません。設定画面の「ワンタッチ操作」で選んでください。	App.xaml.cs:934
+96f2c83a	ショートカットキー（{0}）を使えませんでした。ほかのアプリが同じキーを使っているようです。	App.xaml.cs:1028
+45001a5c	スマホ用の Web サーバーは動いていますが、Windows のファイアウォールに許可を追加できませんでした。スマホからつながらないときは、ファイアウォールでポート {0} への接続を許可してください。	App.xaml.cs:1076
+77a0d0ea	スマホ用の Web サーバーを開始できませんでした（ポート {0}）: {1}	App.xaml.cs:1082
+eec05191	緊急全開	App.xaml.cs:1092
+0413f77c	一時停止中	App.xaml.cs:1092
+45fadb4f	制御中	App.xaml.cs:1092
+404e2134	ウィジェット	App.xaml.cs:1170
+1f2511a8	画面	App.xaml.cs:1174
+dfb02ca4	拍の AI	App.xaml.cs:1204
+0f13893a	タスクトレイ	App.xaml.cs:1227
 e6a34da2	停止中	Audio/AudioCapture.cs:79
 652c7b75	音を取り込めません（{0} 秒後に再試行）: {1}	Audio/AudioCapture.cs:225
 2674d6a9	音の出力先（スピーカー・ヘッドホン）が見つかりません	Audio/AudioCapture.cs:252
@@ -813,13 +828,13 @@ f87c3ac9	他のファンに連動	Core/Advisor.cs:323
 c8d58466	標準	Core/AppConfig.cs:167
 52ed0fe4	最大値	Core/AppConfig.cs:602
 91302315	差分	Core/AppConfig.cs:605
-8e4f9981	起動時	Core/AppConfig.cs:1440
-b6d7dbf8	自動	Core/AppConfig.cs:1441
-ae81cf8d	手動	Core/AppConfig.cs:1442
-7aebcb13	読み込み前	Core/AppConfig.cs:1443
-44fc16c5	部品交換の対応付け前	Core/AppConfig.cs:1444
-f32b8618	復元前	Core/AppConfig.cs:1445
-4db25563	{0:yyyy/MM/dd HH:mm}（{1}）	Core/AppConfig.cs:1453
+8e4f9981	起動時	Core/AppConfig.cs:1457
+b6d7dbf8	自動	Core/AppConfig.cs:1458
+ae81cf8d	手動	Core/AppConfig.cs:1459
+7aebcb13	読み込み前	Core/AppConfig.cs:1460
+44fc16c5	部品交換の対応付け前	Core/AppConfig.cs:1461
+f32b8618	復元前	Core/AppConfig.cs:1462
+4db25563	{0:yyyy/MM/dd HH:mm}（{1}）	Core/AppConfig.cs:1470
 7dc6c4d8	ワンタッチ静音	Core/AppController.cs:97
 c7f7bdf4	自動: {0}	Core/AppController.cs:98
 ab7eac67	ブースト中（残り {0}）	Core/AppController.cs:120
@@ -976,11 +991,12 @@ f83af4dd	2 回の値が合いません（CPU・GPU 以外が {0:F0} W になり�
 0021212b	値が合いません（CPU・GPU 以外が {0:F0} W になりました）。もう一度測ってください	Core/EnergyMeter.cs:220
 6636279c	FanControl の設定ファイルではありません（Controls がありません）。	Core/FanControlImport.cs:72
 b9b79f98	FanControl（{0}）	Core/FanControlImport.cs:76
-d48dabb5	{0}: カーブ「{1}」の種類が分からないため、読み込んでいません	Core/FanControlImport.cs:103
-27bd2ad9	{0}: FanControl のオフセット（{1:+0;-0}%）は、Zeph-Iris にないので読み込んでいません（カーブの点で調整してください）	Core/FanControlImport.cs:107
-71dd4f9b	カーブを使っているファンが見つかりませんでした。	Core/FanControlImport.cs:112
-1d429c5c	{0}: Mix「{1}」は、Zeph-Iris では「いちばん高いものを使う」で読み込みました	Core/FanControlImport.cs:152
-1d109c7e	{0}: カーブ「{1}」に温度センサーがないため、読み込んでいません	Core/FanControlImport.cs:168
+d48dabb5	{0}: カーブ「{1}」の種類が分からないため、読み込んでいません	Core/FanControlImport.cs:105
+27bd2ad9	{0}: FanControl のオフセット（{1:+0;-0}%）は、Zeph-Iris にないので読み込んでいません（カーブの点で調整してください）	Core/FanControlImport.cs:114
+df96e04b	このファイルにはカーブがまだ保存されていません。FanControl でカーブを作ってファンに割り当てたら、右上の「⋮」→「保存」を押してから、もう一度読み込んでください。	Core/FanControlImport.cs:122
+71dd4f9b	カーブを使っているファンが見つかりませんでした。	Core/FanControlImport.cs:123
+1d429c5c	{0}: Mix「{1}」は、Zeph-Iris では「いちばん高いものを使う」で読み込みました	Core/FanControlImport.cs:163
+1d109c7e	{0}: カーブ「{1}」に温度センサーがないため、読み込んでいません	Core/FanControlImport.cs:179
 4da047ad	スリープに入ったため中止しました。	Core/FanEngine.cs:291
 4e66f356	スリープ中	Core/FanEngine.cs:297
 dc704e71	スリープから復帰中	Core/FanEngine.cs:315
@@ -1022,10 +1038,11 @@ e6825d4b	（テストモード中ですが、ポンプの保護のため 100% �
 14f61819	ポンプ '{0}' の回転数が読めません。回っているか確認できないため、100% で保護運転にしています。すぐに確認してください。{1}	Core/FanEngine.cs:1680
 06027eff	ポンプ '{0}' の回転数が {1:F0} rpm に低下しています。100% で保護運転中です。すぐに確認してください。{2}	Core/FanEngine.cs:1697
 fab09721	ポンプ '{0}' の回転数が回復しました ({1:F0} rpm)。	Core/FanEngine.cs:1707
-9b226151	発生: {0:yyyy/MM/dd HH:mm:ss} ／ プロファイル: {1}	Core/FlightRecorder.cs:93
-ecc04ddd	記録: {0:HH:mm:ss} 〜 {1:HH:mm:ss}（{2:N0} 行）	Core/FlightRecorder.cs:94
-f7957ed6	この間に起きたこと:	Core/FlightRecorder.cs:98
-2fadbaab	最高値:	Core/FlightRecorder.cs:102
+0c6e9512	「{0}」を BIOS の制御に戻せませんでした。いまの回転数のままかもしれません。ほかのファン制御ソフトが動いていないか確かめてください。	Core/FanEngine.cs:1764
+9b226151	発生: {0:yyyy/MM/dd HH:mm:ss} ／ プロファイル: {1}	Core/FlightRecorder.cs:95
+ecc04ddd	記録: {0:HH:mm:ss} 〜 {1:HH:mm:ss}（{2:N0} 行）	Core/FlightRecorder.cs:96
+f7957ed6	この間に起きたこと:	Core/FlightRecorder.cs:100
+2fadbaab	最高値:	Core/FlightRecorder.cs:104
 198beb10	PresentMon の電子署名を確かめられません（Intel の署名がありません）。アプリを入れ直してください。	Core/Games/PresentMonRunner.cs:56
 ab6781dc	{0} の温度を読めません（グラボは見えていますが、温度とファンの値がグラボのドライバーから取れません）。ドライバーが入れ替わったときに起きることがあります。メーカーのサイトから最新のドライバー（AMD Software・NVIDIA のドライバーなど）を入れ直して PC を再起動すると、直ることがあります。直るまでは、グラボの温度での制御と緊急全開は働きません。	Core/GpuTempCheck.cs:35
 7e24b89a	・	Core/GpuTempCheck.cs:35
@@ -1133,22 +1150,22 @@ a86cdb33	コントローラー情報が途中で切れています	Core/OpenRgb.
 a5ce650f	コントローラー情報を読み取れません	Core/OpenRgb.cs:561
 0027866f	描画できません: {0}	Core/OpenRgb.cs:879
 c790979e	OpenRGB の処理が追いつかないため、1 秒に {0:0} 回に下げています	Core/OpenRgb.cs:967
-ffaf3cd2	OpenRGB に接続しています…	Core/OpenRgb.cs:1339
-c19da9e8	前の接続が終わるのを待っています…	Core/OpenRgb.cs:1409
-21503ff4	OpenRGB との接続が切れました（{0} 秒後に繋ぎ直します）: {1}	Core/OpenRgb.cs:1470
-91c695dc	接続できません（{0} 秒後に再試行）: {1}	Core/OpenRgb.cs:1471
-b6c76b3b	エラーで止まりました: {0}	Core/OpenRgb.cs:1490
-a4a0e7be	OpenRGB の接続先が変わったので、繋ぎ直しています…	Core/OpenRgb.cs:1562
-a12cdd84	OpenRGB に繋ぎ直しています…	Core/OpenRgb.cs:1578
-b9eec9ec	OpenRGB のデバイスの一覧が変わったので、繋ぎ直しています…	Core/OpenRgb.cs:1584
-ece981c1	OpenRGB に見つかりません	Core/OpenRgb.cs:1828
-303ee7e1	選んだデバイスが見つかりません: {0}（OpenRGB の画面に表示されているか確認してください）	Core/OpenRgb.cs:1836
-f9706898	接続できましたが、色を変えられるデバイスが見つかりません。OpenRGB の画面にデバイスが表示されているか確認してください	Core/OpenRgb.cs:1837
-a4da3fc4	接続中: {0} 個のデバイスの色を変えています	Core/OpenRgb.cs:1841
-007ac9b1	（1 秒に {0:0} コマ）	Core/OpenRgb.cs:1842
-db01850a	。選んだデバイスが見つかりません: {0}	Core/OpenRgb.cs:1843
-9e6acdec	{0}（LED {1} 個・{2}）	Core/OpenRgb.cs:1873
-ad45bf76	場所不明	Core/OpenRgb.cs:1873
+ffaf3cd2	OpenRGB に接続しています…	Core/OpenRgb.cs:1344
+c19da9e8	前の接続が終わるのを待っています…	Core/OpenRgb.cs:1415
+21503ff4	OpenRGB との接続が切れました（{0} 秒後に繋ぎ直します）: {1}	Core/OpenRgb.cs:1479
+91c695dc	接続できません（{0} 秒後に再試行）: {1}	Core/OpenRgb.cs:1480
+b6c76b3b	エラーで止まりました: {0}	Core/OpenRgb.cs:1499
+a4a0e7be	OpenRGB の接続先が変わったので、繋ぎ直しています…	Core/OpenRgb.cs:1571
+a12cdd84	OpenRGB に繋ぎ直しています…	Core/OpenRgb.cs:1587
+b9eec9ec	OpenRGB のデバイスの一覧が変わったので、繋ぎ直しています…	Core/OpenRgb.cs:1593
+ece981c1	OpenRGB に見つかりません	Core/OpenRgb.cs:1837
+303ee7e1	選んだデバイスが見つかりません: {0}（OpenRGB の画面に表示されているか確認してください）	Core/OpenRgb.cs:1845
+f9706898	接続できましたが、色を変えられるデバイスが見つかりません。OpenRGB の画面にデバイスが表示されているか確認してください	Core/OpenRgb.cs:1846
+a4da3fc4	接続中: {0} 個のデバイスの色を変えています	Core/OpenRgb.cs:1850
+007ac9b1	（1 秒に {0:0} コマ）	Core/OpenRgb.cs:1851
+db01850a	。選んだデバイスが見つかりません: {0}	Core/OpenRgb.cs:1852
+9e6acdec	{0}（LED {1} 個・{2}）	Core/OpenRgb.cs:1882
+ad45bf76	場所不明	Core/OpenRgb.cs:1882
 29f94095	PawnIO をインストールしました。仕上げに PC の再起動が必要です。PC を再起動すると、ファンを制御できるようになります。	Core/PawnIoSetup.cs:55
 3364480f	PawnIO をインストールしました。	Core/PawnIoSetup.cs:60
 129482fa	PawnIO はすでにインストールされています。	Core/PawnIoSetup.cs:60
@@ -1283,20 +1300,20 @@ f898c734	https のアドレスではありません: {0}	Core/SystemTool.cs:50
 bba9cc48	前の版には戻しましたが、設定を戻せませんでした（{0}）。	Core/UpdateRecovery.cs:194
 cd083e7b	新しい版 {0} が、{1:F0} 分のうちにファンの制御を始めませんでした。	Core/UpdateRecovery.cs:304
 17d6b1ee	Zeph-Iris を終わらせられないため、前の版に戻せませんでした。タスクトレイの Zeph-Iris を終了する（または PC を再起動する）と、ファンは BIOS の設定に戻ります。そのあと、次のファイルをダブルクリックすると前の版に戻せます。\n{0}	Core/UpdateRecovery.cs:327
-9181a7c0	{0:F0} 分間に {1} 回終了したため、自動での再起動はやめました。	Core/Watchdog.cs:281
-abf150b9	自動での再起動はオフになっています。	Core/Watchdog.cs:282
-82655ed5	Zeph-Iris が予期せず終了しました。\n\nファンは安全な回転数（{0:F0}%、ポンプは 100%）に固定しています。{1}\n	Core/Watchdog.cs:284
-91122f58	PC を再起動すると BIOS の制御に戻ります（Zeph-Iris を起動し直すと、アプリの制御で動きます）。\n\nログ: 	Core/Watchdog.cs:285
-27271310	この版には最近更新したばかりです。新しい版で落ち続けるときは、次のファイルをダブルクリックすると、前の版（{0}）と更新する前の設定に戻せます（いまの設定は backups フォルダーに取っておきます）。\n{1}	Core/Watchdog.cs:299
-874d775f	この版には最近更新したばかりです。新しい版で落ち続けるときは、リリースのページ（{0}）から {1} のインストーラー（Zeph-Iris-{2}-setup.exe）を実行すると、前の版に戻せます。	Core/Watchdog.cs:300
+9181a7c0	{0:F0} 分間に {1} 回終了したため、自動での再起動はやめました。	Core/Watchdog.cs:283
+abf150b9	自動での再起動はオフになっています。	Core/Watchdog.cs:284
+82655ed5	Zeph-Iris が予期せず終了しました。\n\nファンは安全な回転数（{0:F0}%、ポンプは 100%）に固定しています。{1}\n	Core/Watchdog.cs:286
+91122f58	PC を再起動すると BIOS の制御に戻ります（Zeph-Iris を起動し直すと、アプリの制御で動きます）。\n\nログ: 	Core/Watchdog.cs:287
+27271310	この版には最近更新したばかりです。新しい版で落ち続けるときは、次のファイルをダブルクリックすると、前の版（{0}）と更新する前の設定に戻せます（いまの設定は backups フォルダーに取っておきます）。\n{1}	Core/Watchdog.cs:301
+874d775f	この版には最近更新したばかりです。新しい版で落ち続けるときは、リリースのページ（{0}）から {1} のインストーラー（Zeph-Iris-{2}-setup.exe）を実行すると、前の版に戻せます。	Core/Watchdog.cs:302
 5e11c7bc	このネットワークからは使えません。	Core/WebServer.cs:78
 3540eeb1	鍵の間違いが続いたため、しばらく受け付けません。1 分ほど待ってください。	Core/WebServer.cs:98
 aacf373e	アクセス用の鍵が違います。PC の設定画面に表示されている URL を使ってください。	Core/WebServer.cs:106
-1e1ddced	接続中…	Core/WebServer.cs:308
-6b1221b3	システム	Core/WebServer.cs:310
-73dd9d77	全開 5分	Core/WebServer.cs:312
-f27c7942	 更新 ・ 	Core/WebServer.cs:315
-908c69fa	PC に接続できません	Core/WebServer.cs:316
+1e1ddced	接続中…	Core/WebServer.cs:311
+6b1221b3	システム	Core/WebServer.cs:313
+73dd9d77	全開 5分	Core/WebServer.cs:315
+f27c7942	 更新 ・ 	Core/WebServer.cs:318
+908c69fa	PC に接続できません	Core/WebServer.cs:319
 88209a5b	（なし）	Core/Winget.cs:71
 59d07259	winget.exe が見つかりません	Core/Winget.cs:203
 f20bb342	winget を起動できませんでした	Core/Winget.cs:240
@@ -1380,20 +1397,21 @@ e158d65b	・追加した直後は「このツールで制御する」がオフ�
 082898e0	「{0}」をすべてのプロファイルから削除しますか？\n削除した端子は BIOS 制御に戻ります。	MainWindow.Curves.cs:232
 5c0edbde	カーブ {0}	MainWindow.Curves.cs:251
 68339e34	カーブは最低 1 つ必要です。一定の回転にしたい場合は「固定回転にする」を使ってください。	MainWindow.Curves.cs:266
-0de821a1	ほかのファンのキャリブレーションが実行中です。終わってから始めてください。	MainWindow.Curves.cs:293
-72f6035d	自動セットアップか冷却テストが実行中です。終わってから始めてください。	MainWindow.Curves.cs:298
-2e3bb637	このファンは実行中のプロファイルに含まれていません。	MainWindow.Curves.cs:304
-3009598f	「{0}」のキャリブレーションを開始します。\n\n	MainWindow.Curves.cs:308
-8d17b7e8	・約 1〜2 分間、ファンが全開になったり止まったりします。\n	MainWindow.Curves.cs:309
-60985017	・CPU/GPU に負荷をかけていない状態で実行してください（温度が 80°C を超えると自動で中止します）。	MainWindow.Curves.cs:310
-33d3e475	ファンの特性を測る	MainWindow.Curves.cs:311
-40098717	開始しています…	MainWindow.Curves.cs:320
-5a35c90a	まだ測定していません。	MainWindow.Curves.cs:367
-4661e38f	最大 {0:N0} rpm ／ {1:F0}% 未満で停止 ／ {2:F0}% で回り始める（{3:yyyy/MM/dd HH:mm} 測定）	MainWindow.Curves.cs:368
-0010941c	⚠ このファンは {0:F0}% 未満で止まります。止めたくない場合は {1:F0}% 以上にしてください。	MainWindow.Curves.cs:374
-1d4c0bba	「{0}」の最低回転数を全プロファイルで {1:F0}% にしました。	MainWindow.Curves.cs:390
-9edeb81a	「{0}」の {1:F0}〜{2:F0}% を避けるようにしました。カーブのグラフに桃色の帯で表示されます。	MainWindow.Curves.cs:476
-1e5aacaa	共振回避帯は 1 つのファンに 4 つまでです。	MainWindow.Curves.cs:491
+6b7ec6f2	「{0}」の端子が見つからないため、テスト（全開）できませんでした。配線や BIOS の設定を確かめてください。	MainWindow.Curves.cs:282
+0de821a1	ほかのファンのキャリブレーションが実行中です。終わってから始めてください。	MainWindow.Curves.cs:300
+72f6035d	自動セットアップか冷却テストが実行中です。終わってから始めてください。	MainWindow.Curves.cs:305
+2e3bb637	このファンは実行中のプロファイルに含まれていません。	MainWindow.Curves.cs:311
+3009598f	「{0}」のキャリブレーションを開始します。\n\n	MainWindow.Curves.cs:315
+8d17b7e8	・約 1〜2 分間、ファンが全開になったり止まったりします。\n	MainWindow.Curves.cs:316
+60985017	・CPU/GPU に負荷をかけていない状態で実行してください（温度が 80°C を超えると自動で中止します）。	MainWindow.Curves.cs:317
+33d3e475	ファンの特性を測る	MainWindow.Curves.cs:318
+40098717	開始しています…	MainWindow.Curves.cs:327
+5a35c90a	まだ測定していません。	MainWindow.Curves.cs:374
+4661e38f	最大 {0:N0} rpm ／ {1:F0}% 未満で停止 ／ {2:F0}% で回り始める（{3:yyyy/MM/dd HH:mm} 測定）	MainWindow.Curves.cs:375
+0010941c	⚠ このファンは {0:F0}% 未満で止まります。止めたくない場合は {1:F0}% 以上にしてください。	MainWindow.Curves.cs:381
+1d4c0bba	「{0}」の最低回転数を全プロファイルで {1:F0}% にしました。	MainWindow.Curves.cs:397
+9edeb81a	「{0}」の {1:F0}〜{2:F0}% を避けるようにしました。カーブのグラフに桃色の帯で表示されます。	MainWindow.Curves.cs:483
+1e5aacaa	共振回避帯は 1 つのファンに 4 つまでです。	MainWindow.Curves.cs:498
 d66864fa	ケース内	MainWindow.Dashboard.cs:37
 1eef08cf	編集を終了	MainWindow.Dashboard.cs:155
 653d9443	カードは最低 1 枚必要です。	MainWindow.Dashboard.cs:188
@@ -1415,9 +1433,9 @@ b0dd9531	クリップボードに画像がありません。ブラウザーで�
 0d4f2878	自由に使える写真の共有サイト（Wikimedia Commons と Openverse）に、この型番の写真は見つかりませんでした。「ブラウザーで画像を探す」で画像をコピーして、「コピーした画像を貼り付け」で設定できます（メーカーのサイトの写真などは、自分で見るためだけに使ってください）。	MainWindow.Devices.cs:328
 02c5893e	使う写真を選んでください（Wikimedia Commons と Openverse の、自由に使える写真です。作者とライセンスはカードに表示します）。見つからなければ、ブラウザーで探して貼り付けることもできます。	MainWindow.Devices.cs:331
 b45d8636	写真を取ってきています…	MainWindow.Devices.cs:334
-a55323f3	写真を取ってこられませんでした。別の写真を選ぶか、貼り付けてください。	MainWindow.Devices.cs:339
-ec74b9eb	写真を探せませんでした（{0}）。「ブラウザーで画像を探す」で探して、貼り付けることもできます。	MainWindow.Devices.cs:348
-0a0e4a97	{0} ・ {1}	MainWindow.Devices.cs:372
+a55323f3	写真を取ってこられませんでした。別の写真を選ぶか、貼り付けてください。	MainWindow.Devices.cs:341
+ec74b9eb	写真を探せませんでした（{0}）。「ブラウザーで画像を探す」で探して、貼り付けることもできます。	MainWindow.Devices.cs:357
+0a0e4a97	{0} ・ {1}	MainWindow.Devices.cs:381
 5119fa5e	ワットチェッカーの値を数字で入れてください	MainWindow.Energy.cs:26
 c0bf5633	合わせ込みました: CPU・GPU 以外 {0:F0} W・電源の効率 {1:F0}%（アイドル中と負荷中の 2 回から）	MainWindow.Energy.cs:67
 c91890c4	合わせ込みました: CPU・GPU 以外 {0:F0} W（電源の効率は {1:F0}% のまま。負荷中も記録すると効率も求めます）	MainWindow.Energy.cs:68
@@ -1433,21 +1451,23 @@ d8cf90d7	CPU 最高 {0:0}°C（平均 {1:0}°C）	MainWindow.Games.cs:38
 cc8dbf23	GPU 最高 {0:0}°C（平均 {1:0}°C）	MainWindow.Games.cs:39
 e2bb4ae7	ファン平均 {0:0} rpm	MainWindow.Games.cs:40
 e19b1126	PresentMon が終わりました（終了コード {0}）	MainWindow.Games.cs:103
-b419c5cc	オフです。オンにすると、ゲームを遊んでいるあいだの FPS と温度を記録します。	MainWindow.Games.cs:158
-3bb71d5d	PresentMon が見つかりません（アプリのフォルダーの PresentMon フォルダー）。アプリを入れ直すと直ります。	MainWindow.Games.cs:160
-8204e45d	記録中: {0} ・ いま {1:0} fps	MainWindow.Games.cs:162
-83ecfa1a	ゲームを待っています（ゲームを手前に出して 1 分ほど遊ぶと、記録を始めます）。	MainWindow.Games.cs:164
-0fe39ffc	PresentMon を起動し直すのを待っています（{0}）。	MainWindow.Games.cs:165
-5afb6e9d	{0} 〜 {1}（描いていた時間 {2}・{3} フレーム）	MainWindow.Games.cs:197
-c4454de4	CPU 使用率 平均 {0:0}%	MainWindow.Games.cs:202
-c401f258	GPU 使用率 平均 {0:0}%	MainWindow.Games.cs:203
-6caecaec	GPU の電力 平均 {0:0} W	MainWindow.Games.cs:204
-47dae337	10 秒ごとの平均 FPS: いちばん低い {0:0} fps ・ いちばん高い {1:0} fps	MainWindow.Games.cs:209
-381eb861	1 秒以上止まった: {0} 回・合計 {1:0} 秒（ロード・一時停止・最小化など。FPS と描いていた時間には入れていません）	MainWindow.Games.cs:212
-836a6b89	1% Low・0.1% Low は、遅かったほうから 1%・0.1% のところのフレーム時間（99・99.9 パーセンタイル）を FPS にしたものです。1 秒を超えて止まったフレームは入れません。平均との差が大きいほど、カクつきを感じやすくなります（ほかのソフトは、遅いほうから 1% のフレームの平均で出すことがあり、値が少し違います）。	MainWindow.Games.cs:214
-c5f9ace5	温度・使用率・ファンは、FPS と同じく、最初に描いたときから描いていたあいだの値です。	MainWindow.Games.cs:215
-73a40039	{0} を、これからは記録しないようにしますか？（ゲームではないアプリが記録されたとき用です。これまでの記録も消します）	MainWindow.Games.cs:222
-e16c0947	ゲームの記録	MainWindow.Games.cs:223
+e4133a80	ゲームの記録を保存できませんでした（{0}）。	MainWindow.Games.cs:154
+b419c5cc	オフです。オンにすると、ゲームを遊んでいるあいだの FPS と温度を記録します。	MainWindow.Games.cs:167
+3bb71d5d	PresentMon が見つかりません（アプリのフォルダーの PresentMon フォルダー）。アプリを入れ直すと直ります。	MainWindow.Games.cs:169
+8204e45d	記録中: {0} ・ いま {1:0} fps	MainWindow.Games.cs:171
+83ecfa1a	ゲームを待っています（ゲームを手前に出して 1 分ほど遊ぶと、記録を始めます）。	MainWindow.Games.cs:173
+0fe39ffc	PresentMon を起動し直すのを待っています（{0}）。	MainWindow.Games.cs:174
+5afb6e9d	{0} 〜 {1}（描いていた時間 {2}・{3} フレーム）	MainWindow.Games.cs:206
+c4454de4	CPU 使用率 平均 {0:0}%	MainWindow.Games.cs:211
+c401f258	GPU 使用率 平均 {0:0}%	MainWindow.Games.cs:212
+6caecaec	GPU の電力 平均 {0:0} W	MainWindow.Games.cs:213
+47dae337	10 秒ごとの平均 FPS: いちばん低い {0:0} fps ・ いちばん高い {1:0} fps	MainWindow.Games.cs:218
+381eb861	1 秒以上止まった: {0} 回・合計 {1:0} 秒（ロード・一時停止・最小化など。FPS と描いていた時間には入れていません）	MainWindow.Games.cs:221
+836a6b89	1% Low・0.1% Low は、遅かったほうから 1%・0.1% のところのフレーム時間（99・99.9 パーセンタイル）を FPS にしたものです。1 秒を超えて止まったフレームは入れません。平均との差が大きいほど、カクつきを感じやすくなります（ほかのソフトは、遅いほうから 1% のフレームの平均で出すことがあり、値が少し違います）。	MainWindow.Games.cs:223
+c5f9ace5	温度・使用率・ファンは、FPS と同じく、最初に描いたときから描いていたあいだの値です。	MainWindow.Games.cs:224
+73a40039	{0} を、これからは記録しないようにしますか？（ゲームではないアプリが記録されたとき用です。これまでの記録も消します）	MainWindow.Games.cs:231
+e16c0947	ゲームの記録	MainWindow.Games.cs:232
+8360b734	ゲームの記録を消せませんでした（{0}）。	MainWindow.Games.cs:254
 1c845124	記録期間: {0:hh\\:mm\\:ss}（{1:N0} サンプル）  ／  グラフにマウスを乗せると、その時刻の値を表示します	MainWindow.History.cs:32
 67fc1b84	{0} (仮想) [°C]	MainWindow.History.cs:41
 7f375751	まだ記録がありません。	MainWindow.History.cs:77
@@ -1461,30 +1481,35 @@ f6719722	まだバックアップはありません	MainWindow.Integrations.cs:2
 a09fc803	送信しています…	MainWindow.Integrations.cs:77
 0d845e4d	送れませんでした: {0}	MainWindow.Integrations.cs:82
 7e4e7bd2	自動（CPU と GPU の高いほう）	MainWindow.Integrations.cs:93
-97682f4b	設定をバックアップしました: {0}	MainWindow.Integrations.cs:140
-51e56e6f	バックアップがありません	MainWindow.Integrations.cs:152
-5cb6d892	{0} の設定に戻しますか？\n\n今の設定もバックアップしてから戻すので、あとで元に戻せます。	MainWindow.Integrations.cs:158
-ca58240b	バックアップから戻す	MainWindow.Integrations.cs:159
-0a066c64	{0} の設定に戻しました（「元に戻す」で取り消せます）。	MainWindow.Integrations.cs:167
-4a2fd247	このバックアップは読み込めませんでした。\n{0}	MainWindow.Integrations.cs:171
-1b7a6d56	設定を書き出す	MainWindow.Integrations.cs:180
-5e2d8db8	Zeph-Iris の設定 (*.zeph-iris.json)|*.zeph-iris.json	MainWindow.Integrations.cs:181
-bf4b6694	Zeph-Iris設定_{0}_{1:yyyyMMdd}{2}	MainWindow.Integrations.cs:182
-dd581e02	{0} 個のプロファイルを書き出しました。このファイルを相手に送り、設定 →「安全・バックアップ」→「設定を読み込む」で読み込んでもらってください。	MainWindow.Integrations.cs:189
-25f3627c	書き出せませんでした。\n{0}	MainWindow.Integrations.cs:193
-e6cdafd7	ハードウェアの初期化が終わるまでお待ちください。	MainWindow.Integrations.cs:206
-d5a279cc	FanControl の設定を取り込む	MainWindow.Integrations.cs:213
-40d41833	FanControl の設定 (*.json)|*.json	MainWindow.Integrations.cs:214
-de0ce3c8	設定を読み込む	MainWindow.Integrations.cs:219
-67578d3a	Zeph-Iris の設定 (*.zeph-iris.json;*.json)|*.zeph-iris.json;*.json	MainWindow.Integrations.cs:220
-f095a744	FanControl の設定ファイルではありません。FanControl のフォルダーの Configurations の中の .json を選んでください。	MainWindow.Integrations.cs:238
-49c7511d	このファイルは読み込めません。\n{0}	MainWindow.Integrations.cs:244
-5d608685	FanControl の設定のうち、次のものはそのままでは読み込めませんでした:	MainWindow.Integrations.cs:248
-d01ee250	。「元に戻す」で取り消せます。読み込んだファンは、カーブを確認してから使ってください。	MainWindow.Integrations.cs:261
-565076e7	カーブを確認	MainWindow.Integrations.cs:262
-e5decd8b	新しいハードウェアに合わせて設定を置き換えました（「元に戻す」で戻せます）。念のため、ファンカーブを確認してください。	MainWindow.Integrations.cs:285
-49a0ae7a	ハードウェアの変更があります。見つからないセンサーを使っているカーブは、安全のため一定の回転数で回しています。	MainWindow.Integrations.cs:294
-dff7789c	対応付けを開く	MainWindow.Integrations.cs:295
+82c14b71	（変える前の設定のバックアップは作れませんでした: {0}。アプリを終了するまでは「元に戻す」で取り消せます）	MainWindow.Integrations.cs:137
+97682f4b	設定をバックアップしました: {0}	MainWindow.Integrations.cs:144
+f14b0cd2	設定のバックアップを作れませんでした（{0}）。	MainWindow.Integrations.cs:145
+9e0504b2	まだ保存された設定がないため、バックアップするものがありません。	MainWindow.Integrations.cs:146
+51e56e6f	バックアップがありません	MainWindow.Integrations.cs:158
+5cb6d892	{0} の設定に戻しますか？\n\n今の設定もバックアップしてから戻すので、あとで元に戻せます。	MainWindow.Integrations.cs:164
+ca58240b	バックアップから戻す	MainWindow.Integrations.cs:165
+0a066c64	{0} の設定に戻しました（「元に戻す」で取り消せます）。	MainWindow.Integrations.cs:173
+4a2fd247	このバックアップは読み込めませんでした。\n{0}	MainWindow.Integrations.cs:177
+1b7a6d56	設定を書き出す	MainWindow.Integrations.cs:186
+5e2d8db8	Zeph-Iris の設定 (*.zeph-iris.json)|*.zeph-iris.json	MainWindow.Integrations.cs:187
+bf4b6694	Zeph-Iris設定_{0}_{1:yyyyMMdd}{2}	MainWindow.Integrations.cs:188
+dd581e02	{0} 個のプロファイルを書き出しました。このファイルを相手に送り、設定 →「安全・バックアップ」→「設定を読み込む」で読み込んでもらってください。	MainWindow.Integrations.cs:195
+25f3627c	書き出せませんでした。\n{0}	MainWindow.Integrations.cs:199
+e6cdafd7	ハードウェアの初期化が終わるまでお待ちください。	MainWindow.Integrations.cs:212
+d5a279cc	FanControl の設定を取り込む	MainWindow.Integrations.cs:219
+40d41833	FanControl の設定 (*.json)|*.json	MainWindow.Integrations.cs:220
+de0ce3c8	設定を読み込む	MainWindow.Integrations.cs:225
+67578d3a	Zeph-Iris の設定 (*.zeph-iris.json;*.json)|*.zeph-iris.json;*.json	MainWindow.Integrations.cs:226
+f095a744	FanControl の設定ファイルではありません。FanControl のフォルダーの Configurations の中の .json を選んでください。	MainWindow.Integrations.cs:244
+49c7511d	このファイルは読み込めません。\n{0}	MainWindow.Integrations.cs:250
+5d608685	FanControl の設定のうち、次のものはそのままでは読み込めませんでした:	MainWindow.Integrations.cs:254
+d01ee250	。「元に戻す」で取り消せます。読み込んだファンは、カーブを確認してから使ってください。	MainWindow.Integrations.cs:269
+565076e7	カーブを確認	MainWindow.Integrations.cs:270
+5ac0d44b	設定を読み込めませんでした。いまの設定はそのままです（途中まで変わったときは「元に戻す」で戻せます）。\n{0}	MainWindow.Integrations.cs:275
+e5decd8b	新しいハードウェアに合わせて設定を置き換えました（「元に戻す」で戻せます）。念のため、ファンカーブを確認してください。	MainWindow.Integrations.cs:301
+3270468e	新しいハードウェアに合わせて設定を置き換えられませんでした。いまの設定はそのままです（途中まで変わったときは「元に戻す」で戻せます）。\n{0}	MainWindow.Integrations.cs:307
+49a0ae7a	ハードウェアの変更があります。見つからないセンサーを使っているカーブは、安全のため一定の回転数で回しています。	MainWindow.Integrations.cs:316
+dff7789c	対応付けを開く	MainWindow.Integrations.cs:317
 8226a1e3	自動セットアップの途中です。	MainWindow.Language.cs:55
 e955d878	冷却テストの途中です。	MainWindow.Language.cs:56
 afb9660d	キャリブレーションの途中です。	MainWindow.Language.cs:57
@@ -1595,43 +1620,43 @@ ed4a4a84	OpenRGB のサービスが無効になっています。OpenRGB を起�
 23f992d4	OpenRGB が見つかりません。OpenRGB（無料）をインストールしてください。Program Files に入れると、このアプリが自動で起動します（zip を展開した OpenRGB は、自分で起動してください）。	MainWindow.Lighting.cs:1441
 fe396d5d	OpenRGB を起動して「SDK Server」タブの「Start Server」を押してから、もう一度試してください。	MainWindow.Lighting.cs:1442
 23ecbb88	「OpenRGB と連携する」がオフです。オンにすると接続します	MainWindow.Lighting.cs:1451
-f8d56f66	オフ（「OpenRGB と連携する」をオンにすると、LED の色を変え始めます）	MainWindow.Lighting.cs:1475
-dabf7260	デバイスの一覧を読み込んでから選べます。上の「接続テスト」を押してください	MainWindow.Lighting.cs:1638
-70f103b7	少なくとも 1 つは選んでください（LED を消したいときは、上の「OpenRGB と連携する」をオフにします）	MainWindow.Lighting.cs:1665
-355efac9	いま見つからないデバイスの設定も残してあります（つなぎ直すと元どおりに使えます）: {0}	MainWindow.Lighting.cs:1713
-b8946100	覚えた曲: {0} 曲	MainWindow.Lighting.cs:1741
-e8d98a10	覚えた曲の拍をすべて消しますか？（曲を聴けば、また覚えます）	MainWindow.Lighting.cs:1746
-49610d95	音を出しているアプリを探しています…	MainWindow.Lighting.cs:1759
-937d0bba	　（音が出ています）	MainWindow.Lighting.cs:1785
-bd2b75f3	　（再生中）	MainWindow.Lighting.cs:1785
-e197ab2d	アプリが見つかりません。曲を再生してから、もう一度押してください	MainWindow.Lighting.cs:1796
-8dc805b8	同期テストは、「OpenRGB と連携する」がオンで、光り方が「音楽連動」のときに使えます。	MainWindow.Lighting.cs:1865
-1071825a	クリック音を鳴らせませんでした	MainWindow.Lighting.cs:1872
-9fb33dc5	0.6 秒ごとに「カチッ」と鳴り、LED が白く光ります。光が音より早ければ「+」、遅ければ「−」で、音と光がそろうところを探してください。	MainWindow.Lighting.cs:1880
-462dc044	もう一度押すか、この画面を離れると止まります。	MainWindow.Lighting.cs:1881
-8cd7762f	{0} が動いています。同じ LED を操作するので、色が勝手に戻る・ちらつく・ほかのデバイスとそろわない原因になります。	MainWindow.Lighting.cs:1955
-55b403e0	そのソフトの LED の制御（ライティング）を止めるか、終了してください（Lian Li の L-Connect は、ファンの回転だけ使う設定にできます）。	MainWindow.Lighting.cs:1956
-caf81aa5	OpenRGB の設定で「Shared SMBus Access」（SMBus をほかのソフトと共有する）がオフになっています。	MainWindow.Lighting.cs:1959
-7051883b	このアプリはメモリの温度を同じ配線（SMBus）で読むので、ぶつかって温度が読めなくなることがあります。	MainWindow.Lighting.cs:1960
-2810f408	OpenRGB の Settings で「Shared SMBus Access」をオンにして、OpenRGB を起動し直してください（または、設定 →「メモリの温度を読む」をオフに）。	MainWindow.Lighting.cs:1961
-0b102823	\n設定ファイル: {0}	MainWindow.Lighting.cs:1962
-7c87a784	 ・ 	MainWindow.Lighting.cs:2120
-cde5d20f	「OpenRGB と連携する」をオンにすると、音の取り込みが始まります	MainWindow.Lighting.cs:2132
-37b53bcd	{0}（{1} の音だけに反応）	MainWindow.Lighting.cs:2134
-8e13b3ed	\n聞いている出力先: {0}	MainWindow.Lighting.cs:2140
-67520391	+{0} ms にする	MainWindow.Lighting.cs:2150
-a33ee710	音の取り込みを準備しています…	MainWindow.Lighting.cs:2163
-aeb57d02	音楽連動で OpenRGB と連携しているときに表示します	MainWindow.Lighting.cs:2163
-6a7d3717	テンポ: 使わない	MainWindow.Lighting.cs:2171
-d9cb0d66	音の大きさだけで光っています	MainWindow.Lighting.cs:2172
-8d9ab8cc	キックに合わせて光っています	MainWindow.Lighting.cs:2178
-58c9b655	テンポをつかんでいます（確かさ {0:F0}%）	MainWindow.Lighting.cs:2179
-7ddda7d0	テンポ検出中…	MainWindow.Lighting.cs:2183
-12235fc4	候補 {0:F0} BPM（確かさ {1:F0}%）	MainWindow.Lighting.cs:2185
-f689911d	ビートがはっきりした曲なら、数秒でテンポをつかみます	MainWindow.Lighting.cs:2186
-64ff1784	音量 {0} ・ 基準 {1:F0} dBFS	MainWindow.Lighting.cs:2195
-87c8c605	● 音を検出しています	MainWindow.Lighting.cs:2196
-eafa50be	○ 無音（音が鳴ると反応します）	MainWindow.Lighting.cs:2196
+f8d56f66	オフ（「OpenRGB と連携する」をオンにすると、LED の色を変え始めます）	MainWindow.Lighting.cs:1478
+dabf7260	デバイスの一覧を読み込んでから選べます。上の「接続テスト」を押してください	MainWindow.Lighting.cs:1641
+70f103b7	少なくとも 1 つは選んでください（LED を消したいときは、上の「OpenRGB と連携する」をオフにします）	MainWindow.Lighting.cs:1668
+355efac9	いま見つからないデバイスの設定も残してあります（つなぎ直すと元どおりに使えます）: {0}	MainWindow.Lighting.cs:1716
+b8946100	覚えた曲: {0} 曲	MainWindow.Lighting.cs:1744
+e8d98a10	覚えた曲の拍をすべて消しますか？（曲を聴けば、また覚えます）	MainWindow.Lighting.cs:1749
+49610d95	音を出しているアプリを探しています…	MainWindow.Lighting.cs:1762
+937d0bba	　（音が出ています）	MainWindow.Lighting.cs:1788
+bd2b75f3	　（再生中）	MainWindow.Lighting.cs:1788
+e197ab2d	アプリが見つかりません。曲を再生してから、もう一度押してください	MainWindow.Lighting.cs:1799
+8dc805b8	同期テストは、「OpenRGB と連携する」がオンで、光り方が「音楽連動」のときに使えます。	MainWindow.Lighting.cs:1868
+1071825a	クリック音を鳴らせませんでした	MainWindow.Lighting.cs:1875
+9fb33dc5	0.6 秒ごとに「カチッ」と鳴り、LED が白く光ります。光が音より早ければ「+」、遅ければ「−」で、音と光がそろうところを探してください。	MainWindow.Lighting.cs:1883
+462dc044	もう一度押すか、この画面を離れると止まります。	MainWindow.Lighting.cs:1884
+8cd7762f	{0} が動いています。同じ LED を操作するので、色が勝手に戻る・ちらつく・ほかのデバイスとそろわない原因になります。	MainWindow.Lighting.cs:1958
+55b403e0	そのソフトの LED の制御（ライティング）を止めるか、終了してください（Lian Li の L-Connect は、ファンの回転だけ使う設定にできます）。	MainWindow.Lighting.cs:1959
+caf81aa5	OpenRGB の設定で「Shared SMBus Access」（SMBus をほかのソフトと共有する）がオフになっています。	MainWindow.Lighting.cs:1962
+7051883b	このアプリはメモリの温度を同じ配線（SMBus）で読むので、ぶつかって温度が読めなくなることがあります。	MainWindow.Lighting.cs:1963
+2810f408	OpenRGB の Settings で「Shared SMBus Access」をオンにして、OpenRGB を起動し直してください（または、設定 →「メモリの温度を読む」をオフに）。	MainWindow.Lighting.cs:1964
+0b102823	\n設定ファイル: {0}	MainWindow.Lighting.cs:1965
+7c87a784	 ・ 	MainWindow.Lighting.cs:2123
+cde5d20f	「OpenRGB と連携する」をオンにすると、音の取り込みが始まります	MainWindow.Lighting.cs:2135
+37b53bcd	{0}（{1} の音だけに反応）	MainWindow.Lighting.cs:2137
+8e13b3ed	\n聞いている出力先: {0}	MainWindow.Lighting.cs:2143
+67520391	+{0} ms にする	MainWindow.Lighting.cs:2153
+a33ee710	音の取り込みを準備しています…	MainWindow.Lighting.cs:2166
+aeb57d02	音楽連動で OpenRGB と連携しているときに表示します	MainWindow.Lighting.cs:2166
+6a7d3717	テンポ: 使わない	MainWindow.Lighting.cs:2174
+d9cb0d66	音の大きさだけで光っています	MainWindow.Lighting.cs:2175
+8d9ab8cc	キックに合わせて光っています	MainWindow.Lighting.cs:2181
+58c9b655	テンポをつかんでいます（確かさ {0:F0}%）	MainWindow.Lighting.cs:2182
+7ddda7d0	テンポ検出中…	MainWindow.Lighting.cs:2186
+12235fc4	候補 {0:F0} BPM（確かさ {1:F0}%）	MainWindow.Lighting.cs:2188
+f689911d	ビートがはっきりした曲なら、数秒でテンポをつかみます	MainWindow.Lighting.cs:2189
+64ff1784	音量 {0} ・ 基準 {1:F0} dBFS	MainWindow.Lighting.cs:2198
+87c8c605	● 音を検出しています	MainWindow.Lighting.cs:2199
+eafa50be	○ 無音（音が鳴ると反応します）	MainWindow.Lighting.cs:2199
 8117844a	CPU ・ {0}	MainWindow.Monitoring.cs:41
 2a0c461e	GPU ・ {0}	MainWindow.Monitoring.cs:68
 7df797d5	VRAM（ビデオメモリ）	MainWindow.Monitoring.cs:94
@@ -1643,32 +1668,34 @@ efd9152e	寿命 {0:F0}%	MainWindow.Monitoring.cs:152
 6b7001de	正常	MainWindow.Report.cs:38
 56d75872	参考	MainWindow.Report.cs:39
 22024d48	収集中	MainWindow.Report.cs:40
-5afe281d	異常の前後 10 分の記録を保存しました: {0}	MainWindow.Report.cs:68
-61c7691d	記録を見る	MainWindow.Report.cs:68
-dd7ad3b9	自動（見つかりません）	MainWindow.Report.cs:122
-c4d4fe99	自動（{0}）	MainWindow.Report.cs:122
-096f8d69	使わない（休んでいるときとの差だけで比べる）	MainWindow.Report.cs:123
-29d6a363	{0:N0} 円	MainWindow.Report.cs:224
-074e3049	{0} にワットチェッカーで合わせ込んだ値（CPU・GPU 以外 {1:F0} W・電源の効率 {2:F0}%）で、コンセントから引く電力を計算しています（単価 {3:0.##} 円/kWh）。モニターなどは含みません。アプリが動いている間だけ数えます。	MainWindow.Report.cs:231
-89449c5d	CPU・GPU はセンサーの値、それ以外は {0:F0} W、電源の効率は {1:F0}% として計算した ±20% ほどの目安です（単価 {2:0.##} 円/kWh）。設定の「電気代の計算」でワットチェッカーと合わせ込めます。アプリが動いている間だけ数えます。	MainWindow.Report.cs:232
-c037de9a	CPU {0:F0} W ・ GPU {1:F0} W ・ その他 {2:F0} W ・ 電源の損失 {3:F0} W	MainWindow.Report.cs:234
-83b6ebdd	{0:F2} kWh ・ {1:F1} 時間	MainWindow.Report.cs:242
-2f240cf7	{0:F1} kWh（記録のある日の平均から）	MainWindow.Report.cs:246
-b5d6b2e1	約 {0} ・ {1:F1} 時間	MainWindow.Report.cs:251
-8dec5fdd	約 {0}	MainWindow.Report.cs:253
-c4867bf2	{0:M/d（ddd）}  {1:F2} kWh ・ 約 {2} ・ {3:F1} 時間	MainWindow.Report.cs:261
-df95f0be	記録を読み込んで調べています…	MainWindow.Report.cs:279
-8223041f	 ・ 基準: {0:yyyy/MM/dd} の掃除以降	MainWindow.Report.cs:293
-c427ad3a	{0:HH:mm} に確認 ・ 記録 {1:F0} 日分{2}	MainWindow.Report.cs:294
-00cd1e3b	メンテナンスのお知らせ: {0} に変化があります。	MainWindow.Report.cs:302
-4c563244	診断を見る	MainWindow.Report.cs:304
-5ff17925	調べられませんでした: {0}	MainWindow.Report.cs:310
-aa4e55c3	ファンやフィルター・ラジエーターを掃除しましたか？\n\nこれ以降の記録を新しい基準にして比べます（判定できるまで 10 日ほどかかります）。	MainWindow.Report.cs:322
-d83f7d90	掃除した	MainWindow.Report.cs:323
-b5814c1a	開けませんでした: {0}	MainWindow.Report.cs:360
-5f439d96	消費電力（目安）	MainWindow.Report.cs:372
-039fa193	電力	MainWindow.Report.cs:373
-239f35c2	今日 {0:F2} kWh ・ 約 {1:N0} 円	MainWindow.Report.cs:380
+fe29d679	異常の前後の記録を保存できませんでした（{0}）。	MainWindow.Report.cs:70
+5afe281d	異常の前後 10 分の記録を保存しました: {0}	MainWindow.Report.cs:75
+61c7691d	記録を見る	MainWindow.Report.cs:75
+dd7ad3b9	自動（見つかりません）	MainWindow.Report.cs:129
+c4d4fe99	自動（{0}）	MainWindow.Report.cs:129
+096f8d69	使わない（休んでいるときとの差だけで比べる）	MainWindow.Report.cs:130
+29d6a363	{0:N0} 円	MainWindow.Report.cs:231
+074e3049	{0} にワットチェッカーで合わせ込んだ値（CPU・GPU 以外 {1:F0} W・電源の効率 {2:F0}%）で、コンセントから引く電力を計算しています（単価 {3:0.##} 円/kWh）。モニターなどは含みません。アプリが動いている間だけ数えます。	MainWindow.Report.cs:238
+89449c5d	CPU・GPU はセンサーの値、それ以外は {0:F0} W、電源の効率は {1:F0}% として計算した ±20% ほどの目安です（単価 {2:0.##} 円/kWh）。設定の「電気代の計算」でワットチェッカーと合わせ込めます。アプリが動いている間だけ数えます。	MainWindow.Report.cs:239
+c037de9a	CPU {0:F0} W ・ GPU {1:F0} W ・ その他 {2:F0} W ・ 電源の損失 {3:F0} W	MainWindow.Report.cs:241
+83b6ebdd	{0:F2} kWh ・ {1:F1} 時間	MainWindow.Report.cs:249
+2f240cf7	{0:F1} kWh（記録のある日の平均から）	MainWindow.Report.cs:253
+b5d6b2e1	約 {0} ・ {1:F1} 時間	MainWindow.Report.cs:258
+8dec5fdd	約 {0}	MainWindow.Report.cs:260
+c4867bf2	{0:M/d（ddd）}  {1:F2} kWh ・ 約 {2} ・ {3:F1} 時間	MainWindow.Report.cs:268
+df95f0be	記録を読み込んで調べています…	MainWindow.Report.cs:286
+8223041f	 ・ 基準: {0:yyyy/MM/dd} の掃除以降	MainWindow.Report.cs:300
+c427ad3a	{0:HH:mm} に確認 ・ 記録 {1:F0} 日分{2}	MainWindow.Report.cs:301
+00cd1e3b	メンテナンスのお知らせ: {0} に変化があります。	MainWindow.Report.cs:309
+4c563244	診断を見る	MainWindow.Report.cs:311
+5ff17925	調べられませんでした: {0}	MainWindow.Report.cs:317
+aa4e55c3	ファンやフィルター・ラジエーターを掃除しましたか？\n\nこれ以降の記録を新しい基準にして比べます（判定できるまで 10 日ほどかかります）。	MainWindow.Report.cs:329
+d83f7d90	掃除した	MainWindow.Report.cs:330
+7cd5754e	記録のファイルが見つかりません（消されたか、移されたかもしれません）。	MainWindow.Report.cs:368
+b5814c1a	開けませんでした: {0}	MainWindow.Report.cs:373
+5f439d96	消費電力（目安）	MainWindow.Report.cs:385
+039fa193	電力	MainWindow.Report.cs:386
+239f35c2	今日 {0:F2} kWh ・ 約 {1:N0} 円	MainWindow.Report.cs:393
 a5a18898	最小・最大・平均は {0:HH:mm} から	MainWindow.Settings.cs:28
 b46fd1a2	現在「{0}」が起動中のため「{1}」を使っています	MainWindow.Settings.cs:48
 7cc5282f	新しいプロファイル	MainWindow.Settings.cs:82
@@ -1753,7 +1780,9 @@ e8547f63	現在 {0:F0}°C ／ 最高 {1:F0}°C	MainWindow.Tools.cs:318
 555758d6	冷却テストが終わりました: {0}	MainWindow.Tools.cs:347
 8c1ed861	冷却テストのレポートを保存	MainWindow.Tools.cs:356
 73ba74aa	テキスト (*.txt)|*.txt	MainWindow.Tools.cs:357
-dab5f292	直近の冷却テストの結果を評価して、ファン設定の改善案を教えてください。	MainWindow.Tools.cs:367
+e267eed2	レポートを保存しました: {0}	MainWindow.Tools.cs:364
+1236f4c4	レポートを保存できませんでした。\n{0}	MainWindow.Tools.cs:369
+dab5f292	直近の冷却テストの結果を評価して、ファン設定の改善案を教えてください。	MainWindow.Tools.cs:377
 cb8ee667	いまの版: {0}	MainWindow.Update.cs:28
 5b6c7a62	インストーラーを起動しました。まもなくアプリが終了し、入れ替えたあとに起動し直します。	MainWindow.Update.cs:30
 e1525ed0	新しい版 {0} があります（{1:yyyy/MM/dd} 公開・{2:F0} MB）。	MainWindow.Update.cs:32

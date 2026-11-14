@@ -588,7 +588,6 @@ c0fd45c5	Continue de tourner dans la zone de notification. Pour quitter, faites 
 e586d56a	Zeph-Iris : maintenance
 5b860ae3	Fonctionne en DRY RUN (mode test). Il calcule seulement les vitesses selon les températures ; les ventilateurs ne sont pas pilotés.
 874003cc	Commencer le contrôle
-812bba50	Le fichier de réglages était endommagé ; il a été restauré depuis une sauvegarde ({0:yyyy/MM/dd HH:mm}). Le fichier endommagé est conservé sous config.broken_*.json.
 47b4365f	Zeph-Iris s'est arrêté de façon inattendue ; le processus de surveillance l'a relancé automatiquement. Le contrôle a repris après avoir mis les ventilateurs à une vitesse sûre. La cause figure dans le journal.
 7b249720	Ouvrir le journal
 3a7e2e72	L'application s'est arrêtée de façon inattendue et a été relancée automatiquement.
@@ -1901,3 +1900,33 @@ b148d60e	Impossible de lancer le programme de surveillance.
 c5f9ace5	Températures, charges et ventilateurs couvrent la même période que les FPS : depuis la première image, pendant l’affichage.
 17f1a7c2	Retour à la version précédente ({0}).\n\nLa copie gardée avant la mise à jour est utilisée (rien n’est téléchargé). L’application se ferme une fois, les ventilateurs suivent le BIOS quelques secondes, puis elle redémarre. Les réglages reviennent à ceux d’avant la mise à jour. Les réglages actuels sont gardés dans le dossier backups ; vous pouvez les rétablir avec la sauvegarde « Avant restauration » dans Paramètres → « Sécurité et sauvegarde ». Journaux et enregistrements sont conservés.\n\nRevenir ?
 ff6a2182	Revenir à la version précédente {0} de Zeph-Iris ? (version actuelle {1})\n\nZeph-Iris est fermé (ventilateurs rendus au BIOS), l’exe précédent et les réglages d’avant la mise à jour sont remis, puis il redémarre. Les réglages actuels sont d’abord gardés dans le dossier backups (à rétablir depuis Paramètres → « Sécurité et sauvegarde »).
+0ce1e664	Impossible de changer la langue d'affichage ({0}). Le contrôle des ventilateurs continue. Au redémarrage, l'application s'affichera dans la langue choisie. Redémarrer maintenant ?
+4aa4977a	L'application n'a pas pu redémarrer d'elle-même ({0}). Elle continue de fonctionner telle quelle. Fermez-la une fois, puis relancez-la.
+2b78d413	Impossible d'enregistrer les paramètres ({0}). Les modifications sont actives pour l'instant, mais elles seront perdues si vous fermez l'application ainsi. Vérifiez qu'aucune autre application n'a ouvert config.json et qu'il reste de l'espace disque (l'enregistrement est retenté toutes les 30 s).
+466cf7d7	Les paramètres ont été enregistrés.
+3edcb675	Impossible de passer au mode d'alimentation du profil « {0} ». Vérifiez que le mode d'alimentation choisi existe toujours dans Windows, puis choisissez-le de nouveau dans les paramètres du profil.
+3f6a7367	Impossible de reprendre les paramètres de la version précédente ({0}). Les paramètres de la version précédente sont toujours là. Redémarrez l'application avant de modifier les paramètres pour réessayer.
+f7737c39	Redémarrer
+c4657a17	config.json était ouvert dans une autre application et n'a pas pu être lu : l'application a donc démarré avec la sauvegarde du {0} (config.json n'est pas endommagé). Si vous modifiez les paramètres, il sera remplacé par cette sauvegarde. Redémarrez l'application pour retrouver les paramètres les plus récents.
+4f3dd658	Le fichier de paramètres était endommagé : l'application a donc démarré avec la sauvegarde ({0}), mais elle n'a pas pu être réécrite dans config.json ({1}). Vérifiez que config.json n'est pas en lecture seule.
+720c745a	Le fichier de paramètres était endommagé : il a été restauré à partir de la sauvegarde ({0}). Le fichier endommagé est conservé sous le nom config.broken_*.json.
+224fc585	Le processus de surveillance s'est arrêté {0} fois en 10 minutes. Vérifiez qu'un antivirus ou un logiciel similaire ne l'arrête pas (il est relancé à chaque fois).
+cecb4968	Les couleurs des LED ne sont pas modifiées car OpenRGB est injoignable ({0}). Vérifiez qu'OpenRGB est lancé et que son « serveur SDK » est activé.
+f06249d0	Impossible de démarrer le processus de surveillance ({0}). La protection qui met les ventilateurs à une vitesse sûre si l'application s'arrête brusquement ne fonctionne pas pour l'instant. Essayez de redémarrer l'application.
+05539caa	Un problème est survenu pendant une opération, elle n'est peut-être pas allée jusqu'au bout ({0}). Le contrôle des ventilateurs continue. Si cela se répète, ouvrez le journal et envoyez-le via « Signaler un problème… ».
+96f2c83a	Impossible d'utiliser le raccourci clavier ({0}). Une autre application semble utiliser les mêmes touches.
+45001a5c	Le serveur web pour le téléphone fonctionne, mais aucune règle n'a pu être ajoutée au pare-feu Windows. Si le téléphone n'arrive pas à se connecter, autorisez les connexions au port {0} dans le pare-feu.
+0c6e9512	Impossible de rendre « {0} » au contrôle du BIOS. Il peut rester à sa vitesse actuelle. Vérifiez qu'aucun autre logiciel de contrôle des ventilateurs n'est lancé.
+6b7ec6f2	Le connecteur de « {0} » est introuvable, le test (pleine vitesse) n'a donc pas pu être fait. Vérifiez le câblage et les réglages du BIOS.
+e4133a80	Impossible d'enregistrer l'historique des jeux ({0}).
+8360b734	Impossible de supprimer l'historique des jeux ({0}).
+82c14b71	(Impossible de sauvegarder les paramètres d'avant la modification : {0}. Jusqu'à la fermeture de l'application, vous pouvez revenir en arrière avec « Annuler ».)
+f14b0cd2	Impossible de sauvegarder les paramètres ({0}).
+9e0504b2	Il n'y a encore rien à sauvegarder, car aucun paramètre n'a été enregistré.
+5ac0d44b	Impossible d'importer les paramètres. Les paramètres actuels sont inchangés (si une partie a changé en cours de route, utilisez « Annuler »).\n{0}
+3270468e	Impossible d'adapter les paramètres au nouveau matériel. Les paramètres actuels sont inchangés (si une partie a changé en cours de route, utilisez « Annuler »).\n{0}
+fe29d679	Impossible d'enregistrer les enregistrements d'avant et d'après l'incident ({0}).
+7cd5754e	Le fichier d'enregistrement est introuvable (il a peut-être été supprimé ou déplacé).
+e267eed2	Rapport enregistré : {0}
+1236f4c4	Impossible d'enregistrer le rapport.\n{0}
+df96e04b	Ce fichier ne contient encore aucune courbe enregistrée. Dans FanControl, créez les courbes et attribuez-les aux ventilateurs, puis choisissez « ⋮ » → « Enregistrer » en haut à droite et importez à nouveau.

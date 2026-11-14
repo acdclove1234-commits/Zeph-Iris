@@ -13,6 +13,17 @@ and Iris, the rainbow (the LEDs).
   for example: Settings [設定].
 
 
+■ What's new in v6.15.3 (failures shown on screen, FanControl import)
+  - Failures that were only written to the log now appear as notices in the app (and as a tray notification while the
+    window is closed): settings that cannot be saved (retried every 30 s, with a notice once saved), a power plan that
+    cannot be switched, a watchdog that cannot start or keeps stopping, OpenRGB unreachable for 2 minutes, hotkeys in
+    use, a firewall rule that cannot be added, a fan that cannot be handed back to BIOS, settings from the previous
+    version that cannot be carried over, and failed settings backups/imports, game records, incident records and reports.
+  - When the settings file cannot be read, the notice now says whether another app had it open, it could not be written
+    back, or it was damaged.
+  - FanControl import: matches the current FanControl file format (hysteresis, step up/down speeds and the minimum speed
+    are carried over). Choosing a file that FanControl has not saved yet now says so.
+
 ■ What's new in v6.15.2 (update safeguards, safety review)
   - Updates: if the preparation for going back to the previous version fails, the update is not started (the current
     version keeps controlling the fans).

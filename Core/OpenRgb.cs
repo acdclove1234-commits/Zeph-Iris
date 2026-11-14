@@ -990,6 +990,11 @@ public sealed class RgbDeviceChannel
 /// </summary>
 public sealed class RgbSync : IDisposable
 {
+    /// <summary>OpenRGB につながらなくなった時刻（AudioClock の秒。つながっている・止めているときは NaN）。画面で、長く続いたら知らせる</summary>
+    public double FailingSince { get; private set; } = double.NaN;
+    /// <summary>つながらない理由（最後のもの）</summary>
+    public string LastError { get; private set; } = "";
+
     /// <summary>全デバイスで共有する音楽連動の色（デバイスごとに色がずれないように）</summary>
     private readonly SharedColor _sharedColor = new();
     /// <summary>「確かめていない型番なので OpenRGB を通す」と記録したグラボ（1 台につき 1 回だけ書く）</summary>
@@ -1342,6 +1347,7 @@ public sealed class RgbSync : IDisposable
 
     private void StopLocked(RgbConfig? stopCfg, string status)
     {
+        FailingSince = double.NaN;
         var h = _loop;
         _loop = null;
         if (h is not null)
@@ -1435,6 +1441,7 @@ public sealed class RgbSync : IDisposable
                     client.Connect(cfg.Host, cfg.Port);
                     var devices = client.GetDevices();
                     connected = true;
+                    FailingSince = double.NaN;
                     if (token.IsCancellationRequested) break;
                     _devices = devices;
                     // 見つかったデバイスは、一覧が変わったときだけログに残す（ほかの PC の「光らない」を調べられるように）
@@ -1459,6 +1466,8 @@ public sealed class RgbSync : IDisposable
                     int delay = ReconnectBackoff.DelaySec(failures);
                     string msg = OpenRgbClient.Describe(ex);
                     AutoStart.Disconnected(AudioClock.Now);
+                    LastError = msg;
+                    if (double.IsNaN(FailingSince)) FailingSince = AudioClock.Now;
                     // OpenRGB が動いていなければ起動する（起動したら、短い間隔で繋ぎ直す）
                     string? launched = connected ? null : AutoStart.OnFailure(cfg, AudioClock.Now);
                     if (launched is not null)
