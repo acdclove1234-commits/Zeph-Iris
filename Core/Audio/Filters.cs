@@ -102,6 +102,26 @@ public struct Biquad
         };
     }
 
+    /// <summary>
+    /// ハイパスフィルターを作る（ローパスと同じ式の仲間。ハイハット・スネアの響き線の音を取り出すのに使う）。
+    ///   b0 = b2 = (1 + cos w0) / 2、b1 = −(1 + cos w0)、a0・a1・a2 はローパスと同じ（すべて a0 で割る）
+    /// </summary>
+    public static Biquad HighPass(double sampleRate, double f0, double q)
+    {
+        double w0 = 2 * Math.PI * f0 / sampleRate;
+        double cos = Math.Cos(w0);
+        double alpha = Math.Sin(w0) / (2 * q);
+        double a0 = 1 + alpha;
+        return new Biquad
+        {
+            _b0 = (1 + cos) / 2 / a0,
+            _b1 = -(1 + cos) / a0,
+            _b2 = (1 + cos) / 2 / a0,
+            _a1 = -2 * cos / a0,
+            _a2 = (1 - alpha) / a0,
+        };
+    }
+
     /// <summary>1 個通す（転置直接形 II。計算の誤差がたまりにくい形）</summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public double Process(double x)

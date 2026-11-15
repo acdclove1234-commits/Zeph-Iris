@@ -324,7 +324,6 @@ b0ba1b8f	Xanh dương
 4cba9eab	Cài đặt theo vùng (cổng)
 d64827fc	Có thể đổi hiệu ứng, hướng và tông màu theo từng cổng trên bo mạch chủ cho phù hợp với thứ được cắm (quạt, nguồn, đầu tản nước…). "Giống thiết bị" thì giữ cài đặt ở trên. Những thứ nối tiếp trên cùng một cổng là một vùng
 41860c08	Chỉ đổi hiệu ứng đồng bộ nhạc cho vùng này (VD: quạt két tản nhiệt dùng thanh âm lượng, nguồn dùng đổi màu theo nhịp)
-1642d09b	Khi hiệu ứng là "Mỗi linh kiện một vai", vùng này sáng theo âm nào. "Theo linh kiện" thì quạt theo âm trầm, card đồ họa theo âm trung, RAM và bàn phím theo âm cao. Nếu nhiều vùng của cùng một thiết bị có cùng một âm (như các cổng quạt), chúng lần lượt được gán âm trầm, âm trung và âm cao
 ed5a9363	Hướng
 3d275c1f	Mẹo: với cổng ARGB trên bo mạch chủ không cắm gì, hãy đặt số LED về 0 trong OpenRGB tại Devices → (bo mạch chủ) → "Edit Device" để giảm dữ liệu gửi đi và chuyển động mượt hơn. Đối xứng và Đảo ngược có tác dụng với các hiệu ứng dùng thứ tự LED (phổ âm, thanh âm lượng…).
 6a1f71f3	Bố trí trong thùng máy
@@ -1947,3 +1946,53 @@ c98fd0e4	Không tìm thấy cổng quạt nào.
 a08b13cf	Không thể tắt tự khởi động khi đăng nhập. Trong Cài đặt → "Chung", hãy tắt lại "Tự khởi động khi đăng nhập Windows".
 cd2d0b3c	• Cài đặt quạt hiện tại được giữ nguyên. Hãy đóng bằng "Hủy".
 845000a1	Không tìm thấy cổng quạt nên cài đặt quạt hiện tại được giữ nguyên. Hãy đóng phần mềm khác, khởi động lại ứng dụng rồi chạy thiết lập lần nữa.
+82cfa58e	Mở hướng dẫn sử dụng (thiết lập lần đầu, sử dụng hằng ngày, khắc phục sự cố)
+13d94a85	Hướng dẫn
+b44c9cc9	Trang web OpenRGB
+d279d75b	Mở trang (openrgb.org) để tải OpenRGB (miễn phí), dùng để đổi màu LED
+b6ac496a	Mở hướng dẫn sử dụng
+619bb003	Mở hướng dẫn trong thư mục ứng dụng (hoặc README trên GitHub nếu không có)
+44b1af0b	Không thể mở trình duyệt: {0}
+ce000878	Không thể mở hướng dẫn sử dụng.
+52b3b243	Không tìm thấy OpenRGB. Hãy cài OpenRGB (miễn phí) và khởi động nó (nếu bật "Khởi động OpenRGB nếu nó chưa chạy", ứng dụng này sẽ khởi động OpenRGB đã cài trong Program Files).
+94a21ec2	Cách chia nhạc cụ
+8703d0a3	Với hiệu ứng "Mỗi linh kiện một vai", chọn âm thanh hay nhạc cụ làm sáng vùng có "Âm thanh để phản ứng" là "Theo linh kiện". Âm thanh đã chọn riêng cho từng vùng vẫn giữ nguyên
+876fdd1c	Nhạc cụ được đoán từ âm thanh nên với một số bài sẽ bị nhầm. Âm nhanh (hi-hat, snare) hiện thành các hạt sáng nhỏ; thiết bị cập nhật chậm như card đồ họa, RAM chỉ sáng theo màu của nhạc cụ nổi bật trong từng đoạn bài hát
+5519f7df	Khi dùng một màu thì không phân biệt được nhạc cụ bằng màu. Chọn hiệu ứng "Sáng theo nhạc cụ" để thể hiện nhạc cụ bằng độ sáng, vị trí sáng và chuyển động (kick sáng toàn bộ, hi-hat là hạt nhỏ, giọng hát là độ sáng chung...)
+0d8065a5	Phân tích khoảng 1 giây âm thanh gần nhất mỗi 0,5 giây. Màu đổi dần trong vài giây và không nhấp nháy. Không đổi màu với bảng màu "Chỉ màu đã chọn", "Các màu gần với màu đã chọn", Đồng hồ âm lượng, Đèn chớp và Mỗi linh kiện một vai
+1b6f3970	Nhận biết nhạc cụ bằng AI
+aadf5c4a	Dùng AI (YAMNet) nhận biết nhạc cụ nổi bật trong từng đoạn bài hát (giọng hát, guitar, piano, kèn đồng, synth, đàn dây) và đổi màu chậm rãi (giọng hát màu xanh dương, kèn đồng màu vàng kim, guitar màu cam...). Khi dùng một màu, sẽ đổi cách chuyển động của hiệu ứng "Sáng theo nhạc cụ". Chỉ chạy trong PC và dùng một ít CPU và RAM
+4e43701b	Với hiệu ứng "Mỗi linh kiện một vai", vùng này sáng theo âm nào. "Theo linh kiện" sẽ theo "Cách chia nhạc cụ" (nếu chia theo cao độ: quạt âm trầm, card đồ họa âm trung, RAM và bàn phím âm cao). Nếu nhiều vùng trên cùng thiết bị trùng âm (như các cổng quạt), chúng được chia lần lượt. Cũng có thể chọn một nhạc cụ như kick, snare hoặc giọng hát
+b555c16c	AI nhạc cụ
+dbb80bf4	Tốc độ cần để giữ mục tiêu {0:F0}°C: {1:F0}% trở xuống (đã dừng giữa chừng nên chưa đo được tốc độ thấp hơn)
+da6452ac	Lưu trữ
+bb721e17	Bo mạch chủ, v.v.
+50030dc4	{0}: đường cong "{1}" có vẻ dùng sai cảm biến
+3959777c	Trong cấu hình "{0}", "{1}" theo tên thì có vẻ là đường cong {2}, nhưng lại đọc nhiệt độ "{3}" ({4}). Khi {5} nóng lên, đường cong này sẽ không tăng tốc độ quay.
+4059ff76	Chuyển sang "{0}"
+8b8b7a36	Đã chuyển nhiệt độ của "{1}" trong cấu hình "{0}" sang "{2}".
+08d8c54e	{0}: quạt GPU chỉ chạy theo nhiệt độ ổ lưu trữ
+3ba7001c	Trong cấu hình "{0}", quạt này chỉ đọc "{1}". Khi GPU nóng lên lúc chơi game, quạt sẽ không quay nhanh hơn.
+d71badc6	Chuyển sang dựa trên "{0}"
+d0514409	Đã chuyển sang đường cong chuẩn dựa trên "{1}" trong cấu hình "{0}".
+dc31499c	Cảm biến ảo "{0}": không đọc được cảm biến nguồn ({1}) nên chỉ tính từ các cảm biến còn lại.
+a0b3b7dd	Sáng theo nhạc cụ
+3c260d3f	Kick sáng toàn bộ, snare sáng một bên, hi-hat là hạt nhỏ, bass ở phía rìa, giọng hát là độ sáng chung, guitar và phím đàn là dải sáng chạy. Vẫn phân biệt được nhạc cụ dù chỉ một màu (Chỉ màu đã chọn)
+d3efe37c	Theo từng nhạc cụ
+e8d8b63a	Chỉ trống
+31b76718	Cao độ (trầm, trung, cao)
+ce37ccb7	Mỗi linh kiện sáng theo một nhạc cụ riêng, như quạt theo kick, RAM và bàn phím theo hi-hat, card đồ họa theo giọng hát. Nếu có nhiều cổng quạt, chúng được chia lần lượt cho kick, snare, hi-hat và bass
+c7cc18b1	Chỉ sáng theo kick, snare và hi-hat. Không sáng theo guitar hay giọng hát
+7b659d5a	Chia theo cao độ, như quạt theo âm trầm, card đồ họa theo âm trung, RAM theo âm cao (như trước đây)
+c33f330a	Kick
+8b911b1b	Snare
+7ae7bcde	Hi-hat và cymbal
+f5489867	Bass (nhạc cụ)
+412c6fd5	Giọng hát và lead
+203562ee	Hợp âm (phím đàn, guitar)
+dac2be1c	Pad và synth
+64270fa4	{0}: đã dừng giữa chừng, chưa đo tới tốc độ thấp nhất giữ được mục tiêu, nên không tạo đường cong và giữ đường cong hiện tại ({1})
+d5a051f9	Tốc độ cần để giữ {0:F0}°C: {1:F0}% trở xuống (chưa đo được tốc độ thấp hơn)
+0c8c7106	* Chưa đo tới tốc độ thấp nhất giữ được mục tiêu, nên dù bấm Áp dụng, đường cong này cũng không được đặt (giữ đường cong hiện tại)
+e2a336cd	Chưa đo tới tốc độ thấp nhất giữ được mục tiêu, nên đã không đặt đường cong (giữ đường cong hiện tại).
+90a68504	Dưới {0:F0}%, tốc độ quay gần như không đổi (tốc độ tối thiểu của chính quạt).

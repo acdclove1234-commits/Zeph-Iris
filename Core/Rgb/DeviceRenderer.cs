@@ -58,6 +58,8 @@ public sealed class RenderInput
     public bool AllowDither = true;
     /// <summary>全デバイスで共有する色の位置（null ならデバイスごとに数える）。RgbSync が 1 つ作って全デバイスに渡す</summary>
     public SharedColor? SharedColor;
+    /// <summary>曲の部分ごとに目立つ楽器（楽器の AI。使っていなければ場面なし）。RgbSync が 1 コマに 1 回読んで全デバイスに渡す</summary>
+    public MusicScene Scene = MusicScene.None;
 }
 
 /// <summary>
@@ -68,7 +70,8 @@ public sealed class RenderInput
 ///   3. 音楽連動以外のモードは RgbEffects（これまでと同じ見た目）
 ///   4. 音楽連動: ビートの計算（BeatDriver）→ 光り方（IMusicEffect）→ 音が止まったときの光り方と混ぜる（IdleMixer）
 ///   5. 明るさを掛け、モード・光り方・パレットを変えた直後は 0.4 秒のクロスフェード（SnapshotFade）
-///   6. OutputStage で 0〜255 にする（速いデバイスは暗い色をディザリング）
+///   6. 音楽連動は、LED ごとに明るさの向きが短い間に戻らないようにする（LedSteady。ちらつき止め）
+///   7. OutputStage で 0〜255 にする（音楽連動・雷などは前に送った値を保つ書き方、同期テストなどは暗い色をディザリング）
 /// 毎コマの処理では new しない（配列は LED の数・設定が変わったときだけ作り直す）
 /// </summary>
 public sealed class DeviceRenderer
@@ -103,6 +106,8 @@ public sealed class DeviceRenderer
     private readonly SnapshotFade _fade = new();
     private readonly OutputStage _out = new();
     private readonly AttackHold _attack = new();
+    private readonly LedSteady _steady = new();
+    private LedSteady.Kind[] _steadyKinds = Array.Empty<LedSteady.Kind>();
     private readonly SectionMeter _section = new();
     private readonly IMusicEffect?[] _effects = new IMusicEffect?[EffectCatalog.VariantCount];
     private readonly int[] _effectLayout = new int[EffectCatalog.VariantCount];
@@ -120,6 +125,7 @@ public sealed class DeviceRenderer
     private RgbDeviceSettings? _settingsRef;
     private string _layoutKey = "";
     private string _caseKey = "";
+    private string _roleSet = MusicRoleSets.Bands;
     private double[] _pos = Array.Empty<double>();
     // ゾーンごとの光り方（まとまりごと。null ならデバイスの光り方）と、このコマで使う光り方
     private string?[] _segEffect = Array.Empty<string?>();
@@ -288,6 +294,32 @@ public sealed class DeviceRenderer
         || (Device.IsGpu && variant is EffectVariant.BeatHue or EffectVariant.BeatHueSlow or EffectVariant.Pulse
             or EffectVariant.PulseSlow or EffectVariant.PulseLoudSlow);
 
+    /// <summary>0.4 秒のクロスフェードの途中（テスト用）</summary>
+    internal bool Crossfading => _fade.Active;
+
+    // 前のコマの楽器の AI の場面と、そのときの「AI で楽器を聞き分ける」
+    private MusicScene _lastScene = MusicScene.None;
+    private bool _lastSceneColors;
+
+    /// <summary>場面がパレットの色のまま（移り変わりも終わっている）か</summary>
+    private static bool SceneSettledNone(MusicScene s, double t) => s.Group == SceneGroup.None && s.Progress(t) >= 1;
+
+    /// <summary>
+    /// 楽器の AI の場面（色・光り方）が、ゆっくり移り変わらずに変わったか（前のコマと比べる）。
+    /// ふつうの切り替えは、前の場面が移り終わってから、新しい場面が移り変わりの始め（0〜5%）で届くので、変わったことにしない
+    /// </summary>
+    private bool SceneJumped(MusicScene s, bool on, double t)
+    {
+        var old = _lastScene;
+        bool wasOn = _lastSceneColors;
+        _lastScene = s;
+        _lastSceneColors = on;
+        if (on != wasOn) return !(SceneSettledNone(old, t) && SceneSettledNone(s, t));
+        if (!on || ReferenceEquals(s, old) || s == old) return false;
+        if (SceneSettledNone(old, t) && SceneSettledNone(s, t)) return false;
+        return !(s.From == old.Group && old.Progress(t) >= 0.98f && s.Progress(t) <= 0.05f);
+    }
+
     /// <summary>1 コマ描いて output（長さ = LED の数）に入れる</summary>
     public void Render(RenderInput input, Rgb[] output)
     {
@@ -297,7 +329,7 @@ public sealed class DeviceRenderer
         if (n == 0) return;
         var cfg = input.Cfg ?? new RgbConfig();
         var settings = input.Device ?? new RgbDeviceSettings();
-        EnsureLayout(n, settings, cfg);
+        EnsureLayout(n, settings, cfg, input.Music?.RoleSet);
         float dt = MeasureDt(input);
         if (!ReferenceEquals(cfg.StaticColor, _staticHex))
         {
@@ -342,8 +374,10 @@ public sealed class DeviceRenderer
             || (layer == Layer.Mode && cfg.Mode != _mode)
             || (layer == Layer.Music && (variant != _variant || zoneSig != _zoneSig || !ReferenceEquals(_palette, _pal) || music.IdleEffect != _idleName));
         // 緊急の赤い点滅が終わったときも、赤からクロスフェードする（音楽連動の状態はそのまま続ける）
+        // 楽器の AI の場面が、ゆっくり移らずに変わったとき（オンオフ・AI を止めた・付け直した）も同じ
         // （ちかちかしやすいデバイスは、途中の色を何度も送ることになるのでクロスフェードしない）
-        if ((changed || afterEmergency) && _hasLast && (_layer != Layer.None || afterEmergency) && !Device.IsLowWrite) _fade.Start(_light, input.T);
+        bool sceneJump = layer == Layer.Music && SceneJumped(input.Scene ?? MusicScene.None, music.SceneColors, input.TEval);
+        if ((changed || afterEmergency || sceneJump) && _hasLast && (_layer != Layer.None || afterEmergency) && !Device.IsLowWrite) _fade.Start(_light, input.T);
         if (changed)
         {
             if (layer == Layer.Music && _layer != Layer.Music) _idle.Reset();
@@ -413,25 +447,55 @@ public sealed class DeviceRenderer
         }
         _fade.Apply(_light, input.T);
         // 音楽連動: 明るくなった直後の小さな下がりを止める（低音の値の上下で、光の立ち上がりが段つきになってちらつく）。
-        // ゾーン全体が一緒に明るくなる光り方だけ（波紋・テンポ追従など光が動く光り方では、通り過ぎた光が残って尾を引くため）。
+        // 波紋・ストロボ・ムード・音量メーター・エナジーは使わない（AttackHold.Applies）。
         // 書き込みを減らすデバイス（グラボ）は、光り方の側で立ち上がりを遅らせているので使わない
         if (layer == Layer.Music && !Device.IsLowWrite && AttackHold.Applies(variant)) _attack.Apply(_light, n, dt);
         else _attack.Reset();
-        // ディザリングは、1 秒に何十回も送る速いデバイスで、動きのある光り方だけ（止まった色は毎回同じ値を送る）
+        // 音楽連動: LED ごとに、明るさの向きが短い間に戻らないようにする（ちらつき止め。ストロボの LED は除く）。
+        // 書き込みを減らすデバイス（グラボ）は明るさを一定にしているので使わない
+        if (afterEmergency) _steady.Reset();
+        if (layer == Layer.Music && !Device.IsLowWrite && SteadyKinds(variant) is var (any, kinds, kind) && any) _steady.Apply(_light, n, dt, kinds, kind);
+        else _steady.Reset();
+        // ディザリングは、1 秒に何十回も送る速いデバイスで、同期テストと、音楽連動以外の切り替えのクロスフェードだけ
         // 送る速さが下がって間引くようになったら、持ち越していた端数を捨てる（戻ったときに古い端数を使わない）
         bool allow = !Device.IsSlow && input.AllowDither;
         if (!allow && _ditherAllowed) _out.Reset();
         _ditherAllowed = allow;
         // 虹・呼吸などでは使わない（OpenRGB が間引いて書くと端数の持ち越しがずれて、暗い色がちらつくことがあるため）。
-        // 雷・波・オーロラなど暗いところがゆっくり変わる光り方は、前に送った値を保つ書き方にする（下の WriteHold）。
+        // 雷・波・オーロラなど暗いところがゆっくり変わる光り方と音楽連動は、前に送った値を保つ書き方にする（下の WriteHold）。
+        // 音楽連動でディザリングすると、暗い LED が隣どうしの段を 2・3・2・3 と行き来してちらついて見えるため。
         // 書き込みを減らすデバイス（グラボ）は止まった絵なので、ふつうに四捨五入する
         bool ambient = layer == Layer.Mode && !Device.IsLowWrite && (AmbientEffects.Handles(cfg.Mode) || _planHasAmbient);
-        bool dither = allow && (layer is Layer.Music or Layer.SyncTest || _fade.Active);
+        bool hold = !Device.IsLowWrite && (ambient || layer == Layer.Music);
+        bool dither = allow && (layer == Layer.SyncTest || (_fade.Active && layer != Layer.Music));
         _out.DitherFloorCode = 0f;
-        // 雷・波など: ディザリングの代わりに、前に送った値を保つ（暗い色が 2・3・2・3 と行き来しない）
-        if (ambient && !dither) _out.WriteHold(_light, output, 1f);
+        // 雷・波・音楽連動: ディザリングの代わりに、前に送った値を保つ（暗い色が 2・3・2・3 と行き来しない）
+        if (hold && !dither) _out.WriteHold(_light, output, 1f);
         else _out.Write(_light, output, 1f, dither);
         _hasLast = true;
+    }
+
+    /// <summary>
+    /// ちらつき止め（LedSteady）の LED ごとの直し方。ゾーンごとの光り方がなければ、デバイスの光り方で全部同じ（kinds は null）。
+    /// ゾーンごとに選んだ光り方があれば、ゾーンの光り方ごと（ストロボのゾーンの LED は直さない）
+    /// </summary>
+    private (bool Any, LedSteady.Kind[]? Kinds, LedSteady.Kind Kind) SteadyKinds(EffectVariant variant)
+    {
+        var kind = LedSteady.KindOf(variant);
+        if (!_hasZoneEffects) return (kind != LedSteady.Kind.Skip, null, kind);
+        int n = _light.Length;
+        if (_steadyKinds.Length != n) _steadyKinds = new LedSteady.Kind[n];
+        Array.Fill(_steadyKinds, kind);
+        var c = _ctx;
+        for (int k = 0; k < c.SegmentCount && k < _segVariant.Length; k++)
+        {
+            var s = c.Segments[k];
+            var zk = LedSteady.KindOf(_segVariant[k]);
+            for (int j = s.Start; j < s.Start + s.Count && j < n; j++) _steadyKinds[j] = zk;
+        }
+        bool any = false;
+        foreach (var zk in _steadyKinds) any |= zk != LedSteady.Kind.Skip;
+        return (any, _steadyKinds, kind);
     }
 
     /// <summary>前のコマからの秒数。描画の時刻 T の差（なければ input.Dt）を 0〜0.25 秒に収める</summary>
@@ -448,13 +512,16 @@ public sealed class DeviceRenderer
     /// 設定のオブジェクトが同じなら何もしない。変わっても、並びの中身が同じなら並びは作り直さない
     /// （明るさなどほかの設定を変えただけで、光り方が最初からにならないように）
     /// </summary>
-    private void EnsureLayout(int n, RgbDeviceSettings settings, RgbConfig cfg)
+    private void EnsureLayout(int n, RgbDeviceSettings settings, RgbConfig cfg, string? roleSet)
     {
         // ケースの配置（オン・オフと流れる向き）は全体の設定なので、デバイスの設定とは別に見る
         string caseKey = cfg.CaseLayout ? CaseDirections.Normalize(cfg.CaseDirection) : "";
-        if (n == _layoutN && ReferenceEquals(settings, _settingsRef) && caseKey == _caseKey) return;
+        // 「パーツに合わせる」のゾーンの分け方（音の高さ・楽器ごと・ドラムだけ）も全体の設定
+        roleSet = MusicRoleSets.Normalize(roleSet);
+        if (n == _layoutN && ReferenceEquals(settings, _settingsRef) && caseKey == _caseKey && roleSet == _roleSet) return;
         _settingsRef = settings;
         _caseKey = caseKey;
+        _roleSet = roleSet;
         // ファンごとに分けたゾーン（RgbZoneSettings.Fans）は、分けた部分をそれぞれ 1 つのゾーンとして扱う
         _zx = RgbZoneSplit.Expand(Device.Zones, Device.ZoneName, settings);
         RgbEffects.SegmentZones(n, _zx.Zones, _segZones);
@@ -479,15 +546,15 @@ public sealed class DeviceRenderer
             zoneSet[k] = z;
             key.Append('|').Append(z?.Mirror?.ToString() ?? "-").Append(',').Append(z?.Reverse?.ToString() ?? "-").Append(',').Append(z?.Place ?? "");
             // 反応する音（光り方「パーツごとの役割」用。設定がなければパーツの種類・ケースの中の場所から決める）
-            natural[k] = MusicSounds.Resolve(z?.Sound, Device, _zx.Name(Math.Max(0, zone)), z?.Place);
+            natural[k] = MusicSounds.Resolve(z?.Sound, Device, _zx.Name(Math.Max(0, zone)), z?.Place, roleSet);
             autoSound[k] = MusicSounds.Normalize(z?.Sound) == MusicSounds.Auto;
             segLeds[k] = _segZones[k].Length;
             string? effect = z is null || z.Effect == RgbZoneSettings.SameAsDevice ? null : z.Effect;
             _segEffect[k] = effect;
             if (effect is not null) _hasZoneEffects = true;
         }
-        // 同じ音になった「パーツに合わせる」のゾーンが 2 つ以上あれば、低音・中音・高音に振り分ける
-        _segRole = MusicSounds.Spread(natural, autoSound, segLeds);
+        // 同じ音になった「パーツに合わせる」のゾーンが 2 つ以上あれば、低音・中音・高音（楽器ごとなら キック・スネア・ハイハット…）に振り分ける
+        _segRole = MusicSounds.Spread(natural, autoSound, segLeds, roleSet);
         foreach (var role in _segRole) key.Append(',').Append((int)role);
         BuildGains(n, settings);
         BuildLightPlan(n, settings);
@@ -619,10 +686,13 @@ public sealed class DeviceRenderer
         c.F0 = OutputStage.Floor(floor, cfg.Gamma);
         c.Pal = _palette;
         c.Slow = EffectCatalog.IsSlowVariant(variant);
+        c.SlowDevice = Device.IsSlow || Device.IsLowWrite || Device.DirectGpu;   // 直接書き込むグラボも 1 秒に 10 回まで
         c.NoFade = lowWrite;
         c.Speed = (float)music.Speed;
         c.Frame = input.Frame ?? _silent;
         c.Beat = input.Beat ?? BeatState.None;
+        c.Scene = input.Scene ?? MusicScene.None;
+        c.SceneOn = ScenePalettes.Applies(music, variant);
         c.Events = input.Events;
         c.Features = input.Features;
         c.Beats = _beat;
@@ -635,6 +705,7 @@ public sealed class DeviceRenderer
         else if (t1 - t0 > 0.5) t0 = t1 - dt;         // 初回・長く止まっていた
         c.TPrev = t0;
         c.T = t1;
+        c.Now = input.T;
         c.Dt = dt;
         SampleWindow(input.Features, t0, t1);
         c.Section = _section.Update(c.Frame, dt);
@@ -709,10 +780,12 @@ public sealed class DeviceRenderer
             _effectLayout[i] = _ctx.LayoutVersion;
         }
         _effectFrame[i] = _frame;
-        bool slow = _ctx.Slow;
+        bool slow = _ctx.Slow, sceneOn = _ctx.SceneOn;
         _ctx.Slow = EffectCatalog.IsSlowVariant(v);
+        _ctx.SceneOn = ScenePalettes.Applies(_ctx.Music, v);
         fx.Update(_ctx);
         _ctx.Slow = slow;
+        _ctx.SceneOn = sceneOn;
         return fx;
     }
 
@@ -729,10 +802,12 @@ public sealed class DeviceRenderer
                 fx.Render(c, c.Segments[k], dst);
                 continue;
             }
-            bool slow = c.Slow;
+            bool slow = c.Slow, sceneOn = c.SceneOn;
             c.Slow = EffectCatalog.IsSlowVariant(v);
+            c.SceneOn = ScenePalettes.Applies(c.Music, v);
             fx.Render(c, c.Segments[k], dst);
             c.Slow = slow;
+            c.SceneOn = sceneOn;
         }
     }
 
@@ -742,6 +817,15 @@ public sealed class DeviceRenderer
     /// ちかちかしやすいデバイスのムードは、色を 20 秒ごとに一度に進める（少しずつ書き換えない）
     /// </summary>
     private void RenderIdle(RenderInput input, RgbConfig cfg, ResolvedMusic music)
+    {
+        // 音が止まったときの光り方は、楽器の AI の場面の色を使わない（選んだパレットのまま）
+        bool sceneOn = _ctx.SceneOn;
+        _ctx.SceneOn = false;
+        RenderIdleCore(input, cfg, music);
+        _ctx.SceneOn = sceneOn;
+    }
+
+    private void RenderIdleCore(RenderInput input, RgbConfig cfg, ResolvedMusic music)
     {
         switch (music.IdleEffect)
         {

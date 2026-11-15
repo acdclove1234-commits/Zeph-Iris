@@ -324,7 +324,6 @@ b0ba1b8f	Blau
 4cba9eab	Einstellungen pro Zone (Anschluss)
 d64827fc	Ändern Sie Effekt, Richtung und Farbton für jeden Mainboard-Anschluss passend zum Angeschlossenen (Lüfter, Netzteil, Wasserkühlungskopf usw.). „Wie Gerät“ behält die Einstellungen oben. Was am selben Anschluss in Reihe hängt, ist eine Zone
 41860c08	Ändert den Musikeffekt nur für diese Zone (z. B. Pegelanzeige für die Radiatorlüfter, Farbwechsel im Takt für das Netzteil)
-1642d09b	Beim Effekt „Bauteile in ihren Rollen“: auf welchen Ton diese Zone reagiert. „Zum Bauteil passend“: Lüfter Bass, Grafikkarte Mitten, Arbeitsspeicher und Tastatur Höhen. Bekommen mehrere Zonen desselben Geräts denselben Ton (etwa Lüfteranschlüsse), werden ihnen der Reihe nach Bass, Mitten und Höhen zugeteilt
 ed5a9363	Richtung
 3d275c1f	Tipp: Für ARGB-Anschlüsse des Mainboards ohne angeschlossenes Gerät in OpenRGB unter Devices → (Mainboard) → „Edit Device“ die LED-Anzahl auf 0 setzen. So werden weniger Daten gesendet und Bewegungen werden flüssiger. Spiegeln und Umkehren wirken bei Effekten, die die LED-Reihenfolge nutzen (Spektrum, Pegelanzeige usw.).
 6a1f71f3	Anordnung im Gehäuse
@@ -1947,3 +1946,53 @@ c98fd0e4	Es wurden keine Lüfteranschlüsse gefunden.
 a08b13cf	Der Start bei der Anmeldung konnte nicht ausgeschaltet werden. Schalten Sie unter Einstellungen → „Allgemein“ die Option „Bei der Windows-Anmeldung automatisch starten“ erneut aus.
 cd2d0b3c	• Ihre aktuellen Lüftereinstellungen bleiben unverändert. Schließen Sie dieses Fenster mit „Abbrechen“.
 845000a1	Es wurden keine Lüfteranschlüsse gefunden, daher bleiben Ihre aktuellen Lüftereinstellungen unverändert. Beenden Sie die andere Software, starten Sie die App neu und führen Sie die Einrichtung dann erneut durch.
+82cfa58e	Öffnet die Bedienungsanleitung (Ersteinrichtung, tägliche Nutzung, Fehlerbehebung)
+13d94a85	Anleitung
+b44c9cc9	OpenRGB-Website
+d279d75b	Öffnet die Seite (openrgb.org), auf der es OpenRGB (kostenlos) gibt, das zum Ändern der LED-Farben verwendet wird
+b6ac496a	Anleitung öffnen
+619bb003	Öffnet die Anleitung im App-Ordner (falls nicht vorhanden, die README auf GitHub)
+44b1af0b	Browser konnte nicht geöffnet werden: {0}
+ce000878	Die Anleitung konnte nicht geöffnet werden.
+52b3b243	OpenRGB wurde nicht gefunden. Bitte installiere OpenRGB (kostenlos) und starte es (wenn du „OpenRGB starten, wenn es nicht läuft“ einschaltest, startet diese App das in Program Files installierte OpenRGB).
+94a21ec2	Instrumentaufteilung
+8703d0a3	Beim Effekt „Bauteile in ihren Rollen“: welcher Ton oder welches Instrument eine Zone beleuchtet, deren „Ton, auf den reagiert wird“ auf „Zum Bauteil passend“ steht. Für einzelne Zonen gewählte Töne bleiben unverändert
+876fdd1c	Instrumente werden aus dem Klang erraten, daher werden sie bei manchen Songs verwechselt. Schnelle Klänge (Hi-Hats, Snares) erscheinen als kleine Lichtpunkte. Langsam aktualisierende Geräte wie Grafikkarten und Arbeitsspeicher zeigen nur die Farbe des Instruments, das im jeweiligen Songabschnitt hervortritt
+5519f7df	Mit einer einzigen Farbe lassen sich Instrumente nicht über die Farbe unterscheiden. Mit dem Effekt „Instrumente“ werden sie stattdessen über Helligkeit, Position und Bewegung gezeigt (der Kick lässt alles leuchten, Hi-Hats sind kleine Lichtpunkte, der Gesang bestimmt die Gesamthelligkeit usw.)
+0d8065a5	Prüft alle 0,5 Sekunden etwa die letzte Sekunde Ton. Die Farben wechseln über einige Sekunden und blinken nie. Bei den Paletten „Nur die gewählte Farbe“ und „Farben ähnlich der gewählten Farbe“ sowie bei Pegelanzeige, Stroboskop und „Bauteile in ihren Rollen“ ändern sich die Farben nicht
+1b6f3970	Instrumente per AI erkennen
+aadf5c4a	AI (YAMNet) erkennt das Instrument, das im jeweiligen Songabschnitt hervortritt (Gesang, Gitarre, Klavier, Blechbläser, Synthesizer, Streicher), und ändert die Farben langsam (Blau für Gesang, Gold für Blechbläser, Orange für Gitarre usw.). Bei einer einzigen Farbe ändert sie stattdessen die Bewegung des Effekts „Instrumente“. Läuft nur auf diesem PC und nutzt etwas CPU und Arbeitsspeicher
+4e43701b	Beim Effekt „Bauteile in ihren Rollen“: welcher Ton diese Zone beleuchtet. „Zum Bauteil passend“ folgt der „Instrumentaufteilung“ (nach Tonhöhe: Lüfter Bässe, Grafikkarte Mitten, Arbeitsspeicher und Tastaturen Höhen). Erhalten mehrere Zonen desselben Geräts denselben Ton (z. B. Lüfteranschlüsse), werden sie der Reihe nach aufgeteilt. Sie können auch ein einzelnes Instrument wählen, etwa Kick, Snare oder Gesang
+b555c16c	Instrument-AI
+dbb80bf4	Benötigte Drehzahl für {0:F0} °C: höchstens {1:F0} % (vorzeitig beendet, niedrigere Drehzahlen wurden nicht gemessen)
+da6452ac	Datenträger
+bb721e17	Mainboard und Sonstiges
+50030dc4	{0}: Die Kurve „{1}“ scheint den falschen Sensor zu nutzen
+3959777c	Im Profil „{0}“ sieht „{1}“ dem Namen nach wie eine {2}-Kurve aus, liest aber „{3}“ ({4}). Wird die {5} heiß, erhöht diese Kurve die Drehzahl nicht.
+4059ff76	Zu „{0}“ wechseln
+8b8b7a36	Im Profil „{0}“ wurde die Temperatur für „{1}“ auf „{2}“ umgestellt.
+08d8c54e	{0}: Der GPU-Lüfter richtet sich nur nach einer Datenträgertemperatur
+3ba7001c	Im Profil „{0}“ richtet sich dieser Lüfter nur nach „{1}“. Wird die GPU etwa beim Spielen heiß, dreht er nicht höher.
+d71badc6	Zu einer Kurve auf Basis von „{0}“ wechseln
+d0514409	Im Profil „{0}“ wurde zur Standardkurve auf Basis von „{1}“ gewechselt.
+dc31499c	Virtueller Sensor „{0}“: Die Quellsensoren ({1}) können nicht gelesen werden, daher wird nur mit den übrigen Sensoren gerechnet.
+a0b3b7dd	Instrumente
+3c260d3f	Der Kick lässt alles leuchten, die Snare eine Seite, Hi-Hats kleine Lichtpunkte, der Bass das äußere Ende, der Gesang die Gesamthelligkeit, Gitarre oder Tasten ein fließendes Licht. Instrumente sind auch mit einer Farbe (Nur die gewählte Farbe) unterscheidbar
+d3efe37c	Nach Instrument
+e8d8b63a	Nur Schlagzeug
+31b76718	Nach Tonhöhe (Bässe, Mitten, Höhen)
+ce37ccb7	Jedes Bauteil leuchtet zu seinem eigenen Instrument: Lüfter zum Kick, Arbeitsspeicher und Tastaturen zu Hi-Hats, die Grafikkarte zum Gesang usw. Bei mehreren Lüfteranschlüssen wird der Reihe nach in Kick, Snare, Hi-Hat und Bass aufgeteilt
+c7cc18b1	Leuchtet nur zu Kick, Snare und Hi-Hat. Gitarre und Gesang lösen nichts aus
+7b659d5a	Aufteilung nach Tonhöhe: Lüfter für Bässe, Grafikkarte für Mitten, Arbeitsspeicher für Höhen (wie bisher)
+c33f330a	Kick
+8b911b1b	Snare
+7ae7bcde	Hi-Hat und Becken
+f5489867	Bass (Instrument)
+412c6fd5	Gesang und Lead
+203562ee	Akkorde (Tasten, Gitarre)
+dac2be1c	Pads und Synthesizer
+64270fa4	{0}: Vorzeitig beendet, bevor die niedrigste Drehzahl erreicht war, die das Ziel hält; daher wurde keine Kurve erstellt und die aktuelle Kurve bleibt ({1})
+d5a051f9	Benötigte Drehzahl für {0:F0} °C: höchstens {1:F0} % (niedrigere Drehzahlen wurden nicht gemessen)
+0c8c7106	* Die niedrigste Drehzahl, die das Ziel hält, wurde nicht gemessen; diese Kurve wird daher auch beim Anwenden nicht übernommen (die aktuelle Kurve bleibt)
+e2a336cd	Die niedrigste Drehzahl, die das Ziel hält, wurde nicht gemessen, daher wurde keine Kurve übernommen (die aktuelle Kurve bleibt).
+90a68504	Unter {0:F0} % ändert sich die Drehzahl kaum (eigene Mindestdrehzahl des Lüfters).

@@ -1475,9 +1475,12 @@ public sealed class RgbSync : IDisposable
                         failures = 0;
                         delay = AfterLaunchRetrySec;
                     }
+                    // この PC に OpenRGB が入っていなければ、くり返し「接続できません」とだけ出さず、入れるよう案内する
+                    bool missing = launched is null && !connected && OpenRgbAutoStart.IsLocal(cfg.Host)
+                                   && OpenRgbAutoStart.NotInstalled(OpenRgbAutoStart.Inspect());
                     SetStatus(h, launched ?? (connected
                         ? L($"OpenRGB との接続が切れました（{delay} 秒後に繋ぎ直します）: {msg}")
-                        : L($"接続できません（{delay} 秒後に再試行）: {msg}")));
+                        : L($"接続できません（{delay} 秒後に再試行）: {msg}") + (missing ? "\n" + OpenRgbAutoStart.MissingText(cfg.AutoStartOpenRgb) : "")));
                     PublishDisconnected(h, msg);
                     if (msg != lastLogged)
                     {
@@ -1648,6 +1651,8 @@ public sealed class RgbSync : IDisposable
             catch { engine = null; }
         }
         var beat = engine?.Beat ?? BeatState.None;
+        // 楽器の AI の場面（1 コマに 1 回だけ読み、全デバイスに同じものを渡す。移り変わりは各デバイスが同じ時刻の式で計算する）
+        var musicScene = engine?.Scene ?? MusicScene.None;
         bool whiteTest = _whiteTest;
         // 音楽連動で「遅いデバイスをほかのデバイスの色に合わせる」ときは、速いデバイスを先に描いて、その色から代表の色を作る
         bool follow = cfg.Mode == RgbModes.Music && cfg.MatchSlowDevices && !whiteTest && !syncTest && !emergency;
@@ -1661,6 +1666,7 @@ public sealed class RgbSync : IDisposable
             // 1 回目は速いデバイス（合わせる元）、2 回目は合わせるデバイス。合わせないときは 1 回目で全部描く
             if (pass == 0 ? follower : !follower) continue;
             ch.Input.WhiteTest = whiteTest;
+            ch.Input.Scene = musicScene;
             ch.Input.FollowColor = null;
             if (follower && haveLeader && scene.TryGet(out var sceneColor, out float sceneLevel))
             {

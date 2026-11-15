@@ -354,8 +354,13 @@ public partial class MainWindow
         if (result is null) return;
         string what = kind == SetupStepKind.TuneGpu ? "GPU" : "CPU";
         Logger.Info($"自動セットアップ: {what} の結果\n" + result.ToText(TargetFor(kind)));
-        if (result.Usable) _tuneResults[kind] = result;
-        if (result.AbortReason is not null)
+        // 途中で終わり、どの段も目標以下だったときは、必要な回転数が分からない（測った段より低くてよいかもしれない）。
+        // 測った段をそのまま「必要な回転数」にするとうるさいカーブになるので、結果にせず今のカーブのままにする
+        bool known = result.NeedKnown(TargetFor(kind));
+        if (known) _tuneResults[kind] = result;
+        if (result.Usable && !known)
+            _setupNotes.Add(L($"{what}: 途中で終わり、目標を守れるいちばん低い回転数まで測れなかったため、カーブは作らず今のカーブのままにしました（{result.AbortReason ?? L("中断")}）"));
+        else if (result.AbortReason is not null)
             _setupNotes.Add(result.Usable ? L($"{what}: 途中で終わったため、測れた段だけでカーブを作りました（{result.AbortReason}）") : $"{what}: {result.AbortReason}");
     }
 
@@ -468,11 +473,16 @@ public partial class MainWindow
         TuneIdleText.Text = L($"{r.SensorName} ・ 待機時 {r.IdleTemp:F1}°C ・ 全力で負荷をかけたとき:");
         TuneSteps.ItemsSource = r.Steps.Select(st => new TuneStepVm { Step = st, Target = target }).ToList();
         var (need, insufficient) = AutoTuner.RequiredDuty(r.Steps, target);
+        bool known = r.NeedKnown(target);
         TuneNeedText.Text = insufficient
             ? L($"全開でも {target:F0}°C は守れません（冷却の強化を検討してください）")
-            : L($"{target:F0}°C を守るのに必要な回転数: 約 {Math.Max(need, minDuty):F0}%");
-        TuneNeedText.Foreground = insufficient ? Palette.Danger : Palette.Ok;
-        TuneAbortText.Text = r.AbortReason is null ? "" : L($"※ 途中で終わったため、測れた段だけで作っています（{r.AbortReason}）");
+            : !known
+                ? L($"{target:F0}°C を守るのに必要な回転数: {Math.Max(need, minDuty):F0}% 以下（これより低い回転は測れていません）")
+                : L($"{target:F0}°C を守るのに必要な回転数: 約 {Math.Max(need, minDuty):F0}%");
+        TuneNeedText.Foreground = insufficient ? Palette.Danger : known ? Palette.Ok : Palette.Warn;
+        TuneAbortText.Text = !known
+            ? L("※ 目標を守れるいちばん低い回転数まで測れていないため、適用してもこのカーブは入れません（今のカーブのままです）")
+            : r.AbortReason is null ? "" : L($"※ 途中で終わったため、測れた段だけで作っています（{r.AbortReason}）");
         TuneCurve.Points = TuneCurveFor(kind, target);
         TuneCurve.Calibration = Config.FindCalibration(r.Fans[0].ControlId);
         TuneCurve.SetRange(20, 100);
@@ -488,8 +498,18 @@ public partial class MainWindow
             return;
         }
         FlushCommit();
-        int n = 0;
-        foreach (var kind in _tuneResults.Keys) n += ApplyTune(profile, kind, TargetFor(kind));
+        int n = 0, skipped = 0;
+        foreach (var kind in _tuneResults.Keys)
+        {
+            // 必要な回転数が分からない結果（途中で終わった・目標を変えた）は入れない
+            if (!_tuneResults[kind].NeedKnown(TargetFor(kind))) { skipped++; continue; }
+            n += ApplyTune(profile, kind, TargetFor(kind));
+        }
+        if (n == 0 && skipped > 0)
+        {
+            ShowAlert(L("目標を守れるいちばん低い回転数まで測れていないため、カーブは入れませんでした（今のカーブのままです）。"), AlertLevel.Warning);
+            return;
+        }
         RememberSetupBaseline();
         _controller.Commit();
         ShowAlert(L($"「{profile.Name}」に、自動で作ったカーブを {n} 本入れました（「元に戻す」で戻せます）。"), AlertLevel.Info,
@@ -504,9 +524,17 @@ public partial class MainWindow
         foreach (var p in Config.Profiles)
         {
             double offset = ProfileRoles.TargetOffset(p.Role);
-            foreach (var kind in _tuneResults.Keys) ApplyTune(p, kind, TargetFor(kind) + offset);
-            lines.Add(string.Join(" ", new[] { $"{p.Name}" }
-                .Concat(_tuneResults.Keys.OrderBy(k => k).Select(k => $"{(k == SetupStepKind.TuneGpu ? "GPU" : "CPU")} {TargetFor(k) + offset:F0}°C"))));
+            // 必要な回転数が分からない結果（途中で終わった・目標を変えた）は入れない
+            var kinds = _tuneResults.Keys.Where(k => _tuneResults[k].NeedKnown(TargetFor(k) + offset)).OrderBy(k => k).ToList();
+            foreach (var kind in kinds) ApplyTune(p, kind, TargetFor(kind) + offset);
+            if (kinds.Count > 0)
+                lines.Add(string.Join(" ", new[] { $"{p.Name}" }
+                    .Concat(kinds.Select(k => $"{(k == SetupStepKind.TuneGpu ? "GPU" : "CPU")} {TargetFor(k) + offset:F0}°C"))));
+        }
+        if (lines.Count == 0)
+        {
+            ShowAlert(L("目標を守れるいちばん低い回転数まで測れていないため、カーブは入れませんでした（今のカーブのままです）。"), AlertLevel.Warning);
+            return;
         }
         RememberSetupBaseline();
         _controller.Commit();

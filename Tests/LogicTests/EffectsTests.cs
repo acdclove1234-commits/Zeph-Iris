@@ -915,12 +915,14 @@ public static class EffectsTests
 
     public static void TestFrameRateIndependence()
     {
-        // 光り方そのものの計算を比べる。立ち上がりの段つきを止める仕上げ（AttackHold）は、コマが細かいほど働く
-        // （8 fps では 1 コマが保つ時間より長いので何もしない）ので、ここでは外す（AttackHold は TestAttackHold* で確かめる）
+        // 光り方そのものの計算を比べる。立ち上がりの段つきを止める仕上げ（AttackHold）とちらつき止め（LedSteady）は、コマが細かいほど働く
+        // （8 fps では 1 コマが保つ時間より長いので何もしない）ので、ここでは外す
+        // （AttackHold は TestAttackHold*、LedSteady は LedSteadyTests・MusicFlickerTests で確かめる）
         double savedHold = AttackHold.HoldSec;
         AttackHold.HoldSec = 0;
+        LedSteady.Enabled = false;
         try { FrameRateIndependence(); }
-        finally { AttackHold.HoldSec = savedHold; }
+        finally { AttackHold.HoldSec = savedHold; LedSteady.Enabled = true; }
     }
 
     private static void FrameRateIndependence()
@@ -1020,6 +1022,13 @@ public static class EffectsTests
             var m = Music(effect) with { StrobeAllowed = true, ReduceFlashing = effect != MusicStyles.Strobe };
             setups.Add((effect, new Rig(Asrock(), MusicCfg(), m)));
             setups.Add((effect + " (GPU)", new Rig(Gpu(), MusicCfg(), m)));
+            // 楽器の AI の場面の色: 測る間（4〜9 秒）に、シンセ → 歌の移り変わり（5〜7.5 秒）と、移り変わった後がある
+            var scene = new Rig(Asrock(), MusicCfg(), m with { SceneColors = true });
+            scene.In.Scene = new MusicScene(SceneGroup.Vocal, SceneGroup.Synth, 5.0, 1);
+            setups.Add((effect + " (scene fade)", scene));
+            var sceneGpu = new Rig(Gpu(), MusicCfg(), m with { SceneColors = true });
+            sceneGpu.In.Scene = scene.In.Scene;
+            setups.Add((effect + " (GPU scene)", sceneGpu));
         }
         var idle = new Rig(Asrock(), MusicCfg(), Music(MusicStyles.Spectrum) with { IdleDelaySec = 1 });
         idle.Synth.SilentFrom = 1.5;
@@ -1046,20 +1055,32 @@ public static class EffectsTests
 
         // 描画の時間（A0: 300 LED で 1 コマ 0.5 ミリ秒未満）。ASRock（250 LED）で、いちばん重い光り方を測る
         var sw = new System.Diagnostics.Stopwatch();
-        double worstUs = 0;
+        double worstUs = 0, worstPlain = 0, worstScene = 0;
         string worstName = "";
+        // 楽器の AI の場面の色の移り変わりの途中（2〜7 秒の間ずっと。FadeSec を超える長さは同じ速さで測れないので、2 回の移り変わりを続ける）も測る
+        var fades = new[] { new MusicScene(SceneGroup.Vocal, SceneGroup.Synth, 2.0, 1), new MusicScene(SceneGroup.Keys, SceneGroup.Vocal, 4.5, 1) };
+        foreach (bool scenes in new[] { false, true })
         foreach (var effect in MusicStyles.All)
         {
-            var m = Music(effect) with { StrobeAllowed = true, ReduceFlashing = effect != MusicStyles.Strobe, CrossfadeMs = 600 };
+            var m = Music(effect) with { StrobeAllowed = true, ReduceFlashing = effect != MusicStyles.Strobe, CrossfadeMs = 600, SceneColors = scenes };
             var rig = new Rig(new RgbDevice(0, "300", 300, 4, new[] { 60, 120, 120 }, "HID"), MusicCfg(), m);
             rig.Run(0.3, 2.0, 60);
             rig.UseRing = true;
             sw.Restart();
-            rig.Run(2.0, 7.0, 60);
+            if (scenes)
+            {
+                rig.In.Scene = fades[0];
+                rig.Run(2.0, 4.5, 60);
+                rig.In.Scene = fades[1];
+                rig.Run(4.5, 7.0, 60);
+            }
+            else rig.Run(2.0, 7.0, 60);
             sw.Stop();
             double us = sw.Elapsed.TotalMilliseconds * 1000 / 300;
-            if (us > worstUs) { worstUs = us; worstName = effect; }
+            if (us > worstUs) { worstUs = us; worstName = effect + (scenes ? " (scene fade)" : ""); }
+            if (scenes) worstScene = Math.Max(worstScene, us); else worstPlain = Math.Max(worstPlain, us);
         }
+        T.Info($"slowest without scene colours {worstPlain:F0} µs, during a scene colour fade {worstScene:F0} µs per frame for 300 LEDs");
         T.Info($"slowest effect: {worstName} {worstUs:F0} µs per frame for 300 LEDs (including the test rig)");
         T.Check(worstUs < 500, "render time per frame for 300 LEDs < 0.5 ms");
     }

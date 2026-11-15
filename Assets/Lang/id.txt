@@ -324,7 +324,6 @@ b0ba1b8f	Biru
 4cba9eab	Pengaturan per zona (konektor)
 d64827fc	Ubah efek, arah, dan rona tiap konektor motherboard sesuai yang tersambung (kipas, PSU, kepala water cooling, dll.). "Sama dengan perangkat" memakai pengaturan di atas. Yang dirangkai di konektor yang sama dihitung satu zona
 41860c08	Mengubah efek sinkron musik hanya untuk zona ini (mis. meter volume untuk kipas radiator, ganti warna per ketukan untuk PSU)
-1642d09b	Pada efek "Setiap komponen dengan perannya", zona ini menyala mengikuti suara apa. "Sesuai komponen": kipas bas, kartu grafis nada tengah, memori dan keyboard treble. Jika beberapa zona pada perangkat yang sama mendapat suara yang sama (misalnya header kipas), zona-zona itu diberi bas, nada tengah, dan treble secara bergiliran
 ed5a9363	Arah
 3d275c1f	Tips: untuk konektor ARGB motherboard yang tidak tersambung apa pun, setel jumlah LED ke 0 di OpenRGB pada Devices → (motherboard) → "Edit Device". Data yang dikirim berkurang dan gerakan jadi lebih halus. Cermin dan Balik berlaku pada efek yang memakai urutan LED (spektrum, meter volume, dll.).
 6a1f71f3	Tata letak di casing
@@ -1947,3 +1946,53 @@ c98fd0e4	Tidak ada konektor kipas yang ditemukan.
 a08b13cf	Tidak bisa mematikan mulai otomatis saat masuk. Di Pengaturan → "Umum", nonaktifkan lagi "Mulai otomatis saat masuk Windows".
 cd2d0b3c	• Pengaturan kipas saat ini tetap dipertahankan. Tutup dengan "Batal".
 845000a1	Konektor kipas tidak ditemukan, jadi pengaturan kipas saat ini tetap dipertahankan. Tutup perangkat lunak lain, mulai ulang aplikasi, lalu jalankan penyiapan lagi.
+82cfa58e	Membuka panduan pengguna (penyiapan awal, penggunaan sehari-hari, pemecahan masalah)
+13d94a85	Panduan pengguna
+b44c9cc9	Situs OpenRGB
+d279d75b	Membuka halaman (openrgb.org) untuk mendapatkan OpenRGB (gratis), yang digunakan untuk mengubah warna LED
+b6ac496a	Buka panduan pengguna
+619bb003	Membuka panduan di folder aplikasi (atau README di GitHub jika tidak ada)
+44b1af0b	Tidak dapat membuka browser: {0}
+ce000878	Tidak dapat membuka panduan pengguna.
+52b3b243	OpenRGB tidak ditemukan. Silakan pasang OpenRGB (gratis) dan jalankan (jika "Jalankan OpenRGB jika belum berjalan" diaktifkan, aplikasi ini menjalankan OpenRGB yang dipasang di Program Files).
+94a21ec2	Pembagian instrumen
+8703d0a3	Pada efek "Setiap komponen dengan perannya", menentukan suara atau instrumen yang menyalakan zona dengan "Suara yang diikuti" berisi "Sesuai komponen". Suara yang dipilih untuk tiap zona tidak berubah
+876fdd1c	Instrumen ditebak dari suara, jadi pada beberapa lagu bisa tertukar. Suara cepat (hi-hat, snare) ditampilkan sebagai butiran cahaya kecil; perangkat yang lambat diperbarui seperti kartu grafis dan memori hanya menyala dengan warna instrumen yang menonjol di tiap bagian lagu
+5519f7df	Dengan satu warna, instrumen tidak bisa dibedakan lewat warna. Pilih efek "Menyala sesuai instrumen" untuk menampilkan instrumen lewat kecerahan, posisi, dan gerakan (kick menyalakan semuanya, hi-hat butiran kecil, vokal kecerahan keseluruhan, dll.)
+0d8065a5	Memeriksa sekitar 1 detik suara terakhir setiap 0,5 detik. Warna berubah selama beberapa detik dan tidak berkedip. Warna tidak berubah pada palet "Hanya warna pilihan" dan "Warna yang mirip dengan warna pilihan", Meter volume, Strobo, dan Setiap komponen dengan perannya
+1b6f3970	Kenali instrumen dengan AI
+aadf5c4a	AI (YAMNet) mengenali instrumen yang menonjol di tiap bagian lagu (vokal, gitar, piano, brass, synth, gesek) dan mengubah warna perlahan (vokal biru, brass emas, gitar oranye, dll.). Dengan satu warna, yang berubah adalah gerakan efek "Menyala sesuai instrumen". Hanya berjalan di PC ini dan memakai sedikit CPU dan memori
+4e43701b	Pada efek "Setiap komponen dengan perannya", suara yang menyalakan zona ini. "Sesuai komponen" mengikuti "Pembagian instrumen" (jika per nada: kipas nada rendah, kartu grafis nada tengah, memori dan keyboard nada tinggi). Jika beberapa zona di perangkat yang sama mendapat suara yang sama (misalnya header kipas), zona itu dibagi bergantian. Anda juga bisa memilih satu instrumen, seperti kick, snare, atau vokal
+b555c16c	AI instrumen
+dbb80bf4	Putaran yang dibutuhkan untuk menjaga target {0:F0}°C: {1:F0}% atau kurang (berhenti di tengah jalan, jadi putaran lebih rendah belum terukur)
+da6452ac	Penyimpanan
+bb721e17	Motherboard, dll.
+50030dc4	{0}: sensor kurva "{1}" tampaknya salah
+3959777c	Di profil "{0}", "{1}" dari namanya tampak seperti kurva {2}, tetapi membaca suhu "{3}" ({4}). Saat {5} panas, kurva ini tidak akan menaikkan putaran.
+4059ff76	Ganti ke "{0}"
+8b8b7a36	Suhu untuk "{1}" di profil "{0}" diganti ke "{2}".
+08d8c54e	{0}: kipas GPU hanya mengikuti suhu penyimpanan
+3ba7001c	Di profil "{0}", kipas ini hanya membaca "{1}". Saat GPU panas karena game, putarannya tidak akan naik.
+d71badc6	Ganti ke kurva berbasis "{0}"
+d0514409	Di profil "{0}", diganti ke kurva standar berbasis "{1}".
+dc31499c	Sensor virtual "{0}": sensor sumber ({1}) tidak bisa dibaca, jadi dihitung hanya dari sensor yang tersisa.
+a0b3b7dd	Menyala sesuai instrumen
+3c260d3f	Kick menyalakan semuanya, snare satu sisi, hi-hat butiran kecil, bass bagian ujung, vokal kecerahan keseluruhan, gitar dan kibor cahaya mengalir. Instrumen tetap bisa dibedakan meski dengan satu warna (Hanya warna pilihan)
+d3efe37c	Per instrumen
+e8d8b63a	Hanya drum
+31b76718	Nada (rendah, tengah, tinggi)
+ce37ccb7	Setiap komponen menyala mengikuti instrumennya sendiri, misalnya kipas pada kick, memori dan keyboard pada hi-hat, kartu grafis pada vokal. Beberapa header kipas dibagi bergantian ke kick, snare, hi-hat, dan bass
+c7cc18b1	Hanya menyala pada kick, snare, dan hi-hat. Tidak menyala pada gitar atau vokal
+7b659d5a	Dibagi per nada, misalnya kipas pada nada rendah, kartu grafis pada nada tengah, memori pada nada tinggi (seperti sebelumnya)
+c33f330a	Kick
+8b911b1b	Snare
+7ae7bcde	Hi-hat dan simbal
+f5489867	Bass (instrumen)
+412c6fd5	Vokal dan lead
+203562ee	Akor (kibor, gitar)
+dac2be1c	Pad dan synth
+64270fa4	{0}: berhenti di tengah jalan sebelum mencapai putaran terendah yang menjaga target, jadi kurva tidak dibuat dan kurva saat ini dipertahankan ({1})
+d5a051f9	Putaran yang dibutuhkan untuk menjaga {0:F0}°C: {1:F0}% atau kurang (putaran lebih rendah belum terukur)
+0c8c7106	* Putaran terendah yang menjaga target belum terukur, jadi kurva ini tidak dipasang meski Anda menekan Terapkan (kurva saat ini tetap)
+e2a336cd	Putaran terendah yang menjaga target belum terukur, jadi kurva tidak dipasang (kurva saat ini tetap).
+90a68504	Di bawah {0:F0}%, putaran hampir tidak berubah (putaran minimum kipas itu sendiri).

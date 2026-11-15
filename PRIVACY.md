@@ -28,6 +28,8 @@ Like any web request, the services above can see your IP address. Their own priv
 
 The beat AI (Beat This!) runs on your PC only; no audio leaves it. When "Remember songs already heard" is on, the app stores, per song, the beat times and a short beat-strength curve of the song's opening in `data/songs`. Songs are told apart by a SHA-256 code made from "Artist - Song": Spotify's window title, or the song shown in Windows' media info (the name that appears when you press a volume key, for example from YouTube Music or Apple Music). The same song counts as one song in any player app. This is read on your PC only; the title itself and the audio are never saved. "Forget remembered songs" on the Lighting page deletes them.
 
+The instrument AI (YAMNet) also runs only on your PC: every half second it looks at about one second of the sound that is playing to tell which instruments stand out. Nothing is saved or sent: no audio, scores or results.
+
 ## Bug reports
 
 "Report a problem" makes a zip file with logs, settings and the list of detected parts **on your PC** and opens the GitHub issue page in your browser. Nothing is uploaded automatically: you read the zip and decide whether to attach it.
@@ -63,6 +65,8 @@ Zeph-Iris は、あなたの PC の中で動きます。アカウント・利用
 ## 音楽連動の AI と覚えた曲
 
 拍の AI（Beat This!）は PC の中だけで動き、音を外に出しません。「一度聴いた曲を覚える」がオンのときは、曲ごとに拍の時刻と、曲の始まりの立ち上がりの強さの並びを `data/songs` に保存します。曲は「アーティスト - 曲名」から作った SHA-256 の印で見分けます。曲名は、Spotify のウィンドウのタイトルか、Windows のメディアの情報（音量ボタンを押すと出る曲名。YouTube Music・Apple Music など）から PC の中で読み（どの再生アプリで流しても同じ曲として扱います）、曲名そのものや音は保存しません。ライティングの画面の「覚えた曲を消す」で消せます。
+
+楽器の AI（YAMNet）も PC の中だけで動きます。0.5 秒ごとに直近の約 1 秒の音を調べて、いま目立っている楽器を見分けるだけで、音も結果も保存・送信しません。
 
 ## 不具合の報告
 

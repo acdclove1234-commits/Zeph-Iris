@@ -33,6 +33,22 @@ public partial class MainWindow
 
     private void OnReportProblemClick(object sender, RoutedEventArgs e) => ShowReportDialog();
 
+    /// <summary>「使い方」: アプリのフォルダーの説明書を開く（なければ GitHub の README）</summary>
+    private void OnOpenGuideClick(object sender, RoutedEventArgs e)
+    {
+        string lang = Localization.Language;
+        try
+        {
+            if (GuideFile.LocalFor(AppContext.BaseDirectory, lang, File.Exists) is { } path) SystemTool.Open(path);
+            else SystemTool.OpenUrl(GuideFile.WebFor(lang, AppUpdater.Repository));
+        }
+        catch (Exception ex) when (ex is System.ComponentModel.Win32Exception or InvalidOperationException or ArgumentException)
+        {
+            Logger.Warn($"説明書を開けません: {ex.Message}");
+            ShowAlert(L("説明書を開けませんでした。") + " " + GuideFile.WebFor(lang, AppUpdater.Repository), AlertLevel.Warning);
+        }
+    }
+
     /// <summary>
     /// 「動作報告…」: 版・部品の型番と、アプリが確かめたこと（数だけ）を入れた GitHub の動作報告のページを開く。
     /// アプリからは送らない（送るかどうかは、ページで内容を見てから決めてもらう）

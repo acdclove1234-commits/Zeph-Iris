@@ -73,6 +73,25 @@ public sealed record LightRun(double[] T, double[] Brightness)
         return peaks / (to - from);
     }
 
+    /// <summary>
+    /// 明るさの向きが 4 コマ（60 コマ／秒で 0.07 秒）以内に戻った回数（1 秒あたり。2 段（2/255）以上の変化だけ数える。
+    /// ModeSyncBench の jit と同じ数え方を、ゾーン全体の明るさで）
+    /// </summary>
+    public double QuickReversalsPerSec(double from, double to)
+    {
+        var b = Between(from, to).Select(x => x.B).ToArray();
+        int dir = 0, flip = int.MinValue / 2, n = 0;
+        for (int i = 1; i < b.Length; i++)
+        {
+            double d = b[i] - b[i - 1];
+            int s = Math.Abs(d) >= 2 / 255.0 ? Math.Sign(d) : 0;
+            if (s == 0) continue;
+            if (dir != 0 && s != dir) { if (i - flip <= 4) n++; flip = i; }
+            dir = s;
+        }
+        return n / (to - from);
+    }
+
     /// <summary>細かい揺れ: 前後 50 ミリ秒（±3 コマ）の平均からのずれの二乗平均の平方根（ハイハットのたびの小さな明滅など）</summary>
     public double Ripple(double from, double to)
     {
@@ -123,7 +142,8 @@ public static class MusicLight
     private const double Latency = 0.08;
 
     /// <summary>buf を流しながら、30 LED のテープを 60 コマ/秒で描く</summary>
-    public static LightRun Run(float[] buf, int fs, ResolvedMusic m, RgbConfig? engineCfg = null)
+    /// <param name="settings">テープの設定（null なら既定。ゾーンの「反応する音」を決めるときに使う。デバイスの名前は「Strip」）</param>
+    public static LightRun Run(float[] buf, int fs, ResolvedMusic m, RgbConfig? engineCfg = null, RgbDeviceSettings? settings = null)
     {
         var e = new AudioEngine(fs) { Settings = MusicTuning.EngineSettings(engineCfg ?? new RgbConfig { Mode = RgbModes.Music }) };
         var dev = new RgbDevice(2, "Strip", 30, 4, null, "HID: x");
@@ -132,7 +152,7 @@ public static class MusicLight
         {
             Cfg = new RgbConfig { Mode = RgbModes.Music, Brightness = 100, Gamma = false },
             Music = m,
-            Device = new RgbDeviceSettings { Name = dev.Name },
+            Device = settings ?? new RgbDeviceSettings { Name = dev.Name },
         };
         var output = new Rgb[dev.LedCount];
         const double t0 = 1000;
@@ -326,12 +346,17 @@ public static class BeatHueLightTests
         double kick = lr.MeanAfter(c.Gen.KickTimes.Where(t => t > 8), 0, 0.08), between = lr.MeanAfter(c.Beats.Where(t => t > 8), 0.20, 0.30);
         T.Check(kick - between >= 0.18, $"rock: kicks stand out ({kick:F2} vs {between:F2} between beats)");
 
-        foreach (var (rate, reg, name, maxPeaks) in new[] { (12.0, 1.0, "mid 12/s", 1.0), (6.0, 0.25, "low 6/s", 3.0) })
+        // 12 音／秒のアルペジオは 6 音で 1 周（0.5 秒 = 120 BPM）なので、テンポをつかんで 1 周に 1 回（1 秒に 2 回）光るのはよい。
+        // 1 音ずつ光らない（はっきりした山は 1 秒に 2 回まで）・短い間に明るさの向きが戻らない（ちらつかない）ことを見る。
+        // （6.15.7 までは山 0.8 回／秒と数えていたが、拍の光の途中の小さなへこみ（ちらつき）で山が 2 つに割れて、低く数えていた。
+        //  そのころの短い間の向きの戻りは 4.0 回／秒（12 音）・4.8 回／秒（6 音）。低い 6 音／秒は 1 音ずつが低音として光る）
+        foreach (var (rate, reg, name, maxPeaks, maxQuick) in new[] { (12.0, 1.0, "mid 12/s", 2.0, 0.5), (6.0, 0.25, "low 6/s", 3.0, 1.5) })
         {
             var (arp, _) = MusicLight.Arpeggio(rate, 16, reg);
             var la = MusicLight.Run(arp.Buf, arp.Fs, m);
-            T.Check(la.PeaksPerSec(4, 15.5) <= maxPeaks && la.Swing(4, 15.5) <= 0.3,
-                $"arpeggio {name}: no flicker ({la.PeaksPerSec(4, 15.5):F1} clear peaks/s ≤ {maxPeaks}, swing {la.Swing(4, 15.5):F2} ≤ 0.30)");
+            double quick = la.QuickReversalsPerSec(4, 15.5);
+            T.Check(la.PeaksPerSec(4, 15.5) <= maxPeaks && la.Swing(4, 15.5) <= 0.3 && quick <= maxQuick,
+                $"arpeggio {name}: no flicker ({la.PeaksPerSec(4, 15.5):F1} clear peaks/s ≤ {maxPeaks}, swing {la.Swing(4, 15.5):F2} ≤ 0.30, quick reversals {quick:F2}/s ≤ {maxQuick})");
         }
     }
 }
@@ -460,6 +485,13 @@ public static class DenseMixLight
         }
     }
 
+    /// <summary>ギターだけの瞬間（キック・スネアから 60 ms 以上離れたストローク。[from, to) 秒）</summary>
+    public static List<double> GuitarOnly(Mix x, double from = 8, double to = 23)
+    {
+        var drums = x.Kicks.Concat(x.Snares).ToList();
+        return x.Strums.Where(s => s >= from && s < to && drums.All(d => Math.Abs(d - s) >= 0.06)).ToList();
+    }
+
     /// <summary>キック・スネア・ギターだけの瞬間（ドラムから 60 ms 以上離れたストローク）の直後の明るさと、ふだんの明るさ（下から 30%）</summary>
     public static (double Kick, double Snare, double Guitar, double Floor) Measure(Mix x, LightRun r, double from = 8, double to = 23)
     {
@@ -505,8 +537,9 @@ public static class DenseMixReportTests
 public static class DenseMixLightTests
 {
     /// <summary>
-    /// 音の多い曲（ギターのストローク・リード入り）で、テンポをつかめていない区間でも、キックが主役で、ギターだけの瞬間には光りすぎず、
-    /// 明るさの底上げもない（テンポの確かさを 0 にして確かめる。実際の曲では、確かさが下がる区間が半分ほどある）
+    /// 音の多い曲（ギターのストローク・リード入り）で、テンポをつかめていない区間でも、キックが主役（ギターだけの瞬間の 3 倍以上）で、
+    /// ギターだけの瞬間には光りすぎず（+0.06 まで）、明るさの底上げもない（テンポの確かさを 0 にして確かめる。実際の曲では、確かさが下がる区間が半分ほどある）。
+    /// 楽器ごとの役割で、ギターを和音のゾーンで見せるのは別に確かめる（TestDenseMixGuitarHasItsOwnChannel）
     /// </summary>
     public static void TestDenseMixKeepsDrumsInFront()
     {
@@ -521,9 +554,48 @@ public static class DenseMixLightTests
                 var r = MusicLight.Run(dense.G.Buf, dense.G.Fs, MusicTuning.Resolve(cfg), cfg);
                 var (k, s, g, fl) = DenseMixLight.Measure(dense, r);
                 string state = unlocked ? "unlocked" : "locked";
+                // 全体で 1 色の光り方（ビートで色替え）では、ギターだけの瞬間は今までどおり +0.06 まで（楽器ごとの役割を足しても緩めない）
                 T.Check(k - fl >= 0.25 && g - fl <= 0.06 && k - fl >= 3 * (g - fl),
-                    $"dense mix ({state}): kick +{k - fl:F2} stands out, guitar-only +{g - fl:F2} stays small");
+                    $"dense mix ({state}): kick +{k - fl:F2} stands out, guitar-only +{g - fl:F2} stays small (≤ +0.06) and at most 1/3 of the kick");
                 T.Check(fl <= 0.45, $"dense mix ({state}): no lifted floor ({fl:F2})");
+            }
+        }
+        finally { BeatTuneSweepTests.Restore(saved); }
+    }
+
+    /// <summary>
+    /// 楽器ごとの役割で分けたとき（ゾーンごとの決まり）: 音の多い曲で、
+    ///   キック・スネア・ハイハットのゾーンは、ギターだけの瞬間に光らない（+0.06 まで）。キックのゾーンはキックではっきり光る
+    ///   和音のゾーンは、ギターだけの瞬間の少し後（0.04〜0.16 秒。はじいた瞬間を、ドラムでないと確かめてから光らせる）に明るくなり、
+    ///   ギターのない版（同じドラムとベース）の同じ時刻ではほとんど明るくならない。ギターが鳴っている間は、下地もない版より明るい
+    /// </summary>
+    public static void TestDenseMixGuitarHasItsOwnChannel()
+    {
+        var saved = BeatTuneSweepTests.Snapshot();
+        try
+        {
+            foreach (bool unlocked in new[] { false, true })
+            {
+                if (unlocked) BeatTuneSweepTests.Apply("RatioZero=5;RatioFull=6");
+                string state = unlocked ? "unlocked" : "locked";
+                var mixes = DenseMixLight.Mixes().ToList();
+                var (sparse, dense) = (mixes[0], mixes[1]);
+                var strums = DenseMixLight.GuitarOnly(dense);
+                foreach (var sound in new[] { MusicSounds.Kick, MusicSounds.Snare, MusicSounds.Hat })
+                {
+                    var r = InstrumentRoleRun.Run(dense.G.Buf, sound, MusicRoleSets.Band);
+                    var (k, _, g, fl) = DenseMixLight.Measure(dense, r);
+                    bool kickOk = sound != MusicSounds.Kick || k - fl >= 0.2;
+                    T.Check(g - fl <= 0.06 && kickOk, $"dense mix ({state}): {sound} zone ignores guitar-only moments (+{g - fl:F2}){(sound == MusicSounds.Kick ? $", kick +{k - fl:F2}" : "")}");
+                }
+                var hd = InstrumentRoleRun.Run(dense.G.Buf, MusicSounds.Harmony, MusicRoleSets.Band);
+                var hs = InstrumentRoleRun.Run(sparse.G.Buf, MusicSounds.Harmony, MusicRoleSets.Band);
+                double fd = DenseMixLight.Measure(dense, hd).Floor, fs = DenseMixLight.Measure(sparse, hs).Floor;
+                double withGuitar = hd.MeanAfter(strums, 0.04, 0.16) - fd, without = hs.MeanAfter(strums, 0.04, 0.16) - fs;
+                T.Check(withGuitar >= 0.06 && without <= 0.03,
+                    $"dense mix ({state}): harmony zone lights after guitar-only strums (+{withGuitar:F2}), not at the same times without guitar (+{without:F2})");
+                double md = InstrumentRoleRun.Mean(hd, 8, 23), ms = InstrumentRoleRun.Mean(hs, 8, 23);
+                T.Check(md >= ms + 0.05, $"dense mix ({state}): harmony zone glows while the guitar plays ({md:F2} vs {ms:F2} without guitar)");
             }
         }
         finally { BeatTuneSweepTests.Restore(saved); }

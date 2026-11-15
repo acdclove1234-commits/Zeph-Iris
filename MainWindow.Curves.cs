@@ -373,6 +373,9 @@ public partial class MainWindow
             CalibrationText.Text = cal is null
                 ? L("まだ測定していません。")
                 : L($"最大 {cal.MaxRpm:N0} rpm ／ {cal.StopDuty:F0}% 未満で停止 ／ {cal.StartDuty:F0}% で回り始める（{cal.MeasuredAt:yyyy/MM/dd HH:mm} 測定）");
+            // ファン自身が最低回転数を守っていて、低い Duty では音が変わらない範囲（連動の回転数合わせは、その上の端から使う）
+            if (cal?.EffectiveDeadZone() is double dz and > 0)
+                CalibrationText.Text += "\n" + L($"{dz:F0}% 以下では回転数がほとんど変わりません（ファン自身の最低回転数）。");
         }
 
         // 最低回転数が停止域に入っていたら警告する

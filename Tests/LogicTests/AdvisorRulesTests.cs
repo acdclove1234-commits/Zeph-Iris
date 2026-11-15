@@ -55,4 +55,117 @@ public static class AdvisorRulesTests
         h.AddRaw(t0.AddSeconds(n), new Dictionary<string, float> { ["x"] = -1 });
         T.Check(c.ValueAt("x", c.Count - 1) == n - 1, "the copy does not change when the original gets new samples");
     }
+
+    // =====================================================================
+    // センサーの選び間違い（設定だけで分かる）
+    // =====================================================================
+
+    private const string CpuT = "/intelcpu/0/temperature/16", GpuT = "/gpu-nvidia/0/temperature/0", Ssd = "/nvme/2/temperature/0";
+    private const string Board = "/lpc/nct6686d/0/temperature/1", BoardCpu = "/lpc/nct6686d/0/temperature/0";
+
+    private static readonly List<SensorInfo> Temps = new()
+    {
+        new(CpuT, "CPU Package", "Intel Core i7", "Cpu", "Temperature"),
+        new(GpuT, "GPU Core", "NVIDIA GeForce RTX", "GpuNvidia", "Temperature"),
+        new(Ssd, "Composite Temperature", "NVMe SSD", "Storage", "Temperature"),
+        new(Board, "System", "Nuvoton NCT6686D", "SuperIO", "Temperature"),
+        new(BoardCpu, "CPU", "Nuvoton NCT6686D", "SuperIO", "Temperature"),
+    };
+
+    private static AppConfig MismatchConfig(params (string Profile, FanConfig Fan)[] fans)
+    {
+        var cfg = new AppConfig();
+        foreach (var g in fans.GroupBy(f => f.Profile))
+        {
+            var p = new ProfileConfig { Name = g.Key };
+            foreach (var (_, fan) in g) p.Fans.Add(fan);
+            cfg.Profiles.Add(p);
+        }
+        cfg.Normalize();
+        return cfg;
+    }
+
+    private static CurveConfig Curve(string name, string sensor) => new() { Name = name, SensorId = sensor };
+
+    /// <summary>
+    /// 静音プロファイルのラジエーターの「GPU」カーブが SSD の温度を見ている（実際にあった設定）: 警告し、1 クリックで GPU 温度に直せる。
+    /// 正しい設定・ほかのプロファイルには何も出さない
+    /// </summary>
+    public static void TestCurveOnWrongSensorKind()
+    {
+        var radiator = new FanConfig { Name = "Radiator", ControlId = "/lpc/nct6686d/0/control/0", Curves = { Curve("CPU", CpuT), Curve("GPU", Ssd) } };
+        var good = new FanConfig { Name = "Radiator", ControlId = "/lpc/nct6686d/0/control/0", Curves = { Curve("CPU", CpuT), Curve("GPU", GpuT) } };
+        var cfg = MismatchConfig(("静音", radiator), ("標準", good));
+        var found = Diagnostics.SensorMismatches(cfg, Temps);
+        T.Check(found.Count == 1, $"one finding for the wrong curve only ({found.Count})");
+        var f = found[0];
+        T.Check(f.Level == FindingLevel.Warning && f.Title.Contains("Radiator") && f.Title.Contains("GPU"), $"warning names the fan and curve ({f.Title})");
+        T.Check(f.Detail.Contains("静音") && f.Detail.Contains("Composite Temperature") && f.Detail.Contains("ストレージ"), $"detail names the profile, the sensor and its kind ({f.Detail})");
+        T.Check(f.Apply is not null && f.ActionLabel?.Contains("GPU Core") == true, $"one-click remap offered ({f.ActionLabel})");
+        var points = cfg.FindProfile("静音")!.Fans[0].Curves[1].Points.Select(p => (p.Temp, p.Duty)).ToList();
+        f.Apply!(cfg);
+        var fixedCurve = cfg.FindProfile("静音")!.Fans[0].Curves[1];
+        T.Check(fixedCurve.SensorId == GpuT, "remapped to the GPU core temperature");
+        T.Check(fixedCurve.Points.Select(p => (p.Temp, p.Duty)).SequenceEqual(points), "the user's curve points are kept (it was drawn as a GPU curve)");
+        T.Check(cfg.FindProfile("静音")!.Fans[0].Curves[0].SensorId == CpuT, "the CPU curve is untouched");
+        T.Check(Diagnostics.SensorMismatches(cfg, Temps).Count == 0, "after the fix: no finding");
+
+        // CPU のカーブが GPU を見ている・GPU のカーブが CPU を見ている
+        var swapped = MismatchConfig(("標準", new FanConfig { Name = "Front", ControlId = "f", Curves = { Curve("CPU", GpuT) } }),
+                                     ("ゲーム", new FanConfig { Name = "Top", ControlId = "t", Curves = { Curve("GPU（自動調整）", CpuT) } }));
+        var sw = Diagnostics.SensorMismatches(swapped, Temps);
+        T.Check(sw.Count == 2 && sw.All(x => x.Level == FindingLevel.Warning && x.Apply is not null), $"CPU↔GPU swapped curves: both warned ({sw.Count})");
+        sw[0].Apply!(swapped);
+        sw[1].Apply!(swapped);
+        T.Check(swapped.FindProfile("標準")!.Fans[0].Curves[0].SensorId == CpuT && swapped.FindProfile("ゲーム")!.Fans[0].Curves[0].SensorId == GpuT, "each remapped to its own part");
+    }
+
+    /// <summary>
+    /// マザーボードの温度: 名前が合う（SuperIO の「CPU」）なら何も出さない。合わないときは知らせるだけ（Info）。
+    /// 名前に CPU も GPU もない・両方あるカーブ、仮想センサー、今つながっていないセンサー、ポンプは見ない
+    /// </summary>
+    public static void TestMismatchIgnoresAmbiguousCases()
+    {
+        var cfg = MismatchConfig(("標準", new FanConfig
+        {
+            Name = "Front", ControlId = "f",
+            Curves =
+            {
+                Curve("CPU", BoardCpu),                     // SuperIO の CPU 温度: 合っている
+                Curve("ケース", Ssd),                       // 名前に CPU・GPU がない
+                Curve("CPU+GPU", Ssd),                      // 両方ある
+                Curve("GPU", "/virtual/abcd1234"),          // 仮想センサー
+                Curve("GPU", "/nvme/9/temperature/0"),      // 今は見つからない
+            },
+        }), ("標準", new FanConfig { Name = "Pump", ControlId = "p", Role = FanRoles.Pump, Curves = { Curve("CPU", Ssd) } }));
+        T.Check(Diagnostics.SensorMismatches(cfg, Temps).Count == 0, "no finding for matching board sensor, unnamed, mixed, virtual, missing or pump curves");
+
+        var board = MismatchConfig(("標準", new FanConfig { Name = "Front", ControlId = "f", Curves = { Curve("GPU", Board) } }));
+        var b = Diagnostics.SensorMismatches(board, Temps);
+        T.Check(b.Count == 1 && b[0].Level == FindingLevel.Info && b[0].Detail.Contains("System"), $"GPU curve on the board 'System' sensor: info only ({b.FirstOrDefault()?.Level})");
+        T.Check(Diagnostics.CurveIntent("CPU（自動調整）") == SensorKind.Cpu && Diagnostics.CurveIntent("GPU Hot Spot") == SensorKind.Gpu
+                && Diagnostics.CurveIntent("CPU/GPU") is null && Diagnostics.CurveIntent("SSD") is null, "intent from the curve name");
+        T.Check(Diagnostics.IsStorageSensor("/hdd/0/temperature/0", Temps) && !Diagnostics.IsStorageSensor(CpuT, Temps), "storage detection");
+    }
+
+    /// <summary>GPU のファン（GPU の端子・名前に GPU）が、ストレージの温度だけで動いている: 警告し、GPU 温度の標準カーブに直せる</summary>
+    public static void TestGpuFanOnlyOnStorage()
+    {
+        var gpuFan = new FanConfig { Name = "GPU Fan", ControlId = "/gpu-nvidia/0/control/0", Curves = { Curve("SSD", Ssd) } };
+        var named = new FanConfig { Name = "GPU 排気", ControlId = "/lpc/nct6686d/0/control/3", Curves = { Curve("カーブ", Ssd) } };
+        var mixed = new FanConfig { Name = "GPU side", ControlId = "/lpc/nct6686d/0/control/4", Curves = { Curve("SSD", Ssd), Curve("温度", GpuT) } };
+        var caseFan = new FanConfig { Name = "Bottom", ControlId = "/lpc/nct6686d/0/control/5", Curves = { Curve("SSD", Ssd) } };
+        var cfg = MismatchConfig(("標準", gpuFan), ("標準", named), ("標準", mixed), ("標準", caseFan));
+        var found = Diagnostics.SensorMismatches(cfg, Temps);
+        T.Check(found.Count == 2 && found.All(f => f.Level == FindingLevel.Warning), $"GPU-port fan and GPU-named fan on storage only: warned; mixed inputs and a case fan on SSD: not ({found.Count})");
+        T.Check(found.Any(f => f.Title.StartsWith("GPU Fan")) && found.Any(f => f.Title.StartsWith("GPU 排気")), "both fans named");
+        found[0].Apply!(cfg);
+        var c = cfg.FindProfile("標準")!.Fans[0].Curves[0];
+        T.Check(c.SensorId == GpuT && c.Points.Select(p => (p.Temp, p.Duty)).SequenceEqual(CurvePresets.Create(CurvePresets.Balanced, SensorKind.Gpu).Select(p => (p.Temp, p.Duty))),
+            "switched to the GPU core with the standard GPU curve (SSD temperatures do not fit a GPU)");
+
+        // 診断の画面: 記録が足りなくても、設定の間違いは出す
+        var d = Diagnostics.Run(new HistoryStore(), cfg, "標準", Temps, TimeSpan.FromMinutes(30));
+        T.Check(d.Any(f => f.Title.Contains("GPU 排気")), "Diagnostics.Run shows the mismatch even with too little history");
+    }
 }

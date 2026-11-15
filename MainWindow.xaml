@@ -407,6 +407,28 @@
                                 <TextBlock Text="不具合を報告…" FontSize="14" Foreground="{DynamicResource SubTextBrush}" VerticalAlignment="Center"/>
                             </StackPanel>
                         </Button>
+                        <!-- 使い方（説明書を開く。はじめての人が、いつでも見つけられるように） -->
+                        <Button x:Name="NavGuide" Click="OnOpenGuideClick" Cursor="Hand" Margin="12,2,12,0" Padding="12,8"
+                                Background="Transparent" BorderThickness="0" HorizontalContentAlignment="Left" Focusable="True"
+                                ToolTip="使い方の説明書（はじめての準備・ふだんの使い方・うまく動かないとき）を開きます">
+                            <Button.Template>
+                                <ControlTemplate TargetType="Button">
+                                    <Border x:Name="Bd" Background="{TemplateBinding Background}" CornerRadius="8" Padding="{TemplateBinding Padding}">
+                                        <ContentPresenter HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                    </Border>
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter TargetName="Bd" Property="Background" Value="{DynamicResource CardBrush}"/>
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Button.Template>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="&#xE897;" FontFamily="{StaticResource IconFont}" FontSize="15" VerticalAlignment="Center"
+                                           Foreground="{DynamicResource SubTextBrush}" Margin="0,0,12,0"/>
+                                <TextBlock Text="使い方" FontSize="14" Foreground="{DynamicResource SubTextBrush}" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
                     </StackPanel>
                 </ScrollViewer>
             </DockPanel>
@@ -1886,6 +1908,8 @@
                                             ToolTip="OpenRGB につながるか確かめて、見つかったデバイスを下の一覧に表示します（LED の色は変えません）"/>
                                     <Button Style="{StaticResource SmallGhost}" Content="今すぐ再接続" Click="OnRgbReconnectClick" Margin="6,0,0,0"
                                             ToolTip="OpenRGB を起動し直したときや、デバイスを付け外ししたときに押すと、待たずにすぐ繋ぎ直します"/>
+                                    <Button Style="{StaticResource SmallGhost}" Content="OpenRGB のサイト" Click="OnOpenOpenRgbSiteClick" Margin="6,0,0,0"
+                                            ToolTip="LED の色を変えるのに使う OpenRGB（無料）を入手するページ（openrgb.org）を開きます"/>
                                 </StackPanel>
                             </DockPanel>
                             <CheckBox Style="{StaticResource Switch}" IsChecked="{Binding Rgb.AutoStartOpenRgb}" Margin="0,12,0,0"
@@ -2040,6 +2064,23 @@
                                 <TextBlock x:Name="StrobeNote" Style="{StaticResource Caption}" Margin="0,0,0,4"
                                            Text="「ストロボ」は激しく点滅するため、下の「激しい点滅を抑える」をオフにしたときだけ選べます。"/>
 
+                                <!-- 楽器の分け方（光り方「パーツごとの役割」のときだけ。MainWindow.Lighting.cs の RefreshLightingUi） -->
+                                <DockPanel x:Name="RoleSetRow" Margin="0,10,0,0" Visibility="Collapsed">
+                                    <TextBlock Text="楽器の分け方" Style="{StaticResource RowLabelTop}"
+                                               ToolTip="光り方「パーツごとの役割」で、ゾーンの「反応する音」が「パーツに合わせる」のときに、どの音・楽器で光るか。ゾーンごとに選んだ音はそのままです"/>
+                                    <StackPanel>
+                                        <ItemsControl x:Name="RoleSetChoices" ItemTemplate="{StaticResource ChoiceChipTemplate}">
+                                            <ItemsControl.ItemsPanel>
+                                                <ItemsPanelTemplate>
+                                                    <WrapPanel/>
+                                                </ItemsPanelTemplate>
+                                            </ItemsControl.ItemsPanel>
+                                        </ItemsControl>
+                                        <TextBlock Style="{StaticResource Caption}" TextWrapping="Wrap" Margin="0,4,0,0"
+                                                   Text="楽器は音から推測するので、曲によっては取り違えます。速い音（ハイハット・スネア）は小さな光の粒で見せ、グラボやメモリなど更新の遅いデバイスでは、曲の部分ごとに目立つ楽器の色だけで光ります"/>
+                                    </StackPanel>
+                                </DockPanel>
+
                                 <!-- 強さ・色の組み合わせ -->
                                 <DockPanel Margin="0,10,0,0">
                                     <TextBlock Text="強さ" Style="{StaticResource RowLabelTop}"
@@ -2063,6 +2104,9 @@
                                         </ItemsControl.ItemsPanel>
                                     </ItemsControl>
                                 </DockPanel>
+                                <!-- 単色で、光り方が「楽器で光る」でないときだけ（MainWindow.Lighting.cs の RefreshLightingUi） -->
+                                <TextBlock x:Name="SolidEnsembleNote" Style="{StaticResource Caption}" TextWrapping="Wrap" Margin="0,4,0,0" Visibility="Collapsed"
+                                           Text="単色では色で楽器を分けられません。光り方を「楽器で光る」にすると、明るさ・光る場所・動き方で楽器を見せます（キックは全体、ハイハットは小さな粒、歌は全体の明るさなど）"/>
 
                                 <!-- 反応のしかた -->
                                 <StackPanel Margin="0,8,0,0">
@@ -2222,6 +2266,15 @@
                                         <Button Style="{StaticResource SmallGhost}" Content="覚えた曲を消す" Click="OnClearSongMemoryClick" Margin="10,0,0,0"
                                                 ToolTip="覚えた曲の拍をすべて消します（曲を聴けば、また覚えます）"/>
                                     </StackPanel>
+                                    <!-- 楽器の AI（Audio/SceneAi.cs・Core/Rgb/Palette.cs の ScenePalettes） -->
+                                    <CheckBox Style="{StaticResource Switch}" IsChecked="{Binding Rgb.MusicScenes}" Margin="0,10,0,0"
+                                              ToolTip="直近の約 1 秒の音を 0.5 秒ごとに調べます。色は数秒かけて変わり、点滅はしません。パレット「選んだ色だけ」「選んだ色と近い色」・音量メーター・ストロボ・パーツごとの役割では色を変えません">
+                                        <StackPanel>
+                                            <TextBlock Text="AI で楽器を聞き分ける" FontWeight="SemiBold"/>
+                                            <TextBlock Style="{StaticResource Caption}" TextWrapping="Wrap"
+                                                       Text="曲の部分ごとに目立つ楽器（歌・ギター・ピアノ・金管・シンセ・弦）を AI（YAMNet）で聞き分け、色をゆっくり変えます（歌は青、金管は金色、ギターはオレンジなど）。単色のときは、光り方「楽器で光る」の動き方を変えます。PC の中だけで動き、CPU とメモリを少し使います"/>
+                                        </StackPanel>
+                                    </CheckBox>
                                 </StackPanel>
 
                                 <!-- 詳しい設定 -->
@@ -2485,9 +2538,9 @@
                                                                             </StackPanel>
                                                                             <StackPanel Orientation="Horizontal" Margin="0,0,18,4" Visibility="{Binding ShowMusicEffect, Converter={StaticResource BoolToVis}}">
                                                                                 <TextBlock Text="反応する音" Style="{StaticResource Label}" FontSize="13" Margin="0,0,8,0"/>
-                                                                                <ComboBox Width="190" ItemsSource="{Binding SoundOptions}" DisplayMemberPath="Label" SelectedValuePath="Id"
+                                                                                <ComboBox Width="200" ItemsSource="{Binding SoundOptions}" DisplayMemberPath="Label" SelectedValuePath="Id"
                                                                                           SelectedValue="{Binding SoundId}"
-                                                                                          ToolTip="光り方「パーツごとの役割」のとき、このゾーンがどの音で光るか。「パーツに合わせる」なら、ファンは低音・グラボは中音・メモリやキーボードは高音。同じデバイスで同じ音になるゾーンがいくつもあれば（ファンの端子など）、低音・中音・高音に順に分けます"/>
+                                                                                          ToolTip="光り方「パーツごとの役割」のとき、このゾーンがどの音で光るか。「パーツに合わせる」なら「楽器の分け方」に合わせます（音の高さなら、ファンは低音・グラボは中音・メモリやキーボードは高音）。同じデバイスで同じ音になるゾーンがいくつもあれば（ファンの端子など）、順に分けます。キック・スネア・ボーカルなど、楽器を 1 つ選ぶこともできます"/>
                                                                             </StackPanel>
                                                                             <StackPanel Orientation="Horizontal" Margin="0,0,18,4">
                                                                                 <TextBlock Text="左右対称" Style="{StaticResource Label}" FontSize="13" Margin="0,0,8,0"/>
@@ -3279,6 +3332,8 @@
                                     <Button Style="{StaticResource AccentButton}" Content="セットアップウィザードを開く" Click="OnOpenWizardClick" Margin="0,0,8,8"/>
                                     <Button Style="{StaticResource GhostButton}" Content="設定フォルダを開く" Click="OnOpenFolderClick" Margin="0,0,8,8"/>
                                     <Button Style="{StaticResource GhostButton}" Content="ログフォルダを開く" Click="OnOpenLogsClick" Margin="0,0,8,8"/>
+                                    <Button Style="{StaticResource GhostButton}" Content="使い方（説明書）を開く" Click="OnOpenGuideClick" Margin="0,0,8,8"
+                                            ToolTip="アプリのフォルダーの説明書を開きます（なければ GitHub の README）"/>
                                     <Button Style="{StaticResource GhostButton}" Content="不具合を報告…" Click="OnReportProblemClick" Margin="0,0,8,8"
                                             ToolTip="ログ・設定・部品の一覧をまとめた zip を作り、GitHub の報告ページを開きます（個人的な情報は伏せます）"/>
                                     <Button Style="{StaticResource GhostButton}" Content="動作報告…" Click="OnHardwareReportClick" Margin="0,0,8,8"

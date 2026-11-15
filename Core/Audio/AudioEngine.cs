@@ -58,7 +58,9 @@ public static class TempoModes
 ///   4. KickPath: 150 Hz 以下の音の包絡線（音 1 個ずつ計算してあるものを、512 個ごとにまとめる）
 ///   5. OnsetDetector: 立ち上がり（キック・スネア・ハイハット）を本当の時刻つきで Events に書く
 ///   6. BeatTracker: テンポとビートの位置を求めて Beat を差し替える
-///   7. 1 コマ分の結果を Features に書く（時刻 = そのコマのいちばん新しい音の時刻）
+///   7. InstrumentFeatures: 打楽器と持続音の分け方・左右の広がり・12 音の色・ベースの音の高さ・楽器らしさ
+///      （打楽器と持続音は 5 の前に求め、キックの打楽器らしさとして使う。ベースの音の出だしは 5 の後）
+///   8. 1 コマ分の結果を Features に書く（時刻 = そのコマのいちばん新しい音の時刻）
 /// 分析の途中ではメモリを新しく確保しない（ガベージコレクションで音が途切れないように）。
 /// 例外: テンポとビートの位置（Beat）は変更しない値なので、変わったときだけ作り直す
 /// （0.5 ミリ秒以上ずれたとき・確かさが 0.02 以上変わったとき・8 拍ごとなど。ロック中は数拍に 1 回程度）
@@ -89,9 +91,19 @@ public sealed class AudioEngine
     private const double ClickAttackSec = 0.005;
 
     private readonly Decimator? _dec;
+    /// <summary>サイド（(L − R) / 2）を落とすフィルター（88.2 kHz 以上のとき。ミッドと同じ遅れ）</summary>
+    private readonly Decimator? _decSide;
     private readonly double _decDelaySec;
     private readonly int _nLow, _nHigh, _ringMask;
     private readonly float[] _ring;
+    /// <summary>サイド（(L − R) / 2）の直近の音（ステレオで届いたときだけ 0 以外になる）</summary>
+    private readonly float[] _sideRing;
+    /// <summary>サイドの FFT（1024 点。左右の広がりに使う）</summary>
+    private readonly double[] _sideRe, _sideIm, _powSide;
+    /// <summary>ステレオの音が最後に届いてから、サイドを使い続ける残りの回数（モノラルだけになったら 0 になり、サイドを見ない）</summary>
+    private int _stereoHops;
+    /// <summary>楽器ごとの手がかり（打楽器と持続音・左右・12 音の色・ベースの音の高さ・楽器らしさ）</summary>
+    private readonly InstrumentFeatures _inst;
     private int _pos;
     private int _sinceHop;
     private long _hop = -1;
@@ -101,8 +113,23 @@ public sealed class AudioEngine
     private readonly double[] _winLow, _winHigh;
     private readonly double[] _lowRe, _lowIm, _highRe, _highIm;
     private readonly double[] _powLow, _powHigh, _magLow;
+    /// <summary>ハイハット・スネアを早く見つける短い FFT の大きさ（48 kHz で 512 個 = 11 ミリ秒。窓の真ん中が新しい端から 5 ミリ秒）</summary>
+    private const int FastFftBase = 512;
+    /// <summary>回と回の間に確かめるのは、前の回からこの数以上の音が届いたときだけ（2 ミリ秒。届いた直後に回を処理したときは確かめない）</summary>
+    private const int ProbeMinSamples = 96;
+    private readonly int _nFast;
+    private readonly Fft _fftFast;
+    private readonly double[] _winFast, _fastRe, _fastIm, _magFast;
+    /// <summary>いちばん新しい分析した音の時刻と、最後の回の反応の強さ（回と回の間に確かめるとき使う）</summary>
+    private double _lastSampleT = double.NaN, _lastActivity;
+    /// <summary>曲全体の音量の平均（2 乗。直近 MixLevelSec 秒）</summary>
+    private WarmEma _mixPow;
+    private const double MixLevelSec = 3.0;
+    private readonly double _aMix;
     private readonly BandAnalyzer _bands;
     private readonly KickPath _kick;
+    /// <summary>ハイハット・スネアの響き線・スネアの胴の音の、FFT を使わない包絡線（その回のうちに確かめるのと、立ち上がりの時刻に使う）</summary>
+    private readonly TransientPath _hatPath, _snarePath, _bodyPath;
     private readonly OnsetDetector _onsets;
     private readonly BeatTracker _tracker;
     private readonly DropDetector _drop;
@@ -139,6 +166,7 @@ public sealed class AudioEngine
         if (factor > 1)
         {
             _dec = new Decimator(factor);
+            _decSide = new Decimator(factor);
             _decDelaySec = _dec.DelaySamples / SampleRate;
         }
         AnalysisRate = SampleRate / factor;
@@ -151,6 +179,7 @@ public sealed class AudioEngine
         int ring = 4096;
         while (ring < _nLow) ring <<= 1;
         _ring = new float[ring];
+        _sideRing = new float[ring];
         _ringMask = ring - 1;
         _dt = (double)Hop / AnalysisRate;
         // 立ち上がりの検出は「フルスケールのサイン波 ≈ 512」の目盛りで調整してあるので、FFT が大きいときは割る
@@ -166,14 +195,29 @@ public sealed class AudioEngine
         _powLow = new double[_nLow / 2 + 1];
         _powHigh = new double[_nHigh / 2 + 1];
         _magLow = new double[_nLow / 2 + 1];
+        _sideRe = new double[_nHigh];
+        _sideIm = new double[_nHigh];
+        _powSide = new double[_nHigh / 2 + 1];
+        _nFast = FastFftBase * scale;
+        _fftFast = new Fft(_nFast);
+        _winFast = Fft.PeriodicHann(_nFast);
+        _fastRe = new double[_nFast];
+        _fastIm = new double[_nFast];
+        _magFast = new double[_nFast / 2 + 1];
         double frameRate = AnalysisRate / (double)Hop;
         _bands = new BandAnalyzer(AnalysisRate, _nLow, _nHigh, _dt);
+        _inst = new InstrumentFeatures(AnalysisRate, _nLow, _nHigh, _dt);
         _kick = new KickPath(AnalysisRate);
-        _onsets = new OnsetDetector(AnalysisRate, _nLow, frameRate);
+        _hatPath = TransientPath.ForHat(AnalysisRate);
+        _snarePath = TransientPath.ForSnare(AnalysisRate);
+        _bodyPath = TransientPath.ForSnareBody(AnalysisRate);
+        // ハイハット・スネアは短い FFT（48 kHz で 512 個 = 11 ミリ秒）でも見る（長い FFT より立ち上がりが早く見える）
+        _onsets = new OnsetDetector(AnalysisRate, _nLow, frameRate, _nFast);
         _tracker = new BeatTracker(frameRate);
         _drop = new DropDetector(_dt);
         _aGateRelease = TimeConst.Alpha(_dt, GateReleaseSec);
         _aApp = TimeConst.Alpha(_dt, AppGateSec);
+        _aMix = TimeConst.Alpha(_dt, MixLevelSec);
         _quietNeeded = (int)Math.Round(ClickQuietSec * SampleRate);
         _attackNeeded = Math.Max(1, (int)Math.Round(ClickAttackSec * SampleRate));
         ResetInternal();
@@ -205,9 +249,17 @@ public sealed class AudioEngine
 
     /// <summary>テンポの追跡（テスト・調査用）</summary>
     internal BeatTracker Tracker => _tracker;
+    /// <summary>楽器ごとの手がかり（テスト・調査用）</summary>
+    internal InstrumentFeatures Instruments => _inst;
+    /// <summary>楽器ごとの手がかりを求めるか（テストで、求めないときの計算の重さと比べるため。アプリの中では変えない）</summary>
+    internal static bool InstrumentsEnabled = true;
 
     /// <summary>拍の AI で追跡を確かめて直す（null なら使わない。取り込みのスレッドで動かす）</summary>
     public BeatAssist? Assist { get; set; }
+    /// <summary>楽器の AI で、曲の部分ごとに目立つ楽器（場面）を調べる（null なら使わない。取り込みのスレッドで音を渡す）</summary>
+    public SceneTagger? Tagger { get; set; }
+    /// <summary>いまの場面（楽器の AI を使っていなければ場面なし。どのスレッドから読んでもよい）</summary>
+    public MusicScene Scene => Tagger?.Current ?? MusicScene.None;
     internal OnsetDetector Onsets => _onsets;
 
     /// <summary>テンポの追跡の状態（ロック中・予測を続けている・つかんでいない。表示・テスト用）</summary>
@@ -223,32 +275,55 @@ public sealed class AudioEngine
     /// 無音で何も届かない間は、0 の音（無音）を渡して時間を進めてよい（テンポの記録や減衰が途切れない）。
     /// 512 個たまるごとに分析し、そのコマの時刻は tFirst + (そのコマの最後の音の番号) / サンプリング周波数
     /// </summary>
-    public void Push(ReadOnlySpan<float> mono, double tFirst)
+    public void Push(ReadOnlySpan<float> mono, double tFirst) => Push(mono, ReadOnlySpan<float>.Empty, tFirst);
+
+    /// <summary>
+    /// ステレオの音を、ミッド（(L + R) / 2 = モノラルと同じ）とサイド（(L − R) / 2）で追加する（取り込みスレッドから呼ぶ）。
+    /// side が空なら、モノラルの Push と同じ（左右の広がりは 0）。side が mono より短ければ、足りない分は 0
+    /// </summary>
+    public void Push(ReadOnlySpan<float> mono, ReadOnlySpan<float> side, double tFirst)
     {
         if (_resetRequested) ResetInternal();
         Assist?.Push(mono, tFirst);
+        Tagger?.Push(mono, tFirst);
         bool click = ClickDetect;
+        bool stereo = !side.IsEmpty;
+        // ステレオで届いたら、リングの音がすべて入れ替わるまで（リングの長さ分）サイドの FFT を続ける
+        if (stereo) _stereoHops = _ring.Length / Hop + 1;
         double invFs = 1.0 / SampleRate;
         var dec = _dec;
         for (int i = 0; i < mono.Length; i++)
         {
             float x = mono[i];
             if (!float.IsFinite(x)) x = 0;
+            float sd = stereo && i < side.Length ? side[i] : 0;
+            if (!float.IsFinite(sd)) sd = 0;
             double t = tFirst + i * invFs;
             // 同期テストのクリックは、届いたままの細かさで時刻を測る
             if (click) DetectClick(x, t);
-            if (dec is null) Analyze(x, t);
-            // 落とした音の時刻は、フィルターの遅れの分だけ前（線形位相なので、どの高さの音も同じ遅れ）
-            else if (dec.Push(x, out float y)) Analyze(y, t - _decDelaySec);
+            if (dec is null) Analyze(x, sd, t);
+            else
+            {
+                // 落とした音の時刻は、フィルターの遅れの分だけ前（線形位相なので、どの高さの音も同じ遅れ）
+                _decSide!.Push(sd, out float ys);
+                if (dec.Push(x, out float y)) Analyze(y, ys, t - _decDelaySec);
+            }
         }
+        ProbeBetweenHops();
     }
 
-    /// <summary>分析するサンプリング周波数（AnalysisRate）の音 1 個</summary>
-    private void Analyze(float x, double t)
+    /// <summary>分析するサンプリング周波数（AnalysisRate）の音 1 個（side = サイド。モノラルなら 0）</summary>
+    private void Analyze(float x, float side, double t)
     {
         _ring[_pos] = x;
+        _sideRing[_pos] = side;
         _pos = (_pos + 1) & _ringMask;
+        _lastSampleT = t;
         _kick.Sample(x);
+        _hatPath.Sample(x);
+        _snarePath.Sample(x);
+        _bodyPath.Sample(x);
+        if (InstrumentsEnabled) _inst.Sample(x);
         if (++_sinceHop >= Hop)
         {
             _sinceHop = 0;
@@ -277,14 +352,22 @@ public sealed class AudioEngine
     {
         _resetRequested = false;
         Assist?.Reset();
+        Tagger?.Reset();
         _resetTempoRequested = false;
         _dec?.Reset();
+        _decSide?.Reset();
         Array.Clear(_ring);
+        Array.Clear(_sideRing);
+        _stereoHops = 0;
+        _inst.Reset();
         _pos = 0;
         _sinceHop = 0;
         _hop = -1;
         _bands.Reset();
         _kick.Reset();
+        _hatPath.Reset();
+        _snarePath.Reset();
+        _bodyPath.Reset();
         _onsets.Reset();
         _tracker.Reset();
         _drop.Reset();
@@ -295,6 +378,9 @@ public sealed class AudioEngine
         _quiet = 0;
         _attackLeft = 0;
         _lastT = double.NegativeInfinity;
+        _lastSampleT = double.NaN;
+        _lastActivity = 0;
+        _mixPow.Reset();
         _frame.Clear();
         _expSub = _expBass = _expMid = _expTreble = default;
     }
@@ -365,6 +451,32 @@ public sealed class AudioEngine
         else _quiet = 0;
     }
 
+    /// <summary>直近 _nFast 個（48 kHz で 512 個）の短い FFT の強さを _magFast に入れる（長い FFT と同じ目盛り: フルスケールのサイン波 ≈ 512）</summary>
+    private void FastFft()
+    {
+        int start = _pos - _nFast;
+        for (int j = 0; j < _nFast; j++)
+        {
+            _fastRe[j] = _ring[(start + j) & _ringMask] * _winFast[j];
+            _fastIm[j] = 0;
+        }
+        _fftFast.Forward(_fastRe, _fastIm);
+        // 目盛りはノイズ（ハイハット・響き線の音）で長い FFT とそろえる: ノイズの強さは窓の長さの平方根に比例する
+        double scale = Math.Sqrt(_nLow / (double)_nFast) * _magScale;
+        for (int b = 0; b <= _nFast / 2; b++) _magFast[b] = Math.Sqrt(_fastRe[b] * _fastRe[b] + _fastIm[b] * _fastIm[b]) * scale;
+    }
+
+    /// <summary>
+    /// 届いた音の最後で、まだ次の回（512 個）がたまっていなければ、ハイハット・スネアだけを先に確かめる
+    /// （OnsetDetector.ProbeBetweenHops。回の途中で鳴った音を、次の回まで待たずに出す）
+    /// </summary>
+    private void ProbeBetweenHops()
+    {
+        if (!OnsetDetector.EventTune.LowLatency || !OnsetDetector.EventTune.Probe || _hop < 0 || _sinceHop < ProbeMinSamples || double.IsNaN(_lastSampleT)) return;
+        FastFft();
+        _onsets.ProbeBetweenHops(_magFast, Effective(), _lastActivity, _lastSampleT, Events, _kick, _hatPath, _snarePath, _bodyPath);
+    }
+
     /// <param name="tHop">このコマのいちばん新しい音の時刻</param>
     private void AnalyzeHop(double tHop)
     {
@@ -406,6 +518,20 @@ public sealed class AudioEngine
             _magLow[b] = Math.Sqrt(p) * _magScale;
         }
         for (int b = 0; b <= _nHigh / 2; b++) _powHigh[b] = _highRe[b] * _highRe[b] + _highIm[b] * _highIm[b];
+        FastFft();
+        // サイドの FFT（ステレオの音が届いているときだけ。ミッドの 1024 点と同じ窓）
+        bool stereo = InstrumentsEnabled && _stereoHops > 0;
+        if (stereo)
+        {
+            _stereoHops--;
+            for (int j = 0; j < _nHigh; j++)
+            {
+                _sideRe[j] = _sideRing[(startHigh + j) & _ringMask] * _winHigh[j];
+                _sideIm[j] = 0;
+            }
+            _fftHigh.Forward(_sideRe, _sideIm);
+            for (int b = 0; b <= _nHigh / 2; b++) _powSide[b] = _sideRe[b] * _sideRe[b] + _sideIm[b] * _sideIm[b];
+        }
 
         // 2. 無音判定の門と、反応の強さ（門 × アプリの割合）
         double rmsDb = 10 * Math.Log10(sumSq / _nHigh + 1e-12);
@@ -413,13 +539,28 @@ public sealed class AudioEngine
         double g = _gateEnv.StepA(open ? 1 : 0, 1.0, _aGateRelease);
         double app = _appEnv.StepA(SafeAppGate(), _aApp, _aApp);
         double activity = Math.Clamp(g * app, 0, 1);
+        _lastActivity = activity;
+        // 曲全体の音量（直近 3 秒の 2 乗平均。音が鳴っている間だけ）。早く出すハイハットが小さすぎないかの基準にする
+        if (open) _mixPow.Step(sumSq / _nHigh, _aMix);
+        _onsets.MixDb = _mixPow.N > 0 ? 10 * Math.Log10(_mixPow.V + 1e-12) : double.NaN;
 
         // 3〜4. 帯の強さとキック
         _bands.Process(_powLow, _powHigh, s, open, activity);
         _kick.EndHop(open, activity, s.GainDb, _bands.CeilingAlpha, _bands.CeilingFallDb, _bands.Coefs);
 
+        // 楽器ごとの手がかり（打楽器と持続音・左右・12 音の色・楽器らしさ）
+        if (InstrumentsEnabled) _inst.Process(_powLow, _powHigh, stereo ? _powSide : null, s, open, activity);
+
         // 5. 立ち上がり
-        _onsets.Process(_magLow, s, activity, open, _hop, tHop, Events, _kick);
+        _onsets.Process(_magLow, s, activity, open, _hop, tHop, Events, _kick, _magFast, _hatPath, _snarePath, _bodyPath);
+        _hatPath.EndHop();
+        _snarePath.EndHop();
+        _bodyPath.EndHop();
+        // ベースの音の高さと出だし（キックの直後は出だしにしない）
+        if (InstrumentsEnabled) _inst.EndHop(tHop, _onsets.KickFired, _onsets.KickTime, _onsets.BassCandidate, _onsets.BassCandidateTime);
+
+        // 楽器の AI（テンポの追跡を使わないときも。0.48 秒ごとに、別のスレッドに頼むだけ）
+        Tagger?.Tick(tHop, open && activity >= OnsetDetector.MinActivity);
 
         // 6. テンポとビート（Off のときは計算もしない）
         if (s.TempoMode == TempoModes.Off)
@@ -451,7 +592,7 @@ public sealed class AudioEngine
             Events.Add(AudioEventKind.Drop, dropT, dropS);
         }
 
-        // 7. 1 コマ分の結果
+        // 8. 1 コマ分の結果
         var f = _frame;
         f.T = tHop;
         for (int k = 0; k < AudioFrame.BandCount; k++)
@@ -479,6 +620,20 @@ public sealed class AudioEngine
         f.Activity = (float)activity;
         f.GateOpen = open;
         f.Extrapolated = false;
+        var ins = _inst;
+        f.PercLow = (float)ins.PercLow; f.PercMid = (float)ins.PercMid; f.PercHigh = (float)ins.PercHigh;
+        f.HarmBass = (float)ins.HarmBass; f.HarmMid = (float)ins.HarmMid; f.HarmHigh = (float)ins.HarmHigh;
+        f.Centre = (float)ins.Centre; f.Side = (float)ins.Side;
+        f.WidthBass = (float)ins.WidthBass; f.WidthMid = (float)ins.WidthMid; f.WidthHigh = (float)ins.WidthHigh;
+        f.Flatness = (float)ins.Flatness;
+        for (int k = 0; k < 12; k++) f.Chroma[k] = (float)ins.Chroma[k];
+        f.PitchClass = ins.PitchClass;
+        f.PitchClarity = (float)ins.PitchClarity;
+        f.BassF0Hz = (float)ins.BassF0Hz;
+        f.BassPitchClass = ins.BassPitchClass;
+        f.BassLevel = (float)ins.BassLevel;
+        f.BassOnset = (float)ins.BassOnset;
+        f.Vocal = (float)ins.Vocal; f.GuitarKeys = (float)ins.GuitarKeys; f.Pad = (float)ins.Pad; f.Brass = (float)ins.Brass;
         Features.Write(f);
         if (StatsLogging) AddStats(f);
     }

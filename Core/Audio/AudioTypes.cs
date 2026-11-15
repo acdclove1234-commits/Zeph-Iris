@@ -81,6 +81,31 @@ public sealed class AudioFrame
     /// <summary>まだ届いていない未来の時刻を求められたので、いちばん新しいコマをそのまま返した</summary>
     public bool Extrapolated;
 
+    // ===== 楽器ごとの手がかり（InstrumentFeatures。どれも「らしさ」の連続した値で、楽器の名前を決めるものではない）
+
+    /// <summary>打楽器の分の大きさ: 低音 40〜230 Hz・中音 230〜2,200 Hz・高音 2.2〜16 kHz（ドラムなど、広い帯に一度に出る音）</summary>
+    public float PercLow, PercMid, PercHigh;
+    /// <summary>持続音の分の大きさ: 低音・中音・高音（ベース・声・和音など、同じ高さで鳴り続ける音）</summary>
+    public float HarmBass, HarmMid, HarmHigh;
+    /// <summary>真ん中の音・横（左右に広がった音）の大きさ（モノラルの音では横は 0）</summary>
+    public float Centre, Side;
+    /// <summary>帯ごとの広がり（0 = 真ん中・モノラル、1 = 左右で別の音）</summary>
+    public float WidthBass, WidthMid, WidthHigh;
+    /// <summary>音のざらつき（スペクトルの平坦さ。ノイズ・ひずんだギターほど大きい）</summary>
+    public float Flatness;
+    /// <summary>12 音の色（C = 0 … B = 11。いちばん強い音名を 1 にした割合）</summary>
+    public readonly float[] Chroma = new float[12];
+    /// <summary>いちばん強い音名（0〜11。はっきりしなければ −1）と、そのはっきりさ（0〜1）</summary>
+    public int PitchClass = -1;
+    public float PitchClarity;
+    /// <summary>ベースの音の高さ（Hz。分からなければ 0）と音名（0〜11。分からなければ −1）</summary>
+    public float BassF0Hz;
+    public int BassPitchClass = -1;
+    /// <summary>ベースの音の大きさ（キックの音を含まない持続音の低音）と、音の出だし（出だしで大きくなり 0.12 秒で消える）</summary>
+    public float BassLevel, BassOnset;
+    /// <summary>らしさ: ボーカル（真ん中の持続音の中音・ビブラート）・ギターと鍵盤（はじく音・横に広い）・パッド（変わらない持続音）・金管（明るい持続音）</summary>
+    public float Vocal, GuitarKeys, Pad, Brass;
+
     public void CopyFrom(AudioFrame o)
     {
         T = o.T;
@@ -90,6 +115,14 @@ public sealed class AudioFrame
         SubE = o.SubE; BassE = o.BassE; MidE = o.MidE; TrebleE = o.TrebleE;
         KickEnv = o.KickEnv; LoudVU = o.LoudVU; LoudDb = o.LoudDb; RmsDb = o.RmsDb; CeilingDb = o.CeilingDb;
         CentroidHz = o.CentroidHz; Activity = o.Activity; GateOpen = o.GateOpen; Extrapolated = o.Extrapolated;
+        PercLow = o.PercLow; PercMid = o.PercMid; PercHigh = o.PercHigh;
+        HarmBass = o.HarmBass; HarmMid = o.HarmMid; HarmHigh = o.HarmHigh;
+        Centre = o.Centre; Side = o.Side; WidthBass = o.WidthBass; WidthMid = o.WidthMid; WidthHigh = o.WidthHigh;
+        Flatness = o.Flatness;
+        Array.Copy(o.Chroma, Chroma, 12);
+        PitchClass = o.PitchClass; PitchClarity = o.PitchClarity;
+        BassF0Hz = o.BassF0Hz; BassPitchClass = o.BassPitchClass; BassLevel = o.BassLevel; BassOnset = o.BassOnset;
+        Vocal = o.Vocal; GuitarKeys = o.GuitarKeys; Pad = o.Pad; Brass = o.Brass;
     }
 
     /// <summary>a と b の間（u = 0 で a、1 で b）を直線で補う</summary>
@@ -110,6 +143,20 @@ public sealed class AudioFrame
         Activity = L(a.Activity, b.Activity);
         GateOpen = k < 0.5 ? a.GateOpen : b.GateOpen;
         Extrapolated = false;
+        PercLow = L(a.PercLow, b.PercLow); PercMid = L(a.PercMid, b.PercMid); PercHigh = L(a.PercHigh, b.PercHigh);
+        HarmBass = L(a.HarmBass, b.HarmBass); HarmMid = L(a.HarmMid, b.HarmMid); HarmHigh = L(a.HarmHigh, b.HarmHigh);
+        Centre = L(a.Centre, b.Centre); Side = L(a.Side, b.Side);
+        WidthBass = L(a.WidthBass, b.WidthBass); WidthMid = L(a.WidthMid, b.WidthMid); WidthHigh = L(a.WidthHigh, b.WidthHigh);
+        Flatness = L(a.Flatness, b.Flatness);
+        for (int i = 0; i < 12; i++) Chroma[i] = L(a.Chroma[i], b.Chroma[i]);
+        PitchClarity = L(a.PitchClarity, b.PitchClarity);
+        BassLevel = L(a.BassLevel, b.BassLevel); BassOnset = L(a.BassOnset, b.BassOnset);
+        Vocal = L(a.Vocal, b.Vocal); GuitarKeys = L(a.GuitarKeys, b.GuitarKeys); Pad = L(a.Pad, b.Pad); Brass = L(a.Brass, b.Brass);
+        // 音名・音の高さは間を補えないので、近いほうのコマの値
+        var near = k < 0.5 ? a : b;
+        PitchClass = near.PitchClass;
+        BassF0Hz = near.BassF0Hz;
+        BassPitchClass = near.BassPitchClass;
     }
 
     /// <summary>無音の状態に戻す</summary>
@@ -123,6 +170,11 @@ public sealed class AudioFrame
         CeilingDb = -30;
         CentroidHz = 500;
         GateOpen = Extrapolated = false;
+        PercLow = PercMid = PercHigh = HarmBass = HarmMid = HarmHigh = Centre = Side = 0;
+        WidthBass = WidthMid = WidthHigh = Flatness = PitchClarity = BassF0Hz = BassLevel = BassOnset = 0;
+        Vocal = GuitarKeys = Pad = Brass = 0;
+        Array.Clear(Chroma);
+        PitchClass = BassPitchClass = -1;
     }
 }
 
@@ -224,7 +276,8 @@ public sealed class FeatureRing
 
     /// <summary>
     /// 時刻 t の値を dst に入れる（前後のコマの間を直線で補う）。
-    /// t がいちばん新しいコマより新しければ、いちばん新しいコマを返して Extrapolated = true。
+    /// t がいちばん新しいコマより新しければ、いちばん新しいコマを返して Extrapolated = true（先の値は予測しない。光り方は
+    /// EffectContext.AgeT で、まだ届いていない先読みの分だけ残光を減らすことはしない）。
     /// いちばん古いコマより古ければ、いちばん古いコマを返す。記録が空なら無音にして false
     /// </summary>
     public bool Sample(double t, AudioFrame dst)

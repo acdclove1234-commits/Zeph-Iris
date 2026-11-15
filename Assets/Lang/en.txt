@@ -324,7 +324,6 @@ b0ba1b8f	Blue
 4cba9eab	Per-zone (header) settings
 d64827fc	Change the effect, direction and tint for each motherboard header to suit what is connected (fans, PSU, the water-cooling head and so on). "Same as device" keeps the settings above. Things daisy-chained on the same header form one zone
 41860c08	Changes the music sync effect for this zone only (e.g. a level meter for the radiator fans, beat-color for the PSU)
-1642d09b	With the "Parts play their roles" effect, which sound this zone lights up to. "Match the part": fans bass, graphics card mids, memory and keyboard treble. If several zones of the same device get the same sound (such as fan headers), they are given bass, mids and treble in turn
 ed5a9363	Direction
 3d275c1f	Tip: for motherboard ARGB headers with nothing connected, set the LED count to 0 in OpenRGB under Devices → (motherboard) → "Edit Device". Less data is sent and motion gets smoother. Mirror and Reverse affect effects that use the LED order (spectrum, level meter and so on).
 6a1f71f3	Layout in the case
@@ -1947,3 +1946,53 @@ c98fd0e4	No fan headers were found.
 a08b13cf	Could not turn off starting at logon. In Settings → General, turn "Start automatically at Windows logon" off again.
 cd2d0b3c	• Your current fan settings are kept as they are. Close this with "Cancel".
 845000a1	No fan headers were found, so your current fan settings are kept as they are. Close the other software, restart the app, then run the setup again.
+82cfa58e	Opens the user guide (first-time setup, everyday use, troubleshooting)
+13d94a85	User guide
+b44c9cc9	OpenRGB website
+d279d75b	Opens the page (openrgb.org) where you can get OpenRGB (free), which is used to change LED colors
+b6ac496a	Open the user guide
+619bb003	Opens the guide in the app folder (or the README on GitHub if it is missing)
+44b1af0b	Could not open the browser: {0}
+ce000878	Could not open the user guide.
+52b3b243	OpenRGB was not found. Install OpenRGB (free) and start it (if you turn on "Start OpenRGB if it is not running", this app starts the OpenRGB installed in Program Files).
+94a21ec2	Instrument split
+8703d0a3	With the "Parts play their roles" style, which sound or instrument lights a zone whose "Sound to react to" is "Match the part". Sounds you chose for individual zones stay as they are
+876fdd1c	Instruments are guessed from the sound, so some songs get mixed up. Fast sounds (hi-hats, snares) show as small sparks of light. Slow-updating devices such as graphics cards and memory only show the color of the instrument that stands out in each part of the song
+5519f7df	A single color can't tell instruments apart by color. Choose the "Instruments" style to show them by brightness, position and motion instead (the kick lights everything, hi-hats are small sparks, the voice sets the overall brightness, and so on)
+0d8065a5	Checks the last second or so of sound every 0.5 seconds. Colors change over a few seconds and never flash. Colors don't change with the "Selected color only" or "Colors close to the selected color" palettes, or with the VU meter, Strobe and "Parts play their roles" styles
+1b6f3970	Recognize instruments with AI
+aadf5c4a	AI (YAMNet) recognizes the instrument that stands out in each part of a song (vocals, guitar, piano, brass, synth, strings) and changes the colors slowly (blue for vocals, gold for brass, orange for guitar, and so on). With a single color, it changes how the "Instruments" style moves instead. It runs only on this PC and uses a little CPU and memory
+4e43701b	With the "Parts play their roles" style, which sound lights this zone. "Match the part" follows "Instrument split" (by pitch: fans take the lows, the graphics card the mids, memory and keyboards the highs). If several zones on the same device end up with the same sound (such as fan headers), they are split in turn. You can also pick one instrument, such as kick, snare or vocals
+b555c16c	Instrument AI
+dbb80bf4	Speed needed to hold {0:F0}°C: {1:F0}% or less (the run ended early, so lower speeds were not measured)
+da6452ac	Storage
+bb721e17	Motherboard and others
+50030dc4	{0}: the curve "{1}" seems to use the wrong sensor
+3959777c	In profile "{0}", "{1}" looks like a {2} curve from its name, but it reads "{3}" ({4}). When the {5} gets hot, this curve will not speed the fans up.
+4059ff76	Switch to "{0}"
+8b8b7a36	In profile "{0}", the temperature for "{1}" was switched to "{2}".
+08d8c54e	{0}: the GPU fan runs only on a storage temperature
+3ba7001c	In profile "{0}", this fan only reads "{1}". When the GPU gets hot in games, the fan will not speed up.
+d71badc6	Switch to a curve based on "{0}"
+d0514409	In profile "{0}", switched to the standard curve based on "{1}".
+dc31499c	Virtual sensor "{0}": the source sensors ({1}) can't be read, so it is calculated from the remaining sensors only.
+a0b3b7dd	Instruments
+3c260d3f	The kick lights everything, the snare one side, hi-hats small sparks, the bass the far end, the voice the overall brightness, and guitar or keys a flowing light. You can tell instruments apart even with a single color (Selected color only)
+d3efe37c	By instrument
+e8d8b63a	Drums only
+31b76718	By pitch (lows, mids, highs)
+ce37ccb7	Each part lights for its own instrument: fans for the kick, memory and keyboards for hi-hats, the graphics card for vocals, and so on. With several fan headers, they are split into kick, snare, hi-hat and bass in turn
+c7cc18b1	Lights only for the kick, snare and hi-hats. Guitar and vocals don't light it
+7b659d5a	Splits by pitch: fans for the lows, the graphics card for the mids, memory for the highs (same as before)
+c33f330a	Kick
+8b911b1b	Snare
+7ae7bcde	Hi-hat and cymbals
+f5489867	Bass (instrument)
+412c6fd5	Vocals and lead
+203562ee	Chords (keys, guitar)
+dac2be1c	Pad and synth
+64270fa4	{0}: the run ended before reaching the lowest speed that holds the target, so no curve was made and the current curve stays ({1})
+d5a051f9	Speed needed to hold {0:F0}°C: {1:F0}% or less (lower speeds were not measured)
+0c8c7106	* The lowest speed that holds the target was not measured, so this curve won't be applied even if you press Apply (the current curve stays)
+e2a336cd	The lowest speed that holds the target was not measured, so no curve was applied (the current curve stays).
+90a68504	Below {0:F0}%, the speed barely changes (the fan's own minimum speed).

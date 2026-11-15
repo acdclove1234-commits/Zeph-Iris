@@ -45,6 +45,17 @@ public sealed class OpenRgbAutoStart
     private double _failingSince = double.NaN;
     private double _connectedAt = double.NaN;
 
+    /// <summary>この PC に OpenRGB が入っていない（動いていない・サービスもない・Program Files にもない）</summary>
+    public static bool NotInstalled(Facts f) => !f.Running && !f.ServiceInstalled && f.Exe is null;
+
+    /// <summary>OpenRGB のサイト（ダウンロード）</summary>
+    public const string Website = "https://openrgb.org/";
+
+    /// <summary>OpenRGB が見つからないときの案内（「OpenRGB が動いていなければ起動する」がオフなら、自動で起動するとは言わない）</summary>
+    public static string MissingText(bool autoStart) => autoStart
+        ? L("OpenRGB が見つかりません。OpenRGB（無料）をインストールしてください。Program Files に入れると、このアプリが自動で起動します（zip を展開した OpenRGB は、自分で起動してください）。")
+        : L("OpenRGB が見つかりません。OpenRGB（無料）をインストールして、起動してください（「OpenRGB が動いていなければ起動する」をオンにすると、Program Files に入れた OpenRGB をこのアプリが起動します）。");
+
     /// <summary>何をするか（サービスを起動する・exe を起動する・何もしない）</summary>
     public static Action Decide(Facts f)
     {

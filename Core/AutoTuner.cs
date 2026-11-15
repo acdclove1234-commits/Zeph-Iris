@@ -27,8 +27,16 @@ public sealed class AutoTuneResult
     public required List<(string ControlId, string Name)> Fans { get; init; }
     public string? AbortReason { get; init; }
     public DateTime MeasuredAt { get; init; } = DateTime.Now;
+    /// <summary>測る予定のいちばん低い回転数まで測れたか（途中で終わると、それより低くてよいかは分からない）</summary>
+    public bool ReachedLowestStep { get; init; } = true;
 
     public bool Usable => Steps.Count >= 2;
+
+    /// <summary>
+    /// この目標で、必要な回転数が測った段から決まるか。
+    /// false: 途中で終わり、どの段も目標以下だった（「いちばん低く測った段以下」までしか分からない）ので、カーブは作らない
+    /// </summary>
+    public bool NeedKnown(double target) => Usable && AutoTuner.NeedMeasured(Steps, target, ReachedLowestStep);
 
     public string ToText(double target)
     {
@@ -44,7 +52,9 @@ public sealed class AutoTuneResult
         var top = Steps.OrderByDescending(x => x.Duty).First();
         sb.AppendLine(need.Insufficient
             ? L($"目標 {target:F0}°C は全開でも届きません（全開で {top.SteadyTemp:F1}°C）")
-            : L($"目標 {target:F0}°C を守るのに必要な回転数: 約 {need.Duty:F0}%"));
+            : !AutoTuner.NeedMeasured(Steps, target, ReachedLowestStep)
+                ? L($"目標 {target:F0}°C を守るのに必要な回転数: {need.Duty:F0}% 以下（途中で終わったため、これより低い回転は測れていません）")
+                : L($"目標 {target:F0}°C を守るのに必要な回転数: 約 {need.Duty:F0}%"));
         return sb.ToString();
     }
 }
@@ -73,9 +83,25 @@ public sealed class AutoTuner : IDisposable
     private static readonly TimeSpan WarmupMin = TimeSpan.FromSeconds(60);
     private static readonly TimeSpan WarmupMax = TimeSpan.FromSeconds(180);
     private static readonly TimeSpan CooldownTime = TimeSpan.FromSeconds(20);
-    /// <summary>直近 30 秒で、前半と後半の平均の差がこれ未満なら「落ち着いた」とみなす</summary>
+    /// <summary>直近 30 秒で、最初の 3 分の 1 と最後の 3 分の 1 の平均の差がこれ未満なら「落ち着いた」とみなす</summary>
     private const double SteadyDelta = 0.5;
+    /// <summary>温度の記録を残す長さ（落ち着いたかは、この中で見る）</summary>
+    private static readonly TimeSpan WindowSpan = TimeSpan.FromSeconds(30);
+    /// <summary>「落ち着いた」と判断するのに要る記録の長さ（回数ではなく秒で見る。読み取りの間隔が長くても同じに判断する）</summary>
+    private static readonly TimeSpan SteadySpan = TimeSpan.FromSeconds(25);
+    /// <summary>段の温度は、最後のこの時間の平均にする</summary>
+    private static readonly TimeSpan RecordSpan = TimeSpan.FromSeconds(15);
     private const double ExternalLoadThreshold = 70;
+    /// <summary>使用率がこれ未満になったら「負荷がなくなった」とみなす</summary>
+    private const double LoadLostThreshold = 40;
+    /// <summary>負荷がなくなった状態がこれだけ続いたら中止する（ゲームの読み込み・場面の切り替えなどの一瞬の落ち込みでは中止しない）</summary>
+    private static readonly TimeSpan LoadLostAbort = TimeSpan.FromSeconds(6);
+    /// <summary>
+    /// 負荷が落ち込んだ段は、落ち込みが温度の記録（直近 30 秒）から外れるまで記録を待つ
+    /// （落ち込んで戻る V 字の温度は、前と後ろの平均が近くなり「落ち着いた」と見誤るため）。
+    /// ただし、何度も落ち込み続けても段の最長からこれ以上は待たない
+    /// </summary>
+    private static readonly TimeSpan DipWaitMax = TimeSpan.FromSeconds(60);
     /// <summary>手動テストの固定を送り直す間隔（固定は 10 秒で切れるので、その半分ごと）</summary>
     private static readonly TimeSpan OverrideRefresh = TimeSpan.FromSeconds(5);
     /// <summary>手動テストで固定する期間</summary>
@@ -100,6 +126,9 @@ public sealed class AutoTuner : IDisposable
     /// <summary>今の段階を始めた時刻（スナップショットの時刻で測る。最初のスナップショットで決まる）</summary>
     private DateTime _phaseStart = DateTime.MinValue;
     private DateTime _loadSeenSince = DateTime.MinValue;
+    /// <summary>負荷がなくなり始めた時刻（MinValue: 今は負荷がある）と、最後に負荷が落ち込んでいた時刻</summary>
+    private DateTime _loadLostSince = DateTime.MinValue;
+    private DateTime _lastLoadDip = DateTime.MinValue;
     private int _stepIndex;
     private string? _abortReason;
     /// <summary>最後にエンジンへ送った固定の Duty と時刻（同じ値を毎周期送らないため）</summary>
@@ -173,7 +202,7 @@ public sealed class AutoTuner : IDisposable
         var now = s.Time;
         if (_phaseStart == DateTime.MinValue) _phaseStart = now;
         _window.Add((now, temp));
-        _window.RemoveAll(w => now - w.T > TimeSpan.FromSeconds(30));
+        _window.RemoveAll(w => now - w.T > WindowSpan);
 
         // 危険な温度・緊急全開になったら、すぐにやめる
         if (s.Emergency || temp >= _abortTemp)
@@ -186,13 +215,27 @@ public sealed class AutoTuner : IDisposable
             }
         }
 
-        // 負荷がかからなくなったら中止（外部の負荷: ゲームなどがやめられた。内蔵の負荷: GPU が止めた）
-        if (_loadSensorId is not null && Current is Phase.Warmup or Phase.Steps && LoadOf(s) is double load && load < 40)
+        // 負荷がかからなくなったら中止（外部の負荷: ゲームなどがやめられた。内蔵の負荷: GPU が止めた）。
+        // 1 回読んだだけでは中止しない: ゲームの読み込みや場面の切り替えで一瞬下がることがあるので、6 秒続いたら中止する
+        if (_loadSensorId is not null && Current is Phase.Warmup or Phase.Steps && LoadOf(s) is double load)
         {
-            Abort(_builtInLoad
-                ? L("GPU の負荷が止まったため中止しました")
-                : L("GPU の負荷がなくなったため中止しました（ゲームやベンチマークを動かし続けてください）"));
-            return;
+            if (load < LoadLostThreshold)
+            {
+                // 時計が戻ったときは、そこから数え直す
+                if (_loadLostSince == DateTime.MinValue || now < _loadLostSince) _loadLostSince = now;
+                _lastLoadDip = now;
+                if (now - _loadLostSince >= LoadLostAbort)
+                {
+                    Abort(_builtInLoad
+                        ? L("GPU の負荷が止まったため中止しました")
+                        : L("GPU の負荷がなくなったため中止しました（ゲームやベンチマークを動かし続けてください）"));
+                    return;
+                }
+            }
+            else
+            {
+                _loadLostSince = DateTime.MinValue;
+            }
         }
 
         switch (Current)
@@ -253,7 +296,10 @@ public sealed class AutoTuner : IDisposable
                 Override(_duties[_stepIndex], now);
                 var rpms = _fans.Select(f => s.Fans.FirstOrDefault(x => x.ControlId == f.ControlId)?.Rpm).OfType<double>().ToList();
                 if (rpms.Count > 0 && now - _phaseStart > TimeSpan.FromSeconds(10)) _rpms.Add(rpms.Average());
-                if (now - _phaseStart >= MaxHold || (now - _phaseStart >= MinHold && Steady()))
+                // 負荷が一瞬落ち込んだばかりなら、その分だけ温度が下がっているので、落ち込みが温度の記録（直近 30 秒）から外れるまで待つ
+                bool dipRecent = _lastLoadDip != DateTime.MinValue && now >= _lastLoadDip && now - _lastLoadDip <= WindowSpan
+                                 && now - _phaseStart < MaxHold + DipWaitMax;
+                if (!dipRecent && (now - _phaseStart >= MaxHold || (now - _phaseStart >= MinHold && Steady())))
                 {
                     var step = Record(now, aborted: false);
                     // 目標を大きく超えたら、それより下げても意味がない
@@ -276,17 +322,29 @@ public sealed class AutoTuner : IDisposable
     private double? LoadOf(EngineSnapshot s)
         => _loadSensorId is not null && s.Values.TryGetValue(_loadSensorId, out var v) ? v : null;
 
-    private bool Steady()
+    /// <summary>
+    /// 温度が落ち着いたか: 25 秒以上の記録があり、最初の 3 分の 1 と最後の 3 分の 1（時間で分ける）の平均の差が 0.5°C 未満。
+    /// 回数ではなく時間で見るので、読み取りの間隔（0.25〜5 秒）が違っても同じに判断する
+    /// </summary>
+    private bool Steady() => IsSteady(_window);
+
+    internal static bool IsSteady(IReadOnlyList<(DateTime T, double Temp)> window)
     {
-        if (_window.Count < 20 || _window[^1].T - _window[0].T < TimeSpan.FromSeconds(25)) return false;
-        var first = _window.Take(_window.Count / 3).Average(w => w.Temp);
-        var last = _window.Skip(_window.Count * 2 / 3).Average(w => w.Temp);
-        return Math.Abs(last - first) < SteadyDelta;
+        if (window.Count < 4) return false;
+        var t0 = window[0].T;
+        var t1 = window[^1].T;
+        var span = t1 - t0;
+        if (span < SteadySpan) return false;
+        var third = span / 3;
+        var first = window.Where(w => w.T - t0 <= third).Select(w => w.Temp).ToList();
+        var last = window.Where(w => t1 - w.T <= third).Select(w => w.Temp).ToList();
+        if (first.Count < 2 || last.Count < 2) return false;
+        return Math.Abs(last.Average() - first.Average()) < SteadyDelta;
     }
 
     private AutoTuneStep Record(DateTime now, bool aborted)
     {
-        var recent = _window.Where(w => now - w.T <= TimeSpan.FromSeconds(15)).Select(w => w.Temp).DefaultIfEmpty(LastTemp).Average();
+        var recent = _window.Where(w => now - w.T <= RecordSpan).Select(w => w.Temp).DefaultIfEmpty(LastTemp).Average();
         var step = new AutoTuneStep
         {
             Duty = _duties[_stepIndex],
@@ -355,6 +413,7 @@ public sealed class AutoTuner : IDisposable
             Steps = _steps.ToList(),
             Fans = _fans,
             AbortReason = _abortReason,
+            ReachedLowestStep = _steps.Count > 0 && _steps.Min(x => x.Duty) <= _duties[^1],
         };
     }
 
@@ -385,6 +444,18 @@ public sealed class AutoTuner : IDisposable
             return (Math.Clamp(lo.Duty + k * (hi.Duty - lo.Duty), lo.Duty, hi.Duty), false);
         }
         return (pts[^1].Duty, false); // いちばん低い回転でも目標以下
+    }
+
+    /// <summary>
+    /// 必要な回転数が、測った段から決まるか。
+    /// 目標を超えた段があれば（その間を補間できる・全開でも届かない）決まる。どの段も目標以下なら、
+    /// 予定のいちばん低い回転数まで測れたときだけ決まる（途中で終わったときは「測った段以下」としか言えない）
+    /// </summary>
+    public static bool NeedMeasured(IReadOnlyList<AutoTuneStep> steps, double target, bool reachedLowest, double margin = 1.5)
+    {
+        if (steps.Count == 0) return false;
+        double goal = target - margin;
+        return reachedLowest || steps.Any(s => s.SteadyTemp > goal);
     }
 
     /// <summary>

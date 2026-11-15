@@ -48,8 +48,12 @@ public static class MusicFinishTests
         q[0] = new LinColor(0.6f, 0, 0);
         slow.Apply(q, 1, 0.125f);
         T.Check(Math.Abs(q[0].R - 0.6f) < 1e-4, "at 8 fps nothing is held");
-        T.Check(AttackHold.Applies(EffectVariant.Pulse) && AttackHold.Applies(EffectVariant.BeatHue) && !AttackHold.Applies(EffectVariant.Ripple) && !AttackHold.Applies(EffectVariant.Chase),
-            "used for whole-zone flashes only (moving light would leave a trail)");
+        T.Check(AttackHold.Applies(EffectVariant.Pulse) && AttackHold.Applies(EffectVariant.BeatHue),
+            "used for whole-zone flashes");
+        T.Check(AttackHold.Applies(EffectVariant.Chase) && AttackHold.Applies(EffectVariant.Scroll) && AttackHold.Applies(EffectVariant.Sparkle),
+            "also used for Chase, Scroll and Sparkle (their brightness also follows the beat flash and the bass)");
+        T.Check(!AttackHold.Applies(EffectVariant.Ripple) && !AttackHold.Applies(EffectVariant.Strobe) && !AttackHold.Applies(EffectVariant.Mood),
+            "not for Ripple (a held LED behind the thin ring would look like the ring lagging), Strobe or Mood");
     }
 
     private static AudioFrame Frame(float loudDb, bool open = true) => new() { LoudDb = loudDb, GateOpen = open };

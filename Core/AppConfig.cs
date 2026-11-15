@@ -617,12 +617,17 @@ public sealed class CalibrationResult
     /// <summary>回っている状態から下げていき、止まる直前の Duty（これ以上なら回り続ける）</summary>
     public double StopDuty { get; set; }
     public List<CalibrationPoint> Points { get; set; } = new();
+    /// <summary>この Duty 以下では回転数がほとんど変わらない（ファン自身の最低回転数。0 = なし）</summary>
+    public double DeadZoneDuty { get; set; }
     public DateTime MeasuredAt { get; set; }
 
-    /// <summary>Duty から回転数を推定する（測定点の線形補間）</summary>
+    /// <summary>回転数が変わらない範囲の上の端。前の版で測った（記録していない）結果は、測定点から求める</summary>
+    public double EffectiveDeadZone() => Math.Max(DeadZoneDuty, CalibrationFit.DeadZoneEdge(CalibrationFit.Monotone(Points)));
+
+    /// <summary>Duty から回転数を推定する（測定点の線形補間。回転数が Duty とともに減らないようにならした点を使う）</summary>
     public double? EstimateRpm(double duty)
     {
-        var pts = Points.OrderBy(p => p.Duty).ToList();
+        var pts = CalibrationFit.Monotone(Points);
         if (pts.Count < 2) return null;
         if (duty <= pts[0].Duty) return pts[0].Rpm;
         if (duty >= pts[^1].Duty) return pts[^1].Rpm;
@@ -640,10 +645,15 @@ public sealed class CalibrationResult
 
 public static class CalibrationExtensions
 {
-    /// <summary>回転数から Duty を逆算する（回っている測定点だけを使う）</summary>
+    /// <summary>
+    /// 回転数から Duty を逆算する（回っている測定点だけを使う）。
+    /// 回転数が変わらない範囲（例: 0〜20% はどれも 850 rpm）の中の点は使わず、その上の端をいちばん低い Duty にする
+    /// （範囲の中の点は回転数がほぼ同じで、どの Duty になるかが測り方の揺れで決まってしまうため）
+    /// </summary>
     public static double? EstimateDuty(this CalibrationResult cal, double rpm)
     {
-        var pts = cal.Points.Where(p => p.Rpm > 50).OrderBy(p => p.Rpm).ToList();
+        double low = cal.EffectiveDeadZone();
+        var pts = CalibrationFit.Monotone(cal.Points).Where(p => p.Rpm > 50 && p.Duty >= low).ToList();
         if (pts.Count < 2) return null;
         if (rpm <= pts[0].Rpm) return pts[0].Duty;
         if (rpm >= pts[^1].Rpm) return pts[^1].Duty;
@@ -836,6 +846,7 @@ public sealed class RgbConfig : ObservableObject
     private string _musicSource = "";
     private bool _musicAi = true;
     private bool _musicMemory = true;
+    private bool _musicScenes;
     private double _sensitivity = 1.0;
     private bool _gamma = true;
     private bool _lightsOff;
@@ -892,6 +903,11 @@ public sealed class RgbConfig : ObservableObject
     public bool MusicAi { get => _musicAi; set => Set(ref _musicAi, value); }
     /// <summary>一度聴いた曲の拍を覚え、次に同じ曲が流れたら最初から合わせる（曲名は保存せず、印だけ）</summary>
     public bool MusicMemory { get => _musicMemory; set => Set(ref _musicMemory, value); }
+    /// <summary>
+    /// 楽器の AI（YAMNet）で曲の部分ごとに目立つ楽器を聞き分け、色・光り方をゆっくり変える（CPU とメモリを少し使う）。
+    /// 前からの設定の見た目を変えないよう、初めはオフ
+    /// </summary>
+    public bool MusicScenes { get => _musicScenes; set => Set(ref _musicScenes, value); }
     /// <summary>音楽連動の感度（0.5〜3）</summary>
     public double Sensitivity { get => _sensitivity; set => Set(ref _sensitivity, value); }
     /// <summary>ガンマ補正（LED の色を画面の色に近い濃い色にする）</summary>
@@ -978,10 +994,17 @@ public sealed class MusicConfig : ObservableObject
     public string IdleEffect { get => _idleEffect; set { if (!string.IsNullOrEmpty(value)) Set(ref _idleEffect, value); } }
     /// <summary>音が止まってから、止まっているときの光り方に切り替えるまでの秒数（1〜10）</summary>
     public double IdleDelaySec { get => _idleDelaySec; set => Set(ref _idleDelaySec, value); }
+    /// <summary>
+    /// 光り方「パーツごとの役割」で、「反応する音」が「パーツに合わせる」のゾーンの分け方: Bands（音の高さ）/ Band（楽器ごと）/ Drums（ドラムだけ）。
+    /// 6.15.7 までの設定にはこの値がないので Bands（それまでと同じ光り方）になる
+    /// </summary>
+    public string RoleSet { get => _roleSet; set { if (!string.IsNullOrEmpty(value)) Set(ref _roleSet, value); } }
+    private string _roleSet = MusicRoleSets.Bands;
 
     public void Normalize()
     {
         if (!MusicPresets.All.Contains(Preset)) Preset = MusicPresets.Custom;
+        RoleSet = MusicRoleSets.Normalize(RoleSet);
         if (!Intensities.All.Contains(Intensity)) Intensity = Intensities.Moderate;
         if (!Palettes.All.Contains(Palette)) Palette = Palettes.Rainbow;
         GainDb = Math.Clamp(GainDb, -12, 12);

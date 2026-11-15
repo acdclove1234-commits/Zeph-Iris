@@ -514,6 +514,7 @@ public sealed class KickPath
         _envPos = 0;
         _kickRefDb = -120;
         _kickRefReady = false;
+        _foundPeakDb = double.NaN;
         _lowKick = default;
         KickEnv = KickPunch = 0;
     }
@@ -538,10 +539,32 @@ public sealed class KickPath
     /// 山が最近のキックの大きさより maxBelowKickDb 以上小さいときも false
     /// （スネアの胴の音（150〜250 Hz）はローパスを少し通り抜けるが、キックよりずっと小さい）。
     /// キックと認めたら、その山を「最近のキックの大きさ」として覚える（1 秒に 1 dB ずつ下げていく）。
-    /// samplesAgo = 立ち上がりが、いちばん新しい音から何個前か（実際の音の始まりに合わせて少し戻してある）
+    /// samplesAgo = 立ち上がりが、いちばん新しい音から何個前か（実際の音の始まりに合わせて少し戻してある）。
+    /// commit = false なら覚えない（ほかの確かめ（打楽器らしさ）の後で CommitOnset を呼ぶ。ベースの音を覚えないように）
     /// </summary>
-    public bool TryFindOnset(double minRiseDb, double maxBelowKickDb, out int samplesAgo, out double riseDb)
+    public bool TryFindOnset(double minRiseDb, double maxBelowKickDb, out int samplesAgo, out double riseDb) =>
+        TryFindOnset(minRiseDb, maxBelowKickDb, true, out samplesAgo, out riseDb);
+
+    /// <summary>最後に TryFindOnset（commit = false）で見つけた山を、「最近のキックの大きさ」として覚える</summary>
+    public void CommitOnset()
     {
+        if (double.IsNaN(_foundPeakDb)) return;
+        _kickRefDb = _kickRefReady ? Math.Max(_kickRefDb, _foundPeakDb) : _foundPeakDb;
+        _kickRefReady = true;
+        _foundPeakDb = double.NaN;
+    }
+
+    private double _foundPeakDb = double.NaN;
+
+    /// <summary>最後に TryFindOnset で見つけた山の大きさ（dB。振幅）。見つからなかった・CommitOnset で覚えた後は NaN</summary>
+    public double FoundPeakDb => _foundPeakDb;
+
+    /// <summary>512 個ごとの包絡線の最大値（dB）の中央値の見積もり（まだなければ NaN）</summary>
+    public double MedianHopDb => _lowKick.Ready ? _lowKick.L : double.NaN;
+
+    public bool TryFindOnset(double minRiseDb, double maxBelowKickDb, bool commit, out int samplesAgo, out double riseDb)
+    {
+        _foundPeakDb = double.NaN;
         samplesAgo = 0;
         riseDb = 0;
         int newest = (_envPos - 1) & _envMask;
@@ -572,8 +595,8 @@ public sealed class KickPath
         if (riseDb < minRiseDb) return false;
         double peakDb = 20 * Math.Log10(peak);
         if (_kickRefReady && peakDb < _kickRefDb - maxBelowKickDb) return false;
-        _kickRefDb = _kickRefReady ? Math.Max(_kickRefDb, peakDb) : peakDb;
-        _kickRefReady = true;
+        _foundPeakDb = peakDb;
+        if (commit) CommitOnset();
         double mid = Math.Sqrt(peak * (double)Math.Max(trough, 1e-9f));
         int crossAgo = peakAgo;
         for (int k = troughAgo; k >= peakAgo; k--)
@@ -586,6 +609,27 @@ public sealed class KickPath
         }
         samplesAgo = crossAgo + (int)Math.Round(OnsetLagSec * _sampleRate);
         return true;
+    }
+
+    /// <summary>
+    /// 直近 withinSec 秒の間に、キックの包絡線がキックらしく上がったか（状態は変えない。スネアを待たずに決めてよいかの確かめ）。
+    /// 今の値が、その間のいちばん小さい値より minRiseDb 以上大きく、最近のキックの山から maxBelowKickDb 以内なら true
+    /// （最近のキックがまだないときも、上がっていれば true）。下がっている途中の前のキックは、今の値がいちばん小さいので false
+    /// </summary>
+    public bool IsRising(double withinSec, double minRiseDb, double maxBelowKickDb)
+    {
+        int n = Math.Clamp((int)Math.Round(withinSec * _sampleRate), 1, _envMask);
+        int newest = (_envPos - 1) & _envMask;
+        float now = _envRing[newest];
+        if (now <= 1e-9f) return false;
+        float low = now;
+        for (int k = 1; k < n; k++)
+        {
+            float v = _envRing[(newest - k) & _envMask];
+            if (v < low) low = v;
+        }
+        if (20 * Math.Log10(now / Math.Max(low, 1e-9f)) < minRiseDb) return false;
+        return !_kickRefReady || 20 * Math.Log10(now) >= _kickRefDb - maxBelowKickDb;
     }
 
     /// <summary>512 個ごとに呼ぶ。0〜1 の値とパンチを求める</summary>

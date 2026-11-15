@@ -1,5 +1,6 @@
 // ==================================================
-// Palette.cs - 音楽連動の色の組み合わせ (パレット)。数色の「見本の色」の間を OKLab で滑らかにつないだ色の表
+// Palette.cs - 音楽連動の色の組み合わせ (パレット)。数色の「見本の色」の間を OKLab で滑らかにつないだ色の表、
+//              楽器の AI の場面ごとの色 (ScenePalettes) と、選んだパレットとの混ぜ合わせ (PaletteView)
 // Dependencies: .NET 8 (MIT License)
 // See CREDITS.txt for full license details.
 // ==================================================
@@ -143,6 +144,9 @@ public sealed class ColorPalette
         return new ColorPalette(Palettes.Solid, new[] { c, c });
     }
 
+    /// <summary>決まった見本の色（#RRGGBB）から作る（Get の覚えには入れない。場面の色 ScenePalettes 用）</summary>
+    internal static ColorPalette FromHex(string name, string[] hex) => new(name, Parse(hex));
+
     private static ColorPalette? _meter;
 
     /// <summary>音量メーター用のパレット（緑 → 黄 → 赤）</summary>
@@ -171,5 +175,124 @@ public sealed class ColorPalette
             OkLab.FitGamut(Lab.FromLch(Math.Clamp(l - MonoLightShift, 0.05f, 0.98f), ch, h - dh)),
         };
         return new ColorPalette(Palettes.Mono, stops);
+    }
+}
+
+/// <summary>
+/// 楽器の AI の場面ごとの色（見本 3 色。どの見本も、どれか 1 つの成分が FF なので、ふつうのパレットと同じ明るさ）。
+/// 歌は青、金管は金色、ギターはオレンジ、鍵盤は白っぽい水色、シンセは紫〜ピンク、弦は緑〜青緑。
+/// 場面なし（ドラムだけ・分からない）と話し声は null（選んだパレットのまま）
+/// </summary>
+public static class ScenePalettes
+{
+    private static readonly ColorPalette?[] ByGroup = Build();
+
+    private static ColorPalette?[] Build()
+    {
+        var a = new ColorPalette?[Enum.GetValues<SceneGroup>().Length];
+        a[(int)SceneGroup.Vocal] = ColorPalette.FromHex("Scene.Vocal", new[] { "#2D6BFF", "#00A8FF", "#5B4BFF" });
+        a[(int)SceneGroup.Brass] = ColorPalette.FromHex("Scene.Brass", new[] { "#FFB300", "#FFD24A", "#FF8C00" });
+        a[(int)SceneGroup.Guitar] = ColorPalette.FromHex("Scene.Guitar", new[] { "#FF5A14", "#FF8A2A", "#FF3B1F" });
+        a[(int)SceneGroup.Keys] = ColorPalette.FromHex("Scene.Keys", new[] { "#CFF6FF", "#9FE8FF", "#EAF2FF" });
+        a[(int)SceneGroup.Synth] = ColorPalette.FromHex("Scene.Synth", new[] { "#B44CFF", "#FF3CC8", "#7A3CFF" });
+        a[(int)SceneGroup.Strings] = ColorPalette.FromHex("Scene.Strings", new[] { "#00FFC3", "#00EBFF", "#45FF9D" });
+        return a;
+    }
+
+    /// <summary>場面の色（null なら選んだパレットのまま）</summary>
+    public static ColorPalette? Of(SceneGroup g) => (uint)g < (uint)ByGroup.Length ? ByGroup[(int)g] : null;
+
+    /// <summary>
+    /// 場面の色を使う光り方か。音量メーター（緑・黄・赤に意味がある。遅いデバイスで代わりに使う音量のパルスも同じ扱い）・
+    /// ストロボ（白）・パーツごとの役割（ゾーンの色が「どのパーツ・どの楽器か」を表す。遅いデバイスでは役割の側で場面の色を出している）は使わない
+    /// </summary>
+    public static bool Applies(EffectVariant v) =>
+        v is not (EffectVariant.Meter or EffectVariant.PulseLoudSlow or EffectVariant.Strobe or EffectVariant.Role or EffectVariant.RoleSlow);
+
+    /// <summary>このパレット・光り方で場面の色を使うか（選んだ色だけ・選んだ色と近い色では使わない）</summary>
+    public static bool Applies(ResolvedMusic music, EffectVariant v) =>
+        music.SceneColors && !Palettes.UsesStaticColor(music.Palette) && Applies(v);
+}
+
+/// <summary>
+/// 光り方が色を引くパレット（選んだパレットと、楽器の AI の場面の色の混ぜ合わせ）。
+/// 場面の色を使わないとき・場面が選んだパレットのままのときは、選んだパレット（User）の色をそのまま返す（今までとまったく同じ値）。
+/// 場面が変わる途中は、前の場面の色（From）と次の場面の色（To）を OKLab の直線で U（0〜1）の割合で混ぜ、
+/// いちばん強い成分を 2 つの色の間の値にそろえる（混ぜた途中で暗くならないように）。new しない（毎コマ使ってよい）
+/// </summary>
+public readonly struct PaletteView
+{
+    public readonly ColorPalette User, From, To;
+    /// <summary>From → To の割合（0 = From、1 = To）</summary>
+    public readonly float U;
+
+    /// <summary>選んだパレットだけ（場面の色なし）</summary>
+    public PaletteView(ColorPalette user)
+    {
+        User = From = To = user;
+        U = 1;
+    }
+
+    /// <summary>パレットそのまま（場面の色なし）</summary>
+    public static implicit operator PaletteView(ColorPalette p) => new(p);
+
+    public PaletteView(ColorPalette user, ColorPalette from, ColorPalette to, float u)
+    {
+        User = user;
+        From = from;
+        To = to;
+        U = Math.Clamp(u, 0f, 1f);
+    }
+
+    /// <summary>
+    /// 場面 scene の時刻 t の混ぜ合わせ。snap なら途中の色を作らず、半分を過ぎたところで一度に切り替える
+    /// （途中の色を何度も送るとちかちかするデバイス用）
+    /// </summary>
+    public static PaletteView Of(ColorPalette user, MusicScene? scene, double t, bool snap)
+    {
+        if (scene is null) return new PaletteView(user);
+        var to = ScenePalettes.Of(scene.Group) ?? user;
+        var from = ScenePalettes.Of(scene.From) ?? user;
+        if (ReferenceEquals(from, to)) return new PaletteView(user, to, to, 1);
+        float u = scene.Progress(t);
+        if (snap) u = u >= 0.5f ? 1f : 0f;
+        return new PaletteView(user, from, to, u);
+    }
+
+    /// <summary>1 つのパレットだけを引けばよいとき、そのパレット（混ぜている途中なら null）</summary>
+    private ColorPalette? Single => U >= 1 || ReferenceEquals(From, To) ? To : U <= 0 ? From : null;
+
+    /// <summary>場面の色を混ぜているか（選んだパレットのままでなければ true）</summary>
+    public bool Tinted => !(Single is { } p && ReferenceEquals(p, User));
+
+    /// <summary>位置 x の色（LED に送る光の量）</summary>
+    public LinColor At(double x, bool gamma)
+    {
+        if (Single is { } p) return p.At(x, gamma);
+        var led = OkLab.ToLed(Lab.Lerp(From.LabAt(x), To.LabAt(x), U), gamma);
+        float a = From.At(x, gamma).MaxChannel, b = To.At(x, gamma).MaxChannel;
+        float target = a + (b - a) * U;
+        float m = led.MaxChannel;
+        return m > 1e-6f ? led * (target / m) : led;
+    }
+
+    /// <summary>位置 x の色（OKLab）。混ぜている途中は、光の量のいちばん強い成分を 2 つの色の間の値にそろえる</summary>
+    public Lab LabAt(double x)
+    {
+        if (Single is { } p) return p.LabAt(x);
+        Lab a = From.LabAt(x), b = To.LabAt(x);
+        var lab = Lab.Lerp(a, b, U);
+        float ma = MaxLinear(a), mb = MaxLinear(b), m = MaxLinear(lab);
+        float target = ma + (mb - ma) * U;
+        if (!(m > 1e-6f) || !(target > 0)) return lab;
+        // 光の量を k 倍すると OKLab は k の 3 乗根倍になる（OKLab は光の量の 3 乗根の一次式）
+        float k = MathF.Cbrt(target / m);
+        return new Lab(lab.L * k, lab.A * k, lab.B * k);
+    }
+
+    private static float MaxLinear(Lab c)
+    {
+        OkLab.ToLinear(c, out float r, out float g, out float b);
+        return Math.Clamp(MathF.Max(r, MathF.Max(g, b)), 0f, 1f);
     }
 }

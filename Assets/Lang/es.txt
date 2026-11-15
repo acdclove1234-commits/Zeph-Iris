@@ -324,7 +324,6 @@ b0ba1b8f	Azul
 4cba9eab	Ajustes por zona (conector)
 d64827fc	Cambia el efecto, la dirección y el tono de cada conector de la placa base según lo que tenga conectado (ventiladores, fuente, bloque de refrigeración líquida, etc.). «Igual que el dispositivo» mantiene los ajustes de arriba. Lo que va encadenado en un mismo conector forma una zona
 41860c08	Cambia el efecto de sincronización musical solo para esta zona (p. ej. vúmetro para los ventiladores del radiador, color al ritmo para la fuente)
-1642d09b	Con el efecto «Cada pieza en su papel», a qué sonido reacciona esta zona. «Según la pieza»: ventiladores graves, tarjeta gráfica medios, memoria y teclado agudos. Si varias zonas del mismo dispositivo quedan con el mismo sonido (como los conectores de ventilador), se les asignan graves, medios y agudos por turno
 ed5a9363	Dirección
 3d275c1f	Consejo: en los conectores ARGB de la placa base sin nada conectado, pon el número de LED en 0 en OpenRGB desde Devices → (placa base) → «Edit Device». Se envían menos datos y el movimiento es más fluido. Espejo e Invertir afectan a los efectos que usan el orden de los LED (espectro, vúmetro, etc.).
 6a1f71f3	Disposición en la caja
@@ -1947,3 +1946,53 @@ c98fd0e4	No se encontró ningún conector de ventilador.
 a08b13cf	No se pudo desactivar el inicio al iniciar sesión. En Ajustes → «General», vuelve a desactivar «Iniciar automáticamente al iniciar sesión en Windows».
 cd2d0b3c	• Tus ajustes actuales de los ventiladores se mantienen tal como están. Cierra esta ventana con «Cancelar».
 845000a1	No se encontraron conectores de ventilador, así que tus ajustes actuales de los ventiladores se mantienen tal como están. Cierra el otro software, reinicia la app y vuelve a ejecutar la configuración.
+82cfa58e	Abre la guía de uso (configuración inicial, uso diario, solución de problemas)
+13d94a85	Guía de uso
+b44c9cc9	Sitio de OpenRGB
+d279d75b	Abre la página (openrgb.org) donde se obtiene OpenRGB (gratis), que se usa para cambiar los colores de los LED
+b6ac496a	Abrir guía de uso
+619bb003	Abre la guía de la carpeta de la aplicación (o el README en GitHub si no está)
+44b1af0b	No se pudo abrir el navegador: {0}
+ce000878	No se pudo abrir la guía de uso.
+52b3b243	No se encontró OpenRGB. Instala OpenRGB (gratuito) e inícialo (si activas «Iniciar OpenRGB si no se está ejecutando», esta app inicia el OpenRGB instalado en Program Files).
+94a21ec2	Reparto de instrumentos
+8703d0a3	Con el efecto «Cada pieza en su papel», qué sonido o instrumento ilumina una zona cuyo «Sonido al que reaccionar» es «Según la pieza». Los sonidos elegidos para cada zona se mantienen
+876fdd1c	Los instrumentos se deducen del sonido, así que en algunas canciones se confunden. Los sonidos rápidos (charles, caja) se muestran como pequeñas chispas de luz, y los dispositivos que se actualizan despacio, como la tarjeta gráfica o la memoria, solo muestran el color del instrumento que destaca en cada parte de la canción
+5519f7df	Con un solo color no se pueden distinguir los instrumentos por color. Con el efecto «Instrumentos», se muestran por el brillo, el lugar que se ilumina y el movimiento (el bombo ilumina todo, el charles son pequeñas chispas, la voz marca el brillo general, etc.)
+0d8065a5	Analiza aproximadamente el último segundo de sonido cada 0,5 segundos. Los colores cambian a lo largo de unos segundos y nunca parpadean. Los colores no cambian con las paletas «Solo el color elegido» y «Colores parecidos al elegido», ni con Vúmetro, Estroboscopio y «Cada pieza en su papel»
+1b6f3970	Reconocer instrumentos con AI
+aadf5c4a	La AI (YAMNet) reconoce el instrumento que destaca en cada parte de la canción (voz, guitarra, piano, metales, sintetizador, cuerdas) y cambia los colores despacio (azul para la voz, dorado para los metales, naranja para la guitarra, etc.). Con un solo color, cambia el movimiento del efecto «Instrumentos». Funciona solo en este PC y usa un poco de CPU y memoria
+4e43701b	Con el efecto «Cada pieza en su papel», qué sonido ilumina esta zona. «Según la pieza» sigue el «Reparto de instrumentos» (por tono: los ventiladores, los graves; la tarjeta gráfica, los medios; la memoria y los teclados, los agudos). Si varias zonas del mismo dispositivo quedan con el mismo sonido (como los conectores de ventilador), se reparten por turnos. También puedes elegir un solo instrumento, como bombo, caja o voz
+b555c16c	AI de instrumentos
+dbb80bf4	Velocidad necesaria para mantener el objetivo de {0:F0}°C: {1:F0}% o menos (la prueba terminó antes, así que no se midieron velocidades más bajas)
+da6452ac	Almacenamiento
+bb721e17	Placa base y otros
+50030dc4	{0}: la curva «{1}» parece usar un sensor equivocado
+3959777c	En el perfil «{0}», «{1}» parece por su nombre una curva de {2}, pero lee «{3}» ({4}). Aunque {5} se caliente, esta curva no subirá la velocidad.
+4059ff76	Cambiar a «{0}»
+8b8b7a36	En el perfil «{0}», la temperatura de «{1}» se cambió a «{2}».
+08d8c54e	{0}: el ventilador de la GPU solo sigue la temperatura del almacenamiento
+3ba7001c	En el perfil «{0}», este ventilador solo lee «{1}». Aunque la GPU se caliente en juegos, no subirá la velocidad.
+d71badc6	Cambiar a una curva basada en «{0}»
+d0514409	En el perfil «{0}», se cambió a la curva estándar basada en «{1}».
+dc31499c	Sensor virtual «{0}»: no se pueden leer los sensores de origen ({1}), así que se calcula solo con los sensores restantes.
+a0b3b7dd	Instrumentos
+3c260d3f	El bombo ilumina todo, la caja un lado, el charles pequeñas chispas, el bajo el extremo, la voz el brillo general, y la guitarra o los teclados una luz que fluye. Los instrumentos se distinguen incluso con un solo color (Solo el color elegido)
+d3efe37c	Por instrumento
+e8d8b63a	Solo batería
+31b76718	Por tono (graves, medios, agudos)
+ce37ccb7	Cada pieza se ilumina con su propio instrumento: los ventiladores con el bombo, la memoria y los teclados con el charles, la tarjeta gráfica con la voz, etc. Si hay varios conectores de ventilador, se reparten por turnos entre bombo, caja, charles y bajo
+c7cc18b1	Se ilumina solo con el bombo, la caja y el charles. No reacciona a la guitarra ni a la voz
+7b659d5a	Reparte por tono: los ventiladores con los graves, la tarjeta gráfica con los medios y la memoria con los agudos (como antes)
+c33f330a	Bombo
+8b911b1b	Caja
+7ae7bcde	Charles y platillos
+f5489867	Bajo (instrumento)
+412c6fd5	Voz y solista
+203562ee	Acordes (teclados, guitarra)
+dac2be1c	Pad y sintetizador
+64270fa4	{0}: terminó antes de llegar a la velocidad más baja que mantiene el objetivo, así que no se creó ninguna curva y se mantiene la actual ({1})
+d5a051f9	Velocidad necesaria para mantener {0:F0}°C: {1:F0}% o menos (no se midieron velocidades más bajas)
+0c8c7106	* No se midió la velocidad más baja que mantiene el objetivo, así que esta curva no se usará aunque apliques el resultado (se mantiene la curva actual)
+e2a336cd	No se midió la velocidad más baja que mantiene el objetivo, así que no se aplicó la curva (se mantiene la actual).
+90a68504	Por debajo del {0:F0}%, la velocidad apenas cambia (la velocidad mínima propia del ventilador).

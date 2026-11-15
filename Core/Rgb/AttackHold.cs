@@ -24,12 +24,13 @@ public sealed class AttackHold
     public static double HoldSec { get; set; } = DefaultHoldSec;
 
     /// <summary>
-    /// 使う光り方: LED の受け持ちが決まっていて、光が移動しないもの（パルス・ビートで色替え・ミックス・パーツごとの役割・
-    /// スペクトラム（LED ごとに受け持つ音の高さが決まっている））。
-    /// 光が動く光り方（波紋・テンポ追従・流れる波など）では、通り過ぎた光が残って尾を引くので使わない
+    /// 使う光り方: パルス・ビートで色替え・ミックス・パーツごとの役割・スペクトラムと、テンポ追従・流れる波・きらめき
+    /// （テンポ追従の帯・流れる波・きらめきの下地も、拍の光と低音で明るさが決まるので、立ち上がりが段つきになる）。
+    /// 波紋は使わない: 細い輪が 1 コマに 1〜2 個ずつ進むので、通り過ぎた LED を 2 コマ保つと、いちばん明るい所が輪の
+    /// 3 個後ろになって輪が遅れて見える（波紋のちらつきは LedSteady の「光が動く光り方」の直し方で止める）
     /// </summary>
     public static bool Applies(EffectVariant v) => v is EffectVariant.Pulse or EffectVariant.BeatHue or EffectVariant.Mix or EffectVariant.Role
-        or EffectVariant.Spectrum;
+        or EffectVariant.Ensemble or EffectVariant.Spectrum or EffectVariant.Chase or EffectVariant.Scroll or EffectVariant.Sparkle;
 
     private float[] _peak = Array.Empty<float>();
     private float[] _age = Array.Empty<float>();

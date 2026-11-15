@@ -157,7 +157,8 @@ public static class ReviewFixRgbTests
         T.Check(governed.EffectiveFps < RgbDeviceChannel.DitherMinFps && !governed.Input.AllowDither,
             $"governor lowered the rate to {governed.EffectiveFps:F0} fps → no dithering");
 
-        // 描画: 暗い一定の色は、ディザリングを許すとコマごとに揺れ、許さなければ毎回同じ値
+        // 描画: 音楽連動の暗い一定の色は、ディザリングを許しても許さなくても毎回同じ値
+        // （6.15.7 までは許すとコマごとに 2・3・2・3 と揺れていた。暗い LED のちらつきに見えるので、前に送った値を保つ書き方にした）
         foreach (bool allow in new[] { true, false })
         {
             var r = new DeviceRenderer(Fast());
@@ -183,7 +184,7 @@ public static class ReviewFixRgbTests
                 values.Add(output[0].B);
                 last = t;
             }
-            T.Check(allow ? values.Count > 1 : values.Count == 1, $"AllowDither={allow}: {values.Count} distinct values over 30 frames");
+            T.Check(values.Count == 1, $"music mode, AllowDither={allow}: no temporal dithering ({values.Count} distinct value(s) over 30 frames)");
         }
     }
 

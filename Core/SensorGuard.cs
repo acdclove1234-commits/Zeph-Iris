@@ -9,7 +9,7 @@ namespace ProFanController;
 /// <summary>
 /// 制御に使う温度センサーの値を、次の 2 つの異常から守る。
 ///   ・スパイク: 1 回だけ大きく跳ねて、次の回には元に戻る値（読み取りの瞬断など）。
-///              大きな変化は 2 回続いて初めて受け入れるので、本物の温度上昇は 1 周期遅れるだけで反映される。
+///              大きな変化は 2 回続いて（かつ 約 1 秒続いて）初めて受け入れるので、本物の温度上昇は 約 1 秒遅れるだけで反映される。
 ///   ・固着    : 同じ値のまま変わらないのに、同じ部品の使用率は大きく変わっている（センサーが止まっている）。
 ///              アイドル中に温度が一定なのは普通なので、「負荷が変わったのに温度が動かない」ときだけ異常とみなす。
 ///              ただし緊急温度に近い高い温度（NoStuckAbove 以上）では固着と判定しない
@@ -21,6 +21,13 @@ public sealed class SensorGuard
 {
     /// <summary>1 周期でこれ以上変わったら、次の周期で確認してから受け入れる</summary>
     public const double SpikeThreshold = 20;
+    /// <summary>
+    /// 大きく変わった値は、最初に来てからこの時間（秒）がたつまで受け入れない（同じくらいの値が続いたとき）。
+    /// 1 秒ごとの更新で「2 回続いたら」と同じ長さ。回数だけで決めると、更新間隔を 250ms にしたとき 0.25 秒で通ってしまう
+    /// </summary>
+    public const double ConfirmSeconds = 0.8;
+    /// <summary>値が毎回違っていても、最初に来てからこの時間（秒）続けて離れていれば受け入れる（1 秒ごとの更新で 3 回分）</summary>
+    public const double ForceAcceptSeconds = 1.6;
     /// <summary>この時間、値がまったく変わらなければ固着を疑う</summary>
     public static readonly TimeSpan StuckTime = TimeSpan.FromMinutes(3);
     /// <summary>固着を疑っている間に、使用率がこれ以上変化していたら固着と判定する</summary>
@@ -31,6 +38,8 @@ public sealed class SensorGuard
         public double? Accepted;
         public double? Pending;
         public int PendingCount;
+        /// <summary>今の大きな変化が最初に来た時刻</summary>
+        public DateTime PendingSince;
         public double LastRaw = double.NaN;
         public DateTime UnchangedSince;
         public double LoadMin = double.MaxValue;
@@ -118,11 +127,14 @@ public sealed class SensorGuard
             return v;
         }
         // 大きく変わった値は、同じくらいの値がもう一度来たら本物とみなす。
-        // 急上昇中で毎回値が違っても、3 回続けて離れていれば本物として受け入れる
+        // 急上昇中で毎回値が違っても、3 回続けて離れていれば本物として受け入れる。
+        // どちらも回数に加えて時間（ConfirmSeconds・ForceAcceptSeconds）も待つので、更新間隔を縮めても無視できる跳ねの長さは同じ
         bool similar = s.Pending is double p && Math.Abs(v - p) < SpikeThreshold / 2;
+        if (s.PendingCount == 0) s.PendingSince = now;
         s.PendingCount++;
         s.Pending = v;
-        if ((similar && s.PendingCount >= 2) || s.PendingCount >= 3)
+        double waited = (now - s.PendingSince).TotalSeconds;
+        if ((similar && s.PendingCount >= 2 && waited >= ConfirmSeconds) || (s.PendingCount >= 3 && waited >= ForceAcceptSeconds))
         {
             s.Accepted = v;
             s.Pending = null;

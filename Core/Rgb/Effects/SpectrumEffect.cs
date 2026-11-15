@@ -9,6 +9,7 @@ namespace ProFanController;
 /// <summary>
 /// スペクトラム: 「始まり」側が低音、端が高音。LED の位置 x（0〜1）の強さは 10 帯の間を直線で補う:
 ///   B(x) = lerp(e_k, e_k+1, u − k)、u = x × 9、k = ⌊u⌋（e = 立ち上がりを強調した帯の強さ Punch）
+///   LED ごとに、B が上がったらすぐ明るく、0.15 秒保ってから τ 0.25 秒で下げる（細かい刻みで上下しない）
 ///   ピークの保持: h = 最大値を 0.4 秒保ち、その後 1 秒に 1.5 ずつ下げる（ゴーストとして 0.35 倍で見せる）
 ///   LED の色 = P(x + 少しずつ回る量) × Ilin(max(B(x), 0.35 × h))
 /// 24 個以上のゾーンは、隣どうしを [0.25, 0.5, 0.25] で 1 回ぼかす（帯の境目のカクカクを消す）。
@@ -28,12 +29,21 @@ public sealed class SpectrumEffect : IMusicEffect
     public const double RotatePerTrigger = 0.02;
     /// <summary>色を回すときの滑らかさ（秒）</summary>
     public const double RotateTauSec = 0.3;
+    /// <summary>
+    /// LED ごとの強さを、上がってから保つ秒数と、その後に下がる時定数（秒。上がるときはすぐ）。帯の強さ（Punch）は音の立ち上がりの
+    /// たびに一瞬だけ上がって 0.1 秒で戻るので、16 分のハイハット（0.11〜0.16 秒おき）で高音側の LED が 1 秒に何回も上下して
+    /// ちらついていた（6.15.7: 向きの戻り 5.67 回／秒）。保つ間に次のハイハットが来れば、LED は明るいまま
+    /// </summary>
+    public const double SmoothHoldSec = 0.15, SmoothReleaseSec = 0.25;
 
     private readonly MixEffect _small = new();
     private float[] _hPeak = Array.Empty<float>();
     private double[] _tPeak = Array.Empty<double>();
     private float[] _v = Array.Empty<float>();
     private float[] _tmp = Array.Empty<float>();
+    /// <summary>LED ごとの、ならした今の強さ</summary>
+    private float[] _s = Array.Empty<float>();
+    private double[] _sT = Array.Empty<double>();
     private double _rot;
 
     public string Name => MusicStyles.Spectrum;
@@ -47,8 +57,12 @@ public sealed class SpectrumEffect : IMusicEffect
             _tPeak = new double[n];
             _v = new float[n];
             _tmp = new float[n];
+            _s = new float[n];
+            _sT = new double[n];
         }
         Array.Clear(_hPeak);
+        Array.Clear(_s);
+        Array.Fill(_sT, double.NegativeInfinity);
         Array.Fill(_tPeak, double.NegativeInfinity);
         _rot = RotatePerTrigger * c.TriggerCount;
         _small.Reset(c);
@@ -74,15 +88,23 @@ public sealed class SpectrumEffect : IMusicEffect
     {
         if (s.Small) { _small.Render(c, s, dst); return; }
         int a = s.Start, end = s.Start + s.Count;
-        double t = c.T;
+        double t = c.AgeT;   // 続いている値なので、まだ届いていない先読みの分は減らさない（EffectContext.AgeT）
         for (int j = a; j < end; j++)
         {
             float x = c.X[j];
-            float now = BandCurve(c.Frame.Punch, x);
-            float pk = Math.Max(now, BandCurve(c.Peak.Punch, x));
+            float raw = BandCurve(c.Frame.Punch, x);
+            float pk = Math.Max(raw, BandCurve(c.Peak.Punch, x));
             // ピークの時刻 = この LED が見ている 2 つの帯のうち、強いほうがピークになった時刻
             int k = Math.Min((int)(Math.Clamp(x, 0f, 1f) * (AudioFrame.BandCount - 1)), AudioFrame.BandCount - 2);
             double tPk = c.Peak.Punch[k] >= c.Peak.Punch[k + 1] ? c.PunchPeakT[k] : c.PunchPeakT[k + 1];
+            // 今の強さ: 上がるときはすぐ。コマの間のピークから SmoothHoldSec は保ち、その後 SmoothReleaseSec でゆっくり下げる
+            // （ピークの本当の時刻から計算するので、1 秒間のコマ数に左右されない）
+            if (pk >= LevelAt(j, tPk))
+            {
+                _s[j] = pk;
+                _sT[j] = tPk;
+            }
+            float now = Math.Max(raw, LevelAt(j, t));
             // ピーク: 保持時間が過ぎたら一定の速さで下げる（時刻で計算するので 1 秒間のコマ数に左右されない）
             if (pk >= HeightAt(j, tPk))
             {
@@ -96,6 +118,13 @@ public sealed class SpectrumEffect : IMusicEffect
         double span = c.Pal.Span;
         for (int j = a; j < end; j++)
             dst[j] = c.PalAt(c.X[j] * span + _rot) * c.Ilin(_v[j]);
+    }
+
+    /// <summary>LED j のならした強さの、時刻 t の値（SmoothHoldSec は保ち、その後 SmoothReleaseSec で下げる）</summary>
+    private float LevelAt(int j, double t)
+    {
+        double age = t - _sT[j] - SmoothHoldSec;
+        return age <= 0 ? _s[j] : _s[j] * (float)Math.Exp(-age / SmoothReleaseSec);
     }
 
     /// <summary>LED j のピークの、時刻 t の高さ（保持時間が過ぎたら 1 秒に 1.5 ずつ下げる）</summary>

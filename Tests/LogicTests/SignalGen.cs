@@ -1,5 +1,6 @@
 // ==================================================
-// SignalGen.cs - テスト用の合成音 (キック・ハイハット・スネア・サイン波・白色／ピンクノイズ・ループ・ランダムな打音)
+// SignalGen.cs - テスト用の合成音 (キック・ハイハット・スネア・サイン波・白色／ピンクノイズ・ループ・ランダムな打音・
+//                ベースライン・声に似た音・パッド・金管に似た音・はじいた和音)
 // Dependencies: .NET 8 (MIT License)
 // See CREDITS.txt for full license details.
 // ==================================================
@@ -202,6 +203,149 @@ public sealed class SignalGen
         Tone(392, 0.03, from, to);
         Tone(523.3, 0.02, from, to);
         Pink(-32, from, to);
+    }
+
+    // ===== 楽器らしさの確かめ用（InstrumentFeatures）
+
+    /// <summary>ベースの音の出だしの時刻（バッファの先頭からの秒）と高さ（Hz）</summary>
+    public readonly List<double> BassNoteTimes = new();
+    public readonly List<double> BassNoteHz = new();
+
+    /// <summary>
+    /// ベースライン（はじいたベース）: 1 秒に notesPerSec 音、notesHz を順に。倍音 6 本（1/h^1.5）・立ち上がり 6 ミリ秒・
+    /// 0.35 秒で減衰・次の音の 10 ミリ秒前に止める
+    /// </summary>
+    public void BassLine(double from, double to, double notesPerSec, double[] notesHz, double amp = 0.3)
+    {
+        double step = 1 / notesPerSec;
+        int k = 0;
+        for (double t = from; t < to - 1e-9; t += step, k++)
+        {
+            double f = notesHz[k % notesHz.Length];
+            int s0 = (int)Math.Round(t * Fs);
+            BassNoteTimes.Add(s0 / (double)Fs);
+            BassNoteHz.Add(f);
+            int n = (int)((Math.Min(step, to - t) - 0.010) * Fs);
+            int rel = (int)(0.010 * Fs);
+            for (int i = 0; i < n + rel; i++)
+            {
+                double tt = i / (double)Fs;
+                double env = Math.Min(1, tt / 0.006) * Math.Exp(-tt / 0.35);
+                if (i >= n) env *= 1 - (i - n) / (double)rel;
+                double v = 0;
+                for (int h = 1; h <= 6; h++) v += Math.Sin(2 * Math.PI * f * h * tt) / Math.Pow(h, 1.5);
+                Add(s0 + i, amp * env * v);
+            }
+        }
+    }
+
+    /// <summary>
+    /// 声に似た音: 声帯の音（倍音 1/h、5 kHz まで）を 3 つの共鳴（「あ」の母音 730・1,090・2,440 Hz）で形づくり、
+    /// 0.15 秒後から vibratoHz・±vibratoCents のビブラート。立ち上がり 40 ミリ秒・音の終わり 50 ミリ秒
+    /// </summary>
+    public void VocalTone(double from, double to, double[] notesHz, double noteSec, double amp = 0.15, double vibratoHz = 5.5, double vibratoCents = 40)
+    {
+        double[] fc = { 730, 1090, 2440 }, bw = { 100, 120, 170 }, g = { 1.0, 0.5, 0.25 };
+        static double Formant(double f, double[] fc, double[] bw, double[] g)
+        {
+            double a = 0.02;
+            for (int i = 0; i < fc.Length; i++)
+            {
+                double u = (f - fc[i]) / (bw[i] / 2);
+                a += g[i] / (1 + u * u);
+            }
+            return a;
+        }
+        int k = 0;
+        for (double t = from; t < to - 1e-9; t += noteSec, k++)
+        {
+            double f0 = notesHz[k % notesHz.Length];
+            int s0 = (int)Math.Round(t * Fs), n = (int)(Math.Min(noteSec, to - t) * Fs);
+            double phase = 0;
+            int hMax = (int)(5000 / f0);
+            for (int i = 0; i < n; i++)
+            {
+                double tt = i / (double)Fs;
+                double ramp = Math.Clamp((tt - 0.15) / 0.15, 0, 1);
+                double f = f0 * Math.Pow(2, vibratoCents / 1200 * ramp * Math.Sin(2 * Math.PI * vibratoHz * tt));
+                phase += 2 * Math.PI * f / Fs;
+                double env = Math.Min(1, tt / 0.040) * Math.Min(1, (n - i) / (0.050 * Fs));
+                double v = 0;
+                for (int h = 1; h <= hMax; h++) v += Formant(h * f, fc, bw, g) / h * Math.Sin(h * phase);
+                Add(s0 + i, amp * env * v);
+            }
+        }
+    }
+
+    /// <summary>
+    /// パッド: 和音の音ごとに 3 つの少しずらした音（±detuneCents）、倍音 8 本（1/h²）。立ち上がり・終わりとも 0.5 秒。
+    /// seed を変えると位相とずらし方が変わる（左右で別の音にして、横に広げる）
+    /// </summary>
+    public void PadChord(double from, double to, double[] chordHz, double amp = 0.05, double detuneCents = 7, int seed = 1)
+    {
+        var rng = new Random(seed);
+        int a = (int)(from * Fs), b = Math.Min(Buf.Length, (int)(to * Fs));
+        foreach (double fn in chordHz)
+        {
+            for (int v = -1; v <= 1; v++)
+            {
+                double f = fn * Math.Pow(2, (v * detuneCents + (rng.NextDouble() - 0.5) * 2) / 1200);
+                double ph = rng.NextDouble() * 2 * Math.PI;
+                for (int i = a; i < b; i++)
+                {
+                    double tt = (i - a) / (double)Fs;
+                    double env = Math.Min(1, Math.Min(tt / 0.5, (b - i) / (0.5 * Fs)));
+                    double s = 0;
+                    for (int h = 1; h <= 8; h++) s += Math.Sin(h * (2 * Math.PI * f * tt + ph)) / (h * h);
+                    Add(i, amp / 3 * env * s);
+                }
+            }
+        }
+    }
+
+    /// <summary>
+    /// 金管に似た音: 倍音がたくさんあり（8 kHz まで）、1.5 kHz あたりがいちばん強い明るい音。大きいほど高い倍音が強い。
+    /// 立ち上がり 60 ミリ秒・音の終わり 60 ミリ秒・音と音の間は 30 ミリ秒あける
+    /// </summary>
+    public void BrassTone(double from, double to, double[] notesHz, double noteSec, double amp = 0.12)
+    {
+        int k = 0;
+        for (double t = from; t < to - 1e-9; t += noteSec, k++)
+        {
+            double f0 = notesHz[k % notesHz.Length];
+            int s0 = (int)Math.Round(t * Fs), n = (int)((Math.Min(noteSec, to - t) - 0.030) * Fs);
+            int hMax = (int)(8000 / f0);
+            for (int i = 0; i < n; i++)
+            {
+                double tt = i / (double)Fs;
+                double env = Math.Min(1, tt / 0.060) * Math.Min(1, (n - i) / (0.060 * Fs));
+                double v = 0;
+                for (int h = 1; h <= hMax; h++)
+                {
+                    double f = h * f0;
+                    double shape = f < 1500 ? Math.Sqrt(f / 1500) : Math.Pow(1500 / f, 1.2);
+                    v += shape * Math.Pow(env, 0.2 * (h - 1)) * Math.Sin(2 * Math.PI * f * tt);
+                }
+                Add(s0 + i, amp * env * v / 4);
+            }
+        }
+    }
+
+    /// <summary>ギター・鍵盤に似た音: 和音の音を spreadSec ずつずらしてはじく（倍音 8 本 1/h^1.2・0.4 秒で減衰）</summary>
+    public void Strum(double t0, double[] chordHz, double amp = 0.08, double spreadSec = 0.012)
+    {
+        for (int j = 0; j < chordHz.Length; j++)
+        {
+            int s0 = (int)Math.Round((t0 + j * spreadSec) * Fs), n = (int)(1.6 * Fs);
+            for (int i = 0; i < n; i++)
+            {
+                double tt = i / (double)Fs;
+                double env = Math.Exp(-tt / 0.4) * Math.Min(1, tt / 0.002) * Fade(i, n);
+                double v = 0;
+                for (int h = 1; h <= 8; h++) v += Math.Sin(2 * Math.PI * chordHz[j] * h * tt) / Math.Pow(h, 1.2);
+                Add(s0 + i, amp * env * v);
+            }
+        }
     }
 
     /// <summary>ランダムな打音（間隔は指数分布、平均 meanGap 秒・最短 minGap 秒）。キック 60%・スネア 20%・ハイハット 20%</summary>

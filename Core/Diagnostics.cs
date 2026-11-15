@@ -29,9 +29,12 @@ public static class Diagnostics
         IReadOnlyList<SensorInfo> temperatures, TimeSpan window)
     {
         var list = new List<DiagnosticFinding>();
+        // 設定だけで分かる問題（センサーの選び間違い）は、記録が足りなくても知らせる
+        var mismatches = SensorMismatches(cfg, temperatures);
         if (h.Count < 120)
         {
             list.Add(new() { Level = FindingLevel.Info, Title = L("記録が足りません"), Detail = L("診断には 2 分以上の記録が必要です。しばらく使ってから（できればゲームなどで負荷をかけた後に）もう一度実行してください。") });
+            list.AddRange(mismatches);
             return list;
         }
 
@@ -295,12 +298,132 @@ public static class Diagnostics
             }
         }
 
+        list.AddRange(mismatches);
+
         if (list.All(f => f.Level is FindingLevel.Info or FindingLevel.Good && f.Apply is null))
         {
             list.Insert(0, new() { Level = FindingLevel.Good, Title = L("大きな問題は見つかりませんでした"), Detail = L($"直近 {minutes:F0} 分の記録を確認しました。") });
         }
         // 「問題なし」を先頭に、あとは重要なものから
         return list.OrderBy(f => f.Level == FindingLevel.Good ? 0 : 1).ThenByDescending(f => f.Level).ToList();
+    }
+
+    /// <summary>ストレージ（SSD・HDD）の温度か</summary>
+    public static bool IsStorageSensor(string id, IReadOnlyList<SensorInfo> temperatures)
+        => temperatures.FirstOrDefault(t => t.Id == id)?.HardwareType == "Storage"
+           || id.StartsWith("/nvme", StringComparison.OrdinalIgnoreCase) || id.StartsWith("/hdd", StringComparison.OrdinalIgnoreCase)
+           || id.StartsWith("/ssd", StringComparison.OrdinalIgnoreCase) || id.StartsWith("/storage", StringComparison.OrdinalIgnoreCase);
+
+    /// <summary>カーブの名前から、何を冷やすカーブか（CPU・GPU のどちらか一方の名前が入っているときだけ。両方・どちらもなしは null）</summary>
+    public static SensorKind? CurveIntent(string name)
+    {
+        bool cpu = name.Contains("CPU", StringComparison.OrdinalIgnoreCase);
+        bool gpu = name.Contains("GPU", StringComparison.OrdinalIgnoreCase) || name.Contains("Hot Spot", StringComparison.OrdinalIgnoreCase);
+        if (cpu == gpu) return null;
+        return cpu ? SensorKind.Cpu : SensorKind.Gpu;
+    }
+
+    /// <summary>
+    /// センサーの選び間違い（設定だけで分かる。全プロファイル）:
+    /// ・名前が CPU・GPU のカーブが、ストレージ・もう一方の部品・名前の合わないマザーボードなどの温度を見ている
+    ///   （例: ラジエーターの「GPU」カーブが SSD の温度を見ている。GPU が熱くなっても回転が上がらない）
+    /// ・GPU のファン（GPU の端子・名前に GPU が入ったファン）が、ストレージの温度だけで動いている
+    /// 仮想センサーは何を組み合わせたか分からないので見ない。今つながっていないセンサーは「見つからない」の扱いなので見ない
+    /// </summary>
+    public static List<DiagnosticFinding> SensorMismatches(AppConfig cfg, IReadOnlyList<SensorInfo> temperatures)
+    {
+        var list = new List<DiagnosticFinding>();
+        var cpuSensor = SensorNames.CpuTemperature(temperatures);
+        var gpuSensor = SensorNames.GpuCoreTemperature(temperatures);
+        string NameOf(string id) => temperatures.FirstOrDefault(t => t.Id == id)?.Name ?? id;
+        bool Known(string id) => !id.StartsWith(VirtualSensorConfig.IdPrefix) && temperatures.Any(t => t.Id == id);
+
+        foreach (var profile in cfg.Profiles)
+        {
+            string profileName = profile.Name;
+            foreach (var fan in profile.Fans.Where(f => !f.IsPump))
+            {
+                string controlId = fan.ControlId;
+                bool curveFinding = false;
+
+                // --- 名前と違う種類の温度を見ているカーブ
+                foreach (var curve in fan.Curves)
+                {
+                    if (CurveIntent(curve.Name) is not { } want || !Known(curve.SensorId)) continue;
+                    string sensorId = curve.SensorId, sensorName = NameOf(sensorId), curveName = curve.Name;
+                    var kind = CurvePresets.Classify(sensorId, sensorName);
+                    string wantText = want == SensorKind.Cpu ? "CPU" : "GPU";
+                    string kindText;
+                    var level = FindingLevel.Warning;
+                    if (IsStorageSensor(sensorId, temperatures)) kindText = L("ストレージ");
+                    else if (want == SensorKind.Cpu && kind is SensorKind.Gpu or SensorKind.GpuHotspot) kindText = "GPU";
+                    else if (want == SensorKind.Gpu && kind == SensorKind.Cpu) kindText = "CPU";
+                    else if (kind == SensorKind.Other && !sensorName.Contains(wantText, StringComparison.OrdinalIgnoreCase))
+                    {
+                        // マザーボードの温度を CPU のカーブに使うこともあるので、知らせるだけにする
+                        kindText = L("マザーボードなど");
+                        level = FindingLevel.Info;
+                    }
+                    else continue;
+
+                    var replacement = want == SensorKind.Cpu ? cpuSensor : gpuSensor;
+                    curveFinding = true;
+                    list.Add(new()
+                    {
+                        Level = level,
+                        Title = L($"{fan.Name}: 「{curveName}」のカーブのセンサーが違うようです"),
+                        Detail = L($"プロファイル「{profileName}」の「{curveName}」は、名前からは {wantText} のカーブのようですが、温度は「{sensorName}」（{kindText}）を見ています。{wantText} が熱くなっても、このカーブでは回転が上がりません。"),
+                        ActionLabel = replacement is null ? null : L($"「{replacement.Name}」に切り替える"),
+                        Apply = replacement is null ? null : c =>
+                        {
+                            foreach (var cv in (c.FindProfile(profileName)?.Fans ?? new()).Where(f => f.ControlId == controlId)
+                                         .SelectMany(f => f.Curves).Where(x => x.SensorId == sensorId && x.Name == curveName))
+                            {
+                                cv.SensorId = replacement.Id;
+                            }
+                            return L($"プロファイル「{profileName}」の「{curveName}」の温度を「{replacement.Name}」に切り替えました。");
+                        },
+                    });
+                }
+                if (curveFinding) continue;
+
+                // --- ストレージの温度だけで動いている GPU のファン
+                bool gpuFan = fan.IsGpuFan || fan.Name.Contains("GPU", StringComparison.OrdinalIgnoreCase);
+                var inputs = fan.Curves.Select(c => c.SensorId)
+                    .Concat(fan.Mode == FanModes.Target && fan.TargetSensorId.Length > 0 ? new[] { fan.TargetSensorId } : Array.Empty<string>())
+                    .Where(id => id.Length > 0).Distinct().ToList();
+                if (!gpuFan || fan.Mode is not (FanModes.Curve or FanModes.Target) || inputs.Count == 0
+                    || !inputs.All(id => Known(id) && IsStorageSensor(id, temperatures))) continue;
+
+                string names = string.Join(Localization.ListSeparator, inputs.Select(NameOf));
+                list.Add(new()
+                {
+                    Level = FindingLevel.Warning,
+                    Title = L($"{fan.Name}: GPU のファンがストレージの温度だけで動いています"),
+                    Detail = L($"プロファイル「{profileName}」で、このファンは「{names}」だけを見ています。ゲームなどで GPU が熱くなっても回転が上がりません。"),
+                    ActionLabel = gpuSensor is null ? null : L($"「{gpuSensor.Name}」基準に切り替える"),
+                    Apply = gpuSensor is null ? null : c =>
+                    {
+                        foreach (var f in (c.FindProfile(profileName)?.Fans ?? new()).Where(f => f.ControlId == controlId))
+                        {
+                            // ストレージ用の温度の点のままでは GPU に合わないので、GPU の標準のカーブにする
+                            foreach (var cv in f.Curves.Where(x => inputs.Contains(x.SensorId)))
+                            {
+                                cv.SensorId = gpuSensor.Id;
+                                cv.Points = CurvePresets.Create(CurvePresets.Balanced, SensorKind.Gpu);
+                            }
+                            if (f.Mode == FanModes.Target && inputs.Contains(f.TargetSensorId))
+                            {
+                                f.TargetSensorId = gpuSensor.Id;
+                                f.TargetTemp = 75;
+                            }
+                        }
+                        return L($"プロファイル「{profileName}」で、「{gpuSensor.Name}」を基準にした標準のカーブに切り替えました。");
+                    },
+                });
+            }
+        }
+        return list;
     }
 
     private static List<double> Series(HistoryStore h, string key, int start, int end)

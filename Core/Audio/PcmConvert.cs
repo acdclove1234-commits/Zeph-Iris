@@ -137,4 +137,33 @@ public static class PcmConvert
         }
         return frames;
     }
+
+    /// <summary>
+    /// data の左右（1 番目と 2 番目のチャンネル）の差の半分 (L − R) / 2（サイド）を dst に書く。戻り値は書いた個数（フレーム数）。
+    /// 1 チャンネルの音や対応していない形式では 0（サイドなし）。左右の広がりを見るのに使う（ToMono と同じ目盛り。2 チャンネルなら
+    /// ToMono の値がミッド (L + R) / 2）
+    /// </summary>
+    public static int ToSide(ReadOnlySpan<byte> data, PcmKind kind, int channels, Span<float> dst)
+    {
+        int bps = BytesPerSample(kind);
+        if (bps == 0 || channels < 2) return 0;
+        int frameBytes = bps * channels;
+        int frames = Math.Min(data.Length / frameBytes, dst.Length);
+        for (int i = 0; i < frames; i++)
+        {
+            int b = i * frameBytes;
+            dst[i] = 0.5f * (Sample(data, b, kind) - Sample(data, b + bps, kind));
+        }
+        return frames;
+    }
+
+    /// <summary>offset バイト目からの音 1 個（−1〜1）</summary>
+    private static float Sample(ReadOnlySpan<byte> data, int offset, PcmKind kind) => kind switch
+    {
+        PcmKind.Float32 => BinaryPrimitives.ReadSingleLittleEndian(data[offset..]),
+        PcmKind.Int16 => BinaryPrimitives.ReadInt16LittleEndian(data[offset..]) / 32768f,
+        PcmKind.Int24 => ((data[offset] << 8) | (data[offset + 1] << 16) | (data[offset + 2] << 24)) / 2147483648f,
+        PcmKind.Int32 => BinaryPrimitives.ReadInt32LittleEndian(data[offset..]) / 2147483648f,
+        _ => 0,
+    };
 }

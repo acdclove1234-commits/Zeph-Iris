@@ -97,6 +97,8 @@ public sealed class FanEngine : IDisposable
         public PiState Pi { get; set; } = new();
         /// <summary>共振回避帯の中で、どちらの端にいるか（帯の真ん中付近で上下に揺れないように）</summary>
         public int BandSide { get; set; }
+        /// <summary>要求が帯の反対側に移ってから続いている時間（秒）。BandFlipHoldSeconds 続いたら端を切り替える</summary>
+        public double BandFlipSeconds;
         public bool GpuGuard { get; set; }
         /// <summary>GPU 保護の切り替えを確かめている回数（1 回だけの異常な読み取りで切り替えない）</summary>
         public int GpuGuardCount;
@@ -112,6 +114,8 @@ public sealed class FanEngine : IDisposable
         public SpinUpState SpinUp;
         /// <summary>センサー異常が続いている周期の数</summary>
         public int ErrorTicks;
+        /// <summary>センサー異常が最初の周期から続いている時間（秒。最初の周期は 0）</summary>
+        public double ErrorSeconds;
         /// <summary>このファンの処理で例外が続いた回数</summary>
         public int Failures;
         /// <summary>ポンプの回転数が読めなくなった時刻（ミリ秒。読めているときは -1）</summary>
@@ -141,6 +145,16 @@ public sealed class FanEngine : IDisposable
     /// <summary>識別テストの期限（ControlId → 単調時計のミリ秒）</summary>
     private readonly Dictionary<string, long> _identify = new(StringComparer.OrdinalIgnoreCase);
     private readonly Dictionary<string, float?> _virtualValues = new(StringComparer.OrdinalIgnoreCase);
+    /// <summary>仮想センサーの元のセンサーごと（「仮想センサーの ID|元の ID」）の、最後に読めた値と、読めなくなった時刻</summary>
+    private readonly Dictionary<string, float> _virtualLastGood = new(StringComparer.OrdinalIgnoreCase);
+    private readonly Dictionary<string, DateTime> _virtualNullSince = new(StringComparer.OrdinalIgnoreCase);
+    /// <summary>元のセンサーの一部が読めないと知らせた仮想センサー（全部読めるようになったら外す）</summary>
+    private readonly HashSet<string> _virtualPartialAlerted = new(StringComparer.OrdinalIgnoreCase);
+    /// <summary>
+    /// 仮想センサーの元のセンサーが読めなくなってから、この秒数までは「一瞬の読み取り失敗」とみなす:
+    /// 平均値は最後に読めた値を使い続け（残りだけの平均に跳ばない）、知らせもしない。過ぎたら残りのセンサーだけで計算して知らせる
+    /// </summary>
+    internal const double VirtualSourceHoldSeconds = 10;
     /// <summary>この周期の、異常値フィルターを通した温度（制御に使うセンサーだけ）</summary>
     private readonly Dictionary<string, float?> _guarded = new(StringComparer.OrdinalIgnoreCase);
     private readonly SensorGuard _guard = new();
@@ -759,9 +773,11 @@ public sealed class FanEngine : IDisposable
                 rt.StallAlerted = prev.StallAlerted;
                 rt.StallTicks = prev.StallTicks;
                 rt.BandSide = prev.BandSide;
+                rt.BandFlipSeconds = prev.BandFlipSeconds;
                 rt.GpuGuard = prev.GpuGuard;
                 rt.GpuGuardCount = prev.GpuGuardCount;
                 rt.ErrorTicks = prev.ErrorTicks;
+                rt.ErrorSeconds = prev.ErrorSeconds;
                 rt.LastState = prev.LastState;
                 if (ReferenceEquals(prev.Control, rt.Control))
                 {
@@ -890,7 +906,7 @@ public sealed class FanEngine : IDisposable
         _lastTickMs = nowMs;
 
         UpdateGuardedTemps(mono);
-        UpdateVirtualSensors();
+        UpdateVirtualSensors(mono);
         UpdateEmergency(nowMs);
         StepCalibration(mono);
         _pendingOutput.Clear(); // この周期でまとめて反映する
@@ -979,12 +995,13 @@ public sealed class FanEngine : IDisposable
     private float? ReadTemp(string? id)
         => id is not null && _virtualValues.TryGetValue(id, out var v) ? v : ReadPhysicalTemp(id);
 
-    private void UpdateVirtualSensors()
+    private void UpdateVirtualSensors(DateTime mono)
     {
         _virtualValues.Clear();
         foreach (var vs in _cfg.VirtualSensors)
         {
             var values = vs.Sources.Select(ReadPhysicalTemp).ToList();
+            if (vs.Kind != VirtualSensorKinds.Delta) HoldVirtualSources(vs, values, mono);
             float? result = vs.Kind switch
             {
                 VirtualSensorKinds.Delta => values.Count >= 2 && values[0].HasValue && values[1].HasValue ? values[0] - values[1] : null,
@@ -994,6 +1011,57 @@ public sealed class FanEngine : IDisposable
                 _ => values.Where(v => v.HasValue).Max(),
             };
             _virtualValues[vs.Id] = result;
+        }
+    }
+
+    /// <summary>
+    /// 仮想センサー（差分以外）の元のセンサーの一部が読めないとき:
+    /// ・10 秒までは一瞬の失敗とみなす。平均値は、そのセンサーの最後に読めた値を使う（残りだけの平均に跳ぶと回転が急に変わるため）。
+    ///   最大値・最小値は、これまでどおり読めるものだけで計算する
+    /// ・10 秒を過ぎたら、残りのセンサーだけで計算し、一度だけ知らせる（全部読めるようになったら、また知らせられるようにする）。
+    ///   全部読めないときは仮想センサーごと読めない扱い（カーブはセンサー異常として全開）なので、ここでは知らせない。
+    ///   全部が同時に読めなくなったときは、10 秒以内でも最後の値で埋めない（すぐにセンサー異常にする）
+    /// </summary>
+    private void HoldVirtualSources(VirtualSensorConfig vs, List<float?> values, DateTime mono)
+    {
+        var lost = new List<string>();
+        // 今この周期に読めている元のセンサーがあるか。全部読めないときは最後の値で埋めない
+        // （埋めると、全部読めなくなっても 10 秒間は古い温度のまま動き、センサー異常の全開が遅れる）
+        bool anyLive = values.Any(x => x.HasValue);
+        bool allLive = values.All(x => x.HasValue);
+        for (int i = 0; i < values.Count; i++)
+        {
+            string key = vs.Id + "|" + vs.Sources[i];
+            if (values[i] is float v)
+            {
+                _virtualLastGood[key] = v;
+                _virtualNullSince.Remove(key);
+                continue;
+            }
+            // 時計が戻ったときは、そこから数え直す
+            if (!_virtualNullSince.TryGetValue(key, out var since) || mono < since) _virtualNullSince[key] = since = mono;
+            if ((mono - since).TotalSeconds < VirtualSourceHoldSeconds)
+            {
+                if (anyLive && vs.Kind == VirtualSensorKinds.Average && _virtualLastGood.TryGetValue(key, out var last)) values[i] = last;
+            }
+            else
+            {
+                _virtualLastGood.Remove(key);
+                lost.Add(vs.Sources[i]);
+            }
+        }
+
+        if (lost.Count > 0 && anyLive)
+        {
+            if (_virtualPartialAlerted.Add(vs.Id))
+            {
+                string names = string.Join(Localization.ListSeparator, lost.Select(id => _hub?.NameOf(id) ?? id).Distinct());
+                RaiseAlert(L($"仮想センサー「{vs.Name}」: 元のセンサー（{names}）が読めないため、残りのセンサーだけで計算しています。"), AlertLevel.Warning);
+            }
+        }
+        else if (allLive && _virtualPartialAlerted.Remove(vs.Id))
+        {
+            Logger.Info($"仮想センサー「{vs.Name}」: 元のセンサーがすべて読めるようになりました");   // no-loc（ログだけ）
         }
     }
 
@@ -1190,6 +1258,11 @@ public sealed class FanEngine : IDisposable
             ? L($"キャリブレーションを中止しました: {cal.FailureReason}")
             : L($"キャリブレーション完了: 最大 {result.MaxRpm:N0} rpm / 停止 {result.StopDuty:F0}% 未満 / 始動 {result.StartDuty:F0}%");
         Logger.Info($"{cal.FanName}: {message}");
+        if (result is not null)
+        {
+            Logger.Info($"{cal.FanName}: 測定点 {string.Join(" ", result.Points.Select(p => $"{p.Duty:F0}%:{p.Rpm:F0}"))}"   // no-loc（ログだけ）
+                        + (result.DeadZoneDuty > 0 ? $"／{result.DeadZoneDuty:F0}% 以下は回転数がほぼ同じ" : ""));             // no-loc（ログだけ）
+        }
         CalibrationFinished?.Invoke(cal.ControlId, result, message);
         if (fan is not null) fan.Duty = null; // 通常制御は現在値から滑らかに再開する
     }
@@ -1374,7 +1447,7 @@ public sealed class FanEngine : IDisposable
         double floor = Math.Max(cfg.MinDuty, cfg.IsPump ? PumpHardMinDuty : 0);
         demand = Math.Max(demand, floor);
         // 共振回避帯の中に要求が入ったら、近いほうの端へ寄せる（最低回転数より下には寄せない。100% の操作は影響しない）
-        if (state is FanState.Active or FanState.SensorMissing) demand = AvoidBands(f, demand, floor);
+        if (state is FanState.Active or FanState.SensorMissing) demand = AvoidBands(f, state, demand, floor, _tickDt);
 
         bool overriding = _overrides.TryGetValue(cfg.ControlId, out var ov) && nowMs < ov.UntilMs;
         if (!overriding) _overrides.Remove(cfg.ControlId);
@@ -1396,8 +1469,18 @@ public sealed class FanEngine : IDisposable
         // GPU 保護・ポンプ保護はキャリブレーションより優先する（キャリブレーションは次の周期の StepCalibration で中止される）
         bool calibrating = _calibration is not null && Same(_calibration.ControlId, cfg.ControlId) && !f.GpuGuard && !f.PumpFailsafe;
 
-        // センサー異常が何周期続いているか（1 周期だけの読み取りミスで全開に跳ねないよう、2 周期続いたら一気に上げる）
-        f.ErrorTicks = state == FanState.SensorError ? f.ErrorTicks + 1 : 0;
+        // センサー異常が何周期・何秒続いているか（1 回だけの読み取りミスで回転が跳ねないよう、
+        // 最初は今の回転のまま待ち、2 周期かつ SensorErrorDirectSeconds 秒続いたら一気に全開にする）
+        if (state == FanState.SensorError)
+        {
+            f.ErrorSeconds = f.ErrorTicks == 0 ? 0 : f.ErrorSeconds + _tickDt;
+            f.ErrorTicks++;
+        }
+        else
+        {
+            f.ErrorTicks = 0;
+            f.ErrorSeconds = 0;
+        }
 
         // --- 2. 書き込むかどうか（ポンプ保護・識別テスト・キャリブレーションは、BIOS 制御中や一時停止中でも優先する）
         // ブーストはユーザーの明示的な操作なので、BIOS 制御中のファンも全開にする
@@ -1419,9 +1502,12 @@ public sealed class FanEngine : IDisposable
             // 上げは速く、下げはゆっくり（急な回転変化による「うなり」を防ぐ）。
             // ただし緊急全開・GPU 保護・ポンプ保護・続いているセンサー異常は、最初の周期から一気に全開にする
             double cur = f.Duty ?? hwDuty ?? demand;
-            bool direct = FanSafety.IsDirect(state, cfg.Mode, f.ErrorTicks);
+            bool direct = FanSafety.IsDirect(state, cfg.Mode, f.ErrorTicks, f.ErrorSeconds);
+            // センサー異常の始めは、全開へ少し上げるのではなく今の回転のまま待つ（1 回だけの読み取りミスで回転が上がって、
+            // 何秒もかけて下がってくるのを防ぐ。続いていれば IsDirect で一気に全開にする。1 秒ごとの更新なら、その時刻は前と同じ 2 周期目）
+            double goal = FanSafety.HoldOnSensorError(state, direct) ? cur : demand;
             // 上げ・下げの速さは「1 秒あたり」（画面の表示どおり）。実際に経った時間ぶんだけ動かすので、更新間隔を変えても速さは同じ
-            next = FanSafety.Slew(cur, demand, cfg.MaxStepUpPerTick * _tickDt, cfg.MaxStepDownPerTick * _tickDt, direct);
+            next = FanSafety.Slew(cur, goal, cfg.MaxStepUpPerTick * _tickDt, cfg.MaxStepDownPerTick * _tickDt, direct);
             if (state != FanState.Manual)
             {
                 // ゆっくり変化している途中でも、共振回避帯の中には留まらず一気に通り過ぎる
@@ -1442,6 +1528,11 @@ public sealed class FanEngine : IDisposable
                 state = _paused ? FanState.Paused : !cfg.Enabled ? FanState.Bios : FanState.DryRun;
         }
         f.Duty = next;
+        // 目標温度モード: 実際に出した Duty を PI に返す（なめらかな変化・下限・回り始めの後押しで出力どおりに動けなかった分を、
+        // 次の周期に積分へ戻す）。手動テスト・緊急全開などの上書き中と、書き込んでいない間は返さない。
+        // 共振回避帯で端へ寄せた分も返さない（返すと PI の出力が端に張り付いて、目標から離れたまま戻らなくなる）
+        if (cfg.Mode == FanModes.Target)
+            f.Pi.Applied = write && state == FanState.Active && f.Pi.LastOutput is double piOut && !cfg.AvoidBands.Any(b => b.Contains(piOut)) ? next : null;
 
         if (write)
         {
@@ -1576,25 +1667,31 @@ public sealed class FanEngine : IDisposable
         f.LastState = state;
     }
 
-    /// <summary>要求 Duty が共振回避帯の中なら、近いほうの端に寄せる（前回と同じ側を優先して、真ん中で揺れないようにする）</summary>
-    private static double AvoidBands(FanRuntime f, double demand, double floor)
+    /// <summary>
+    /// 要求 Duty が共振回避帯の中なら、近いほうの端に寄せる（前回と同じ側を優先して、真ん中で揺れないようにする）。
+    /// 目標温度モードでは、要求が反対側に FanSafety.BandFlipHoldSeconds 秒続いたときだけ切り替える
+    /// （温度が読めて PI で動いているときだけ。センサーが消えて回転を保っているときは、保つ回転より下の端で待たない）
+    /// </summary>
+    private static double AvoidBands(FanRuntime f, FanState state, double demand, double floor, double dt)
     {
         var band = f.Cfg.AvoidBands.FirstOrDefault(b => b.Contains(demand));
         if (band is null)
         {
             f.BandSide = 0;
+            f.BandFlipSeconds = 0;
             return demand;
         }
         // 下の端が最低回転数より下なら、上の端にする（止まる回転数に入らないように）
         if (band.From < floor)
         {
             f.BandSide = 1;
+            f.BandFlipSeconds = 0;
             return band.To;
         }
-        double mid = (band.From + band.To) / 2;
-        // 真ん中から帯の幅の 1 割以内は、前回の側を保つ
-        double margin = (band.To - band.From) * 0.1;
-        int side = demand > mid + margin ? 1 : demand < mid - margin ? -1 : f.BandSide != 0 ? f.BandSide : (demand >= mid ? 1 : -1);
+        double hold = f.Cfg.Mode == FanModes.Target && state == FanState.Active ? FanSafety.BandFlipHoldSeconds : 0;
+        // 温度が目標を BandFlipHotMargin 以上超えているときは、上の端へは待たずに切り替える（熱いのに下の端で待たない）
+        bool hot = f.Pi.Ema is double ema && ema >= f.Cfg.TargetTemp + FanSafety.BandFlipHotMargin;
+        int side = FanSafety.BandSide(band, demand, f.BandSide, ref f.BandFlipSeconds, dt, hold, hot);
         f.BandSide = side;
         return side > 0 ? band.To : band.From;
     }
@@ -1908,8 +2005,24 @@ public static class FanSafety
     /// （MSI のマザーボードなど、チップが回転をゆっくり変えるものは 1 周期に 0.5% ほどしか近づかない）
     /// </summary>
     public const double ReadbackApproachStep = 0.25;
-    /// <summary>センサー異常がこの周期の数続いたら、ゆっくりではなく一気に全開にする</summary>
+    /// <summary>センサー異常がこの周期の数続き、かつ SensorErrorDirectSeconds 秒続いたら、一気に全開にする（それまでは今の回転のまま待つ）</summary>
     public const int SensorErrorDirectTicks = 2;
+    /// <summary>
+    /// センサー異常を「続いている」とみなすまでの時間（秒）。1 秒ごとの更新なら 2 周期目（周期のずれの分だけ余裕を持たせて 0.8 秒）。
+    /// 回数だけで決めると、更新間隔を 250ms にしたとき 0.25 秒の読み取りミスで全開に跳ねてしまう
+    /// </summary>
+    public const double SensorErrorDirectSeconds = 0.8;
+    /// <summary>
+    /// 目標温度モードで共振回避帯の端を切り替えるのは、要求が反対側にこの時間（秒）続いてから。
+    /// 必要な回転が帯の中にあると、端を行ったり来たりして 約 30 秒ごとに音が 10% 変わっていたため
+    /// （カーブなどほかのモードは、これまでどおりすぐ切り替える）
+    /// </summary>
+    public const double BandFlipHoldSeconds = 60;
+    /// <summary>
+    /// 目標温度モードで、平滑化した温度が目標をこれ以上（°C）超えていたら、共振回避帯の下の端から上の端へは待たずに切り替える
+    /// （負荷が増えて熱くなっているのに、BandFlipHoldSeconds のあいだ低い回転のまま待たないように）
+    /// </summary>
+    public const double BandFlipHotMargin = 3;
     /// <summary>ポンプの回転数がこの時間（ミリ秒）読めなければ危険として知らせる</summary>
     public const long PumpRpmLostMs = 5000;
     /// <summary>GPU 保護は、この回数続けて同じ判定になったら切り替える</summary>
@@ -1927,16 +2040,49 @@ public static class FanSafety
 
     /// <summary>この状態のとき、ゆっくり変化させずに要求値をそのまま書くか</summary>
     /// <param name="errorTicks">センサー異常が続いている周期の数</param>
-    public static bool IsDirect(FanState state, string mode, int errorTicks) => state switch
+    /// <param name="errorSeconds">センサー異常が最初の周期から続いている時間（秒）</param>
+    public static bool IsDirect(FanState state, string mode, int errorTicks, double errorSeconds) => state switch
     {
         // 安全のための全開は、最初の周期から一気に（以前は 1 周期 8% ずつで、全開まで 10 秒以上かかっていた）
         FanState.Emergency or FanState.GpuGuard or FanState.PumpAlert => true,
-        FanState.SensorError => errorTicks >= SensorErrorDirectTicks,
+        FanState.SensorError => errorTicks >= SensorErrorDirectTicks && errorSeconds >= SensorErrorDirectSeconds,
         // 手動テストは指定した値をすぐに。連動はリーダー側でなめらかにしてあるので、そのまま
         FanState.Manual => true,
         FanState.Active => mode == FanModes.Follow,
         _ => false,
     };
+
+    /// <summary>センサー異常の始め（まだ一気に全開にしない間）は、全開へ向けて上げずに今の回転のまま待つ</summary>
+    public static bool HoldOnSensorError(FanState state, bool direct) => state == FanState.SensorError && !direct;
+
+    /// <summary>
+    /// 共振回避帯のどちらの端に寄せるか（1 = 上の端、-1 = 下の端）。
+    /// 帯の真ん中から帯の幅の 1 割以内は前回の側を保つ。前回と反対側に要求が移っても、holdSeconds 秒続くまでは切り替えない
+    /// （帯に入ったばかりのとき（前回の側がない）は、近いほうの端）
+    /// </summary>
+    /// <param name="flipSeconds">要求が反対側に移ってから続いている時間（秒）。呼び出しごとに更新する</param>
+    /// <param name="holdSeconds">切り替えるまで待つ時間（秒。0 ならすぐ切り替える）</param>
+    /// <param name="hot">温度が目標を大きく超えている。下の端から上の端へは待たずに切り替える（上から下へは待つ）</param>
+    public static int BandSide(DutyBand band, double demand, int previous, ref double flipSeconds, double dt, double holdSeconds, bool hot = false)
+    {
+        double mid = (band.From + band.To) / 2;
+        double margin = (band.To - band.From) * 0.1;
+        int want = demand > mid + margin ? 1 : demand < mid - margin ? -1 : 0;
+        if (previous == 0)
+        {
+            flipSeconds = 0;
+            return want != 0 ? want : demand >= mid ? 1 : -1;
+        }
+        if (want == 0 || want == previous)
+        {
+            flipSeconds = 0;
+            return previous;
+        }
+        flipSeconds += Math.Max(0, dt);
+        if (flipSeconds < holdSeconds && !(hot && want > previous)) return previous;
+        flipSeconds = 0;
+        return want;
+    }
 
     /// <summary>回り始めの後押しで、回り始める回転にのせる余裕（%）</summary>
     public const double SpinUpMargin = 3;
@@ -2090,17 +2236,38 @@ public sealed class PiState
     public bool Ready { get; set; }
     /// <summary>温度が読めていたときに最後に出した値（%）。センサーが途中で消えたとき、これより下げない</summary>
     public double? LastOutput { get; set; }
+    /// <summary>LastOutput のあとに実際に出した Duty（%）。上書き中・書き込んでいないときは null（次の周期の追従に使う）</summary>
+    public double? Applied { get; set; }
+    /// <summary>一瞬の跳ねを除くための直近の生温度</summary>
+    public SpikeMedian Median { get; } = new();
 }
 
 /// <summary>
 /// 目標温度モードの PI 制御。
-///   出力 = 最低回転数 + Kp × (平滑化した温度 − 目標) + 積分項
+///   出力 = 最低回転数 + Kp × e + 積分項（e は平滑化した温度 − 目標 を、目標の近くでだけ小さくしたもの）
 /// 温度が目標より高い間は積分項が少しずつ増えて回転が上がり続け、低ければ下がっていく。
-/// CPU 温度は 1 秒ごとに数°C 跳ねるので、時定数 約 10 秒で平滑化してから使う（そのままだと回転がふらつく）。
+/// CPU 温度は 1 秒ごとに数°C 跳ねるので、一瞬の跳ねを除いて（直近 約 2 秒の真ん中）、時定数 約 10 秒で平滑化してから使う
+/// （そのままだと回転がふらつく）。
 /// </summary>
 public readonly struct PiController
 {
     private const double EmaAlpha = 0.1;
+    /// <summary>
+    /// 比例の分で、目標のまわりの誤差を小さくする幅 w（°C）。誤差 e を e − w·tanh(e/w) にする:
+    /// 目標 ±0.5°C ではほぼ 0（雑音で回転が揺れない）、3°C 以上離れると「誤差 − 1°C」（差の分は積分が埋める）
+    /// </summary>
+    public const double QuietBand = 1.0;
+    /// <summary>
+    /// 積分の分で、目標のまわりの誤差を小さくする幅 w（°C）。誤差 e を e³ / (e² + w²) にする:
+    /// 目標 ±0.25°C では 2 割以下、1°C で 8 割、離れるほど元の誤差に近づく。
+    /// 以前の「±1°C で積分を止める」と違って境目の段差がないので、境目で回転が揺れない
+    /// </summary>
+    public const double QuietIntegralBand = 0.5;
+    /// <summary>
+    /// 実際に出した Duty に積分を合わせる速さ（時定数・秒）。なめらかな変化や下限で出力どおりに動けなかった分を戻し、
+    /// あとで行き過ぎない（積分のため込み防止）
+    /// </summary>
+    public const double TrackingSeconds = 8;
     private readonly double _target;
     private readonly double _kp;
     private readonly double _ki;
@@ -2121,22 +2288,36 @@ public readonly struct PiController
     /// <param name="currentDuty">今の回転（初回だけ使う。切り替えた瞬間に回転が跳ねないように）</param>
     public double Step(double rawTemp, double dt, double currentDuty, PiState s)
     {
-        // ならし具合は 1 秒あたり（更新間隔を変えても時定数 約 10 秒のまま）
+        // 一瞬の跳ねを除いてから、ならす（ならし具合は 1 秒あたり。更新間隔を変えても時定数 約 10 秒のまま）
+        double filtered = s.Median.Next(rawTemp, dt);
         double alpha = CurveMath.AlphaFor(EmaAlpha, dt);
-        s.Ema = s.Ema is null ? rawTemp : alpha * rawTemp + (1 - alpha) * s.Ema.Value;
+        s.Ema = s.Ema is null ? filtered : alpha * filtered + (1 - alpha) * s.Ema.Value;
+        // 目標の近くでは誤差を小さくして、雑音で回転が細かく揺れないようにする（比例・積分の両方。段差はない）
         double error = s.Ema.Value - _target;
+        double e = SoftenProportional(error);
+        double ei = SoftenIntegral(error);
         if (!s.Ready)
         {
-            s.Integral = currentDuty - _min - _kp * error;
+            s.Integral = currentDuty - _min - _kp * e;
             s.Ready = true;
         }
+        else if (s.Applied is double applied && s.LastOutput is double last)
+        {
+            // 前の周期の出力どおりに動けなかった分（なめらかな変化・下限・回り始めの後押し）を、積分に少しずつ戻す
+            s.Integral += (applied - last) * Math.Min(1, Math.Max(0, dt) / TrackingSeconds);
+        }
+        s.Applied = null;
 
-        // 目標 ±1°C 以内は積分を止めて、回転が細かく揺れないようにする
-        double e = Math.Abs(error) < 1 ? 0 : error;
-        double output = _min + _kp * error + s.Integral;
+        double output = _min + _kp * e + s.Integral;
         // 出力が上限・下限に張り付いている間は、それ以上積分しない（ワインドアップ防止）
-        if ((output < 100 || e < 0) && (output > _min || e > 0)) s.Integral += _ki * e * dt;
+        if ((output < 100 || ei < 0) && (output > _min || ei > 0)) s.Integral += _ki * ei * dt;
         s.Integral = Math.Clamp(s.Integral, -60, 100);
-        return Math.Clamp(_min + _kp * error + s.Integral, _min, 100);
+        return Math.Clamp(_min + _kp * e + s.Integral, _min, 100);
     }
+
+    /// <summary>比例の分に使う誤差（°C）。目標の近くでだけなめらかに小さくする（QuietBand を参照）</summary>
+    public static double SoftenProportional(double error) => error - QuietBand * Math.Tanh(error / QuietBand);
+
+    /// <summary>積分の分に使う誤差（°C）。目標の近くでだけなめらかに小さくする（QuietIntegralBand を参照）</summary>
+    public static double SoftenIntegral(double error) => error * error * error / (error * error + QuietIntegralBand * QuietIntegralBand);
 }

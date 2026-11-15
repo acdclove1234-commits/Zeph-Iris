@@ -45,14 +45,61 @@ public static class CurveMath
     public static double Median3(double a, double b, double c) => Math.Max(Math.Min(a, b), Math.Min(Math.Max(a, b), c));
 }
 
+/// <summary>
+/// 一瞬の跳ねを除くための「直近の値の真ん中」。回数ではなく直近 WindowSeconds 秒ぶん（最低 3 回分）の真ん中を使う。
+/// 1 秒ごとの更新なら直近 3 回の真ん中（これまでの Median3 と同じ）。更新間隔を 250ms に縮めても、
+/// 無視できる跳ねの長さ（約 1 秒）と、本当の上昇に追いつくまでの遅れ（約 1 秒）は変わらない
+/// </summary>
+public sealed class SpikeMedian
+{
+    /// <summary>この秒数より古い値は使わない</summary>
+    public const double WindowSeconds = 2.0;
+    /// <summary>更新間隔のわずかなずれで、使う値の数が増えたり減ったりしないための余裕（秒）</summary>
+    private const double Slack = 0.1;
+    private const int MinSamples = 3;
+    private const int MaxSamples = 64;
+    // 古い順の (値, 経過秒)
+    private readonly List<(double Value, double Age)> _samples = new();
+    private readonly double[] _sort = new double[MaxSamples];
+
+    /// <summary>今の値と、前の値から経った時間（秒）を受け取り、跳ねを除いた値を返す</summary>
+    public double Next(double value, double dtSeconds)
+    {
+        double dt = Math.Clamp(dtSeconds, 0, 10);
+        for (int i = 0; i < _samples.Count; i++) _samples[i] = (_samples[i].Value, _samples[i].Age + dt);
+        // 古すぎる値を捨てる（ただし直前の 2 回分は残す。更新間隔が長くても 3 回の真ん中にする）
+        while (_samples.Count > MinSamples - 1 && (_samples[0].Age > WindowSeconds + Slack || _samples.Count >= MaxSamples)) _samples.RemoveAt(0);
+        _samples.Add((value, 0));
+        // 始めの 2 回はそのまま使う（起動直後に反応を遅らせない）
+        if (_samples.Count < MinSamples) return value;
+        int n = _samples.Count;
+        for (int i = 0; i < n; i++) _sort[i] = _samples[i].Value;
+        Array.Sort(_sort, 0, n);
+        return n % 2 == 1 ? _sort[n / 2] : (_sort[n / 2 - 1] + _sort[n / 2]) / 2;
+    }
+
+    /// <summary>設定変更で作り直したときに、途中の値を引き継ぐ</summary>
+    public void CopyFrom(SpikeMedian other)
+    {
+        _samples.Clear();
+        _samples.AddRange(other._samples);
+    }
+}
+
 public sealed class CurveEvaluator
 {
+    /// <summary>温度が下がり始めてから、ヒステリシスの分をそのまま保つ時間（秒）。この間に戻ってくる上下のゆれでは回転を変えない</summary>
+    public const double HysteresisHoldSeconds = 20;
+    /// <summary>保つ時間が過ぎたあと、ヒステリシスの分が平滑化した温度へ近づく速さ（時定数・秒）</summary>
+    public const double HysteresisDecaySeconds = 20;
+
     private readonly CurvePoint[] _points;
     private double? _ema;
     private double? _effective;
-    // 一瞬の跳ねを除くための直近 3 回の生温度（古い順）
-    private double _r0, _r1;
-    private int _samples;
+    // 最後に温度に押し上げられてから（effective が ema に追いつかれてから）経った時間（秒）
+    private double _sinceRise;
+    // 一瞬の跳ねを除くための直近 約 2 秒の生温度
+    private readonly SpikeMedian _median = new();
 
     public CurveConfig Config { get; }
     public double? EffectiveTemp => _effective;
@@ -71,31 +118,41 @@ public sealed class CurveEvaluator
         if (old.Config.SensorId != Config.SensorId) return;
         _ema = old._ema;
         _effective = old._effective;
-        _r0 = old._r0;
-        _r1 = old._r1;
-        _samples = old._samples;
+        _sinceRise = old._sinceRise;
+        _median.CopyFrom(old._median);
         LastRequest = old.LastRequest;
     }
 
     /// <summary>直近の生温度を受け取り、要求 Duty(%) を返す。dtSeconds は前の周期から経った時間</summary>
     public double Evaluate(double rawTemp, double dtSeconds = 1.0)
     {
-        // 1. 一瞬の跳ねを除く: 直近 3 回の真ん中を使う。
+        // 1. 一瞬の跳ねを除く: 直近 約 2 秒（1 秒ごとなら 3 回）の真ん中を使う。
         //    Intel の CPU などは 1 回だけ温度が跳ねることがあり、そのたびにファンが回り上がって、
-        //    下げのヒステリシスのせいで上がったまま残るのを防ぐ（続いて上がったときは 1 周期遅れで追従する）
-        double filtered = _samples >= 2 ? CurveMath.Median3(_r0, _r1, rawTemp) : rawTemp;
-        _r0 = _r1;
-        _r1 = rawTemp;
-        if (_samples < 2) _samples++;
+        //    下げのヒステリシスのせいで上がったまま残るのを防ぐ（続いて上がったときは 約 1 秒遅れで追従する）
+        double filtered = _median.Next(rawTemp, dtSeconds);
 
         // 2. EMA でセンサーのノイズをならす（ならし具合は 1 秒あたり。更新間隔が変わっても同じ速さになる）
         double alpha = CurveMath.AlphaFor(Config.EmaAlpha, dtSeconds);
         _ema = _ema is null ? filtered : alpha * filtered + (1 - alpha) * _ema.Value;
 
         // 3. ヒステリシス: 上昇には即追従、下降は HysteresisCelsius 分だけ遅れて追従
-        //    （effective は常に [ema, ema + hysteresis] の範囲に収まる）
+        //    （effective は常に [ema, ema + hysteresis] の範囲に収まる）。
+        //    下がったまま HysteresisHoldSeconds 秒たったら、上乗せの分を少しずつ ema へ戻す
+        //    （以前はずっと上乗せが残り、冷えたあとも「H°C 熱い」ときの回転のままだった）
         double ema = _ema.Value;
-        _effective = Math.Clamp(_effective ?? ema, ema, ema + Config.HysteresisCelsius);
+        if (_effective is not double prev || ema >= prev)
+        {
+            _effective = ema;
+            _sinceRise = 0;
+        }
+        else
+        {
+            double dt = Math.Max(0, dtSeconds);
+            double eff = Math.Min(prev, ema + Config.HysteresisCelsius);
+            _sinceRise += dt;
+            if (_sinceRise > HysteresisHoldSeconds) eff -= (eff - ema) * (1 - Math.Exp(-dt / HysteresisDecaySeconds));
+            _effective = Math.Max(eff, ema);
+        }
 
         double req = CurveMath.Interpolate(_points, _effective.Value);
         LastRequest = req;

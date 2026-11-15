@@ -82,17 +82,17 @@ public sealed class PulseEffect : IMusicEffect
         double tau = _steady ? (_slow ? SlowSwellGlowSec : SwellGlowSec) : _slow ? SlowGlowTauSec : GlowTauSec;
         float now, peak;
         // 今の値は、本当の時刻（分析結果の時刻）からの経過時間だけ減らしておく（古い値を何度も拾い直さない）
-        float age = (float)Math.Exp(-(c.T - c.FrameTime) / tau);
+        float age = (float)Math.Exp(-(c.AgeT - c.FrameTime) / tau);
         if (_source == Source.Bass)
         {
             now = f.BassE * age;
             // コマの間にあったピークを、ピークからの経過時間だけ減らして使う（1 秒に 8 回でもキックを取りこぼさない）
-            peak = c.Peak.BassE * (float)Math.Exp(-Math.Max(0, c.T - c.BassPeakT) / tau);
+            peak = c.Peak.BassE * (float)Math.Exp(-Math.Max(0, c.AgeT - c.BassPeakT) / tau);
         }
         else
         {
             now = f.LoudVU * age;
-            peak = c.Peak.LoudVU * (float)Math.Exp(-Math.Max(0, c.T - c.LoudPeakT) / tau);
+            peak = c.Peak.LoudVU * (float)Math.Exp(-Math.Max(0, c.AgeT - c.LoudPeakT) / tau);
         }
         float x = Math.Max(now, peak);
         if (_slow)
@@ -111,7 +111,7 @@ public sealed class PulseEffect : IMusicEffect
         {
             // 色はビートで切り替えず、時刻でゆっくり移り変わる（どのデバイスも同じ時刻なので同じ色）
             double pos = c.T / ColorHoldSec * c.Pal.Step;
-            _color = accent ? OkLab.ToLed(Lab.Lerp(c.Pal.LabAt(pos), Lab.White, DownbeatWhiteMix * c.Fl), c.Gamma) : c.PalAt(pos);
+            _color = accent ? OkLab.ToLed(Lab.Lerp(c.PalLabAt(pos), Lab.White, DownbeatWhiteMix * c.Fl), c.Gamma) : c.PalAt(pos);
         }
         else if (accent) _color = OkLab.ToLed(Lab.Lerp(c.ColorLabAt(0), Lab.White, DownbeatWhiteMix * c.Fl), c.Gamma);
         else _color = c.ColorAt(0);

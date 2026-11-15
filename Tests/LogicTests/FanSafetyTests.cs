@@ -233,12 +233,12 @@ public static class FanSafetyTests
     public static void TestPureDecisions()
     {
         // 安全のための全開は一気に、通常はゆっくり
-        T.Check(FanSafety.IsDirect(FanState.Emergency, FanModes.Curve, 0) && FanSafety.IsDirect(FanState.GpuGuard, FanModes.Curve, 0)
-                && FanSafety.IsDirect(FanState.PumpAlert, FanModes.Fixed, 0), "emergency / GPU guard / pump alert are direct");
-        T.Check(!FanSafety.IsDirect(FanState.SensorError, FanModes.Curve, 1) && FanSafety.IsDirect(FanState.SensorError, FanModes.Curve, 2),
+        T.Check(FanSafety.IsDirect(FanState.Emergency, FanModes.Curve, 0, 0) && FanSafety.IsDirect(FanState.GpuGuard, FanModes.Curve, 0, 0)
+                && FanSafety.IsDirect(FanState.PumpAlert, FanModes.Fixed, 0, 0), "emergency / GPU guard / pump alert are direct");
+        T.Check(!FanSafety.IsDirect(FanState.SensorError, FanModes.Curve, 1, 0) && FanSafety.IsDirect(FanState.SensorError, FanModes.Curve, 2, 1.0),
             "sensor error becomes direct on the 2nd consecutive tick");
-        T.Check(!FanSafety.IsDirect(FanState.Active, FanModes.Curve, 0) && FanSafety.IsDirect(FanState.Active, FanModes.Follow, 0)
-                && !FanSafety.IsDirect(FanState.Boost, FanModes.Curve, 0), "normal control is slew-limited (follow stays direct)");
+        T.Check(!FanSafety.IsDirect(FanState.Active, FanModes.Curve, 0, 0) && FanSafety.IsDirect(FanState.Active, FanModes.Follow, 0, 0)
+                && !FanSafety.IsDirect(FanState.Boost, FanModes.Curve, 0, 0), "normal control is slew-limited (follow stays direct)");
         T.Near(FanSafety.Slew(20, 100, 8, 2, direct: false), 28, 1e-9, "slew up by max step");
         T.Near(FanSafety.Slew(60, 30, 8, 2, direct: false), 58, 1e-9, "slew down by max step");
         T.Near(FanSafety.Slew(20, 100, 8, 2, direct: true), 100, 1e-9, "direct jumps to demand");
@@ -702,23 +702,56 @@ public static class FanSafetyTests
         T.Check(rig.Fan(gpuFan).State != FanState.GpuGuard, "released after two cool readings");
     }
 
-    /// <summary>S1 の補足: センサー異常が 1 周期だけなら全開に跳ねない。続けば一気に全開</summary>
+    /// <summary>S1 の補足: センサー異常が 1 周期だけなら、回転を変えずに待つ（以前は少し上げて、何秒もかけて下がっていた）。続けば一気に全開</summary>
     public static void TestSensorErrorDebounce()
     {
         var hw = new FakeHardware();
         var ctl = hw.AddControl(Fan0, 20);
         hw.Values[Cpu] = 50;
-        var rig = new Rig(Config(FlatFan()), hw);
-        rig.Tick(3);
+        var fan = FlatFan();
+        fan.Curves[0].Points = new() { new() { Temp = 30, Duty = 45 }, new() { Temp = 110, Duty = 45 } };
+        var rig = new Rig(Config(fan), hw);
+        rig.Tick(10);
+        float before = ctl.Register, beforeWrite = ctl.LastWrite;
         hw.Values[Cpu] = null; // 1 回だけ読めない
         rig.Tick();
-        T.Check(rig.Fan(Fan0).State == FanState.SensorError && ctl.LastWrite < 30, $"single unreadable tick only ramps ({ctl.LastWrite})");
+        T.Check(rig.Fan(Fan0).State == FanState.SensorError, "single unreadable tick → sensor error state");
+        T.Near(ctl.Register, before, 1e-6, "single unreadable tick holds the current duty (no ramp up)");
         hw.Values[Cpu] = 50;
-        rig.Tick();
-        T.Check(ctl.Writes.Max() < 30, "no jump to 100% on a one-tick glitch");
+        rig.Tick(5);
+        T.Check(ctl.Writes.Max() <= beforeWrite + 1e-6, $"no jump and no ramp on a one-tick glitch (max write {ctl.Writes.Max():F1}%)");
+        T.Near(ctl.Register, before, 1e-6, "back at the same duty right away");
         hw.Values[Cpu] = null;
         rig.Tick(2);
         T.Near(ctl.LastWrite, 100, 1e-6, "persistent sensor error → 100% on the 2nd tick");
+    }
+
+    /// <summary>センサー異常の待ちは時間で決める: 更新間隔 250ms でも 0.75 秒までの読み取りミスでは回転を変えず、続けば 約 1 秒で全開</summary>
+    public static void TestSensorErrorDebounceIsTimeBased()
+    {
+        var hw = new FakeHardware();
+        var ctl = hw.AddControl(Fan0, 20);
+        hw.Values[Cpu] = 50;
+        var fan = FlatFan();
+        fan.Curves[0].Points = new() { new() { Temp = 30, Duty = 45 }, new() { Temp = 110, Duty = 45 } };
+        var cfg = Config(fan);
+        cfg.PollingIntervalMs = 250;
+        cfg.Normalize();
+        var rig = new Rig(cfg, hw);
+        void Step(int n = 1) { for (int i = 0; i < n; i++) { rig.E.StepForTest(); rig.Now += 250; } }
+        Step(40);
+        float before = ctl.Register, beforeWrite = ctl.LastWrite;
+        hw.Values[Cpu] = null;
+        Step(3); // 0.75 秒
+        T.Near(ctl.Register, before, 1e-6, "250 ms: 3 unreadable ticks (0.75 s) still hold the duty (was 100% on the 2nd tick = 0.25 s)");
+        hw.Values[Cpu] = 50;
+        Step(8);
+        T.Check(ctl.Writes.Max() <= beforeWrite + 1e-6, $"250 ms: no full-speed blip from a short read failure (max write {ctl.Writes.Max():F1}%)");
+        hw.Values[Cpu] = null;
+        int ticks = 0;
+        while (ctl.LastWrite < 100 && ticks < 20) { Step(); ticks++; }
+        T.Info($"250 ms: persistent sensor error reaches 100% on tick {ticks} ({(ticks - 1) * 0.25:F2} s after the first failed reading)");
+        T.Check(ticks is >= 4 and <= 5, $"250 ms: persistent sensor error → 100% after about 1 s (tick {ticks})");
     }
 
     /// <summary>S2: 失敗する命令があってもエンジンは止まらない。重複した端子でも準備に失敗しない</summary>

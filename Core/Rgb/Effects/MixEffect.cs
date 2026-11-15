@@ -25,6 +25,8 @@ public sealed class MixEffect : IMusicEffect
     private float _l, _c, _h;          // いまの色（OKLCh）
     private bool _hasColor;
     private ColorPalette? _bandPal;    // 帯の色を求めたパレット
+    private ColorPalette? _bandFrom, _bandTo;   // 帯の色を求めたときの場面の色（PaletteView）
+    private float _bandU;
     private readonly Lab[] _band = new Lab[3];
     private LinColor _color;
     private float _i;
@@ -37,7 +39,7 @@ public sealed class MixEffect : IMusicEffect
     {
         _eB = _eM = _eT = 0;
         _hasColor = false;
-        _bandPal = null;
+        _bandPal = _bandFrom = _bandTo = null;
     }
 
     public void Update(EffectContext c)
@@ -56,14 +58,18 @@ public sealed class MixEffect : IMusicEffect
             _eT = f.TrebleE;
         }
 
-        if (!ReferenceEquals(_bandPal, c.Pal))
+        var view = c.View;
+        if (!ReferenceEquals(_bandPal, c.Pal) || !ReferenceEquals(_bandFrom, view.From) || !ReferenceEquals(_bandTo, view.To) || _bandU != view.U)
         {
-            // 帯の色（パレットの最初・真ん中・最後）は、パレットが変わったときだけ求め直す
+            // 帯の色（パレットの最初・真ん中・最後）は、パレット・楽器の AI の場面の色（移り変わりの途中なら毎コマ）が変わったときだけ求め直す
             _bandPal = c.Pal;
+            _bandFrom = view.From;
+            _bandTo = view.To;
+            _bandU = view.U;
             double span = c.Pal.Span;
-            _band[0] = c.Pal.LabAt(0);
-            _band[1] = c.Pal.LabAt(span * 0.5);
-            _band[2] = c.Pal.LabAt(span);
+            _band[0] = view.LabAt(0);
+            _band[1] = view.LabAt(span * 0.5);
+            _band[2] = view.LabAt(span);
             if (!_hasColor) { SetColor(_band[0]); }
         }
 

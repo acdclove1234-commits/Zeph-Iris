@@ -197,8 +197,10 @@ public static class MusicStyles
     public const string Strobe = "Strobe";
     /// <summary>パーツごとの役割: ゾーンごとに、低音・中音・高音・音全体のどれかに反応する</summary>
     public const string Role = "Role";
+    /// <summary>楽器で光る: 1 つのゾーンの中で、楽器ごとに光り方の形を変える（単色でも楽器が分かる）</summary>
+    public const string Ensemble = "Ensemble";
 
-    public static readonly string[] All = { BeatHue, Pulse, Mix, Meter, Spectrum, Energy, Scroll, Ripple, Sparkle, Role, Chase, Mood, Strobe };
+    public static readonly string[] All = { BeatHue, Pulse, Mix, Meter, Spectrum, Energy, Scroll, Ripple, Sparkle, Role, Ensemble, Chase, Mood, Strobe };
 }
 
 public readonly record struct Rgb(byte R, byte G, byte B)
@@ -263,6 +265,23 @@ public static class RgbEffects
     /// <summary>緊急時の赤い点滅の、時刻 t（秒）の色</summary>
     public static Rgb EmergencyColor(double t) => (long)Math.Floor(t * 2) % 2 == 0 ? EmergencyOn : EmergencyOff;
 
+    /// <summary>呼吸のいちばん暗いときに、いちばん強い成分が残す明るさ（0〜255 の段。四捨五入で 0 にならない）</summary>
+    public const double BreathMinCode = 1.5;
+
+    /// <summary>
+    /// 呼吸のいちばん暗いときの割合（選んだ色に掛ける値。ふつうは 0.1）。全体の明るさ brightness（0〜100）を掛けて送ったとき、
+    /// いちばん強い成分が BreathMinCode 段より暗くならないように、必要なら 0.1 より上げる
+    /// </summary>
+    public static double BreathFloor(Rgb color, double brightness, bool gamma)
+    {
+        double maxc = Math.Max(color.R, Math.Max(color.G, color.B)) / 255.0;
+        double bri = Math.Clamp(brightness, 0, 100) / 100;
+        if (maxc <= 0 || bri <= 0) return 0.1;
+        double lin = Math.Min(1, BreathMinCode / 255 / bri);   // 光の量で必要な分
+        double c = gamma ? Math.Pow(lin, 1 / OutputStage.GammaExponent) : lin;
+        return Math.Clamp(c / maxc, 0.1, 1);
+    }
+
     /// <param name="t">経過秒数（アニメーションの位置）</param>
     /// <param name="ledCount">そのデバイスの LED の数</param>
     /// <param name="temperature">温度モード用の温度（なければ null）</param>
@@ -313,8 +332,11 @@ public static class RgbEffects
             case RgbModes.Breathing:
             {
                 // 1 呼吸 6 秒（速さ 1 のとき）。真っ暗にはせず 1 割は残す。
-                // 色を 0〜255 に丸めずに小数のまま暗くするので、暗いところでも段々にならない
-                float k = (float)(0.1 + 0.9 * (0.5 - 0.5 * Math.Cos(2 * Math.PI * t * speed / 6)));
+                // 色を 0〜255 に丸めずに小数のまま暗くするので、暗いところでも段々にならない。
+                // 全体の明るさを下げたときも、いちばん強い成分が 0 に丸まらない明るさ（BreathMinCode 段）までにする
+                // （0 になると、いちばん暗いところで一度消えてまた点く「まばたき」に見える）
+                double kLo = BreathFloor(baseColor, cfg.Brightness, gamma);
+                float k = (float)(kLo + (1 - kLo) * (0.5 - 0.5 * Math.Cos(2 * Math.PI * t * speed / 6)));
                 var c = new LinColor(
                     OutputStage.Lin(baseColor.R / 255f * k, gamma),
                     OutputStage.Lin(baseColor.G / 255f * k, gamma),

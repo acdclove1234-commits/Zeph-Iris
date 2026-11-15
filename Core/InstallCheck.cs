@@ -154,8 +154,8 @@ public static class InstallCheck
     /// 写すアプリのファイル（exe と、インストーラーが入れる説明書・バッチ・ライセンス）。
     /// これ以外は写さない（exe をダウンロードフォルダーにそのまま置いたとき、ダウンロードの中身を丸ごと写さないため）
     /// </summary>
-    private static readonly string[] AppFiles =
-        { AppIdentity.ExeName, "README_en.txt", "はじめにお読みください.txt", "1_PawnIO をインストール.bat" }; // no-loc
+    public static readonly string[] AppFiles =
+        { AppIdentity.ExeName, "README_en.txt", "はじめにお読みください.txt", "変更履歴.txt", "CHANGELOG_en.txt", "1_PawnIO をインストール.bat" }; // no-loc
     private static readonly string[] AppFolders = { "licenses" };
     /// <summary>設定と記録（設定を引き継ぐときだけ写す。ログは書き込み中で写せないことがあり、写した先で新しく作られる）</summary>
     private static readonly string[] DataFolders = { "data", "backups", "records", "reports", "images" };

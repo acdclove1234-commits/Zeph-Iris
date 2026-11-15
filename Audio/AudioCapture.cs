@@ -54,6 +54,8 @@ public sealed class AudioCapture : IDisposable
     private AudioEngineSettings _settings = AudioEngineSettings.Default;
     private bool _clickDetect;
     private float[] _mono = new float[4096];
+    /// <summary>左右の差の半分（サイド）。左右の広がりの分析に使う（1 チャンネルの音では使わない）</summary>
+    private float[] _side = new float[4096];
     private readonly float[] _zeros = new float[AudioEngine.Hop];
     private SampleClock _clock = new(48000);
     private double _lastArrival = double.NegativeInfinity;
@@ -110,6 +112,34 @@ public sealed class AudioCapture : IDisposable
         if (Engine.Assist is not null) return;
         try { Engine.Assist = AssistFactory?.Invoke(Engine.SampleRate); }
         catch (Exception ex) { Logger.Warn($"拍の AI を付けられません: {ex.Message}"); }   // no-loc（ログだけ）
+    }
+
+    /// <summary>楽器の AI を作る（サンプリング周波数を受け取る。null を返せば使わない）。音の分析を作り直すたびに呼ぶ</summary>
+    public Func<int, SceneTagger?>? TaggerFactory { get; set; }
+
+    /// <summary>楽器の AI を付け直す（設定を変えた・モデルの読み込みが終わった）</summary>
+    public void RefreshTagger()
+    {
+        lock (_feedGate)
+        {
+            // 止めるのは待たない（計算中なら、AI のスレッドが終えてからモデルを手放す）
+            var shown = Engine.Tagger?.Current;
+            Engine.Tagger?.Dispose();
+            Engine.Tagger = null;
+            AttachTagger(shown);
+        }
+    }
+
+    /// <summary>_feedGate の中で呼ぶ。shown = 前の楽器の AI の場面（新しい AI はそこからゆっくり続ける。いきなり色を変えない）</summary>
+    private void AttachTagger(MusicScene? shown = null)
+    {
+        if (Engine.Tagger is not null) return;
+        try
+        {
+            Engine.Tagger = TaggerFactory?.Invoke(Engine.SampleRate);
+            if (shown is not null) Engine.Tagger?.ContinueFrom(shown);
+        }
+        catch (Exception ex) { Logger.Warn($"楽器の AI を付けられません: {ex.Message}"); }   // no-loc（ログだけ）
     }
     public bool Running => _thread is not null;
 
@@ -271,9 +301,12 @@ public sealed class AudioCapture : IDisposable
 
         lock (_feedGate)
         {
+            MusicScene? shown = null;
             if (Engine.SampleRate != format.SampleRate)
             {
                 Engine.Assist?.Dispose();
+                shown = Engine.Tagger?.Current;
+                Engine.Tagger?.Dispose();
                 Engine = new AudioEngine(format.SampleRate) { Settings = _settings, ClickDetect = _clickDetect, StatsLogging = true };
             }
             else
@@ -281,6 +314,7 @@ public sealed class AudioCapture : IDisposable
                 Engine.Reset(); // 出力先が変わった・取り込み直した: テンポの記録などを最初から
             }
             AttachAssist();
+            AttachTagger(shown);
             _clock = new SampleClock(format.SampleRate);
             _lastArrival = double.NegativeInfinity;
             _nextSampleT = double.NegativeInfinity;
@@ -557,9 +591,12 @@ public sealed class AudioCapture : IDisposable
 
         lock (_feedGate)
         {
+            MusicScene? shown = null;
             if (Engine.SampleRate != ProcessLoopbackCapture.SampleRate)
             {
                 Engine.Assist?.Dispose();
+                shown = Engine.Tagger?.Current;
+                Engine.Tagger?.Dispose();
                 Engine = new AudioEngine(ProcessLoopbackCapture.SampleRate) { Settings = _settings, ClickDetect = _clickDetect, StatsLogging = true };
             }
             else
@@ -569,6 +606,7 @@ public sealed class AudioCapture : IDisposable
             // ほかのアプリの音は混ざらないので、反応の強さはそのまま（取り込みを始める前に 1 にしておく）
             Engine.AppGate = 1;
             AttachAssist();
+            AttachTagger(shown);
             _clock = new SampleClock(ProcessLoopbackCapture.SampleRate);
             _lastArrival = double.NegativeInfinity;
             _nextSampleT = double.NegativeInfinity;
@@ -701,7 +739,10 @@ public sealed class AudioCapture : IDisposable
         return CaptureResult.Normal;
     }
 
-    /// <summary>届いた音（ふつうは 32bit 浮動小数・2ch）をモノラルにして分析に回す（NAudio の取り込みスレッドから呼ばれる）</summary>
+    /// <summary>
+    /// 届いた音（ふつうは 32bit 浮動小数・2ch）をモノラル（ミッド）とサイド（左右の差の半分）にして分析に回す
+    /// （NAudio の取り込みスレッドから呼ばれる）
+    /// </summary>
     private void Feed(byte[] buffer, int bytes, PcmKind kind, int channels)
     {
         if (bytes <= 0) return;
@@ -711,12 +752,14 @@ public sealed class AudioCapture : IDisposable
         lock (_feedGate)
         {
             if (_mono.Length < frames) _mono = new float[Math.Max(frames, _mono.Length * 2)];
+            if (_side.Length < frames) _side = new float[Math.Max(frames, _side.Length * 2)];
             int n = PcmConvert.ToMono(buffer.AsSpan(0, bytes), kind, channels, _mono);
+            int ns = PcmConvert.ToSide(buffer.AsSpan(0, bytes), kind, channels, _side);
             double t = _clock.Observe(n, arrival);
             // 時刻が前の音より戻らないようにする（無音で埋めた直後に本物の音が届いたときなど）。
             // わずかなずれ（5 ミリ秒未満）は少しずつ戻して正しい時刻に近づけ、大きく重なるときは前の音の続きにする
             if (t < _nextSampleT) t = _nextSampleT - t < 0.005 ? Math.Max(t, _nextSampleT - 0.0002) : _nextSampleT;
-            Engine.Push(_mono.AsSpan(0, n), t);
+            Engine.Push(_mono.AsSpan(0, n), _side.AsSpan(0, Math.Min(ns, n)), t);
             _nextSampleT = t + (double)n / _clock.SampleRate;
             Volatile.Write(ref _lastArrival, arrival);
         }

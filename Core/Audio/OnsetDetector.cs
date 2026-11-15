@@ -18,7 +18,13 @@ namespace ProFanController;
 ///      上がっている途中なら検出
 ///   5. キックは、FFT を使わないキックの包絡線（KickPath）でも 4.5 dB 以上の立ち上がりを確かめ、
 ///      その立ち上がりの時刻（音 1 個の精度）を「本当に鳴った時刻」にする。
+///      さらに打楽器らしさ（Percussiveness:「カチッ」か、いつもより目立つ低音）が低いものはキックにせず、
+///      ベースの音の出だし（BassCandidate）にする（ベースのアルペジオが、1 秒に 3〜4 回キックと数えられていた）。
 ///      ほかの種類は、検出した回の最後の音の時刻から EventLatencySec 戻した時刻にする
+///   6. ハイハット・スネアは、短い FFT（11 ミリ秒）と FFT を使わない包絡線（TransientPath）でも見て、
+///      その回のうち（または回と回の間。ProbeBetweenHops）に確かめられた音は、すぐに出来事にする（時刻 = 包絡線の立ち上がりの中点）。
+///      長い FFT（43 ミリ秒）で見つけるより約 20 ミリ秒早い。確かめられなかった音は、1〜5 の決め方で今までどおり見つける
+///      （同じ音は 2 回出さない）
 /// 取り込みスレッドからだけ使う
 /// </summary>
 public sealed class OnsetDetector
@@ -67,6 +73,11 @@ public sealed class OnsetDetector
         /// （以前は 2 コマ。1 コマ待つごとに、スネアの光が約 11 ミリ秒遅れる）
         /// </summary>
         internal static int HoldHops = 1;
+        /// <summary>
+        /// キック・ハイハットかどうかがその回で分かれば、待たずに決める（CanDecideSnareNow）。
+        /// キックは FFT を使わない包絡線で、上がっている途中かを確かめる（上がっていれば待つ）
+        /// </summary>
+        internal static bool EarlyDecide = true;
     }
     /// <summary>光らせる出来事の大きさの見分け方（テストから変えられるようにしてある。アプリの中では変えない）</summary>
     internal static class EventTune
@@ -86,9 +97,66 @@ public sealed class OnsetDetector
         /// 見つけた回は立ち上がりの途中なので、その回だけでは大きな音も小さく見える
         /// </summary>
         internal static int HoldHops = 1;
+        /// <summary>
+        /// 遅れを減らす決め方を使うか（短い FFT・包絡線の時刻・大きさが足りていれば待たない・スネアをその回で決める）。
+        /// false にすると 6.15.7 と同じ決め方になる（テストで前後を比べるため。アプリの中では変えない）
+        /// </summary>
+        internal static bool LowLatency = true;
+        /// <summary>回と回の間（音が届くたび）にもハイハット・スネアを確かめるか（ProbeBetweenHops。テストで前後を比べるため）</summary>
+        internal static bool Probe = true;
     }
 
-    /// <summary>見つけたハイハット・立ち上がりを、大きさが分かるまで少し待ってから出来事にする</summary>
+    /// <summary>キックの見分け方（テストから変えられるようにしてある。アプリの中では変えない）</summary>
+    internal static class KickTune
+    {
+        /// <summary>
+        /// 打楽器らしさ（Percussiveness）が低い低音の立ち上がりは、キックにしない（ベースの音の出だし）。
+        /// false にすると、今までどおり低音の立ち上がりと包絡線だけで決める（テストで前後を比べるため）
+        /// </summary>
+        internal static bool PercGate = true;
+        /// <summary>キックとみなす打楽器らしさの下限（0〜1）</summary>
+        internal static double MinPercussive = KickMinPercussive;
+    }
+
+    /// <summary>
+    /// キックとみなす打楽器らしさの下限（Percussiveness）。
+    /// 合成音で測ると、キックは 0.59 以上（「カチッ」のないキックは 1 割ほどがこれより下）、ベースの音の出だしは 0.3 以下
+    /// </summary>
+    public const double KickMinPercussive = 0.5;
+    /// <summary>キックの始まりで「カチッ」（1〜5 kHz の包絡線の立ち上がり）を見る範囲: 始まりの前・後（秒）</summary>
+    private const double ClickBeforeSec = 0.010, ClickAfterSec = 0.006;
+
+    /// <summary>
+    /// キックの打楽器らしさ（0〜1）。キックの始まりの時点で分かることだけで決める（光を遅らせない）。
+    /// 2048 点の FFT の打楽器と持続音の分け方（InstrumentFeatures）は、キックを見つけた回にはまだキックが窓の端にしか入っておらず
+    /// （合成音で、キックの回でも持続音より小さく見えることが多い）、ここでは使わない。次の 2 つの大きいほう:
+    ///   ・「カチッ」: 1〜5 kHz の包絡線が、キックの始まりと同時に上がった（clickRiseDb。2 dB で 0・4 dB で 1）、
+    ///     かつ、その大きさがキックの包絡線から大きく下でない（clickRelDb。−34 dB で 0・−29 dB で 1）。
+    ///     ベースの音の出だしは高い帯にほとんど音が出ない（合成音で、上がり 2.3 dB 以下・キックの包絡線から −36〜−56 dB）。
+    ///     ハイハットと同時のベースの音は、上がっても小さすぎる
+    ///   ・目立ち: キックの包絡線の山が、いつもの大きさ（512 個ごとの最大値の中央値）より大きく上（prominenceDb。6 dB で 0・10 dB で 1）。
+    ///     「カチッ」のないキック（808 のような音）のため。続けて鳴るベースの音は、いつもの大きさから 7 dB 以内
+    /// どれも NaN なら NaN（見ない）
+    /// </summary>
+    internal static double Percussiveness(double clickRiseDb, double clickRelDb, double prominenceDb)
+    {
+        static double Ramp(double x, double lo, double hi) => Math.Clamp((x - lo) / (hi - lo), 0, 1);
+        double click = double.IsFinite(clickRiseDb) && double.IsFinite(clickRelDb) ? Math.Min(Ramp(clickRiseDb, 2, 4), Ramp(clickRelDb, -34, -29)) : double.NaN;
+        double prom = double.IsFinite(prominenceDb) ? Ramp(prominenceDb, 6, 10) : double.NaN;
+        if (double.IsNaN(click)) return prom;
+        return double.IsNaN(prom) ? click : Math.Max(click, prom);
+    }
+    /// <summary>最後に確かめたキックの候補の打楽器らしさ（0〜1。テスト・調査用）</summary>
+    internal double LastKickPercussiveness { get; private set; } = double.NaN;
+    /// <summary>調査用: キックの候補（包絡線でも確かめられた）を見つけたとき（時刻・目立ち dB・「カチッ」の上がり dB・「カチッ」のキックからの大きさ dB）</summary>
+    internal Action<double, double, double, double>? DiagKickCandidate { get; set; }
+
+    /// <summary>
+    /// 見つけたハイハット・立ち上がりの大きさを確かめてから出来事にする。
+    /// 見つけた回のうちに大きさが足りていれば、すぐに出来事にする（待たない）。
+    /// 足りなければ EventTune.HoldHops 回まで待って、立ち上がりの続きで決める（見つけた回は立ち上がりの途中なので、
+    /// 大きな音も小さく見えることがある）。以前は大きさが足りていても必ず 1 回待っていた（光が約 11 ミリ秒遅れていた）
+    /// </summary>
     private sealed class PendingEvent
     {
         private long _hop = -1;
@@ -96,9 +164,17 @@ public sealed class OnsetDetector
         private float _strength;
         private double _size;
 
-        public void Clear() => _hop = -1;
+        /// <summary>最後に出来事にした時刻（まだなければ負の無限大）</summary>
+        public double LastT { get; private set; } = double.NegativeInfinity;
 
-        public void Step(bool fired, long hop, double t, float strength, double size, double minSize, AudioEventKind kind, EventRing events)
+        public void Clear()
+        {
+            _hop = -1;
+            LastT = double.NegativeInfinity;
+        }
+
+        /// <param name="sameAs">この時刻の出来事（短い FFT で先に出したもの）から DuplicateSec 以内なら、同じ音なので出さない</param>
+        public void Step(bool fired, long hop, double t, float strength, double size, double minSize, AudioEventKind kind, EventRing events, double sameAs)
         {
             if (fired && _hop < 0)
             {
@@ -109,8 +185,13 @@ public sealed class OnsetDetector
             }
             if (_hop < 0) return;
             if (size > _size) _size = size;
-            if (hop < _hop + EventTune.HoldHops) return;
-            if (_size >= minSize) events.Add(kind, _t, _strength);
+            bool due = hop >= _hop + EventTune.HoldHops;
+            if (!due && !(EventTune.LowLatency && _size >= minSize)) return;
+            if (_size >= minSize && Math.Abs(_t - sameAs) > DuplicateSec)
+            {
+                events.Add(kind, _t, _strength);
+                LastT = _t;
+            }
             _hop = -1;
         }
     }
@@ -126,6 +207,28 @@ public sealed class OnsetDetector
     /// 音の多い背景では 1〜2 回後に検出されるので、その間の 10 ミリ秒にした（テスト TestKickEventTiming）
     /// </summary>
     public const double EventLatencySec = 0.010;
+    /// <summary>曲全体の音量（dB。直近 3 秒の 2 乗平均。NaN なら比べない。AudioEngine が回ごとに設定する）</summary>
+    public double MixDb { get; set; } = double.NaN;
+    /// <summary>短い FFT で見つけた音を、その回のうちに確かめるのに必要な、包絡線の立ち上がり（dB）</summary>
+    private const double FastRiseDb = 6;
+    /// <summary>短い FFT のピーク検出より 1 回早く出すときに必要な、包絡線の立ち上がり（dB）</summary>
+    private const double EarlyRiseDb = 6;
+    /// <summary>早く出すハイハットに必要な大きさ: 包絡線の山が、曲全体の音量（MixDb）からこの dB 以内（「反応の感度」で下がる）</summary>
+    private const double HatMinVsMixDb = -16;
+    /// <summary>1 回早く出すときに必要な、短い FFT の立ち上がり（しきい値の何倍か）</summary>
+    private const double EarlyShare = 0.25;
+    /// <summary>1 回早く出すのは、包絡線の立ち上がりがこの回の中（新しい端からこの秒数以内）にあるときだけ</summary>
+    private const double EarlyMaxAgoSec = 0.012;
+    /// <summary>スネアの胴の音の包絡線に必要な立ち上がり（dB。胴の音はゆっくり立ち上がるので、響き線の音より小さくする）</summary>
+    private const double BodyRiseDb = 4;
+    /// <summary>スネアを早く出すのは、響き線の音が立ち上がってからこの秒数以上たってから（キックでないことを確かめるため）</summary>
+    private const double SnareMinAgeSec = 0.004;
+    /// <summary>スネアの響き線の音と胴の音の立ち上がりが、これ以内なら同じ 1 つの音（秒）</summary>
+    private const double FastBodyWindowSec = 0.008;
+    /// <summary>包絡線で決めた時刻を、検出した回の最後の音からどこまで前にしてよいか（秒。約 3 回分）</summary>
+    private const double TransientMaxAgoSec = 0.032;
+    /// <summary>短い FFT と長い FFT で、同じ種類の出来事の時刻がこれ以内なら同じ音（2 回出さない。秒）</summary>
+    private const double DuplicateSec = 0.040;
     /// <summary>キックとみなすのに必要な、キックの包絡線の立ち上がり（dB。ノイズの揺れと見分ける）</summary>
     public const double KickMinRiseDb = 4.5;
     /// <summary>キックとみなす大きさの下限（最近のキックの山から何 dB 下まで。スネアの胴の音と見分ける）</summary>
@@ -133,10 +236,102 @@ public sealed class OnsetDetector
     /// <summary>反応の強さ（門 × アプリの割合）がこれ未満の間は、出来事を記録しない</summary>
     public const double MinActivity = 0.3;
 
+    /// <summary>
+    /// 三角形のフィルターの並び（1 オクターブに 6 個。FFT の番号の重み）。
+    /// minCentreHz より低い中心のフィルターは作らない（短い FFT では、中音より上だけを使う）
+    /// </summary>
+    private sealed class FilterBank
+    {
+        public readonly int N;
+        public readonly int[] First, Count, Off, Group;
+        public readonly double[] W;
+
+        public FilterBank(int sampleRate, int fftSize, double minCentreHz)
+        {
+            double binHz = (double)sampleRate / fftSize;
+            int maxBin = fftSize / 2;
+
+            // 中心の周波数 30·2^(i/6) を FFT の番号にして、同じ番号になったものは 1 つにまとめる
+            var bins = new List<int>();
+            int edgeCount = (int)Math.Ceiling(FiltersPerOctave * Math.Log2(FilterHighHz / FilterLowHz)) + 2;
+            for (int i = -1; i <= edgeCount; i++)
+            {
+                double f = FilterLowHz * Math.Pow(2, i / (double)FiltersPerOctave);
+                int b = Math.Clamp((int)Math.Round(f / binHz), 1, maxBin);
+                if (bins.Count == 0 || bins[^1] != b) bins.Add(b);
+                if (f > FilterHighHz) break;
+            }
+            // フィルター j: 下の端 bins[j−1] → 頂点 bins[j] → 上の端 bins[j+1] の三角形（重みの合計を 1 にする）
+            var first = new List<int>();
+            var count = new List<int>();
+            var off = new List<int>();
+            var group = new List<int>();
+            var w = new List<double>();
+            for (int j = 1; j + 1 < bins.Count; j++)
+            {
+                int lo = bins[j - 1], mid = bins[j], hi = bins[j + 1];
+                double centreHz = mid * binHz;
+                if (centreHz < FilterLowHz * 0.9 || centreHz > FilterHighHz * 1.05) continue;
+                if (centreHz < minCentreHz) continue;
+                int start = lo, stop = hi;
+                double sum = 0;
+                int o = w.Count;
+                for (int b = start; b <= stop; b++)
+                {
+                    double v;
+                    if (b <= mid) v = mid == lo ? 1 : (double)(b - lo) / (mid - lo);
+                    else v = hi == mid ? 0 : (double)(hi - b) / (hi - mid);
+                    // 端の番号（重み 0）も 1 つは含め、どのフィルターも少なくとも頂点の番号を見る
+                    w.Add(v);
+                    sum += v;
+                }
+                if (sum <= 0) continue;
+                for (int i = o; i < w.Count; i++) w[i] /= sum;
+                first.Add(start);
+                count.Add(stop - start + 1);
+                off.Add(o);
+                int g = 0;
+                for (int e = 1; e < GroupEdgesHz.Length; e++) if (centreHz >= GroupEdgesHz[e]) g = e;
+                group.Add(g);
+            }
+            N = first.Count;
+            First = first.ToArray();
+            Count = count.ToArray();
+            Off = off.ToArray();
+            Group = group.ToArray();
+            W = w.ToArray();
+        }
+
+        /// <summary>log にしたフィルターの出力 Y_i = log10(1 + Σ w·|X|)</summary>
+        public void Apply(double[] mag, double[] y)
+        {
+            for (int i = 0; i < N; i++)
+            {
+                int o = Off[i], f0 = First[i], n = Count[i];
+                double sum = 0;
+                for (int k = 0; k < n; k++) sum += W[o + k] * mag[f0 + k];
+                y[i] = Math.Log10(1 + sum);
+            }
+        }
+
+        /// <summary>SuperFlux: prev（μ 回前。両隣を含めた最大値）より増えた分だけを帯ごとに band へ足す</summary>
+        public void Flux(double[] y, double[] prev, double[] band)
+        {
+            band[0] = band[1] = band[2] = band[3] = 0;
+            for (int i = 0; i < N; i++)
+            {
+                double m = prev[i];
+                if (i > 0 && prev[i - 1] > m) m = prev[i - 1];
+                if (i + 1 < N && prev[i + 1] > m) m = prev[i + 1];
+                double d = y[i] - m;
+                if (d > 0) band[Group[i]] += d;
+            }
+        }
+    }
+
     private readonly int _sampleRate;
+    private readonly FilterBank _bank;
     private readonly int _nf;                      // 三角形のフィルターの数
-    private readonly int[] _fFirst, _fCount, _fOff, _fGroup;
-    private readonly double[] _fW;
     private readonly double[] _y;                  // 今回の Y
     private readonly double[][] _yHist;            // 過去の Y（μ 回前と比べる）
     private readonly int _lag;                     // μ（何回前と比べるか）
@@ -168,65 +363,32 @@ public sealed class OnsetDetector
     /// <param name="sampleRate">サンプリング周波数（Hz）</param>
     /// <param name="fftSize">使う FFT の大きさ（48 kHz で 2048。窓の長さが約 43 ミリ秒になるように選ぶ）</param>
     /// <param name="frameRate">1 秒あたりの分析の回数（サンプリング周波数 / 512）</param>
-    public OnsetDetector(int sampleRate, int fftSize, double frameRate)
+    /// <param name="fastFftSize">ハイハット・スネアの響き線を見る短い FFT の大きさ（48 kHz で 512。0 なら使わず、今までどおり fftSize だけで見る）</param>
+    public OnsetDetector(int sampleRate, int fftSize, double frameRate, int fastFftSize = 0)
     {
         _sampleRate = sampleRate;
-        double binHz = (double)sampleRate / fftSize;
-        int maxBin = fftSize / 2;
-
-        // 中心の周波数 30·2^(i/6) を FFT の番号にして、同じ番号になったものは 1 つにまとめる
-        var bins = new List<int>();
-        int edgeCount = (int)Math.Ceiling(FiltersPerOctave * Math.Log2(FilterHighHz / FilterLowHz)) + 2;
-        for (int i = -1; i <= edgeCount; i++)
-        {
-            double f = FilterLowHz * Math.Pow(2, i / (double)FiltersPerOctave);
-            int b = Math.Clamp((int)Math.Round(f / binHz), 1, maxBin);
-            if (bins.Count == 0 || bins[^1] != b) bins.Add(b);
-            if (f > FilterHighHz) break;
-        }
-        // フィルター j: 下の端 bins[j−1] → 頂点 bins[j] → 上の端 bins[j+1] の三角形（重みの合計を 1 にする）
-        var first = new List<int>();
-        var count = new List<int>();
-        var off = new List<int>();
-        var group = new List<int>();
-        var w = new List<double>();
-        for (int j = 1; j + 1 < bins.Count; j++)
-        {
-            int lo = bins[j - 1], mid = bins[j], hi = bins[j + 1];
-            double centreHz = mid * binHz;
-            if (centreHz < FilterLowHz * 0.9 || centreHz > FilterHighHz * 1.05) continue;
-            int start = lo, stop = hi;
-            double sum = 0;
-            int o = w.Count;
-            for (int b = start; b <= stop; b++)
-            {
-                double v;
-                if (b <= mid) v = mid == lo ? 1 : (double)(b - lo) / (mid - lo);
-                else v = hi == mid ? 0 : (double)(hi - b) / (hi - mid);
-                // 端の番号（重み 0）も 1 つは含め、どのフィルターも少なくとも頂点の番号を見る
-                w.Add(v);
-                sum += v;
-            }
-            if (sum <= 0) continue;
-            for (int i = o; i < w.Count; i++) w[i] /= sum;
-            first.Add(start);
-            count.Add(stop - start + 1);
-            off.Add(o);
-            int g = 0;
-            for (int e = 1; e < GroupEdgesHz.Length; e++) if (centreHz >= GroupEdgesHz[e]) g = e;
-            group.Add(g);
-        }
-        _nf = first.Count;
-        _fFirst = first.ToArray();
-        _fCount = count.ToArray();
-        _fOff = off.ToArray();
-        _fGroup = group.ToArray();
-        _fW = w.ToArray();
+        _bank = new FilterBank(sampleRate, fftSize, 0);
+        _nf = _bank.N;
         _y = new double[_nf];
         // μ = 1 回（512 個）前と比べる。96 kHz では 1 回が半分の長さなので 2 回前と比べる（同じ時間の差になる）
         _lag = Math.Max(1, (int)Math.Round(frameRate / 93.75));
         _yHist = new double[_lag][];
         for (int i = 0; i < _lag; i++) _yHist[i] = new double[_nf];
+        if (fastFftSize > 0)
+        {
+            // 短い FFT（48 kHz で 512 個 = 11 ミリ秒）の立ち上がり: 500 Hz 以上（G2・G3）だけ。スネア・ハイハットを早く見つけるのに使う。
+            // 長い FFT（43 ミリ秒）は窓の新しい端がほぼ 0 なので、音が窓の真ん中に来るまで（約 2 回）立ち上がりが小さい
+            _fast = new FilterBank(sampleRate, fastFftSize, GroupEdgesHz[2]);
+            _yF = new double[_fast.N];
+            _yP = new double[_fast.N];
+            _yHistF = new double[_lag][];
+            for (int i = 0; i < _lag; i++) _yHistF[i] = new double[_fast.N];
+        }
+        else
+        {
+            _yF = Array.Empty<double>();
+            _yHistF = Array.Empty<double[]>();
+        }
 
         _aMean = TimeConst.Alpha(1 / frameRate, MeanSec);
         int hist = Math.Max(4, (int)Math.Round(PickerHistorySec * frameRate));
@@ -239,8 +401,26 @@ public sealed class OnsetDetector
         _combined = new PeakPicker(hist, gap, frameRate);
         _snarePick1 = new PeakPicker(hist, gap, frameRate, SnareTune.NoiseWeight);
         _snarePick2 = new PeakPicker(hist, gap, frameRate, SnareTune.NoiseWeight);
+        _hatFast = new PeakPicker(hist, hatGap, frameRate);
+        _snareFast2 = new PeakPicker(hist, gap, frameRate, SnareTune.NoiseWeight);
         _snareWindow = Math.Max(1, (int)Math.Round(SnareKickWindowSec * frameRate));
     }
+
+    // ===== 短い FFT（ハイハット・スネアの中音）
+    private readonly FilterBank? _fast;
+    private readonly double[] _yF;
+    private readonly double[][] _yHistF;
+    private readonly double[] _bandF = new double[4];
+    private readonly double[] _bandNormF = new double[4];
+    private readonly WarmEma[] _meanF = new WarmEma[4];
+    private readonly PeakPicker _hatFast, _snareFast2;
+    /// <summary>短い FFT で出したハイハット・スネアの時刻と、長い FFT で出したスネアの時刻（同じ音を 2 回出さない）</summary>
+    private double _fastHatT = double.NegativeInfinity, _fastSnareT = double.NegativeInfinity, _lastSnareT = double.NegativeInfinity;
+    /// <summary>回と回の間に確かめるときの、短い FFT の Y と帯ごとの立ち上がり（状態は変えない）</summary>
+    private readonly double[] _yP = Array.Empty<double>();
+    private readonly double[] _bandP = new double[4];
+    /// <summary>最後に処理した回の番号（まだなければ −1）</summary>
+    private long _hopIndex = -1;
 
     /// <summary>三角形のフィルターの数（約 46 個）</summary>
     public int FilterCount => _nf;
@@ -255,6 +435,10 @@ public sealed class OnsetDetector
     public double KickFlux => _band[0];
     /// <summary>今回、キックを検出した（キックの帯で検出し、キックの包絡線でも確かめられた。反応の強さが足りないときは false）</summary>
     public bool KickFired { get; private set; }
+    /// <summary>今回、低音の立ち上がりを見つけたが、打楽器らしくないのでキックにしなかった（ベースの音の出だし。反応の強さが足りないときは false）</summary>
+    public bool BassCandidate { get; private set; }
+    /// <summary>その立ち上がりの時刻（BassCandidate のときだけ意味がある）</summary>
+    public double BassCandidateTime { get; private set; }
     /// <summary>今回、キックか低い中音（120〜500 Hz）の帯で検出した（テンポの「音が続いているか」に使う）</summary>
     public bool LowFired { get; private set; }
     /// <summary>今回検出した立ち上がりのうち、いちばん強いもの（しきい値の何倍か。なければ 0）</summary>
@@ -289,13 +473,23 @@ public sealed class OnsetDetector
         _combined.Reset();
         _snarePick1.Reset();
         _snarePick2.Reset();
+        for (int i = 0; i < _yHistF.Length; i++) Array.Clear(_yHistF[i]);
+        for (int g = 0; g < 4; g++)
+        {
+            _meanF[g].Reset();
+            _bandF[g] = _bandNormF[g] = 0;
+        }
+        _hatFast.Reset();
+        _snareFast2.Reset();
+        _fastHatT = _fastSnareT = _lastSnareT = double.NegativeInfinity;
+        _hopIndex = -1;
         _lastKickHop = long.MinValue / 4;
         _lastHatHop = long.MinValue / 4;
         _snareHop = -1;
         _hatPend.Clear();
         _onsetPend.Clear();
         Odf = Low = StrongestStrength = KickStrength = 0;
-        KickFired = LowFired = false;
+        KickFired = LowFired = BassCandidate = false;
     }
 
     /// <summary>
@@ -306,32 +500,29 @@ public sealed class OnsetDetector
     /// <param name="tHop">今回のいちばん新しい音の時刻（AudioClock の秒）</param>
     /// <param name="events">出来事の書き込み先（null なら書かない）</param>
     /// <param name="kick">キックの包絡線（null なら確かめずに、時刻も EventLatencySec で求める）</param>
-    public void Process(double[] mag, AudioEngineSettings s, double activity, bool gateOpen, long hop, double tHop, EventRing? events, KickPath? kick = null)
+    /// <param name="magFast">短い FFT の強さ（null ならハイハット・スネアも mag で見る。目盛りは mag と同じ「フルスケールのサイン波 ≈ 512」）</param>
+    /// <param name="hatEnv">ハイハットの包絡線</param>
+    /// <param name="snareEnv">スネアの響き線の包絡線</param>
+    /// <param name="bodyEnv">スネアの胴の音の包絡線（magFast と包絡線がそろったときだけ、その回のうちに確かめて出す）</param>
+    public void Process(double[] mag, AudioEngineSettings s, double activity, bool gateOpen, long hop, double tHop, EventRing? events, KickPath? kick = null,
+        double[]? magFast = null, TransientPath? hatEnv = null, TransientPath? snareEnv = null, TransientPath? bodyEnv = null)
     {
         // 1. log にしたフィルターの出力
-        for (int i = 0; i < _nf; i++)
-        {
-            int o = _fOff[i], f0 = _fFirst[i], n = _fCount[i];
-            double sum = 0;
-            for (int k = 0; k < n; k++) sum += _fW[o + k] * mag[f0 + k];
-            _y[i] = Math.Log10(1 + sum);
-        }
+        _bank.Apply(mag, _y);
+        bool fast = EventTune.LowLatency && _fast is not null && magFast is not null;
+        if (fast) _fast!.Apply(magFast!, _yF);
 
         // 2. SuperFlux: μ 回前の値（両隣を含めた最大値）より増えた分だけを帯ごとに足す
         double[] prev = _yHist[_yHead];   // ちょうど μ 回前に書いた値
         _band[0] = _band[1] = _band[2] = _band[3] = 0;
+        _bandF[0] = _bandF[1] = _bandF[2] = _bandF[3] = 0;
         if (_frames >= _lag)
         {
-            for (int i = 0; i < _nf; i++)
-            {
-                double m = prev[i];
-                if (i > 0 && prev[i - 1] > m) m = prev[i - 1];
-                if (i + 1 < _nf && prev[i + 1] > m) m = prev[i + 1];
-                double d = _y[i] - m;
-                if (d > 0) _band[_fGroup[i]] += d;
-            }
+            _bank.Flux(_y, prev, _band);
+            if (fast) _fast!.Flux(_yF, _yHistF[_yHead], _bandF);
         }
         Array.Copy(_y, prev, _nf);
+        if (fast) Array.Copy(_yF, _yHistF[_yHead], _yF.Length);
         _yHead = (_yHead + 1) % _lag;
         _frames++;
 
@@ -348,6 +539,15 @@ public sealed class OnsetDetector
         Odf = odf;
         Low = _bandNorm[0] + 0.8 * _bandNorm[1];
         DiagHop?.Invoke(tHop, odf, _bandNorm);
+        // 短い FFT の帯も、それぞれの直近 3 秒の平均で割る（テンポの追跡には使わない）
+        if (fast)
+        {
+            for (int g = 1; g < 4; g++)
+            {
+                if (gateOpen) _meanF[g].Step(_bandF[g], _aMean);
+                _bandNormF[g] = _bandF[g] / (_meanF[g].V + MeanFloor);
+            }
+        }
 
         // 4. ピーク検出（感度が高いほど δ が小さい）
         double delta = Math.Clamp(0.8 / Math.Max(0.1, s.BeatSensitivity), 0.25, 2.0);
@@ -359,14 +559,41 @@ public sealed class OnsetDetector
         bool s1 = _snarePick1.Step(_bandNorm[1], delta, hop);
         bool s2 = _snarePick2.Step(_bandNorm[2], delta, hop);
         bool onset = _combined.Step(odf, delta, hop);
+        // 短い FFT（ハイハット・スネアの響き線）。長い FFT より約 1〜2 回早く立ち上がりが見える
+        bool hatFast = fast && _hatFast.Step(_bandNormF[3], delta, hop);
+        bool snareFast = fast && _snareFast2.Step(_bandNormF[2], delta, hop);
 
         // キックは、FFT を使わない包絡線でもはっきり立ち上がっているかを確かめ、その時刻を使う
         double tKick = tHop - EventLatencySec;
         bool isKick = kickFired;
+        bool bassCand = false;
+        double bassCandT = double.NaN;
         if (kickFired && kick is not null)
         {
-            isKick = kick.TryFindOnset(KickMinRiseDb, KickMaxBelowRecentDb, out int ago, out _);
-            if (isKick) tKick = tHop - ago / (double)_sampleRate;
+            // 「最近のキックの大きさ」は、打楽器らしさも確かめてから覚える（ベースの音を覚えないように）
+            isKick = kick.TryFindOnset(KickMinRiseDb, KickMaxBelowRecentDb, false, out int ago, out _);
+            if (isKick)
+            {
+                // 打楽器らしさが低い（「カチッ」もなく目立ちもしない = ベースの音の出だし）ときは、キックにしない
+                double clickPeakDb = double.NaN;
+                double click = snareEnv is null ? double.NaN : snareEnv.RiseAt(ago, ClickBeforeSec, ClickAfterSec, out clickPeakDb);
+                double clickRel = clickPeakDb - kick.FoundPeakDb;
+                double prominence = kick.FoundPeakDb - kick.MedianHopDb;
+                double perc = Percussiveness(click, clickRel, prominence);
+                LastKickPercussiveness = perc;
+                DiagKickCandidate?.Invoke(tHop - ago / (double)_sampleRate, prominence, click, clickRel);
+                if (KickTune.PercGate && double.IsFinite(perc) && perc < KickTune.MinPercussive)
+                {
+                    isKick = false;
+                    bassCand = true;
+                    bassCandT = tHop - ago / (double)_sampleRate;
+                }
+            }
+            if (isKick)
+            {
+                kick.CommitOnset();
+                tKick = tHop - ago / (double)_sampleRate;
+            }
             // キックでなかったときは、次のキックまでの最短の間隔を使わなかったことにする（すぐ後の本物を逃さない）
             else _pickers[0].Cancel();
         }
@@ -379,10 +606,16 @@ public sealed class OnsetDetector
         double minSize = EventTune.MinSize / Math.Max(0.1, s.BeatSensitivity);
         double hatSize = _band[3] / loudest;
         double snareSize = Math.Max(_band[1], _band[2]) / loudest;
+        // 短い FFT の立ち上がりは、長い FFT の目盛りに直してから比べる（直近 3 秒の平均の比を掛ける）。
+        // 下限 MinSize は長い FFT の立ち上がりで合わせてあるため（小さな音で光りすぎない。FaintSoundTests）
+        double hatSizeF = fast ? _bandF[3] * (_mean[3].V + MeanFloor) / (_meanF[3].V + MeanFloor) / loudest : 0;
+        double snareSizeF = fast ? _bandF[2] * (_mean[2].V + MeanFloor) / (_meanF[2].V + MeanFloor) / loudest : 0;
         double anySize = Math.Max(Math.Max(_band[0], _band[1]), Math.Max(_band[2], _band[3])) / loudest;
 
         bool emit = activity >= MinActivity && events is not null;
         KickFired = isKick && emit;
+        BassCandidate = bassCand && emit;
+        BassCandidateTime = bassCandT;
         LowFired = (isKick || g1) && emit;
         KickStrength = KickFired ? _pickers[0].Strength : 0;
         double strongest = 0;
@@ -399,18 +632,38 @@ public sealed class OnsetDetector
             _snareHop = -1;
             _hatPend.Clear();
             _onsetPend.Clear();
+            _fastHatT = _fastSnareT = _lastSnareT = double.NegativeInfinity;
             return;
         }
         if (isKick) events!.Add(AudioEventKind.Kick, tKick, (float)_pickers[0].Strength);
-        // ハイハット・立ち上がり: 検出した回は立ち上がりの途中なので、EventTune.HoldHops 回のうちのいちばん大きい立ち上がりで決める
-        _hatPend.Step(hat, hop, tTrue, (float)_pickers[3].Strength, hatSize, minSize, AudioEventKind.Hat, events!);
-        _onsetPend.Step(onset, hop, tTrue, (float)_combined.Strength, anySize, minSize, AudioEventKind.Onset, events!);
+
+        // 4b. 短い FFT と包絡線で、その回のうちに確かめられたハイハット・スネアは、すぐに出来事にする（FastHit）。
+        //     確かめられなかった音は、今までどおり長い FFT で見つける（同じ音を 2 回出さない。DuplicateSec）
+        //     短い FFT のピーク検出がまだ出ていなくても（音が窓の新しい端にあって、立ち上がりがまだ半分しか見えない）、
+        //     包絡線がこの回のうちに大きく（EarlyRiseDb 以上）立ち上がっていて、立ち上がりがしきい値の EarlyShare 以上なら出す（1 回早くなる）
+        double minS = SnareTune.MinStrength;
+        if (fast)
+        {
+            if (hatFast) TryFastHat(_bandNormF[3], hatSizeF, minSize, hatEnv, tHop, FastRiseDb, TransientMaxAgoSec, events!);
+            else TryFastHat(_bandNormF[3], hatSizeF, minSize, hatEnv, tHop, EarlyRiseDb, EarlyMaxAgoSec, events!);
+            if (snareFast)
+            {
+                if (_snareFast2.Strength >= minS) TryFastSnare(_bandNormF[2], snareSizeF, minSize, kick, snareEnv, bodyEnv, hop, tHop, FastRiseDb, TransientMaxAgoSec, events!);
+            }
+            else TryFastSnare(_bandNormF[2], snareSizeF, minSize, kick, snareEnv, bodyEnv, hop, tHop, EarlyRiseDb, EarlyMaxAgoSec, events!);
+        }
+        _hopIndex = hop;
+
+        // ハイハット・立ち上がり: 大きさが足りていれば見つけた回に、足りなければ EventTune.HoldHops 回までの
+        // いちばん大きい立ち上がりで決める
+        _hatPend.Step(hat, hop, tTrue, (float)_pickers[3].Strength, hatSize, minSize, AudioEventKind.Hat, events!, _fastHatT);
+        _onsetPend.Step(onset, hop, tTrue, (float)_combined.Strength, anySize, minSize, AudioEventKind.Onset, events!, double.NegativeInfinity);
 
         // 5. スネア: 中音の帯で検出し、直前 20 ミリ秒（約 2 回）にキックがなければスネアとする。
-        //    1 コマだけ待って決める（キックはほとんどその時までに見つかっている。待つほど光が遅れる。SnareTune.HoldHops）。
+        //    キック・ハイハットかどうかがその回で分かれば、その回のうちに決める（SnareTune.EarlyDecide）。
+        //    分からなければ 1 コマだけ待って決める（キックはほとんどその時までに見つかっている。待つほど光が遅れる。SnareTune.HoldHops）。
         //    500 Hz〜4 kHz（G2）だけで検出し、同時にハイハットも検出したときは、ハイハットの音の漏れとみなす
         //    （スネアは胴の音が 120〜500 Hz（G1）にも出る。仕様 A6 にない追加）
-        double minS = SnareTune.MinStrength;
         double snareS = 0;
         if (s1 && _snarePick1.Strength >= minS) snareS = _snarePick1.Strength;
         if (s2 && _snarePick2.Strength >= minS) snareS = Math.Max(snareS, _snarePick2.Strength);
@@ -438,7 +691,8 @@ public sealed class OnsetDetector
             _snareHi = Math.Max(_snareHi, _bandNorm[3]);
             if (snareSize >= minSize) _snareBig = true;
         }
-        if (_snareHop >= 0 && hop >= _snareHop + Math.Min(SnareTune.HoldHops, _snareWindow))
+        bool due = _snareHop >= 0 && hop >= _snareHop + Math.Min(SnareTune.HoldHops, _snareWindow);
+        if (_snareHop >= 0 && (due || (EventTune.LowLatency && SnareTune.EarlyDecide && CanDecideSnareNow(kick))))
         {
             bool kickNear = _lastKickHop >= _snareHop - _snareWindow;
             // キックと同時でも、中音がとても強ければスネア（2・4 拍目でキックと重なるクラップなど）
@@ -450,9 +704,113 @@ public sealed class OnsetDetector
             if (SnareTune.HiMin > 0 && !_snareG1 && _snareHi < SnareTune.HiMin) hatOnly = true;
             DiagSnare?.Invoke(_snareT, _snareS, _snareG1, kickNear, hatOnly);
             DiagSnareFirst?.Invoke(_snareT, _snareKickBandFirst, _snareHatFirst, _snareG1First, kickNear, hatOnly, _lastKickHop - _snareHop);
-            if (!kickNear && !hatOnly && _snareBig) events!.Add(AudioEventKind.Snare, _snareT, _snareS);
+            // 短い FFT で先に出したスネアと同じ音なら出さない
+            if (!kickNear && !hatOnly && _snareBig && Math.Abs(_snareT - _fastSnareT) > DuplicateSec)
+            {
+                events!.Add(AudioEventKind.Snare, _snareT, _snareS);
+                _lastSnareT = _snareT;
+            }
             _snareHop = -1;
         }
+    }
+
+    /// <summary>
+    /// 短い FFT の立ち上がり bn（平均で割った値）と大きさ size のハイハットを、包絡線で確かめて出す。
+    /// bn がしきい値の EarlyShare 以上・大きさが minSize 以上・包絡線が minRiseDb 以上立ち上がっていて、
+    /// その立ち上がりが新しい端から maxAgoSec 以内なら出す（ピーク検出が出た回は maxAgoSec を長く、出ていない回は短くする）。
+    /// 時刻 = 包絡線の立ち上がりの中点。長い FFT で出したハイハットと同じ音（DuplicateSec 以内）なら出さない
+    /// </summary>
+    private void TryFastHat(double bn, double size, double minSize, TransientPath? env, double tNow, double minRiseDb, double maxAgoSec, EventRing events)
+    {
+        double thr = Math.Max(1e-9, _hatFast.Threshold);
+        if (bn < EarlyShare * thr || size < minSize || env is null) return;
+        if (!env.TryFindOnset(minRiseDb, out int ago, out _) || ago > maxAgoSec * _sampleRate) return;
+        // 曲全体の音量より HatMinVsMixDb 以上小さいハイハットは、ここでは出さない（小さな「チッ」で光りすぎない。
+        // 「反応の感度」を上げると下限が下がる）。出さなかった音も、今までどおり長い FFT で見つけられる
+        double sens = EventTune.MinSize / Math.Max(1e-9, minSize);
+        if (double.IsFinite(MixDb) && env.RecentPeakDb() < MixDb + HatMinVsMixDb - 20 * Math.Log10(Math.Max(0.1, sens))) return;
+        double t = tNow - Math.Min(ago / (double)_sampleRate, TransientMaxAgoSec);
+        if (Math.Abs(t - _fastHatT) <= DuplicateSec || Math.Abs(t - _hatPend.LastT) <= DuplicateSec) return;
+        events.Add(AudioEventKind.Hat, t, (float)Math.Max(1, bn / thr));
+        _fastHatT = t;
+    }
+
+    /// <summary>短い FFT のスネアの候補を、包絡線（響き線の音・胴の音・キック）で確かめて出す（TryFastHat と同じ決め方 + FastSnareBody）</summary>
+    private void TryFastSnare(double bn, double size, double minSize, KickPath? kick, TransientPath? noise, TransientPath? body, long hop, double tNow,
+        double minRiseDb, double maxAgoSec, EventRing events)
+    {
+        double thr = Math.Max(1e-9, _snareFast2.Threshold);
+        if (bn < EarlyShare * thr || size < minSize) return;
+        if (!FastSnareBody(kick, noise, body, hop, tNow, minRiseDb, maxAgoSec, out double t)) return;
+        if (Math.Abs(t - _fastSnareT) <= DuplicateSec || Math.Abs(t - _lastSnareT) <= DuplicateSec) return;
+        events.Add(AudioEventKind.Snare, t, (float)Math.Max(SnareTune.MinStrength, bn / thr));
+        _fastSnareT = t;
+    }
+
+    /// <summary>
+    /// 分析の回と回の間（音が届くたび。約 10 ミリ秒ごと）に、直近 512 個の短い FFT と包絡線で、ハイハット・スネアを確かめて出す。
+    /// 次の回まで待たないので、回の途中で鳴った音の光が平均 5 ミリ秒ほど早くなる。
+    /// 立ち上がりは、最後の回の短い FFT との差（SuperFlux と同じ）。しきい値・平均は最後の回のまま（状態は変えない）。
+    /// 次の回で同じ音を見つけても、時刻が DuplicateSec 以内なので 2 回は出さない
+    /// </summary>
+    /// <param name="magFast">直近 512 個（48 kHz のとき）の FFT の強さ（Process の magFast と同じ目盛り）</param>
+    /// <param name="tNow">いちばん新しい音の時刻</param>
+    public void ProbeBetweenHops(double[] magFast, AudioEngineSettings s, double activity, double tNow, EventRing? events,
+        KickPath? kick, TransientPath? hatEnv, TransientPath? snareEnv, TransientPath? bodyEnv)
+    {
+        if (!EventTune.LowLatency || _fast is null || events is null || activity < MinActivity || _frames <= _lag || _hopIndex < 0) return;
+        _fast.Apply(magFast, _yP);
+        _fast.Flux(_yP, _yHistF[(_yHead + _lag - 1) % _lag], _bandP);
+        double loudest = MeanFloor;
+        for (int g = 0; g < 4; g++)
+            if (_mean[g].V > loudest) loudest = _mean[g].V;
+        double minSize = EventTune.MinSize / Math.Max(0.1, s.BeatSensitivity);
+        double bn3 = _bandP[3] / (_meanF[3].V + MeanFloor), bn2 = _bandP[2] / (_meanF[2].V + MeanFloor);
+        double size3 = bn3 * (_mean[3].V + MeanFloor) / loudest, size2 = bn2 * (_mean[2].V + MeanFloor) / loudest;
+        TryFastHat(bn3, size3, minSize, hatEnv, tNow, EarlyRiseDb, EarlyMaxAgoSec, events);
+        TryFastSnare(bn2, size2, minSize, kick, snareEnv, bodyEnv, _hopIndex, tNow, EarlyRiseDb, EarlyMaxAgoSec, events);
+    }
+
+    /// <summary>
+    /// 短い FFT で見つけたスネアの候補を、その回のうちにスネアと確かめる（FFT を使わない包絡線で）。
+    ///   ・響き線の音（1〜5 kHz）と胴の音（150〜400 Hz）が、どちらも FastRiseDb 以上立ち上がっていて、
+    ///     2 つの立ち上がりの時刻が FastBodyWindowSec 以内（同じ 1 つの音）
+    ///   ・キックが近くで見つかっていない・キックの包絡線が上がっている途中でもない
+    ///   ・響き線の音が立ち上がってから SnareMinAgeSec 以上たっている（キックの「カチッ」も響き線の帯に出るので、
+    ///     キックの包絡線（150 Hz 以下・2 ミリ秒で追従）が上がるのを待ってから、キックでないことを確かめる）
+    /// 胴の音がない音（ハイハット・クラップなど）は、ここではスネアにしない（今までどおり長い FFT で決める）。
+    /// t = 響き線の音の立ち上がりの時刻
+    /// </summary>
+    private bool FastSnareBody(KickPath? kick, TransientPath? noise, TransientPath? body, long hop, double tHop, double minRiseDb, double maxAgoSec, out double t)
+    {
+        t = double.NaN;
+        if (kick is null || noise is null || body is null) return false;
+        if (_lastKickHop >= hop - _snareWindow) return false;
+        if (kick.IsRising(SnareKickWindowSec, KickMinRiseDb, KickMaxBelowRecentDb)) return false;
+        if (!noise.TryFindOnset(minRiseDb, out int noiseAgo, out _) || noiseAgo > maxAgoSec * _sampleRate) return false;
+        if (noiseAgo < SnareMinAgeSec * _sampleRate) return false;
+        if (!body.TryFindOnset(BodyRiseDb, out int bodyAgo, out _)) return false;
+        if (Math.Abs(noiseAgo - bodyAgo) > FastBodyWindowSec * _sampleRate) return false;
+        t = tHop - Math.Min(noiseAgo / (double)_sampleRate, TransientMaxAgoSec);
+        return true;
+    }
+
+    /// <summary>
+    /// スネアの候補を、待たずにその回のうちに決めてよいか（決めた結果は、待ったときと同じになるはずのときだけ true）。
+    ///   ・キックがもう近くで見つかっている → スネアにしない、と決められる
+    ///   ・キックの包絡線が上がっている途中（FFT のキックの検出は 1〜2 回遅れる）→ 待つ
+    ///   ・低い中音（胴の音）でも見つけていて、大きさも足りている → スネア
+    ///   ・中音だけで、ハイハットも見つかっている → ハイハットの漏れ、と決められる
+    ///   ・それ以外（中音だけでハイハットがまだない・大きさが足りない）→ 待つ
+    /// 見分け方の追加の値（KickOverride・HatLeakRatio・HiMin）を使うときは、待ってからの値で決める
+    /// </summary>
+    private bool CanDecideSnareNow(KickPath? kick)
+    {
+        if (_lastKickHop >= _snareHop - _snareWindow) return SnareTune.KickOverride <= 0;
+        if (kick is null || kick.IsRising(SnareKickWindowSec, KickMinRiseDb, KickMaxBelowRecentDb)) return false;
+        if (_snareG1) return _snareBig;
+        if (_lastHatHop >= _snareHop - _snareWindow) return SnareTune.HatLeakRatio <= 0 && SnareTune.HiMin <= 0;
+        return false;
     }
 }
 

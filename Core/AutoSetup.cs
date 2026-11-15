@@ -19,8 +19,8 @@ public sealed record SetupStep(SetupStepKind Kind, IReadOnlyList<(string Control
 
 public static class AutoSetupPlan
 {
-    /// <summary>キャリブレーション 1 台の目安（秒）</summary>
-    public const double CalibrateSec = 100;
+    /// <summary>キャリブレーション 1 台の目安（秒。各段で回転数が落ち着くまで待つので、回転がゆっくり変わるファンは長くなる）</summary>
+    public const double CalibrateSec = 140;
     /// <summary>CPU・GPU の測定 1 回の目安（秒）</summary>
     public const double TuneSec = 600;
 

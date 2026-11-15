@@ -324,7 +324,6 @@ b0ba1b8f	Blauw
 4cba9eab	Instellingen per zone (aansluiting)
 d64827fc	Wijzig per moederbordaansluiting effect, richting en tint passend bij wat er aangesloten is (ventilatoren, voeding, waterkoelingskop enz.). "Zelfde als apparaat" houdt de instellingen hierboven. Wat aan dezelfde aansluiting is doorgelust, vormt één zone
 41860c08	Wijzigt het muziekeffect alleen voor deze zone (bijv. niveaumeter voor de radiatorventilatoren, kleur op de maat voor de voeding)
-1642d09b	Bij het effect "Elk onderdeel zijn rol": op welk geluid deze zone oplicht. "Passend bij het onderdeel": ventilatoren laag, videokaart midden, geheugen en toetsenbord hoog. Krijgen meerdere zones van hetzelfde apparaat hetzelfde geluid (zoals ventilatoraansluitingen), dan krijgen ze om de beurt laag, midden en hoog
 ed5a9363	Richting
 3d275c1f	Tip: zet voor ARGB-aansluitingen op het moederbord waar niets op zit het aantal leds op 0 in OpenRGB via Devices → (moederbord) → "Edit Device". Er wordt dan minder data verstuurd en de beweging wordt vloeiender. Spiegelen en Omkeren werken bij effecten die de ledvolgorde gebruiken (spectrum, niveaumeter enz.).
 6a1f71f3	Indeling in de kast
@@ -1947,3 +1946,53 @@ c98fd0e4	Er zijn geen ventilatoraansluitingen gevonden.
 a08b13cf	Opstarten bij aanmelden kon niet worden uitgeschakeld. Zet in Instellingen → Algemeen "Automatisch starten bij aanmelden in Windows" opnieuw uit.
 cd2d0b3c	• Je huidige ventilatorinstellingen blijven zoals ze zijn. Sluit dit met "Annuleren".
 845000a1	Er zijn geen ventilatoraansluitingen gevonden, dus je huidige ventilatorinstellingen blijven zoals ze zijn. Sluit de andere software, start de app opnieuw en voer de installatie daarna nog eens uit.
+82cfa58e	Opent de handleiding (eerste installatie, dagelijks gebruik, problemen oplossen)
+13d94a85	Handleiding
+b44c9cc9	OpenRGB-website
+d279d75b	Opent de pagina (openrgb.org) waar je OpenRGB (gratis) kunt downloaden, dat wordt gebruikt om LED-kleuren te wijzigen
+b6ac496a	Handleiding openen
+619bb003	Opent de handleiding in de app-map (of de README op GitHub als die ontbreekt)
+44b1af0b	Kan de browser niet openen: {0}
+ce000878	Kan de handleiding niet openen.
+52b3b243	OpenRGB is niet gevonden. Installeer OpenRGB (gratis) en start het (als je "OpenRGB starten als het niet draait" aanzet, start deze app het in Program Files geïnstalleerde OpenRGB).
+94a21ec2	Instrumentverdeling
+8703d0a3	Bij het effect "Elk onderdeel zijn rol": welk geluid of instrument een zone laat oplichten waarvan "Geluid om op te reageren" op "Volgens onderdeel" staat. Geluiden die je per zone hebt gekozen, blijven zoals ze zijn
+876fdd1c	Instrumenten worden uit het geluid afgeleid, dus bij sommige nummers worden ze verward. Snelle geluiden (hi-hats, snares) verschijnen als kleine lichtpuntjes; traag bijwerkende apparaten zoals videokaarten en geheugen tonen alleen de kleur van het instrument dat in elk deel van het nummer opvalt
+5519f7df	Met één kleur kun je instrumenten niet op kleur onderscheiden. Kies het effect "Instrumenten" om ze te tonen met helderheid, plaats en beweging (de kick laat alles oplichten, hi-hats zijn kleine puntjes, de zang bepaalt de totale helderheid enz.)
+0d8065a5	Controleert elke 0,5 seconde het geluid van ongeveer de laatste seconde. Kleuren veranderen in een paar seconden en knipperen niet. Bij de paletten "Alleen de gekozen kleur" en "Kleuren dicht bij de gekozen kleur" en bij VU-meter, Stroboscoop en Elk onderdeel zijn rol veranderen de kleuren niet
+1b6f3970	Instrumenten herkennen met AI
+aadf5c4a	AI (YAMNet) herkent het instrument dat in elk deel van een nummer opvalt (zang, gitaar, piano, koper, synth, strijkers) en verandert de kleuren langzaam (blauw voor zang, goud voor koper, oranje voor gitaar enz.). Met één kleur verandert het in plaats daarvan hoe het effect "Instrumenten" beweegt. Draait alleen op deze PC en gebruikt een beetje CPU en geheugen
+4e43701b	Bij het effect "Elk onderdeel zijn rol": op welk geluid deze zone oplicht. "Volgens onderdeel" volgt "Instrumentverdeling" (bij toonhoogte: ventilatoren de lage tonen, de videokaart de middentonen, geheugen en toetsenborden de hoge tonen). Krijgen meerdere zones op hetzelfde apparaat hetzelfde geluid (zoals ventilatoraansluitingen), dan worden ze om de beurt verdeeld. Je kunt ook één instrument kiezen, zoals kick, snare of zang
+b555c16c	Instrument-AI
+dbb80bf4	Toerental nodig om het doel van {0:F0} °C te halen: {1:F0}% of minder (de meting stopte voortijdig, dus lagere toerentallen zijn niet gemeten)
+da6452ac	Opslag
+bb721e17	Moederbord en overig
+50030dc4	{0}: de curve "{1}" lijkt de verkeerde sensor te gebruiken
+3959777c	In profiel "{0}" lijkt "{1}" op basis van de naam een {2}-curve, maar hij leest "{3}" ({4}). Als de {5} heet wordt, laat deze curve de ventilatoren niet sneller draaien.
+4059ff76	Overschakelen naar "{0}"
+8b8b7a36	In profiel "{0}" is de temperatuur voor "{1}" omgezet naar "{2}".
+08d8c54e	{0}: de GPU-ventilator draait alleen op een opslagtemperatuur
+3ba7001c	In profiel "{0}" leest deze ventilator alleen "{1}". Als de GPU tijdens games heet wordt, gaat de ventilator niet sneller draaien.
+d71badc6	Overschakelen naar een curve op basis van "{0}"
+d0514409	In profiel "{0}" is overgeschakeld naar de standaardcurve op basis van "{1}".
+dc31499c	Virtuele sensor "{0}": de bronsensoren ({1}) kunnen niet worden gelezen, dus wordt alleen met de overige sensoren gerekend.
+a0b3b7dd	Instrumenten
+3c260d3f	De kick laat alles oplichten, de snare één kant, hi-hats kleine puntjes, de bas het uiteinde, de zang de totale helderheid en gitaar of toetsen een stromend licht. Zelfs met één kleur (Alleen de gekozen kleur) zie je de instrumenten
+d3efe37c	Per instrument
+e8d8b63a	Alleen drums
+31b76718	Toonhoogte (laag, midden, hoog)
+ce37ccb7	Elk onderdeel licht op bij zijn eigen instrument: ventilatoren bij de kick, geheugen en toetsenborden bij de hi-hat, de videokaart bij de zang enz. Bij meerdere ventilatoraansluitingen worden ze om de beurt verdeeld over kick, snare, hi-hat en bas
+c7cc18b1	Licht alleen op bij kick, snare en hi-hat. Gitaar en zang laten het niet oplichten
+7b659d5a	Verdeelt op toonhoogte: ventilatoren voor de lage tonen, de videokaart voor de middentonen, geheugen voor de hoge tonen (zoals voorheen)
+c33f330a	Kick
+8b911b1b	Snare
+7ae7bcde	Hi-hat en bekkens
+f5489867	Bas (instrument)
+412c6fd5	Zang en lead
+203562ee	Akkoorden (toetsen, gitaar)
+dac2be1c	Pad en synth
+64270fa4	{0}: de meting stopte voordat het laagste toerental werd bereikt dat het doel haalt, dus er is geen curve gemaakt en de huidige curve blijft ({1})
+d5a051f9	Toerental nodig om {0:F0} °C te halen: {1:F0}% of minder (lagere toerentallen zijn niet gemeten)
+0c8c7106	* Het laagste toerental dat het doel haalt is niet gemeten, dus deze curve wordt niet ingesteld, ook niet als je hem toepast (de huidige curve blijft)
+e2a336cd	Het laagste toerental dat het doel haalt is niet gemeten, dus er is geen curve ingesteld (de huidige curve blijft).
+90a68504	Onder {0:F0}% verandert het toerental nauwelijks (het eigen minimumtoerental van de ventilator).

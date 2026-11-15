@@ -10,6 +10,11 @@
 //   loud  … 明るさ（0.5 秒でならす）と音の大きさの相関。静かなところで暗く、盛り上がりで明るくなっているか
 //   range … 明るさの p95 − p5（メリハリ）
 //   jit   … 0.07 秒以内に明るさの向きが戻った回数（LED 1 個・1 秒あたり。ちらつき）
+//   toggle… jit と同じだが 1 段の変化でも数える（ディザリングの 2・3・2・3 も数える）
+//   blink … 消える（0）と点く（1 以上）の行き来の回数（LED 1 個・1 秒あたり）
+// 合成した曲で同じものを測って判定するのは MusicFlickerTests（録音がなくても動く）。
+// 調べる用の環境変数: MODE_LED=光り方:LED:秒（その LED の値を 2 秒）、MODE_JITLOG=光り方（数えたちらつきの前後の値）、
+//   MODE_STEADY=0（ちらつき止め LedSteady を外して比べる）
 using ProFanController;
 
 namespace LogicTests;
@@ -24,6 +29,12 @@ public static class ModeSyncBenchTests
         public double RandAmp { get; init; }
         /// <summary>拍の光の立ち上がり ÷ 拍の間の光の立ち上がり（平均。拍が目立つか）</summary>
         public double Accent { get; init; } = double.NaN;
+        /// <summary>1 段の変化でも、4 コマ以内に向きが戻った回数（LED 1 個・1 秒あたり。ディザリングの行き来も数える）</summary>
+        public double Toggle { get; init; }
+        /// <summary>消える（0）と点く（1 以上）の行き来の回数（LED 1 個・1 秒あたり）</summary>
+        public double Blink { get; init; }
+        /// <summary>曲ごとの jit（平均をとったときだけ入れる）</summary>
+        public double[] Jits { get; init; } = Array.Empty<double>();
     }
 
     private const double Fps = 60;
@@ -61,10 +72,11 @@ public static class ModeSyncBenchTests
         if (string.IsNullOrEmpty(dir) || !Directory.Exists(dir)) return;
         if (double.TryParse(Environment.GetEnvironmentVariable("MODE_HOLD"), out double holdSec)) AttackHold.HoldSec = holdSec;
         if (Environment.GetEnvironmentVariable("MODE_SECTION") == "0") SectionMeter.Enabled = false;
+        if (Environment.GetEnvironmentVariable("MODE_STEADY") == "0") LedSteady.Enabled = false;
         var savedTune = BeatTuneSweepTests.Snapshot();
         BeatTuneSweepTests.Apply(Environment.GetEnvironmentVariable("BEAT_TUNE") ?? "");
         try { Bench(dir); }
-        finally { BeatTuneSweepTests.Restore(savedTune); AttackHold.HoldSec = AttackHold.DefaultHoldSec; SectionMeter.Enabled = true; BeatHueEffect.Tune.OffBeatDuck = 0.25f; }
+        finally { BeatTuneSweepTests.Restore(savedTune); AttackHold.HoldSec = AttackHold.DefaultHoldSec; SectionMeter.Enabled = true; LedSteady.Enabled = true; BeatHueEffect.Tune.OffBeatDuck = 0.25f; }
     }
 
     private static void Bench(string dir)
@@ -87,12 +99,13 @@ public static class ModeSyncBenchTests
         {
             var l = all[m];
             T.Info("   " + Format(new ModeScore(m, l.Average(x => x.Hit), l.Average(x => x.Beat), Median(l.Select(x => x.OffMs)),
-                l.Average(x => x.Resp), Median(l.Select(x => x.LagMs)), l.Average(x => x.Loud), l.Average(x => x.Range), l.Average(x => x.Jit), (int)l.Average(x => x.Flashes)) { Half = l.Average(x => x.Half), RandAmp = l.Average(x => x.RandAmp), Accent = Median(l.Select(x => x.Accent)) }));
+                l.Average(x => x.Resp), Median(l.Select(x => x.LagMs)), l.Average(x => x.Loud), l.Average(x => x.Range), l.Average(x => x.Jit), (int)l.Average(x => x.Flashes)) { Half = l.Average(x => x.Half), RandAmp = l.Average(x => x.RandAmp), Accent = Median(l.Select(x => x.Accent)),
+                  Toggle = l.Average(x => x.Toggle), Blink = l.Average(x => x.Blink) }));
         }
     }
 
     public static string Format(ModeScore s) =>
-        $"{s.Mode,-9} hit {s.Hit * 100,3:F0}% +sub {s.Half * 100,3:F0}% stray {s.RandAmp * 100,3:F0}% accent {s.Accent,4:F2}  beat {s.Beat * 100,3:F0}%  off {s.OffMs,4:F0} ms  resp {s.Resp,5:F2} lag {s.LagMs,4:F0} ms  loud {s.Loud,5:F2}  range {s.Range,4:F2}  jit {s.Jit,5:F2}  flashes {s.Flashes,4}";
+        $"{s.Mode,-9} hit {s.Hit * 100,3:F0}% +sub {s.Half * 100,3:F0}% stray {s.RandAmp * 100,3:F0}% accent {s.Accent,4:F2}  beat {s.Beat * 100,3:F0}%  off {s.OffMs,4:F0} ms  resp {s.Resp,5:F2} lag {s.LagMs,4:F0} ms  loud {s.Loud,5:F2}  range {s.Range,4:F2}  jit {s.Jit,5:F2}  toggle {s.Toggle,5:F2}  blink {s.Blink,5:F2}  flashes {s.Flashes,4}";
 
     private static double Median(IEnumerable<double> xs)
     {
@@ -111,12 +124,27 @@ public static class ModeSyncBenchTests
         /// <summary>LED ごとに明るくなった分の平均（動く光でも、新しく光ったところを数えられる）</summary>
         public readonly List<double> U = new();
         public int[] Prev = Array.Empty<int>(), Dir = Array.Empty<int>(), Flip = Array.Empty<int>();
-        public long Jitter;
+        public int[] Dir1 = Array.Empty<int>(), Flip1 = Array.Empty<int>();
+        public long Jitter, Toggle, Blink;
+        /// <summary>LED ごとの直近の値（MODE_JITLOG のときだけ）</summary>
+        public Queue<int>[] Hist = Array.Empty<Queue<int>>();
     }
 
     public static List<ModeScore> RunSong(string path, string[] modes, out double refBpm, out double secondsOut)
     {
         var mono = MusicWavTests.ReadWavMono(path, out int fs);
+        return RunSong(mono, fs, modes, out refBpm, out secondsOut);
+    }
+
+    /// <summary>
+    /// RunSong と同じ。曲をファイルではなく、メモリーの音（モノラル）で渡す（合成した曲を WAV に書かずに使う）。
+    /// settings を渡すと、光り方 modes[0] で、デバイスの設定ごとに 1 本ずつ描く（ModeScore.Mode は Label。ゾーンの「反応する音」を変えて比べる）。
+    /// scenes を渡すと、楽器の AI の場面の代わりに使う（引数は曲の頭からの秒。返す場面の SwitchT も曲の頭からの秒で、ここで分析の時計に直す）
+    /// </summary>
+    public static List<ModeScore> RunSong(float[] mono, int fs, string[] modes, out double refBpm, out double secondsOut,
+        RgbDevice? device = null, Func<ResolvedMusic, ResolvedMusic>? tweak = null, IReadOnlyList<(string Label, RgbDeviceSettings Settings)>? settings = null,
+        Func<double, MusicScene>? scenes = null)
+    {
         double seconds = mono.Length / (double)fs;
         secondsOut = seconds;
 
@@ -130,15 +158,21 @@ public static class ModeSyncBenchTests
         var odf = hops.Select(h => (T: h.T - refRun.T0, h.Odf)).ToList();
 
         // 2) 本物の分析に流しながら、全部の光り方を描く
-        var dev = new RgbDevice(0, "Strip", 24, 4, null, "HID: x");
+        var dev = device ?? new RgbDevice(0, "Strip", 24, 4, null, "HID: x");
         var engine = new AudioEngine(fs) { Settings = MusicTuning.EngineSettings(cfg) };
-        var lanes = modes.Select(m =>
+        var laneSpecs = settings is null
+            ? modes.Select(m => (Label: m, Effect: m, Settings: new RgbDeviceSettings { Name = dev.Name })).ToList()
+            : settings.Select(x => (x.Label, Effect: modes[0], x.Settings)).ToList();
+        var lanes = laneSpecs.Select(spec =>
         {
-            var music = ResolvedMusic.Default with { Effect = m };
+            string m = spec.Effect;
+            var music = (tweak?.Invoke(ResolvedMusic.Default) ?? ResolvedMusic.Default) with { Effect = m };
             if (m == MusicStyles.Strobe) music = music with { StrobeAllowed = true, ReduceFlashing = false };
-            var input = new RenderInput { Cfg = cfg, Music = music, Device = new RgbDeviceSettings { Name = dev.Name } };
-            return new Lane { Mode = m, R = new DeviceRenderer(dev), In = input, Out = new Rgb[dev.LedCount],
-                Prev = new int[dev.LedCount], Dir = new int[dev.LedCount], Flip = new int[dev.LedCount] };
+            var input = new RenderInput { Cfg = cfg, Music = music, Device = spec.Settings };
+            return new Lane { Mode = spec.Label, R = new DeviceRenderer(dev), In = input, Out = new Rgb[dev.LedCount],
+                Prev = new int[dev.LedCount], Dir = new int[dev.LedCount], Flip = new int[dev.LedCount],
+                Dir1 = new int[dev.LedCount], Flip1 = new int[dev.LedCount],
+                Hist = Environment.GetEnvironmentVariable("MODE_JITLOG") == spec.Label ? Enumerable.Range(0, dev.LedCount).Select(_ => new Queue<int>()).ToArray() : Array.Empty<Queue<int>>() };
         }).ToList();
 
         const double t0 = 1000.0; // EngineRun と同じ始まり
@@ -148,6 +182,7 @@ public static class ModeSyncBenchTests
         var evBuf = new List<AudioEvent>();
         AllEvents.Clear();
         var rms = new List<double>();
+        var sceneAt = SceneClock(scenes, t0);
         for (int pos = 0; pos < mono.Length; pos += chunk)
         {
             int n = Math.Min(chunk, mono.Length - pos);
@@ -161,7 +196,7 @@ public static class ModeSyncBenchTests
                 double s2 = 0;
                 for (int i = a; i < b; i++) s2 += mono[i] * (double)mono[i];
                 rms.Add(b > a ? Math.Sqrt(s2 / (b - a)) : 0);
-                foreach (var L in lanes) DrawFrame(L, engine, t, lastFrame);
+                foreach (var L in lanes) DrawFrame(L, engine, t, lastFrame, sceneAt);
                 evBuf.Clear();
                 engine.Events.Read(ref evCursor, t, evBuf);
                 foreach (var ev in evBuf) AllEvents.Add((ev.T - t0, ev.Kind, ev.Strength));
@@ -172,7 +207,25 @@ public static class ModeSyncBenchTests
         return lanes.Select(L => Score(L, refBeats, odf, rms, seconds)).ToList();
     }
 
-    private static void DrawFrame(Lane L, AudioEngine e, double t, double lastT)
+    /// <summary>
+    /// 曲の頭からの秒で決めた場面（scenes）を、分析の時計（t0 から始まる）の場面にする。
+    /// 同じ場面が続く間は同じものを返す（毎コマ作り直さない）
+    /// </summary>
+    internal static Func<double, MusicScene>? SceneClock(Func<double, MusicScene>? scenes, double t0)
+    {
+        if (scenes is null) return null;
+        MusicScene? lastIn = null, lastOut = null;
+        return t =>
+        {
+            var s = scenes(t - t0);
+            if (ReferenceEquals(s, lastIn) && lastOut is not null) return lastOut;
+            lastIn = s;
+            lastOut = double.IsFinite(s.SwitchT) ? s with { SwitchT = s.SwitchT + t0 } : s;
+            return lastOut;
+        };
+    }
+
+    private static void DrawFrame(Lane L, AudioEngine e, double t, double lastT, Func<double, MusicScene>? scenes = null)
     {
         var input = L.In;
         input.T = t;
@@ -180,6 +233,7 @@ public static class ModeSyncBenchTests
         input.TPrevEval = double.IsNaN(lastT) ? t : lastT;
         input.Dt = double.IsNaN(lastT) ? 1 / Fps : t - lastT;
         input.Beat = e.Beat;
+        input.Scene = scenes?.Invoke(t) ?? e.Scene;
         input.Features = e.Features;
         e.Features.Sample(t, input.Frame);
         input.Events.Clear();
@@ -187,6 +241,14 @@ public static class ModeSyncBenchTests
         L.R.Render(input, L.Out);
         double sum = 0, up = 0;
         int f = L.B.Count;
+        // 調べる用: MODE_LED=光り方:LED の番号:秒 で、その LED の送った値（いちばん強い成分）を 2 秒ぶん出す
+        if (Environment.GetEnvironmentVariable("MODE_LED") is { } ml && ml.Split(':') is [var lm, var li, var ls] && lm == L.Mode
+            && int.TryParse(li, out int led) && led < L.Out.Length && double.TryParse(ls, out double lt0) && f >= lt0 * Fps && f < (lt0 + 2) * Fps)
+        {
+            var o = L.Out[led];
+            int v = Math.Max(o.R, Math.Max(o.G, o.B));
+            T.Info($"{f / Fps,7:F3} {v,3} {new string('#', v / 4)}");
+        }
         for (int i = 0; i < L.Out.Length; i++)
         {
             int v = Math.Max(L.Out[i].R, Math.Max(L.Out[i].G, L.Out[i].B));
@@ -194,14 +256,33 @@ public static class ModeSyncBenchTests
             if (f > 0)
             {
                 up += Math.Max(0, v - L.Prev[i]) / 255.0;
+                // 1 段の変化でも数える向きの戻り（FlickerDiag の toggle と同じ）・消えたり点いたり
+                int d1 = Math.Sign(v - L.Prev[i]);
+                if (d1 != 0)
+                {
+                    if (L.Dir1[i] != 0 && d1 != L.Dir1[i]) { if (f - L.Flip1[i] <= 4) L.Toggle++; L.Flip1[i] = f; }
+                    L.Dir1[i] = d1;
+                }
+                if ((v == 0) != (L.Prev[i] == 0)) L.Blink++;
                 int d = Math.Abs(v - L.Prev[i]) >= 2 ? Math.Sign(v - L.Prev[i]) : 0;
                 if (d != 0)
                 {
-                    if (L.Dir[i] != 0 && d != L.Dir[i]) { if (f - L.Flip[i] <= 4) L.Jitter++; L.Flip[i] = f; }
+                    if (L.Dir[i] != 0 && d != L.Dir[i])
+                    {
+                        if (f - L.Flip[i] <= 4)
+                        {
+                            L.Jitter++;
+                            // 調べる用: MODE_JITLOG=光り方 で、数えたちらつきの前後の値を出す
+                            if (Environment.GetEnvironmentVariable("MODE_JITLOG") == L.Mode && f > 8 * Fps && f < 20 * Fps)
+                                T.Info($"{f / Fps,7:F3} led {i,2}: {string.Join(" ", L.Hist[i].TakeLast(8))} {v}");
+                        }
+                        L.Flip[i] = f;
+                    }
                     L.Dir[i] = d;
                 }
             }
             L.Prev[i] = v;
+            if (L.Hist.Length == L.Out.Length) { L.Hist[i].Enqueue(v); if (L.Hist[i].Count > 8) L.Hist[i].Dequeue(); }
         }
         L.B.Add(sum / L.Out.Length);
         L.U.Add(up / L.Out.Length);
@@ -313,8 +394,10 @@ public static class ModeSyncBenchTests
         var sb = Smooth(b, 30);
         var sr = Smooth(rms.Take(n).Select(x => 20 * Math.Log10(Math.Max(1e-5, x))).ToArray(), 30);
         double loud = Corr(f0, Math.Min(n, sr.Length), i => sb[i], i => sr[i]);
-        double jit = L.Jitter / Math.Max(1e-9, (n - f0) / Fps * L.Out.Length);
-        return new ModeScore(L.Mode, hit, beatCover, offMs, bestR, bestLag * 1000 / Fps, loud, range, jit, flashes.Count) { Half = half, RandAmp = randShare, Accent = accent };
+        double per = Math.Max(1e-9, (n - f0) / Fps * L.Out.Length);
+        double jit = L.Jitter / per;
+        return new ModeScore(L.Mode, hit, beatCover, offMs, bestR, bestLag * 1000 / Fps, loud, range, jit, flashes.Count)
+            { Half = half, RandAmp = randShare, Accent = accent, Toggle = L.Toggle / per, Blink = L.Blink / per };
     }
 
     private static double[] Smooth(double[] x, int w)

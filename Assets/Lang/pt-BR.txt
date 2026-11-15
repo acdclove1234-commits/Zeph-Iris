@@ -324,7 +324,6 @@ b0ba1b8f	Azul
 4cba9eab	Configurações por zona (conector)
 d64827fc	Mude efeito, direção e tom de cada conector da placa-mãe conforme o que estiver ligado (ventoinhas, fonte, bloco do water cooler etc.). "Igual ao dispositivo" mantém as configurações acima. O que estiver encadeado no mesmo conector forma uma zona
 41860c08	Muda o efeito de sincronização com música só desta zona (ex.: medidor de volume nas ventoinhas do radiador, cor no ritmo para a fonte)
-1642d09b	No efeito "Cada peça no seu papel", a qual som esta zona reage. "Conforme a peça": ventoinhas graves, placa de vídeo médios, memória e teclado agudos. Se várias zonas do mesmo dispositivo ficarem com o mesmo som (como os conectores de ventoinha), elas recebem graves, médios e agudos em sequência
 ed5a9363	Direção
 3d275c1f	Dica: nos conectores ARGB da placa-mãe sem nada ligado, defina o número de LEDs como 0 no OpenRGB em Devices → (placa-mãe) → "Edit Device". Menos dados são enviados e o movimento fica mais suave. Espelhar e Inverter valem para efeitos que usam a ordem dos LEDs (espectro, medidor de volume etc.).
 6a1f71f3	Disposição no gabinete
@@ -1947,3 +1946,53 @@ c98fd0e4	Nenhum conector de ventoinha foi encontrado.
 a08b13cf	Não foi possível desativar a inicialização no login. Em Configurações → Geral, desative de novo "Iniciar automaticamente ao entrar no Windows".
 cd2d0b3c	• As configurações atuais das ventoinhas ficam como estão. Feche com "Cancelar".
 845000a1	Nenhum conector de ventoinha foi encontrado, então as configurações atuais das ventoinhas ficam como estão. Feche o outro software, reinicie o app e faça a configuração de novo.
+82cfa58e	Abre o guia do usuário (configuração inicial, uso diário, solução de problemas)
+13d94a85	Guia do usuário
+b44c9cc9	Site do OpenRGB
+d279d75b	Abre a página (openrgb.org) onde você pode obter o OpenRGB (gratuito), usado para mudar as cores dos LEDs
+b6ac496a	Abrir guia do usuário
+619bb003	Abre o guia na pasta do app (ou o README no GitHub, se ele não existir)
+44b1af0b	Não foi possível abrir o navegador: {0}
+ce000878	Não foi possível abrir o guia do usuário.
+52b3b243	OpenRGB não encontrado. Instale o OpenRGB (gratuito) e inicie-o (se você ativar "Iniciar o OpenRGB se não estiver em execução", este app inicia o OpenRGB instalado em Program Files).
+94a21ec2	Divisão de instrumentos
+8703d0a3	Com o efeito "Cada peça no seu papel", qual som ou instrumento acende uma zona cujo "Som a acompanhar" é "Conforme a peça". Os sons escolhidos para cada zona permanecem como estão
+876fdd1c	Os instrumentos são deduzidos pelo som, então algumas músicas podem confundi-los. Sons rápidos (chimbal, caixa) aparecem como pequenos pontos de luz, e dispositivos de atualização lenta, como placa de vídeo e memória, acendem só com a cor do instrumento que se destaca em cada parte da música
+5519f7df	Com uma cor única, não dá para distinguir os instrumentos pela cor. Escolha o efeito "Instrumentos" para mostrá-los pelo brilho, pela posição e pelo movimento (o bumbo acende tudo, o chimbal vira pequenos pontos, a voz define o brilho geral etc.)
+0d8065a5	A cada 0,5 segundo, analisa cerca de 1 segundo do som mais recente. As cores mudam ao longo de alguns segundos e não piscam. As cores não mudam com as paletas "Somente a cor escolhida" e "Cores próximas da escolhida" nem com Medidor de volume, Estroboscópio e Cada peça no seu papel
+1b6f3970	Reconhecer instrumentos com AI
+aadf5c4a	A AI (YAMNet) reconhece o instrumento que se destaca em cada parte da música (voz, guitarra, piano, metais, sintetizador, cordas) e muda as cores devagar (azul para a voz, dourado para os metais, laranja para a guitarra etc.). Com uma cor única, muda o movimento do efeito "Instrumentos". Funciona só neste PC e usa um pouco de CPU e memória
+4e43701b	Com o efeito "Cada peça no seu papel", qual som acende esta zona. "Conforme a peça" segue a "Divisão de instrumentos" (por altura: ventoinhas nos graves, placa de vídeo nos médios, memória e teclados nos agudos). Se várias zonas do mesmo dispositivo ficarem com o mesmo som (como conectores de ventoinha), elas são divididas em sequência. Também é possível escolher um instrumento, como bumbo, caixa ou vocal
+b555c16c	AI de instrumentos
+dbb80bf4	Rotação necessária para manter o alvo de {0:F0} °C: {1:F0}% ou menos (o teste terminou antes, então rotações menores não foram medidas)
+da6452ac	Armazenamento
+bb721e17	Placa-mãe e outros
+50030dc4	{0}: a curva "{1}" parece usar o sensor errado
+3959777c	No perfil "{0}", "{1}" parece pelo nome uma curva de {2}, mas lê "{3}" ({4}). Mesmo que {5} esquente, esta curva não aumenta a rotação.
+4059ff76	Mudar para "{0}"
+8b8b7a36	No perfil "{0}", a temperatura de "{1}" foi trocada para "{2}".
+08d8c54e	{0}: a ventoinha da GPU funciona só com a temperatura do armazenamento
+3ba7001c	No perfil "{0}", esta ventoinha só lê "{1}". Mesmo que a GPU esquente em jogos, a rotação não aumenta.
+d71badc6	Mudar para uma curva baseada em "{0}"
+d0514409	No perfil "{0}", foi aplicada a curva padrão baseada em "{1}".
+dc31499c	Sensor virtual "{0}": os sensores de origem ({1}) não podem ser lidos, então o cálculo usa só os sensores restantes.
+a0b3b7dd	Instrumentos
+3c260d3f	O bumbo acende tudo, a caixa um lado, o chimbal pequenos pontos, o baixo as extremidades, a voz o brilho geral, e guitarra ou teclados uma luz que corre. Dá para distinguir os instrumentos mesmo com cor única (Somente a cor escolhida)
+d3efe37c	Por instrumento
+e8d8b63a	Só bateria
+31b76718	Por altura (graves, médios, agudos)
+ce37ccb7	Cada peça acende com seu próprio instrumento, como as ventoinhas com o bumbo, a memória e os teclados com o chimbal e a placa de vídeo com o vocal. Vários conectores de ventoinha são divididos entre bumbo, caixa, chimbal e baixo, nessa ordem
+c7cc18b1	Acende só com bumbo, caixa e chimbal. Guitarra e vocal não acendem
+7b659d5a	Divide pela altura: ventoinhas nos graves, placa de vídeo nos médios e memória nos agudos (como antes)
+c33f330a	Bumbo
+8b911b1b	Caixa
+7ae7bcde	Chimbal e pratos
+f5489867	Baixo (instrumento)
+412c6fd5	Vocal e solo
+203562ee	Acordes (teclados, guitarra)
+dac2be1c	Pad e sintetizador
+64270fa4	{0}: o teste terminou antes de chegar à menor rotação que mantém o alvo, então nenhuma curva foi criada e a curva atual foi mantida ({1})
+d5a051f9	Rotação necessária para manter {0:F0} °C: {1:F0}% ou menos (rotações menores não foram medidas)
+0c8c7106	* A menor rotação que mantém o alvo não foi medida, então esta curva não será aplicada mesmo se você clicar em Aplicar (a curva atual é mantida)
+e2a336cd	A menor rotação que mantém o alvo não foi medida, então nenhuma curva foi aplicada (a curva atual foi mantida).
+90a68504	Abaixo de {0:F0}%, a rotação quase não muda (a rotação mínima da própria ventoinha).

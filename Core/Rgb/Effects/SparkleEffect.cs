@@ -34,6 +34,10 @@ public sealed class SparkleEffect : IMusicEffect
     public const float SmallSnareLevel = 0.8f;
     /// <summary>静かな部分での明るさの倍率（盛り上がりで 1。EffectContext.SectionGain）</summary>
     public const float SectionMin = 0.6f;
+    /// <summary>同じ LED に次の粒を置けるまでの秒数（1 つの LED が光るのは 1 秒に 3 回まで）</summary>
+    public const double ParticleGapSec = 0.333;
+    /// <summary>ハイハットの粒の場所を選び直す回数（少し前に光った LED に当たったとき）</summary>
+    private const int PickTries = 4;
 
     private double[] _t0 = Array.Empty<double>();
     private float[] _tau = Array.Empty<float>();
@@ -114,7 +118,11 @@ public sealed class SparkleEffect : IMusicEffect
             }
             int n = Math.Clamp((int)MathF.Round(0.02f * s.Count * strength * gain), 1, Math.Max(1, s.Count / 12));
             for (int q = 0; q < n; q++)
-                Set(s.Start + c.Rng.NextInt(s.Count), t0, HatTauSec, HatColor(c) * level);
+            {
+                // 少し前に粒が光った LED は避けて、別の LED を選ぶ（見つからなければ、この粒は出さない）
+                for (int tryNo = 0; tryNo < PickTries; tryNo++)
+                    if (Set(s.Start + c.Rng.NextInt(s.Count), t0, HatTauSec, HatColor(c) * level)) break;
+            }
         }
     }
 
@@ -145,13 +153,19 @@ public sealed class SparkleEffect : IMusicEffect
 
     /// <summary>ハイハットの粒の色: パレットのランダムな色を白へ寄せる（OKLab で混ぜる）</summary>
     private static LinColor HatColor(EffectContext c)
-        => OkLab.ToLed(Lab.Lerp(c.Pal.LabAt(c.Rng.NextFloat()), Lab.White, HatWhiteMix), c.Gamma);
+        => OkLab.ToLed(Lab.Lerp(c.PalLabAt(c.Rng.NextFloat()), Lab.White, HatWhiteMix), c.Gamma);
 
-    private void Set(int j, double t0, float tau, LinColor col)
+    /// <summary>
+    /// LED j に、時刻 t0 に光る粒を置く。同じ LED には ParticleGapSec より詰めて粒を置かない（置かなければ false）。
+    /// ハイハット・スネアが 1 秒に何回も鳴っても、1 つの LED は 1 秒に 3 回までしか光らない（同じ LED の点滅に見えないように）
+    /// </summary>
+    private bool Set(int j, double t0, float tau, LinColor col)
     {
+        if (t0 - _t0[j] < ParticleGapSec && t0 >= _t0[j]) return false;
         _t0[j] = t0;
         _tau[j] = tau;
         _col[j] = col;
+        return true;
     }
 
     public void Render(EffectContext c, in LedSegment s, LinColor[] dst)

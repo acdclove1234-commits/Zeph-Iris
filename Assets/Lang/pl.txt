@@ -324,7 +324,6 @@ b0ba1b8f	Niebieski
 4cba9eab	Ustawienia stref (złączy)
 d64827fc	Dla każdego złącza płyty głównej możesz zmienić efekt, kierunek i odcień zależnie od podłączonego sprzętu (wentylatory, zasilacz, głowica chłodzenia wodnego itp.). „Jak urządzenie” zachowuje ustawienia powyżej. Elementy połączone szeregowo do jednego złącza tworzą jedną strefę
 41860c08	Zmienia efekt synchronizacji z muzyką tylko dla tej strefy (np. wskaźnik głośności dla wentylatorów chłodnicy, kolor w rytm dla zasilacza)
-1642d09b	Przy efekcie „Każda część w swojej roli”: na jaki dźwięk reaguje ta strefa. „Zgodnie z częścią”: wentylatory basy, karta graficzna środek, pamięć i klawiatura soprany. Jeśli kilka stref tego samego urządzenia dostaje ten sam dźwięk (np. złącza wentylatorów), przydziela się im kolejno basy, środek i soprany
 ed5a9363	Kierunek
 3d275c1f	Wskazówka: dla złączy ARGB płyty głównej, do których nic nie jest podłączone, ustaw w OpenRGB liczbę LED-ów na 0 (Devices → (płyta główna) → „Edit Device”). Wysyłanych jest mniej danych, a ruch staje się płynniejszy. Lustro i Odwróć działają przy efektach korzystających z kolejności LED-ów (spektrum, wskaźnik głośności itp.).
 6a1f71f3	Rozmieszczenie w obudowie
@@ -1947,3 +1946,53 @@ c98fd0e4	Nie znaleziono żadnego złącza wentylatora.
 a08b13cf	Nie udało się wyłączyć uruchamiania przy logowaniu. W Ustawienia → Ogólne wyłącz ponownie „Uruchamiaj automatycznie po zalogowaniu do Windows”.
 cd2d0b3c	• Obecne ustawienia wentylatorów pozostaną bez zmian. Zamknij to okno przyciskiem „Anuluj”.
 845000a1	Nie znaleziono złączy wentylatorów, więc obecne ustawienia wentylatorów pozostaną bez zmian. Zamknij inne oprogramowanie, uruchom ponownie aplikację, a potem jeszcze raz przeprowadź konfigurację.
+82cfa58e	Otwiera instrukcję obsługi (pierwsza konfiguracja, codzienne użytkowanie, rozwiązywanie problemów)
+13d94a85	Instrukcja
+b44c9cc9	Strona OpenRGB
+d279d75b	Otwiera stronę (openrgb.org), z której można pobrać OpenRGB (bezpłatny), używany do zmiany kolorów LED
+b6ac496a	Otwórz instrukcję
+619bb003	Otwiera instrukcję z folderu aplikacji (a jeśli jej brak, README na GitHub)
+44b1af0b	Nie udało się otworzyć przeglądarki: {0}
+ce000878	Nie udało się otworzyć instrukcji.
+52b3b243	Nie znaleziono OpenRGB. Zainstaluj OpenRGB (darmowy) i uruchom go (jeśli włączysz „Uruchamiaj OpenRGB, jeśli nie działa”, ta aplikacja uruchomi OpenRGB zainstalowany w Program Files).
+94a21ec2	Podział instrumentów
+8703d0a3	Przy efekcie „Każda część w swojej roli”: jaki dźwięk lub instrument rozświetla strefę, której „Dźwięk, na który reagować” to „Według części”. Dźwięki wybrane dla poszczególnych stref pozostają bez zmian
+876fdd1c	Instrumenty są rozpoznawane z dźwięku, więc w niektórych utworach mogą się mylić. Szybkie dźwięki (hi-hat, werbel) są pokazywane jako małe iskry światła, a wolno odświeżane urządzenia, takie jak karty graficzne i pamięć, świecą tylko kolorem instrumentu wyróżniającego się w danej części utworu
+5519f7df	Jednym kolorem nie da się odróżnić instrumentów po barwie. Wybierz efekt „Instrumenty”, aby pokazywać je jasnością, miejscem i ruchem (stopa rozświetla wszystko, hi-hat to małe iskry, wokal ustala ogólną jasność itd.)
+0d8065a5	Co 0,5 sekundy sprawdza dźwięk z mniej więcej ostatniej sekundy. Kolory zmieniają się przez kilka sekund i nie migają. Kolory nie zmieniają się przy paletach „Tylko wybrany kolor” i „Kolory zbliżone do wybranego” ani przy efektach Wskaźnik głośności, Stroboskop i Każda część w swojej roli
+1b6f3970	Rozpoznawaj instrumenty za pomocą AI
+aadf5c4a	AI (YAMNet) rozpoznaje instrument wyróżniający się w każdej części utworu (wokal, gitara, fortepian, dęte blaszane, syntezator, smyczki) i powoli zmienia kolory (niebieski dla wokalu, złoty dla dętych blaszanych, pomarańczowy dla gitary itd.). Przy jednym kolorze zmienia zamiast tego sposób ruchu efektu „Instrumenty”. Działa tylko na tym PC i zużywa trochę CPU i pamięci
+4e43701b	Przy efekcie „Każda część w swojej roli”: na jaki dźwięk świeci ta strefa. „Według części” stosuje „Podział instrumentów” (przy wysokości dźwięku: wentylatory basy, karta graficzna średnie, pamięć i klawiatury wysokie). Jeśli kilka stref na tym samym urządzeniu dostaje ten sam dźwięk (np. złącza wentylatorów), są dzielone po kolei. Możesz też wybrać jeden instrument, np. stopę, werbel lub wokal
+b555c16c	AI instrumentów
+dbb80bf4	Obroty potrzebne do utrzymania celu {0:F0}°C: {1:F0}% lub mniej (pomiar zakończył się przedwcześnie, więc niższych obrotów nie zmierzono)
+da6452ac	Dyski
+bb721e17	Płyta główna i inne
+50030dc4	{0}: krzywa „{1}” chyba używa niewłaściwego czujnika
+3959777c	W profilu „{0}” krzywa „{1}” sądząc po nazwie jest krzywą {2}, ale odczytuje „{3}” ({4}). Gdy {5} się nagrzeje, ta krzywa nie zwiększy obrotów.
+4059ff76	Przełącz na „{0}”
+8b8b7a36	W profilu „{0}” temperaturę dla „{1}” przełączono na „{2}”.
+08d8c54e	{0}: wentylator GPU działa tylko według temperatury dysku
+3ba7001c	W profilu „{0}” ten wentylator odczytuje tylko „{1}”. Gdy GPU nagrzeje się w grach, obroty nie wzrosną.
+d71badc6	Przełącz na krzywą opartą na „{0}”
+d0514409	W profilu „{0}” przełączono na standardową krzywą opartą na „{1}”.
+dc31499c	Czujnik wirtualny „{0}”: nie można odczytać czujników źródłowych ({1}), więc jest liczony tylko z pozostałych czujników.
+a0b3b7dd	Instrumenty
+3c260d3f	Stopa rozświetla wszystko, werbel jedną stronę, hi-hat małe iskry, bas daleki koniec, wokal ogólną jasność, a gitara i klawisze płynące światło. Instrumenty da się rozróżnić nawet jednym kolorem (Tylko wybrany kolor)
+d3efe37c	Według instrumentu
+e8d8b63a	Tylko perkusja
+31b76718	Wysokość dźwięku (niskie, średnie, wysokie)
+ce37ccb7	Każda część świeci w rytm własnego instrumentu: wentylatory do stopy, pamięć i klawiatury do hi-hatu, karta graficzna do wokalu itd. Przy kilku złączach wentylatorów są one po kolei dzielone na stopę, werbel, hi-hat i bas
+c7cc18b1	Świeci tylko na stopę, werbel i hi-hat. Gitara i wokal go nie rozświetlają
+7b659d5a	Dzieli według wysokości dźwięku: wentylatory do basów, karta graficzna do średnich, pamięć do wysokich (jak dotąd)
+c33f330a	Stopa
+8b911b1b	Werbel
+7ae7bcde	Hi-hat i talerze
+f5489867	Bas (instrument)
+412c6fd5	Wokal i partia prowadząca
+203562ee	Akordy (klawisze, gitara)
+dac2be1c	Pady i syntezator
+64270fa4	{0}: pomiar zakończył się przed osiągnięciem najniższych obrotów utrzymujących cel, więc nie utworzono krzywej i pozostaje obecna ({1})
+d5a051f9	Obroty potrzebne do utrzymania {0:F0}°C: {1:F0}% lub mniej (niższych obrotów nie zmierzono)
+0c8c7106	* Nie zmierzono najniższych obrotów utrzymujących cel, więc ta krzywa nie zostanie wstawiona nawet po zastosowaniu (pozostaje obecna krzywa)
+e2a336cd	Nie zmierzono najniższych obrotów utrzymujących cel, więc krzywej nie wstawiono (pozostaje obecna krzywa).
+90a68504	Poniżej {0:F0}% obroty prawie się nie zmieniają (własne minimalne obroty wentylatora).

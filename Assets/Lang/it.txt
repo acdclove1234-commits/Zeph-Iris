@@ -324,7 +324,6 @@ b0ba1b8f	Blu
 4cba9eab	Impostazioni per zona (connettore)
 d64827fc	Cambia effetto, direzione e tinta per ogni connettore della scheda madre in base a ciò che vi è collegato (ventole, alimentatore, testa del liquido ecc.). «Come il dispositivo» mantiene le impostazioni sopra. Ciò che è collegato in serie sullo stesso connettore forma una zona
 41860c08	Cambia l'effetto di sincronizzazione musicale solo per questa zona (es. VU meter per le ventole del radiatore, colore a tempo per l'alimentatore)
-1642d09b	Con l'effetto «Ogni componente il suo ruolo», a quale suono reagisce questa zona. «In base al componente»: ventole i bassi, scheda video i medi, memoria e tastiera gli acuti. Se più zone dello stesso dispositivo ricevono lo stesso suono (come i connettori delle ventole), vengono assegnati a turno bassi, medi e acuti
 ed5a9363	Direzione
 3d275c1f	Suggerimento: per i connettori ARGB della scheda madre senza nulla collegato, imposta a 0 il numero di LED in OpenRGB da Devices → (scheda madre) → «Edit Device». Si inviano meno dati e il movimento diventa più fluido. Specchio e Inverti agiscono sugli effetti che usano l'ordine dei LED (spettro, VU meter ecc.).
 6a1f71f3	Disposizione nel case
@@ -1947,3 +1946,53 @@ c98fd0e4	Non è stato trovato nessun connettore delle ventole.
 a08b13cf	Impossibile disattivare l'avvio all'accesso. In Impostazioni → «Generale», disattiva di nuovo «Avvia automaticamente all'accesso a Windows».
 cd2d0b3c	• Le impostazioni attuali delle ventole restano invariate. Chiudi questa finestra con «Annulla».
 845000a1	Non sono stati trovati connettori delle ventole, quindi le impostazioni attuali delle ventole restano invariate. Chiudi l'altro software, riavvia l'app e poi esegui di nuovo la configurazione.
+82cfa58e	Apre la guida all'uso (prima configurazione, uso quotidiano, risoluzione dei problemi)
+13d94a85	Guida all'uso
+b44c9cc9	Sito di OpenRGB
+d279d75b	Apre la pagina (openrgb.org) da cui ottenere OpenRGB (gratuito), usato per cambiare i colori dei LED
+b6ac496a	Apri la guida all'uso
+619bb003	Apre la guida nella cartella dell'app (o il README su GitHub se manca)
+44b1af0b	Impossibile aprire il browser: {0}
+ce000878	Impossibile aprire la guida all'uso.
+52b3b243	OpenRGB non trovato. Installa OpenRGB (gratuito) e avvialo (se attivi «Avvia OpenRGB se non è in esecuzione», questa app avvia l'OpenRGB installato in Program Files).
+94a21ec2	Suddivisione strumenti
+8703d0a3	Con l'effetto «Ogni componente il suo ruolo», quale suono o strumento illumina una zona il cui «Suono da seguire» è «In base al componente». I suoni scelti per le singole zone restano invariati
+876fdd1c	Gli strumenti vengono dedotti dal suono, quindi con alcuni brani possono essere confusi. I suoni veloci (hi-hat, rullante) appaiono come piccole scintille di luce, mentre i dispositivi che si aggiornano lentamente, come scheda video e memoria, mostrano solo il colore dello strumento che spicca in ogni parte del brano
+5519f7df	Con una tinta unita non si possono distinguere gli strumenti dal colore. Con l'effetto «Strumenti» vengono mostrati tramite luminosità, posizione e movimento (la cassa illumina tutto, l'hi-hat appare come piccole scintille, la voce regola la luminosità generale, ecc.)
+0d8065a5	Analizza circa l'ultimo secondo di suono ogni 0,5 secondi. I colori cambiano nell'arco di alcuni secondi e non lampeggiano mai. I colori non cambiano con le tavolozze «Solo il colore scelto» e «Colori vicini a quello scelto», né con VU meter, Stroboscopio e «Ogni componente il suo ruolo»
+1b6f3970	Riconosci gli strumenti con l'AI
+aadf5c4a	L'AI (YAMNet) riconosce lo strumento che spicca in ogni parte del brano (voce, chitarra, pianoforte, ottoni, synth, archi) e cambia lentamente i colori (blu per la voce, oro per gli ottoni, arancione per la chitarra, ecc.). Con una tinta unita cambia invece il movimento dell'effetto «Strumenti». Funziona solo su questo PC e usa un po' di CPU e memoria
+4e43701b	Con l'effetto «Ogni componente il suo ruolo», quale suono illumina questa zona. «In base al componente» segue la «Suddivisione strumenti» (per altezza: alle ventole i bassi, alla scheda video i medi, a memoria e tastiere gli alti). Se più zone dello stesso dispositivo hanno lo stesso suono (come i connettori delle ventole), vengono suddivise a turno. Puoi anche scegliere un solo strumento, come cassa, rullante o voce
+b555c16c	AI degli strumenti
+dbb80bf4	Velocità necessaria per mantenere l'obiettivo di {0:F0}°C: {1:F0}% o meno (la prova è terminata prima, quindi le velocità più basse non sono state misurate)
+da6452ac	Archiviazione
+bb721e17	Scheda madre e altro
+50030dc4	{0}: la curva «{1}» sembra usare il sensore sbagliato
+3959777c	Nel profilo «{0}», «{1}» dal nome sembra una curva per {2}, ma legge «{3}» ({4}). Quando {5} si scalda, questa curva non aumenta la velocità.
+4059ff76	Passa a «{0}»
+8b8b7a36	Nel profilo «{0}», la temperatura di «{1}» è stata cambiata in «{2}».
+08d8c54e	{0}: la ventola della GPU segue solo la temperatura dell'unità di archiviazione
+3ba7001c	Nel profilo «{0}», questa ventola legge solo «{1}». Quando la GPU si scalda nei giochi, la velocità non aumenta.
+d71badc6	Passa a una curva basata su «{0}»
+d0514409	Nel profilo «{0}», è stata impostata la curva standard basata su «{1}».
+dc31499c	Sensore virtuale «{0}»: i sensori di origine ({1}) non sono leggibili, quindi viene calcolato solo con i sensori rimanenti.
+a0b3b7dd	Strumenti
+3c260d3f	La cassa illumina tutto, il rullante un lato, l'hi-hat piccole scintille, il basso l'estremità, la voce la luminosità generale, chitarra e tastiere una luce che scorre. Gli strumenti si distinguono anche con una tinta unita (Solo il colore scelto)
+d3efe37c	Per strumento
+e8d8b63a	Solo batteria
+31b76718	Per altezza (bassi, medi, alti)
+ce37ccb7	Ogni componente si illumina con il suo strumento: le ventole con la cassa, memoria e tastiere con l'hi-hat, la scheda video con la voce, ecc. Con più connettori delle ventole, vengono suddivisi a turno tra cassa, rullante, hi-hat e basso
+c7cc18b1	Si illumina solo con cassa, rullante e hi-hat. Non reagisce a chitarra e voce
+7b659d5a	Suddivide per altezza: alle ventole i bassi, alla scheda video i medi, alla memoria gli alti (come prima)
+c33f330a	Cassa
+8b911b1b	Rullante
+7ae7bcde	Hi-hat e piatti
+f5489867	Basso (strumento)
+412c6fd5	Voce e solista
+203562ee	Accordi (tastiere, chitarra)
+dac2be1c	Pad e synth
+64270fa4	{0}: terminato prima di raggiungere la velocità più bassa che mantiene l'obiettivo, quindi non è stata creata alcuna curva e resta quella attuale ({1})
+d5a051f9	Velocità necessaria per mantenere {0:F0}°C: {1:F0}% o meno (le velocità più basse non sono state misurate)
+0c8c7106	* La velocità più bassa che mantiene l'obiettivo non è stata misurata, quindi questa curva non verrà usata anche se applichi il risultato (resta la curva attuale)
+e2a336cd	La velocità più bassa che mantiene l'obiettivo non è stata misurata, quindi la curva non è stata applicata (resta quella attuale).
+90a68504	Sotto il {0:F0}%, la velocità cambia appena (la velocità minima propria della ventola).

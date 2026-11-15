@@ -97,6 +97,8 @@ public sealed class EffectContext
     /// <summary>ビートの計算（任意の時刻のビートの光を求めるのに使う）</summary>
     public BeatDriver? Beats;
     public BeatState Beat = BeatState.None;
+    /// <summary>曲の部分ごとに目立つ楽器（楽器の AI。使っていなければ場面なし）。移り変わりは Scene.Progress(T)</summary>
+    public MusicScene Scene = MusicScene.None;
     /// <summary>前のコマから今のコマまでに起きた出来事（時刻 T は本当に鳴った時刻）</summary>
     public List<AudioEvent> Events = new();
 
@@ -110,6 +112,11 @@ public sealed class EffectContext
     public ColorPalette Pal = ColorPalette.Get(Palettes.Rainbow, null);
     /// <summary>更新の遅いデバイス用の、ゆっくりした版の光り方を使っている</summary>
     public bool Slow;
+    /// <summary>
+    /// 更新の遅いデバイス（グラボ・メモリなど。1 秒に 4〜10 回しか送れない）。デバイスの光り方を自分で選んでいて Slow でなくても true。
+    /// 楽器ごとの役割は、このデバイスでは一瞬の光を見せられないので、曲の部分ごとの目立つ楽器の色だけにする（RoleEffect）
+    /// </summary>
+    public bool SlowDevice;
     /// <summary>色をクロスフェードせず一度に切り替える（途中の色を送るとちかちかするデバイス用）</summary>
     public bool NoFade;
     /// <summary>流れる速さの倍率（ResolvedMusic.Speed）</summary>
@@ -204,20 +211,49 @@ public sealed class EffectContext
     /// </summary>
     public double FrameTime => Frame.T > 0 && Frame.T < T ? Frame.T : T;
 
+    /// <summary>描いている時刻（RenderInput.T。LED はこの時刻からデバイスの遅れの分だけ後に光る。NaN なら T と同じに扱う）</summary>
+    public double Now = double.NaN;
+
+    /// <summary>
+    /// 続いている値（帯の強さ・低音・音量とそのピーク）の残光を数える時刻。
+    /// T（= 描く時刻 + デバイスの遅れ − 音の遅れの補正）の分析結果がまだ届いていないときは、
+    /// いちばん新しい分析結果を使うので、デバイスの遅れの分まで先に減らさない（今の時刻 Now まで。新しい結果より前にはしない）。
+    /// 以前は T まで減らしていたので、デバイスの遅れ（8〜60 ミリ秒）の分だけ、届いたばかりの立ち上がりも暗く見えていた
+    /// （遅れを補うための先読みが、続いている値では光を弱くするだけになっていた）。
+    /// 分析結果が T まで届いている（Bluetooth などで音の遅れの補正が大きい）ときは T のまま
+    /// </summary>
+    public double AgeT => double.IsNaN(Now) || !(Frame.T > 0 && Frame.T < T) ? T : Math.Max(Frame.T, Math.Min(T, Now));
+
     /// <summary>時刻 t のビートの光（0〜1。FlashAmp を掛けた後。点滅の制限は、このコマまでに決めた分）</summary>
     public float FlashAt(double t) => Beats is null ? Fl : (float)Math.Clamp(Music.FlashAmp * Beats.FlashAt(this, t), 0, 1);
 
     /// <summary>音の強さ I（0〜1）→ 明るさ（光の量。いちばん暗いときの明るさ F0 を下限にする）</summary>
     public float Ilin(float i) => OutputStage.Ilin(i, F0, Gamma);
 
+    /// <summary>
+    /// この光り方で、楽器の AI の場面の色を使う（DeviceRenderer が光り方ごとに入れる。ScenePalettes.Applies）。
+    /// false なら、色は選んだパレットのまま（今までとまったく同じ）
+    /// </summary>
+    public bool SceneOn;
+
+    /// <summary>
+    /// 色を引くパレット（選んだパレット Pal と、場面の色の混ぜ合わせ。場面の移り変わりは Scene.Progress(T)。
+    /// どのデバイスも同じ時刻の計算なので、デバイスごとに色がずれない）。
+    /// 色を一度に切り替えるデバイス（NoFade）は、移り変わりの半分で一度に切り替える
+    /// </summary>
+    public PaletteView View => SceneOn ? PaletteView.Of(Pal, Scene, T, NoFade) : new PaletteView(Pal);
+
     /// <summary>パレットの位置 x の色（光の量）</summary>
-    public LinColor PalAt(double x) => Pal.At(x, Gamma);
+    public LinColor PalAt(double x) => View.At(x, Gamma);
+
+    /// <summary>パレットの位置 x の色（OKLab。白と混ぜるときなど）</summary>
+    public Lab PalLabAt(double x) => View.LabAt(x);
 
     /// <summary>いまの色（ビートで進む色。クロスフェード中なら途中の色）を、パレットの位置を off だけずらして引く</summary>
-    public LinColor ColorAt(double off) => Color.Sample(Pal, off, T, Gamma);
+    public LinColor ColorAt(double off) => Color.Sample(View, off, T, Gamma);
 
     /// <summary>いまの色を OKLab で（白と混ぜるときなど）</summary>
-    public Lab ColorLabAt(double off) => Color.SampleLab(Pal, off, T);
+    public Lab ColorLabAt(double off) => Color.SampleLab(View, off, T);
 
     /// <summary>u（0〜1）を、始めと終わりがゆっくりな曲線にする: u²(3 − 2u)</summary>
     public static float Smoothstep(double u)
@@ -335,7 +371,7 @@ public sealed class ColorFade
     private float Progress(double t) => _dur <= 0 ? 1f : EffectContext.Smoothstep((t - _tSwitch) / _dur);
 
     /// <summary>時刻 t の色（光の量）。パレットの位置を off だけずらして引く</summary>
-    public LinColor Sample(ColorPalette pal, double off, double t, bool gamma)
+    public LinColor Sample(in PaletteView pal, double off, double t, bool gamma)
     {
         float s = Progress(t);
         if (s >= 1) return pal.At(_c + off, gamma);   // クロスフェードしていないときは表を引くだけ
@@ -343,14 +379,14 @@ public sealed class ColorFade
     }
 
     /// <summary>時刻 t の色（OKLab）</summary>
-    public Lab SampleLab(ColorPalette pal, double off, double t)
+    public Lab SampleLab(in PaletteView pal, double off, double t)
     {
         float s = Progress(t);
         if (s >= 1) return pal.LabAt(_c + off);
         return Lab.Lerp(From(pal, off), pal.LabAt(_c + off), s);
     }
 
-    private Lab From(ColorPalette pal, double off) =>
+    private Lab From(in PaletteView pal, double off) =>
         _uab <= 0 ? pal.LabAt(_a + off) : Lab.Lerp(pal.LabAt(_a + off), pal.LabAt(_b + off), _uab);
 }
 

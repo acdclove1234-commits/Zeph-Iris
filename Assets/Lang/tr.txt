@@ -324,7 +324,6 @@ b0ba1b8f	Mavi
 4cba9eab	Bölge (konnektör) ayarları
 d64827fc	Her anakart konnektörü için bağlı olana (fanlar, PSU, su soğutma bloğu vb.) göre efekti, yönü ve tonu değiştirin. "Cihazla aynı" yukarıdaki ayarları korur. Aynı konnektöre zincirleme bağlananlar tek bir bölgedir
 41860c08	Müzik senkronu efektini yalnızca bu bölge için değiştirir (örn. radyatör fanları için ses seviyesi göstergesi, PSU için ritimle renk değiştirme)
-1642d09b	"Her parça kendi rolünde" efektinde bu bölgenin hangi sese göre yanacağı. "Parçaya göre": fanlar bas, ekran kartı orta, bellek ve klavye tiz. Aynı cihazdaki birden çok bölge aynı sese düşerse (fan başlıkları gibi), bunlara sırayla bas, orta ve tiz atanır
 ed5a9363	Yön
 3d275c1f	İpucu: hiçbir şey bağlı olmayan anakart ARGB konnektörlerinde OpenRGB'de Devices → (anakart) → "Edit Device" ile LED sayısını 0 yapın. Daha az veri gönderilir ve hareket akıcılaşır. Ayna ve Ters, LED sırasını kullanan efektlerde (spektrum, ses seviyesi göstergesi vb.) etkilidir.
 6a1f71f3	Kasa içi yerleşim
@@ -1947,3 +1946,53 @@ c98fd0e4	Hiç fan konnektörü bulunamadı.
 a08b13cf	Oturum açılışında başlatma kapatılamadı. Ayarlar → Genel'de "Windows oturumu açılınca otomatik başlat" seçeneğini yeniden kapatın.
 cd2d0b3c	• Mevcut fan ayarlarınız olduğu gibi korunur. Bunu "İptal" ile kapatın.
 845000a1	Fan konnektörü bulunamadığından mevcut fan ayarlarınız olduğu gibi korunur. Diğer yazılımı kapatın, uygulamayı yeniden başlatın ve ardından kurulumu tekrar yapın.
+82cfa58e	Kullanım kılavuzunu açar (ilk kurulum, günlük kullanım, sorun giderme)
+13d94a85	Kullanım kılavuzu
+b44c9cc9	OpenRGB web sitesi
+d279d75b	LED renklerini değiştirmek için kullanılan OpenRGB'yi (ücretsiz) indirebileceğiniz sayfayı (openrgb.org) açar
+b6ac496a	Kullanım kılavuzunu aç
+619bb003	Uygulama klasöründeki kılavuzu açar (yoksa GitHub'daki README'yi)
+44b1af0b	Tarayıcı açılamadı: {0}
+ce000878	Kullanım kılavuzu açılamadı.
+52b3b243	OpenRGB bulunamadı. Lütfen OpenRGB'yi (ücretsiz) kurun ve başlatın ("OpenRGB çalışmıyorsa başlat" seçeneğini açarsanız, bu uygulama Program Files'a kurulmuş OpenRGB'yi başlatır).
+94a21ec2	Enstrüman dağılımı
+8703d0a3	"Her parça kendi rolünde" efektinde, "Tepki verilecek ses" ayarı "Parçaya göre" olan bir bölgenin hangi ses veya enstrümanla yanacağı. Bölge bazında seçtiğiniz sesler olduğu gibi kalır
+876fdd1c	Enstrümanlar sesten tahmin edildiği için bazı şarkılarda karışabilir. Hızlı sesler (hi-hat, trampet) küçük ışık noktalarıyla gösterilir; ekran kartı ve bellek gibi yavaş güncellenen cihazlar ise şarkının her bölümünde öne çıkan enstrümanın rengiyle yanar
+5519f7df	Tek renkte enstrümanlar renkle ayırt edilemez. Efekti "Enstrümanlar" yaparsanız enstrümanlar parlaklık, konum ve hareketle gösterilir (kick her yeri yakar, hi-hat küçük noktalar olur, vokal genel parlaklığı belirler vb.)
+0d8065a5	Son yaklaşık 1 saniyelik sesi 0,5 saniyede bir inceler. Renkler birkaç saniyede değişir ve yanıp sönmez. "Yalnızca seçilen renk" ve "Seçilen renge yakın renkler" paletlerinde ve Ses seviyesi göstergesi, Stroboskop ve Her parça kendi rolünde efektlerinde renkler değişmez
+1b6f3970	Enstrümanları AI ile tanı
+aadf5c4a	AI (YAMNet), şarkının her bölümünde öne çıkan enstrümanı (vokal, gitar, piyano, bakır nefesliler, sentezleyici, yaylılar) tanır ve renkleri yavaşça değiştirir (vokal için mavi, bakır nefesliler için altın, gitar için turuncu vb.). Tek renkte ise "Enstrümanlar" efektinin hareketini değiştirir. Yalnızca bu PC'de çalışır, biraz CPU ve bellek kullanır
+4e43701b	"Her parça kendi rolünde" efektinde bu bölgenin hangi sesle yanacağı. "Parçaya göre" seçiliyse "Enstrüman dağılımı" ayarına uyar (perdeye göre: fanlar bas, ekran kartı orta, bellek ve klavyeler tiz sesler). Aynı cihazda aynı sese düşen birden çok bölge varsa (fan konnektörleri gibi) sırayla paylaştırılır. Kick, trampet veya vokal gibi tek bir enstrüman da seçebilirsiniz
+b555c16c	Enstrüman tanıma (AI)
+dbb80bf4	{0:F0}°C hedefini korumak için gereken devir: %{1:F0} veya daha az (test erken bittiği için daha düşük devirler ölçülemedi)
+da6452ac	Depolama
+bb721e17	Anakart ve diğerleri
+50030dc4	{0}: "{1}" eğrisi yanlış sensörü kullanıyor gibi görünüyor
+3959777c	"{0}" profilinde "{1}", adına bakılırsa bir {2} eğrisi gibi görünüyor ama "{3}" ({4}) sıcaklığını okuyor. {5} ısınsa bile bu eğri devri artırmaz.
+4059ff76	"{0}" sensörüne geç
+8b8b7a36	"{0}" profilinde "{1}" sıcaklığı "{2}" olarak değiştirildi.
+08d8c54e	{0}: GPU fanı yalnızca depolama sıcaklığına göre çalışıyor
+3ba7001c	"{0}" profilinde bu fan yalnızca "{1}" değerini okuyor. Oyunlarda GPU ısınsa bile devir artmaz.
+d71badc6	"{0}" tabanlı eğriye geç
+d0514409	"{0}" profilinde "{1}" tabanlı standart eğriye geçildi.
+dc31499c	Sanal sensör "{0}": kaynak sensörler ({1}) okunamadığı için yalnızca kalan sensörlerle hesaplanıyor.
+a0b3b7dd	Enstrümanlar
+3c260d3f	Kick her yeri, trampet bir tarafı, hi-hat küçük noktaları, bas uçları yakar; vokal genel parlaklığı belirler, gitar ve tuşlular akan bir ışıkla gösterilir. Tek renkte (Yalnızca seçilen renk) bile enstrümanlar ayırt edilir
+d3efe37c	Enstrümana göre
+e8d8b63a	Yalnızca davul
+31b76718	Perdeye göre (bas, orta, tiz)
+ce37ccb7	Fanlar kick, bellek ve klavyeler hi-hat, ekran kartı vokalle olduğu gibi her parça kendi enstrümanıyla yanar. Birden çok fan konnektörü varsa sırasıyla kick, trampet, hi-hat ve basa paylaştırılır
+c7cc18b1	Yalnızca kick, trampet ve hi-hat ile yanar. Gitar ve vokalde yanmaz
+7b659d5a	Perdeye göre böler: fanlar bas, ekran kartı orta, bellek tiz seslerle yanar (önceki gibi)
+c33f330a	Kick
+8b911b1b	Trampet
+7ae7bcde	Hi-hat ve ziller
+f5489867	Bas (enstrüman)
+412c6fd5	Vokal ve solo
+203562ee	Akorlar (tuşlular, gitar)
+dac2be1c	Pad ve sentezleyici
+64270fa4	{0}: Test, hedefi koruyan en düşük devre ulaşmadan bitti; bu yüzden eğri oluşturulmadı ve mevcut eğri korundu ({1})
+d5a051f9	{0:F0}°C'yi korumak için gereken devir: %{1:F0} veya daha az (daha düşük devirler ölçülemedi)
+0c8c7106	* Hedefi koruyan en düşük devir ölçülemediği için Uygula'ya bassanız bile bu eğri uygulanmaz (mevcut eğri korunur)
+e2a336cd	Hedefi koruyan en düşük devir ölçülemediği için eğri uygulanmadı (mevcut eğri korundu).
+90a68504	%{0:F0} altında devir neredeyse değişmez (fanın kendi en düşük devri).

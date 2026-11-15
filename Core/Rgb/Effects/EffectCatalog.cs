@@ -34,13 +34,18 @@ public enum EffectVariant
     Role,
     /// <summary>遅いデバイス用のパーツごとの役割（光の消え方をゆっくり）</summary>
     RoleSlow,
+    /// <summary>楽器で光る</summary>
+    Ensemble,
+    /// <summary>遅いデバイス用の楽器で光る（一瞬の光も動きもなく、明るさをゆっくり変える）</summary>
+    EnsembleSlow,
 }
 
 /// <summary>
 /// どの光り方を使うかを決める。
 ///   デバイスの設定が "Auto"（または空）なら全体の光り方（MusicStyle）。更新の遅いデバイス（GPU・メモリなど）は次のように置き換える:
 ///     パルス → 遅い版のパルス、ビートで色替え → 遅い版、スペクトラム・エナジー・ミックス → 遅い版のミックス（全体で 1 色）、
-///     音量メーター → 音量で光る遅い版のパルス、流れる波・波紋・きらめき・テンポ追従・ストロボ → 遅い版のビートで色替え、ムード → ムード
+///     音量メーター → 音量で光る遅い版のパルス、流れる波・波紋・きらめき・テンポ追従・ストロボ → 遅い版のビートで色替え、ムード → ムード、
+///     パーツごとの役割 → 遅い版のパーツごとの役割、楽器で光る → 遅い版の楽器で光る（一瞬の光も動きもなく、明るさをゆっくり変える）
 ///   デバイスの設定で光り方を指定したら、遅いデバイスでもそのまま使う（ただしストロボは使わない）。
 ///   ストロボは「使ってよい」（強さ「激しい」かつ点滅の制限がオフ）ときだけ。だめなら「ビートで色替え」
 /// </summary>
@@ -67,6 +72,7 @@ public static class EffectCatalog
                 MusicStyles.Meter => EffectVariant.PulseLoudSlow,
                 MusicStyles.Mood => EffectVariant.Mood,
                 MusicStyles.Role => EffectVariant.RoleSlow,
+                MusicStyles.Ensemble => EffectVariant.EnsembleSlow,
                 _ => EffectVariant.BeatHueSlow,   // ビートで色替え・流れる波・波紋・きらめき・テンポ追従
             };
         }
@@ -84,6 +90,7 @@ public static class EffectCatalog
             MusicStyles.Mood => EffectVariant.Mood,
             MusicStyles.Strobe => EffectVariant.Strobe,
             MusicStyles.Role => EffectVariant.Role,
+            MusicStyles.Ensemble => EffectVariant.Ensemble,
             _ => EffectVariant.BeatHue,
         };
     }
@@ -104,12 +111,14 @@ public static class EffectCatalog
         EffectVariant.Mood => MusicStyles.Mood,
         EffectVariant.Strobe => MusicStyles.Strobe,
         EffectVariant.Role or EffectVariant.RoleSlow => MusicStyles.Role,
+        EffectVariant.Ensemble or EffectVariant.EnsembleSlow => MusicStyles.Ensemble,
         _ => MusicStyles.BeatHue,
     };
 
     /// <summary>遅いデバイス用の版か（ビートの光の消え方・色の切り替えを遅くする）</summary>
     public static bool IsSlowVariant(EffectVariant v) =>
-        v is EffectVariant.PulseSlow or EffectVariant.PulseLoudSlow or EffectVariant.BeatHueSlow or EffectVariant.MixSlow or EffectVariant.RoleSlow;
+        v is EffectVariant.PulseSlow or EffectVariant.PulseLoudSlow or EffectVariant.BeatHueSlow or EffectVariant.MixSlow or EffectVariant.RoleSlow
+        or EffectVariant.EnsembleSlow;
 
     /// <summary>光り方を作る（デバイスごとに 1 回だけ。毎コマは作らない）</summary>
     public static IMusicEffect Create(EffectVariant v) => v switch
@@ -131,6 +140,8 @@ public static class EffectCatalog
         EffectVariant.MixSlow => new MixEffect(slow: true),
         EffectVariant.Role => new RoleEffect(),
         EffectVariant.RoleSlow => new RoleEffect(slow: true),
+        EffectVariant.Ensemble => new EnsembleEffect(),
+        EffectVariant.EnsembleSlow => new EnsembleEffect(slow: true),
         _ => new BeatHueEffect(),
     };
 

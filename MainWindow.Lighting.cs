@@ -36,6 +36,8 @@ public enum LightingChoiceKind
     Tempo,
     /// <summary>音が止まったときの光り方（MusicConfig.IdleEffect）</summary>
     Idle,
+    /// <summary>「パーツごとの役割」のゾーンの分け方（MusicConfig.RoleSet）</summary>
+    RoleSet,
     /// <summary>色の候補（RgbConfig.StaticColor）</summary>
     Color,
     /// <summary>画面のアクセント色（AppearanceConfig.Accent）</summary>
@@ -830,6 +832,12 @@ internal static class LightingRules
     /// <summary>その光り方でテンポを使うか（音量メーターは使わない）</summary>
     public static bool UsesTempo(string effect) => effect != MusicStyles.Meter;
 
+    /// <summary>光り方「パーツごとの役割」を、全体・デバイス・ゾーンのどこかで使っているか（「楽器の分け方」を出す）</summary>
+    public static bool UsesRoles(RgbConfig cfg) => MusicRoleSets.InUse(cfg);
+
+    /// <summary>単色なのに「楽器で光る」を使っていない（案内を出す）</summary>
+    public static bool SuggestEnsemble(RgbConfig cfg) => Palettes.SuggestEnsemble(cfg);
+
     /// <summary>その光り方で「流れる速さ」を使うか</summary>
     public static bool UsesSpeed(string effect) => effect == MusicStyles.Scroll;
 
@@ -911,6 +919,7 @@ public partial class MainWindow
     private readonly List<LightingChoiceVm> _paletteChoices = new();
     private readonly List<LightingChoiceVm> _tempoChoices = new();
     private readonly List<LightingChoiceVm> _idleChoices = new();
+    private readonly List<LightingChoiceVm> _roleSetChoices = new();
     private readonly List<LightingChoiceVm> _colorChoices = new();
     private readonly ObservableCollection<RgbDeviceVm> _rgbDeviceRows = new();
 
@@ -959,6 +968,7 @@ public partial class MainWindow
         PaletteChoices.ItemsSource = _paletteChoices;
         TempoChoices.ItemsSource = _tempoChoices;
         IdleChoices.ItemsSource = _idleChoices;
+        RoleSetChoices.ItemsSource = _roleSetChoices;
         ColorSwatches.ItemsSource = _colorChoices;
         OnStopCombo.ItemsSource = StopOptions;
         RgbDevices.ItemsSource = _rgbDeviceRows;
@@ -1036,6 +1046,9 @@ public partial class MainWindow
             };
             _idleChoices.Add(new LightingChoiceVm { Kind = LightingChoiceKind.Idle, Id = id, Label = IdleEffects.Label(id), Tip = tip });
         }
+
+        foreach (var id in MusicRoleSets.All)
+            _roleSetChoices.Add(new LightingChoiceVm { Kind = LightingChoiceKind.RoleSet, Id = id, Label = MusicRoleSets.Label(id), Tip = MusicRoleSets.Tip(id) });
 
         foreach (var (hex, name) in SwatchColors)
             _colorChoices.Add(new LightingChoiceVm { Kind = LightingChoiceKind.Color, Id = hex, Label = name, Tip = L($"{name}（{hex}）"), Swatch = SolidBrush(hex) });
@@ -1186,6 +1199,7 @@ public partial class MainWindow
         foreach (var c in _paletteChoices) c.IsSelected = c.Id == m.Palette;
         foreach (var c in _tempoChoices) c.IsSelected = c.Id == m.TempoMode;
         foreach (var c in _idleChoices) c.IsSelected = c.Id == m.IdleEffect;
+        foreach (var c in _roleSetChoices) c.IsSelected = c.Id == MusicRoleSets.Normalize(m.RoleSet);
         foreach (var c in _colorChoices) c.IsSelected = string.Equals(c.Id, rgb.StaticColor, StringComparison.OrdinalIgnoreCase);
 
         // パレット「選んだ色」の見本と、いまの色の丸は、色が変わったときだけ作り直す
@@ -1218,7 +1232,9 @@ public partial class MainWindow
         PunchRow.Visibility = VisibleIf(LightingRules.UsesPunch(rgb.MusicStyle));
         RefreshTuningDefaults();
         TempoRow.Visibility = VisibleIf(LightingRules.UsesTempo(rgb.MusicStyle));
+        RoleSetRow.Visibility = VisibleIf(music && LightingRules.UsesRoles(rgb));
         ColorRow.Visibility = VisibleIf(LightingRules.UsesStaticColor(rgb));
+        SolidEnsembleNote.Visibility = VisibleIf(LightingRules.SuggestEnsemble(rgb));
         StrobeNote.Visibility = VisibleIf(m.ReduceFlashing);
         FlashWarning.Visibility = VisibleIf(!m.ReduceFlashing);
 
@@ -1271,6 +1287,9 @@ public partial class MainWindow
                 break;
             case LightingChoiceKind.Idle:
                 m.IdleEffect = c.Id;
+                break;
+            case LightingChoiceKind.RoleSet:
+                m.RoleSet = c.Id;
                 break;
             case LightingChoiceKind.Color:
                 rgb.StaticColor = c.Id;
@@ -1438,8 +1457,18 @@ public partial class MainWindow
         if (facts.ServiceInstalled && facts.ServiceDisabled)
             return L("OpenRGB のサービスが無効になっています。OpenRGB を起動して「SDK Server」タブの「Start Server」を押してから、もう一度試してください。");
         if (facts.Exe is null)
-            return L("OpenRGB が見つかりません。OpenRGB（無料）をインストールしてください。Program Files に入れると、このアプリが自動で起動します（zip を展開した OpenRGB は、自分で起動してください）。");
+            return OpenRgbAutoStart.MissingText(cfg.AutoStartOpenRgb);
         return L("OpenRGB を起動して「SDK Server」タブの「Start Server」を押してから、もう一度試してください。");
+    }
+
+    /// <summary>「OpenRGB のサイト」: OpenRGB（無料）を入手するページを開く</summary>
+    private void OnOpenOpenRgbSiteClick(object sender, RoutedEventArgs e)
+    {
+        try { SystemTool.OpenUrl(OpenRgbAutoStart.Website); }
+        catch (Exception ex) when (ex is System.ComponentModel.Win32Exception or InvalidOperationException)
+        {
+            ShowRgbMessage(L($"ブラウザーを開けませんでした: {OpenRgbAutoStart.Website}"));
+        }
     }
 
     /// <summary>「今すぐ再接続」: 待たずに OpenRGB へ繋ぎ直す</summary>

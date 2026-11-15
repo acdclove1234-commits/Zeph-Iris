@@ -324,7 +324,6 @@ b0ba1b8f	Bleu
 4cba9eab	Réglages par zone (connecteur)
 d64827fc	Changez l'effet, le sens et la teinte pour chaque connecteur de la carte mère selon ce qui y est branché (ventilateurs, alimentation, tête de watercooling, etc.). « Comme l'appareil » garde les réglages ci-dessus. Les éléments chaînés sur un même connecteur forment une zone
 41860c08	Change l'effet de synchro musicale pour cette zone seulement (ex. : vumètre pour les ventilateurs du radiateur, couleur au rythme pour l'alimentation)
-1642d09b	Avec l'effet « Rôles des composants », le son auquel réagit cette zone. « Selon le composant » : ventilateurs graves, carte graphique médiums, mémoire et clavier aigus. Si plusieurs zones d'un même appareil obtiennent le même son (comme les connecteurs de ventilateur), elles reçoivent tour à tour graves, médiums et aigus
 ed5a9363	Sens
 3d275c1f	Astuce : pour les connecteurs ARGB de la carte mère sans rien de branché, mettez le nombre de LED à 0 dans OpenRGB via Devices → (carte mère) → « Edit Device ». Moins de données sont envoyées et les mouvements sont plus fluides. Miroir et Inverser agissent sur les effets qui utilisent l'ordre des LED (spectre, vumètre, etc.).
 6a1f71f3	Disposition dans le boîtier
@@ -1947,3 +1946,53 @@ c98fd0e4	Aucun connecteur de ventilateur n'a été trouvé.
 a08b13cf	Impossible de désactiver le démarrage à l'ouverture de session. Dans Paramètres → « Général », désactivez à nouveau « Démarrer automatiquement à l'ouverture de session Windows ».
 cd2d0b3c	• Vos réglages actuels des ventilateurs sont conservés tels quels. Fermez cette fenêtre avec « Annuler ».
 845000a1	Aucun connecteur de ventilateur n'a été trouvé, vos réglages actuels des ventilateurs sont donc conservés tels quels. Fermez l'autre logiciel, redémarrez l'application, puis relancez la configuration.
+82cfa58e	Ouvre le guide d'utilisation (première configuration, usage quotidien, dépannage)
+13d94a85	Guide d'utilisation
+b44c9cc9	Site d'OpenRGB
+d279d75b	Ouvre la page (openrgb.org) où obtenir OpenRGB (gratuit), utilisé pour changer les couleurs des LED
+b6ac496a	Ouvrir le guide d'utilisation
+619bb003	Ouvre le guide du dossier de l'application (ou le README sur GitHub s'il est absent)
+44b1af0b	Impossible d'ouvrir le navigateur : {0}
+ce000878	Impossible d'ouvrir le guide d'utilisation.
+52b3b243	OpenRGB est introuvable. Installez OpenRGB (gratuit) et lancez-le (si vous activez « Démarrer OpenRGB s'il n'est pas lancé », cette appli démarre l'OpenRGB installé dans Program Files).
+94a21ec2	Répartition des instruments
+8703d0a3	Avec l'effet « Rôles des composants », le son ou l'instrument qui allume une zone dont le « Son à suivre » est « Selon le composant ». Les sons choisis pour chaque zone restent inchangés
+876fdd1c	Les instruments sont devinés à partir du son, ils peuvent donc être confondus sur certains morceaux. Les sons rapides (charleston, caisse claire) apparaissent comme de petits points de lumière. Les appareils à mise à jour lente comme les cartes graphiques et la mémoire n'affichent que la couleur de l'instrument dominant dans chaque partie du morceau
+5519f7df	Avec une seule couleur, les instruments ne se distinguent pas par la couleur. Choisissez l'effet « Instruments » pour les montrer par la luminosité, la position et le mouvement (la grosse caisse allume tout, le charleston fait de petits points, la voix règle la luminosité globale, etc.)
+0d8065a5	Analyse environ la dernière seconde de son toutes les 0,5 seconde. Les couleurs changent en quelques secondes et ne clignotent jamais. Les couleurs ne changent pas avec les palettes « Couleur choisie uniquement » et « Couleurs proches de la couleur choisie », ni avec VU-mètre, Stroboscope et « Rôles des composants »
+1b6f3970	Reconnaître les instruments par AI
+aadf5c4a	L'AI (YAMNet) reconnaît l'instrument dominant dans chaque partie du morceau (voix, guitare, piano, cuivres, synthé, cordes) et change lentement les couleurs (bleu pour la voix, or pour les cuivres, orange pour la guitare, etc.). Avec une couleur unie, elle modifie plutôt le mouvement de l'effet « Instruments ». Fonctionne uniquement sur ce PC et utilise un peu de CPU et de mémoire
+4e43701b	Avec l'effet « Rôles des composants », le son qui allume cette zone. « Selon le composant » suit « Répartition des instruments » (par hauteur : ventilateurs pour les basses, carte graphique pour les médiums, mémoire et claviers pour les aigus). Si plusieurs zones d'un même appareil ont le même son (connecteurs de ventilateurs, par exemple), elles sont réparties à tour de rôle. Vous pouvez aussi choisir un seul instrument, comme la grosse caisse, la caisse claire ou la voix
+b555c16c	AI des instruments
+dbb80bf4	Vitesse nécessaire pour tenir {0:F0} °C : {1:F0} % ou moins (arrêt avant la fin, les vitesses plus basses n'ont pas été mesurées)
+da6452ac	Stockage
+bb721e17	Carte mère et autres
+50030dc4	{0} : la courbe « {1} » semble utiliser le mauvais capteur
+3959777c	Dans le profil « {0} », « {1} » ressemble d'après son nom à une courbe {2}, mais elle lit « {3} » ({4}). Quand le {5} chauffe, cette courbe n'augmente pas la vitesse.
+4059ff76	Passer à « {0} »
+8b8b7a36	Dans le profil « {0} », la température de « {1} » est passée à « {2} ».
+08d8c54e	{0} : le ventilateur du GPU ne suit que la température du stockage
+3ba7001c	Dans le profil « {0} », ce ventilateur ne suit que « {1} ». Si le GPU chauffe en jeu, il n'accélère pas.
+d71badc6	Passer à une courbe basée sur « {0} »
+d0514409	Dans le profil « {0} », passage à la courbe standard basée sur « {1} ».
+dc31499c	Capteur virtuel « {0} » : les capteurs sources ({1}) ne peuvent pas être lus, le calcul utilise donc uniquement les capteurs restants.
+a0b3b7dd	Instruments
+3c260d3f	La grosse caisse allume tout, la caisse claire un côté, le charleston de petits points, la basse l'extrémité, la voix la luminosité globale, la guitare ou les claviers une lumière qui défile. Les instruments restent reconnaissables même en couleur unie (Couleur choisie uniquement)
+d3efe37c	Par instrument
+e8d8b63a	Batterie seulement
+31b76718	Par hauteur (basses, médiums, aigus)
+ce37ccb7	Chaque composant s'allume avec son propre instrument : ventilateurs avec la grosse caisse, mémoire et claviers avec le charleston, carte graphique avec la voix, etc. Avec plusieurs connecteurs de ventilateurs, ils sont répartis tour à tour entre grosse caisse, caisse claire, charleston et basse
+c7cc18b1	S'allume uniquement avec la grosse caisse, la caisse claire et le charleston. La guitare et la voix ne l'allument pas
+7b659d5a	Répartition par hauteur : ventilateurs pour les basses, carte graphique pour les médiums, mémoire pour les aigus (comme avant)
+c33f330a	Grosse caisse
+8b911b1b	Caisse claire
+7ae7bcde	Charleston et cymbales
+f5489867	Basse (instrument)
+412c6fd5	Voix et mélodie
+203562ee	Accords (claviers, guitare)
+dac2be1c	Nappes et synthé
+64270fa4	{0} : arrêt avant d'atteindre la vitesse la plus basse qui tient la cible, aucune courbe n'a donc été créée et la courbe actuelle est conservée ({1})
+d5a051f9	Vitesse nécessaire pour tenir {0:F0} °C : {1:F0} % ou moins (les vitesses plus basses n'ont pas été mesurées)
+0c8c7106	* La vitesse la plus basse qui tient la cible n'a pas été mesurée : cette courbe ne sera donc pas appliquée, même en cliquant sur Appliquer (la courbe actuelle est conservée)
+e2a336cd	La vitesse la plus basse qui tient la cible n'a pas été mesurée, aucune courbe n'a donc été appliquée (la courbe actuelle est conservée).
+90a68504	Sous {0:F0} %, la vitesse ne change presque plus (vitesse minimale propre au ventilateur).
