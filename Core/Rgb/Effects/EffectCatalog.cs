@@ -126,6 +126,7 @@ public static class EffectCatalog
         EffectVariant.Pulse => new PulseEffect(steadyColor: true),
         EffectVariant.PulseSlow => new PulseEffect(slow: true, steadyColor: true),
         EffectVariant.PulseLoudSlow => new PulseEffect(slow: true, source: PulseEffect.Source.Loudness),
+        EffectVariant.BeatHue => new BeatHueEffect(followBeat: true),
         EffectVariant.BeatHueSlow => new BeatHueEffect(slow: true),
         EffectVariant.Spectrum => new SpectrumEffect(),
         EffectVariant.Energy => new EnergyEffect(),

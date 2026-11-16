@@ -1,6 +1,21 @@
 Zeph-Iris change log (newest first)
 ===================================
 
+■ What's new in v6.15.9 (music sync on the beat)
+  - "Color change on beat" and "Pulse" now light on the beat. While the tempo is found they flash once per beat,
+    brighter on beats with a kick and brightest on the first beat of a bar (flashes on the beat went from about 40%
+    to about 90%). While the tempo isn't found they flash on kicks, and parts without drums move gently with the bass.
+  - Fixed kicks being missed more often since 6.15.8 (back to about the 6.15.7 level).
+  - Fixed gapless playlists: the previous song's tempo no longer makes the next song hard to lock onto (the app
+    forgets the old tempo when the song changes).
+  - Fewer brief flickers when the color changes. On fast LED devices the color change now lands on the beat.
+  - "Instruments" on graphics cards and memory no longer stays almost one color: it swells on the beat in the color
+    of the instrument that stands out.
+  - With "Reduce flashing" on, strong flashes are also capped at 3 per second right before they are sent.
+  - Each lighting style now says which sounds it reacts to.
+  - Removed the online search for device photos. On its own the app now only contacts GitHub (update check).
+    Images you picked yourself still work.
+
 ■ What's new in v6.15.8 (lighting and temperature precision)
   - Less flicker in music sync: in every style, LEDs no longer wobble back and forth in brightness.
   - Hi-hats and snares now light after about 30 ms instead of about 50-60 ms.

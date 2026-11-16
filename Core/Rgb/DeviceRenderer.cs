@@ -107,6 +107,7 @@ public sealed class DeviceRenderer
     private readonly OutputStage _out = new();
     private readonly AttackHold _attack = new();
     private readonly LedSteady _steady = new();
+    private readonly FlashGuard _guard = new();
     private LedSteady.Kind[] _steadyKinds = Array.Empty<LedSteady.Kind>();
     private readonly SectionMeter _section = new();
     private readonly IMusicEffect?[] _effects = new IMusicEffect?[EffectCatalog.VariantCount];
@@ -217,6 +218,43 @@ public sealed class DeviceRenderer
     /// <summary>このコマで、テンポ追従の帯の色が一度に変わった（共有の色とは別に 2 拍ごと）</summary>
     public bool OwnColorStep { get; private set; }
 
+    /// <summary>このコマで、光り方が定期便を待たずに早めに送ってほしいと言った（EffectContext.SendNow）</summary>
+    public bool SendNowRequested { get; private set; }
+
+    /// <summary>このコマで、光り方が小さな変化でも送ってほしいと言った（EffectContext.SendEvenIfSmall）</summary>
+    public bool SendEvenIfSmallRequested { get; private set; }
+
+    /// <summary>
+    /// 調べる用の切り替え（アプリは変えない。既定はオフ）: 直接書き込むグラボ（1 秒に 10 回まで送る）で AttackHold（DirectGpuNoAttackHold）・
+    /// LedSteady（DirectGpuNoSteady）を使わない（どちらも一瞬の光を 0.075 秒ほど保つので、その間に送ると 0.1 秒見えるのではないか、という案）。
+    /// 録音 7 曲では、テンポをつかんでいるときのちかっとした光は変わらず（LED 1 個・1 分あたり 0.60 → 0.59）、つかんでいないときは増えた
+    /// （2.05 → 2.35）ので使っていない
+    /// </summary>
+    internal static bool DirectGpuNoAttackHold { get; set; }
+    internal static bool DirectGpuNoSteady { get; set; }
+
+    /// <summary>
+    /// 調べる用の切り替え（アプリは変えない。既定はオフ）: 直接書き込むグラボで、ビートの光の消え方・色の切り替えを遅いデバイスと同じ長さにする
+    /// （BeatDriver が c.Slow を見る。光り方は同じまま）。録音 7 曲では、テンポをつかんでいないときのちかっとした光が増えた（2.05 → 2.93）ので使っていない
+    /// </summary>
+    internal static bool DirectGpuSlowBeat { get; set; }
+
+    /// <summary>このデバイスは、ビートの光・色の切り替えを遅いデバイスと同じ長さにするか（直接書き込むグラボ）</summary>
+    private bool SlowTiming => Device.DirectGpu && DirectGpuSlowBeat;
+
+    /// <summary>
+    /// 調べる用の切り替え（アプリは変えない。既定はオフ）: 「激しい点滅を抑える」がオンでも、送る直前の強い点滅の制限（FlashGuard）を使わない
+    /// （6.15.8 までと比べる用）
+    /// </summary>
+    internal static bool NoFlashGuard { get; set; }
+
+    /// <summary>送る直前の強い点滅の制限（テスト・調べる用）</summary>
+    internal FlashGuard Guard => _guard;
+
+    /// <summary>このデバイスは、AttackHold・LedSteady を使わないか（直接書き込むグラボ）</summary>
+    private bool NoAttackHold => Device.DirectGpu && DirectGpuNoAttackHold;
+    private bool NoSteady => Device.DirectGpu && DirectGpuNoSteady;
+
     /// <summary>ほかのデバイスの色に合わせているときの、光り方の表示名</summary>
     public static string FollowEffectName => L("ほかのデバイスの色");
 
@@ -326,6 +364,7 @@ public sealed class DeviceRenderer
         int n = output.Length;
         IdleRampDone = false;
         OwnColorStep = false;
+        SendNowRequested = SendEvenIfSmallRequested = false;
         if (n == 0) return;
         var cfg = input.Cfg ?? new RgbConfig();
         var settings = input.Device ?? new RgbDeviceSettings();
@@ -448,14 +487,23 @@ public sealed class DeviceRenderer
         _fade.Apply(_light, input.T);
         // 音楽連動: 明るくなった直後の小さな下がりを止める（低音の値の上下で、光の立ち上がりが段つきになってちらつく）。
         // 波紋・ストロボ・ムード・音量メーター・エナジーは使わない（AttackHold.Applies）。
-        // 書き込みを減らすデバイス（グラボ）は、光り方の側で立ち上がりを遅らせているので使わない
-        if (layer == Layer.Music && !Device.IsLowWrite && AttackHold.Applies(variant)) _attack.Apply(_light, n, dt);
+        // 書き込みを減らすデバイス（グラボ）は、光り方の側で立ち上がりを遅らせているので使わない（NoAttackHold は調べる用。ふだんはオフ）
+        if (layer == Layer.Music && !Device.IsLowWrite && !NoAttackHold && AttackHold.Applies(variant)) _attack.Apply(_light, n, dt);
         else _attack.Reset();
         // 音楽連動: LED ごとに、明るさの向きが短い間に戻らないようにする（ちらつき止め。ストロボの LED は除く）。
-        // 書き込みを減らすデバイス（グラボ）は明るさを一定にしているので使わない
+        // 書き込みを減らすデバイス（グラボ）は明るさを一定にしているので使わない（NoSteady は調べる用。ふだんはオフ）
         if (afterEmergency) _steady.Reset();
-        if (layer == Layer.Music && !Device.IsLowWrite && SteadyKinds(variant) is var (any, kinds, kind) && any) _steady.Apply(_light, n, dt, kinds, kind);
+        if (layer == Layer.Music && !Device.IsLowWrite && !NoSteady && SteadyKinds(variant) is var (any, kinds, kind) && any) _steady.Apply(_light, n, dt, kinds, kind);
         else _steady.Reset();
+        // 音楽連動で「激しい点滅を抑える」がオン: デバイス全体・ゾーンごと・長いデバイスの 4 分の 1 ずつで、強い点滅（0.1 秒で平均 +0.2）を
+        // 1 秒に 3 回までにする。
+        // ビートの光の制限（FlashLimiter）が数えない低音・スネア・ハイハットの光も含めた、送る直前の最後の守り
+        if (layer == Layer.Music && music.ReduceFlashing && !NoFlashGuard && !afterEmergency)
+        {
+            _guard.Layout(n, _segZones);
+            _guard.Apply(_light, n, input.T);
+        }
+        else _guard.Reset();
         // ディザリングは、1 秒に何十回も送る速いデバイスで、同期テストと、音楽連動以外の切り替えのクロスフェードだけ
         // 送る速さが下がって間引くようになったら、持ち越していた端数を捨てる（戻ったときに古い端数を使わない）
         bool allow = !Device.IsSlow && input.AllowDither;
@@ -472,6 +520,8 @@ public sealed class DeviceRenderer
         // 雷・波・音楽連動: ディザリングの代わりに、前に送った値を保つ（暗い色が 2・3・2・3 と行き来しない）
         if (hold && !dither) _out.WriteHold(_light, output, 1f);
         else _out.Write(_light, output, 1f, dither);
+        // 強い点滅の制限は、送る値で数える（Apply していなければ何もしない）
+        _guard.Commit(output, n);
         _hasLast = true;
     }
 
@@ -685,8 +735,10 @@ public sealed class DeviceRenderer
         double floor = Device.IsLowWrite ? 1.0 : Device.IsSlow ? Math.Max(music.MinBrightness, SlowMinBrightness) : music.MinBrightness;
         c.F0 = OutputStage.Floor(floor, cfg.Gamma);
         c.Pal = _palette;
-        c.Slow = EffectCatalog.IsSlowVariant(variant);
+        c.Slow = EffectCatalog.IsSlowVariant(variant) || SlowTiming;
         c.SlowDevice = Device.IsSlow || Device.IsLowWrite || Device.DirectGpu;   // 直接書き込むグラボも 1 秒に 10 回まで
+        c.FixedBrightness = Device.IsLowWrite;
+        c.SendNow = c.SendEvenIfSmall = false;
         c.NoFade = lowWrite;
         c.Speed = (float)music.Speed;
         c.Frame = input.Frame ?? _silent;
@@ -749,6 +801,9 @@ public sealed class DeviceRenderer
         IdleRampDone = settled || (w <= 0 && _prevIdleW > 0 && UsesColorSteps(variant));
         _prevIdleW = w;
         if (w < 1) RenderMusicSegments(variant, _main);
+        // 光り方が早めに送ってほしい・小さな変化でも送ってほしいコマ（音が止まったときの光り方だけのときは使わない）
+        SendNowRequested = w < 1 && c.SendNow;
+        SendEvenIfSmallRequested = w < 1 && c.SendEvenIfSmall;
         if (w > 0)
         {
             RenderIdle(input, cfg, music);
@@ -781,7 +836,7 @@ public sealed class DeviceRenderer
         }
         _effectFrame[i] = _frame;
         bool slow = _ctx.Slow, sceneOn = _ctx.SceneOn;
-        _ctx.Slow = EffectCatalog.IsSlowVariant(v);
+        _ctx.Slow = EffectCatalog.IsSlowVariant(v) || SlowTiming;
         _ctx.SceneOn = ScenePalettes.Applies(_ctx.Music, v);
         fx.Update(_ctx);
         _ctx.Slow = slow;
@@ -803,7 +858,7 @@ public sealed class DeviceRenderer
                 continue;
             }
             bool slow = c.Slow, sceneOn = c.SceneOn;
-            c.Slow = EffectCatalog.IsSlowVariant(v);
+            c.Slow = EffectCatalog.IsSlowVariant(v) || SlowTiming;
             c.SceneOn = ScenePalettes.Applies(c.Music, v);
             fx.Render(c, c.Segments[k], dst);
             c.Slow = slow;
@@ -870,7 +925,7 @@ public sealed class DeviceRenderer
         if (ring is null)
         {
             _gridCursor = double.NaN;
-            AddLoud(tNow, c.Frame.LoudVU);
+            AddLoud(tNow, c.Frame);
             return;
         }
         double end = Math.Min(t1, ring.LatestT);
@@ -896,7 +951,7 @@ public sealed class DeviceRenderer
             pk.Treble = Math.Max(pk.Treble, s.Treble);
             pk.KickEnv = Math.Max(pk.KickEnv, s.KickEnv);
             if (s.LoudVU > pk.LoudVU) { pk.LoudVU = s.LoudVU; c.LoudPeakT = ts; }
-            AddLoud(ts, s.LoudVU);
+            AddLoud(ts, s);
             for (int b = 0; b < AudioFrame.BandCount; b++)
             {
                 pk.Band[b] = Math.Max(pk.Band[b], s.Band[b]);
@@ -907,14 +962,18 @@ public sealed class DeviceRenderer
         if (double.IsNaN(_gridCursor) || _gridCursor < from) _gridCursor = from;
     }
 
-    /// <summary>音量の並び（LoudT・LoudV）に 1 つ足す（いっぱいなら足さない）</summary>
-    private void AddLoud(double t, float v)
+    /// <summary>音量・帯の強さの並び（LoudT・LoudV・BassV・MidV・TrebleV）に 1 つ足す（いっぱいなら足さない）</summary>
+    private void AddLoud(double t, AudioFrame f)
     {
         var c = _ctx;
-        if (c.LoudCount >= EffectContext.MaxWindowSamples) return;
-        c.LoudT[c.LoudCount] = t;
-        c.LoudV[c.LoudCount] = v;
-        c.LoudCount++;
+        int k = c.LoudCount;
+        if (k >= EffectContext.MaxWindowSamples) return;
+        c.LoudT[k] = t;
+        c.LoudV[k] = f.LoudVU;
+        c.BassV[k] = f.BassE;
+        c.MidV[k] = f.MidE;
+        c.TrebleV[k] = f.TrebleE;
+        c.LoudCount = k + 1;
     }
 
     /// <summary>同期テスト: クリック音（Click）の本当の時刻から、白い光を 0.08 秒で消していく。それ以外は消灯</summary>

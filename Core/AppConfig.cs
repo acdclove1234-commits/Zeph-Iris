@@ -27,6 +27,12 @@ public sealed class AppConfig : ObservableObject
     [JsonExtensionData]
     public Dictionary<string, JsonElement>? Extra { get; set; }
 
+    /// <summary>前の版にあって、なくした設定（Extra に入っても保存し直さない）</summary>
+    private static readonly HashSet<string> RemovedKeys = new(StringComparer.OrdinalIgnoreCase)
+    {
+        "AutoDevicePhotos", "DevicePhotoSearchedAt", "DevicePhotoSearched",
+    };
+
     private bool _dryRun;
     private int _pollingIntervalMs = 1000;
     private double _emergencyTemperature = 100.0;
@@ -69,13 +75,6 @@ public sealed class AppConfig : ObservableObject
     public bool RestorePowerPlanOnExit { get; set; } = true;
     /// <summary>デバイス画面で使う自分で用意した画像（exe と同じフォルダの images\ にコピーして保存）</summary>
     public ObservableCollection<DeviceImageConfig> DeviceImages { get; set; } = new();
-    /// <summary>デバイスの写真を、型番で Wikimedia Commons・Openverse から自動で探す（確かに同じ製品と分かる写真だけ自動で使う）</summary>
-    public bool AutoDevicePhotos { get; set; } = true;
-    /// <summary>写真を自動で探したデバイスのキーと、探した日時（毎回ネットに問い合わせない。見つからなければ DevicePhotos.ResearchDays ごとに探し直す）</summary>
-    public Dictionary<string, DateTime> DevicePhotoSearchedAt { get; set; } = new();
-    /// <summary>6.14.3 までの「探し終えたデバイス」（読み込み専用。保存しない。新しい探し先で、もう一度探す）</summary>
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public List<string>? DevicePhotoSearched { get; set; }
     public SafetyConfig Safety { get; set; } = new();
     public NotifyConfig Notify { get; set; } = new();
     public EnergyConfig Energy { get; set; } = new();
@@ -135,9 +134,9 @@ public sealed class AppConfig : ObservableObject
         Calibrations ??= new();
         DashboardCards ??= new();
         DeviceImages ??= new();
-        DevicePhotoSearchedAt ??= new();
-        // 前の版の「探し終えた」印は捨てる（Openverse も探すようになったので、次に起動したときに探し直す）
-        DevicePhotoSearched = null;
+        // 前の版の、ネットで写真を探す設定（もう使わない）は、知らない項目として残さずに捨てる
+        if (Extra is not null)
+            foreach (var key in Extra.Keys.Where(k => RemovedKeys.Contains(k)).ToList()) Extra.Remove(key);
         Widget ??= new();
         Appearance ??= new();
         Appearance.Normalize();
@@ -687,7 +686,7 @@ public sealed class DeviceImageConfig
 {
     public string DeviceKey { get; set; } = "";
     public string FileName { get; set; } = "";
-    /// <summary>ネットの写真なら、元のページ・作者・ライセンス（表示する。自分で用意した画像は空）</summary>
+    /// <summary>前の版がネットから取ってきた写真なら、元のページ・作者・ライセンス（表示する。自分で用意した画像は空）</summary>
     public string SourceUrl { get; set; } = "";
     public string Author { get; set; } = "";
     public string License { get; set; } = "";

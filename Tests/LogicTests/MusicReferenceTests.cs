@@ -229,6 +229,9 @@ public static class BeatTuneSweepTests
             .Append(typeof(OnsetDetector).GetField("OdfWeights", System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.NonPublic)!)
             .Concat(typeof(OnsetDetector.SnareTune).GetFields(System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.NonPublic).Select(f => f))
             .Concat(typeof(BeatHueEffect.Tune).GetFields(System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.NonPublic))
+            .Concat(typeof(BeatFlash.Tune).GetFields(System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.NonPublic))
+            .Concat(typeof(PulseEffect.Tune).GetFields(System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.NonPublic))
+            .Concat(typeof(OnsetDetector.KickTune).GetFields(System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.NonPublic))
             .Concat(typeof(BeatDriver).GetFields(System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.NonPublic).Where(x => !x.IsLiteral && !x.IsInitOnly))
             .ToArray();
 
@@ -249,7 +252,7 @@ public static class BeatTuneSweepTests
             if (f.FieldType == typeof(int[])) { f.SetValue(null, kv[1].Split(',').Select(int.Parse).ToArray()); continue; }
             if (f.FieldType == typeof(double[])) { f.SetValue(null, kv[1].Split(',').Select(x => double.Parse(x, System.Globalization.CultureInfo.InvariantCulture)).ToArray()); continue; }
             double v = double.Parse(kv[1], System.Globalization.CultureInfo.InvariantCulture);
-            object value = f.FieldType == typeof(int) ? (object)(int)Math.Round(v) : f.FieldType == typeof(float) ? (object)(float)v : (object)v;
+            object value = f.FieldType == typeof(bool) ? (object)(v != 0) : f.FieldType == typeof(int) ? (object)(int)Math.Round(v) : f.FieldType == typeof(float) ? (object)(float)v : (object)v;
             f.SetValue(null, value);
         }
     }

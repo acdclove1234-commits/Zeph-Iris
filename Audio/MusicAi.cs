@@ -25,6 +25,8 @@ public sealed class MusicAi : IDisposable
     private bool _loading;
     private bool _wantAi, _wantMemory;
     private string? _lastKey = "";
+    // 最後に流れていた曲の印（止めている間の null では変えない。止めて同じ曲に戻ったときは、曲が変わったことにしない）
+    private string? _lastSongKey;
     private bool _watching;
     private long _mediaRetryAt;           // メディアの情報を次に試す時刻（Environment.TickCount64）。失敗したら少し待ってから試し直す
     private bool _mediaDown;              // 読めない状態をログに出したか（同じことを何度も出さない）
@@ -106,7 +108,14 @@ public sealed class MusicAi : IDisposable
             SongId? id = t.IsCompletedSuccessfully ? t.Result : null;
             if (id?.Key == _lastKey) return;
             _lastKey = id?.Key;
-            if (id is { } s) Memory.BeginSong(s.Key, s.Legacy);
+            if (id is { } s)
+            {
+                Memory.BeginSong(s.Key, s.Legacy);
+                // 別の曲になった: テンポの追跡が覚えている前の曲のテンポを忘れる（曲の間に無音のない再生では、
+                // 無音 4 秒で忘れる仕組みが働かず、前の曲のテンポに 1〜2 分引っぱられて、ロックしにくかった）
+                if (_lastSongKey is not null && s.Key != _lastSongKey) _audio.Engine.NewSong();
+                _lastSongKey = s.Key;
+            }
             else Memory.BeginSong(null);
         }, TaskScheduler.FromCurrentSynchronizationContext());
     }

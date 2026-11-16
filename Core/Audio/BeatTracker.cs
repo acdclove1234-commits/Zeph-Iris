@@ -103,6 +103,8 @@ public sealed class BeatTracker
         /// </summary>
         internal static double MemBoost = 3, MemFadeSec = 60, MemConf = 0.6, MemKeepMin = 0.3;
         internal static int MemMinBeats = 8;
+        /// <summary>曲が変わった（ForgetTempoMemory）あと、ロックが一度外れるまで、テンポを覚え直さない時間の上限（秒）</summary>
+        internal static double MemHoldSec = 20;
         /// <summary>予測した拍の並びのずれの見分け: 離れた音がこの回数続いて、同じ向き・ばらつき OffsetSpreadSec 秒以内なら、ずれとして直す（0 = しない）</summary>
         internal static int OffsetRun = 3;
         internal static double OffsetSpreadSec = 0.03;
@@ -235,6 +237,9 @@ public sealed class BeatTracker
     // テンポの記憶（覚えた周期・最後にしっかりロックしていた時刻・続けて確かさの高かった拍の数）
     private double _memPeriod, _memAtSec;
     private int _memBeats;
+    // 曲が変わったあと、テンポを覚え直さない（ロックが一度外れるか、この時刻まで）
+    private bool _memHold;
+    private double _memHoldUntil;
     // 直近の離れた音のずれ（コマ。予測した拍の並びがずれているかを見分ける）
     private readonly double[] _offErr = new double[6];
     private int _offHead, _offCount;
@@ -439,6 +444,25 @@ public sealed class BeatTracker
         _glide = 0;
         _tNow = 0;
         _published = BeatState.None;
+        // 覚えているテンポも忘れる（取り込み直し・テンポの倍率の変更。以前は無音 4 秒の SilenceReset だけが消していた）
+        _memPeriod = _memAtSec = 0;
+        _memBeats = 0;
+        _memHold = false;
+        _memHoldUntil = 0;
+    }
+
+    /// <summary>
+    /// 曲が変わった: 覚えているテンポ（前の曲のテンポ・その倍・半分に寄せる重み）だけを忘れる。拍の並びとロックはそのまま。
+    /// 曲の間に無音のない再生（続けて流れるプレイリスト）では SilenceReset が起きないので、前の曲のテンポに 1〜2 分引っぱられていた
+    /// 曲が変わった合図は少し遅れて届き、そのときはまだ前の曲の拍の並びでロックしていることが多い。そのまま 8 拍ロックが続くと、
+    /// 前の曲のテンポをまた覚えてしまうので、ロックが一度外れるまで（長くても MemHoldSec 秒）は覚え直さない
+    /// </summary>
+    public void ForgetTempoMemory()
+    {
+        _memPeriod = 0;
+        _memBeats = 0;
+        _memHold = true;
+        _memHoldUntil = _tNow + Tune.MemHoldSec;
     }
 
     /// <summary>
@@ -1197,6 +1221,12 @@ public sealed class BeatTracker
     private void RememberTempo()
     {
         if (Tune.MemBoost <= 0 || _period <= 0) return;
+        if (_memHold)
+        {
+            // 曲が変わったあと: ロックが一度外れる（新しい曲で拍を探し直した）か、MemHoldSec 秒たつまでは覚えない
+            if (_lock == BeatLock.Unlocked || _tNow >= _memHoldUntil) _memHold = false;
+            else { _memBeats = 0; return; }
+        }
         _memBeats = _lock == BeatLock.Locked && _conf >= Tune.MemConf ? _memBeats + 1 : 0;
         if (_memBeats < Tune.MemMinBeats) return;
         _memPeriod = _period;

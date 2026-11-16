@@ -36,6 +36,8 @@ public sealed class PnyEpicXEncoder
         /// <summary>OpenRGB の並びでの位置 → コントローラーの LED の番号</summary>
         public required (int Frame, byte Led)[] Map;
         public ZoneMode Mode;
+        /// <summary>直接モードのまま、1 色のコマが続いた回数（StaticAfterFrames 回続いたら固定色モードに戻す）</summary>
+        public int UniformRun;
         public Rgb StaticColor;
         public Rgb[] Sent = Array.Empty<Rgb>();
     }
@@ -84,24 +86,50 @@ public sealed class PnyEpicXEncoder
 
     private bool ApplyZone(Zone z, ReadOnlySpan<Rgb> frame, bool full, II2cBlockWriter bus, ref int writes)
     {
-        var first = frame[z.Map[0].Frame];
-        bool uniform = true;
-        for (int k = 1; k < z.Map.Length && uniform; k++) uniform = frame[z.Map[k].Frame] == first;
+        // ゾーンの色の広がり（各色のいちばん明るい LED − いちばん暗い LED）と平均の色
+        int minR = 255, minG = 255, minB = 255, maxR = 0, maxG = 0, maxB = 0, sumR = 0, sumG = 0, sumB = 0;
+        for (int k = 0; k < z.Map.Length; k++)
+        {
+            var c = frame[z.Map[k].Frame];
+            minR = Math.Min(minR, c.R); maxR = Math.Max(maxR, c.R); sumR += c.R;
+            minG = Math.Min(minG, c.G); maxG = Math.Max(maxG, c.G); sumG += c.G;
+            minB = Math.Min(minB, c.B); maxB = Math.Max(maxB, c.B); sumB += c.B;
+        }
+        int spread = Math.Max(maxR - minR, Math.Max(maxG - minG, maxB - minB));
+        // 1 色のゾーン: 広がりが SkipDelta 段以下（見て分からない差。平均の色で塗る）
+        bool uniform = spread <= SkipDelta;
+        // 固定色と直接の切り替えに時間の幅を持たせる: 直接モードからは、1 色のコマが StaticAfterFrames 回続いてから固定色に戻す
+        // （1 色と LED ごとに違う色のコマが交互に来ると、そのたびに直接モードに入り直し、書き終わるまでの間、前の色が混ざって見えるため）
+        if (z.Mode == ZoneMode.Direct && !full)
+        {
+            z.UniformRun = uniform ? z.UniformRun + 1 : 0;
+            if (z.UniformRun < StaticAfterFrames) uniform = false;
+        }
 
         if (uniform)
         {
-            if (!full && z.Mode == ZoneMode.Static && z.StaticColor == first) return true;
-            if (!Write(bus, z.Register, ModeStatic, 0xFF, 0x00, first, ref writes)) return false;
+            int n = z.Map.Length;
+            var mean = spread == 0 ? frame[z.Map[0].Frame]
+                : new Rgb((byte)((sumR + n / 2) / n), (byte)((sumG + n / 2) / n), (byte)((sumB + n / 2) / n));
+            if (!full && z.Mode == ZoneMode.Static && z.StaticColor == mean) return true;
+            if (!Write(bus, z.Register, ModeStatic, 0xFF, 0x00, mean, ref writes)) return false;
             z.Mode = ZoneMode.Static;
-            z.StaticColor = first;
+            z.UniformRun = 0;
+            z.StaticColor = mean;
             return true;
         }
 
         bool all = full || z.Mode != ZoneMode.Direct;
         if (z.Mode != ZoneMode.Direct)
         {
-            if (!Write(bus, z.Register, ModeDirect, 0xFF, 0x00, Rgb.Black, ref writes)) return false;
+            // 直接モードに入る命令は「LED 0 番を書く」と同じ形 [直接, 明るさ, 0, 0, R, G, B] なので、LED 0 番の本当の色で書く
+            // （黒で書くと、残りの LED を書き終わるまでの間、LED 0 番が一瞬消える）
+            var led0 = Rgb.Black;
+            for (int k = 0; k < z.Map.Length; k++)
+                if (z.Map[k].Led == 0) { led0 = frame[z.Map[k].Frame]; break; }
+            if (!Write(bus, z.Register, ModeDirect, 0xFF, 0x00, led0, ref writes)) return false;
             z.Mode = ZoneMode.Direct;
+            z.UniformRun = 0;
         }
         for (int k = 0; k < z.Map.Length; k++)
         {
@@ -117,6 +145,9 @@ public sealed class PnyEpicXEncoder
 
     /// <summary>LED 1 個ごとに書くとき、書かずに済ませる色の差（各色の段数。0〜255 のうち）</summary>
     public const int SkipDelta = 2;
+
+    /// <summary>直接モードのゾーンを固定色モードに戻すまでに続いてほしい、1 色のコマの数（ふだん 1 秒に 10 回送るので 0.5 秒）</summary>
+    public const int StaticAfterFrames = 5;
 
     private static bool Near(Rgb a, Rgb b)
         => Math.Abs(a.R - b.R) <= SkipDelta && Math.Abs(a.G - b.G) <= SkipDelta && Math.Abs(a.B - b.B) <= SkipDelta;

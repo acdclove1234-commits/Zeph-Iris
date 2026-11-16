@@ -1045,7 +1045,6 @@ a4d4ce26	Aangepast
 975db0d4	Kleurwissel op de beat
 6f6c9db1	Wisselt bij elke beat naar de volgende kleur, licht fel op en dooft
 1acb0fe4	Puls
-50e3646b	Pulseert met de bas en laat een lange, zachte nagloed achter. De kleur wisselt niet op de beat, maar verloopt langzaam
 fac18e83	Mix
 143bf4c6	Kleuren mengen op basis van de sterkte van lage, midden- en hoge tonen
 d47d8919	VU-meter
@@ -1636,25 +1635,12 @@ ab10ab7f	Zelfde kleur als apparaat
 bf2c93a8	Zelfde als geheel
 c7218a33	Geel
 cc601a2e	Zelfde kleur als geheel
-2a367162	Afbeeldingen zoeken in de browser
-0d4f2878	Er is geen foto van dit model gevonden op de sites met vrij te gebruiken foto's (Wikimedia Commons en Openverse). Kopieer een afbeelding via ‘Afbeeldingen zoeken in de browser’ en stel die in met ‘Gekopieerde afbeelding plakken’ (gebruik foto's van sites van fabrikanten en dergelijke alleen voor uzelf).
-02c5893e	Kies een foto (vrij te gebruiken foto's van Wikimedia Commons en Openverse; maker en licentie staan op de kaart). Past er geen, dan kunt u ook in de browser zoeken en plakken.
-e195c30b	Indien aan, worden apparaten zonder foto op model gezocht op sites met vrij te gebruiken foto's (Wikimedia Commons en Openverse), en worden alleen foto's die duidelijk hetzelfde product tonen automatisch gebruikt. Wordt er niets gevonden, dan wordt elke 30 dagen opnieuw gezocht. Alleen de apparaatnamen worden verstuurd
-6124e108	Voor apparaten zonder resultaat kunt u via de afbeeldingsknop op de kaart een afbeelding plakken die u in de browser vond
-871f648b	Foto's van dit model zoeken op sites met vrij te gebruiken foto's (Wikimedia Commons en Openverse)…
-6d191ffc	Foto van ‘{0}’
-6db944ec	Opent een afbeeldingenzoekopdracht voor het model. Klik met rechts op een afbeelding die u bevalt → ‘Afbeelding kopiëren’ en druk hieronder op ‘Gekopieerde afbeelding plakken’
 7c80ba3a	De afbeelding kon niet worden geplakt.\n{0}
 09a1ab78	Maker en licentie van de foto
-a55323f3	De foto kon niet worden gedownload. Kies een andere of plak een afbeelding.
-aeaca01b	Apparaatfoto's automatisch online zoeken
 b0dd9531	Er staat geen afbeelding op het klembord. Klik in de browser met rechts op een afbeelding, kies ‘Afbeelding kopiëren’ en druk opnieuw.
 b3cec96e	Uit een bestand kiezen…
-b45d8636	Foto downloaden…
 d57e0ef7	Foto: {0} ({1})
 e2890741	Maker onbekend
-e29499f3	Online een foto zoeken…
-ec74b9eb	Er kon niet naar foto's worden gezocht ({0}). U kunt ook zoeken via ‘Afbeeldingen zoeken in de browser’ en plakken.
 ed0f43c5	Gekopieerde afbeelding plakken
 512b961e	Ventilatoren
 66441f18	Zelfde als zone
@@ -1996,3 +1982,18 @@ d5a051f9	Toerental nodig om {0:F0} °C te halen: {1:F0}% of minder (lagere toere
 0c8c7106	* Het laagste toerental dat het doel haalt is niet gemeten, dus deze curve wordt niet ingesteld, ook niet als je hem toepast (de huidige curve blijft)
 e2a336cd	Het laagste toerental dat het doel haalt is niet gemeten, dus er is geen curve ingesteld (de huidige curve blijft).
 90a68504	Onder {0:F0}% verandert het toerental nauwelijks (het eigen minimumtoerental van de ventilator).
+97a3aac7	Reageert op: licht op bij elke beat (op de kick zolang het tempo niet gevonden is; op de bas als tempo uit staat en bij videokaarten en geheugen). De kleur wisselt elke 1–4 beats, afhankelijk van de intensiteit
+6d6e85e7	Reageert op: zwelt aan op de beat en beweegt tussen de beats rustig mee met de bas (op de kick zolang het tempo niet gevonden is; op de bas als tempo uit staat en bij videokaarten en geheugen). De kleur verloopt langzaam in de tijd
+3704a505	Reageert op: neemt de kleur aan van de sterkste van de lage, midden- en hoge tonen
+ba3eca1b	Reageert op: de lengte volgt het volume en veert op bij kicks en snares
+81cd1e18	Reageert op: licht op met de sterkte van elke toonhoogte, van laag tot hoog
+210faf7d	Reageert op: elke band groeit met de sterkte van de lage, midden- en hoge tonen
+a35cc263	Reageert op: de kleuren van de lage, midden- en hoge tonen die nu klinken stromen mee
+a0098d0d	Reageert op: bij elke kick verschijnt een ring van licht (op de beat zodra het tempo gevonden is)
+e367d987	Reageert op: kick, snare en hi-hat lichten elk op een andere manier op
+4a0ca652	Reageert op: alleen het geluid dat per onderdeel (zone) is gekozen: laag, midden, hoog of een instrument
+3d52d090	Reageert op: elk instrument (bij videokaarten en geheugen zwelt het aan op de beat in de kleur van het instrument dat opvalt)
+630581a9	Reageert op: een lichtband loopt mee op de beat (tempo)
+e411765c	Reageert op: verandert langzaam met de helderheid van het geluid (laag of hoog) en het volume
+4c402832	Reageert op: de eerste beat van elke maat (sterke kicks zolang het tempo niet gevonden is)
+e532ec45	Pulseert met de beat en laat een lange, zachte nagloed achter. De kleur wisselt niet op de beat, maar verloopt langzaam

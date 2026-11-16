@@ -70,7 +70,6 @@ static class UiSmoke
         cfg.Normalize();
         cfg.Language = languages[0];
         cfg.Quick.HotkeysEnabled = false;
-        cfg.AutoDevicePhotos = false;   // ネットに問い合わせない
         cfg.Rgb.DeviceSettings.Add(new RgbDeviceSettings
         {
             Name = "Lian Li Uni Hub - SL",

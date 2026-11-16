@@ -155,20 +155,50 @@ public static class ReactiveLatencyTests
         finally { OnsetDetector.EventTune.LowLatency = saved; }
     }
 
+    /// <summary>早く出すスネア（EventTune.FastSnare・SnareTune.EarlyPositive）をオンにして Suite を流す（6.15.8 の既定）</summary>
+    private static Dictionary<AudioEventKind, ReactiveLatency.Kind> WithFastSnare()
+    {
+        bool fs = OnsetDetector.EventTune.FastSnare, ep = OnsetDetector.SnareTune.EarlyPositive;
+        try
+        {
+            OnsetDetector.EventTune.FastSnare = true;
+            OnsetDetector.SnareTune.EarlyPositive = true;
+            return ReactiveLatency.Suite();
+        }
+        finally
+        {
+            OnsetDetector.EventTune.FastSnare = fs;
+            OnsetDetector.SnareTune.EarlyPositive = ep;
+        }
+    }
+
     /// <summary>
-    /// 合成のドラム（ループ・MusicBench の 10 曲）で、スネア・ハイハットが鳴ってから光るまで 33 ミリ秒以下（中央値。
-    /// 6.15.7 は約 51・58 ミリ秒）。キックは 6.15.7 より遅くならない。見つける数は減らず、正解にない出来事は増えない
+    /// 合成のドラム（ループ・MusicBench の 10 曲）で、ハイハットが鳴ってから光るまで 33 ミリ秒以下（中央値。6.15.7 は約 58 ミリ秒）。
+    /// スネアは既定では 6.15.7 と同じ決め方（約 51 ミリ秒）で、遅くならない。早く出すスネアをオンにすると 33 ミリ秒以下（その決め方が
+    /// 壊れていないことを確かめる）。
+    /// 変更の理由: 6.15.8 ではスネアも既定で 33 ミリ秒以下を求めていたが、録音した 7 曲（192 kHz）で、早く出したスネアの約 8 割が
+    /// 長い FFT なら「キックと同時」か「ハイハットの漏れ」と分かる音で、スネアが 1 秒あたり 0.84 → 1.19 に増えた（キックとの取り違え）。
+    /// 実際の曲の取り違えを優先して既定では使わないので、既定の値は 6.15.7 と比べる。
+    /// キックは 6.15.7 より遅くならない。見つける数は減らず、正解にない出来事は増えない
     /// </summary>
     public static void TestSnareAndHatLightWithin33ms()
     {
         var (before, after) = BeforeAfter();
+        var fast = WithFastSnare();
         foreach (var (k, v) in before) T.Info($"6.15.7 {k,-5} {v.Format()}");
         foreach (var (k, v) in after) T.Info($"now    {k,-5} {v.Format()}");
+        T.Info($"fast snare on: Snare {fast[AudioEventKind.Snare].Format()}");
         foreach (var kind in new[] { AudioEventKind.Snare, AudioEventKind.Hat })
         {
             var a = after[kind];
             var b = before[kind];
-            T.Check(a.P50 <= 33, $"{kind}: light ≤ 33 ms after the sound (median {a.P50:F1} ms, 6.15.7 {b.P50:F1} ms)");
+            if (kind == AudioEventKind.Hat) T.Check(a.P50 <= 33, $"{kind}: light ≤ 33 ms after the sound (median {a.P50:F1} ms, 6.15.7 {b.P50:F1} ms)");
+            else
+            {
+                T.Check(a.P50 <= b.P50 + 0.5, $"{kind}: light not later than 6.15.7 (median {a.P50:F1} ms, 6.15.7 {b.P50:F1} ms)");
+                var f = fast[kind];
+                T.Check(f.P50 <= 33 && f.Found >= b.Found, $"{kind}: with the fast snare on, light ≤ 33 ms after the sound (median {f.P50:F1} ms, found {f.Found}/{f.Truth})");
+            }
             T.Check(a.P90 <= b.P90, $"{kind}: the slow tail is not later than 6.15.7 (90% {a.P90:F1} ms, 6.15.7 {b.P90:F1} ms)");
             T.Check(a.Found >= b.Found, $"{kind}: found at least as many as 6.15.7 ({a.Found}/{a.Truth}, 6.15.7 {b.Found}/{b.Truth})");
             T.Check(a.Extra <= b.Extra, $"{kind}: no more events without a sound than 6.15.7 ({a.Extra}, 6.15.7 {b.Extra})");
@@ -181,13 +211,16 @@ public static class ReactiveLatencyTests
 
     /// <summary>
     /// 回と回の間に確かめる（ProbeBetweenHops）と、ハイハット・スネアが見つかるのが早くなる（10 ミリ秒ずつ届く音で）。
-    /// 見つける数は変わらない（同じ音を 2 回出さない）
+    /// 見つける数は変わらない（同じ音を 2 回出さない）。
+    /// スネアを回と回の間に出すのは、早く出すスネア（EventTune.FastSnare）だけなので、ここではオンにして確かめる
+    /// （既定ではオフ。理由は TestSnareAndHatLightWithin33ms）
     /// </summary>
     public static void TestProbeBetweenHopsFindsEarlier()
     {
-        bool saved = OnsetDetector.EventTune.Probe;
+        bool saved = OnsetDetector.EventTune.Probe, fs = OnsetDetector.EventTune.FastSnare;
         try
         {
+            OnsetDetector.EventTune.FastSnare = true;
             OnsetDetector.EventTune.Probe = false;
             var off = ReactiveLatency.Suite();
             OnsetDetector.EventTune.Probe = true;
@@ -201,7 +234,11 @@ public static class ReactiveLatencyTests
                 T.Check(Math.Abs(a.Found - b.Found) <= Math.Max(2, 0.02 * b.Found) && a.Extra <= b.Extra, $"{kind}: the probe finds the same hits ({a.Found} vs {b.Found}, extra {a.Extra} vs {b.Extra})");
             }
         }
-        finally { OnsetDetector.EventTune.Probe = saved; }
+        finally
+        {
+            OnsetDetector.EventTune.Probe = saved;
+            OnsetDetector.EventTune.FastSnare = fs;
+        }
     }
 
     /// <summary>

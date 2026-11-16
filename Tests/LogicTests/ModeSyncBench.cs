@@ -143,7 +143,7 @@ public static class ModeSyncBenchTests
     /// </summary>
     public static List<ModeScore> RunSong(float[] mono, int fs, string[] modes, out double refBpm, out double secondsOut,
         RgbDevice? device = null, Func<ResolvedMusic, ResolvedMusic>? tweak = null, IReadOnlyList<(string Label, RgbDeviceSettings Settings)>? settings = null,
-        Func<double, MusicScene>? scenes = null)
+        Func<double, MusicScene>? scenes = null, float[]? side = null, BeatThis? model = null)
     {
         double seconds = mono.Length / (double)fs;
         secondsOut = seconds;
@@ -160,6 +160,9 @@ public static class ModeSyncBenchTests
         // 2) 本物の分析に流しながら、全部の光り方を描く
         var dev = device ?? new RgbDevice(0, "Strip", 24, 4, null, "HID: x");
         var engine = new AudioEngine(fs) { Settings = MusicTuning.EngineSettings(cfg) };
+        // model を渡すと、アプリと同じに拍の AI を付ける（side を渡すと、ミッドとサイドを流す）
+        BeatAssist? assist = model is null ? null : new BeatAssist(model, fs) { Inline = true };
+        if (assist is not null) engine.Assist = assist;
         var laneSpecs = settings is null
             ? modes.Select(m => (Label: m, Effect: m, Settings: new RgbDeviceSettings { Name = dev.Name })).ToList()
             : settings.Select(x => (x.Label, Effect: modes[0], x.Settings)).ToList();
@@ -186,7 +189,8 @@ public static class ModeSyncBenchTests
         for (int pos = 0; pos < mono.Length; pos += chunk)
         {
             int n = Math.Min(chunk, mono.Length - pos);
-            engine.Push(mono.AsSpan(pos, n), t0 + pos / (double)fs);
+            var sd = side is not null && side.Length >= pos + n ? new ReadOnlySpan<float>(side, pos, n) : ReadOnlySpan<float>.Empty;
+            engine.Push(mono.AsSpan(pos, n), sd, t0 + pos / (double)fs);
             double tAudio = t0 + (pos + n) / (double)fs;
             while (nextFrame <= tAudio)
             {
@@ -204,6 +208,7 @@ public static class ModeSyncBenchTests
                 nextFrame += 1 / Fps;
             }
         }
+        assist?.Dispose();
         return lanes.Select(L => Score(L, refBeats, odf, rms, seconds)).ToList();
     }
 

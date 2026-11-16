@@ -1045,7 +1045,6 @@ a4d4ce26	Özel
 975db0d4	Vuruşta renk değiştir
 6f6c9db1	Her vuruşta sonraki renge geçer, parlayıp söner
 1acb0fe4	Nabız
-50e3646b	Basla birlikte atar ve uzun, yumuşak bir iz bırakır. Renk vuruşta değişmez, yavaşça geçiş yapar
 fac18e83	Karışım
 143bf4c6	Renkler bas, orta ve tiz seslerin gücüne göre karışır
 d47d8919	Ses seviyesi göstergesi
@@ -1636,25 +1635,12 @@ ab10ab7f	Cihazla aynı renk
 bf2c93a8	Genel ile aynı
 c7218a33	Sarı
 cc601a2e	Genel ile aynı renk
-2a367162	Tarayıcıda resim ara
-0d4f2878	Serbestçe kullanılabilen fotoğraf sitelerinde (Wikimedia Commons ve Openverse) bu modelin fotoğrafı bulunamadı. "Tarayıcıda resim ara" ile bir resim kopyalayıp "Kopyalanan resmi yapıştır" ile ayarlayabilirsiniz (üretici siteleri ve benzerlerindeki fotoğrafları yalnızca kendiniz için kullanın).
-02c5893e	Bir fotoğraf seçin (Wikimedia Commons ve Openverse'ten serbestçe kullanılabilen fotoğraflar; yazar ve lisans kartta gösterilir). Uygun olan yoksa tarayıcıda arayıp yapıştırabilirsiniz.
-e195c30b	Açıksa fotoğrafı olmayan cihazlar modele göre serbestçe kullanılabilen fotoğraf sitelerinde (Wikimedia Commons ve Openverse) aranır ve yalnızca açıkça aynı ürünü gösteren fotoğraflar otomatik kullanılır. Bulunamazsa 30 günde bir yeniden aranır. Yalnızca cihaz adları gönderilir
-6124e108	Sonuç bulunamayan cihazlar için karttaki resim düğmesiyle tarayıcıda bulduğunuz bir resmi yapıştırabilirsiniz
-871f648b	Bu modelin fotoğrafları serbestçe kullanılabilen fotoğraf sitelerinde (Wikimedia Commons ve Openverse) aranıyor…
-6d191ffc	"{0}" fotoğrafı
-6db944ec	Model için resim aramasını açar. Beğendiğiniz resme sağ tıklayıp → "Resmi kopyala", ardından aşağıdaki "Kopyalanan resmi yapıştır"a basın
 7c80ba3a	Resim yapıştırılamadı.\n{0}
 09a1ab78	Fotoğrafın yazarı ve lisansı
-a55323f3	Fotoğraf indirilemedi. Başka birini seçin ya da bir resim yapıştırın.
-aeaca01b	Cihaz fotoğraflarını internette otomatik ara
 b0dd9531	Panoda resim yok. Tarayıcıda bir resme sağ tıklayıp "Resmi kopyala"yı seçin, sonra tekrar basın.
 b3cec96e	Dosyadan seç…
-b45d8636	Fotoğraf indiriliyor…
 d57e0ef7	Fotoğraf: {0} ({1})
 e2890741	Yazar bilinmiyor
-e29499f3	İnternette fotoğraf ara…
-ec74b9eb	Fotoğraf aranamadı ({0}). "Tarayıcıda resim ara" ile arayıp yapıştırabilirsiniz.
 ed0f43c5	Kopyalanan resmi yapıştır
 512b961e	Fan sayısı
 66441f18	Bölgeyle aynı
@@ -1996,3 +1982,18 @@ d5a051f9	{0:F0}°C'yi korumak için gereken devir: %{1:F0} veya daha az (daha d�
 0c8c7106	* Hedefi koruyan en düşük devir ölçülemediği için Uygula'ya bassanız bile bu eğri uygulanmaz (mevcut eğri korunur)
 e2a336cd	Hedefi koruyan en düşük devir ölçülemediği için eğri uygulanmadı (mevcut eğri korundu).
 90a68504	%{0:F0} altında devir neredeyse değişmez (fanın kendi en düşük devri).
+97a3aac7	Tepki: vuruşta yanar (tempo yakalanamazken kick'te; tempo kapalıyken ve ekran kartı ile bellekte basta). Renk, yoğunluğa göre her 1–4 vuruşta bir değişir
+6d6e85e7	Tepki: vuruşta kabarır, vuruşlar arasında basla yumuşakça hareket eder (tempo yakalanamazken kick'te; tempo kapalıyken ve ekran kartı ile bellekte basta). Renk zamanla yavaşça değişir
+3704a505	Tepki: bas, orta ve tiz seslerden en güçlü olanın rengini alır
+ba3eca1b	Tepki: uzunluk ses yüksekliğine göre değişir, kick ve trampette zıplar
+81cd1e18	Tepki: bastan tize her perdedeki sesin gücüne göre yanar
+210faf7d	Tepki: bas, orta ve tiz seslerin gücüyle her bant uzar
+a35cc263	Tepki: o an çalan bas, orta ve tiz seslerin renkleri akıp gider
+a0098d0d	Tepki: her kick'te bir ışık halkası çıkar (tempo yakalanınca vuruşta)
+e367d987	Tepki: kick, trampet ve hi-hat her biri farklı şekilde yanar
+4a0ca652	Tepki: yalnızca her parça (bölge) için seçilen ses: bas, orta, tiz veya bir enstrüman
+3d52d090	Tepki: her enstrüman (ekran kartı ve bellekte vuruşta kabarır ve öne çıkan enstrümanın renginde yanar)
+630581a9	Tepki: vuruşa (tempoya) uyumlu bir ışık bandı koşar
+e411765c	Tepki: sesin parlaklığına (pes mi tiz mi) ve ses yüksekliğine göre yavaşça değişir
+4c402832	Tepki: her ölçünün ilk vuruşu (tempo yakalanamazken güçlü kick'ler)
+e532ec45	Vuruşla birlikte atar ve uzun, yumuşak bir iz bırakır. Renk vuruşta değişmez, yavaşça geçiş yapar

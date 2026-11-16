@@ -10,10 +10,15 @@ namespace ProFanController;
 /// <summary>
 /// デバイスごとに 1 つ。毎コマ、前のコマの時刻 t0 から今の時刻 t1 まで（t0 は含まず t1 は含む）を見て、
 ///   合図（Trigger）: テンポをつかんでいれば予測したビートの頭、つかんでいなければ強いキック（強さ 1.5 以上、0.25 秒以上あける）
-///   ビートの光（Flash）= 確かさ × 予測の光 + (1 − 確かさ) × 出来事の光
+///   ビートの光（Flash）= 確かさ × 予測の光 + (1 − 確かさ) × 出来事の光（テンポをつかんでいないときは出来事の光だけ。遅いデバイス用の光り方は除く。
+///       予測した拍で光らせても色はキックで進むので、光ったあとで色だけが変わって、色替えの途中で光って見えていた）
 ///       予測の光 = exp(−拍の頭からの秒数 / τf)、τf = 0.35 × 1 拍（0.12〜0.28 秒）
 ///       出来事の光 = a × exp(−出来事からの秒数 / 0.25 秒)、a = 0.5 + 0.25 × (強さ − 1)（0.5〜1）
-///   色の切り替え: 合図 ColorStepBeats 回ごとに、パレットを 1 つ進める（テンポをつかんでいれば小節の頭にそろえる）
+///   色の切り替え: 合図 ColorStepBeats 回ごとに、パレットを 1 つ進める（テンポをつかんでいれば小節の頭にそろえる）。
+///       テンポをつかんでいるときは、次の拍の前に切り替え始めて拍の頭で切り替え終わる（ビートの光が新しい色で光る。
+///       切り替えにかける時間は CrossfadeSec と 1 拍の PreFadeMaxBeats 倍の短いほう）。
+///       つかんでいないときはキックで進めるので前もって切り替えられない: 速いデバイスはキックの光と同時に一度に切り替える
+///       （クロスフェードすると、キックの光のいちばん明るいところが途中の色になり、そのあと色だけが変わって見える）
 /// 時刻はすべて「音が鳴った本当の時刻」で計算するので、1 秒間のコマ数が違っても同じ光り方になる
 /// </summary>
 public sealed class BeatDriver
@@ -32,6 +37,15 @@ public sealed class BeatDriver
     public const double SlowFlashTauMinSec = 0.30;
     /// <summary>更新の遅いデバイスでの、色の切り替えにかける時間の下限（秒）</summary>
     public const double SlowCrossfadeMinSec = 0.15;
+    /// <summary>拍の前に色を切り替え始めるときの、切り替えにかける時間の上限（1 拍の何倍か。前の拍の光の最中に混ぜ始めない）</summary>
+    public const double PreFadeMaxBeats = 0.6;
+
+    /// <summary>
+    /// テンポをつかんでいないときも予測した拍で光らせる（6.15.8 までの動き。調べる用に、テストから前と比べるために変えられる。アプリの中では変えない）
+    /// </summary>
+    internal static bool UnlockedPrediction { get; set; }
+    /// <summary>テンポをつかんでいるとき、拍の前に色を切り替え始める（調べる用。アプリの中では変えない）</summary>
+    internal static bool PreFade { get; set; } = true;
 
     private double _lastTriggerT = double.NegativeInfinity;
     // 予測したビートの頭をまたいだか（予測が書き換わっても同じビートを 2 回合図にしない）
@@ -40,6 +54,8 @@ public sealed class BeatDriver
     private double _onT1 = double.NegativeInfinity, _onT0 = double.NegativeInfinity;
     private float _onA1, _onA0, _onG1 = 1, _onG0 = 1;
     private float _predGain = 1;
+    // 拍の前に色を切り替え始めた拍の時刻（その拍の頭では、もう進めない）
+    private double _preT = double.NegativeInfinity;
     // このコマで新しく分かった光（検出の遅れで、前のコマの範囲より前の時刻のこともある）
     private bool _fresh1, _fresh0;
 
@@ -49,7 +65,7 @@ public sealed class BeatDriver
     /// <summary>状態を最初に戻す（デバイスを作り直したときなど）</summary>
     public void Reset()
     {
-        _lastTriggerT = _onT1 = _onT0 = double.NegativeInfinity;
+        _lastTriggerT = _onT1 = _onT0 = _preT = double.NegativeInfinity;
         _onA1 = _onA0 = 0;
         _onG1 = _onG0 = _predGain = 1;
         _crossing.Reset();
@@ -100,6 +116,7 @@ public sealed class BeatDriver
             OnOnset(c, ev);
         }
         if (beatPending) OnPredictedBeat(c);
+        if (c.Locked && !off) PreStep(c, t1);
 
         // ---- ビートの光（今の時刻の値と、このコマの間の最大値） ----
         c.Fl = c.FlPeak = 0;
@@ -130,7 +147,8 @@ public sealed class BeatDriver
         var beat = c.Beat;
         bool slow = c.Slow;
         double fpred = 0;
-        if (c.HasTempo && c.Conf > 0)
+        double conf = PredictFlash(c) ? c.Conf : 0;
+        if (conf > 0)
         {
             double tauF = Math.Clamp(0.35 * beat.Period, 0.12, 0.28);
             if (slow) tauF = Math.Max(tauF, SlowFlashTauMinSec);
@@ -138,8 +156,14 @@ public sealed class BeatDriver
         }
         double tauO = slow ? Math.Max(OnsetFlashTauSec, SlowFlashTauMinSec) : OnsetFlashTauSec;
         double fons = Math.Max(Pulse(t, _onT1, _onA1 * _onG1, tauO), Pulse(t, _onT0, _onA0 * _onG0, tauO));
-        return c.Conf * fpred + (1 - c.Conf) * fons;
+        return conf * fpred + (1 - conf) * fons;
     }
+
+    /// <summary>
+    /// 予測した拍で光らせるか（テンポをつかんでいるときだけ。遅いデバイス用の光り方（c.Slow）は、つかんでいなくても光らせる:
+    /// 光も色の切り替えもゆっくりなので、キックの光と色の切り替えが重なると、送った 1 回だけ新しい色で明るく光って見えるため）
+    /// </summary>
+    private static bool PredictFlash(EffectContext c) => c.HasTempo && c.Conf > 0 && (c.Locked || UnlockedPrediction || c.Slow);
 
     /// <summary>時刻 tStart に強さ a で始まり、時定数 tau で消えていく光の、時刻 t の値</summary>
     private static double Pulse(double t, double tStart, double a, double tau)
@@ -152,14 +176,47 @@ public sealed class BeatDriver
     private void OnPredictedBeat(EffectContext c)
     {
         double tb = c.BeatCrossT;
-        if (c.Conf > 0) _predGain = Limiter.Decide(tb);
+        if (PredictFlash(c)) _predGain = Limiter.Decide(tb);
         if (!c.Locked) return;
         // テンポをつかんでいる: 予測したビートが合図。色は小節の頭にそろえて ColorStepBeats 拍ごとに進める
-        int every = StepEvery(c);
-        long rel = c.BeatIndex - c.Beat.DownbeatOffset;
-        bool step = ((rel % every) + every) % every == 0;
-        FireTrigger(c, tb, 1f, step);
+        // （拍の前に切り替え始めた拍では、もう進めない）
+        bool step = IsStepBeat(c, c.BeatIndex) && !(Math.Abs(tb - _preT) < SameBeatSec(c));
+        FireTrigger(c, tb, 1f, step, sameSec: SameBeatSec(c));
     }
+
+    private static bool IsStepBeat(EffectContext c, long index)
+    {
+        int every = StepEvery(c);
+        long rel = index - c.Beat.DownbeatOffset;
+        return ((rel % every) + every) % every == 0;
+    }
+
+    /// <summary>
+    /// テンポをつかんでいるとき: 次の拍で色を進めるなら、拍の頭で切り替え終わるように、その少し前から切り替え始める
+    /// （拍の頭から切り替え始めると、ビートの光のいちばん明るいところが前の色・途中の色になる）
+    /// </summary>
+    private void PreStep(EffectContext c, double t1)
+    {
+        if (!PreFade) return;
+        double lead = Math.Min(CrossfadeSec(c), PreFadeMaxBeats * c.Period);
+        if (!(lead > 0)) return;   // 一度に切り替える: 拍の頭で切り替えるので、ビートの光はもう新しい色
+        var beat = c.Beat;
+        double tn = beat.NextBeatAfter(t1);
+        // 同じ拍かどうかは半拍で比べる（切り替え始めたあとでテンポの予測が 0.15 秒以上動いても、同じ拍でもう一度切り替えない）
+        if (tn - lead > t1 || Math.Abs(tn - _preT) < SameBeatSec(c)) return;
+        _preT = tn;
+        // 次の拍の番号（拍の頭のすぐ後ろで数える。小数の誤差で前の拍にならないように）
+        if (!IsStepBeat(c, beat.Index(tn + 0.25 * beat.Period))) return;
+        double start = Math.Max(c.TPrev, tn - lead);
+        if (c.Shared is { } shared) shared.Step(start, c.Pal.Step, tn, SameBeatSec(c));
+        else c.Color.Step(start, c.Pal.Step, tn - start);
+    }
+
+    /// <summary>テンポをつかんでいるとき、同じ拍とみなす時間（半拍。BeatCrossing と同じ。SameStepSec より短くはしない）</summary>
+    private static double SameBeatSec(EffectContext c) => HalfBeatSame ? Math.Max(SharedColor.SameStepSec, 0.5 * c.Period) : SharedColor.SameStepSec;
+
+    /// <summary>同じ拍かを半拍で比べる（調べる用。false で 6.15.8 と同じ 0.15 秒。アプリの中では変えない）</summary>
+    internal static bool HalfBeatSame { get; set; } = true;
 
     /// <summary>キック（Auto なら立ち上がりも）が来た</summary>
     private void OnOnset(EffectContext c, AudioEvent ev)
@@ -184,11 +241,11 @@ public sealed class BeatDriver
         {
             int every = StepEvery(c);
             bool step = (c.TriggerCount + 1) % every == 0;
-            FireTrigger(c, ev.T, ev.Strength, step);
+            FireTrigger(c, ev.T, ev.Strength, step, onset: true);
         }
     }
 
-    private void FireTrigger(EffectContext c, double t, float strength, bool step)
+    private void FireTrigger(EffectContext c, double t, float strength, bool step, bool onset = false, double sameSec = SharedColor.SameStepSec)
     {
         _lastTriggerT = Math.Max(_lastTriggerT, t);
         c.Trigger = true;
@@ -196,8 +253,10 @@ public sealed class BeatDriver
         c.TriggerStrength = strength;
         c.TriggerCount++;
         if (!step) return;
-        if (c.Shared is { } shared) shared.Step(t, c.Pal.Step);
-        else c.Color.Step(t, c.Pal.Step, CrossfadeSec(c));
+        // キックで進めるとき: 光と同時に一度に切り替える（共有の色は、切り替え終わる時刻 = キックの時刻をほかのデバイスにも渡す。
+        // 遅いデバイスは、いつもどおり CrossfadeSec かけて切り替える）
+        if (c.Shared is { } shared) shared.Step(t, c.Pal.Step, onset ? t : double.NaN, sameSec);
+        else c.Color.Step(t, c.Pal.Step, onset && !c.Slow ? 0 : CrossfadeSec(c));
     }
 
     /// <summary>色の切り替えにかける時間（秒）</summary>
@@ -214,7 +273,21 @@ public sealed class BeatDriver
         if (c.Shared is not { } shared) return;
         // 切り替えの始まりは、共有の色が進んだビートの時刻（ただし今のコマより先にはしない）
         double t = Math.Min(Math.Max(shared.LastStepT, c.TPrev), c.T);
-        c.Color.SyncTo(shared, t, CrossfadeSec(c));
+        double dur = CrossfadeSec(c);
+        double end = shared.FadeEndT;
+        if (!double.IsNaN(end))
+        {
+            // 切り替え終わる時刻が決まっている（拍の前に切り替え始めた・キックで進めた）: その時刻で切り替え終わる。
+            // 一度に切り替えるデバイスは、その時刻まで待つ
+            if (dur <= 0)
+            {
+                if (c.T < end) return;
+                t = Math.Min(Math.Max(end, c.TPrev), c.T);
+            }
+            // 遅いデバイスは、いつもの時間（CrossfadeSec）より短くしない（光が長いので、急に変えると目立つ）
+            else dur = Math.Max(end - t, c.Slow ? dur : 0);
+        }
+        c.Color.SyncTo(shared, t, dur);
     }
 
     /// <summary>色を何回の合図ごとに進めるか（全デバイスで同じにする。違うとデバイスごとに色がずれる）</summary>

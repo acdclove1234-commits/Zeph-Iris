@@ -150,6 +150,7 @@ public sealed class AudioEngine
 
     private volatile bool _resetRequested;
     private volatile bool _resetTempoRequested;
+    private volatile bool _newSongRequested;
     private AudioEngineSettings _settings = AudioEngineSettings.Default;
     private AudioEngineSettings? _effFor;
     private AudioEngineSettings _eff = AudioEngineSettings.Default;
@@ -348,12 +349,19 @@ public sealed class AudioEngine
         Beat = BeatState.None;
     }
 
+    /// <summary>
+    /// 曲が変わった（曲名の見張りで分かったとき）: テンポの追跡が覚えている前の曲のテンポを忘れる（拍の並びとロックはそのまま）。
+    /// どのスレッドから呼んでもよい（取り込みスレッドが次の分析の回で行う）
+    /// </summary>
+    public void NewSong() => _newSongRequested = true;
+
     private void ResetInternal()
     {
         _resetRequested = false;
         Assist?.Reset();
         Tagger?.Reset();
         _resetTempoRequested = false;
+        _newSongRequested = false;
         _dec?.Reset();
         _decSide?.Reset();
         Array.Clear(_ring);
@@ -492,6 +500,11 @@ public sealed class AudioEngine
             _tracker.Reset();
             _drop.Reset();
         }
+        if (_newSongRequested)
+        {
+            _newSongRequested = false;
+            _tracker.ForgetTempoMemory();
+        }
 
         // 1. 窓をかけて FFT（古い順に並べる。窓は直近 N 個を覆う）
         int startLow = _pos - _nLow;
@@ -551,13 +564,14 @@ public sealed class AudioEngine
         // 楽器ごとの手がかり（打楽器と持続音・左右・12 音の色・楽器らしさ）
         if (InstrumentsEnabled) _inst.Process(_powLow, _powHigh, stereo ? _powSide : null, s, open, activity);
 
-        // 5. 立ち上がり
+        // 5. 立ち上がり（キックの門は、前の回までに分かった拍の並びを使う）
+        _onsets.Grid = _trackerOn ? _tracker.Published : null;
         _onsets.Process(_magLow, s, activity, open, _hop, tHop, Events, _kick, _magFast, _hatPath, _snarePath, _bodyPath);
         _hatPath.EndHop();
         _snarePath.EndHop();
         _bodyPath.EndHop();
         // ベースの音の高さと出だし（キックの直後は出だしにしない）
-        if (InstrumentsEnabled) _inst.EndHop(tHop, _onsets.KickFired, _onsets.KickTime, _onsets.BassCandidate, _onsets.BassCandidateTime);
+        if (InstrumentsEnabled) _inst.EndHop(tHop, _onsets.PercussiveKick, _onsets.KickTime, _onsets.BassCandidate, _onsets.BassCandidateTime);
 
         // 楽器の AI（テンポの追跡を使わないときも。0.48 秒ごとに、別のスレッドに頼むだけ）
         Tagger?.Tick(tHop, open && activity >= OnsetDetector.MinActivity);

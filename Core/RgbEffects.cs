@@ -173,7 +173,7 @@ public static class MusicStyles
 {
     /// <summary>ビートのたびに次の色へ切り替わり、ぱっと光って消えていく</summary>
     public const string BeatHue = "BeatHue";
-    /// <summary>低音に合わせて脈打ち、ふわっと長く残光が残る。色はビートでは変わらず、ゆっくり移り変わる</summary>
+    /// <summary>拍に合わせて脈打ち、ふわっと長く残光が残る。色はビートでは変わらず、ゆっくり移り変わる</summary>
     public const string Pulse = "Pulse";
     /// <summary>低音・中音・高音の強さで色が混ざる（濁らないよう色相で混ぜる）</summary>
     public const string Mix = "Mix";

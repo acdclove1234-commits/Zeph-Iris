@@ -23,7 +23,7 @@ Changes from anyone else come in as pull requests and are reviewed before they a
 
 ## Privacy
 
-See the [privacy policy](PRIVACY.md). In short: no account, no telemetry. The app only contacts GitHub (update check) and Wikimedia Commons (device photos) on its own, and both can be turned off. Other network features (phone notifications, phone remote, AI advice, OpenRGB) do nothing until you set them up. The installer shows this before installing.
+See the [privacy policy](PRIVACY.md). In short: no account, no telemetry. The app only contacts GitHub (update check) on its own, and that can be turned off. Other network features (phone notifications, phone remote, AI advice, OpenRGB) do nothing until you set them up. The installer shows this before installing.
 
 ## Reporting a problem with a signed file
 
@@ -54,7 +54,7 @@ If you think a signed Zeph-Iris file is malicious or was not built from this rep
 
 ## プライバシー
 
-[プライバシーポリシー](PRIVACY.md) をご覧ください。アカウントもテレメトリーもありません。アプリが自分から通信するのは GitHub（新しい版の確認）と Wikimedia Commons（デバイスの写真）だけで、どちらも止められます。インストーラーは、入れる前にこのことを表示します。
+[プライバシーポリシー](PRIVACY.md) をご覧ください。アカウントもテレメトリーもありません。アプリが自分から通信するのは GitHub（新しい版の確認）だけで、止められます。インストーラーは、入れる前にこのことを表示します。
 
 ## 署名されたファイルに問題があると思ったら
 

@@ -31,8 +31,16 @@ namespace ProFanController;
 /// ほかのパレットなら、層ごとに RoleEffect.OffsetOf の位置の色を使う（楽器の AI の場面の色も使える）。
 /// 楽器の AI の場面（ResolvedMusic.SceneColors がオンのときの c.Scene）で、層の重み（Pattern）を MusicScene.FadeSec かけて切り替える
 /// （歌の部分はなめらか、ソロは動きを大きく）。ドラムの重み（Wk・Ws・Wh）は 1 を超えない（点滅の量は場面で変わらない）。
-/// 小さいゾーン（6 個未満）は場所を使う層を使わない。更新の遅いデバイスは一瞬の光も動きも見せず、明るさをゆっくり変える
-/// （色もビートでは進めず、パレットの決まった位置の色）。
+/// 小さいゾーン（6 個未満）は場所を使う層を使わない。
+/// 更新の遅いデバイス（メモリ・直接書き込むグラボ・OpenRGB を通すグラボ。1 秒に 4〜10 回しか送れない）は、一瞬の光も場所の動きも見せられないので、
+/// ゾーン全体を 1 色で、次のように光らせる（UpdateSlow）:
+///   明るさを変えてよいデバイス: 下地 0.42 + 0.22·Section + 0.12·歌 + 0.08·ギター鍵盤 + 0.06·パッド·呼吸（0.78 まで。上がる 0.6 秒・下がる 1.5 秒）に、
+///     拍のふくらみ（SwellAmp。τ SwellTauSec で戻る。SwellGapSec 以上あける = 1 秒に 2.4 回まで）を足す。拍は、テンポをつかんでいれば予測した拍、
+///     つかんでいなければキック・スネア（ドラムがなければ強い立ち上がり）。ふくらみのコマは定期便を待たずに送る（c.SendNow）
+///   明るさを変えないグラボ（c.FixedBrightness）: 拍で白へ AccentWhite 寄せて AccentWhiteSec 保ち、一度に戻す（戻すコマは差が小さくても送る）
+///   色: 単色（選んだ色だけ）は選んだ色のまま（明るさだけ）。ほかは、目立つ楽器（歌・パッド・ギター鍵盤・金管・ベース・ドラム）の色
+///     （RoleEffect.OffsetOf の位置。ビートでは進めない）。別の楽器が DomRatio 倍 + DomMargin より大きい状態が DomHoldSec 続いたら替え、
+///     DomFadeSec かけて移る（明るさを変えないグラボは、次の拍で一度に替える）。
 /// 「AI で楽器を聞き分ける」がオフなら場面はいつもなし（リズムの重み）。毎コマの処理では new しない
 /// </summary>
 public sealed class EnsembleEffect : IMusicEffect
@@ -74,8 +82,23 @@ public sealed class EnsembleEffect : IMusicEffect
     public const float FlowHalfWidth = 0.18f;
     /// <summary>パッドの呼吸の周期: 拍が分かれば 8 拍（MinBreathSec〜MaxBreathSec に収める）、分からなければ BreathSec。周期の変化をならす秒数</summary>
     public const double BreathBeats = 8, MinBreathSec = 3, MaxBreathSec = 6, BreathSec = 4, BreathFollowSec = 2;
-    /// <summary>更新の遅いデバイス: 明るさの追従（秒）</summary>
-    public const double SlowUpSec = 0.5, SlowDownSec = 1.2;
+    /// <summary>更新の遅いデバイス: 下地の明るさ（いちばん下・盛り上がり・歌・ギター鍵盤・パッドの呼吸の分）と上限、追従（秒。上がる・下がる）</summary>
+    public const float SlowBase = 0.42f, SlowSectionShare = 0.22f, SlowVocalShare = 0.12f, SlowHarmShare = 0.08f, SlowPadShare = 0.06f, SlowBaseMax = 0.78f;
+    public const double SlowUpSec = 0.6, SlowDownSec = 1.5;
+    /// <summary>更新の遅いデバイス: 拍のふくらみの大きさ・戻る時定数（秒）・次のふくらみまで最低あける秒数</summary>
+    public const float SwellAmp = 0.20f;
+    public const double SwellTauSec = 0.35, SwellGapSec = 0.42;
+    /// <summary>テンポをつかんでいないとき: ドラムが AccentNoDrumSec 秒なければ、強さ AccentOnsetMin 以上の立ち上がりも拍の代わりにする</summary>
+    public const float AccentOnsetMin = 1.5f;
+    public const double AccentNoDrumSec = 1.5;
+    /// <summary>目立つ楽器の色を替える条件（DomRatio 倍 + DomMargin より大きい状態が DomHoldSec 続く）と、移る秒数。金管の色は白へ DomBrassWhite 寄せる</summary>
+    public const float DomRatio = 1.25f, DomMargin = 0.02f, DomBrassWhite = 0.2f;
+    public const double DomHoldSec = 2.0, DomFadeSec = 1.5;
+    /// <summary>目立つ楽器の比べ方: ベース・ドラムは少し割り引く（ほとんどの曲で鳴り続けるので、ほかの楽器が目立つときはそちらの色にする）</summary>
+    public const float DomBassShare = 0.8f, DomDrumShare = 0.7f;
+    /// <summary>明るさを変えないグラボ: 拍で白へ寄せる量と、保つ秒数</summary>
+    public const float AccentWhite = 0.22f;
+    public const double AccentWhiteSec = 0.18;
 
     /// <summary>
     /// 場面ごとの層の重み。Wk・Ws・Wh はドラム（1 を超えない）、Speed は流れる光の速さの倍率、Width はかたまりの幅の倍率、
@@ -130,7 +153,7 @@ public sealed class EnsembleEffect : IMusicEffect
     private float _strumSlow, _riseMean, _candS, _strumS, _strumHold, _strumPres;
     private double _candT = double.NaN, _lastCandT = double.NegativeInfinity, _strumT = double.NegativeInfinity, _strumHoldT = double.NegativeInfinity;
     // なめらかにした楽器の大きさ
-    private float _active, _vocal, _pad, _bass, _harm, _brass, _slowI, _slowBrass, _slowVocal, _slowPad, _flowSup;
+    private float _active, _vocal, _pad, _bass, _harm, _brass, _slowI, _flowSup;
     private double _flow, _breath, _breathSec = BreathSec;
     // まだ粒にしていないハイハット（HatWaitSec 待つ）
     private readonly double[] _hatT = new double[8], _hatSeen = new double[8];
@@ -140,6 +163,18 @@ public sealed class EnsembleEffect : IMusicEffect
     private double[] _pT0 = Array.Empty<double>();
     private float[] _pAmp = Array.Empty<float>();
     private LinColor[] _pCol = Array.Empty<LinColor>();
+    // 更新の遅いデバイス: 拍のふくらみ・目立つ楽器の色
+    private double _accT = double.NegativeInfinity, _slowDrumT = double.NegativeInfinity;
+    private float _accA, _slowDrums;
+    private bool _whiteOn;
+    private int _dom = -1, _domCand = -1;
+    private double _domCandT, _domFadeT = double.NegativeInfinity;
+    private Lab _domFrom, _slowLab;
+    private readonly float[] _domLevel = new float[DomCount];
+    /// <summary>目立つ楽器の色の位置: 0 歌、1 パッド、2 ギター・鍵盤、3 金管（歌の位置を白へ寄せる）、4 ベース、5 ドラム</summary>
+    private static readonly double[] DomOffsets = { RoleEffect.OffsetOf(MusicRole.Vocal), RoleEffect.OffsetOf(MusicRole.Pad), RoleEffect.OffsetOf(MusicRole.Harmony),
+        RoleEffect.OffsetOf(MusicRole.Vocal), RoleEffect.OffsetOf(MusicRole.BassLine), RoleEffect.OffsetOf(MusicRole.Kick) };
+    private const int DomCount = 6, DomBrass = 3;
 
     // ---- コマごとに Update が決めて、Render が使う値
     private Pattern _w = Patterns[0];
@@ -166,6 +201,9 @@ public sealed class EnsembleEffect : IMusicEffect
     /// <summary>キックとスネアで共有する点滅の制限（テスト用）</summary>
     public FlashLimiter AreaLimiter => _area;
 
+    /// <summary>更新の遅いデバイス: 最後の拍のふくらみの時刻・いまの目立つ楽器（0 歌〜5 ドラム。まだなければ −1）・下地の明るさ（テスト用）</summary>
+    public (double AccentT, int Dominant, float Base) SlowState => (_accT, _dom, _slowI);
+
     public void Reset(EffectContext c)
     {
         _area.Reset();
@@ -184,9 +222,15 @@ public sealed class EnsembleEffect : IMusicEffect
         _strumSlow = _riseMean = _candS = _strumS = _strumHold = _strumPres = 0;
         _candT = double.NaN;
         _lastCandT = _strumT = _strumHoldT = double.NegativeInfinity;
-        _active = _vocal = _pad = _bass = _harm = _brass = _slowI = _slowBrass = _slowVocal = _slowPad = _flowSup = 0;
+        _active = _vocal = _pad = _bass = _harm = _brass = _slowI = _flowSup = 0;
         _flow = _breath = 0;
         _breathSec = BreathSec;
+        _accT = _slowDrumT = double.NegativeInfinity;
+        _accA = _slowDrums = 0;
+        _whiteOn = false;
+        _dom = _domCand = -1;
+        _domCandT = 0;
+        _domFadeT = double.NegativeInfinity;
         int n = c.LedCount;
         if (_pT0.Length != n)
         {
@@ -248,16 +292,7 @@ public sealed class EnsembleEffect : IMusicEffect
 
         if (SlowMode(c))
         {
-            // 更新の遅いデバイス: 一瞬の光も動きもなく、明るさをゆっくり変える
-            _harm = EffectContext.Follow(_harm, Span01(f.GuitarKeys, GuitarFrom, GuitarSpan), dt, HarmUpSec, HarmDownSec);
-            float target = body + _active * (0.25f * c.Section + 0.2f * w.Wbass * _bass + 0.15f * w.Wf * _harm);
-            _slowI = EffectContext.Follow(_slowI, Math.Clamp(target, 0, 1), dt, SlowUpSec, SlowDownSec);
-            _slowBrass = EffectContext.Follow(_slowBrass, _brass, dt, SlowUpSec, SlowDownSec);
-            _body = _slowI;
-            _kickA = _snareA = _bassA = _flowA = _waveA = _lift = 0;
-            _slowVocal = EffectContext.Follow(_slowVocal, _vocal, dt, SlowUpSec, SlowDownSec);
-            _slowPad = EffectContext.Follow(_slowPad, _pad, dt, SlowUpSec, SlowDownSec);
-            Colors(c, BrassWhite * w.Wbra * _slowBrass, _slowVocal, _slowPad, steps: false);
+            UpdateSlow(c, breath);
             _prevBassOnset = f.BassOnset;
             return;
         }
@@ -368,11 +403,126 @@ public sealed class EnsembleEffect : IMusicEffect
     }
 
     /// <summary>
+    /// 更新の遅いデバイス（ゾーン全体を 1 色）: 下地の明るさ + 拍のふくらみ（明るさを変えないグラボは白へ寄せる）と、目立つ楽器の色。
+    /// 結果は _body（明るさ）と _col[CBody]（色）
+    /// </summary>
+    private void UpdateSlow(EffectContext c, float breath)
+    {
+        var f = c.Frame;
+        float dt = c.Dt;
+        var ev = c.Events;
+        _harm = EffectContext.Follow(_harm, Span01(f.GuitarKeys, GuitarFrom, GuitarSpan), dt, HarmUpSec, HarmDownSec);
+        _kickA = _snareA = _bassA = _flowA = _waveA = _lift = 0;
+
+        // 拍: テンポをつかんでいれば予測した拍、つかんでいなければキック・スネア（ドラムがなければ強い立ち上がり）
+        bool locked = c.Locked;
+        double accT = double.NaN;
+        float accS = 0;
+        if (locked && c.BeatCrossed) { accT = c.BeatCrossT; accS = 1f; }
+        for (int i = 0; i < ev.Count; i++)
+        {
+            var e = ev[i];
+            bool kick = e.Kind == AudioEventKind.Kick;
+            // スネアは、ドラムの曲の中のものだけ（速いデバイスと同じ。歌・ギターの出だしを取り違えた出来事では光らせない）
+            bool snare = e.Kind == AudioEventKind.Snare && e.T - _kickT < DrumContextSec && DrumConfidence(c, e.T) >= 0.05f;
+            if (kick || snare) _slowDrumT = Math.Max(_slowDrumT, e.T);
+            if (locked) continue;
+            bool use = kick || snare || (e.Kind == AudioEventKind.Onset && e.Strength >= AccentOnsetMin && e.T - _slowDrumT > AccentNoDrumSec);
+            if (use && (double.IsNaN(accT) || e.T < accT))
+            {
+                accT = e.T;
+                accS = Math.Clamp(0.6f + 0.25f * (e.Strength - 1), 0.6f, 1f) * (snare ? 0.8f : 1f);
+            }
+        }
+        bool accent = false;
+        if (!double.IsNaN(accT) && (accT - _accT >= SwellGapSec || accT < _accT - 1) && _active > 0.5f)
+        {
+            _accT = accT;
+            _accA = accS;
+            accent = true;
+            // ふくらみ（白へ寄せた色）は、次の定期便を待たずに送る。明るさを変えないグラボは、差が小さくても送る
+            c.SendNow = true;
+            if (c.FixedBrightness) c.SendEvenIfSmall = true;
+        }
+        _slowDrums = EffectContext.Follow(_slowDrums, c.T - _slowDrumT < AccentNoDrumSec ? 1f : 0f, dt, 0.3, 1.5);
+        float env = double.IsFinite(_accT) ? _accA * (float)Math.Exp(-Math.Max(0, c.T - _accT) / SwellTauSec) : 0f;
+
+        // 下地の明るさ（盛り上がり・歌・ギター鍵盤・パッドの呼吸）と、拍のふくらみ
+        float target = _active * (SlowBase + SlowSectionShare * c.Section + SlowVocalShare * _vocal + SlowHarmShare * _harm + SlowPadShare * _pad * breath);
+        _slowI = EffectContext.Follow(_slowI, Math.Clamp(target, 0, SlowBaseMax), dt, SlowUpSec, SlowDownSec);
+        _body = Math.Clamp(_slowI + SwellAmp * env * _active, 0, 1);
+
+        // 色: 単色は選んだ色のまま。ほかは目立つ楽器の色
+        Lab lab;
+        if (_mono) lab = c.PalLabAt(0);
+        else
+        {
+            _domLevel[0] = _vocal;
+            _domLevel[1] = _pad;
+            _domLevel[2] = _harm;
+            _domLevel[DomBrass] = _brass;
+            _domLevel[4] = DomBassShare * _bass;
+            _domLevel[5] = DomDrumShare * _slowDrums;
+            int best = 0;
+            for (int k = 1; k < DomCount; k++) if (_domLevel[k] > _domLevel[best]) best = k;
+            if (_dom < 0) { _dom = best; _domFadeT = double.NegativeInfinity; }
+            else if (best != _dom && _domLevel[best] > DomRatio * _domLevel[_dom] + DomMargin)
+            {
+                if (best != _domCand) { _domCand = best; _domCandT = c.T; }
+                else if (c.T - _domCandT >= DomHoldSec && (!c.FixedBrightness || accent))
+                {
+                    _domFrom = _slowLab;
+                    _dom = best;
+                    _domCand = -1;
+                    // 明るさを変えないグラボは、拍のコマで一度に替える（途中の色を何度も書かない）
+                    _domFadeT = c.FixedBrightness ? double.NegativeInfinity : c.T;
+                }
+            }
+            else _domCand = -1;
+            lab = DomLab(c, _dom);
+            if (double.IsFinite(_domFadeT))
+            {
+                float u = (float)Math.Clamp((c.T - _domFadeT) / DomFadeSec, 0, 1);
+                if (u >= 1 || c.T < _domFadeT) _domFadeT = double.NegativeInfinity;
+                else lab = Lab.Lerp(_domFrom, lab, EffectContext.Smoothstep(u));
+            }
+        }
+        _slowLab = lab;
+
+        if (c.FixedBrightness)
+        {
+            // 明るさを変えないグラボ: 拍で白へ寄せ、AccentWhiteSec たったら一度に戻す（戻すコマは、差が小さくても送る）
+            bool hold = c.T - _accT < AccentWhiteSec && c.T >= _accT && _active > 0.5f;
+            if (hold)
+            {
+                lab = Lab.Lerp(lab, Lab.White, AccentWhite * _accA);
+                _whiteOn = true;
+            }
+            else if (_whiteOn)
+            {
+                _whiteOn = false;
+                c.SendEvenIfSmall = true;
+            }
+            _body = 1f;
+        }
+        var col = OkLab.ToLed(lab, c.Gamma);
+        _col[CBody] = col;
+        _colMax[CBody] = col.MaxChannel;
+    }
+
+    /// <summary>目立つ楽器 k の色（パレットの決まった位置。金管は白へ少し寄せる）</summary>
+    private static Lab DomLab(EffectContext c, int k)
+    {
+        var lab = c.PalLabAt(DomOffsets[Math.Clamp(k, 0, DomCount - 1)]);
+        return k == DomBrass ? Lab.Lerp(lab, Lab.White, DomBrassWhite) : lab;
+    }
+
+    /// <summary>
     /// 層ごとの色（単色なら全部選んだ色）。金管で白へ寄せる（同じ色合いのまま鮮やかさだけ下がる）。
     /// 下地の色は、キックの色・歌の色・パッドの色を、歌とパッドの大きさ（v・p）で光の量のまま混ぜる
     /// （パレットの位置を動かすと、歌が入るたびに虹の色を順に通ってしまうので、位置は動かさない）
     /// </summary>
-    private void Colors(EffectContext c, float white, float v, float p, bool steps = true)
+    private void Colors(EffectContext c, float white, float v, float p)
     {
         if (_mono)
         {
@@ -396,9 +546,8 @@ public sealed class EnsembleEffect : IMusicEffect
 
         void Set(int k, double off, float wh)
         {
-            // 更新の遅いデバイスは、ビートで進む色を使わない（パレットの決まった位置。色の切り替えのたびに明るさが上下しないように）
-            var lab = steps ? c.ColorLabAt(off) : c.PalLabAt(off);
-            var col = wh > 1e-4f ? OkLab.ToLed(Lab.Lerp(lab, Lab.White, wh), c.Gamma) : steps ? c.ColorAt(off) : c.PalAt(off);
+            var lab = c.ColorLabAt(off);
+            var col = wh > 1e-4f ? OkLab.ToLed(Lab.Lerp(lab, Lab.White, wh), c.Gamma) : c.ColorAt(off);
             _col[k] = col;
             _colMax[k] = col.MaxChannel;
         }

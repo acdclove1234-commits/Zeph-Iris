@@ -205,9 +205,16 @@ public static class MusicFlickerTests
             var modes = reduce ? MusicStyles.All.ToArray() : MusicStyles.All.Where(m => m != MusicStyles.Strobe).ToArray();
             var off = reduce ? Scores() : Scores("intense", modes, null, _ => WithIntensity(Intensities.Intense, false));
             var on = Scores($"scenes-{intensity}", modes, null, _ => WithIntensity(intensity, reduce) with { SceneColors = true }, scenes: cycle);
+            // 流れる波（Scroll）の「場面なし」は、拍の前から色を切り替え始める（BeatDriver.PreFade）ようにしてから、拍に合う割合が
+            // 38% → 66% に上がった（色が拍の頭で新しい色になるので、輝度の山が拍にそろう）。場面ありは 6.15.8 と同じ 39% のまま。
+            // このテストは「場面の色で悪くならない」を見るので、Scroll は色の切り替えの時刻を 6.15.8 と同じにした「場面なし」と比べる
+            Dictionary<string, ModeScore> offOld;
+            BeatDriver.PreFade = false;
+            try { offOld = Scores($"{offKey}-noprefade", new[] { MusicStyles.Scroll }, null, reduce ? null : _ => WithIntensity(Intensities.Intense, false)); }
+            finally { BeatDriver.PreFade = true; }
             foreach (var s in on.Values)
             {
-                var o = off[s.Mode];
+                var o = s.Mode == MusicStyles.Scroll ? offOld[s.Mode] : off[s.Mode];
                 T.Info($"scenes {intensity,-8} " + Format(s));
                 if (s.Mode == MusicStyles.Strobe)
                     T.Check(s.Toggle < MaxToggle && s.Blink < MaxBlink, $"scenes {intensity} Strobe: no dithering flicker between flashes (toggles {s.Toggle:F2}/s, blinks {s.Blink:F2}/s)");

@@ -89,6 +89,8 @@ public sealed class EffectContext
     /// </summary>
     public readonly double[] LoudT = new double[MaxWindowSamples];
     public readonly float[] LoudV = new float[MaxWindowSamples];
+    /// <summary>LoudT と同じ時刻の、低音・中音・高音の強さ（BassE・MidE・TrebleE）。エナジーの帯の長さを、決まった時刻ごとに追いかけるのに使う</summary>
+    public readonly float[] BassV = new float[MaxWindowSamples], MidV = new float[MaxWindowSamples], TrebleV = new float[MaxWindowSamples];
     public int LoudCount;
     /// <summary>LoudT・LoudV に入れられる数の上限</summary>
     public const int MaxWindowSamples = 160;
@@ -117,6 +119,17 @@ public sealed class EffectContext
     /// 楽器ごとの役割は、このデバイスでは一瞬の光を見せられないので、曲の部分ごとの目立つ楽器の色だけにする（RoleEffect）
     /// </summary>
     public bool SlowDevice;
+    /// <summary>
+    /// 明るさを変えないデバイス（OpenRGB を通すグラボ。いつも同じ明るさ）。光り方は、明るさの代わりに色（白へ寄せるなど）で音を見せる
+    /// </summary>
+    public bool FixedBrightness;
+    /// <summary>光り方が「このコマは定期便を待たずに早めに送ってほしい」とき true にする（遅いデバイスの拍のふくらみなど。毎コマ false に戻る）</summary>
+    public bool SendNow;
+    /// <summary>
+    /// 光り方が「このコマの色は、変化が小さくても送ってほしい」とき true にする（グラボの小さな変化は送らないしきい値より小さくても。
+    /// 白へ寄せた色から戻すときなど。毎コマ false に戻る）
+    /// </summary>
+    public bool SendEvenIfSmall;
     /// <summary>色をクロスフェードせず一度に切り替える（途中の色を送るとちかちかするデバイス用）</summary>
     public bool NoFade;
     /// <summary>流れる速さの倍率（ResolvedMusic.Speed）</summary>
@@ -294,27 +307,52 @@ public sealed class SharedColor
 
     /// <summary>パレットの位置</summary>
     public double Target;
-    /// <summary>最後に色を進めたビートの時刻</summary>
+    /// <summary>最後に色を進めたビートの時刻（拍の前に切り替え始めたときは、切り替え始めた時刻）</summary>
     public double LastStepT = double.NegativeInfinity;
+    /// <summary>拍の前に切り替え始めたときの、切り替え終わる時刻（拍の頭）。ふつうに進めたときは NaN</summary>
+    public double FadeEndT = double.NaN;
+    /// <summary>
+    /// 最後に色を進めたビートの時刻（拍の前に切り替え始めたときも、拍の頭）。同じビートかどうかはこれで比べる
+    /// （切り替え始めた時刻で比べると、拍の前から切り替えるデバイスと、拍の頭で一度に切り替えるデバイス・切り替え始めが違うデバイスが
+    /// 並んだとき、同じ拍で 2 回進めてしまう）
+    /// </summary>
+    public double LastBeatT = double.NegativeInfinity;
 
-    /// <summary>時刻 t のビートで色を delta 進める（ほかのデバイスがこのビートですでに進めていれば何もしない）</summary>
-    public void Step(double t, double delta)
+    /// <summary>同じビートかを拍の頭（LastBeatT）で比べる（調べる用。false で 6.15.8 と同じく切り替え始めた時刻で比べる。アプリの中では変えない）</summary>
+    internal static bool KeyOnBeat { get; set; } = true;
+
+    /// <summary>
+    /// 時刻 t のビートで色を delta 進める（ほかのデバイスがこのビートですでに進めていれば何もしない）。
+    /// endT = 拍の前に切り替え始めるときの、切り替え終わる時刻（拍の頭。ふつうは NaN）。
+    /// sameSec = 同じビートとみなす時間（拍で進めるときは半拍。SameStepSec より短くはしない）
+    /// </summary>
+    public void Step(double t, double delta, double endT = double.NaN, double sameSec = SameStepSec)
     {
-        if (Math.Abs(t - LastStepT) < SameStepSec) return;
+        double beatT = double.IsNaN(endT) || !KeyOnBeat ? t : endT;
+        if (Math.Abs(beatT - LastBeatT) < Math.Max(sameSec, SameStepSec)) return;
         Target += delta;
         if (Target > 1000) Target -= 1000;
         LastStepT = t;
+        LastBeatT = beatT;
+        FadeEndT = endT;
     }
 }
 
 public sealed class ColorFade
 {
-    // 表示中の色 = lerp( lerp(P(A), P(B), Uab), P(C), smoothstep((t − TSwitch)/Dur) )
-    // ふつうは A = B（Uab = 0）。クロスフェードの途中で次の切り替えが来たときだけ、途中の色を A・B・Uab で表す
-    private double _a, _b, _c;
-    private float _uab;
+    // 表示中の色 = lerp( From, P(C), smoothstep((t − TSwitch)/Dur) )、From = Σ w_k × P(x_k)（OKLab で混ぜる。Σ w_k = 1）
+    // ふつうは From = P(前の色) の 1 つだけ。クロスフェードの途中で次の切り替えが来たときは、そのときの色そのもの
+    // （From と前の向かう色を、そのときの割合で混ぜたもの）を From にする（途中の色から始めるので、色が飛ばない）
+    /// <summary>From に覚える色の数の上限（超えたら、いちばん小さい重みの色を、パレットの位置がいちばん近い色に足す）</summary>
+    public const int MaxFrom = 12;
+    private readonly double[] _fx = new double[MaxFrom];
+    private readonly float[] _fw = new float[MaxFrom];
+    private int _fn = 1;
+    private double _c;
     private double _tSwitch = double.NegativeInfinity;
     private double _dur;
+
+    public ColorFade() => Reset();
 
     /// <summary>いまの（向かっている）色のパレットの位置</summary>
     public double Target => _c;
@@ -338,8 +376,10 @@ public sealed class ColorFade
     /// <summary>最初の色（位置 x）に戻す。クロスフェードはしない</summary>
     public void Reset(double x = 0)
     {
-        _a = _b = _c = x;
-        _uab = 0;
+        _c = x;
+        _fx[0] = x;
+        _fw[0] = 1;
+        _fn = 1;
         _tSwitch = double.NegativeInfinity;
         _dur = 0;
         Steps = 0;
@@ -351,24 +391,54 @@ public sealed class ColorFade
         float s = Progress(t);
         if (s >= 1 || _dur <= 0)
         {
-            _a = _b = _c;
-            _uab = 0;
+            _fx[0] = _c;
+            _fw[0] = 1;
+            _fn = 1;
         }
         else
         {
-            // 前の切り替えの途中: 途中の色を「前の色の近いほう → いまの向かう色」の s の位置として覚える
-            _a = _uab < 0.5f ? _a : _b;
-            _b = _c;
-            _uab = s;
+            // 前の切り替えの途中: いまの色そのもの（From を 1 − s、前の向かう色を s）を、次の From にする
+            for (int k = 0; k < _fn; k++) _fw[k] *= 1 - s;
+            int same = -1;
+            for (int k = 0; k < _fn; k++) if (Math.Abs(_fx[k] - _c) < 1e-9) same = k;
+            if (same >= 0) _fw[same] += s;
+            else
+            {
+                if (_fn == MaxFrom) MergeSmallest();
+                _fx[_fn] = _c;
+                _fw[_fn] = s;
+                _fn++;
+            }
         }
         _c += delta;
-        if (_c > 1000) { _a -= 1000; _b -= 1000; _c -= 1000; }   // 長時間動かしても小数の精度が落ちないように
+        if (_c > 1000)
+        {
+            // 長時間動かしても小数の精度が落ちないように
+            _c -= 1000;
+            for (int k = 0; k < _fn; k++) _fx[k] -= 1000;
+        }
         _tSwitch = t;
         _dur = Math.Max(0, dur);
         Steps++;
     }
 
+    private void MergeSmallest()
+    {
+        int lo = 0;
+        for (int k = 1; k < _fn; k++) if (_fw[k] < _fw[lo]) lo = k;
+        int hi = lo == 0 ? 1 : 0;
+        for (int k = 0; k < _fn; k++)
+            if (k != lo && Math.Abs(_fx[k] - _fx[lo]) < Math.Abs(_fx[hi] - _fx[lo])) hi = k;
+        _fw[hi] += _fw[lo];
+        _fn--;
+        _fx[lo] = _fx[_fn];
+        _fw[lo] = _fw[_fn];
+    }
+
     private float Progress(double t) => _dur <= 0 ? 1f : EffectContext.Smoothstep((t - _tSwitch) / _dur);
+
+    /// <summary>時刻 t のクロスフェードの進み具合（0〜1。1 = 切り替え終わった）</summary>
+    public float ProgressAt(double t) => Progress(t);
 
     /// <summary>時刻 t の色（光の量）。パレットの位置を off だけずらして引く</summary>
     public LinColor Sample(in PaletteView pal, double off, double t, bool gamma)
@@ -386,8 +456,19 @@ public sealed class ColorFade
         return Lab.Lerp(From(pal, off), pal.LabAt(_c + off), s);
     }
 
-    private Lab From(in PaletteView pal, double off) =>
-        _uab <= 0 ? pal.LabAt(_a + off) : Lab.Lerp(pal.LabAt(_a + off), pal.LabAt(_b + off), _uab);
+    private Lab From(in PaletteView pal, double off)
+    {
+        if (_fn == 1) return pal.LabAt(_fx[0] + off);
+        float l = 0, a = 0, b = 0, w = 0;
+        for (int k = 0; k < _fn; k++)
+        {
+            var p = pal.LabAt(_fx[k] + off);
+            float wk = _fw[k];
+            l += wk * p.L; a += wk * p.A; b += wk * p.B; w += wk;
+        }
+        float iw = w > 1e-9f ? 1f / w : 0f;
+        return new Lab(l * iw, a * iw, b * iw);
+    }
 }
 
 /// <summary>

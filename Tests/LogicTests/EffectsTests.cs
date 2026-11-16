@@ -404,9 +404,10 @@ public static class EffectsTests
         mono.In.Cfg.StaticColor = "#00FF00";
         mono.In.Frame.BassE = 1;
         mono.Step(1);
-        mono.Step(1.02);
+        // 「ビートで色替え」は拍（テンポをつかめないときはキック）でだけ光るので、キックを 1 つ鳴らす
+        mono.Step(1.02, new AudioEvent(1, AudioEventKind.Kick, 1.02, 3f));
         var c = mono.R.LastLight[5];
-        // 明るさ = Ilin(0.6 × 低音) = 0.6^2.2 + F0 ≈ 0.34
+        // 明るさ ≈ Ilin(拍の間の明るさ + キックの光 0.73)
         T.Check(c.G > 0.25f && c.R < 0.05f * c.G && c.B < 0.05f * c.G, $"BeatHue with Mono uses the chosen colour (green) ({c.R:F2},{c.G:F2},{c.B:F2})");
     }
 
@@ -727,6 +728,7 @@ public static class EffectsTests
             int id = 1;
             double nextKick = 1.0;
             var levels = new List<float>();
+            var fls = new List<float>();
             for (double t = 1.0; t < 4.0; t += 1 / 120.0)
             {
                 if (t >= nextKick)
@@ -736,18 +738,30 @@ public static class EffectsTests
                 }
                 else x.Step(t);
                 levels.Add(x.R.LastLight[0].MaxChannel);
+                fls.Add(x.R.Context.Fl);
             }
-            // 明るさが大きく跳ね上がった回数（= 目に見える点滅）
-            int big = 0;
+            // 明るさが大きく跳ね上がった回数（= 目に見える点滅）。ビートの光（BeatDriver の Fl。ほかの光り方が使う）も数える
+            int big = 0, flBig = 0;
             for (int i = 1; i < levels.Count; i++) if (levels[i] - levels[i - 1] > 0.2f) big++;
+            for (int i = 1; i < fls.Count; i++) if (fls[i] - fls[i - 1] > 0.2f) flBig++;
             var lim = x.R.Limiter;
             if (reduce)
             {
                 T.Check(lim.Accepted <= 10 && lim.MinAcceptedGap >= FlashLimiter.MinGapSec - 1e-9,
                     $"FlashLimiter on: ≤ 3 accepted flashes per second (accepted {lim.Accepted} in 3 s, min gap {lim.MinAcceptedGap:F3} s)");
                 T.Check(lim.Rejected > 10 && big <= 10, $"rejected flashes are weakened to 0.35·Fl ({lim.Rejected} rejected, {big} big jumps in 3 s)");
+                // 「ビートで色替え」の明るさは、BeatDriver ではなく BeatFlash の点滅の制限で決まる（そちらも 1 秒に 3 回まで）
+                var bl = (x.R.CurrentEffect as BeatHueEffect)?.Flash?.Limiter;
+                T.Check(bl is not null && bl.Accepted <= 10 && bl.Rejected > 0 && bl.MinAcceptedGap >= FlashLimiter.MinGapSec - 1e-9,
+                    $"BeatHue (BeatFlash): ≤ 3 accepted flashes per second, the rest weakened (accepted {bl?.Accepted}, rejected {bl?.Rejected}, min gap {bl?.MinAcceptedGap:F3} s)");
             }
-            else T.Check(big >= 20, $"FlashLimiter off: every kick flashes ({big} big jumps in 3 s)");
+            else
+            {
+                T.Check(flBig >= 20, $"FlashLimiter off: every kick makes a beat flash Fl ({flBig} big jumps in 3 s)");
+                // 「ビートで色替え」はテンポが分からないとき、キックの光をあける（BeatFlash.Tune.GapSec 秒。ただし色を進める合図のキック
+                // （BeatDriver。0.25 秒以上あける）は必ず光る）。0.125 秒ごとのキックでは 0.25 秒ごと = 3 秒で 12 回（全部の 24 回は光らない）
+                T.Check(big >= 10 && big <= 13, $"FlashLimiter off: BeatHue flashes on the colour-trigger kicks, not on every kick ({big} big jumps in 3 s)");
+            }
         }
     }
 
@@ -918,11 +932,15 @@ public static class EffectsTests
         // 光り方そのものの計算を比べる。立ち上がりの段つきを止める仕上げ（AttackHold）とちらつき止め（LedSteady）は、コマが細かいほど働く
         // （8 fps では 1 コマが保つ時間より長いので何もしない）ので、ここでは外す
         // （AttackHold は TestAttackHold*、LedSteady は LedSteadyTests・MusicFlickerTests で確かめる）
+        // 送る直前の強い点滅の制限（FlashGuard。点滅を抑えるがオンのとき）も同じ仕上げなので外す: 送ったコマで数えた「0.1 秒で +0.2」が
+        // 1 秒に 3 回を超えたときだけ暗くするので、コマの数で数え方が変わる（この合成の曲のミックスでは、ゾーン（10 個）の点滅が 1 秒に 3 回を超え、
+        // 144 fps で平均が 1 割暗くなる）。制限そのものは FlashGuardTests で 30・60・144 fps ごとに確かめる
         double savedHold = AttackHold.HoldSec;
         AttackHold.HoldSec = 0;
         LedSteady.Enabled = false;
+        DeviceRenderer.NoFlashGuard = true;
         try { FrameRateIndependence(); }
-        finally { AttackHold.HoldSec = savedHold; LedSteady.Enabled = true; }
+        finally { AttackHold.HoldSec = savedHold; LedSteady.Enabled = true; DeviceRenderer.NoFlashGuard = false; }
     }
 
     private static void FrameRateIndependence()

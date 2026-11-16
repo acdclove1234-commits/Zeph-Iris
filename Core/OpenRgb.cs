@@ -602,6 +602,33 @@ public static class ReconnectBackoff
 /// </summary>
 public sealed class RgbDeviceChannel
 {
+    /// <summary>
+    /// 合わせる元（速いデバイス）が暗すぎて代表の色がないコマは、最後に合わせた色のまま暗くする（調べる用に、テストから前と比べるために変えられる。アプリの中では変えない）。
+    /// 自分の光り方に切り替えると、そのコマだけ違う色（前の色のまま光った自分の光り方）が送られて、ちかっと光って見えていた
+    /// </summary>
+    internal static bool KeepFollowColor { get; set; } = true;
+    private LinColor? _lastFollow;
+
+    /// <summary>
+    /// 音楽連動で、ほかのデバイスの色に合わせる色を Input に入れる（RgbSync.RenderTick が速いデバイスを描いたあとに呼ぶ）。
+    /// follower = このデバイスを合わせる、haveLeader = 合わせる元を描いた、scene = 合わせる元の代表の色、brightnessPct = 明るさの設定（%）
+    /// </summary>
+    public void SetFollow(bool follower, bool haveLeader, in SceneColor scene, double brightnessPct)
+    {
+        Input.FollowColor = null;
+        if (!follower || !haveLeader)
+        {
+            _lastFollow = null;
+            return;
+        }
+        bool got = scene.TryGet(out var color, out float level);
+        if (got) _lastFollow = color;
+        else if (KeepFollowColor && _lastFollow is LinColor keep) color = keep;
+        else return;
+        Input.FollowColor = color;
+        Input.FollowLevel = level / (float)Math.Max(0.1, Math.Clamp(brightnessPct, 0, 100) / 100);
+    }
+
     /// <summary>全デバイスで共有する色の位置（RgbSync が設定する）</summary>
     public SharedColor? SharedColor { get; set; }
 
@@ -652,6 +679,8 @@ public sealed class RgbDeviceChannel
     private double _seenColorStepT = double.NegativeInfinity;
     private bool _stepPending;
     private double _stepDueT = double.PositiveInfinity;
+    // 拍の前から色を切り替え始めたとき: 拍の頭（切り替え終わる時刻）で、更新の遅いデバイスにすぐ送る（Input.T の時刻）
+    private double _latchDueT = double.PositiveInfinity;
     // ビートの頭をまたいだか（予測が書き換わっても同じビートで 2 回早めに送らない・取りこぼさない）
     private readonly BeatCrossing _beatCrossing = new();
     private double _nextBeatIn = double.PositiveInfinity;
@@ -724,6 +753,12 @@ public sealed class RgbDeviceChannel
     /// アプリが 1 コア近くを使っていた。10 回にしても、ビートの瞬間は「早めに送る」で間に合う（RenderScheduler）
     /// </summary>
     public const double DirectGpuMaxFps = 10;
+
+    /// <summary>
+    /// 調べる用の切り替え（アプリは変えない。既定はオフ）: 直接書き込むグラボも、更新の遅いデバイスと同じく、色の切り替えが終わる拍の頭で送る。
+    /// 録音 7 曲では違いが出なかったので使っていない
+    /// </summary>
+    internal static bool DirectGpuSettledSend { get; set; }
 
     /// <summary>1 秒に送る回数の上限: 設定が 1 以上ならその値、なければ遅いデバイス 8・直接書き込むグラボ 10・ほか 60</summary>
     public static double MaxFpsFor(RgbDevice device, RgbDeviceSettings settings)
@@ -854,11 +889,23 @@ public sealed class RgbDeviceChannel
             if (SharedColor is { } shared && shared.LastStepT != _seenColorStepT)
             {
                 _seenColorStepT = shared.LastStepT;
-                if (Device.IsSlow && !Device.IsFlickerProne) Scheduler.Latch();
+                // 拍の前から切り替え始めた（テンポをつかんでいる）: 切り替え終わる拍の頭まで、あと何秒か（音の時刻で数える）
+                double toEnd = double.IsNaN(shared.FadeEndT) ? 0 : Math.Max(0, shared.FadeEndT - Input.TEval);
+                if ((Device.IsSlow || (Device.DirectGpu && DirectGpuSettledSend)) && !Device.IsFlickerProne)
+                {
+                    // 拍の頭で送る（切り替え始めに送っても、まだ前の色）。直接書き込むグラボも 1 秒に 10 回なので同じにする
+                    if (toEnd > 0) _latchDueT = Input.T + toEnd;
+                    else Scheduler.Latch();
+                }
                 // グラボは小さな色の変化を送らない（しきい値）ので、パレットの隣の色が近いと色替えが届かない。
                 // ビートの色替えを描く光り方なら、色替え（クロスフェード）が終わったところで、差が小さくても 1 回送る
                 // （ムード・ミックスなど色替えを描かない光り方で送ると、わずかな変化を書き込んでちかちかする）
-                if (Device.IsLowWrite && Renderer.DrawsColorSteps) _stepDueT = Input.T + Renderer.ColorStepSettleSec;
+                if (Device.IsLowWrite && Renderer.DrawsColorSteps) _stepDueT = Input.T + Math.Max(Renderer.ColorStepSettleSec, toEnd);
+            }
+            if (Input.T >= _latchDueT)
+            {
+                Scheduler.Latch();
+                _latchDueT = double.PositiveInfinity;
             }
             if (Input.T >= _stepDueT)
             {
@@ -871,6 +918,10 @@ public sealed class RgbDeviceChannel
             // （ちかちかしやすいグラボは、一度の切り替えでも差が 40 以下）を送っていないので、ここで 1 回送る
             // （止まっている間・戻ったあと、色が少しずれたままにならない。同じ色なら送らない）
             if (Device.IsLowWrite && Renderer.IdleRampDone) _stepPending = true;
+            // 光り方が頼んだとき（遅いデバイスの「楽器で光る」の拍のふくらみ・白へ寄せた色から戻すとき）: 定期便を待たずに送る・
+            // 差が小さくても送る（ちかちかしやすいグラボは、臨時の送信をしない）
+            if (Renderer.SendNowRequested && !Device.IsFlickerProne) Scheduler.Latch();
+            if (Renderer.SendEvenIfSmallRequested) _stepPending = true;
             return true;
         }
         catch (Exception ex)
@@ -1667,12 +1718,7 @@ public sealed class RgbSync : IDisposable
             if (pass == 0 ? follower : !follower) continue;
             ch.Input.WhiteTest = whiteTest;
             ch.Input.Scene = musicScene;
-            ch.Input.FollowColor = null;
-            if (follower && haveLeader && scene.TryGet(out var sceneColor, out float sceneLevel))
-            {
-                ch.Input.FollowColor = sceneColor;
-                ch.Input.FollowLevel = sceneLevel / (float)Math.Max(0.1, Math.Clamp(cfg.Brightness, 0, 100) / 100);
-            }
+            ch.SetFollow(follower, haveLeader, scene, cfg.Brightness);
             ch.Prepare(tNow, tick, engine?.Features, engine?.Events, beat, temp, emergency, syncTest);
             if (!ch.Render()) continue;
             if (follow && !follower && !ch.WhiteOnly && !(ch.Input.Device?.HasLightOverride ?? false))   // 白だけのキーボードは色を持たないので、合わせる元にしない（光り方を上書きしたデバイスも、全体の色ではないので合わせる元にしない）

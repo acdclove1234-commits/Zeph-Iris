@@ -1045,7 +1045,6 @@ a4d4ce26	Custom
 975db0d4	Color change on beat
 6f6c9db1	Switches to the next color on every beat, flashes brightly and fades out
 1acb0fe4	Pulse
-50e3646b	Pulses with the bass and leaves a long, soft afterglow. The color does not change on the beat; it shifts slowly
 fac18e83	Mix
 143bf4c6	Colors blend according to the strength of the bass, mids and highs
 d47d8919	VU meter
@@ -1636,25 +1635,12 @@ ab10ab7f	Same colour as device
 bf2c93a8	Same as overall
 c7218a33	Yellow
 cc601a2e	Same colour as overall
-2a367162	Search images in the browser
-0d4f2878	No photo of this model was found on the sites of freely usable photos (Wikimedia Commons and Openverse). Copy an image with "Search images in the browser" and set it with "Paste copied image" (use photos from manufacturers' sites and the like only for yourself).
-02c5893e	Choose a photo (freely usable photos from Wikimedia Commons and Openverse; the author and licence are shown on the card). If none fits, you can also search in the browser and paste.
-e195c30b	When on, devices without a photo are looked up by model on sites of freely usable photos (Wikimedia Commons and Openverse), and only photos that clearly show the same product are used automatically. If none is found, it looks again every 30 days. Only the device names are sent
-6124e108	For devices without a match, use the image button on the card to paste an image you found in your browser
-871f648b	Looking for photos of this model on sites of freely usable photos (Wikimedia Commons and Openverse)…
-6d191ffc	Photo of "{0}"
-6db944ec	Opens an image search for the model. Right-click an image you like → "Copy image", then press "Paste copied image" below
 7c80ba3a	Couldn't paste the image.\n{0}
 09a1ab78	Author and licence of the photo
-a55323f3	Couldn't download the photo. Choose another one or paste an image.
-aeaca01b	Find device photos online automatically
 b0dd9531	There is no image on the clipboard. In your browser, right-click an image, choose "Copy image", then press this again.
 b3cec96e	Choose from a file…
-b45d8636	Downloading the photo…
 d57e0ef7	Photo: {0} ({1})
 e2890741	Unknown author
-e29499f3	Find a photo online…
-ec74b9eb	Couldn't search for photos ({0}). You can also search with "Search images in the browser" and paste.
 ed0f43c5	Paste copied image
 512b961e	Fans
 66441f18	Same as zone
@@ -1996,3 +1982,18 @@ d5a051f9	Speed needed to hold {0:F0}°C: {1:F0}% or less (lower speeds were not 
 0c8c7106	* The lowest speed that holds the target was not measured, so this curve won't be applied even if you press Apply (the current curve stays)
 e2a336cd	The lowest speed that holds the target was not measured, so no curve was applied (the current curve stays).
 90a68504	Below {0:F0}%, the speed barely changes (the fan's own minimum speed).
+97a3aac7	Reacts to: lights up on the beat (on kicks while the tempo isn't found; on the bass when tempo is turned off and on graphics cards and memory). The color changes every 1–4 beats, depending on the intensity
+6d6e85e7	Reacts to: swells on the beat and moves gently with the bass between beats (on kicks while the tempo isn't found; on the bass when tempo is turned off and on graphics cards and memory). The color shifts slowly over time
+3704a505	Reacts to: takes the color of whichever is strongest of the lows, mids and highs
+ba3eca1b	Reacts to: the length follows the volume, and it bounces on kicks and snares
+81cd1e18	Reacts to: lights up with the strength of each pitch, from low to high
+210faf7d	Reacts to: each band grows with the strength of the lows, mids and highs
+a35cc263	Reacts to: the colors of the lows, mids and highs playing right now flow along
+a0098d0d	Reacts to: a ring of light appears on each kick (on the beat once the tempo is found)
+e367d987	Reacts to: kicks, snares and hi-hats each light up in a different way
+4a0ca652	Reacts to: only the sound chosen for each part (zone): lows, mids, highs or an instrument
+3d52d090	Reacts to: each instrument (on graphics cards and memory, it swells on the beat in the color of the instrument that stands out)
+630581a9	Reacts to: a band of light runs in time with the beat (tempo)
+e411765c	Reacts to: changes slowly with the brightness of the sound (low or high pitched) and the volume
+4c402832	Reacts to: the first beat of each bar (strong kicks while the tempo isn't found)
+e532ec45	Pulses with the beat and leaves a long, soft afterglow. The color does not change on the beat; it shifts slowly

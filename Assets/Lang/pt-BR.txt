@@ -1045,7 +1045,6 @@ a4d4ce26	Personalizado
 975db0d4	Troca de cor na batida
 6f6c9db1	A cada batida muda para a próxima cor, acende forte e se apaga
 1acb0fe4	Pulso
-50e3646b	Pulsa com os graves e deixa um brilho residual longo e suave. A cor não muda na batida; vai mudando aos poucos
 fac18e83	Mistura
 143bf4c6	As cores se misturam conforme a força dos graves, médios e agudos
 d47d8919	Medidor de volume
@@ -1636,25 +1635,12 @@ ab10ab7f	Mesma cor do dispositivo
 bf2c93a8	Igual ao geral
 c7218a33	Amarelo
 cc601a2e	Mesma cor do geral
-2a367162	Procurar imagens no navegador
-0d4f2878	Nenhuma foto deste modelo foi encontrada nos sites de fotos de uso livre (Wikimedia Commons e Openverse). Copie uma imagem com "Procurar imagens no navegador" e defina-a com "Colar imagem copiada" (use fotos de sites de fabricantes e afins só para você).
-02c5893e	Escolha uma foto (fotos de uso livre do Wikimedia Commons e do Openverse; o autor e a licença aparecem no cartão). Se nenhuma servir, você também pode procurar no navegador e colar.
-e195c30b	Se ativado, os dispositivos sem foto são procurados pelo modelo em sites de fotos de uso livre (Wikimedia Commons e Openverse), e só as fotos que mostram claramente o mesmo produto são usadas automaticamente. Se nada for encontrado, a busca é repetida a cada 30 dias. Só os nomes dos dispositivos são enviados
-6124e108	Para dispositivos sem resultado, use o botão de imagem do cartão para colar uma imagem que você encontrou no navegador
-871f648b	Procurando fotos deste modelo em sites de fotos de uso livre (Wikimedia Commons e Openverse)…
-6d191ffc	Foto de "{0}"
-6db944ec	Abre uma busca de imagens do modelo. Clique com o botão direito em uma imagem de que gostar → "Copiar imagem" e pressione "Colar imagem copiada" abaixo
 7c80ba3a	Não foi possível colar a imagem.\n{0}
 09a1ab78	Autor e licença da foto
-a55323f3	Não foi possível baixar a foto. Escolha outra ou cole uma imagem.
-aeaca01b	Procurar fotos dos dispositivos na internet automaticamente
 b0dd9531	Não há imagem na área de transferência. No navegador, clique com o botão direito em uma imagem, escolha "Copiar imagem" e pressione de novo.
 b3cec96e	Escolher de um arquivo…
-b45d8636	Baixando a foto…
 d57e0ef7	Foto: {0} ({1})
 e2890741	Autor desconhecido
-e29499f3	Procurar uma foto na internet…
-ec74b9eb	Não foi possível procurar fotos ({0}). Você também pode procurar com "Procurar imagens no navegador" e colar.
 ed0f43c5	Colar imagem copiada
 512b961e	Ventoinhas
 66441f18	Igual à zona
@@ -1996,3 +1982,18 @@ d5a051f9	Rotação necessária para manter {0:F0} °C: {1:F0}% ou menos (rotaç�
 0c8c7106	* A menor rotação que mantém o alvo não foi medida, então esta curva não será aplicada mesmo se você clicar em Aplicar (a curva atual é mantida)
 e2a336cd	A menor rotação que mantém o alvo não foi medida, então nenhuma curva foi aplicada (a curva atual foi mantida).
 90a68504	Abaixo de {0:F0}%, a rotação quase não muda (a rotação mínima da própria ventoinha).
+97a3aac7	Acompanha: acende na batida (no bumbo enquanto o andamento não é captado; nos graves com o andamento desligado e em placas de vídeo e memórias). A cor muda a cada 1–4 batidas, conforme a intensidade
+6d6e85e7	Acompanha: cresce na batida e se move suavemente com os graves entre as batidas (no bumbo enquanto o andamento não é captado; nos graves com o andamento desligado e em placas de vídeo e memórias). A cor muda aos poucos com o tempo
+3704a505	Acompanha: assume a cor do mais forte entre graves, médios e agudos
+ba3eca1b	Acompanha: o comprimento segue o volume e salta com o bumbo e a caixa
+81cd1e18	Acompanha: acende com a força de cada altura do som, dos graves aos agudos
+210faf7d	Acompanha: cada faixa cresce com a força dos graves, médios e agudos
+a35cc263	Acompanha: as cores dos graves, médios e agudos que tocam agora vão fluindo
+a0098d0d	Acompanha: um anel de luz surge a cada bumbo (na batida quando o andamento é captado)
+e367d987	Acompanha: bumbo, caixa e chimbal acendem cada um de um jeito diferente
+4a0ca652	Acompanha: só o som escolhido para cada peça (zona): graves, médios, agudos ou um instrumento
+3d52d090	Acompanha: cada instrumento (em placas de vídeo e memórias, cresce na batida com a cor do instrumento que se destaca)
+630581a9	Acompanha: uma faixa de luz corre no ritmo da batida (andamento)
+e411765c	Acompanha: muda devagar com o brilho do som (grave ou agudo) e o volume
+4c402832	Acompanha: o primeiro tempo de cada compasso (bumbos fortes enquanto o andamento não é captado)
+e532ec45	Pulsa com a batida e deixa um brilho residual longo e suave. A cor não muda na batida; vai mudando aos poucos

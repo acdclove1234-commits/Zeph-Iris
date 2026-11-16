@@ -276,7 +276,7 @@ public sealed class DeviceCardVm : ObservableObject
 
     /// <summary>自分で設定した画像（null ならイラスト）</summary>
     public System.Windows.Media.ImageSource? Image { get => _image; set => Set(ref _image, value); }
-    /// <summary>ネットの写真なら作者とライセンス（空なら出さない）</summary>
+    /// <summary>前の版がネットから取ってきた写真なら作者とライセンス（空なら出さない）</summary>
     public string Credit { get => _credit; set { if (Set(ref _credit, value ?? "")) Raise(nameof(HasCredit)); } }
     public bool HasCredit => _credit.Length > 0;
     private string _credit = "";

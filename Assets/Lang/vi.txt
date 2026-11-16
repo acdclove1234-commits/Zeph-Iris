@@ -1045,7 +1045,6 @@ a4d4ce26	Tùy chỉnh
 975db0d4	Đổi màu theo nhịp
 6f6c9db1	Mỗi nhịp chuyển sang màu kế tiếp, lóe sáng rồi tắt dần
 1acb0fe4	Nhịp đập
-50e3646b	Đập theo âm trầm và để lại vệt sáng mờ kéo dài. Màu không đổi theo nhịp mà chuyển dần chậm rãi
 fac18e83	Pha trộn
 143bf4c6	Màu pha trộn theo độ mạnh của âm trầm, trung và cao
 d47d8919	Đồng hồ âm lượng
@@ -1636,25 +1635,12 @@ ab10ab7f	Cùng màu với thiết bị
 bf2c93a8	Giống toàn bộ
 c7218a33	Vàng
 cc601a2e	Cùng màu với toàn bộ
-2a367162	Tìm ảnh trong trình duyệt
-0d4f2878	Không tìm thấy ảnh của mẫu này trên các trang chia sẻ ảnh dùng tự do (Wikimedia Commons và Openverse). Sao chép ảnh qua "Tìm ảnh trong trình duyệt" và đặt bằng "Dán ảnh đã sao chép" (ảnh từ trang của nhà sản xuất và tương tự chỉ dùng để tự xem).
-02c5893e	Chọn ảnh (ảnh dùng tự do từ Wikimedia Commons và Openverse; tác giả và giấy phép hiển thị trên thẻ). Nếu không có ảnh phù hợp, bạn cũng có thể tìm trong trình duyệt rồi dán.
-e195c30b	Khi bật, thiết bị chưa có ảnh sẽ được tìm theo mẫu trên các trang chia sẻ ảnh dùng tự do (Wikimedia Commons và Openverse), và chỉ những ảnh rõ ràng là cùng sản phẩm mới được dùng tự động. Nếu không tìm thấy, sẽ tìm lại sau mỗi 30 ngày. Chỉ gửi tên thiết bị
-6124e108	Với thiết bị không tìm thấy, dùng nút ảnh trên thẻ để dán ảnh bạn tìm được trong trình duyệt
-871f648b	Đang tìm ảnh của mẫu này trên các trang chia sẻ ảnh dùng tự do (Wikimedia Commons và Openverse)…
-6d191ffc	Ảnh của "{0}"
-6db944ec	Mở tìm kiếm hình ảnh theo mẫu. Nhấp chuột phải vào ảnh bạn thích → "Sao chép hình ảnh", rồi nhấn "Dán ảnh đã sao chép" bên dưới
 7c80ba3a	Không dán được ảnh.\n{0}
 09a1ab78	Tác giả và giấy phép của ảnh
-a55323f3	Không tải được ảnh. Hãy chọn ảnh khác hoặc dán ảnh.
-aeaca01b	Tự động tìm ảnh thiết bị trên mạng
 b0dd9531	Không có ảnh trong bảng tạm. Trong trình duyệt, nhấp chuột phải vào ảnh, chọn "Sao chép hình ảnh" rồi nhấn lại.
 b3cec96e	Chọn từ tệp…
-b45d8636	Đang tải ảnh…
 d57e0ef7	Ảnh: {0} ({1})
 e2890741	Không rõ tác giả
-e29499f3	Tìm ảnh trên mạng…
-ec74b9eb	Không tìm được ảnh ({0}). Bạn cũng có thể tìm qua "Tìm ảnh trong trình duyệt" rồi dán.
 ed0f43c5	Dán ảnh đã sao chép
 512b961e	Số quạt
 66441f18	Giống vùng
@@ -1996,3 +1982,18 @@ d5a051f9	Tốc độ cần để giữ {0:F0}°C: {1:F0}% trở xuống (chưa �
 0c8c7106	* Chưa đo tới tốc độ thấp nhất giữ được mục tiêu, nên dù bấm Áp dụng, đường cong này cũng không được đặt (giữ đường cong hiện tại)
 e2a336cd	Chưa đo tới tốc độ thấp nhất giữ được mục tiêu, nên đã không đặt đường cong (giữ đường cong hiện tại).
 90a68504	Dưới {0:F0}%, tốc độ quay gần như không đổi (tốc độ tối thiểu của chính quạt).
+97a3aac7	Âm thanh để phản ứng: sáng theo nhịp (theo trống kick khi chưa bắt được tempo; theo âm trầm khi không dùng tempo và trên card đồ họa, RAM). Màu đổi sau mỗi 1–4 nhịp tùy cường độ
+6d6e85e7	Âm thanh để phản ứng: phồng lên theo nhịp, giữa các nhịp chuyển động nhẹ theo âm trầm (theo trống kick khi chưa bắt được tempo; theo âm trầm khi không dùng tempo và trên card đồ họa, RAM). Màu chuyển dần chậm rãi theo thời gian
+3704a505	Âm thanh để phản ứng: lấy màu của âm mạnh nhất trong âm trầm, trung và cao
+ba3eca1b	Âm thanh để phản ứng: độ dài thay đổi theo âm lượng, nảy lên theo trống kick và snare
+81cd1e18	Âm thanh để phản ứng: sáng theo độ mạnh của từng cao độ, từ âm trầm đến âm cao
+210faf7d	Âm thanh để phản ứng: mỗi dải dài ra theo độ mạnh của âm trầm, trung và cao
+a35cc263	Âm thanh để phản ứng: màu của âm trầm, trung, cao đang vang chảy dọc theo đèn
+a0098d0d	Âm thanh để phản ứng: mỗi tiếng trống kick (theo nhịp khi đã bắt được tempo) lan ra một vòng sáng
+e367d987	Âm thanh để phản ứng: trống kick, snare và hi-hat mỗi loại sáng theo một cách khác nhau
+4a0ca652	Âm thanh để phản ứng: chỉ âm đã chọn cho từng linh kiện (vùng): âm trầm, trung, cao hoặc nhạc cụ
+3d52d090	Âm thanh để phản ứng: theo từng nhạc cụ (trên card đồ họa, RAM thì phồng lên theo nhịp với màu của nhạc cụ nổi bật)
+630581a9	Âm thanh để phản ứng: dải sáng chạy theo nhịp (tempo)
+e411765c	Âm thanh để phản ứng: thay đổi chậm rãi theo độ sáng của âm (trầm hay cao) và âm lượng
+4c402832	Âm thanh để phản ứng: nhịp đầu của mỗi ô nhịp (trống kick mạnh khi chưa bắt được tempo)
+e532ec45	Đập theo nhịp và để lại vệt sáng mờ kéo dài. Màu không đổi theo nhịp mà chuyển dần chậm rãi

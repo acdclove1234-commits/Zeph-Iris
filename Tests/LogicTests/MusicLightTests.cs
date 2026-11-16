@@ -350,13 +350,15 @@ public static class BeatHueLightTests
         // 1 音ずつ光らない（はっきりした山は 1 秒に 2 回まで）・短い間に明るさの向きが戻らない（ちらつかない）ことを見る。
         // （6.15.7 までは山 0.8 回／秒と数えていたが、拍の光の途中の小さなへこみ（ちらつき）で山が 2 つに割れて、低く数えていた。
         //  そのころの短い間の向きの戻りは 4.0 回／秒（12 音）・4.8 回／秒（6 音）。低い 6 音／秒は 1 音ずつが低音として光る）
-        foreach (var (rate, reg, name, maxPeaks, maxQuick) in new[] { (12.0, 1.0, "mid 12/s", 2.0, 0.5), (6.0, 0.25, "low 6/s", 3.0, 1.5) })
+        // 明るさの幅（swing）は、拍の光だけで光るようにしてから（BeatFlash）、拍の頭の光がはっきりした分だけ広い（12 音: 0.25 → 0.32）。
+        // 1 音ずつのちらつきは、山の数と短い間の向きの戻りで見る
+        foreach (var (rate, reg, name, maxPeaks, maxQuick, maxSwing) in new[] { (12.0, 1.0, "mid 12/s", 2.0, 0.5, 0.35), (6.0, 0.25, "low 6/s", 3.0, 1.5, 0.3) })
         {
             var (arp, _) = MusicLight.Arpeggio(rate, 16, reg);
             var la = MusicLight.Run(arp.Buf, arp.Fs, m);
             double quick = la.QuickReversalsPerSec(4, 15.5);
-            T.Check(la.PeaksPerSec(4, 15.5) <= maxPeaks && la.Swing(4, 15.5) <= 0.3 && quick <= maxQuick,
-                $"arpeggio {name}: no flicker ({la.PeaksPerSec(4, 15.5):F1} clear peaks/s ≤ {maxPeaks}, swing {la.Swing(4, 15.5):F2} ≤ 0.30, quick reversals {quick:F2}/s ≤ {maxQuick})");
+            T.Check(la.PeaksPerSec(4, 15.5) <= maxPeaks && la.Swing(4, 15.5) <= maxSwing && quick <= maxQuick,
+                $"arpeggio {name}: no flicker ({la.PeaksPerSec(4, 15.5):F1} clear peaks/s ≤ {maxPeaks}, swing {la.Swing(4, 15.5):F2} ≤ {maxSwing:F2}, quick reversals {quick:F2}/s ≤ {maxQuick})");
         }
     }
 }
@@ -592,8 +594,27 @@ public static class DenseMixLightTests
                 var hs = InstrumentRoleRun.Run(sparse.G.Buf, MusicSounds.Harmony, MusicRoleSets.Band);
                 double fd = DenseMixLight.Measure(dense, hd).Floor, fs = DenseMixLight.Measure(sparse, hs).Floor;
                 double withGuitar = hd.MeanAfter(strums, 0.04, 0.16) - fd, without = hs.MeanAfter(strums, 0.04, 0.16) - fs;
-                T.Check(withGuitar >= 0.06 && without <= 0.03,
-                    $"dense mix ({state}): harmony zone lights after guitar-only strums (+{withGuitar:F2}), not at the same times without guitar (+{without:F2})");
+                // 変更の理由: ギターのない版のこの時刻（8 分のハイハットとベース）では、6.15.8 の既定の「早く出すスネア」が、ハイハットとベースの重なりを
+                // スネアと取り違えて出し、それが和音の候補を打ち消していた（+0.00）。録音した 7 曲で取り違えが多い（スネアが 1 秒あたり 0.84 → 1.19）ので
+                // 既定では早く出すスネアを使わない（OnsetDetector.EventTune.FastSnare）。そのためハイハットの瞬間に和音のゾーンが少し明るくなる（+0.07）。
+                // 既定では、ギターのない版が +0.08 以下で、ギターのある版のほうが明るいことを確かめ、6.15.8 と同じ厳しさ（+0.03 以下）は早く出すスネアをオンにして確かめる
+                T.Check(withGuitar >= 0.06 && without <= 0.08 && withGuitar > without,
+                    $"dense mix ({state}): harmony zone lights after guitar-only strums (+{withGuitar:F2}), less at the same times without guitar (+{without:F2})");
+                bool fsSaved = OnsetDetector.EventTune.FastSnare, epSaved = OnsetDetector.SnareTune.EarlyPositive;
+                try
+                {
+                    OnsetDetector.EventTune.FastSnare = OnsetDetector.SnareTune.EarlyPositive = true;
+                    var hdF = InstrumentRoleRun.Run(dense.G.Buf, MusicSounds.Harmony, MusicRoleSets.Band);
+                    var hsF = InstrumentRoleRun.Run(sparse.G.Buf, MusicSounds.Harmony, MusicRoleSets.Band);
+                    double wF = hdF.MeanAfter(strums, 0.04, 0.16) - DenseMixLight.Measure(dense, hdF).Floor, oF = hsF.MeanAfter(strums, 0.04, 0.16) - DenseMixLight.Measure(sparse, hsF).Floor;
+                    T.Check(wF >= 0.06 && oF <= 0.03,
+                        $"dense mix ({state}, fast snare on): harmony zone lights after guitar-only strums (+{wF:F2}), not at the same times without guitar (+{oF:F2})");
+                }
+                finally
+                {
+                    OnsetDetector.EventTune.FastSnare = fsSaved;
+                    OnsetDetector.SnareTune.EarlyPositive = epSaved;
+                }
                 double md = InstrumentRoleRun.Mean(hd, 8, 23), ms = InstrumentRoleRun.Mean(hs, 8, 23);
                 T.Check(md >= ms + 0.05, $"dense mix ({state}): harmony zone glows while the guitar plays ({md:F2} vs {ms:F2} without guitar)");
             }

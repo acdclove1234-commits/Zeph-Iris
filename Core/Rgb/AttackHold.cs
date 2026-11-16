@@ -11,7 +11,10 @@ namespace ProFanController;
 /// 低音の強さは 10.7 ミリ秒ごとに読むので、ベースの波（50〜60 Hz）と読むタイミングがずれて、値が少しずつ上下する。
 /// そのため 1 回のキックの光が「明るく → 少し暗く → もっと明るく」と段をつけて立ち上がり、ちかちかして見えていた。
 /// 明るくなった直後の小さな下がりだけを止めるので、光り始めの時刻は変わらない。
-/// 半分より下へ一気に暗くなるとき（ストロボ・消灯・光り方の切り替え）は、待たずに暗くする
+/// 半分より下へ一気に暗くなるとき（ストロボ・消灯・光り方の切り替え）は、待たずに暗くする。
+/// 保つ間は、今の色を山の明るさにするのではなく、足りない分を前に出した光の色で足す（LedSteady.Hold。色が変わったときに、
+/// 新しい色が山の明るさで一瞬光らないように）。保ち終わったら、一気に落とさず時定数 ReleaseTauSec で暗くする。
+/// 色が大きく変わったとき（LedSteady.ColorChanged）は保たない（新しい色の音として、混ぜながら暗くするだけ）
 /// </summary>
 public sealed class AttackHold
 {
@@ -19,6 +22,8 @@ public sealed class AttackHold
     public const double DefaultHoldSec = 0.035;
     /// <summary>この割合より下へ一気に暗くなるときは、保たずに暗くする</summary>
     public const float CutRatio = 0.5f;
+    /// <summary>保ち終わってから今の明るさへ下げる時定数（秒）</summary>
+    public const double ReleaseTauSec = 0.03;
 
     /// <summary>保つ時間（秒。0 なら何もしない。調べる用に変えられる）</summary>
     public static double HoldSec { get; set; } = DefaultHoldSec;
@@ -34,10 +39,12 @@ public sealed class AttackHold
 
     private float[] _peak = Array.Empty<float>();
     private float[] _age = Array.Empty<float>();
+    private LinColor[] _out = Array.Empty<LinColor>();
 
     public void Reset()
     {
         Array.Clear(_peak);
+        Array.Clear(_out);
         Array.Fill(_age, float.PositiveInfinity);
     }
 
@@ -50,27 +57,31 @@ public sealed class AttackHold
         {
             _peak = new float[n];
             _age = new float[n];
+            _out = new LinColor[n];
             Array.Fill(_age, float.PositiveInfinity);
         }
+        float release = EffectContext.Decay(dt, ReleaseTauSec);
         for (int i = 0; i < n; i++)
         {
             var c = px[i];
             float x = Math.Max(c.R, Math.Max(c.G, c.B));
             float p = _peak[i];
-            if (x >= p)
+            if (x >= p || x < p * CutRatio || !(x > 1e-6f) || LedSteady.ColorChanged(_out[i], c, x))
             {
                 if (x > p + 1e-4f) _age[i] = 0;   // 明るくなった: ここから数える
+                else if (x < p) _age[i] = float.PositiveInfinity;
                 _peak[i] = x;
+                _out[i] = c;
                 continue;
             }
             _age[i] += dt;
-            if (_age[i] <= hold && x >= p * CutRatio && x > 1e-6f)
-            {
-                px[i] = c * (p / x);   // 色は今のまま、明るさだけ直前の山に保つ
-                continue;
-            }
-            _peak[i] = x;
-            _age[i] = float.PositiveInfinity;
+            // 保つ間は山の明るさのまま、保ち終わったら時定数 ReleaseTauSec で下げる
+            float y = _age[i] <= hold ? p : Math.Max(x, p * release);
+            // 足りない分を前に出した光の色で足す（色が同じなら「今の色を y の明るさで」と同じ）
+            var o = LedSteady.Hold(c, x, _out[i], y);
+            px[i] = _out[i] = o;
+            _peak[i] = Math.Max(x, Math.Min(y, o.MaxChannel));
+            if (y <= x) _age[i] = float.PositiveInfinity;
         }
     }
 }

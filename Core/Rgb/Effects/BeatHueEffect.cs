@@ -14,6 +14,11 @@ namespace ProFanController;
 ///   LED の色 = P(いまの色 + 0.08 × (p − 0.5)) × Ilin(I)   … ゾーンの中で色を少しずらし、のっぺりさせない
 /// パレットに「選んだ色（Mono）」を使えば、選んだ色とその両隣の色で光る。
 /// 遅いデバイス用（slow）では、ビートの光の消え方・色の切り替えを遅くする（BeatDriver が c.Slow を見て行う）
+/// 光り方「ビートで色替え」として使うとき（followBeat。速いデバイス・テンポの設定が Off 以外）は、光るきっかけを拍だけにする:
+///   I = 拍の間 + (1 − 拍の間) × 拍の光（BeatFlash: 拍の頭。テンポをつかめないときはキック）
+///   拍の間 = max(BodyShare × 低音をゆっくり（0.5 秒）追った値, メロディの光（つかめていないときだけ）, 0.7 × BassE（テンポもドラムもないときだけ）)
+///   低音・メロディの立ち上がりでは光り始めない（以前は光の半分以上が 8 分・16 分のベースなど拍の外だった）。
+///   拍の間を暗くしすぎると、ほとんど真っ暗で短く点滅するだけに見えるので、BodyShare は拍の光が目立つ範囲で大きくする（0.35）
 /// </summary>
 public sealed class BeatHueEffect : IMusicEffect
 {
@@ -41,6 +46,14 @@ public sealed class BeatHueEffect : IMusicEffect
         /// </summary>
         internal static float DrumDuck = 0.85f, DrumFullRate = 1.5f;
         internal static double DrumWindowSec = 2.0;
+        /// <summary>
+        /// 拍に乗せる光り方（followBeat）の、拍の間の明るさ（低音をゆっくり追う。立ち上がり BodyUpSec・戻り BodyDownSec 秒）の割合。
+        /// ゆっくり追うので、8 分・16 分のベースで光り始めたようには見えない
+        /// </summary>
+        internal static float BodyShare = 0.35f;
+        internal static double BodyUpSec = 0.5, BodyDownSec = 0.5;
+        /// <summary>ドラムのないところ（BeatFlash.Drumless）で、今までどおり低音でも光らせるようになるまでの時定数（秒）</summary>
+        internal static double DrumlessSec = 0.5;
     }
 
     /// <summary>メロディの光を進める刻み（秒。分析の 1 回 ≈ 10.7 ミリ秒に合わせる）</summary>
@@ -48,21 +61,40 @@ public sealed class BeatHueEffect : IMusicEffect
     /// <summary>1 コマで進める刻みの数の上限（長く止まっていたとき）</summary>
     private const int MelodyMaxSteps = 50;
 
-    private float _i, _mel, _trRef, _midRef;
+    private float _i, _mel, _trRef, _midRef, _body, _drumless;
+    // 拍に乗せる光（followBeat のときだけ）
+    private readonly BeatFlash? _beat;
     private readonly AudioFrame _sample = new();
     // 直近のキック・スネアの時刻（ドラムが鳴っているか）
     private readonly double[] _drumT = new double[32];
     private int _drumHead, _drumCount;
 
-    public BeatHueEffect(bool slow = false) => IsSlow = slow;
+    /// <param name="slow">遅いデバイス用（ビートの光の消え方・色の切り替えを遅くする）</param>
+    /// <param name="followBeat">
+    /// 光り方「ビートで色替え」として使う: 光るのは拍の頭だけ（テンポをつかめないときはキック。BeatFlash）。
+    /// 低音の大きさでは光らせない（拍の間は、低音をゆっくり追う明るさだけ）。テンポを使わない設定（Off）では今までどおり。
+    /// テンポ追従の小さいゾーン用の代わり・遅いデバイス用は false（今までどおり）
+    /// </param>
+    public BeatHueEffect(bool slow = false, bool followBeat = false)
+    {
+        IsSlow = slow;
+        if (followBeat && !slow) _beat = new BeatFlash();
+    }
+
+    /// <summary>拍に乗せる光り方か（テスト用）</summary>
+    public bool FollowsBeat => _beat is not null;
+
+    /// <summary>拍に乗せる光（テスト用。拍に乗せないときは null）</summary>
+    internal BeatFlash? Flash => _beat;
 
     public bool IsSlow { get; }
     public string Name => MusicStyles.BeatHue;
 
     public void Reset(EffectContext c)
     {
-        _i = _mel = _trRef = _midRef = 0;
+        _i = _mel = _trRef = _midRef = _body = _drumless = 0;
         _drumHead = _drumCount = 0;
+        _beat?.Reset();
     }
 
     public void Update(EffectContext c)
@@ -72,6 +104,20 @@ public sealed class BeatHueEffect : IMusicEffect
         // 拍をつかんでいる曲では拍の光が主役、つかめていない静かな曲（ベル・アルペジオ）ではメロディの光が主役。
         // ドラムが鳴っている曲では、テンポをつかめていなくても、キック・スネアの光を主役にする
         float melShare = Tune.MelodyShare * (1 - Tune.MelodyDuck * c.Conf) * (1 - Tune.DrumDuck * DrumPresence(c));
+        if (_beat is { } bf && c.Music.TempoMode != TempoModes.Off)
+        {
+            // 拍に乗せる: 光るのは拍の頭（つかめないときはキック）だけ。拍の間は低音をゆっくり追う明るさ。
+            // メロディの光は、テンポをつかめていないとき（ドラムのない静かな曲）だけ
+            bf.Update(c);
+            _body = EffectContext.Follow(_body, f.BassE, c.Dt, Tune.BodyUpSec, Tune.BodyDownSec);
+            float mel = c.HasTempo && c.Locked ? 0 : melShare * _mel;
+            // 拍の光は、拍の間の明るさの上に足す（拍の間が明るいところでも、拍で必ず明るくなる）
+            // テンポもドラムもないところ（ドラムのない曲など）では、今までどおり低音でも光る（拍もキックもないので）
+            _drumless = EffectContext.Follow(_drumless, bf.Drumless ? 1 : 0, c.Dt, Tune.DrumlessSec, Tune.DrumlessSec);
+            float bed = Math.Max(Math.Max(Tune.BodyShare * _body, mel), _drumless * Tune.BassShare * f.BassE);
+            _i = bed + (1 - bed) * bf.Value;
+            return;
+        }
         // 拍の間の低音（8 分・16 分のベース・キック）は控えめにして、拍の光を目立たせる
         _i = Math.Max(Math.Max(c.Fl, Tune.BassShare * c.OffBeatDuck(Tune.OffBeatDuck) * f.BassE), melShare * _mel);
     }

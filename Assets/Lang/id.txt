@@ -1045,7 +1045,6 @@ a4d4ce26	Kustom
 975db0d4	Ganti warna tiap ketukan
 6f6c9db1	Berganti ke warna berikutnya pada setiap ketukan, menyala terang lalu memudar
 1acb0fe4	Denyut
-50e3646b	Berdenyut mengikuti bass dan meninggalkan cahaya sisa yang panjang dan lembut. Warna tidak berganti mengikuti ketukan, melainkan berubah perlahan
 fac18e83	Campur
 143bf4c6	Warna bercampur menurut kekuatan nada rendah, tengah, dan tinggi
 d47d8919	Meter volume
@@ -1636,25 +1635,12 @@ ab10ab7f	Warna sama dengan perangkat
 bf2c93a8	Sama dengan keseluruhan
 c7218a33	Kuning
 cc601a2e	Warna sama dengan keseluruhan
-2a367162	Cari gambar di browser
-0d4f2878	Tidak ada foto model ini di situs foto yang bebas dipakai (Wikimedia Commons dan Openverse). Salin gambar lewat "Cari gambar di browser" dan atur dengan "Tempel gambar yang disalin" (gunakan foto dari situs produsen dan sejenisnya hanya untuk Anda sendiri).
-02c5893e	Pilih foto (foto bebas pakai dari Wikimedia Commons dan Openverse; pembuat dan lisensi ditampilkan di kartu). Jika tidak ada yang cocok, Anda juga bisa mencari di browser lalu menempel.
-e195c30b	Jika aktif, perangkat tanpa foto dicari berdasarkan model di situs foto yang bebas dipakai (Wikimedia Commons dan Openverse), dan hanya foto yang jelas menunjukkan produk yang sama dipakai secara otomatis. Jika tidak ditemukan, pencarian diulang setiap 30 hari. Yang dikirim hanya nama perangkat
-6124e108	Untuk perangkat tanpa hasil, gunakan tombol gambar di kartu untuk menempelkan gambar yang Anda temukan di browser
-871f648b	Mencari foto model ini di situs foto yang bebas dipakai (Wikimedia Commons dan Openverse)…
-6d191ffc	Foto "{0}"
-6db944ec	Membuka pencarian gambar untuk model ini. Klik kanan gambar yang Anda suka → "Salin gambar", lalu tekan "Tempel gambar yang disalin" di bawah
 7c80ba3a	Gambar tidak dapat ditempel.\n{0}
 09a1ab78	Pembuat dan lisensi foto
-a55323f3	Foto tidak dapat diunduh. Pilih foto lain atau tempel gambar.
-aeaca01b	Cari foto perangkat di internet secara otomatis
 b0dd9531	Tidak ada gambar di papan klip. Di browser, klik kanan gambar, pilih "Salin gambar", lalu tekan lagi.
 b3cec96e	Pilih dari file…
-b45d8636	Mengunduh foto…
 d57e0ef7	Foto: {0} ({1})
 e2890741	Pembuat tidak diketahui
-e29499f3	Cari foto di internet…
-ec74b9eb	Foto tidak dapat dicari ({0}). Anda juga bisa mencari lewat "Cari gambar di browser" lalu menempel.
 ed0f43c5	Tempel gambar yang disalin
 512b961e	Jumlah kipas
 66441f18	Sama dengan zona
@@ -1996,3 +1982,18 @@ d5a051f9	Putaran yang dibutuhkan untuk menjaga {0:F0}°C: {1:F0}% atau kurang (p
 0c8c7106	* Putaran terendah yang menjaga target belum terukur, jadi kurva ini tidak dipasang meski Anda menekan Terapkan (kurva saat ini tetap)
 e2a336cd	Putaran terendah yang menjaga target belum terukur, jadi kurva tidak dipasang (kurva saat ini tetap).
 90a68504	Di bawah {0:F0}%, putaran hampir tidak berubah (putaran minimum kipas itu sendiri).
+97a3aac7	Suara yang diikuti: menyala pada ketukan (pada kick selama tempo belum tertangkap; pada nada rendah jika tempo dimatikan serta pada kartu grafis dan memori). Warna berganti setiap 1–4 ketukan sesuai intensitas
+6d6e85e7	Suara yang diikuti: membesar pada ketukan dan bergerak lembut mengikuti nada rendah di antara ketukan (pada kick selama tempo belum tertangkap; pada nada rendah jika tempo dimatikan serta pada kartu grafis dan memori). Warna berubah perlahan seiring waktu
+3704a505	Suara yang diikuti: mengambil warna yang paling kuat di antara nada rendah, tengah, dan tinggi
+ba3eca1b	Suara yang diikuti: panjangnya mengikuti volume, dan memantul pada kick dan snare
+81cd1e18	Suara yang diikuti: menyala sesuai kekuatan tiap tinggi nada, dari rendah sampai tinggi
+210faf7d	Suara yang diikuti: tiap pita memanjang sesuai kekuatan nada rendah, tengah, dan tinggi
+a35cc263	Suara yang diikuti: warna nada rendah, tengah, dan tinggi yang sedang berbunyi mengalir
+a0098d0d	Suara yang diikuti: cincin cahaya muncul pada setiap kick (pada ketukan setelah tempo tertangkap)
+e367d987	Suara yang diikuti: kick, snare, dan hi-hat masing-masing menyala dengan cara berbeda
+4a0ca652	Suara yang diikuti: hanya suara yang dipilih untuk tiap komponen (zona): nada rendah, tengah, tinggi, atau instrumen
+3d52d090	Suara yang diikuti: per instrumen (pada kartu grafis dan memori, membesar pada ketukan dengan warna instrumen yang paling menonjol)
+630581a9	Suara yang diikuti: pita cahaya berlari mengikuti ketukan (tempo)
+e411765c	Suara yang diikuti: berubah perlahan mengikuti kecerahan suara (nada rendah atau tinggi) dan volume
+4c402832	Suara yang diikuti: ketukan pertama tiap birama (kick kuat selama tempo belum tertangkap)
+e532ec45	Berdenyut mengikuti ketukan dan meninggalkan cahaya sisa yang panjang dan lembut. Warna tidak berganti mengikuti ketukan, melainkan berubah perlahan

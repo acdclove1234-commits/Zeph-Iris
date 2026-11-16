@@ -1045,7 +1045,6 @@ a4d4ce26	Własne
 975db0d4	Zmiana koloru w rytm
 6f6c9db1	Na każde uderzenie przechodzi do następnego koloru, rozbłyskuje i gaśnie
 1acb0fe4	Puls
-50e3646b	Pulsuje z basem i zostawia długą, łagodną poświatę. Kolor nie zmienia się w rytm, tylko powoli przechodzi w kolejny
 fac18e83	Miks
 143bf4c6	Kolory mieszają się według siły basów, średnich i wysokich tonów
 d47d8919	Wskaźnik głośności
@@ -1636,25 +1635,12 @@ ab10ab7f	Ten sam kolor co urządzenie
 bf2c93a8	Jak całość
 c7218a33	Żółty
 cc601a2e	Ten sam kolor co całość
-2a367162	Szukaj obrazów w przeglądarce
-0d4f2878	W serwisach ze zdjęciami do swobodnego użytku (Wikimedia Commons i Openverse) nie znaleziono zdjęcia tego modelu. Skopiuj obraz przez „Szukaj obrazów w przeglądarce” i ustaw go przez „Wklej skopiowany obraz” (zdjęć ze stron producentów i podobnych używaj tylko na własny użytek).
-02c5893e	Wybierz zdjęcie (zdjęcia do swobodnego użytku z Wikimedia Commons i Openverse; autor i licencja są pokazane na karcie). Jeśli żadne nie pasuje, możesz też poszukać w przeglądarce i wkleić.
-e195c30b	Gdy włączone, urządzenia bez zdjęcia są wyszukiwane po modelu w serwisach ze zdjęciami do swobodnego użytku (Wikimedia Commons i Openverse), a automatycznie używane są tylko zdjęcia wyraźnie przedstawiające ten sam produkt. Jeśli nic nie znaleziono, wyszukiwanie jest powtarzane co 30 dni. Wysyłane są tylko nazwy urządzeń
-6124e108	Dla urządzeń bez wyniku użyj przycisku obrazu na karcie, aby wkleić obraz znaleziony w przeglądarce
-871f648b	Szukanie zdjęć tego modelu w serwisach ze zdjęciami do swobodnego użytku (Wikimedia Commons i Openverse)…
-6d191ffc	Zdjęcie „{0}”
-6db944ec	Otwiera wyszukiwanie obrazów dla modelu. Kliknij prawym przyciskiem obraz, który ci się podoba → „Kopiuj obraz”, a potem naciśnij poniżej „Wklej skopiowany obraz”
 7c80ba3a	Nie udało się wkleić obrazu.\n{0}
 09a1ab78	Autor i licencja zdjęcia
-a55323f3	Nie udało się pobrać zdjęcia. Wybierz inne lub wklej obraz.
-aeaca01b	Automatycznie szukaj zdjęć urządzeń w internecie
 b0dd9531	W schowku nie ma obrazu. W przeglądarce kliknij obraz prawym przyciskiem, wybierz „Kopiuj obraz” i naciśnij ponownie.
 b3cec96e	Wybierz z pliku…
-b45d8636	Pobieranie zdjęcia…
 d57e0ef7	Zdjęcie: {0} ({1})
 e2890741	Autor nieznany
-e29499f3	Szukaj zdjęcia w internecie…
-ec74b9eb	Nie udało się wyszukać zdjęć ({0}). Możesz też poszukać przez „Szukaj obrazów w przeglądarce” i wkleić.
 ed0f43c5	Wklej skopiowany obraz
 512b961e	Wentylatory
 66441f18	Jak strefa
@@ -1996,3 +1982,18 @@ d5a051f9	Obroty potrzebne do utrzymania {0:F0}°C: {1:F0}% lub mniej (niższych 
 0c8c7106	* Nie zmierzono najniższych obrotów utrzymujących cel, więc ta krzywa nie zostanie wstawiona nawet po zastosowaniu (pozostaje obecna krzywa)
 e2a336cd	Nie zmierzono najniższych obrotów utrzymujących cel, więc krzywej nie wstawiono (pozostaje obecna krzywa).
 90a68504	Poniżej {0:F0}% obroty prawie się nie zmieniają (własne minimalne obroty wentylatora).
+97a3aac7	Reaguje na: świeci w rytm uderzeń (na stopę, dopóki tempo nie jest uchwycone; na basy przy wyłączonym tempie oraz na kartach graficznych i pamięciach). Kolor zmienia się co 1–4 uderzenia, zależnie od intensywności
+6d6e85e7	Reaguje na: narasta w rytm uderzeń, a między nimi łagodnie porusza się z basami (na stopę, dopóki tempo nie jest uchwycone; na basy przy wyłączonym tempie oraz na kartach graficznych i pamięciach). Kolor powoli zmienia się w czasie
+3704a505	Reaguje na: przyjmuje kolor najsilniejszych z basów, średnich i wysokich tonów
+ba3eca1b	Reaguje na: długość zależy od głośności, a przy stopie i werblu podskakuje
+81cd1e18	Reaguje na: świeci według siły każdej wysokości dźwięku, od niskich do wysokich
+210faf7d	Reaguje na: każde pasmo wydłuża się według siły basów, średnich i wysokich tonów
+a35cc263	Reaguje na: płyną kolory basów, średnich i wysokich tonów, które właśnie brzmią
+a0098d0d	Reaguje na: przy każdym uderzeniu stopy pojawia się pierścień światła (w rytm uderzeń po uchwyceniu tempa)
+e367d987	Reaguje na: stopa, werbel i hi-hat świecą każdy w inny sposób
+4a0ca652	Reaguje na: tylko dźwięk wybrany dla każdej części (strefy): basy, średnie, wysokie lub instrument
+3d52d090	Reaguje na: każdy instrument (na kartach graficznych i pamięciach narasta w rytm uderzeń w kolorze wyróżniającego się instrumentu)
+630581a9	Reaguje na: pasmo światła biegnie w rytm uderzeń (tempa)
+e411765c	Reaguje na: zmienia się powoli według jasności dźwięku (niski czy wysoki) i głośności
+4c402832	Reaguje na: pierwsze uderzenie każdego taktu (mocna stopa, dopóki tempo nie jest uchwycone)
+e532ec45	Pulsuje w rytm uderzeń i zostawia długą, łagodną poświatę. Kolor nie zmienia się w rytm, tylko powoli przechodzi w kolejny

@@ -1045,7 +1045,6 @@ a4d4ce26	Personalizado
 975db0d4	Cambio de color con el ritmo
 6f6c9db1	Cambia al siguiente color en cada golpe, destella y se apaga
 1acb0fe4	Pulso
-50e3646b	Late con los graves y deja un resplandor largo y suave. El color no cambia con el ritmo, sino que va cambiando poco a poco
 fac18e83	Mezcla
 143bf4c6	Los colores se mezclan según la fuerza de graves, medios y agudos
 d47d8919	Vúmetro
@@ -1636,25 +1635,12 @@ ab10ab7f	Mismo color que el dispositivo
 bf2c93a8	Igual que el general
 c7218a33	Amarillo
 cc601a2e	Mismo color que el general
-2a367162	Buscar imágenes en el navegador
-0d4f2878	No se encontró ninguna foto de este modelo en los sitios de fotos de uso libre (Wikimedia Commons y Openverse). Copia una imagen con «Buscar imágenes en el navegador» y ponla con «Pegar imagen copiada» (usa las fotos de sitios de fabricantes y similares solo para ti).
-02c5893e	Elige una foto (fotos de uso libre de Wikimedia Commons y Openverse; el autor y la licencia se muestran en la tarjeta). Si ninguna sirve, también puedes buscar en el navegador y pegar.
-e195c30b	Si está activado, los dispositivos sin foto se buscan por modelo en sitios de fotos de uso libre (Wikimedia Commons y Openverse) y solo se usan automáticamente las fotos que muestran claramente el mismo producto. Si no se encuentra ninguna, se vuelve a buscar cada 30 días. Solo se envían los nombres de los dispositivos
-6124e108	Para los dispositivos sin resultado, usa el botón de imagen de la tarjeta para pegar una imagen que encuentres en el navegador
-871f648b	Buscando fotos de este modelo en sitios de fotos de uso libre (Wikimedia Commons y Openverse)…
-6d191ffc	Foto de «{0}»
-6db944ec	Abre una búsqueda de imágenes del modelo. Haz clic derecho en una imagen que te guste → «Copiar imagen» y pulsa «Pegar imagen copiada» abajo
 7c80ba3a	No se pudo pegar la imagen.\n{0}
 09a1ab78	Autor y licencia de la foto
-a55323f3	No se pudo descargar la foto. Elige otra o pega una imagen.
-aeaca01b	Buscar fotos de dispositivos en internet automáticamente
 b0dd9531	No hay ninguna imagen en el portapapeles. En el navegador, haz clic derecho en una imagen, elige «Copiar imagen» y vuelve a pulsar.
 b3cec96e	Elegir de un archivo…
-b45d8636	Descargando la foto…
 d57e0ef7	Foto: {0} ({1})
 e2890741	Autor desconocido
-e29499f3	Buscar una foto en internet…
-ec74b9eb	No se pudieron buscar fotos ({0}). También puedes buscar con «Buscar imágenes en el navegador» y pegar.
 ed0f43c5	Pegar imagen copiada
 512b961e	Ventiladores
 66441f18	Igual que la zona
@@ -1996,3 +1982,18 @@ d5a051f9	Velocidad necesaria para mantener {0:F0}°C: {1:F0}% o menos (no se mid
 0c8c7106	* No se midió la velocidad más baja que mantiene el objetivo, así que esta curva no se usará aunque apliques el resultado (se mantiene la curva actual)
 e2a336cd	No se midió la velocidad más baja que mantiene el objetivo, así que no se aplicó la curva (se mantiene la actual).
 90a68504	Por debajo del {0:F0}%, la velocidad apenas cambia (la velocidad mínima propia del ventilador).
+97a3aac7	Reacciona a: se ilumina con el pulso (con el bombo mientras no capta el tempo; con los graves si el tempo está desactivado y en tarjetas gráficas y memoria). El color cambia cada 1–4 pulsos según la intensidad
+6d6e85e7	Reacciona a: se expande con el pulso y entre pulsos se mueve suavemente con los graves (con el bombo mientras no capta el tempo; con los graves si el tempo está desactivado y en tarjetas gráficas y memoria). El color cambia despacio con el tiempo
+3704a505	Reacciona a: toma el color del más fuerte entre graves, medios y agudos
+ba3eca1b	Reacciona a: la longitud sigue al volumen y rebota con el bombo y la caja
+81cd1e18	Reacciona a: se ilumina según la fuerza de cada tono, de graves a agudos
+210faf7d	Reacciona a: cada banda crece según la fuerza de graves, medios y agudos
+a35cc263	Reacciona a: fluyen los colores de los graves, medios y agudos que suenan ahora
+a0098d0d	Reacciona a: con cada bombo sale un anillo de luz (con el pulso al captar el tempo)
+e367d987	Reacciona a: bombo, caja y charles se iluminan cada uno de forma distinta
+4a0ca652	Reacciona a: solo el sonido elegido para cada pieza (zona): graves, medios, agudos o un instrumento
+3d52d090	Reacciona a: cada instrumento (en tarjetas gráficas y memoria, se expande con el pulso con el color del instrumento que destaca)
+630581a9	Reacciona a: una banda de luz recorre la tira siguiendo el pulso (tempo)
+e411765c	Reacciona a: cambia despacio según el brillo del sonido (grave o agudo) y el volumen
+4c402832	Reacciona a: el primer pulso de cada compás (bombos fuertes mientras no capta el tempo)
+e532ec45	Late con el pulso y deja un resplandor largo y suave. El color no cambia con el ritmo, sino que va cambiando poco a poco

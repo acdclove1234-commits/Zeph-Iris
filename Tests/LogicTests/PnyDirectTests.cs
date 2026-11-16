@@ -62,11 +62,23 @@ public static class PnyDirectTests
         int w = Apply(enc, frame, bus);
         T.Check(w == 1 + 17, $"arrow becomes mixed: mode + 17 LEDs ({w}); front untouched");
         T.Check(bus.Log[0].Reg == 0x02 && bus.Log[0].Data[0] == 0x09 && bus.Log[0].Data[2] == 0x00, "switches ARROW to direct mode first");
+        // 直接モードに入る命令は LED 0 番を書くのと同じ形なので、LED 0 番の色で書く（6.15.8 までは黒: 書き終わるまで LED 0 番が一瞬消えた）
+        T.Check(bus.Log[0].Data.AsSpan(4).SequenceEqual(new byte[] { 0, 0, 255 }), "enters direct mode with LED 0's own colour, not black");
         T.Check(bus.Log.Any(l => l.Reg == 0x02 && l.Data.SequenceEqual(new byte[] { 0x09, 0xFF, 6, 0x00, 0, 255, 0 })), "arrow LED 6 green");
         frame[31] = new Rgb(10, 20, 30);
         w = Apply(enc, frame, bus);
         T.Check(w == 1 && bus.Log[0].Data.SequenceEqual(new byte[] { 0x09, 0xFF, 7, 0x00, 10, 20, 30 }), $"one more LED changed: 1 write ({w})");
-        T.Check(Apply(enc, Uniform(blue), bus) == 1, "arrow back to one colour: 1 static write (front unchanged)");
+        // 直接モードからは、1 色のコマが StaticAfterFrames 回続いてから固定色に戻す（6.15.8 までは 1 回目ですぐ戻していた。本物の曲で、
+        // 1 色と LED ごとに違う色のコマが交互に来て、ビートで色替え・きらめきで 1 分に 20〜100 回も直接モードに入り直していたため）
+        T.Check(Apply(enc, Uniform(blue), bus) == 2, "arrow back to one colour: stays direct at first and writes only the 2 LEDs that changed");
+        for (int i = 2; i < PnyEpicXEncoder.StaticAfterFrames; i++)
+            T.Check(Apply(enc, Uniform(blue), bus) == 0, $"one-colour frame {i}: still direct, nothing to write");
+        T.Check(Apply(enc, Uniform(blue), bus) == 1, $"after {PnyEpicXEncoder.StaticAfterFrames} one-colour frames: 1 static write (front unchanged)");
+        frame[30] = new Rgb(0, 255, 0);
+        T.Check(Apply(enc, frame, bus) == 18 && bus.Log[0].Data.AsSpan(4).SequenceEqual(new byte[] { 0, 0, 255 }), "mixed again: direct mode with LED 0's colour, then all 17 LEDs");
+        var almost = Uniform(blue);
+        almost[33] = new Rgb(0, 1, 253);
+        T.Check(Apply(enc, Uniform(blue), bus) == 2 && Apply(enc, almost, bus) == 0, "a difference of 2 levels or less counts as one colour (nothing written while direct)");
     }
 
     /// <summary>

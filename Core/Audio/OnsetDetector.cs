@@ -20,11 +20,13 @@ namespace ProFanController;
 ///      その立ち上がりの時刻（音 1 個の精度）を「本当に鳴った時刻」にする。
 ///      さらに打楽器らしさ（Percussiveness:「カチッ」か、いつもより目立つ低音）が低いものはキックにせず、
 ///      ベースの音の出だし（BassCandidate）にする（ベースのアルペジオが、1 秒に 3〜4 回キックと数えられていた）。
+///      ただしドラムが鳴っている間は、拍・裏拍の上の候補と、テンポをつかんでいない間の候補はキックのままにする（GateApplies。
+///      実際の曲では、音の多い曲のキックも打楽器らしさが低く見える）。キックにしなかった候補も、スネアにはせず、テンポの追跡には数える。
 ///      ほかの種類は、検出した回の最後の音の時刻から EventLatencySec 戻した時刻にする
-///   6. ハイハット・スネアは、短い FFT（11 ミリ秒）と FFT を使わない包絡線（TransientPath）でも見て、
+///   6. ハイハットは、短い FFT（11 ミリ秒）と FFT を使わない包絡線（TransientPath）でも見て、
 ///      その回のうち（または回と回の間。ProbeBetweenHops）に確かめられた音は、すぐに出来事にする（時刻 = 包絡線の立ち上がりの中点）。
 ///      長い FFT（43 ミリ秒）で見つけるより約 20 ミリ秒早い。確かめられなかった音は、1〜5 の決め方で今までどおり見つける
-///      （同じ音は 2 回出さない）
+///      （同じ音は 2 回出さない）。スネアを早く出す決め方もあるが、実際の曲でキックとの取り違えが増えるので使わない（EventTune.FastSnare）
 /// 取り込みスレッドからだけ使う
 /// </summary>
 public sealed class OnsetDetector
@@ -78,6 +80,13 @@ public sealed class OnsetDetector
         /// キックは FFT を使わない包絡線で、上がっている途中かを確かめる（上がっていれば待つ）
         /// </summary>
         internal static bool EarlyDecide = true;
+        /// <summary>
+        /// 待たずに「スネア」と決めてよいか（false なら、待たずに決めるのは「スネアではない」ときだけ）。
+        /// 録音した 7 曲（192 kHz）で、待たずにスネアと決めると、次の回に見つかるキックと重なった音までスネアになり
+        /// （キックと同時のスネア 12% → 16%）、スネアが 1 秒あたり 0.84 → 0.94 に増えた。キックの包絡線を長く（60 ミリ秒）見ても減らない
+        /// （キックの包絡線が上がる前に、響き線の帯が先に上がる）ので、スネアと決めるのは 1 回待ってから
+        /// </summary>
+        internal static bool EarlyPositive = false;
     }
     /// <summary>光らせる出来事の大きさの見分け方（テストから変えられるようにしてある。アプリの中では変えない）</summary>
     internal static class EventTune
@@ -104,6 +113,13 @@ public sealed class OnsetDetector
         internal static bool LowLatency = true;
         /// <summary>回と回の間（音が届くたび）にもハイハット・スネアを確かめるか（ProbeBetweenHops。テストで前後を比べるため）</summary>
         internal static bool Probe = true;
+        /// <summary>
+        /// 短い FFT と包絡線で、スネアを早く出すか（TryFastSnare）。ハイハットは今までどおり早く出す。
+        /// 録音した 7 曲で、早く出したスネアの 4 割は、長い FFT なら「キックと同時」、4 割は「ハイハットの漏れ」、
+        /// 2 割は候補にもならない音で、スネアが 1 秒あたり 0.84 → 1.13 に増えた（キックをスネアと取り違える）。
+        /// 合成音では約 18 ミリ秒早く光るが、取り違えを増やさないため使わない（テストで前後を比べるため残してある）
+        /// </summary>
+        internal static bool FastSnare = false;
     }
 
     /// <summary>キックの見分け方（テストから変えられるようにしてある。アプリの中では変えない）</summary>
@@ -116,6 +132,42 @@ public sealed class OnsetDetector
         internal static bool PercGate = true;
         /// <summary>キックとみなす打楽器らしさの下限（0〜1）</summary>
         internal static double MinPercussive = KickMinPercussive;
+        /// <summary>
+        /// 門を使う場面（GateApplies）: 0 = いつも（6.15.8）、1 = ドラムが鳴っている間は、テンポをつかんでいて拍の頭（± OnBeatSec）から
+        /// 外れた候補だけ、2 = 1 と同じだが裏拍（拍の真ん中 ± OnBeatSec）の候補も通す。
+        /// 録音した 7 曲（192 kHz）では、いつも使うと拍の上のキックの 25〜56% を捨てていた（音の多い曲では「カチッ」も目立ちも小さい。
+        /// 拍の上と外で手がかりの分布がほとんど変わらない曲もある）。キックは 1 秒あたり 1.68 → 1.09、キックのある拍 46% → 34%。
+        /// 2 にすると 1.56・45% で、捨てるのは拍にも裏拍にも乗らない候補だけ（キックのうち拍・裏拍の上 91% → 95%）
+        /// </summary>
+        internal static int GateMode = 2;
+        /// <summary>拍の頭（・裏拍）とみなす幅（秒）</summary>
+        internal static double OnBeatSec = 0.07;
+        /// <summary>ドラムが鳴っている間、テンポをつかんでいなくても門を使うか（GateMode 1・2）</summary>
+        internal static bool GateUnlocked = false;
+        /// <summary>
+        /// 門で落とした候補も「キックが近い」とみなす（スネアにしない）。6.15.8 では落とした候補がスネアになり、
+        /// 録音した 7 曲でスネアが 1 秒あたり 0.13 増えていた
+        /// </summary>
+        internal static bool GatedIsKickNear = true;
+        /// <summary>
+        /// 門で落とした候補も、テンポの追跡の「低音の立ち上がり」に数える（LowFired。テンポの追跡は 6.15.7 と同じになる）。
+        /// 6.15.8 では数えなかったので、キックの少ない曲で「低音の立ち上がりがしばらくない」とロックが外れやすくなっていた
+        /// </summary>
+        internal static bool GatedLowOnset = true;
+        /// <summary>
+        /// 「カチッ」の谷を探す、キックの始まりより前の長さ（秒）。10 ミリ秒では、音の多い曲で直前のハイハット・スネアの残りが谷になり、
+        /// 上がりが小さく見えていた（録音した 7 曲で、拍の上の候補が「カチッ」で門を通る割合が上がる。合成のベースの音は変わらない）
+        /// </summary>
+        internal static double ClickBeforeSec = 0.030;
+        /// <summary>
+        /// 門を拍の上で使わない（GateMode 1・2）・テンポをつかんでいないときに使わない（GateUnlocked = false）のは、ドラムが鳴っているときだけ:
+        /// 直近 ContextSec 秒に門を通る（打楽器らしい）キックの候補があり、最近の候補のうち門を通った割合（候補ごとに ContextAlpha で追う
+        /// 指数平均）が ContextMinRatio 以上。ベースだけの曲では、テンポの追跡がベースの音に合うので、拍の上のベースの音もキックにしてしまうため
+        /// （合成のベースの音は 1 割ほどしか門を通らない。録音した曲は 4〜9 割）。0 = 確かめない
+        /// </summary>
+        internal static double ContextSec = 3.0;
+        /// <summary>ドラムが鳴っているとみなす、門を通った割合の下限と、その指数平均の重み</summary>
+        internal static double ContextMinRatio = 0.4, ContextAlpha = 0.1;
     }
 
     /// <summary>
@@ -123,8 +175,8 @@ public sealed class OnsetDetector
     /// 合成音で測ると、キックは 0.59 以上（「カチッ」のないキックは 1 割ほどがこれより下）、ベースの音の出だしは 0.3 以下
     /// </summary>
     public const double KickMinPercussive = 0.5;
-    /// <summary>キックの始まりで「カチッ」（1〜5 kHz の包絡線の立ち上がり）を見る範囲: 始まりの前・後（秒）</summary>
-    private const double ClickBeforeSec = 0.010, ClickAfterSec = 0.006;
+    /// <summary>キックの始まりで「カチッ」（1〜5 kHz の包絡線の立ち上がり）を見る範囲: 始まりの後（秒。前は KickTune.ClickBeforeSec）</summary>
+    private const double ClickAfterSec = 0.006;
 
     /// <summary>
     /// キックの打楽器らしさ（0〜1）。キックの始まりの時点で分かることだけで決める（光を遅らせない）。
@@ -150,6 +202,30 @@ public sealed class OnsetDetector
     internal double LastKickPercussiveness { get; private set; } = double.NaN;
     /// <summary>調査用: キックの候補（包絡線でも確かめられた）を見つけたとき（時刻・目立ち dB・「カチッ」の上がり dB・「カチッ」のキックからの大きさ dB）</summary>
     internal Action<double, double, double, double>? DiagKickCandidate { get; set; }
+
+    /// <summary>テンポの追跡の、最後に分かった拍の並び（AudioEngine が回ごとに入れる。null ならテンポを追っていない）</summary>
+    public BeatState? Grid { get; set; }
+    /// <summary>最後に門を通った（打楽器らしい）キックの候補の時刻</summary>
+    private double _lastPercKickT = double.NegativeInfinity;
+    /// <summary>最近のキックの候補のうち、門を通った割合（指数平均）</summary>
+    private double _percPassRatio;
+
+    /// <summary>
+    /// 時刻 t の、打楽器らしさが低いキックの候補に、門を使う（キックにしない）か（KickTune.GateMode）。
+    /// ドラムが鳴っていなければ（KickTune.ContextSec）いつも使う。鳴っていれば、テンポをつかんでいて拍（・裏拍）から外れた候補だけ
+    /// </summary>
+    private bool GateApplies(double t)
+    {
+        if (KickTune.GateMode == 0) return true;
+        if (KickTune.ContextSec > 0 && (!(t - _lastPercKickT <= KickTune.ContextSec) || _percPassRatio < KickTune.ContextMinRatio)) return true;
+        var g = Grid;
+        if (g is null || !g.Locked || !g.HasTempo) return KickTune.GateUnlocked;
+        double ph = g.Phase(t);
+        double fromBeat = Math.Min(ph, 1 - ph) * g.Period;
+        if (fromBeat <= KickTune.OnBeatSec) return false;
+        if (KickTune.GateMode == 2 && Math.Abs(ph - 0.5) * g.Period <= KickTune.OnBeatSec) return false;
+        return true;
+    }
 
     /// <summary>
     /// 見つけたハイハット・立ち上がりの大きさを確かめてから出来事にする。
@@ -435,8 +511,13 @@ public sealed class OnsetDetector
     public double KickFlux => _band[0];
     /// <summary>今回、キックを検出した（キックの帯で検出し、キックの包絡線でも確かめられた。反応の強さが足りないときは false）</summary>
     public bool KickFired { get; private set; }
-    /// <summary>今回、低音の立ち上がりを見つけたが、打楽器らしくないのでキックにしなかった（ベースの音の出だし。反応の強さが足りないときは false）</summary>
+    /// <summary>
+    /// 今回、打楽器らしくない低音の立ち上がりを見つけた（ベースの音の出だし。反応の強さが足りないときは false）。
+    /// 拍の上なのでキックにもした（KickFired）ときも true（楽器の手がかりは 6.15.8 と同じに、ベースの音の出だしとして扱う）
+    /// </summary>
     public bool BassCandidate { get; private set; }
+    /// <summary>今回、打楽器らしさも確かめられたキックを検出した（KickFired で、BassCandidate でない。楽器の手がかりに使う）</summary>
+    public bool PercussiveKick { get; private set; }
     /// <summary>その立ち上がりの時刻（BassCandidate のときだけ意味がある）</summary>
     public double BassCandidateTime { get; private set; }
     /// <summary>今回、キックか低い中音（120〜500 Hz）の帯で検出した（テンポの「音が続いているか」に使う）</summary>
@@ -484,12 +565,14 @@ public sealed class OnsetDetector
         _fastHatT = _fastSnareT = _lastSnareT = double.NegativeInfinity;
         _hopIndex = -1;
         _lastKickHop = long.MinValue / 4;
+        _lastPercKickT = double.NegativeInfinity;
+        _percPassRatio = 0;
         _lastHatHop = long.MinValue / 4;
         _snareHop = -1;
         _hatPend.Clear();
         _onsetPend.Clear();
         Odf = Low = StrongestStrength = KickStrength = 0;
-        KickFired = LowFired = BassCandidate = false;
+        KickFired = LowFired = BassCandidate = PercussiveKick = false;
     }
 
     /// <summary>
@@ -566,7 +649,7 @@ public sealed class OnsetDetector
         // キックは、FFT を使わない包絡線でもはっきり立ち上がっているかを確かめ、その時刻を使う
         double tKick = tHop - EventLatencySec;
         bool isKick = kickFired;
-        bool bassCand = false;
+        bool bassCand = false, bassLike = false;
         double bassCandT = double.NaN;
         if (kickFired && kick is not null)
         {
@@ -575,18 +658,27 @@ public sealed class OnsetDetector
             if (isKick)
             {
                 // 打楽器らしさが低い（「カチッ」もなく目立ちもしない = ベースの音の出だし）ときは、キックにしない
+                double tc = tHop - ago / (double)_sampleRate;
                 double clickPeakDb = double.NaN;
-                double click = snareEnv is null ? double.NaN : snareEnv.RiseAt(ago, ClickBeforeSec, ClickAfterSec, out clickPeakDb);
+                double click = snareEnv is null ? double.NaN : snareEnv.RiseAt(ago, KickTune.ClickBeforeSec, ClickAfterSec, out clickPeakDb);
                 double clickRel = clickPeakDb - kick.FoundPeakDb;
                 double prominence = kick.FoundPeakDb - kick.MedianHopDb;
                 double perc = Percussiveness(click, clickRel, prominence);
                 LastKickPercussiveness = perc;
-                DiagKickCandidate?.Invoke(tHop - ago / (double)_sampleRate, prominence, click, clickRel);
-                if (KickTune.PercGate && double.IsFinite(perc) && perc < KickTune.MinPercussive)
+                DiagKickCandidate?.Invoke(tc, prominence, click, clickRel);
+                bool lowPerc = double.IsFinite(perc) && perc < KickTune.MinPercussive;
+                if (!lowPerc) _lastPercKickT = tc;
+                _percPassRatio += ((lowPerc ? 0 : 1) - _percPassRatio) * KickTune.ContextAlpha;
+                if (KickTune.PercGate && lowPerc)
                 {
-                    isKick = false;
-                    bassCand = true;
-                    bassCandT = tHop - ago / (double)_sampleRate;
+                    // 楽器の手がかり（ベースの音の出だし）には、キックにしたかどうかによらず渡す（6.15.8 と同じ）
+                    bassLike = true;
+                    bassCandT = tc;
+                    if (GateApplies(tc))
+                    {
+                        isKick = false;
+                        bassCand = true;
+                    }
                 }
             }
             if (isKick)
@@ -614,9 +706,10 @@ public sealed class OnsetDetector
 
         bool emit = activity >= MinActivity && events is not null;
         KickFired = isKick && emit;
-        BassCandidate = bassCand && emit;
+        BassCandidate = bassLike && emit;
+        PercussiveKick = isKick && !bassLike && emit;
         BassCandidateTime = bassCandT;
-        LowFired = (isKick || g1) && emit;
+        LowFired = (isKick || g1 || (bassCand && KickTune.GatedLowOnset)) && emit;
         KickStrength = KickFired ? _pickers[0].Strength : 0;
         double strongest = 0;
         if (isKick) strongest = Math.Max(strongest, _pickers[0].Strength);
@@ -625,7 +718,7 @@ public sealed class OnsetDetector
         KickTime = tKick;
 
         double tTrue = tHop - EventLatencySec;
-        if (isKick) _lastKickHop = hop;
+        if (isKick || (bassCand && KickTune.GatedIsKickNear)) _lastKickHop = hop;
         if (hat) _lastHatHop = hop;
         if (!emit)
         {
@@ -739,6 +832,7 @@ public sealed class OnsetDetector
     private void TryFastSnare(double bn, double size, double minSize, KickPath? kick, TransientPath? noise, TransientPath? body, long hop, double tNow,
         double minRiseDb, double maxAgoSec, EventRing events)
     {
+        if (!EventTune.FastSnare) return;
         double thr = Math.Max(1e-9, _snareFast2.Threshold);
         if (bn < EarlyShare * thr || size < minSize) return;
         if (!FastSnareBody(kick, noise, body, hop, tNow, minRiseDb, maxAgoSec, out double t)) return;
@@ -808,7 +902,7 @@ public sealed class OnsetDetector
     {
         if (_lastKickHop >= _snareHop - _snareWindow) return SnareTune.KickOverride <= 0;
         if (kick is null || kick.IsRising(SnareKickWindowSec, KickMinRiseDb, KickMaxBelowRecentDb)) return false;
-        if (_snareG1) return _snareBig;
+        if (_snareG1) return _snareBig && SnareTune.EarlyPositive;
         if (_lastHatHop >= _snareHop - _snareWindow) return SnareTune.HatLeakRatio <= 0 && SnareTune.HiMin <= 0;
         return false;
     }

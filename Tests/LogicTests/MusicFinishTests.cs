@@ -31,12 +31,19 @@ public static class MusicFinishTests
         // 保つのは 35 ms まで: その後は今の値（ゆっくり暗くなる光はそのまま）
         float h1 = Step(0.81f), h2 = Step(0.75f), after = Step(0.70f);
         T.Check(h1 > 0.866f && h2 > 0.866f && Math.Abs(after - 0.70f) < 1e-4, $"held for 2 frames at 60 fps, then the decay goes through ({h1:F3}, {h2:F3}, {after:F3})");
-        // 色は今の色のまま、明るさだけを保つ
+        // 色が変わったときは保たない: 6.15.8 までは「新しい色を山の明るさで出す」ことを確かめていたが、それが
+        // 色替えの途中のちかっとした光そのものだった（新しい色が 2 コマだけ前の色の明るさで光る）。いまは新しい色を今の明るさで通す
+        // （暗くなる速さの上限は、このあとの LedSteady が前の色から混ぜながらかける）
         Step(0.2f);
         Step(0.9f);
         px[0] = new LinColor(0, 0, 0.8f);
         h.Apply(px, 1, Dt);
-        T.Check(px[0].R == 0 && Math.Abs(px[0].B - 0.9f) < 1e-4, "the held frame keeps the new colour, only its brightness is held");
+        T.Check(px[0].R == 0 && Math.Abs(px[0].B - 0.8f) < 1e-4, $"a colour change is not held at the old peak ({px[0].R:F2}, {px[0].B:F2})");
+        // 同じ色のままなら、保つ間は山の明るさ（色も同じ）
+        Step(0.2f);
+        Step(0.9f);
+        float same = Step(0.8f);
+        T.Check(Math.Abs(same - 0.9f) < 1e-4 && Math.Abs(px[0].G / px[0].R - 0.5f) < 1e-4, $"same colour: held at the peak, colour unchanged ({same:F3})");
         // 半分より下へ一気に暗くなるとき（ストロボ・切り替え）は待たない
         Step(0.9f);
         float cut = Step(0.3f);

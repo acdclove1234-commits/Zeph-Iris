@@ -83,7 +83,6 @@ internal static class Program
         cfg.Normalize();
         cfg.Language = lang;
         cfg.Quick.HotkeysEnabled = false;
-        cfg.AutoDevicePhotos = false;
         cfg.SetupCompleted = true;
         cfg.Rgb.Enabled = false;
         foreach (var p in cfg.Profiles)

@@ -56,6 +56,9 @@ public static class LightingUiTests
             var (label, description) = MusicTuning.Describe(style);
             T.Check(label.Length > 0 && label != style, $"{style}: has a Japanese label ({label})");
             T.Check(description.Length > 0, $"{style}: has a description");
+            // どの音に反応するかを 1 行目に（どの音で光っているのか分からない、という声があった）
+            string follows = MusicTuning.Follows(style);
+            T.Check(follows.Length > 0 && !follows.Contains('\n') && description.StartsWith(follows + "\n"), $"{style}: the description starts with the sound it follows ({follows})");
             T.Check(labels.Add(label), $"{style}: label is unique");
         }
         foreach (var id in MusicPresets.All) T.Check(MusicPresets.Label(id) != id, $"preset {id} has a label");

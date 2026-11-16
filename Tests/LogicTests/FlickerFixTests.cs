@@ -52,8 +52,8 @@ public static class FlickerFixTests
     }
 
     /// <summary>
-    /// LedSteady: 明るくなってから MinFlipSec（75 ms）は暗くし始めない。暗くなる速さは時定数 30 ms まで
-    /// （1 コマで消えない）。そのあとは入力どおりに暗くなる
+    /// LedSteady: 明るくなってから MinFlipSec（75 ms）は暗くし始めない。暗くなる速さは時定数 ReleaseTauSec（80 ms）まで
+    /// （1 コマで消えない。6.15.8 までは 30 ms で、保ったあとに光が四角く切れて見えた）。そのあとは入力どおりに暗くなる
     /// </summary>
     public static void TestLedSteadyHoldsThenReleasesGently()
     {
@@ -109,13 +109,26 @@ public static class FlickerFixTests
         for (int i = 1; i <= 60; i++) { float o = up.Step(0.8f - 0.7f * i / 120); monotone &= o <= prev + 1e-6f; prev = o; lastOut = o; }
         T.Check(monotone && Math.Abs(lastOut - 0.45f) < 0.06f, $"at the top it turns once and then follows the fall ({lastOut:F3})");
 
+        // 色が変わった直後に明るさを保つコマ: 6.15.8 までは「新しい色を保った明るさで出す」ことを確かめていたが、それが
+        // 色替えの途中のちかっとした光そのもの（明るい青 → 暗い緑の下地で、緑が青の明るさで光る）だった。
+        // いまは新しい色を今の明るさで出し、足りない分だけを前に出した光の色で足す（輝度は前後の明るいほうを超えない）
         var c = new One();
         c.StepColor(new LinColor(0.2f, 0, 0));
         c.StepColor(new LinColor(0.9f, 0, 0));
         var held = c.StepColor(new LinColor(0, 0, 0.88f));
-        T.Check(held.R == 0 && Math.Abs(held.B - 0.9f) < 1e-5, $"a held frame shows the new colour at the held brightness ({held.R:F2}, {held.B:F2})");
+        T.Check(Math.Abs(held.B - 0.88f) < 1e-5 && Math.Abs(held.R - 0.02f) < 1e-4,
+            $"a held frame shows the new colour at its own brightness, the held rest in the colour shown before ({held.R:F3}, {held.B:F3})");
         var black = c.StepColor(LinColor.Black);
-        T.Check(black.B > 0.5f && black.R == 0, $"if the effect goes black during the hold, the last colour is kept ({black.B:F2})");
+        T.Check(black.B > 0.5f && black.R < 0.03f, $"if the effect goes black during the hold, the last colour is kept ({black.R:F2}, {black.B:F2})");
+        // 暗い色への色替え: 明るい青のあと暗い緑の下地。緑を青の明るさで出さない（輝度が前後のどちらより高くならない）
+        var g = new One();
+        g.StepColor(new LinColor(0, 0, 0.3f));
+        var blue = g.StepColor(new LinColor(0, 0, 1f));
+        static float Y(LinColor x) => 0.2126f * x.R + 0.7152f * x.G + 0.0722f * x.B;
+        float worst = 0;
+        for (int i = 0; i < 6; i++) worst = Math.Max(worst, Y(g.StepColor(new LinColor(0, 0.1f, 0))));
+        T.Check(worst <= Math.Max(Y(blue), Y(new LinColor(0, 0.1f, 0))) * 1.001f + 1e-6f,
+            $"bright blue then a dim green background: no frame is brighter than both (worst Y {worst:F3}, blue {Y(blue):F3}, green {Y(new LinColor(0, 0.1f, 0)):F3})");
 
         // 外した LED（ゾーンだけストロボ）はそのまま。光が動く光り方の LED は、明るくなった直後でも暗くし始める（尾を引かない）。
         // 暗くなる速さの上限はどちらにも使う
@@ -127,7 +140,7 @@ public static class FlickerFixTests
         st.Apply(px, 3, Dt, kinds);
         px[0] = px[1] = px[2] = new LinColor(0.1f, 0, 0);
         st.Apply(px, 3, Dt, kinds);
-        float k = EffectContext.Decay(Dt, LedSteady.ReleaseTauSec);
+        float k = EffectContext.Decay(Dt, LedSteady.MovingReleaseTauSec);
         T.Check(Math.Abs(px[0].R - 0.9f) < 1e-5 && Math.Abs(px[1].R - 0.1f) < 1e-6 && Math.Abs(px[2].R - 0.9f * k) < 1e-4,
             $"full: held ({px[0].R:F2}); skipped: unchanged ({px[1].R:F2}); moving light: starts fading at once ({px[2].R:F2})");
         T.Check(!LedSteady.Applies(EffectVariant.Strobe) && !LedSteady.Applies(EffectVariant.Mood) && LedSteady.KindOf(EffectVariant.Spectrum) == LedSteady.Kind.Full

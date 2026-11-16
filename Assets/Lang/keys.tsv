@@ -49,552 +49,549 @@ e3edb67b	削除	MainWindow.xaml:588
 b4255600	直近 10 分 ／ 実線 = 温度（左軸） ・ 破線 = 回転数（右軸）	MainWindow.xaml:630
 0a88e8cb	リアルタイム	MainWindow.xaml:631
 c5ebcb9c	ファン / ポンプ（クリックでカーブを編集）	MainWindow.xaml:654
-e195c30b	オンなら、写真のないデバイスを型番で、自由に使える写真の共有サイト（Wikimedia Commons と Openverse）から探し、同じ製品と分かる写真だけ自動で使います。見つからなければ 30 日ごとに探し直します。送るのはデバイスの名前だけです	MainWindow.xaml:718
-aeaca01b	デバイスの写真をネットで自動で探す	MainWindow.xaml:720
-6124e108	見つからないデバイスは、カードの画像のボタンから、ブラウザーで探した画像を貼り付けられます	MainWindow.xaml:721
-286f135b	動作報告…	MainWindow.xaml:725
-96d19994	この PC で動いたことを知らせる GitHub のページを、部品の型番と、アプリが確かめたこと（数だけ）を入れた状態で開きます	MainWindow.xaml:726
-2f719799	この PC で動いたら、「動作報告…」で知らせてもらえると助かります。集まった報告から、README の「動作確認済み」を増やします。	MainWindow.xaml:728
-09a1ab78	写真の作者とライセンス	MainWindow.xaml:749
-a7377177	回転中のファンの数	MainWindow.xaml:754
-0ee2f2ba	画像を変更	MainWindow.xaml:759
-1606ea26	センサーを表示	MainWindow.xaml:761
-9a7c10f0	編集するプロファイル	MainWindow.xaml:793
-262a4a95	FanControl から取り込む…	MainWindow.xaml:796
-a4fa184c	FanControl（Rem0o）のカーブとファンの名前を、新しいプロファイルとして読み込みます（Configurations フォルダーの .json を選びます）	MainWindow.xaml:797
-33c1221d	端子を追加	MainWindow.xaml:801
-762d7886	「テスト」で 8 秒だけ全開にして、どのファンか確認できます（全プロファイルに追加されます）	MainWindow.xaml:802
-82a38dd8	テスト	MainWindow.xaml:810
-2a1d8a18	追加	MainWindow.xaml:811
-1337d6a7	テスト（8秒 100%）	MainWindow.xaml:843
-5f279080	基本設定	MainWindow.xaml:846
-ba60770e	名前（全プロファイル共通）	MainWindow.xaml:856
-2bf39d7d	種類	MainWindow.xaml:860
-99ad1110	ファン	MainWindow.xaml:862
-0af668ca	ポンプ（簡易水冷）	MainWindow.xaml:863
-6920ae77	このツールで制御する	MainWindow.xaml:870
-67175336	オフにすると BIOS の設定で回ります（ポンプは監視だけ続けます）	MainWindow.xaml:871
-03cf27f6	GPU のファン（試験的）	MainWindow.xaml:878
-8be5fd73	制御している間は、GPU ドライバーの自動制御（アイドル時に止まる 0 RPM モードなど）が止まります。カーブには GPU の温度を使ってください。GPU 温度が 85°C（Hot Spot は 100°C）を超えると、設定に関係なく 100% にします。	MainWindow.xaml:880
-59c6e4bc	制御の方法	MainWindow.xaml:884
-a80265dc	カーブ	MainWindow.xaml:889
-051753eb	温度ごとの回転数を自分で決める	MainWindow.xaml:890
-0e59213f	目標温度	MainWindow.xaml:896
-a390636e	決めた温度を超えないよう、その場で回転を変える	MainWindow.xaml:897
-27bd9d15	固定	MainWindow.xaml:903
-84b1afad	いつも同じ回転（ポンプ向け）	MainWindow.xaml:904
-26a15192	連動（グループ）	MainWindow.xaml:910
-7f925b2a	他のファンと回転を揃える	MainWindow.xaml:911
-b2e99d58	目標温度モード	MainWindow.xaml:920
-41ce3406	選んだ温度が目標を超えないよう、できるだけ低い回転で自動調整します。カーブを考える必要はありません。目標より高い状態が続くほど、少しずつ回転を上げます。	MainWindow.xaml:922
-bc125c78	見る温度	MainWindow.xaml:934
-84629c82	反応の強さ	MainWindow.xaml:940
-f4774c9f	大きいほど温度の変化にきびきび反応します（小さいほど静かでゆったり）	MainWindow.xaml:940
-34c1c904	連動モード（ファングループ）	MainWindow.xaml:951
-4e05c4dd	選んだファン（リーダー）と同じ回転にします。前面の吸気ファン同士など、同じ役割のファンを揃えると「ウォンウォン」といううなりを防げます。	MainWindow.xaml:953
-932d7da3	合わせる相手	MainWindow.xaml:964
-7c20c9ff	上乗せ	MainWindow.xaml:967
-e66fa60a	リーダーより少し速く／遅く回したいときに使います	MainWindow.xaml:967
-ca7e07b6	回転数（rpm）で揃える	MainWindow.xaml:973
-a4885460	両方のファンをキャリブレーション済みなら、% ではなく実際の回転数を合わせます（型番の違うファン同士でも揃う）	MainWindow.xaml:974
-7dd9bc7b	固定回転数	MainWindow.xaml:986
-309627fd	最低回転数	MainWindow.xaml:1003
-ac1c4927	上昇の速さ / 秒	MainWindow.xaml:1009
-fa9ef1de	下降の速さ / 秒	MainWindow.xaml:1013
-3aed820e	ポンプ保護	MainWindow.xaml:1022
-a5668673	どの設定でも 40% 未満にはなりません。回転数が警告値を 3 秒続けて下回ると、BIOS 制御中でも 100% にして通知します。	MainWindow.xaml:1024
-7c811ff7	警告する回転数	MainWindow.xaml:1031
-cb5145a7	最低回転数に反映	MainWindow.xaml:1046
-e0e8a2f4	特性を測る	MainWindow.xaml:1048
-ec41d4ae	中止	MainWindow.xaml:1049
-6d8d04fc	ファンの特性（キャリブレーション）	MainWindow.xaml:1052
-addb0201	ファンを 0〜100% で動かして、止まる回転数・回り始める回転数・最大回転数を測ります（約 1〜2 分）。「自動セットアップ」なら、まだ測っていないファンをまとめて測ります	MainWindow.xaml:1053
-26101bee	＋ 帯を追加	MainWindow.xaml:1067
-f5097e76	共振回避（うるさい回転数を避ける）	MainWindow.xaml:1069
-11bb3e7a	ケースやラジエーターが「ブーン」と共鳴する回転数の帯を登録すると、その帯の中には留まらず素早く通り過ぎます（全プロファイル共通）	MainWindow.xaml:1071
-da85df7a	回転数を試す	MainWindow.xaml:1077
-af4cf1be	スライダーを動かすと、このファンだけ実際にその回転数になります（操作をやめて 20 秒たつと元に戻ります）。うるさい所が見つかったら「ここを避ける」を押してください。	MainWindow.xaml:1079
-ea6d9cfc	ここを避ける	MainWindow.xaml:1092
-ed263790	避ける範囲	MainWindow.xaml:1108
-49024f94	% 〜	MainWindow.xaml:1110
-8b7237a1	まだ登録されていません。気になる音がなければ、このままで大丈夫です。	MainWindow.xaml:1119
-08fb3614	自動セットアップ…	MainWindow.xaml:1130
-af0435c9	CPU と GPU に負荷をかけて測り、目標温度を守れるいちばん静かなカーブを自動で作ります（自動セットアップの画面を開きます）	MainWindow.xaml:1131
-cd6687b0	コピー ▾	MainWindow.xaml:1132
-a8a30430	＋ カーブを追加	MainWindow.xaml:1133
-29506d39	このカーブを削除	MainWindow.xaml:1134
-5d2df974	複数のカーブがあるときは、要求の高いほうを採用します	MainWindow.xaml:1138
-4c746c03	カーブ名	MainWindow.xaml:1160
-8e521d8d	連動する温度センサー	MainWindow.xaml:1164
-06c32776	プリセット	MainWindow.xaml:1171
-60e54e25	静音	MainWindow.xaml:1172
-0d4c913e	バランス	MainWindow.xaml:1173
-bec16825	冷却重視	MainWindow.xaml:1174
-7b60cd54	全開	MainWindow.xaml:1175
-3f2721c4	点をドラッグで移動（Shift で 5 刻み） ／ 空白をダブルクリックで追加 ／ 点を右クリックで削除 ／ Ctrl+Z で元に戻す	MainWindow.xaml:1180
-88ee66d0	ヒステリシス	MainWindow.xaml:1213
-27871d57	温度が下がるとき、この温度差だけ遅れて回転を下げます（うなり防止）	MainWindow.xaml:1214
-cc724aca	反応の速さ	MainWindow.xaml:1218
-58bf73af	小さいほど温度の急な変化を無視してゆったり動きます（EMA 係数）	MainWindow.xaml:1219
-ed1667bc	ハードウェアを初期化しています…	MainWindow.xaml:1232
-762ee495	オプション	MainWindow.xaml:1273
-3b807e37	AI 冷却アドバイザーを使う（実験的な機能）	MainWindow.xaml:1277
-6fa47fc1	オンにすると、すぐ下に AI のアドバイスの欄が出ます。記録の統計と設定を、この PC で動く Ollama に渡して分析させます（データは PC の外に出ません）。Ollama と AI のモデル（数 GB）を別に入れる必要があります。回答を作るあいだは CPU・GPU に負荷がかかるので、温度が上がることがあります。設定を書き換えることはありません	MainWindow.xaml:1279
-f406552c	AI 冷却アドバイザー（Ollama）	MainWindow.xaml:1288
-cf692ab8	記録の統計（最小・平均・最大など）と設定・診断・冷却テストの結果を、この PC で動いている Ollama に渡して分析させます。データは PC の外に送信されません。	MainWindow.xaml:1290
-662a0e08	Ollama の URL	MainWindow.xaml:1300
-00a8f617	モデル	MainWindow.xaml:1302
-1576035a	一覧を更新	MainWindow.xaml:1304
-ba9c8066	AI に聞きたいこと（任意）	MainWindow.xaml:1306
-f1b60e47	質問（任意）	MainWindow.xaml:1307
-f8aac5e1	例: ゲーム中のファンの音を静かにしたい ／ ラジエーターファンのカーブを見直したい（空欄でも分析できます）	MainWindow.xaml:1308
-59ed94e7	分析する	MainWindow.xaml:1310
-de37473b	停止	MainWindow.xaml:1311
-8ba6749e	AI に渡す内容を見る	MainWindow.xaml:1312
-15466e37	直近 30 分	MainWindow.xaml:1325
-d5eeddbf	直近 2 時間	MainWindow.xaml:1326
-33fe68e5	記録すべて	MainWindow.xaml:1327
-482a6b70	診断する	MainWindow.xaml:1329
-6ff94291	自動診断	MainWindow.xaml:1332
-8165f824	記録から、回転のふらつき・冷やしすぎ・冷え不足・停止域・うなりなどを見つけて、調整案を出します。ゲームなどで負荷をかけた後に実行すると効果的です	MainWindow.xaml:1333
-7fff8113	掃除した（ここを新しい基準にする）	MainWindow.xaml:1368
-f0f25c1b	フィルターやファンを掃除したら押してください。これ以降の記録を新しい基準にして比べます	MainWindow.xaml:1369
-9c1df669	今すぐ調べる	MainWindow.xaml:1370
-267e9ec4	ファンの劣化・ホコリのチェック	MainWindow.xaml:1373
-2c6b3065	1 分ごとの記録を保存して、「同じ回転の指示なのに回転数が下がっていないか（軸受けの劣化・ホコリ）」「同じ消費電力なのに温度が上がっていないか（フィルター・ラジエーターの目詰まり）」を、以前と比べます。	MainWindow.xaml:1375
-d4af943f	室温のセンサー	MainWindow.xaml:1381
-c7b80b29	休む時間のない日に、冷え方を比べる基準にする温度。マザーボードの「System」は、部屋ではなく基板の上の温度のことがあります（PC が動くと一緒に上がる）	MainWindow.xaml:1382
-095205e6	自動セットアップを開始	MainWindow.xaml:1423
-46ac54ca	おすすめ	MainWindow.xaml:1430
-766747f4	ボタン 1 つで、① ファンの特性を測る → ② CPU と GPU に負荷をかけて、ファンを 100% から少しずつ下げながら温度を測る → ③「目標温度を守れる、いちばん静かなカーブ」を作る、まで進みます。結果は確かめてから適用します（途中で中止しても、いつもの制御に戻り、設定は変わりません）。	MainWindow.xaml:1434
-8d17780e	CPU の目標	MainWindow.xaml:1451
-31af6243	CPU に全力で負荷をかけたときに、この温度を超えないようにします	MainWindow.xaml:1453
-9f77375a	GPU の目標	MainWindow.xaml:1457
-a9addd42	GPU に全力で負荷をかけたときに、この温度を超えないようにします（負荷はアプリがかけます。ゲームの起動は要りません）	MainWindow.xaml:1459
-14e2760b	まだ測っていないファンは、先に特性を測る	MainWindow.xaml:1484
-140786db	1 台 約 1〜2 分。止まる回転数が分かると、最低回転数も安全な値にします	MainWindow.xaml:1486
-3e4a2fef	測定結果	MainWindow.xaml:1508
-67633e51	作られるカーブ（上の目標温度を動かすと、測り直さずに作り直せます）	MainWindow.xaml:1531
-0e95ff55	このプロファイルに適用	MainWindow.xaml:1535
-0acedb82	測った CPU と GPU のカーブを、選んだプロファイルに入れます	MainWindow.xaml:1536
-ab824de0	測った CPU と GPU のカーブを、全プロファイルに入れます。役割が「静音」のプロファイルは目標 +5°C、「冷却重視」は −5°C、それ以外は目標どおりで作ります	MainWindow.xaml:1538
-a6de9295	全プロファイルにまとめて適用	MainWindow.xaml:1539
-35ae4fe6	10分	MainWindow.xaml:1552
-c7ad32f7	15分	MainWindow.xaml:1553
-89cb8346	テスト開始	MainWindow.xaml:1554
-f965efc0	冷却テスト（今の設定を確かめる）	MainWindow.xaml:1558
-16e5632b	待機 30 秒 → CPU 全コアに負荷 → 負荷を止めて冷却、の順に自動で測ります。今のファン設定でどこまで冷えるかが分かります。GPU は含まれないので、GPU も試すときはテスト中にゲームやベンチマークを動かしてください。	MainWindow.xaml:1560
-eb918d75	準備ができたら「テスト開始」を押してください。重いアプリは閉じておくと正確に測れます。	MainWindow.xaml:1566
-48090db5	測定中の推移	MainWindow.xaml:1573
-339697a1	レポートを保存	MainWindow.xaml:1582
-8a49bfd9	AI に分析させる	MainWindow.xaml:1583
-1ba434e9	結果	MainWindow.xaml:1586
-d5adfca5	電気代（円）	MainWindow.xaml:1604
-30ece901	電力量（kWh）	MainWindow.xaml:1605
-4feccfb0	電力と電気代（目安）	MainWindow.xaml:1608
-f342a144	いまの消費電力	MainWindow.xaml:1614
-6c5afbe8	今日	MainWindow.xaml:1619
-895e4f8f	今月	MainWindow.xaml:1624
-fcfbfdb9	今月の見込み	MainWindow.xaml:1629
-74c2a632	直近 30 日 ／ 棒にマウスを乗せると、その日の値を表示します。単価などは 設定 →「通知・連携」で変更できます	MainWindow.xaml:1635
-64cff568	フォルダを開く	MainWindow.xaml:1643
-4afe1df2	ゲームの記録（FPS と温度）	MainWindow.xaml:1645
-ba856364	ゲームを遊ぶたびに、平均 FPS・1% Low（カクつき）と、CPU・GPU の温度、ファンの回転数を 1 件ずつ残します。ファンの設定を変える前と後で、温度と FPS がどう変わったかを比べられます。	MainWindow.xaml:1647
-ac0fb61e	ゲーム中の FPS と温度を記録する	MainWindow.xaml:1652
-01f5728d	同梱の Intel PresentMon（MIT License）で、どのアプリが何 ms ごとに画面を描いたかだけを見ます（画面の中身・入力は見ません）。手前で 1 分ほど描き続けたアプリをゲームとみなし、ブラウザー・チャット・動画のアプリは除きます。記録はこの PC の中だけに置きます。	MainWindow.xaml:1654
-de7074fc	まだ記録はありません。	MainWindow.xaml:1658
-04adc800	詳しく	MainWindow.xaml:1665
-4549282a	消す	MainWindow.xaml:1666
-4668d319	ゲームではない	MainWindow.xaml:1667
-97077d12	このアプリを、これからは記録しません（これまでの記録も消します）	MainWindow.xaml:1668
-7b9f9495	異常の記録（フライトレコーダー）	MainWindow.xaml:1692
-f98ae273	緊急全開・ポンプ異常・ファンの停止などが起きたとき、前後 10 分のすべての温度と回転数を自動で保存します。原因を調べるときや、AI に相談するときに使えます。	MainWindow.xaml:1694
-b1ff910c	概要	MainWindow.xaml:1703
-d0f79d07	CSV を開く	MainWindow.xaml:1704
-0fc2ab3f	まだ記録はありません（危険な状態になったことがない、ということです）。	MainWindow.xaml:1715
-1a038335	仮想センサー	MainWindow.xaml:1729
-a16411bf	複数のセンサーの最大値・平均値や、2 つのセンサーの差（例: 水温 − 室温）を作って、カーブの連動先に使えます。	MainWindow.xaml:1731
-696b6294	新しい仮想センサー	MainWindow.xaml:1757
-8b00feb4	最大値（いちばん高い温度）	MainWindow.xaml:1766
-4d8caee1	平均値	MainWindow.xaml:1767
-5658427c	最小値	MainWindow.xaml:1768
-07307e41	差分（A − B）	MainWindow.xaml:1769
-fcf52b91	作成	MainWindow.xaml:1797
-28cf181a	最小・最大をリセット	MainWindow.xaml:1805
-0d4a4da5	最小・最大・平均を、いまから数え直します（ゲームを始める前などに）	MainWindow.xaml:1806
-6ae383a5	最小・最大・平均は、アプリを起動してから（画面を開いていないあいだも数えます）	MainWindow.xaml:1808
-7a5c0197	いま	MainWindow.xaml:1829
-e8a96130	最小	MainWindow.xaml:1830
-10b17f28	最大	MainWindow.xaml:1831
-78bdf61f	平均	MainWindow.xaml:1832
-bc3cb03d	いま LED に送っている色（LED ごとに違うときは先頭の色）	MainWindow.xaml:1878
-9c4008ce	接続	MainWindow.xaml:1880
-e59863c1	無料の OpenRGB を通して、マザーボード・メモリ・ファン・LED テープなどの色を変えます。OpenRGB が動いていなければ、このアプリが「SDK Server」をオンにして起動します（下のスイッチ）。	MainWindow.xaml:1882
-8f1d5969	オンにすると OpenRGB に接続して、下で選んだ光り方で LED の色を変えます。オフにすると、このアプリは LED に何も送りません	MainWindow.xaml:1886
-49aac369	OpenRGB と連携する	MainWindow.xaml:1888
-6305fed9	OpenRGB が対応している LED が対象です。ASRock Polychrome などメーカーの RGB ソフトとは同時に使わないでください（取り合いになってチカチカします）	MainWindow.xaml:1889
-c8f39b51	LED をすべて消します。連携は続けるので、機器が自分の光り方（レインボーなど）に戻りません。タスクトレイの「LED の光り方」からも切り替えられます	MainWindow.xaml:1894
-4c92312b	消灯する（連携は続ける）	MainWindow.xaml:1896
-956da380	寝るときや画面を暗くしたいときに。設定はそのまま残るので、オフに戻すと同じ光り方で点きます	MainWindow.xaml:1897
-7f4cedf2	接続先	MainWindow.xaml:1901
-722099aa	OpenRGB の SDK サーバーの場所。同じ PC なら 127.0.0.1 : 6742 のままで大丈夫です	MainWindow.xaml:1902
-64c2cd9b	OpenRGB が動いている PC のアドレス（同じ PC なら 127.0.0.1）	MainWindow.xaml:1904
-5b89ecc9	OpenRGB の SDK サーバーのポート番号（ふつうは 6742）	MainWindow.xaml:1906
-1ac6b9e1	接続テスト	MainWindow.xaml:1907
-235b3d31	OpenRGB につながるか確かめて、見つかったデバイスを下の一覧に表示します（LED の色は変えません）	MainWindow.xaml:1908
-342a5300	今すぐ再接続	MainWindow.xaml:1909
-f65c9d04	OpenRGB を起動し直したときや、デバイスを付け外ししたときに押すと、待たずにすぐ繋ぎ直します	MainWindow.xaml:1910
-b44c9cc9	OpenRGB のサイト	MainWindow.xaml:1911
-d279d75b	LED の色を変えるのに使う OpenRGB（無料）を入手するページ（openrgb.org）を開きます	MainWindow.xaml:1912
-2df46840	つながらない状態が続くと、OpenRGB がサービスとして入っていればサービスを、なければ Program Files の OpenRGB を「--server --startminimized」で起動します。動いている OpenRGB を止めたり起動し直したりはしません	MainWindow.xaml:1917
-858ce626	OpenRGB が動いていなければ起動する	MainWindow.xaml:1919
-7c3107e5	同じ PC の OpenRGB だけです。安全のため、Program Files に入れた OpenRGB だけを起動します（zip を展開した OpenRGB は、自分で起動してください）	MainWindow.xaml:1920
-0218f6e9	光り方	MainWindow.xaml:1930
-8221927c	LED をどのように光らせるかを選びます。選ぶとすぐに LED に反映されます。	MainWindow.xaml:1931
-4e683b86	温度	MainWindow.xaml:1933
-2986bd87	CPU や GPU の温度に合わせて、水色（冷えている）→ 緑 → 黄 → 赤（熱い）と色が変わります	MainWindow.xaml:1934
-d24ecf3b	レインボー（流れる）	MainWindow.xaml:1936
-5f081b9f	虹色が LED の並びに沿ってゆっくり流れます	MainWindow.xaml:1937
-0b164d69	レインボー（固定）	MainWindow.xaml:1939
-e584bd69	虹色を LED の並びに沿って並べたまま、動かしません	MainWindow.xaml:1940
-7eda32b9	呼吸	MainWindow.xaml:1942
-28f5315f	選んだ色が、息をするようにゆっくり明るくなったり暗くなったりします	MainWindow.xaml:1943
-f5b86f25	固定色	MainWindow.xaml:1945
-afb96a15	選んだ 1 色で光り続けます	MainWindow.xaml:1946
-71259fb6	雷	MainWindow.xaml:1948
-750a4eb3	暗い嵐の空に、ときどき白い稲光が走ります。1 回の雷は 2〜3 回またたき、落ちた場所から広がって消えます（全部のデバイスで同時に光ります）	MainWindow.xaml:1949
-678fa065	波	MainWindow.xaml:1951
-a8481ef8	選んだ色の海に、明るさのうねりが寄せては返します。波の頭は白く泡立ちます	MainWindow.xaml:1952
-f00ee174	さえずり	MainWindow.xaml:1954
-c3299008	やわらかい若葉色の上に、小鳥の声のような小さな光が「ちちっ」と 2〜4 回跳ねます	MainWindow.xaml:1955
-8b898d11	炎	MainWindow.xaml:1957
-f16a0b90	赤〜橙〜黄の光が、LED ごとにゆらゆらと揺らめきます	MainWindow.xaml:1958
-ce20ec89	オーロラ	MainWindow.xaml:1960
-01eb7369	緑・水色・紫の光の帯が、夜空をゆっくり流れてうねります	MainWindow.xaml:1961
-9afce40d	流れ星	MainWindow.xaml:1963
-4dc2e807	暗い夜空を、ときどき光が尾を引いて流れます（向きはそのたびに変わります）	MainWindow.xaml:1964
-5db4a3ad	心拍	MainWindow.xaml:1966
-2634e74e	選んだ色が「ドクン、ドクン」と 2 回ずつ脈打ちます（速さ 1 で 1 分に 60 回）	MainWindow.xaml:1967
-f8fa9d4d	音楽連動	MainWindow.xaml:1969
-0b622a65	PC で流れている音（スピーカー・ヘッドホンに出ている音）に合わせて光ります。マイクは使いません	MainWindow.xaml:1970
-c9d8508e	色を決める温度	MainWindow.xaml:1977
-e315f45c	どのセンサーの温度で色を決めるか。「自動」なら CPU と GPU の高いほうを使います	MainWindow.xaml:1978
-33276084	水色になる温度	MainWindow.xaml:1983
-a08b7324	この温度以下では水色（冷えている色）になります	MainWindow.xaml:1983
-0582db54	赤になる温度	MainWindow.xaml:1989
-74068713	この温度以上で真っ赤（熱い色）になります。間は緑 → 黄と変わります	MainWindow.xaml:1989
-181b9ba1	速さ	MainWindow.xaml:1998
-6f30cf75	レインボーは 1 倍で 1 周 30 秒（3 倍で 10 秒・10 倍で 3 秒）、呼吸は 1 倍で 1 回 6 秒。音楽連動の「流れる波」では流れる速さ	MainWindow.xaml:1999
-36bcf3d7	{0:F1} 倍	MainWindow.xaml:2000
-f9dafe1e	PC から出ている音を分析して、ドラムの瞬間・テンポ・音の高さに合わせて光らせます。まずはプリセットを選び、気になるところだけ下で調整してください。	MainWindow.xaml:2013
-5414b5c1	いまの音を、一般的なイコライザーと同じ 10 の帯（31 Hz〜16 kHz）に分けて、低音（左）から高音（右）まで表示しています。中の明るい棒はドラムなどの「立ち上がり」、白い線は少し前までのいちばん高いところです	MainWindow.xaml:2023
-a8d258f0	キック（バスドラム）を見つけるたびに光ります。同期テスト中は、クリック音で白く光ります	MainWindow.xaml:2027
-9aa04ac9	曲のテンポ（1 分間の拍の数）。テンポをつかむと、ビートを先読みして遅れなく光らせます	MainWindow.xaml:2029
-8d97f850	音量 = いまの音の大きさ。基準 = 自動の音量調整が「いちばん明るい」とみなしている大きさ（dBFS。0 が最大で、マイナスが大きいほど小さい音）	MainWindow.xaml:2033
-1634d9e9	とても小さな音（雑音）には反応しないようにしています。音が鳴っていないときは、下の「音が止まったとき」の光り方になります	MainWindow.xaml:2035
-2f3d51ba	光り方・強さ・色の組み合わせを、まとめておすすめの組み合わせにします。下の設定を自分で変えると「カスタム」になります	MainWindow.xaml:2044
-932cdbc7	音楽の表現	MainWindow.xaml:2055
-2c274961	音楽に合わせてどう光らせるか。デバイスごとに変えたいときは、下の「デバイス」で選べます	MainWindow.xaml:2056
-4d0abffb	「ストロボ」は激しく点滅するため、下の「激しい点滅を抑える」をオフにしたときだけ選べます。	MainWindow.xaml:2065
-94a21ec2	楽器の分け方	MainWindow.xaml:2069
-8703d0a3	光り方「パーツごとの役割」で、ゾーンの「反応する音」が「パーツに合わせる」のときに、どの音・楽器で光るか。ゾーンごとに選んだ音はそのままです	MainWindow.xaml:2070
-876fdd1c	楽器は音から推測するので、曲によっては取り違えます。速い音（ハイハット・スネア）は小さな光の粒で見せ、グラボやメモリなど更新の遅いデバイスでは、曲の部分ごとに目立つ楽器の色だけで光ります	MainWindow.xaml:2080
-c87d9699	強さ	MainWindow.xaml:2086
-541920a5	ビートで光る強さと、色が切り替わる間隔。選ぶと、下の「滑らかさ」「メリハリ」「いちばん暗いとき」もその強さに合わせた値になります	MainWindow.xaml:2087
-a800602a	色の組み合わせ	MainWindow.xaml:2097
-5c25c402	音楽連動で使う色のセット（パレット）。ビートのたびに、この中の次の色へ切り替わります	MainWindow.xaml:2098
-5519f7df	単色では色で楽器を分けられません。光り方を「楽器で光る」にすると、明るさ・光る場所・動き方で楽器を見せます（キックは全体、ハイハットは小さな粒、歌は全体の明るさなど）	MainWindow.xaml:2109
-758ca518	感度	MainWindow.xaml:2114
-ab2026d3	+ にすると、小さな音でも明るく光ります。音が小さい曲や、音量を下げて聴いているとき用。− にすると、大きな音のときだけ明るくなります	MainWindow.xaml:2115
-65d61087	反応の感度	MainWindow.xaml:2121
-33c9b585	ドラムなどの「音の立ち上がり」をどれだけ拾うか。大きいほど小さなドラムの音でもビートとして反応します。反応しすぎてせわしないときは小さくします	MainWindow.xaml:2122
-2c61a63b	滑らかさ	MainWindow.xaml:2128
-b99839d0	光が消えていく速さ。大きいほどふわっとゆっくり暗くなり、小さいほどキビキビ動きます	MainWindow.xaml:2129
-86b8ad57	メリハリ	MainWindow.xaml:2135
-708b0876	大きいほど、ドラムの瞬間だけ強く光り、それ以外は控えめになります。小さいほど、音の大きさに素直に合わせて光ります	MainWindow.xaml:2136
-5b2abe07	いちばん暗いとき	MainWindow.xaml:2142
-f59ad0c8	音が小さいときでも、この明るさまでは光らせておきます。0% にすると、音がないときは真っ暗になります	MainWindow.xaml:2143
-1b6feb60	初期値に戻す	MainWindow.xaml:2151
-23e2af21	感度・滑らかさ・メリハリなどの値（下の「詳細」の値も）を初期値に戻します。光り方・強さ・色の組み合わせ・音の遅れの補正はそのままです。右上の「元に戻す」で取り消せます	MainWindow.xaml:2153
-21444cf4	音の遅れの補正	MainWindow.xaml:2159
-a9eeb51b	光が音より早いときは + に、遅いときは − にします。Bluetooth のイヤホンやスピーカー、テレビ（HDMI）は音が遅れて聞こえるので + にします。「同期テスト」を使うと合わせやすくなります	MainWindow.xaml:2160
-a48b2636	10 ミリ秒だけ光を早めます	MainWindow.xaml:2165
-42e71d61	10 ミリ秒だけ光を遅らせます	MainWindow.xaml:2167
-7d84f147	同期テスト	MainWindow.xaml:2168
-41951cb8	0.6 秒ごとに「カチッ」という音を鳴らし、LED を白く光らせます。音と光がそろうように「音の遅れの補正」を動かしてください。もう一度押すか、この画面を離れると止まります	MainWindow.xaml:2169
-61644194	光が音より早いときは + に、遅いときは − にします。Bluetooth のイヤホンやスピーカー、テレビ（HDMI）は音が遅れて聞こえるので + にします	MainWindow.xaml:2172
-0e36045a	Bluetooth は音が遅れるので +150〜200 ms がおすすめ	MainWindow.xaml:2179
-ece319ca	+180 ms にする	MainWindow.xaml:2180
-5ed44de1	音の遅れの補正をこの出力先の目安にします（あとで同期テストで微調整できます）	MainWindow.xaml:2181
-e02412ea	オンのあいだは、強い点滅を 1 秒に 3 回までにします（光に敏感な方の目や体調を守るため）。ストロボも使いません	MainWindow.xaml:2186
-ff4e5cc2	激しい点滅を抑える	MainWindow.xaml:2188
-a2bb37bc	強い点滅を 1 秒に 3 回までにします。オフにすると「ストロボ」が選べるようになります	MainWindow.xaml:2189
-03e1f9ef	⚠ 激しく点滅することがあります。光の点滅で気分が悪くなったら、すぐに「激しい点滅を抑える」をオンに戻してください。	MainWindow.xaml:2193
-dc8c4f99	テンポ	MainWindow.xaml:2197
-9c0a6ff9	自動: 曲のテンポをつかんだらビートを先読みして、遅れなく光らせます。キックだけ: 先読みせず、バスドラムが鳴ったときだけ光ります。使わない: テンポもビートも使わず、音の大きさだけで光ります	MainWindow.xaml:2198
-19595ed1	テンポが実際の 2 倍に取れているとき（せわしなく光るとき）に押すと、半分のテンポで光ります	MainWindow.xaml:2202
-b74e97b3	テンポが実際の半分に取れているとき（ビートの 1 つおきに光るとき）に押すと、2 倍のテンポで光ります	MainWindow.xaml:2204
-fbc2bffb	音が止まったとき	MainWindow.xaml:2217
-23bf0707	音が鳴っていないとき（曲と曲の間・一時停止中など）の光り方。音が戻るとすぐに音楽連動に戻ります	MainWindow.xaml:2218
-3cc7a5c7	切り替えるまで	MainWindow.xaml:2228
-47460e62	音が止まってから、「音が止まったとき」の光り方に切り替えるまでの秒数。曲の中の短い無音で切り替わってしまうときは長くします	MainWindow.xaml:2229
-f88e8627	{0:F0} 秒	MainWindow.xaml:2230
-22d9166d	反応する音	MainWindow.xaml:2237
-500cdc90	空欄なら PC から出ているすべての音に反応します。アプリ名（例: Spotify）を入れると、そのアプリの音が鳴っているときだけ反応します	MainWindow.xaml:2238
-bfe1fde6	空欄ならすべての音。アプリ名（例: Spotify）を入れると、そのアプリの音が鳴っているときだけ反応します	MainWindow.xaml:2241
-84a6f5e5	音を出しているアプリから選ぶ ▾	MainWindow.xaml:2242
-86415147	いま音を出している（または出せる）アプリの一覧から選びます。音が出ているアプリが上に並びます	MainWindow.xaml:2243
-d120384c	すべての音	MainWindow.xaml:2244
-9905daf4	アプリを指定せず、PC から出ているすべての音に反応します	MainWindow.xaml:2245
-9050f432	AI で拍を確かめる	MainWindow.xaml:2252
-5ae7b468	数秒おきに直近の音を AI（Beat This!）で調べ、違うテンポや裏拍で光っていたら直します。PC の中だけで動き、CPU を少し使います	MainWindow.xaml:2254
-1b4c8ef3	一度聴いた曲を覚える	MainWindow.xaml:2259
-33f1fdda	AI が見つけた拍を曲ごとに覚え、次に同じ曲が流れたら最初から合わせます（Spotify などの曲名から作った印で見分けます。曲名や音は保存しません）	MainWindow.xaml:2261
-959ac7af	覚えた曲を消す	MainWindow.xaml:2266
-83419666	覚えた曲の拍をすべて消します（曲を聴けば、また覚えます）	MainWindow.xaml:2267
-0d8065a5	直近の約 1 秒の音を 0.5 秒ごとに調べます。色は数秒かけて変わり、点滅はしません。パレット「選んだ色だけ」「選んだ色と近い色」・音量メーター・ストロボ・パーツごとの役割では色を変えません	MainWindow.xaml:2271
-1b6f3970	AI で楽器を聞き分ける	MainWindow.xaml:2273
-aadf5c4a	曲の部分ごとに目立つ楽器（歌・ギター・ピアノ・金管・シンセ・弦）を AI（YAMNet）で聞き分け、色をゆっくり変えます（歌は青、金管は金色、ギターはオレンジなど）。単色のときは、光り方「楽器で光る」の動き方を変えます。PC の中だけで動き、CPU とメモリを少し使います	MainWindow.xaml:2275
-68010262	詳しい設定（上級者向け）	MainWindow.xaml:2281
-7f7d168e	音の分析の細かな設定を表示します。ふつうは変えなくて大丈夫です	MainWindow.xaml:2282
-548593da	音が大きくなったとき、光が明るくなるまでの時間。0 にすると最速ですが、チラつきやすくなります	MainWindow.xaml:2286
-88a0aec8	明るさに使う音量の幅	MainWindow.xaml:2292
-4ce9ee35	いちばん大きな音から何 dB 小さい音までを、明るさの違いとして表すか。小さくすると明暗がはっきりし、大きくすると小さな音にも反応します	MainWindow.xaml:2293
-6986be54	音の高さのバランス	MainWindow.xaml:2299
-8406bc01	低音ばかり・高音ばかりの曲でも、すべての帯がほどよく光るように自動でならす強さ。0% にすると、曲の音のバランスをそのまま表します	MainWindow.xaml:2300
-417793f0	高音の持ち上げ	MainWindow.xaml:2306
-69e0667b	高い音ほど強めに扱う量（1 オクターブ上がるごとに何 dB 足すか）。ハイハットなどの高音にもっと反応させたいときは大きくします	MainWindow.xaml:2307
-ed8c6bb1	コントラスト	MainWindow.xaml:2313
-a4c8a92f	大きいほど、強い音だけがくっきり明るくなり、弱い音は暗めになります。1.0 で変えません	MainWindow.xaml:2314
-0c86ccaf	色と明るさ	MainWindow.xaml:2327
-f645ed15	色	MainWindow.xaml:2330
-889d5957	固定色・呼吸の色。音楽連動では、色の組み合わせ「選んだ色」のときの中心の色になります	MainWindow.xaml:2331
-cfcf25fc	いま選んでいる色	MainWindow.xaml:2341
-b2c395cb	#RRGGBB の形で色を入力できます（例: #6A00FF）。左の丸から選んでも構いません	MainWindow.xaml:2344
-55b1d508	#RRGGBB の形で入力してください（例: #6A00FF）。0〜9 と A〜F の 6 文字です	MainWindow.xaml:2348
-743a1e61	明るさ	MainWindow.xaml:2351
-26565f26	LED 全体の明るさ。どの光り方でも、この明るさを上限にします	MainWindow.xaml:2351
-35ab111a	OpenRGB で見つかった LED のデバイスです。下の帯は、いま送っている色のプレビューです。	MainWindow.xaml:2364
-74e00d85	オンなら、OpenRGB で見つかったすべてのデバイス（あとから増えたものも含む）の色を変えます。オフにすると、色を変えるデバイスを選べます	MainWindow.xaml:2366
-c01c149b	すべてのデバイスの色を変える	MainWindow.xaml:2368
-e61331df	オフにすると、下でデバイスごとに選べます	MainWindow.xaml:2369
-2c8ea653	色合わせ用。全部のデバイスを同じ白で光らせます（デバイス・ゾーンの色合わせと明るさは掛けます）。この画面を離れると元に戻ります	MainWindow.xaml:2373
-4dbed8b1	白く光らせて見比べる	MainWindow.xaml:2375
-9795e04b	色合わせのとき、全部のデバイスを同じ白にします（この画面を離れると戻ります）	MainWindow.xaml:2376
-082c3f40	デバイスの一覧は、OpenRGB に接続すると表示されます（上の「接続テスト」でも読み込めます）。	MainWindow.xaml:2381
-3922b0ea	fps = 1 秒に色を送っている回数 ・ いま使っている音楽連動の光り方	MainWindow.xaml:2389
-f3e43b07	チェックしたデバイスの色を変えます（「すべてのデバイスの色を変える」がオンのときは全部が対象です）	MainWindow.xaml:2391
-5f338e63	このデバイスに最後に送った色（画面の色に近づけて表示しています）	MainWindow.xaml:2404
-79acf3fc	このデバイスの色	MainWindow.xaml:2409
-5d9bf5c2	このデバイスだけ、上の「光り方」と違う光り方にします（例: グラボは赤の固定色、キーボードはレインボー）。「全体と同じ」なら上の設定のままです。音楽連動は全体でだけ選べます	MainWindow.xaml:2412
-55525f98	固定色・呼吸の色。「全体と同じ色」なら上の「色」を使います	MainWindow.xaml:2416
-ccf4614e	このデバイスだけ音楽連動の光り方を変えます。「自動」なら上の「音楽の表現」を使います（更新が遅いデバイスは、滑らかな光り方に自動で置き換えます）	MainWindow.xaml:2433
-91935430	左右対称	MainWindow.xaml:2436
-f527b8c5	LED の並びの真ん中から左右対称に光らせます（長い LED テープ向け）。「自動」なら LED が 30 個以上のまとまりでオンになります	MainWindow.xaml:2439
-2d073419	1 秒に送る回数	MainWindow.xaml:2443
-ec70d216	このデバイスに色を送る回数の上限です。多いほど動きが滑らかになりますが、グラボやメモリでは多すぎると一部しか書き換わらず、ちかちかすることがあります。ちかちかしない範囲で上げてください	MainWindow.xaml:2446
-b4d70ec0	早めに光らせる	MainWindow.xaml:2449
-df7472e3	このデバイスだけ、音楽連動の色の切り替えを早めます。ほかのデバイスより遅れて見えるときに増やしてください（グラボなど、色が反映されるまで時間がかかる機器向け）。テンポをつかんでいる（予測できる）ビートで効きます。「自動」は USB 8 ミリ秒・メモリなど 20 ミリ秒・グラボ 60 ミリ秒	MainWindow.xaml:2452
-bce10cf7	オフ（おすすめ）: グラボは、レインボー（流れる）を止まった虹に、呼吸を固定色にします。グラボは LED を 1 個ずつ書き込むため、動かし続けるとちかちかしやすいからです。オンにすると、グラボも流れ・呼吸します	MainWindow.xaml:2456
-44f9a4dc	虹・呼吸も動かす	MainWindow.xaml:2457
-9e24740c	LED の並びを逆向きにします（流れる向きや、低音・高音の並びが逆に見えるとき）	MainWindow.xaml:2460
-8ebe842f	逆向き	MainWindow.xaml:2461
-b35b1a81	水色がピンクに、緑が赤に見えるときにオンにします（色の並び順が逆のデバイス用）	MainWindow.xaml:2464
-96aaf779	赤と緑を入れ替える	MainWindow.xaml:2465
-a28e3556	このデバイスの色味・明るさを合わせたり、マザーボードの端子（ゾーン）ごとに光り方・向き・色味を変えたりします	MainWindow.xaml:2469
-8847ea7e	色合わせ・ゾーンごとの設定を開く	MainWindow.xaml:2470
-43c6336e	色合わせ（このデバイス全体）	MainWindow.xaml:2473
-ee85a976	同じ色を送っても、LED によって色味や明るさが違って見えます。上の「白く光らせて見比べる」をオンにして、白がそろうように赤・緑・青を下げてください（上げることはできないので、強すぎる色を下げます）	MainWindow.xaml:2475
-3bb159a9	赤 	MainWindow.xaml:2478
-4fc93dd4	緑 	MainWindow.xaml:2482
-b0ba1b8f	青 	MainWindow.xaml:2486
-387da053	明るさ 	MainWindow.xaml:2490
-4cba9eab	ゾーン（端子）ごとの設定	MainWindow.xaml:2494
-d64827fc	マザーボードの端子ごとに、つないだ物（ファン・電源・水冷のヘッドなど）に合わせて光り方・向き・色味を変えられます。「デバイスと同じ」なら上の設定のままです。同じ端子に数珠つなぎにした物は、まとめて 1 つのゾーンです	MainWindow.xaml:2498
-512b961e	ファンの数	MainWindow.xaml:2510
-9a813855	この端子（チャンネル）に数珠つなぎにしたファンの数。分けると、ファン 1 台ずつ色・光り方を変えられます（LED を台数で等分します）。Lian Li の UNI HUB のチャンネルや、分岐ケーブルでつないだファン向け	MainWindow.xaml:2512
-156f8722	このゾーン（端子）だけ光り方を変えます（例: 水冷のヘッドだけ白、ケースファンは消灯）。「デバイスと同じ」ならデバイスの設定のままです	MainWindow.xaml:2518
-8ed1329c	固定色・呼吸の色。「デバイスと同じ色」ならデバイスの色を使います	MainWindow.xaml:2521
-41860c08	このゾーンだけ音楽連動の光り方を変えます（例: ラジエーターのファンは音量メーター、電源はビートで色替え）	MainWindow.xaml:2537
-4e43701b	光り方「パーツごとの役割」のとき、このゾーンがどの音で光るか。「パーツに合わせる」なら「楽器の分け方」に合わせます（音の高さなら、ファンは低音・グラボは中音・メモリやキーボードは高音）。同じデバイスで同じ音になるゾーンがいくつもあれば（ファンの端子など）、順に分けます。キック・スネア・ボーカルなど、楽器を 1 つ選ぶこともできます	MainWindow.xaml:2543
-ed5a9363	向き	MainWindow.xaml:2551
-3d275c1f	ヒント: 何もつないでいないマザーボードの ARGB 端子は、OpenRGB の Devices →（マザーボード）→「Edit Device」で LED の数を 0 にしておくと、送るデータが減って動きが滑らかになります。左右対称・逆向きは、LED の並びを使う光り方（スペクトラム・音量メーターなど）で効きます。	MainWindow.xaml:2587
-9ccdaf43	ファンを 1 台ずつ違う色にするには: 1 本の端子（チャンネル）に数珠つなぎにしたファンは、「色合わせ・ゾーンごとの設定を開く」の「ファンの数」で分けられます。Lian Li の UNI HUB をマザーボードと同期（MB Sync）させていると、ハブはマザーボードの 1 本の信号をそのまま全部のファンに流すので、ファンごとの色にはなりません。ハブの同期をやめ（MB Sync のケーブルを外すか、L-Connect で同期をオフにする）、L-Connect を終了すると、ハブが OpenRGB のデバイスとして出て、チャンネル・ファンごとに色を変えられます。	MainWindow.xaml:2589
-6a1f71f3	ケースの中の配置	MainWindow.xaml:2596
-337d069f	ファン・グラボ・メモリ・テープなどが、ケースの中のどこにあるかを選ぶと、波・虹・音量メーター・波紋などがデバイスをまたいで、ケース全体で 1 つにつながって流れます。場所を決めていない LED（キーボードなど）は、これまでどおりデバイスの中の並びで光ります	MainWindow.xaml:2598
-12ccc5b1	ケースの中の位置に合わせて光を流す	MainWindow.xaml:2601
-c699ba40	オフにすると、場所を選んであっても、デバイスごとの並びで光ります	MainWindow.xaml:2602
-7f06ca34	光が流れる向き	MainWindow.xaml:2606
-a7b5b016	波・虹が流れる向き、音量メーターが伸びる向き、波紋が広がる向きです（ケースを横のガラスから見たとき）	MainWindow.xaml:2609
-c99b267f	ケースを横から見た絵です。場所を決めた LED に、最後に送った色を表示します	MainWindow.xaml:2619
-fa48084e	横のガラスから見た絵です（左が背面、右が前面）。「ケースの中の位置に合わせて光を流す」がオンのときに表示します	MainWindow.xaml:2621
-b553839d	デバイスの一覧は、OpenRGB に接続すると表示されます。	MainWindow.xaml:2626
-5229dd83	このゾーンの LED がケースの中のどこにあるか。数珠つなぎのファンは「3 つ（上から順）」など、つないだ順を選んでください	MainWindow.xaml:2639
-bb048236	詳細	MainWindow.xaml:2653
-90901950	色を濃く見せる（ガンマ補正。オフにすると明るく淡い色になります）	MainWindow.xaml:2655
-3ccf4c41	LED は暗い成分もそのまま光るので、画面で見る色より白っぽく見えます。オンにすると画面の色に近い濃い色になり、明るさの変化も目で見て滑らかになります	MainWindow.xaml:2656
-dff98214	緊急全開のときは赤く点滅させる（どの光り方でも優先）	MainWindow.xaml:2658
-c447e46b	温度が上限に達してファンを全開にしたとき、どの光り方を選んでいても LED を赤く点滅させてお知らせします	MainWindow.xaml:2659
-6b3a1b39	対応しているグラボは OpenRGB を通さず直接光らせる（PNY ARGB Epic-X。ほかの LED と遅れずに光ります）	MainWindow.xaml:2661
-f6b581bb	OpenRGB は PNY のグラボの LED を 1 個ずつ書くので、色が変わるたびに約 35 ミリ秒かかり、ほかの LED より遅れます。オンにすると、アプリが NVIDIA のドライバーを通して直接書きます。書き込みに失敗し続けたときは、自動で OpenRGB を通す方法に戻ります	MainWindow.xaml:2662
-e36ea0de	確かめていない型番のグラボにも直接書き込む（試すときだけ）	MainWindow.xaml:2665
-a6862cdb	直接書き込みを実機で確かめたのは RTX 5070 Ti だけです。同じ PNY ARGB Epic-X の別の型番（LED の並びが同じもの）にも試すときにオンにします。色がおかしいときはオフに戻してください	MainWindow.xaml:2666
-e90d8670	音楽連動で、グラボ・メモリなど更新の遅いデバイスは、ほかのデバイスの色に合わせる	MainWindow.xaml:2668
-a64d70bc	グラボやメモリは 1 秒に 4〜8 回しか色を変えられないので、スペクトラム・音量メーターなどの細かい動きは出せません。オンにすると、ファンなど速いデバイスがいま光っている色の平均に合わせて光るので、色がそろって見えます。デバイスごとに光り方を選んだデバイスは、選んだ光り方のままです	MainWindow.xaml:2669
-7b9813d5	止めるときの LED	MainWindow.xaml:2673
-74ebaadf	連携をオフにしたとき・アプリを終了するとき・スリープするときに、LED をどうするか	MainWindow.xaml:2674
-4ba5fb63	連携をオフにしたとき・アプリを終了するとき・スリープするときに、LED をどうするか。「そのまま」は最後の色のまま止まります	MainWindow.xaml:2677
-ac0f3749	一般	MainWindow.xaml:2692
-69af1b60	プロファイル・自動化	MainWindow.xaml:2693
-86406a7c	通知・連携	MainWindow.xaml:2694
-0dee4b23	安全・バックアップ	MainWindow.xaml:2695
-ddd59eb1	起動と表示	MainWindow.xaml:2704
-bf6cf977	Windows ログオン時に自動で起動する	MainWindow.xaml:2707
-5699c4fc	タスクスケジューラに「最上位の特権」で登録します（UAC の確認なしで起動）	MainWindow.xaml:2708
-5d0a76ce	手動で起動したときもタスクトレイに格納する	MainWindow.xaml:2713
-aefcd37e	自動起動のときは常にタスクトレイで起動します。ウィンドウの × で閉じてもトレイで動き続けます	MainWindow.xaml:2714
-e162bf76	ミニウィジェットを表示する	MainWindow.xaml:2719
-1b093ce9	常に最前面に温度と回転数を表示します。ドラッグで移動、右クリックで不透明度を変更できます	MainWindow.xaml:2720
-6f13f8bc	アップデート	MainWindow.xaml:2729
-6e708964	更新を確認	MainWindow.xaml:2733
-1c275381	更新する	MainWindow.xaml:2734
-7f2a592a	新しい版で困ったとき、更新してから 14 日のあいだは、前の版のインストーラーを GitHub から取ってきて戻せます	MainWindow.xaml:2736
-44cc4c9a	リリースのページを開く	MainWindow.xaml:2737
-2420b253	新しい版を自動で確かめる	MainWindow.xaml:2741
-094990a5	1 日 1 回まで GitHub に最新の版を問い合わせ、新しい版があればお知らせします（送るのはアプリの名前と版だけです）	MainWindow.xaml:2742
-395b0a50	「更新する」を押すと、インストーラーをダウンロードして GitHub に公開されたものと同じかを確かめてから、画面を出さずに入れ替えます。そのあいだ十数秒、アプリが終了してファンは BIOS の設定で回り、終わると起動し直します。設定・ログ・記録はそのまま残ります	MainWindow.xaml:2746
-1483f6b3	見た目	MainWindow.xaml:2753
-d6776d41	表示言語・テーマ・アクセント色・背景色・文字色・フォント・文字の大きさを変えられます。変えるとすぐに反映されます	MainWindow.xaml:2755
-b8eab0de	表示言語 · Language	MainWindow.xaml:2758
-e0480009	画面の言葉の言語。「自動」なら Windows の表示言語に合わせます（対応していない言語なら英語）。選ぶとすぐに切り替わります	MainWindow.xaml:2761
-9bb17d53	テーマ	MainWindow.xaml:2764
-ae52556f	「Windows に合わせる」なら、Windows の設定（個人用設定 → 色 → アプリ モード）のダーク／ライトに合わせます	MainWindow.xaml:2767
-aab63522	アクセント色	MainWindow.xaml:2769
-d95f93ef	既定（紫）	MainWindow.xaml:2771
-2a8cd564	Windows の色に合わせる	MainWindow.xaml:2772
-ea89f663	Windows の設定（個人用設定 → 色 → アクセント カラー）の色を使います	MainWindow.xaml:2773
-3170685a	背景色	MainWindow.xaml:2782
-14c3e93f	背景・サイドバー・カードをまとめて染めます。ダークでは暗い色、ライトでは明るい色になり、テーマを替えても色合いは同じです	MainWindow.xaml:2784
-17ff6b6d	既定	MainWindow.xaml:2786
-da6bf903	文字色	MainWindow.xaml:2795
-793df94e	画面のすべての文字の色です（補足の文字やグラフの目盛りも、同じ色合いで少し薄くなります）。ダークでは明るい色、ライトでは暗い色になり、どの背景でも読めます	MainWindow.xaml:2797
-1843d590	フォント	MainWindow.xaml:2809
-05dc00d5	画面の文字のフォント。日本語の文字がないフォントでは、日本語は Yu Gothic UI で表示します	MainWindow.xaml:2812
-bfea4384	あいうえお 温度とファン ABC 123 °C	MainWindow.xaml:2814
-982d7356	文字の大きさ	MainWindow.xaml:2817
-2b8e9d8c	画面全体（文字・ボタン・グラフ）を拡大・縮小します	MainWindow.xaml:2820
-00478af8	制御	MainWindow.xaml:2828
-13f4a528	DRY RUN（テストモード）	MainWindow.xaml:2831
-db8eea4d	計算結果を表示するだけで、ファンには書き込みません（ポンプの回転が落ちたときの保護運転と、自分で始めた識別・測定・一時指定だけは書き込みます）	MainWindow.xaml:2832
-b373eaee	更新間隔	MainWindow.xaml:2847
-14e1cbc6	緊急全開（CPU・その他）	MainWindow.xaml:2851
-35593dc1	カーブで使っているどれかのセンサーがこの温度に達すると、全ファンを 100% にします	MainWindow.xaml:2852
-53ef686b	緊急全開（GPU Hot Spot）	MainWindow.xaml:2856
-279d8c16	Hot Spot は GPU 内でいちばん熱い点で、Edge より 10〜20°C 高く出ます	MainWindow.xaml:2857
-9bcc9b8c	Radeon RX 7000 シリーズは Hot Spot 110°C で自動的に性能を下げます。全開の解除は、しきい値より 5°C 下がってからです。	MainWindow.xaml:2861
-1ac4b576	このアプリについて	MainWindow.xaml:2868
-81d90dca	＋ 新しいプロファイル	MainWindow.xaml:2879
-4cdf9ede	ファンカーブの組み合わせを名前を付けて保存し、切り替えられます	MainWindow.xaml:2882
-d36eeaf3	このプロファイルの役割。名前を変えても、自動セットアップ（静音は目標温度 +5°C・冷却重視は −5°C）・新しいファンのカーブ・ワンタッチの「静音」が、この役割で正しく動きます	MainWindow.xaml:2898
-82ac5e85	このプロファイルのときに使う Windows の電源プラン	MainWindow.xaml:2901
-d663551d	普段使う	MainWindow.xaml:2904
-80173301	複製	MainWindow.xaml:2905
-1aafcfce	終了時に元の電源プランに戻す	MainWindow.xaml:2914
-935428de	電源プランは、プロファイルが切り替わったときに自動で変わります（「変えない」を選ぶとそのまま）	MainWindow.xaml:2915
-02bd77a9	＋ ルールを追加	MainWindow.xaml:2925
-95dbf04d	スケジュール	MainWindow.xaml:2927
-c6ae093f	時間帯でプロファイルを切り替えます（例: 毎日 23:00〜7:00 は静音）。アプリの自動切り替えのほうが優先されます	MainWindow.xaml:2928
-b30b1d5c	毎日	MainWindow.xaml:2945
-1b0c1825	平日	MainWindow.xaml:2946
-c16e0695	週末	MainWindow.xaml:2947
-9b7e9425	開始時刻（例: 23:00）	MainWindow.xaml:2949
-1925ac9b	〜	MainWindow.xaml:2950
-a297edb9	終了時刻（例: 7:00）。開始より前なら翌日の時刻	MainWindow.xaml:2951
-8d3afa5f	プロファイルの自動切り替え	MainWindow.xaml:2967
-a6a78db0	指定したアプリが起動している間、プロファイルを自動で切り替えます。上にあるルールほど優先されます。終了すると「普段使う」プロファイルに戻ります。	MainWindow.xaml:2969
-235c5be1	プロセス名（例: eldenring）。.exe は付けても付けなくても構いません	MainWindow.xaml:3005
-92b89c34	実行中のアプリから選ぶ ▾	MainWindow.xaml:3006
-850bfcd1	ワンタッチ操作	MainWindow.xaml:3018
-b7230497	ダッシュボード・タスクトレイ・ミニウィジェット・スマホから、一時的にブースト（全開）や静音にできます	MainWindow.xaml:3019
-37cd5718	ホットキーを使う（ゲーム中でも操作できます）	MainWindow.xaml:3022
-18d0cc13	Ctrl+Alt+B: 5 分ブースト ／ Ctrl+Alt+Q: 1 時間静音 ／ Ctrl+Alt+N: 解除	MainWindow.xaml:3023
-7ae7ed01	「静音」で使うプロファイル	MainWindow.xaml:3031
-77a57db6	スマホから監視	MainWindow.xaml:3042
-fe9fdb92	スマホのブラウザから見られるようにする	MainWindow.xaml:3045
-49d300c9	同じ Wi-Fi のスマホから温度・回転数の確認とプロファイルの切り替えができます。Windows ファイアウォールに、プライベートネットワーク（自宅など）だけの許可を追加します	MainWindow.xaml:3046
-6ac0a5cf	ポート番号	MainWindow.xaml:3055
-cf308cb2	アクセス用の鍵を作り直す	MainWindow.xaml:3057
-389a7b03	今までの URL では開けなくなります	MainWindow.xaml:3058
-ac3a6f94	スマホのカメラで QR コードを読むか、次の URL を開いてください	MainWindow.xaml:3069
-12e17da1	URL にはアクセス用の鍵が含まれています。他の人に教えないでください	MainWindow.xaml:3072
-967f26f5	スマホに通知	MainWindow.xaml:3081
-9fcdd35a	緊急全開・ポンプ異常・ファンの停止などをスマホに通知する	MainWindow.xaml:3084
-1fe03718	外出中やゲーム中でも気づけます。同じ内容の通知は 10 分間は送りません	MainWindow.xaml:3085
-5bd9ee6f	ntfy（アプリを入れるだけ・おすすめ）	MainWindow.xaml:3089
-a643ae88	1. スマホに「ntfy」アプリを入れる（App Store / Google Play・無料・登録不要）\n2. アプリの「＋」から、下のトピック名を購読する（左の QR コードをカメラで読んでも OK）	MainWindow.xaml:3105
-6ced87ba	トピック名	MainWindow.xaml:3116
-19b272e4	作り直す	MainWindow.xaml:3118
-084d7180	サーバー	MainWindow.xaml:3119
-172228d8	トピック名を知っている人は誰でも通知を読めます。推測されにくい今の名前のまま使ってください	MainWindow.xaml:3123
-88a4ad91	Discord のサーバー設定 →「連携サービス」→「ウェブフック」→「新しいウェブフック」→「ウェブフック URL をコピー」で取得できます	MainWindow.xaml:3131
-cb5c4d63	「注意」も通知する（ファンの停止・センサーの異常など）	MainWindow.xaml:3136
-a000b788	回復したときも通知する	MainWindow.xaml:3138
-a15f890e	テスト送信	MainWindow.xaml:3141
-c114b738	ライティングを開く	MainWindow.xaml:3150
-3f597f38	LED のライティング（OpenRGB 連携）の画面を開きます	MainWindow.xaml:3151
-c0c9a6ba	LED のライティング（OpenRGB 連携）	MainWindow.xaml:3153
-158ada0f	LED の設定は、左のメニューの「ライティング」に移りました。接続・光り方・音楽連動・デバイスごとの設定をまとめて変えられます。	MainWindow.xaml:3155
-c1eb5397	電気代の計算	MainWindow.xaml:3163
-6da48835	ダッシュボードとレポート画面に、消費電力量と電気代の目安を表示します	MainWindow.xaml:3164
-db0f8cfc	1 kWh あたりの電気代	MainWindow.xaml:3176
-e3b755dc	円（明細の「請求金額 ÷ 使用量 kWh」がいちばん正確。分からなければ目安の 31 円のまま）	MainWindow.xaml:3179
-1405c464	CPU・GPU 以外の消費電力	MainWindow.xaml:3180
-2b38bba6	W（マザーボード・メモリ・SSD・ファン・ポンプ・LED など。一般的に 30〜70 W）	MainWindow.xaml:3183
-89dc9684	電源の効率	MainWindow.xaml:3184
-30253b1e	%（電源の損失の分。80 PLUS Gold で 87〜90%。分からなければ 88% のまま）	MainWindow.xaml:3187
-a659b907	CPU と GPU はセンサーの値を使い、それ以外の分と電源の損失を足して、コンセントから引く電力にします。モニターやスピーカーは含みません。ワットチェッカーで合わせ込むまでは ±20% ほどの目安です。	MainWindow.xaml:3190
-8d572aec	ワットチェッカーで合わせ込む	MainWindow.xaml:3193
-138470aa	PC 本体の電源コードをワットチェッカーにつなぎ（モニターは別のコンセントに）、表示の値を入れて「記録」を押します。アイドル中だけでも合わせ込めます。負荷中（ゲームやベンチマークを動かしている間）も記録すると、電源の効率も求めます。どちらも、値が落ち着いてから押してください。	MainWindow.xaml:3195
-083b2352	アイドル中のワットチェッカーの値	MainWindow.xaml:3207
-42c1084f	記録	MainWindow.xaml:3209
-8d15c619	負荷中のワットチェッカーの値	MainWindow.xaml:3211
-e4d1e7a9	合わせ込みを消す	MainWindow.xaml:3217
-69355ed4	安全機能	MainWindow.xaml:3227
-619b1ea2	見張りプロセスを使う（おすすめ）	MainWindow.xaml:3230
-b686ae3d	アプリが強制終了・フリーズしたとき、ファンが低い回転のまま止まってしまうのを防ぎます。タスクマネージャーに Zeph-Iris が 2 つ表示されますが、片方は見張り役です	MainWindow.xaml:3232
-f739cc9b	そのときの回転数	MainWindow.xaml:3245
-43c454af	ポンプは常に 100% にします	MainWindow.xaml:3245
-d063c0c0	アプリを自動で起動し直す（10 分間に 3 回までで、それ以上はお知らせを表示）	MainWindow.xaml:3249
-f2eae029	異常なセンサーの値を無視する	MainWindow.xaml:3254
-2487009f	一瞬だけ跳ねた値（読み取りエラー）で全開にならないようにします。負荷が変わっても値が動かない「固まった」センサーは、異常として扱います	MainWindow.xaml:3256
-3616d69f	起動時に部品の交換を確認する	MainWindow.xaml:3262
-f47011bb	GPU などを交換してセンサーが変わったときに、新しいセンサーへの置き換えを案内します	MainWindow.xaml:3264
-35eb3141	センサーがないときの回転数	MainWindow.xaml:3277
-90554019	部品を外した・交換したなどで、センサーそのものが見つからないカーブはこの回転数にします（センサーはあるのに値がおかしいときは、安全のため 100%）	MainWindow.xaml:3281
-963fb48e	異常の前後を自動で記録する	MainWindow.xaml:3286
-e424608f	緊急全開・ポンプ異常などのとき、前後 10 分の記録を保存します（レポート画面で確認できます）	MainWindow.xaml:3287
-f4e32f07	GPU のファンも制御できるようにする（試験的）	MainWindow.xaml:3293
-f73d1f9b	ファンカーブ画面の「端子を追加」に GPU のファンが表示されます。制御中は GPU ドライバーの自動制御（0 RPM モードなど）が止まるので、GPU の温度を使ったカーブで使ってください	MainWindow.xaml:3295
-f04fb800	メモリの温度を読む	MainWindow.xaml:3301
-5ac1bfd9	メモリの温度は、メモリの LED と同じ配線（SMBus）で読みます。OpenRGB などがこの配線を順番待ちせずに使っていると、ぶつかってメモリの温度が読めなくなることがあります。そのときはオフにしてください（メモリの温度を使うカーブは、センサーが見つからないときの回転数で回ります）	MainWindow.xaml:3303
-8154441c	設定のバックアップと共有	MainWindow.xaml:3312
-894c08f0	設定は変更のたびに自動でバックアップしています（10 分に 1 回まで・最大 30 個）。config.json が壊れても、起動時に自動で復旧します。プロファイルをファイルに書き出せば、別の PC で読み込めます（端子やセンサーは名前で対応付けます）	MainWindow.xaml:3314
-b187e750	設定を書き出す…	MainWindow.xaml:3316
-7c186faa	設定を読み込む…	MainWindow.xaml:3317
-077e159d	バックアップから戻す ▾	MainWindow.xaml:3320
-4222af0e	今すぐバックアップ	MainWindow.xaml:3321
-8d711ab6	セットアップとファイル	MainWindow.xaml:3330
-f8cfb37f	セットアップウィザードを開く	MainWindow.xaml:3332
-0cdb9795	設定フォルダを開く	MainWindow.xaml:3333
-e252e493	ログフォルダを開く	MainWindow.xaml:3334
-b6ac496a	使い方（説明書）を開く	MainWindow.xaml:3335
-619bb003	アプリのフォルダーの説明書を開きます（なければ GitHub の README）	MainWindow.xaml:3336
-17abf912	ログ・設定・部品の一覧をまとめた zip を作り、GitHub の報告ページを開きます（個人的な情報は伏せます）	MainWindow.xaml:3338
-f0a34e2b	この PC で動いたことを知らせる GitHub のページを、部品の型番と、アプリが確かめたこと（数だけ）を入れた状態で開きます。問題がなくても、まだ確かめていない部品の報告はとても助かります	MainWindow.xaml:3340
-c7cbd09a	ファン制御用のドライバー（PawnIO）	MainWindow.xaml:3348
-6234a43c	アンインストール（お片付け）	MainWindow.xaml:3356
-29c38de6	このアプリを使うのをやめるときに使います。ファンを BIOS の自動制御に戻したことを確かめてから、ライティングの制御・ログオン時の自動起動・ファイアウォールの許可などを片付けて終了します。何を行うかは、次の画面で確かめてから始められます（設定・記録を消すか、PawnIO もアンインストールするかも選べます）	MainWindow.xaml:3358
-b2abf4ee	アンインストール（お片付け）…	MainWindow.xaml:3360
+286f135b	動作報告…	MainWindow.xaml:718
+96d19994	この PC で動いたことを知らせる GitHub のページを、部品の型番と、アプリが確かめたこと（数だけ）を入れた状態で開きます	MainWindow.xaml:719
+2f719799	この PC で動いたら、「動作報告…」で知らせてもらえると助かります。集まった報告から、README の「動作確認済み」を増やします。	MainWindow.xaml:721
+09a1ab78	写真の作者とライセンス	MainWindow.xaml:742
+a7377177	回転中のファンの数	MainWindow.xaml:747
+0ee2f2ba	画像を変更	MainWindow.xaml:752
+1606ea26	センサーを表示	MainWindow.xaml:754
+9a7c10f0	編集するプロファイル	MainWindow.xaml:786
+262a4a95	FanControl から取り込む…	MainWindow.xaml:789
+a4fa184c	FanControl（Rem0o）のカーブとファンの名前を、新しいプロファイルとして読み込みます（Configurations フォルダーの .json を選びます）	MainWindow.xaml:790
+33c1221d	端子を追加	MainWindow.xaml:794
+762d7886	「テスト」で 8 秒だけ全開にして、どのファンか確認できます（全プロファイルに追加されます）	MainWindow.xaml:795
+82a38dd8	テスト	MainWindow.xaml:803
+2a1d8a18	追加	MainWindow.xaml:804
+1337d6a7	テスト（8秒 100%）	MainWindow.xaml:836
+5f279080	基本設定	MainWindow.xaml:839
+ba60770e	名前（全プロファイル共通）	MainWindow.xaml:849
+2bf39d7d	種類	MainWindow.xaml:853
+99ad1110	ファン	MainWindow.xaml:855
+0af668ca	ポンプ（簡易水冷）	MainWindow.xaml:856
+6920ae77	このツールで制御する	MainWindow.xaml:863
+67175336	オフにすると BIOS の設定で回ります（ポンプは監視だけ続けます）	MainWindow.xaml:864
+03cf27f6	GPU のファン（試験的）	MainWindow.xaml:871
+8be5fd73	制御している間は、GPU ドライバーの自動制御（アイドル時に止まる 0 RPM モードなど）が止まります。カーブには GPU の温度を使ってください。GPU 温度が 85°C（Hot Spot は 100°C）を超えると、設定に関係なく 100% にします。	MainWindow.xaml:873
+59c6e4bc	制御の方法	MainWindow.xaml:877
+a80265dc	カーブ	MainWindow.xaml:882
+051753eb	温度ごとの回転数を自分で決める	MainWindow.xaml:883
+0e59213f	目標温度	MainWindow.xaml:889
+a390636e	決めた温度を超えないよう、その場で回転を変える	MainWindow.xaml:890
+27bd9d15	固定	MainWindow.xaml:896
+84b1afad	いつも同じ回転（ポンプ向け）	MainWindow.xaml:897
+26a15192	連動（グループ）	MainWindow.xaml:903
+7f925b2a	他のファンと回転を揃える	MainWindow.xaml:904
+b2e99d58	目標温度モード	MainWindow.xaml:913
+41ce3406	選んだ温度が目標を超えないよう、できるだけ低い回転で自動調整します。カーブを考える必要はありません。目標より高い状態が続くほど、少しずつ回転を上げます。	MainWindow.xaml:915
+bc125c78	見る温度	MainWindow.xaml:927
+84629c82	反応の強さ	MainWindow.xaml:933
+f4774c9f	大きいほど温度の変化にきびきび反応します（小さいほど静かでゆったり）	MainWindow.xaml:933
+34c1c904	連動モード（ファングループ）	MainWindow.xaml:944
+4e05c4dd	選んだファン（リーダー）と同じ回転にします。前面の吸気ファン同士など、同じ役割のファンを揃えると「ウォンウォン」といううなりを防げます。	MainWindow.xaml:946
+932d7da3	合わせる相手	MainWindow.xaml:957
+7c20c9ff	上乗せ	MainWindow.xaml:960
+e66fa60a	リーダーより少し速く／遅く回したいときに使います	MainWindow.xaml:960
+ca7e07b6	回転数（rpm）で揃える	MainWindow.xaml:966
+a4885460	両方のファンをキャリブレーション済みなら、% ではなく実際の回転数を合わせます（型番の違うファン同士でも揃う）	MainWindow.xaml:967
+7dd9bc7b	固定回転数	MainWindow.xaml:979
+309627fd	最低回転数	MainWindow.xaml:996
+ac1c4927	上昇の速さ / 秒	MainWindow.xaml:1002
+fa9ef1de	下降の速さ / 秒	MainWindow.xaml:1006
+3aed820e	ポンプ保護	MainWindow.xaml:1015
+a5668673	どの設定でも 40% 未満にはなりません。回転数が警告値を 3 秒続けて下回ると、BIOS 制御中でも 100% にして通知します。	MainWindow.xaml:1017
+7c811ff7	警告する回転数	MainWindow.xaml:1024
+cb5145a7	最低回転数に反映	MainWindow.xaml:1039
+e0e8a2f4	特性を測る	MainWindow.xaml:1041
+ec41d4ae	中止	MainWindow.xaml:1042
+6d8d04fc	ファンの特性（キャリブレーション）	MainWindow.xaml:1045
+addb0201	ファンを 0〜100% で動かして、止まる回転数・回り始める回転数・最大回転数を測ります（約 1〜2 分）。「自動セットアップ」なら、まだ測っていないファンをまとめて測ります	MainWindow.xaml:1046
+26101bee	＋ 帯を追加	MainWindow.xaml:1060
+f5097e76	共振回避（うるさい回転数を避ける）	MainWindow.xaml:1062
+11bb3e7a	ケースやラジエーターが「ブーン」と共鳴する回転数の帯を登録すると、その帯の中には留まらず素早く通り過ぎます（全プロファイル共通）	MainWindow.xaml:1064
+da85df7a	回転数を試す	MainWindow.xaml:1070
+af4cf1be	スライダーを動かすと、このファンだけ実際にその回転数になります（操作をやめて 20 秒たつと元に戻ります）。うるさい所が見つかったら「ここを避ける」を押してください。	MainWindow.xaml:1072
+ea6d9cfc	ここを避ける	MainWindow.xaml:1085
+ed263790	避ける範囲	MainWindow.xaml:1101
+49024f94	% 〜	MainWindow.xaml:1103
+8b7237a1	まだ登録されていません。気になる音がなければ、このままで大丈夫です。	MainWindow.xaml:1112
+08fb3614	自動セットアップ…	MainWindow.xaml:1123
+af0435c9	CPU と GPU に負荷をかけて測り、目標温度を守れるいちばん静かなカーブを自動で作ります（自動セットアップの画面を開きます）	MainWindow.xaml:1124
+cd6687b0	コピー ▾	MainWindow.xaml:1125
+a8a30430	＋ カーブを追加	MainWindow.xaml:1126
+29506d39	このカーブを削除	MainWindow.xaml:1127
+5d2df974	複数のカーブがあるときは、要求の高いほうを採用します	MainWindow.xaml:1131
+4c746c03	カーブ名	MainWindow.xaml:1153
+8e521d8d	連動する温度センサー	MainWindow.xaml:1157
+06c32776	プリセット	MainWindow.xaml:1164
+60e54e25	静音	MainWindow.xaml:1165
+0d4c913e	バランス	MainWindow.xaml:1166
+bec16825	冷却重視	MainWindow.xaml:1167
+7b60cd54	全開	MainWindow.xaml:1168
+3f2721c4	点をドラッグで移動（Shift で 5 刻み） ／ 空白をダブルクリックで追加 ／ 点を右クリックで削除 ／ Ctrl+Z で元に戻す	MainWindow.xaml:1173
+88ee66d0	ヒステリシス	MainWindow.xaml:1206
+27871d57	温度が下がるとき、この温度差だけ遅れて回転を下げます（うなり防止）	MainWindow.xaml:1207
+cc724aca	反応の速さ	MainWindow.xaml:1211
+58bf73af	小さいほど温度の急な変化を無視してゆったり動きます（EMA 係数）	MainWindow.xaml:1212
+ed1667bc	ハードウェアを初期化しています…	MainWindow.xaml:1225
+762ee495	オプション	MainWindow.xaml:1266
+3b807e37	AI 冷却アドバイザーを使う（実験的な機能）	MainWindow.xaml:1270
+6fa47fc1	オンにすると、すぐ下に AI のアドバイスの欄が出ます。記録の統計と設定を、この PC で動く Ollama に渡して分析させます（データは PC の外に出ません）。Ollama と AI のモデル（数 GB）を別に入れる必要があります。回答を作るあいだは CPU・GPU に負荷がかかるので、温度が上がることがあります。設定を書き換えることはありません	MainWindow.xaml:1272
+f406552c	AI 冷却アドバイザー（Ollama）	MainWindow.xaml:1281
+cf692ab8	記録の統計（最小・平均・最大など）と設定・診断・冷却テストの結果を、この PC で動いている Ollama に渡して分析させます。データは PC の外に送信されません。	MainWindow.xaml:1283
+662a0e08	Ollama の URL	MainWindow.xaml:1293
+00a8f617	モデル	MainWindow.xaml:1295
+1576035a	一覧を更新	MainWindow.xaml:1297
+ba9c8066	AI に聞きたいこと（任意）	MainWindow.xaml:1299
+f1b60e47	質問（任意）	MainWindow.xaml:1300
+f8aac5e1	例: ゲーム中のファンの音を静かにしたい ／ ラジエーターファンのカーブを見直したい（空欄でも分析できます）	MainWindow.xaml:1301
+59ed94e7	分析する	MainWindow.xaml:1303
+de37473b	停止	MainWindow.xaml:1304
+8ba6749e	AI に渡す内容を見る	MainWindow.xaml:1305
+15466e37	直近 30 分	MainWindow.xaml:1318
+d5eeddbf	直近 2 時間	MainWindow.xaml:1319
+33fe68e5	記録すべて	MainWindow.xaml:1320
+482a6b70	診断する	MainWindow.xaml:1322
+6ff94291	自動診断	MainWindow.xaml:1325
+8165f824	記録から、回転のふらつき・冷やしすぎ・冷え不足・停止域・うなりなどを見つけて、調整案を出します。ゲームなどで負荷をかけた後に実行すると効果的です	MainWindow.xaml:1326
+7fff8113	掃除した（ここを新しい基準にする）	MainWindow.xaml:1361
+f0f25c1b	フィルターやファンを掃除したら押してください。これ以降の記録を新しい基準にして比べます	MainWindow.xaml:1362
+9c1df669	今すぐ調べる	MainWindow.xaml:1363
+267e9ec4	ファンの劣化・ホコリのチェック	MainWindow.xaml:1366
+2c6b3065	1 分ごとの記録を保存して、「同じ回転の指示なのに回転数が下がっていないか（軸受けの劣化・ホコリ）」「同じ消費電力なのに温度が上がっていないか（フィルター・ラジエーターの目詰まり）」を、以前と比べます。	MainWindow.xaml:1368
+d4af943f	室温のセンサー	MainWindow.xaml:1374
+c7b80b29	休む時間のない日に、冷え方を比べる基準にする温度。マザーボードの「System」は、部屋ではなく基板の上の温度のことがあります（PC が動くと一緒に上がる）	MainWindow.xaml:1375
+095205e6	自動セットアップを開始	MainWindow.xaml:1416
+46ac54ca	おすすめ	MainWindow.xaml:1423
+766747f4	ボタン 1 つで、① ファンの特性を測る → ② CPU と GPU に負荷をかけて、ファンを 100% から少しずつ下げながら温度を測る → ③「目標温度を守れる、いちばん静かなカーブ」を作る、まで進みます。結果は確かめてから適用します（途中で中止しても、いつもの制御に戻り、設定は変わりません）。	MainWindow.xaml:1427
+8d17780e	CPU の目標	MainWindow.xaml:1444
+31af6243	CPU に全力で負荷をかけたときに、この温度を超えないようにします	MainWindow.xaml:1446
+9f77375a	GPU の目標	MainWindow.xaml:1450
+a9addd42	GPU に全力で負荷をかけたときに、この温度を超えないようにします（負荷はアプリがかけます。ゲームの起動は要りません）	MainWindow.xaml:1452
+14e2760b	まだ測っていないファンは、先に特性を測る	MainWindow.xaml:1477
+140786db	1 台 約 1〜2 分。止まる回転数が分かると、最低回転数も安全な値にします	MainWindow.xaml:1479
+3e4a2fef	測定結果	MainWindow.xaml:1501
+67633e51	作られるカーブ（上の目標温度を動かすと、測り直さずに作り直せます）	MainWindow.xaml:1524
+0e95ff55	このプロファイルに適用	MainWindow.xaml:1528
+0acedb82	測った CPU と GPU のカーブを、選んだプロファイルに入れます	MainWindow.xaml:1529
+ab824de0	測った CPU と GPU のカーブを、全プロファイルに入れます。役割が「静音」のプロファイルは目標 +5°C、「冷却重視」は −5°C、それ以外は目標どおりで作ります	MainWindow.xaml:1531
+a6de9295	全プロファイルにまとめて適用	MainWindow.xaml:1532
+35ae4fe6	10分	MainWindow.xaml:1545
+c7ad32f7	15分	MainWindow.xaml:1546
+89cb8346	テスト開始	MainWindow.xaml:1547
+f965efc0	冷却テスト（今の設定を確かめる）	MainWindow.xaml:1551
+16e5632b	待機 30 秒 → CPU 全コアに負荷 → 負荷を止めて冷却、の順に自動で測ります。今のファン設定でどこまで冷えるかが分かります。GPU は含まれないので、GPU も試すときはテスト中にゲームやベンチマークを動かしてください。	MainWindow.xaml:1553
+eb918d75	準備ができたら「テスト開始」を押してください。重いアプリは閉じておくと正確に測れます。	MainWindow.xaml:1559
+48090db5	測定中の推移	MainWindow.xaml:1566
+339697a1	レポートを保存	MainWindow.xaml:1575
+8a49bfd9	AI に分析させる	MainWindow.xaml:1576
+1ba434e9	結果	MainWindow.xaml:1579
+d5adfca5	電気代（円）	MainWindow.xaml:1597
+30ece901	電力量（kWh）	MainWindow.xaml:1598
+4feccfb0	電力と電気代（目安）	MainWindow.xaml:1601
+f342a144	いまの消費電力	MainWindow.xaml:1607
+6c5afbe8	今日	MainWindow.xaml:1612
+895e4f8f	今月	MainWindow.xaml:1617
+fcfbfdb9	今月の見込み	MainWindow.xaml:1622
+74c2a632	直近 30 日 ／ 棒にマウスを乗せると、その日の値を表示します。単価などは 設定 →「通知・連携」で変更できます	MainWindow.xaml:1628
+64cff568	フォルダを開く	MainWindow.xaml:1636
+4afe1df2	ゲームの記録（FPS と温度）	MainWindow.xaml:1638
+ba856364	ゲームを遊ぶたびに、平均 FPS・1% Low（カクつき）と、CPU・GPU の温度、ファンの回転数を 1 件ずつ残します。ファンの設定を変える前と後で、温度と FPS がどう変わったかを比べられます。	MainWindow.xaml:1640
+ac0fb61e	ゲーム中の FPS と温度を記録する	MainWindow.xaml:1645
+01f5728d	同梱の Intel PresentMon（MIT License）で、どのアプリが何 ms ごとに画面を描いたかだけを見ます（画面の中身・入力は見ません）。手前で 1 分ほど描き続けたアプリをゲームとみなし、ブラウザー・チャット・動画のアプリは除きます。記録はこの PC の中だけに置きます。	MainWindow.xaml:1647
+de7074fc	まだ記録はありません。	MainWindow.xaml:1651
+04adc800	詳しく	MainWindow.xaml:1658
+4549282a	消す	MainWindow.xaml:1659
+4668d319	ゲームではない	MainWindow.xaml:1660
+97077d12	このアプリを、これからは記録しません（これまでの記録も消します）	MainWindow.xaml:1661
+7b9f9495	異常の記録（フライトレコーダー）	MainWindow.xaml:1685
+f98ae273	緊急全開・ポンプ異常・ファンの停止などが起きたとき、前後 10 分のすべての温度と回転数を自動で保存します。原因を調べるときや、AI に相談するときに使えます。	MainWindow.xaml:1687
+b1ff910c	概要	MainWindow.xaml:1696
+d0f79d07	CSV を開く	MainWindow.xaml:1697
+0fc2ab3f	まだ記録はありません（危険な状態になったことがない、ということです）。	MainWindow.xaml:1708
+1a038335	仮想センサー	MainWindow.xaml:1722
+a16411bf	複数のセンサーの最大値・平均値や、2 つのセンサーの差（例: 水温 − 室温）を作って、カーブの連動先に使えます。	MainWindow.xaml:1724
+696b6294	新しい仮想センサー	MainWindow.xaml:1750
+8b00feb4	最大値（いちばん高い温度）	MainWindow.xaml:1759
+4d8caee1	平均値	MainWindow.xaml:1760
+5658427c	最小値	MainWindow.xaml:1761
+07307e41	差分（A − B）	MainWindow.xaml:1762
+fcf52b91	作成	MainWindow.xaml:1790
+28cf181a	最小・最大をリセット	MainWindow.xaml:1798
+0d4a4da5	最小・最大・平均を、いまから数え直します（ゲームを始める前などに）	MainWindow.xaml:1799
+6ae383a5	最小・最大・平均は、アプリを起動してから（画面を開いていないあいだも数えます）	MainWindow.xaml:1801
+7a5c0197	いま	MainWindow.xaml:1822
+e8a96130	最小	MainWindow.xaml:1823
+10b17f28	最大	MainWindow.xaml:1824
+78bdf61f	平均	MainWindow.xaml:1825
+bc3cb03d	いま LED に送っている色（LED ごとに違うときは先頭の色）	MainWindow.xaml:1871
+9c4008ce	接続	MainWindow.xaml:1873
+e59863c1	無料の OpenRGB を通して、マザーボード・メモリ・ファン・LED テープなどの色を変えます。OpenRGB が動いていなければ、このアプリが「SDK Server」をオンにして起動します（下のスイッチ）。	MainWindow.xaml:1875
+8f1d5969	オンにすると OpenRGB に接続して、下で選んだ光り方で LED の色を変えます。オフにすると、このアプリは LED に何も送りません	MainWindow.xaml:1879
+49aac369	OpenRGB と連携する	MainWindow.xaml:1881
+6305fed9	OpenRGB が対応している LED が対象です。ASRock Polychrome などメーカーの RGB ソフトとは同時に使わないでください（取り合いになってチカチカします）	MainWindow.xaml:1882
+c8f39b51	LED をすべて消します。連携は続けるので、機器が自分の光り方（レインボーなど）に戻りません。タスクトレイの「LED の光り方」からも切り替えられます	MainWindow.xaml:1887
+4c92312b	消灯する（連携は続ける）	MainWindow.xaml:1889
+956da380	寝るときや画面を暗くしたいときに。設定はそのまま残るので、オフに戻すと同じ光り方で点きます	MainWindow.xaml:1890
+7f4cedf2	接続先	MainWindow.xaml:1894
+722099aa	OpenRGB の SDK サーバーの場所。同じ PC なら 127.0.0.1 : 6742 のままで大丈夫です	MainWindow.xaml:1895
+64c2cd9b	OpenRGB が動いている PC のアドレス（同じ PC なら 127.0.0.1）	MainWindow.xaml:1897
+5b89ecc9	OpenRGB の SDK サーバーのポート番号（ふつうは 6742）	MainWindow.xaml:1899
+1ac6b9e1	接続テスト	MainWindow.xaml:1900
+235b3d31	OpenRGB につながるか確かめて、見つかったデバイスを下の一覧に表示します（LED の色は変えません）	MainWindow.xaml:1901
+342a5300	今すぐ再接続	MainWindow.xaml:1902
+f65c9d04	OpenRGB を起動し直したときや、デバイスを付け外ししたときに押すと、待たずにすぐ繋ぎ直します	MainWindow.xaml:1903
+b44c9cc9	OpenRGB のサイト	MainWindow.xaml:1904
+d279d75b	LED の色を変えるのに使う OpenRGB（無料）を入手するページ（openrgb.org）を開きます	MainWindow.xaml:1905
+2df46840	つながらない状態が続くと、OpenRGB がサービスとして入っていればサービスを、なければ Program Files の OpenRGB を「--server --startminimized」で起動します。動いている OpenRGB を止めたり起動し直したりはしません	MainWindow.xaml:1910
+858ce626	OpenRGB が動いていなければ起動する	MainWindow.xaml:1912
+7c3107e5	同じ PC の OpenRGB だけです。安全のため、Program Files に入れた OpenRGB だけを起動します（zip を展開した OpenRGB は、自分で起動してください）	MainWindow.xaml:1913
+0218f6e9	光り方	MainWindow.xaml:1923
+8221927c	LED をどのように光らせるかを選びます。選ぶとすぐに LED に反映されます。	MainWindow.xaml:1924
+4e683b86	温度	MainWindow.xaml:1926
+2986bd87	CPU や GPU の温度に合わせて、水色（冷えている）→ 緑 → 黄 → 赤（熱い）と色が変わります	MainWindow.xaml:1927
+d24ecf3b	レインボー（流れる）	MainWindow.xaml:1929
+5f081b9f	虹色が LED の並びに沿ってゆっくり流れます	MainWindow.xaml:1930
+0b164d69	レインボー（固定）	MainWindow.xaml:1932
+e584bd69	虹色を LED の並びに沿って並べたまま、動かしません	MainWindow.xaml:1933
+7eda32b9	呼吸	MainWindow.xaml:1935
+28f5315f	選んだ色が、息をするようにゆっくり明るくなったり暗くなったりします	MainWindow.xaml:1936
+f5b86f25	固定色	MainWindow.xaml:1938
+afb96a15	選んだ 1 色で光り続けます	MainWindow.xaml:1939
+71259fb6	雷	MainWindow.xaml:1941
+750a4eb3	暗い嵐の空に、ときどき白い稲光が走ります。1 回の雷は 2〜3 回またたき、落ちた場所から広がって消えます（全部のデバイスで同時に光ります）	MainWindow.xaml:1942
+678fa065	波	MainWindow.xaml:1944
+a8481ef8	選んだ色の海に、明るさのうねりが寄せては返します。波の頭は白く泡立ちます	MainWindow.xaml:1945
+f00ee174	さえずり	MainWindow.xaml:1947
+c3299008	やわらかい若葉色の上に、小鳥の声のような小さな光が「ちちっ」と 2〜4 回跳ねます	MainWindow.xaml:1948
+8b898d11	炎	MainWindow.xaml:1950
+f16a0b90	赤〜橙〜黄の光が、LED ごとにゆらゆらと揺らめきます	MainWindow.xaml:1951
+ce20ec89	オーロラ	MainWindow.xaml:1953
+01eb7369	緑・水色・紫の光の帯が、夜空をゆっくり流れてうねります	MainWindow.xaml:1954
+9afce40d	流れ星	MainWindow.xaml:1956
+4dc2e807	暗い夜空を、ときどき光が尾を引いて流れます（向きはそのたびに変わります）	MainWindow.xaml:1957
+5db4a3ad	心拍	MainWindow.xaml:1959
+2634e74e	選んだ色が「ドクン、ドクン」と 2 回ずつ脈打ちます（速さ 1 で 1 分に 60 回）	MainWindow.xaml:1960
+f8fa9d4d	音楽連動	MainWindow.xaml:1962
+0b622a65	PC で流れている音（スピーカー・ヘッドホンに出ている音）に合わせて光ります。マイクは使いません	MainWindow.xaml:1963
+c9d8508e	色を決める温度	MainWindow.xaml:1970
+e315f45c	どのセンサーの温度で色を決めるか。「自動」なら CPU と GPU の高いほうを使います	MainWindow.xaml:1971
+33276084	水色になる温度	MainWindow.xaml:1976
+a08b7324	この温度以下では水色（冷えている色）になります	MainWindow.xaml:1976
+0582db54	赤になる温度	MainWindow.xaml:1982
+74068713	この温度以上で真っ赤（熱い色）になります。間は緑 → 黄と変わります	MainWindow.xaml:1982
+181b9ba1	速さ	MainWindow.xaml:1991
+6f30cf75	レインボーは 1 倍で 1 周 30 秒（3 倍で 10 秒・10 倍で 3 秒）、呼吸は 1 倍で 1 回 6 秒。音楽連動の「流れる波」では流れる速さ	MainWindow.xaml:1992
+36bcf3d7	{0:F1} 倍	MainWindow.xaml:1993
+f9dafe1e	PC から出ている音を分析して、ドラムの瞬間・テンポ・音の高さに合わせて光らせます。まずはプリセットを選び、気になるところだけ下で調整してください。	MainWindow.xaml:2006
+5414b5c1	いまの音を、一般的なイコライザーと同じ 10 の帯（31 Hz〜16 kHz）に分けて、低音（左）から高音（右）まで表示しています。中の明るい棒はドラムなどの「立ち上がり」、白い線は少し前までのいちばん高いところです	MainWindow.xaml:2016
+a8d258f0	キック（バスドラム）を見つけるたびに光ります。同期テスト中は、クリック音で白く光ります	MainWindow.xaml:2020
+9aa04ac9	曲のテンポ（1 分間の拍の数）。テンポをつかむと、ビートを先読みして遅れなく光らせます	MainWindow.xaml:2022
+8d97f850	音量 = いまの音の大きさ。基準 = 自動の音量調整が「いちばん明るい」とみなしている大きさ（dBFS。0 が最大で、マイナスが大きいほど小さい音）	MainWindow.xaml:2026
+1634d9e9	とても小さな音（雑音）には反応しないようにしています。音が鳴っていないときは、下の「音が止まったとき」の光り方になります	MainWindow.xaml:2028
+2f3d51ba	光り方・強さ・色の組み合わせを、まとめておすすめの組み合わせにします。下の設定を自分で変えると「カスタム」になります	MainWindow.xaml:2037
+932cdbc7	音楽の表現	MainWindow.xaml:2048
+2c274961	音楽に合わせてどう光らせるか。デバイスごとに変えたいときは、下の「デバイス」で選べます	MainWindow.xaml:2049
+4d0abffb	「ストロボ」は激しく点滅するため、下の「激しい点滅を抑える」をオフにしたときだけ選べます。	MainWindow.xaml:2058
+94a21ec2	楽器の分け方	MainWindow.xaml:2062
+8703d0a3	光り方「パーツごとの役割」で、ゾーンの「反応する音」が「パーツに合わせる」のときに、どの音・楽器で光るか。ゾーンごとに選んだ音はそのままです	MainWindow.xaml:2063
+876fdd1c	楽器は音から推測するので、曲によっては取り違えます。速い音（ハイハット・スネア）は小さな光の粒で見せ、グラボやメモリなど更新の遅いデバイスでは、曲の部分ごとに目立つ楽器の色だけで光ります	MainWindow.xaml:2073
+c87d9699	強さ	MainWindow.xaml:2079
+541920a5	ビートで光る強さと、色が切り替わる間隔。選ぶと、下の「滑らかさ」「メリハリ」「いちばん暗いとき」もその強さに合わせた値になります	MainWindow.xaml:2080
+a800602a	色の組み合わせ	MainWindow.xaml:2090
+5c25c402	音楽連動で使う色のセット（パレット）。ビートのたびに、この中の次の色へ切り替わります	MainWindow.xaml:2091
+5519f7df	単色では色で楽器を分けられません。光り方を「楽器で光る」にすると、明るさ・光る場所・動き方で楽器を見せます（キックは全体、ハイハットは小さな粒、歌は全体の明るさなど）	MainWindow.xaml:2102
+758ca518	感度	MainWindow.xaml:2107
+ab2026d3	+ にすると、小さな音でも明るく光ります。音が小さい曲や、音量を下げて聴いているとき用。− にすると、大きな音のときだけ明るくなります	MainWindow.xaml:2108
+65d61087	反応の感度	MainWindow.xaml:2114
+33c9b585	ドラムなどの「音の立ち上がり」をどれだけ拾うか。大きいほど小さなドラムの音でもビートとして反応します。反応しすぎてせわしないときは小さくします	MainWindow.xaml:2115
+2c61a63b	滑らかさ	MainWindow.xaml:2121
+b99839d0	光が消えていく速さ。大きいほどふわっとゆっくり暗くなり、小さいほどキビキビ動きます	MainWindow.xaml:2122
+86b8ad57	メリハリ	MainWindow.xaml:2128
+708b0876	大きいほど、ドラムの瞬間だけ強く光り、それ以外は控えめになります。小さいほど、音の大きさに素直に合わせて光ります	MainWindow.xaml:2129
+5b2abe07	いちばん暗いとき	MainWindow.xaml:2135
+f59ad0c8	音が小さいときでも、この明るさまでは光らせておきます。0% にすると、音がないときは真っ暗になります	MainWindow.xaml:2136
+1b6feb60	初期値に戻す	MainWindow.xaml:2144
+23e2af21	感度・滑らかさ・メリハリなどの値（下の「詳細」の値も）を初期値に戻します。光り方・強さ・色の組み合わせ・音の遅れの補正はそのままです。右上の「元に戻す」で取り消せます	MainWindow.xaml:2146
+21444cf4	音の遅れの補正	MainWindow.xaml:2152
+a9eeb51b	光が音より早いときは + に、遅いときは − にします。Bluetooth のイヤホンやスピーカー、テレビ（HDMI）は音が遅れて聞こえるので + にします。「同期テスト」を使うと合わせやすくなります	MainWindow.xaml:2153
+a48b2636	10 ミリ秒だけ光を早めます	MainWindow.xaml:2158
+42e71d61	10 ミリ秒だけ光を遅らせます	MainWindow.xaml:2160
+7d84f147	同期テスト	MainWindow.xaml:2161
+41951cb8	0.6 秒ごとに「カチッ」という音を鳴らし、LED を白く光らせます。音と光がそろうように「音の遅れの補正」を動かしてください。もう一度押すか、この画面を離れると止まります	MainWindow.xaml:2162
+61644194	光が音より早いときは + に、遅いときは − にします。Bluetooth のイヤホンやスピーカー、テレビ（HDMI）は音が遅れて聞こえるので + にします	MainWindow.xaml:2165
+0e36045a	Bluetooth は音が遅れるので +150〜200 ms がおすすめ	MainWindow.xaml:2172
+ece319ca	+180 ms にする	MainWindow.xaml:2173
+5ed44de1	音の遅れの補正をこの出力先の目安にします（あとで同期テストで微調整できます）	MainWindow.xaml:2174
+e02412ea	オンのあいだは、強い点滅を 1 秒に 3 回までにします（光に敏感な方の目や体調を守るため）。ストロボも使いません	MainWindow.xaml:2179
+ff4e5cc2	激しい点滅を抑える	MainWindow.xaml:2181
+a2bb37bc	強い点滅を 1 秒に 3 回までにします。オフにすると「ストロボ」が選べるようになります	MainWindow.xaml:2182
+03e1f9ef	⚠ 激しく点滅することがあります。光の点滅で気分が悪くなったら、すぐに「激しい点滅を抑える」をオンに戻してください。	MainWindow.xaml:2186
+dc8c4f99	テンポ	MainWindow.xaml:2190
+9c0a6ff9	自動: 曲のテンポをつかんだらビートを先読みして、遅れなく光らせます。キックだけ: 先読みせず、バスドラムが鳴ったときだけ光ります。使わない: テンポもビートも使わず、音の大きさだけで光ります	MainWindow.xaml:2191
+19595ed1	テンポが実際の 2 倍に取れているとき（せわしなく光るとき）に押すと、半分のテンポで光ります	MainWindow.xaml:2195
+b74e97b3	テンポが実際の半分に取れているとき（ビートの 1 つおきに光るとき）に押すと、2 倍のテンポで光ります	MainWindow.xaml:2197
+fbc2bffb	音が止まったとき	MainWindow.xaml:2210
+23bf0707	音が鳴っていないとき（曲と曲の間・一時停止中など）の光り方。音が戻るとすぐに音楽連動に戻ります	MainWindow.xaml:2211
+3cc7a5c7	切り替えるまで	MainWindow.xaml:2221
+47460e62	音が止まってから、「音が止まったとき」の光り方に切り替えるまでの秒数。曲の中の短い無音で切り替わってしまうときは長くします	MainWindow.xaml:2222
+f88e8627	{0:F0} 秒	MainWindow.xaml:2223
+22d9166d	反応する音	MainWindow.xaml:2230
+500cdc90	空欄なら PC から出ているすべての音に反応します。アプリ名（例: Spotify）を入れると、そのアプリの音が鳴っているときだけ反応します	MainWindow.xaml:2231
+bfe1fde6	空欄ならすべての音。アプリ名（例: Spotify）を入れると、そのアプリの音が鳴っているときだけ反応します	MainWindow.xaml:2234
+84a6f5e5	音を出しているアプリから選ぶ ▾	MainWindow.xaml:2235
+86415147	いま音を出している（または出せる）アプリの一覧から選びます。音が出ているアプリが上に並びます	MainWindow.xaml:2236
+d120384c	すべての音	MainWindow.xaml:2237
+9905daf4	アプリを指定せず、PC から出ているすべての音に反応します	MainWindow.xaml:2238
+9050f432	AI で拍を確かめる	MainWindow.xaml:2245
+5ae7b468	数秒おきに直近の音を AI（Beat This!）で調べ、違うテンポや裏拍で光っていたら直します。PC の中だけで動き、CPU を少し使います	MainWindow.xaml:2247
+1b4c8ef3	一度聴いた曲を覚える	MainWindow.xaml:2252
+33f1fdda	AI が見つけた拍を曲ごとに覚え、次に同じ曲が流れたら最初から合わせます（Spotify などの曲名から作った印で見分けます。曲名や音は保存しません）	MainWindow.xaml:2254
+959ac7af	覚えた曲を消す	MainWindow.xaml:2259
+83419666	覚えた曲の拍をすべて消します（曲を聴けば、また覚えます）	MainWindow.xaml:2260
+0d8065a5	直近の約 1 秒の音を 0.5 秒ごとに調べます。色は数秒かけて変わり、点滅はしません。パレット「選んだ色だけ」「選んだ色と近い色」・音量メーター・ストロボ・パーツごとの役割では色を変えません	MainWindow.xaml:2264
+1b6f3970	AI で楽器を聞き分ける	MainWindow.xaml:2266
+aadf5c4a	曲の部分ごとに目立つ楽器（歌・ギター・ピアノ・金管・シンセ・弦）を AI（YAMNet）で聞き分け、色をゆっくり変えます（歌は青、金管は金色、ギターはオレンジなど）。単色のときは、光り方「楽器で光る」の動き方を変えます。PC の中だけで動き、CPU とメモリを少し使います	MainWindow.xaml:2268
+68010262	詳しい設定（上級者向け）	MainWindow.xaml:2274
+7f7d168e	音の分析の細かな設定を表示します。ふつうは変えなくて大丈夫です	MainWindow.xaml:2275
+548593da	音が大きくなったとき、光が明るくなるまでの時間。0 にすると最速ですが、チラつきやすくなります	MainWindow.xaml:2279
+88a0aec8	明るさに使う音量の幅	MainWindow.xaml:2285
+4ce9ee35	いちばん大きな音から何 dB 小さい音までを、明るさの違いとして表すか。小さくすると明暗がはっきりし、大きくすると小さな音にも反応します	MainWindow.xaml:2286
+6986be54	音の高さのバランス	MainWindow.xaml:2292
+8406bc01	低音ばかり・高音ばかりの曲でも、すべての帯がほどよく光るように自動でならす強さ。0% にすると、曲の音のバランスをそのまま表します	MainWindow.xaml:2293
+417793f0	高音の持ち上げ	MainWindow.xaml:2299
+69e0667b	高い音ほど強めに扱う量（1 オクターブ上がるごとに何 dB 足すか）。ハイハットなどの高音にもっと反応させたいときは大きくします	MainWindow.xaml:2300
+ed8c6bb1	コントラスト	MainWindow.xaml:2306
+a4c8a92f	大きいほど、強い音だけがくっきり明るくなり、弱い音は暗めになります。1.0 で変えません	MainWindow.xaml:2307
+0c86ccaf	色と明るさ	MainWindow.xaml:2320
+f645ed15	色	MainWindow.xaml:2323
+889d5957	固定色・呼吸の色。音楽連動では、色の組み合わせ「選んだ色」のときの中心の色になります	MainWindow.xaml:2324
+cfcf25fc	いま選んでいる色	MainWindow.xaml:2334
+b2c395cb	#RRGGBB の形で色を入力できます（例: #6A00FF）。左の丸から選んでも構いません	MainWindow.xaml:2337
+55b1d508	#RRGGBB の形で入力してください（例: #6A00FF）。0〜9 と A〜F の 6 文字です	MainWindow.xaml:2341
+743a1e61	明るさ	MainWindow.xaml:2344
+26565f26	LED 全体の明るさ。どの光り方でも、この明るさを上限にします	MainWindow.xaml:2344
+35ab111a	OpenRGB で見つかった LED のデバイスです。下の帯は、いま送っている色のプレビューです。	MainWindow.xaml:2357
+74e00d85	オンなら、OpenRGB で見つかったすべてのデバイス（あとから増えたものも含む）の色を変えます。オフにすると、色を変えるデバイスを選べます	MainWindow.xaml:2359
+c01c149b	すべてのデバイスの色を変える	MainWindow.xaml:2361
+e61331df	オフにすると、下でデバイスごとに選べます	MainWindow.xaml:2362
+2c8ea653	色合わせ用。全部のデバイスを同じ白で光らせます（デバイス・ゾーンの色合わせと明るさは掛けます）。この画面を離れると元に戻ります	MainWindow.xaml:2366
+4dbed8b1	白く光らせて見比べる	MainWindow.xaml:2368
+9795e04b	色合わせのとき、全部のデバイスを同じ白にします（この画面を離れると戻ります）	MainWindow.xaml:2369
+082c3f40	デバイスの一覧は、OpenRGB に接続すると表示されます（上の「接続テスト」でも読み込めます）。	MainWindow.xaml:2374
+3922b0ea	fps = 1 秒に色を送っている回数 ・ いま使っている音楽連動の光り方	MainWindow.xaml:2382
+f3e43b07	チェックしたデバイスの色を変えます（「すべてのデバイスの色を変える」がオンのときは全部が対象です）	MainWindow.xaml:2384
+5f338e63	このデバイスに最後に送った色（画面の色に近づけて表示しています）	MainWindow.xaml:2397
+79acf3fc	このデバイスの色	MainWindow.xaml:2402
+5d9bf5c2	このデバイスだけ、上の「光り方」と違う光り方にします（例: グラボは赤の固定色、キーボードはレインボー）。「全体と同じ」なら上の設定のままです。音楽連動は全体でだけ選べます	MainWindow.xaml:2405
+55525f98	固定色・呼吸の色。「全体と同じ色」なら上の「色」を使います	MainWindow.xaml:2409
+ccf4614e	このデバイスだけ音楽連動の光り方を変えます。「自動」なら上の「音楽の表現」を使います（更新が遅いデバイスは、滑らかな光り方に自動で置き換えます）	MainWindow.xaml:2426
+91935430	左右対称	MainWindow.xaml:2429
+f527b8c5	LED の並びの真ん中から左右対称に光らせます（長い LED テープ向け）。「自動」なら LED が 30 個以上のまとまりでオンになります	MainWindow.xaml:2432
+2d073419	1 秒に送る回数	MainWindow.xaml:2436
+ec70d216	このデバイスに色を送る回数の上限です。多いほど動きが滑らかになりますが、グラボやメモリでは多すぎると一部しか書き換わらず、ちかちかすることがあります。ちかちかしない範囲で上げてください	MainWindow.xaml:2439
+b4d70ec0	早めに光らせる	MainWindow.xaml:2442
+df7472e3	このデバイスだけ、音楽連動の色の切り替えを早めます。ほかのデバイスより遅れて見えるときに増やしてください（グラボなど、色が反映されるまで時間がかかる機器向け）。テンポをつかんでいる（予測できる）ビートで効きます。「自動」は USB 8 ミリ秒・メモリなど 20 ミリ秒・グラボ 60 ミリ秒	MainWindow.xaml:2445
+bce10cf7	オフ（おすすめ）: グラボは、レインボー（流れる）を止まった虹に、呼吸を固定色にします。グラボは LED を 1 個ずつ書き込むため、動かし続けるとちかちかしやすいからです。オンにすると、グラボも流れ・呼吸します	MainWindow.xaml:2449
+44f9a4dc	虹・呼吸も動かす	MainWindow.xaml:2450
+9e24740c	LED の並びを逆向きにします（流れる向きや、低音・高音の並びが逆に見えるとき）	MainWindow.xaml:2453
+8ebe842f	逆向き	MainWindow.xaml:2454
+b35b1a81	水色がピンクに、緑が赤に見えるときにオンにします（色の並び順が逆のデバイス用）	MainWindow.xaml:2457
+96aaf779	赤と緑を入れ替える	MainWindow.xaml:2458
+a28e3556	このデバイスの色味・明るさを合わせたり、マザーボードの端子（ゾーン）ごとに光り方・向き・色味を変えたりします	MainWindow.xaml:2462
+8847ea7e	色合わせ・ゾーンごとの設定を開く	MainWindow.xaml:2463
+43c6336e	色合わせ（このデバイス全体）	MainWindow.xaml:2466
+ee85a976	同じ色を送っても、LED によって色味や明るさが違って見えます。上の「白く光らせて見比べる」をオンにして、白がそろうように赤・緑・青を下げてください（上げることはできないので、強すぎる色を下げます）	MainWindow.xaml:2468
+3bb159a9	赤 	MainWindow.xaml:2471
+4fc93dd4	緑 	MainWindow.xaml:2475
+b0ba1b8f	青 	MainWindow.xaml:2479
+387da053	明るさ 	MainWindow.xaml:2483
+4cba9eab	ゾーン（端子）ごとの設定	MainWindow.xaml:2487
+d64827fc	マザーボードの端子ごとに、つないだ物（ファン・電源・水冷のヘッドなど）に合わせて光り方・向き・色味を変えられます。「デバイスと同じ」なら上の設定のままです。同じ端子に数珠つなぎにした物は、まとめて 1 つのゾーンです	MainWindow.xaml:2491
+512b961e	ファンの数	MainWindow.xaml:2503
+9a813855	この端子（チャンネル）に数珠つなぎにしたファンの数。分けると、ファン 1 台ずつ色・光り方を変えられます（LED を台数で等分します）。Lian Li の UNI HUB のチャンネルや、分岐ケーブルでつないだファン向け	MainWindow.xaml:2505
+156f8722	このゾーン（端子）だけ光り方を変えます（例: 水冷のヘッドだけ白、ケースファンは消灯）。「デバイスと同じ」ならデバイスの設定のままです	MainWindow.xaml:2511
+8ed1329c	固定色・呼吸の色。「デバイスと同じ色」ならデバイスの色を使います	MainWindow.xaml:2514
+41860c08	このゾーンだけ音楽連動の光り方を変えます（例: ラジエーターのファンは音量メーター、電源はビートで色替え）	MainWindow.xaml:2530
+4e43701b	光り方「パーツごとの役割」のとき、このゾーンがどの音で光るか。「パーツに合わせる」なら「楽器の分け方」に合わせます（音の高さなら、ファンは低音・グラボは中音・メモリやキーボードは高音）。同じデバイスで同じ音になるゾーンがいくつもあれば（ファンの端子など）、順に分けます。キック・スネア・ボーカルなど、楽器を 1 つ選ぶこともできます	MainWindow.xaml:2536
+ed5a9363	向き	MainWindow.xaml:2544
+3d275c1f	ヒント: 何もつないでいないマザーボードの ARGB 端子は、OpenRGB の Devices →（マザーボード）→「Edit Device」で LED の数を 0 にしておくと、送るデータが減って動きが滑らかになります。左右対称・逆向きは、LED の並びを使う光り方（スペクトラム・音量メーターなど）で効きます。	MainWindow.xaml:2580
+9ccdaf43	ファンを 1 台ずつ違う色にするには: 1 本の端子（チャンネル）に数珠つなぎにしたファンは、「色合わせ・ゾーンごとの設定を開く」の「ファンの数」で分けられます。Lian Li の UNI HUB をマザーボードと同期（MB Sync）させていると、ハブはマザーボードの 1 本の信号をそのまま全部のファンに流すので、ファンごとの色にはなりません。ハブの同期をやめ（MB Sync のケーブルを外すか、L-Connect で同期をオフにする）、L-Connect を終了すると、ハブが OpenRGB のデバイスとして出て、チャンネル・ファンごとに色を変えられます。	MainWindow.xaml:2582
+6a1f71f3	ケースの中の配置	MainWindow.xaml:2589
+337d069f	ファン・グラボ・メモリ・テープなどが、ケースの中のどこにあるかを選ぶと、波・虹・音量メーター・波紋などがデバイスをまたいで、ケース全体で 1 つにつながって流れます。場所を決めていない LED（キーボードなど）は、これまでどおりデバイスの中の並びで光ります	MainWindow.xaml:2591
+12ccc5b1	ケースの中の位置に合わせて光を流す	MainWindow.xaml:2594
+c699ba40	オフにすると、場所を選んであっても、デバイスごとの並びで光ります	MainWindow.xaml:2595
+7f06ca34	光が流れる向き	MainWindow.xaml:2599
+a7b5b016	波・虹が流れる向き、音量メーターが伸びる向き、波紋が広がる向きです（ケースを横のガラスから見たとき）	MainWindow.xaml:2602
+c99b267f	ケースを横から見た絵です。場所を決めた LED に、最後に送った色を表示します	MainWindow.xaml:2612
+fa48084e	横のガラスから見た絵です（左が背面、右が前面）。「ケースの中の位置に合わせて光を流す」がオンのときに表示します	MainWindow.xaml:2614
+b553839d	デバイスの一覧は、OpenRGB に接続すると表示されます。	MainWindow.xaml:2619
+5229dd83	このゾーンの LED がケースの中のどこにあるか。数珠つなぎのファンは「3 つ（上から順）」など、つないだ順を選んでください	MainWindow.xaml:2632
+bb048236	詳細	MainWindow.xaml:2646
+90901950	色を濃く見せる（ガンマ補正。オフにすると明るく淡い色になります）	MainWindow.xaml:2648
+3ccf4c41	LED は暗い成分もそのまま光るので、画面で見る色より白っぽく見えます。オンにすると画面の色に近い濃い色になり、明るさの変化も目で見て滑らかになります	MainWindow.xaml:2649
+dff98214	緊急全開のときは赤く点滅させる（どの光り方でも優先）	MainWindow.xaml:2651
+c447e46b	温度が上限に達してファンを全開にしたとき、どの光り方を選んでいても LED を赤く点滅させてお知らせします	MainWindow.xaml:2652
+6b3a1b39	対応しているグラボは OpenRGB を通さず直接光らせる（PNY ARGB Epic-X。ほかの LED と遅れずに光ります）	MainWindow.xaml:2654
+f6b581bb	OpenRGB は PNY のグラボの LED を 1 個ずつ書くので、色が変わるたびに約 35 ミリ秒かかり、ほかの LED より遅れます。オンにすると、アプリが NVIDIA のドライバーを通して直接書きます。書き込みに失敗し続けたときは、自動で OpenRGB を通す方法に戻ります	MainWindow.xaml:2655
+e36ea0de	確かめていない型番のグラボにも直接書き込む（試すときだけ）	MainWindow.xaml:2658
+a6862cdb	直接書き込みを実機で確かめたのは RTX 5070 Ti だけです。同じ PNY ARGB Epic-X の別の型番（LED の並びが同じもの）にも試すときにオンにします。色がおかしいときはオフに戻してください	MainWindow.xaml:2659
+e90d8670	音楽連動で、グラボ・メモリなど更新の遅いデバイスは、ほかのデバイスの色に合わせる	MainWindow.xaml:2661
+a64d70bc	グラボやメモリは 1 秒に 4〜8 回しか色を変えられないので、スペクトラム・音量メーターなどの細かい動きは出せません。オンにすると、ファンなど速いデバイスがいま光っている色の平均に合わせて光るので、色がそろって見えます。デバイスごとに光り方を選んだデバイスは、選んだ光り方のままです	MainWindow.xaml:2662
+7b9813d5	止めるときの LED	MainWindow.xaml:2666
+74ebaadf	連携をオフにしたとき・アプリを終了するとき・スリープするときに、LED をどうするか	MainWindow.xaml:2667
+4ba5fb63	連携をオフにしたとき・アプリを終了するとき・スリープするときに、LED をどうするか。「そのまま」は最後の色のまま止まります	MainWindow.xaml:2670
+ac0f3749	一般	MainWindow.xaml:2685
+69af1b60	プロファイル・自動化	MainWindow.xaml:2686
+86406a7c	通知・連携	MainWindow.xaml:2687
+0dee4b23	安全・バックアップ	MainWindow.xaml:2688
+ddd59eb1	起動と表示	MainWindow.xaml:2697
+bf6cf977	Windows ログオン時に自動で起動する	MainWindow.xaml:2700
+5699c4fc	タスクスケジューラに「最上位の特権」で登録します（UAC の確認なしで起動）	MainWindow.xaml:2701
+5d0a76ce	手動で起動したときもタスクトレイに格納する	MainWindow.xaml:2706
+aefcd37e	自動起動のときは常にタスクトレイで起動します。ウィンドウの × で閉じてもトレイで動き続けます	MainWindow.xaml:2707
+e162bf76	ミニウィジェットを表示する	MainWindow.xaml:2712
+1b093ce9	常に最前面に温度と回転数を表示します。ドラッグで移動、右クリックで不透明度を変更できます	MainWindow.xaml:2713
+6f13f8bc	アップデート	MainWindow.xaml:2722
+6e708964	更新を確認	MainWindow.xaml:2726
+1c275381	更新する	MainWindow.xaml:2727
+7f2a592a	新しい版で困ったとき、更新してから 14 日のあいだは、前の版のインストーラーを GitHub から取ってきて戻せます	MainWindow.xaml:2729
+44cc4c9a	リリースのページを開く	MainWindow.xaml:2730
+2420b253	新しい版を自動で確かめる	MainWindow.xaml:2734
+094990a5	1 日 1 回まで GitHub に最新の版を問い合わせ、新しい版があればお知らせします（送るのはアプリの名前と版だけです）	MainWindow.xaml:2735
+395b0a50	「更新する」を押すと、インストーラーをダウンロードして GitHub に公開されたものと同じかを確かめてから、画面を出さずに入れ替えます。そのあいだ十数秒、アプリが終了してファンは BIOS の設定で回り、終わると起動し直します。設定・ログ・記録はそのまま残ります	MainWindow.xaml:2739
+1483f6b3	見た目	MainWindow.xaml:2746
+d6776d41	表示言語・テーマ・アクセント色・背景色・文字色・フォント・文字の大きさを変えられます。変えるとすぐに反映されます	MainWindow.xaml:2748
+b8eab0de	表示言語 · Language	MainWindow.xaml:2751
+e0480009	画面の言葉の言語。「自動」なら Windows の表示言語に合わせます（対応していない言語なら英語）。選ぶとすぐに切り替わります	MainWindow.xaml:2754
+9bb17d53	テーマ	MainWindow.xaml:2757
+ae52556f	「Windows に合わせる」なら、Windows の設定（個人用設定 → 色 → アプリ モード）のダーク／ライトに合わせます	MainWindow.xaml:2760
+aab63522	アクセント色	MainWindow.xaml:2762
+d95f93ef	既定（紫）	MainWindow.xaml:2764
+2a8cd564	Windows の色に合わせる	MainWindow.xaml:2765
+ea89f663	Windows の設定（個人用設定 → 色 → アクセント カラー）の色を使います	MainWindow.xaml:2766
+3170685a	背景色	MainWindow.xaml:2775
+14c3e93f	背景・サイドバー・カードをまとめて染めます。ダークでは暗い色、ライトでは明るい色になり、テーマを替えても色合いは同じです	MainWindow.xaml:2777
+17ff6b6d	既定	MainWindow.xaml:2779
+da6bf903	文字色	MainWindow.xaml:2788
+793df94e	画面のすべての文字の色です（補足の文字やグラフの目盛りも、同じ色合いで少し薄くなります）。ダークでは明るい色、ライトでは暗い色になり、どの背景でも読めます	MainWindow.xaml:2790
+1843d590	フォント	MainWindow.xaml:2802
+05dc00d5	画面の文字のフォント。日本語の文字がないフォントでは、日本語は Yu Gothic UI で表示します	MainWindow.xaml:2805
+bfea4384	あいうえお 温度とファン ABC 123 °C	MainWindow.xaml:2807
+982d7356	文字の大きさ	MainWindow.xaml:2810
+2b8e9d8c	画面全体（文字・ボタン・グラフ）を拡大・縮小します	MainWindow.xaml:2813
+00478af8	制御	MainWindow.xaml:2821
+13f4a528	DRY RUN（テストモード）	MainWindow.xaml:2824
+db8eea4d	計算結果を表示するだけで、ファンには書き込みません（ポンプの回転が落ちたときの保護運転と、自分で始めた識別・測定・一時指定だけは書き込みます）	MainWindow.xaml:2825
+b373eaee	更新間隔	MainWindow.xaml:2840
+14e1cbc6	緊急全開（CPU・その他）	MainWindow.xaml:2844
+35593dc1	カーブで使っているどれかのセンサーがこの温度に達すると、全ファンを 100% にします	MainWindow.xaml:2845
+53ef686b	緊急全開（GPU Hot Spot）	MainWindow.xaml:2849
+279d8c16	Hot Spot は GPU 内でいちばん熱い点で、Edge より 10〜20°C 高く出ます	MainWindow.xaml:2850
+9bcc9b8c	Radeon RX 7000 シリーズは Hot Spot 110°C で自動的に性能を下げます。全開の解除は、しきい値より 5°C 下がってからです。	MainWindow.xaml:2854
+1ac4b576	このアプリについて	MainWindow.xaml:2861
+81d90dca	＋ 新しいプロファイル	MainWindow.xaml:2872
+4cdf9ede	ファンカーブの組み合わせを名前を付けて保存し、切り替えられます	MainWindow.xaml:2875
+d36eeaf3	このプロファイルの役割。名前を変えても、自動セットアップ（静音は目標温度 +5°C・冷却重視は −5°C）・新しいファンのカーブ・ワンタッチの「静音」が、この役割で正しく動きます	MainWindow.xaml:2891
+82ac5e85	このプロファイルのときに使う Windows の電源プラン	MainWindow.xaml:2894
+d663551d	普段使う	MainWindow.xaml:2897
+80173301	複製	MainWindow.xaml:2898
+1aafcfce	終了時に元の電源プランに戻す	MainWindow.xaml:2907
+935428de	電源プランは、プロファイルが切り替わったときに自動で変わります（「変えない」を選ぶとそのまま）	MainWindow.xaml:2908
+02bd77a9	＋ ルールを追加	MainWindow.xaml:2918
+95dbf04d	スケジュール	MainWindow.xaml:2920
+c6ae093f	時間帯でプロファイルを切り替えます（例: 毎日 23:00〜7:00 は静音）。アプリの自動切り替えのほうが優先されます	MainWindow.xaml:2921
+b30b1d5c	毎日	MainWindow.xaml:2938
+1b0c1825	平日	MainWindow.xaml:2939
+c16e0695	週末	MainWindow.xaml:2940
+9b7e9425	開始時刻（例: 23:00）	MainWindow.xaml:2942
+1925ac9b	〜	MainWindow.xaml:2943
+a297edb9	終了時刻（例: 7:00）。開始より前なら翌日の時刻	MainWindow.xaml:2944
+8d3afa5f	プロファイルの自動切り替え	MainWindow.xaml:2960
+a6a78db0	指定したアプリが起動している間、プロファイルを自動で切り替えます。上にあるルールほど優先されます。終了すると「普段使う」プロファイルに戻ります。	MainWindow.xaml:2962
+235c5be1	プロセス名（例: eldenring）。.exe は付けても付けなくても構いません	MainWindow.xaml:2998
+92b89c34	実行中のアプリから選ぶ ▾	MainWindow.xaml:2999
+850bfcd1	ワンタッチ操作	MainWindow.xaml:3011
+b7230497	ダッシュボード・タスクトレイ・ミニウィジェット・スマホから、一時的にブースト（全開）や静音にできます	MainWindow.xaml:3012
+37cd5718	ホットキーを使う（ゲーム中でも操作できます）	MainWindow.xaml:3015
+18d0cc13	Ctrl+Alt+B: 5 分ブースト ／ Ctrl+Alt+Q: 1 時間静音 ／ Ctrl+Alt+N: 解除	MainWindow.xaml:3016
+7ae7ed01	「静音」で使うプロファイル	MainWindow.xaml:3024
+77a57db6	スマホから監視	MainWindow.xaml:3035
+fe9fdb92	スマホのブラウザから見られるようにする	MainWindow.xaml:3038
+49d300c9	同じ Wi-Fi のスマホから温度・回転数の確認とプロファイルの切り替えができます。Windows ファイアウォールに、プライベートネットワーク（自宅など）だけの許可を追加します	MainWindow.xaml:3039
+6ac0a5cf	ポート番号	MainWindow.xaml:3048
+cf308cb2	アクセス用の鍵を作り直す	MainWindow.xaml:3050
+389a7b03	今までの URL では開けなくなります	MainWindow.xaml:3051
+ac3a6f94	スマホのカメラで QR コードを読むか、次の URL を開いてください	MainWindow.xaml:3062
+12e17da1	URL にはアクセス用の鍵が含まれています。他の人に教えないでください	MainWindow.xaml:3065
+967f26f5	スマホに通知	MainWindow.xaml:3074
+9fcdd35a	緊急全開・ポンプ異常・ファンの停止などをスマホに通知する	MainWindow.xaml:3077
+1fe03718	外出中やゲーム中でも気づけます。同じ内容の通知は 10 分間は送りません	MainWindow.xaml:3078
+5bd9ee6f	ntfy（アプリを入れるだけ・おすすめ）	MainWindow.xaml:3082
+a643ae88	1. スマホに「ntfy」アプリを入れる（App Store / Google Play・無料・登録不要）\n2. アプリの「＋」から、下のトピック名を購読する（左の QR コードをカメラで読んでも OK）	MainWindow.xaml:3098
+6ced87ba	トピック名	MainWindow.xaml:3109
+19b272e4	作り直す	MainWindow.xaml:3111
+084d7180	サーバー	MainWindow.xaml:3112
+172228d8	トピック名を知っている人は誰でも通知を読めます。推測されにくい今の名前のまま使ってください	MainWindow.xaml:3116
+88a4ad91	Discord のサーバー設定 →「連携サービス」→「ウェブフック」→「新しいウェブフック」→「ウェブフック URL をコピー」で取得できます	MainWindow.xaml:3124
+cb5c4d63	「注意」も通知する（ファンの停止・センサーの異常など）	MainWindow.xaml:3129
+a000b788	回復したときも通知する	MainWindow.xaml:3131
+a15f890e	テスト送信	MainWindow.xaml:3134
+c114b738	ライティングを開く	MainWindow.xaml:3143
+3f597f38	LED のライティング（OpenRGB 連携）の画面を開きます	MainWindow.xaml:3144
+c0c9a6ba	LED のライティング（OpenRGB 連携）	MainWindow.xaml:3146
+158ada0f	LED の設定は、左のメニューの「ライティング」に移りました。接続・光り方・音楽連動・デバイスごとの設定をまとめて変えられます。	MainWindow.xaml:3148
+c1eb5397	電気代の計算	MainWindow.xaml:3156
+6da48835	ダッシュボードとレポート画面に、消費電力量と電気代の目安を表示します	MainWindow.xaml:3157
+db0f8cfc	1 kWh あたりの電気代	MainWindow.xaml:3169
+e3b755dc	円（明細の「請求金額 ÷ 使用量 kWh」がいちばん正確。分からなければ目安の 31 円のまま）	MainWindow.xaml:3172
+1405c464	CPU・GPU 以外の消費電力	MainWindow.xaml:3173
+2b38bba6	W（マザーボード・メモリ・SSD・ファン・ポンプ・LED など。一般的に 30〜70 W）	MainWindow.xaml:3176
+89dc9684	電源の効率	MainWindow.xaml:3177
+30253b1e	%（電源の損失の分。80 PLUS Gold で 87〜90%。分からなければ 88% のまま）	MainWindow.xaml:3180
+a659b907	CPU と GPU はセンサーの値を使い、それ以外の分と電源の損失を足して、コンセントから引く電力にします。モニターやスピーカーは含みません。ワットチェッカーで合わせ込むまでは ±20% ほどの目安です。	MainWindow.xaml:3183
+8d572aec	ワットチェッカーで合わせ込む	MainWindow.xaml:3186
+138470aa	PC 本体の電源コードをワットチェッカーにつなぎ（モニターは別のコンセントに）、表示の値を入れて「記録」を押します。アイドル中だけでも合わせ込めます。負荷中（ゲームやベンチマークを動かしている間）も記録すると、電源の効率も求めます。どちらも、値が落ち着いてから押してください。	MainWindow.xaml:3188
+083b2352	アイドル中のワットチェッカーの値	MainWindow.xaml:3200
+42c1084f	記録	MainWindow.xaml:3202
+8d15c619	負荷中のワットチェッカーの値	MainWindow.xaml:3204
+e4d1e7a9	合わせ込みを消す	MainWindow.xaml:3210
+69355ed4	安全機能	MainWindow.xaml:3220
+619b1ea2	見張りプロセスを使う（おすすめ）	MainWindow.xaml:3223
+b686ae3d	アプリが強制終了・フリーズしたとき、ファンが低い回転のまま止まってしまうのを防ぎます。タスクマネージャーに Zeph-Iris が 2 つ表示されますが、片方は見張り役です	MainWindow.xaml:3225
+f739cc9b	そのときの回転数	MainWindow.xaml:3238
+43c454af	ポンプは常に 100% にします	MainWindow.xaml:3238
+d063c0c0	アプリを自動で起動し直す（10 分間に 3 回までで、それ以上はお知らせを表示）	MainWindow.xaml:3242
+f2eae029	異常なセンサーの値を無視する	MainWindow.xaml:3247
+2487009f	一瞬だけ跳ねた値（読み取りエラー）で全開にならないようにします。負荷が変わっても値が動かない「固まった」センサーは、異常として扱います	MainWindow.xaml:3249
+3616d69f	起動時に部品の交換を確認する	MainWindow.xaml:3255
+f47011bb	GPU などを交換してセンサーが変わったときに、新しいセンサーへの置き換えを案内します	MainWindow.xaml:3257
+35eb3141	センサーがないときの回転数	MainWindow.xaml:3270
+90554019	部品を外した・交換したなどで、センサーそのものが見つからないカーブはこの回転数にします（センサーはあるのに値がおかしいときは、安全のため 100%）	MainWindow.xaml:3274
+963fb48e	異常の前後を自動で記録する	MainWindow.xaml:3279
+e424608f	緊急全開・ポンプ異常などのとき、前後 10 分の記録を保存します（レポート画面で確認できます）	MainWindow.xaml:3280
+f4e32f07	GPU のファンも制御できるようにする（試験的）	MainWindow.xaml:3286
+f73d1f9b	ファンカーブ画面の「端子を追加」に GPU のファンが表示されます。制御中は GPU ドライバーの自動制御（0 RPM モードなど）が止まるので、GPU の温度を使ったカーブで使ってください	MainWindow.xaml:3288
+f04fb800	メモリの温度を読む	MainWindow.xaml:3294
+5ac1bfd9	メモリの温度は、メモリの LED と同じ配線（SMBus）で読みます。OpenRGB などがこの配線を順番待ちせずに使っていると、ぶつかってメモリの温度が読めなくなることがあります。そのときはオフにしてください（メモリの温度を使うカーブは、センサーが見つからないときの回転数で回ります）	MainWindow.xaml:3296
+8154441c	設定のバックアップと共有	MainWindow.xaml:3305
+894c08f0	設定は変更のたびに自動でバックアップしています（10 分に 1 回まで・最大 30 個）。config.json が壊れても、起動時に自動で復旧します。プロファイルをファイルに書き出せば、別の PC で読み込めます（端子やセンサーは名前で対応付けます）	MainWindow.xaml:3307
+b187e750	設定を書き出す…	MainWindow.xaml:3309
+7c186faa	設定を読み込む…	MainWindow.xaml:3310
+077e159d	バックアップから戻す ▾	MainWindow.xaml:3313
+4222af0e	今すぐバックアップ	MainWindow.xaml:3314
+8d711ab6	セットアップとファイル	MainWindow.xaml:3323
+f8cfb37f	セットアップウィザードを開く	MainWindow.xaml:3325
+0cdb9795	設定フォルダを開く	MainWindow.xaml:3326
+e252e493	ログフォルダを開く	MainWindow.xaml:3327
+b6ac496a	使い方（説明書）を開く	MainWindow.xaml:3328
+619bb003	アプリのフォルダーの説明書を開きます（なければ GitHub の README）	MainWindow.xaml:3329
+17abf912	ログ・設定・部品の一覧をまとめた zip を作り、GitHub の報告ページを開きます（個人的な情報は伏せます）	MainWindow.xaml:3331
+f0a34e2b	この PC で動いたことを知らせる GitHub のページを、部品の型番と、アプリが確かめたこと（数だけ）を入れた状態で開きます。問題がなくても、まだ確かめていない部品の報告はとても助かります	MainWindow.xaml:3333
+c7cbd09a	ファン制御用のドライバー（PawnIO）	MainWindow.xaml:3341
+6234a43c	アンインストール（お片付け）	MainWindow.xaml:3349
+29c38de6	このアプリを使うのをやめるときに使います。ファンを BIOS の自動制御に戻したことを確かめてから、ライティングの制御・ログオン時の自動起動・ファイアウォールの許可などを片付けて終了します。何を行うかは、次の画面で確かめてから始められます（設定・記録を消すか、PawnIO もアンインストールするかも選べます）	MainWindow.xaml:3351
+b2abf4ee	アンインストール（お片付け）…	MainWindow.xaml:3353
 276c23be	ファンの回転数を変えるには、マザーボードのファン制御チップを読み書きするドライバー PawnIO（無料・LibreHardwareMonitor などでも使われています）が必要です。\n「PawnIO をインストール」を押すと、Windows に付属の winget で公式のパッケージ（namazso.PawnIO）を入れます。インターネットにつながっている必要があり、数十秒〜数分かかります。終わったら、アプリを起動し直すと使えるようになります。	UI/PawnIoInstallPanel.xaml:13
 32818dc0	PawnIO をインストール	UI/PawnIoInstallPanel.xaml:15
 8d7b411c	アプリを起動し直す	UI/PawnIoInstallPanel.xaml:16
@@ -841,17 +838,17 @@ e0338723	- なし（いまの設定のままで問題ありません）	Core/Adv
 b0bc7eac	目標温度 {0:F0}°C	Core/Advisor.cs:321
 7d5e41f2	固定 {0:F0}%	Core/Advisor.cs:322
 f87c3ac9	他のファンに連動	Core/Advisor.cs:323
-1b56d605	config.json が空です。	Core/AppConfig.cs:111
-c8d58466	標準	Core/AppConfig.cs:167
-52ed0fe4	最大値	Core/AppConfig.cs:602
-91302315	差分	Core/AppConfig.cs:605
-8e4f9981	起動時	Core/AppConfig.cs:1480
-b6d7dbf8	自動	Core/AppConfig.cs:1481
-ae81cf8d	手動	Core/AppConfig.cs:1482
-7aebcb13	読み込み前	Core/AppConfig.cs:1483
-44fc16c5	部品交換の対応付け前	Core/AppConfig.cs:1484
-f32b8618	復元前	Core/AppConfig.cs:1485
-4db25563	{0:yyyy/MM/dd HH:mm}（{1}）	Core/AppConfig.cs:1493
+1b56d605	config.json が空です。	Core/AppConfig.cs:110
+c8d58466	標準	Core/AppConfig.cs:166
+52ed0fe4	最大値	Core/AppConfig.cs:601
+91302315	差分	Core/AppConfig.cs:604
+8e4f9981	起動時	Core/AppConfig.cs:1479
+b6d7dbf8	自動	Core/AppConfig.cs:1480
+ae81cf8d	手動	Core/AppConfig.cs:1481
+7aebcb13	読み込み前	Core/AppConfig.cs:1482
+44fc16c5	部品交換の対応付け前	Core/AppConfig.cs:1483
+f32b8618	復元前	Core/AppConfig.cs:1484
+4db25563	{0:yyyy/MM/dd HH:mm}（{1}）	Core/AppConfig.cs:1492
 7dc6c4d8	ワンタッチ静音	Core/AppController.cs:97
 c7f7bdf4	自動: {0}	Core/AppController.cs:98
 ab7eac67	ブースト中（残り {0}）	Core/AppController.cs:120
@@ -1177,24 +1174,24 @@ eb603574	OpenRGB からの応答が大きすぎます	Core/OpenRgb.cs:431
 278cffe6	コントローラー情報が短すぎます	Core/OpenRgb.cs:521
 a86cdb33	コントローラー情報が途中で切れています	Core/OpenRgb.cs:547
 a5ce650f	コントローラー情報を読み取れません	Core/OpenRgb.cs:561
-0027866f	描画できません: {0}	Core/OpenRgb.cs:879
-c790979e	OpenRGB の処理が追いつかないため、1 秒に {0:0} 回に下げています	Core/OpenRgb.cs:967
-ffaf3cd2	OpenRGB に接続しています…	Core/OpenRgb.cs:1344
-c19da9e8	前の接続が終わるのを待っています…	Core/OpenRgb.cs:1415
-21503ff4	OpenRGB との接続が切れました（{0} 秒後に繋ぎ直します）: {1}	Core/OpenRgb.cs:1482
-91c695dc	接続できません（{0} 秒後に再試行）: {1}	Core/OpenRgb.cs:1483
-b6c76b3b	エラーで止まりました: {0}	Core/OpenRgb.cs:1502
-a4a0e7be	OpenRGB の接続先が変わったので、繋ぎ直しています…	Core/OpenRgb.cs:1574
-a12cdd84	OpenRGB に繋ぎ直しています…	Core/OpenRgb.cs:1590
-b9eec9ec	OpenRGB のデバイスの一覧が変わったので、繋ぎ直しています…	Core/OpenRgb.cs:1596
-ece981c1	OpenRGB に見つかりません	Core/OpenRgb.cs:1843
-303ee7e1	選んだデバイスが見つかりません: {0}（OpenRGB の画面に表示されているか確認してください）	Core/OpenRgb.cs:1851
-f9706898	接続できましたが、色を変えられるデバイスが見つかりません。OpenRGB の画面にデバイスが表示されているか確認してください	Core/OpenRgb.cs:1852
-a4da3fc4	接続中: {0} 個のデバイスの色を変えています	Core/OpenRgb.cs:1856
-007ac9b1	（1 秒に {0:0} コマ）	Core/OpenRgb.cs:1857
-db01850a	。選んだデバイスが見つかりません: {0}	Core/OpenRgb.cs:1858
-9e6acdec	{0}（LED {1} 個・{2}）	Core/OpenRgb.cs:1888
-ad45bf76	場所不明	Core/OpenRgb.cs:1888
+0027866f	描画できません: {0}	Core/OpenRgb.cs:930
+c790979e	OpenRGB の処理が追いつかないため、1 秒に {0:0} 回に下げています	Core/OpenRgb.cs:1018
+ffaf3cd2	OpenRGB に接続しています…	Core/OpenRgb.cs:1395
+c19da9e8	前の接続が終わるのを待っています…	Core/OpenRgb.cs:1466
+21503ff4	OpenRGB との接続が切れました（{0} 秒後に繋ぎ直します）: {1}	Core/OpenRgb.cs:1533
+91c695dc	接続できません（{0} 秒後に再試行）: {1}	Core/OpenRgb.cs:1534
+b6c76b3b	エラーで止まりました: {0}	Core/OpenRgb.cs:1553
+a4a0e7be	OpenRGB の接続先が変わったので、繋ぎ直しています…	Core/OpenRgb.cs:1625
+a12cdd84	OpenRGB に繋ぎ直しています…	Core/OpenRgb.cs:1641
+b9eec9ec	OpenRGB のデバイスの一覧が変わったので、繋ぎ直しています…	Core/OpenRgb.cs:1647
+ece981c1	OpenRGB に見つかりません	Core/OpenRgb.cs:1889
+303ee7e1	選んだデバイスが見つかりません: {0}（OpenRGB の画面に表示されているか確認してください）	Core/OpenRgb.cs:1897
+f9706898	接続できましたが、色を変えられるデバイスが見つかりません。OpenRGB の画面にデバイスが表示されているか確認してください	Core/OpenRgb.cs:1898
+a4da3fc4	接続中: {0} 個のデバイスの色を変えています	Core/OpenRgb.cs:1902
+007ac9b1	（1 秒に {0:0} コマ）	Core/OpenRgb.cs:1903
+db01850a	。選んだデバイスが見つかりません: {0}	Core/OpenRgb.cs:1904
+9e6acdec	{0}（LED {1} 個・{2}）	Core/OpenRgb.cs:1934
+ad45bf76	場所不明	Core/OpenRgb.cs:1934
 29f94095	PawnIO をインストールしました。仕上げに PC の再起動が必要です。PC を再起動すると、ファンを制御できるようになります。	Core/PawnIoSetup.cs:55
 3364480f	PawnIO をインストールしました。	Core/PawnIoSetup.cs:60
 129482fa	PawnIO はすでにインストールされています。	Core/PawnIoSetup.cs:60
@@ -1264,7 +1261,7 @@ a2b18858	テープ	Core/Rgb/CaseLayout.cs:74
 cb71e013	前面の縦のテープ（下から上へ）	Core/Rgb/CaseLayout.cs:75
 face4d45	天面の縁のテープ（前から後ろへ）	Core/Rgb/CaseLayout.cs:76
 a1303c99	底面の縁のテープ（前から後ろへ）	Core/Rgb/CaseLayout.cs:77
-f18c7cb3	ほかのデバイスの色	Core/Rgb/DeviceRenderer.cs:221
+f18c7cb3	ほかのデバイスの色	Core/Rgb/DeviceRenderer.cs:259
 1ad230d1	控えめ	Core/Rgb/MusicTuning.cs:19
 7c96252e	ふつう	Core/Rgb/MusicTuning.cs:20
 9c7d5155	強め	Core/Rgb/MusicTuning.cs:21
@@ -1289,52 +1286,66 @@ a4d4ce26	カスタム	Core/Rgb/MusicTuning.cs:86
 68a0416e	ゆっくり色が変わる	Core/Rgb/MusicTuning.cs:101
 2ee44588	消灯	Core/Rgb/MusicTuning.cs:104
 9a137ab5	{0} {1}（初期 {2}）	Core/Rgb/MusicTuning.cs:248
-975db0d4	ビートで色替え	Core/Rgb/MusicTuning.cs:338
-6f6c9db1	ビートのたびに次の色へ切り替わり、ぱっと光って消えていく	Core/Rgb/MusicTuning.cs:338
-1acb0fe4	パルス	Core/Rgb/MusicTuning.cs:339
-50e3646b	低音に合わせて脈打ち、ふわっと長く残光が残る。色はビートでは変わらず、ゆっくり移り変わる	Core/Rgb/MusicTuning.cs:339
-fac18e83	ミックス	Core/Rgb/MusicTuning.cs:340
-143bf4c6	低音・中音・高音の強さで色が混ざる	Core/Rgb/MusicTuning.cs:340
-d47d8919	音量メーター	Core/Rgb/MusicTuning.cs:341
-c9601c4a	音量の分だけ端から点き、ピークの点がゆっくり落ちてくる	Core/Rgb/MusicTuning.cs:341
-b9056e5c	スペクトラム	Core/Rgb/MusicTuning.cs:342
-1f55a216	LED の並びに低音〜高音を並べ、それぞれの強さで光る	Core/Rgb/MusicTuning.cs:342
-ae14d063	エナジー	Core/Rgb/MusicTuning.cs:343
-9097b7af	低音・中音・高音の帯が、それぞれの強さの分だけ伸びる	Core/Rgb/MusicTuning.cs:343
-a8728d89	流れる波	Core/Rgb/MusicTuning.cs:344
-0dbddecd	今の音の色が端から流れていく（ウォーターフォール）	Core/Rgb/MusicTuning.cs:344
-7579942a	波紋	Core/Rgb/MusicTuning.cs:345
-8f1dc3a2	キックのたびに光の輪が広がる	Core/Rgb/MusicTuning.cs:345
-5c1949b1	きらめき	Core/Rgb/MusicTuning.cs:346
-6ddfa1c0	キックで全体がふわっと、スネアでまとまった光、ハイハットで白い粒が光る	Core/Rgb/MusicTuning.cs:346
-fa793be1	パーツごとの役割	Core/Rgb/MusicTuning.cs:347
-2683fb56	ファンは低音、グラボは中音、メモリは高音のように、パーツごとに決まった音で光る。ファンの端子がいくつもあれば、低音・中音・高音に分ける（ゾーンの設定「反応する音」で変えられる）	Core/Rgb/MusicTuning.cs:347
-a0b3b7dd	楽器で光る	Core/Rgb/MusicTuning.cs:348
-3c260d3f	キックは全体、スネアは片側、ハイハットは小さな粒、ベースは端のほう、歌は全体の明るさ、ギターや鍵盤は流れる光で見せる。単色（選んだ色だけ）でも楽器が分かる	Core/Rgb/MusicTuning.cs:348
-74a4376d	テンポ追従	Core/Rgb/MusicTuning.cs:349
-934997b6	ビートに合わせて光の帯が走る	Core/Rgb/MusicTuning.cs:349
-5d88da90	ムード	Core/Rgb/MusicTuning.cs:350
-e134b40a	曲の雰囲気で色がゆっくり変わる（点滅しない）	Core/Rgb/MusicTuning.cs:350
-c3873745	ストロボ	Core/Rgb/MusicTuning.cs:351
-e266b3b4	ビートで強く点滅する（「激しい点滅を抑える」をオフにしたときだけ）	Core/Rgb/MusicTuning.cs:351
-d3efe37c	楽器ごと	Core/Rgb/MusicTuning.cs:417
-e8d8b63a	ドラムだけ	Core/Rgb/MusicTuning.cs:418
-31b76718	音の高さ（低音・中音・高音）	Core/Rgb/MusicTuning.cs:419
-ce37ccb7	ファンはキック、メモリやキーボードはハイハット、グラボはボーカルのように、パーツごとに楽器を分けて光ります。ファンの端子がいくつもあれば、キック・スネア・ハイハット・ベースの順に分けます	Core/Rgb/MusicTuning.cs:424
-c7cc18b1	キック・スネア・ハイハットだけで光ります。ギターや歌では光りません	Core/Rgb/MusicTuning.cs:425
-7b659d5a	ファンは低音、グラボは中音、メモリは高音のように、音の高さで分けて光ります（これまでと同じ）	Core/Rgb/MusicTuning.cs:426
-3cada106	パーツに合わせる	Core/Rgb/MusicTuning.cs:487
-78733543	低音（キック・ベース）	Core/Rgb/MusicTuning.cs:488
-23099007	中音（スネア・ボーカル）	Core/Rgb/MusicTuning.cs:489
-b599c0f6	高音（ハイハット）	Core/Rgb/MusicTuning.cs:490
-34c5e8d2	音全体（音量）	Core/Rgb/MusicTuning.cs:491
-c33f330a	キック	Core/Rgb/MusicTuning.cs:492
-8b911b1b	スネア	Core/Rgb/MusicTuning.cs:493
-7ae7bcde	ハイハット・シンバル	Core/Rgb/MusicTuning.cs:494
-f5489867	ベース（楽器）	Core/Rgb/MusicTuning.cs:495
-412c6fd5	ボーカル・リード	Core/Rgb/MusicTuning.cs:496
-203562ee	和音（鍵盤・ギター）	Core/Rgb/MusicTuning.cs:497
-dac2be1c	パッド・シンセ	Core/Rgb/MusicTuning.cs:498
+97a3aac7	反応する音: 拍で光る（テンポをつかめないときはキック。テンポを使わない設定とグラボ・メモリでは低音）。強さに応じて 1〜4 拍ごとに色が変わる	Core/Rgb/MusicTuning.cs:351
+6d6e85e7	反応する音: 拍でふくらみ、拍の間は低音でゆるやかに動く（テンポをつかめないときはキック。テンポを使わない設定とグラボ・メモリでは低音）。色は時間でゆっくり変わる	Core/Rgb/MusicTuning.cs:352
+3704a505	反応する音: 低音・中音・高音のうち、いちばん強い音の色になる	Core/Rgb/MusicTuning.cs:353
+ba3eca1b	反応する音: 音量で長さが変わり、キックとスネアで弾む	Core/Rgb/MusicTuning.cs:354
+81cd1e18	反応する音: 低い音から高い音まで、高さごとの音の強さで光る	Core/Rgb/MusicTuning.cs:355
+210faf7d	反応する音: 低音・中音・高音の強さで、それぞれの帯が伸びる	Core/Rgb/MusicTuning.cs:356
+a35cc263	反応する音: いま鳴っている低音・中音・高音の色が流れていく	Core/Rgb/MusicTuning.cs:357
+a0098d0d	反応する音: キック（テンポをつかめば拍）で光の輪が出る	Core/Rgb/MusicTuning.cs:358
+e367d987	反応する音: キック・スネア・ハイハットが、それぞれ違う光り方で光る	Core/Rgb/MusicTuning.cs:359
+4a0ca652	反応する音: パーツ（ゾーン）ごとに決めた音（低音・中音・高音・楽器）だけ	Core/Rgb/MusicTuning.cs:360
+3d52d090	反応する音: 楽器ごと（グラボ・メモリでは、拍でふくらみ、目立つ楽器の色になる）	Core/Rgb/MusicTuning.cs:361
+630581a9	反応する音: 拍（テンポ）に合わせて光の帯が走る	Core/Rgb/MusicTuning.cs:362
+e411765c	反応する音: 音の明るさ（低い音か高い音か）と音量で、ゆっくり変わる	Core/Rgb/MusicTuning.cs:363
+4c402832	反応する音: 小節の頭の拍（テンポをつかめなければ強いキック）	Core/Rgb/MusicTuning.cs:364
+975db0d4	ビートで色替え	Core/Rgb/MusicTuning.cs:371
+6f6c9db1	ビートのたびに次の色へ切り替わり、ぱっと光って消えていく	Core/Rgb/MusicTuning.cs:371
+1acb0fe4	パルス	Core/Rgb/MusicTuning.cs:372
+e532ec45	拍に合わせて脈打ち、ふわっと長く残光が残る。色はビートでは変わらず、ゆっくり移り変わる	Core/Rgb/MusicTuning.cs:372
+fac18e83	ミックス	Core/Rgb/MusicTuning.cs:373
+143bf4c6	低音・中音・高音の強さで色が混ざる	Core/Rgb/MusicTuning.cs:373
+d47d8919	音量メーター	Core/Rgb/MusicTuning.cs:374
+c9601c4a	音量の分だけ端から点き、ピークの点がゆっくり落ちてくる	Core/Rgb/MusicTuning.cs:374
+b9056e5c	スペクトラム	Core/Rgb/MusicTuning.cs:375
+1f55a216	LED の並びに低音〜高音を並べ、それぞれの強さで光る	Core/Rgb/MusicTuning.cs:375
+ae14d063	エナジー	Core/Rgb/MusicTuning.cs:376
+9097b7af	低音・中音・高音の帯が、それぞれの強さの分だけ伸びる	Core/Rgb/MusicTuning.cs:376
+a8728d89	流れる波	Core/Rgb/MusicTuning.cs:377
+0dbddecd	今の音の色が端から流れていく（ウォーターフォール）	Core/Rgb/MusicTuning.cs:377
+7579942a	波紋	Core/Rgb/MusicTuning.cs:378
+8f1dc3a2	キックのたびに光の輪が広がる	Core/Rgb/MusicTuning.cs:378
+5c1949b1	きらめき	Core/Rgb/MusicTuning.cs:379
+6ddfa1c0	キックで全体がふわっと、スネアでまとまった光、ハイハットで白い粒が光る	Core/Rgb/MusicTuning.cs:379
+fa793be1	パーツごとの役割	Core/Rgb/MusicTuning.cs:380
+2683fb56	ファンは低音、グラボは中音、メモリは高音のように、パーツごとに決まった音で光る。ファンの端子がいくつもあれば、低音・中音・高音に分ける（ゾーンの設定「反応する音」で変えられる）	Core/Rgb/MusicTuning.cs:380
+a0b3b7dd	楽器で光る	Core/Rgb/MusicTuning.cs:381
+3c260d3f	キックは全体、スネアは片側、ハイハットは小さな粒、ベースは端のほう、歌は全体の明るさ、ギターや鍵盤は流れる光で見せる。単色（選んだ色だけ）でも楽器が分かる	Core/Rgb/MusicTuning.cs:381
+74a4376d	テンポ追従	Core/Rgb/MusicTuning.cs:382
+934997b6	ビートに合わせて光の帯が走る	Core/Rgb/MusicTuning.cs:382
+5d88da90	ムード	Core/Rgb/MusicTuning.cs:383
+e134b40a	曲の雰囲気で色がゆっくり変わる（点滅しない）	Core/Rgb/MusicTuning.cs:383
+c3873745	ストロボ	Core/Rgb/MusicTuning.cs:384
+e266b3b4	ビートで強く点滅する（「激しい点滅を抑える」をオフにしたときだけ）	Core/Rgb/MusicTuning.cs:384
+d3efe37c	楽器ごと	Core/Rgb/MusicTuning.cs:450
+e8d8b63a	ドラムだけ	Core/Rgb/MusicTuning.cs:451
+31b76718	音の高さ（低音・中音・高音）	Core/Rgb/MusicTuning.cs:452
+ce37ccb7	ファンはキック、メモリやキーボードはハイハット、グラボはボーカルのように、パーツごとに楽器を分けて光ります。ファンの端子がいくつもあれば、キック・スネア・ハイハット・ベースの順に分けます	Core/Rgb/MusicTuning.cs:457
+c7cc18b1	キック・スネア・ハイハットだけで光ります。ギターや歌では光りません	Core/Rgb/MusicTuning.cs:458
+7b659d5a	ファンは低音、グラボは中音、メモリは高音のように、音の高さで分けて光ります（これまでと同じ）	Core/Rgb/MusicTuning.cs:459
+3cada106	パーツに合わせる	Core/Rgb/MusicTuning.cs:520
+78733543	低音（キック・ベース）	Core/Rgb/MusicTuning.cs:521
+23099007	中音（スネア・ボーカル）	Core/Rgb/MusicTuning.cs:522
+b599c0f6	高音（ハイハット）	Core/Rgb/MusicTuning.cs:523
+34c5e8d2	音全体（音量）	Core/Rgb/MusicTuning.cs:524
+c33f330a	キック	Core/Rgb/MusicTuning.cs:525
+8b911b1b	スネア	Core/Rgb/MusicTuning.cs:526
+7ae7bcde	ハイハット・シンバル	Core/Rgb/MusicTuning.cs:527
+f5489867	ベース（楽器）	Core/Rgb/MusicTuning.cs:528
+412c6fd5	ボーカル・リード	Core/Rgb/MusicTuning.cs:529
+203562ee	和音（鍵盤・ギター）	Core/Rgb/MusicTuning.cs:530
+dac2be1c	パッド・シンセ	Core/Rgb/MusicTuning.cs:531
 23f992d4	OpenRGB が見つかりません。OpenRGB（無料）をインストールしてください。Program Files に入れると、このアプリが自動で起動します（zip を展開した OpenRGB は、自分で起動してください）。	Core/Rgb/OpenRgbAutoStart.cs:56
 52b3b243	OpenRGB が見つかりません。OpenRGB（無料）をインストールして、起動してください（「OpenRGB が動いていなければ起動する」をオンにすると、Program Files に入れた OpenRGB をこのアプリが起動します）。	Core/Rgb/OpenRgbAutoStart.cs:57
 98887878	OpenRGB のサービスを起動しました。デバイスを探し終わるまで、少し待ちます…	Core/Rgb/OpenRgbAutoStart.cs:134
@@ -1466,27 +1477,16 @@ e158d65b	・追加した直後は「このツールで制御する」がオフ�
 d66864fa	ケース内	MainWindow.Dashboard.cs:37
 1eef08cf	編集を終了	MainWindow.Dashboard.cs:155
 653d9443	カードは最低 1 枚必要です。	MainWindow.Dashboard.cs:188
-d57e0ef7	写真: {0}（{1}）	MainWindow.Devices.cs:50
-e2890741	作者不明	MainWindow.Devices.cs:50
-e29499f3	ネットで写真を探す…	MainWindow.Devices.cs:87
-ed0f43c5	コピーした画像を貼り付け	MainWindow.Devices.cs:88
-b3cec96e	ファイルから選ぶ…	MainWindow.Devices.cs:89
-44dceb5c	イラストに戻す	MainWindow.Devices.cs:90
-30ef4ec2	「{0}」の画像を選ぶ	MainWindow.Devices.cs:98
-3d493cb5	画像ファイル (*.png;*.jpg;*.jpeg;*.bmp;*.webp)|*.png;*.jpg;*.jpeg;*.bmp;*.webp	MainWindow.Devices.cs:99
-927e8083	画像を設定できませんでした。\n{0}	MainWindow.Devices.cs:114
-b0dd9531	クリップボードに画像がありません。ブラウザーで画像を右クリックして「画像をコピー」を選んでから、もう一度押してください。	MainWindow.Devices.cs:147
-7c80ba3a	画像を貼り付けられませんでした。\n{0}	MainWindow.Devices.cs:156
-6d191ffc	「{0}」の写真	MainWindow.Devices.cs:281
-871f648b	自由に使える写真の共有サイト（Wikimedia Commons と Openverse）で、型番の写真を探しています…	MainWindow.Devices.cs:287
-2a367162	ブラウザーで画像を探す	MainWindow.Devices.cs:300
-6db944ec	型番で画像検索を開きます。気に入った画像を右クリック →「画像をコピー」して、下の「コピーした画像を貼り付け」を押してください	MainWindow.Devices.cs:301
-0d4f2878	自由に使える写真の共有サイト（Wikimedia Commons と Openverse）に、この型番の写真は見つかりませんでした。「ブラウザーで画像を探す」で画像をコピーして、「コピーした画像を貼り付け」で設定できます（メーカーのサイトの写真などは、自分で見るためだけに使ってください）。	MainWindow.Devices.cs:328
-02c5893e	使う写真を選んでください（Wikimedia Commons と Openverse の、自由に使える写真です。作者とライセンスはカードに表示します）。見つからなければ、ブラウザーで探して貼り付けることもできます。	MainWindow.Devices.cs:331
-b45d8636	写真を取ってきています…	MainWindow.Devices.cs:334
-a55323f3	写真を取ってこられませんでした。別の写真を選ぶか、貼り付けてください。	MainWindow.Devices.cs:341
-ec74b9eb	写真を探せませんでした（{0}）。「ブラウザーで画像を探す」で探して、貼り付けることもできます。	MainWindow.Devices.cs:357
-0a0e4a97	{0} ・ {1}	MainWindow.Devices.cs:381
+d57e0ef7	写真: {0}（{1}）	MainWindow.Devices.cs:46
+e2890741	作者不明	MainWindow.Devices.cs:46
+ed0f43c5	コピーした画像を貼り付け	MainWindow.Devices.cs:85
+b3cec96e	ファイルから選ぶ…	MainWindow.Devices.cs:86
+44dceb5c	イラストに戻す	MainWindow.Devices.cs:87
+30ef4ec2	「{0}」の画像を選ぶ	MainWindow.Devices.cs:95
+3d493cb5	画像ファイル (*.png;*.jpg;*.jpeg;*.bmp;*.webp)|*.png;*.jpg;*.jpeg;*.bmp;*.webp	MainWindow.Devices.cs:96
+927e8083	画像を設定できませんでした。\n{0}	MainWindow.Devices.cs:111
+b0dd9531	クリップボードに画像がありません。ブラウザーで画像を右クリックして「画像をコピー」を選んでから、もう一度押してください。	MainWindow.Devices.cs:139
+7c80ba3a	画像を貼り付けられませんでした。\n{0}	MainWindow.Devices.cs:148
 5119fa5e	ワットチェッカーの値を数字で入れてください	MainWindow.Energy.cs:26
 c0bf5633	合わせ込みました: CPU・GPU 以外 {0:F0} W・電源の効率 {1:F0}%（アイドル中と負荷中の 2 回から）	MainWindow.Energy.cs:67
 c91890c4	合わせ込みました: CPU・GPU 以外 {0:F0} W（電源の効率は {1:F0}% のまま。負荷中も記録すると効率も求めます）	MainWindow.Energy.cs:68
@@ -1589,6 +1589,7 @@ c9f1ad56	分けない	MainWindow.Lighting.cs:197
 eb409a51	{0} 台	MainWindow.Lighting.cs:198
 ce8e2c71	LED {0} 個	MainWindow.Lighting.cs:214
 55059eac	決めない（デバイスの中の並びで光る）	MainWindow.Lighting.cs:301
+0a0e4a97	{0} ・ {1}	MainWindow.Lighting.cs:316
 c14c8eef	自動（30 個以上で対称）	MainWindow.Lighting.cs:348
 87b3c1e5	4 回	MainWindow.Lighting.cs:354
 a3cdd021	8 回	MainWindow.Lighting.cs:354

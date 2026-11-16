@@ -1045,7 +1045,6 @@ a4d4ce26	Personalizzato
 975db0d4	Cambio colore a ritmo
 6f6c9db1	A ogni battito passa al colore successivo, si accende di colpo e svanisce
 1acb0fe4	Pulsazione
-50e3646b	Pulsa con i bassi e lascia un lungo e morbido bagliore residuo. Il colore non cambia a ritmo, ma si trasforma lentamente
 fac18e83	Mix
 143bf4c6	I colori si mescolano in base all'intensità di bassi, medi e alti
 d47d8919	VU meter
@@ -1636,25 +1635,12 @@ ab10ab7f	Stesso colore del dispositivo
 bf2c93a8	Come in generale
 c7218a33	Giallo
 cc601a2e	Stesso colore generale
-2a367162	Cerca immagini nel browser
-0d4f2878	Sui siti di foto di libero utilizzo (Wikimedia Commons e Openverse) non è stata trovata nessuna foto di questo modello. Copia un'immagine con «Cerca immagini nel browser» e impostala con «Incolla immagine copiata» (usa le foto dei siti dei produttori e simili solo per te).
-02c5893e	Scegli una foto (foto di libero utilizzo da Wikimedia Commons e Openverse; autore e licenza sono mostrati sulla scheda). Se nessuna va bene, puoi anche cercare nel browser e incollare.
-e195c30b	Se attivo, i dispositivi senza foto vengono cercati per modello su siti di foto di libero utilizzo (Wikimedia Commons e Openverse) e vengono usate automaticamente solo le foto che mostrano chiaramente lo stesso prodotto. Se non si trova nulla, la ricerca viene ripetuta ogni 30 giorni. Vengono inviati solo i nomi dei dispositivi
-6124e108	Per i dispositivi senza risultato, usa il pulsante immagine della scheda per incollare un'immagine trovata nel browser
-871f648b	Ricerca di foto di questo modello su siti di foto di libero utilizzo (Wikimedia Commons e Openverse)…
-6d191ffc	Foto di «{0}»
-6db944ec	Apre una ricerca di immagini del modello. Fai clic destro su un'immagine che ti piace → «Copia immagine», poi premi «Incolla immagine copiata» qui sotto
 7c80ba3a	Impossibile incollare l'immagine.\n{0}
 09a1ab78	Autore e licenza della foto
-a55323f3	Impossibile scaricare la foto. Scegline un'altra o incolla un'immagine.
-aeaca01b	Cerca automaticamente online le foto dei dispositivi
 b0dd9531	Negli appunti non c'è nessuna immagine. Nel browser fai clic destro su un'immagine, scegli «Copia immagine» e premi di nuovo.
 b3cec96e	Scegli da un file…
-b45d8636	Download della foto…
 d57e0ef7	Foto: {0} ({1})
 e2890741	Autore sconosciuto
-e29499f3	Cerca una foto online…
-ec74b9eb	Impossibile cercare le foto ({0}). Puoi anche cercare con «Cerca immagini nel browser» e incollare.
 ed0f43c5	Incolla immagine copiata
 512b961e	Ventole
 66441f18	Come la zona
@@ -1996,3 +1982,18 @@ d5a051f9	Velocità necessaria per mantenere {0:F0}°C: {1:F0}% o meno (le veloci
 0c8c7106	* La velocità più bassa che mantiene l'obiettivo non è stata misurata, quindi questa curva non verrà usata anche se applichi il risultato (resta la curva attuale)
 e2a336cd	La velocità più bassa che mantiene l'obiettivo non è stata misurata, quindi la curva non è stata applicata (resta quella attuale).
 90a68504	Sotto il {0:F0}%, la velocità cambia appena (la velocità minima propria della ventola).
+97a3aac7	Reagisce a: si illumina sul battito (sulla cassa finché il tempo non è trovato; sui bassi con il tempo disattivato e su scheda video e memoria). Il colore cambia ogni 1–4 battiti in base all'intensità
+6d6e85e7	Reagisce a: si espande sul battito e tra un battito e l'altro si muove dolcemente con i bassi (sulla cassa finché il tempo non è trovato; sui bassi con il tempo disattivato e su scheda video e memoria). Il colore cambia lentamente nel tempo
+3704a505	Reagisce a: prende il colore del più forte tra bassi, medi e alti
+ba3eca1b	Reagisce a: la lunghezza segue il volume e rimbalza su cassa e rullante
+81cd1e18	Reagisce a: si illumina in base all'intensità di ogni altezza, dai suoni bassi a quelli acuti
+210faf7d	Reagisce a: ogni banda si allunga in base all'intensità di bassi, medi e alti
+a35cc263	Reagisce a: scorrono i colori dei bassi, medi e alti che suonano in questo momento
+a0098d0d	Reagisce a: a ogni cassa compare un anello di luce (sul battito una volta trovato il tempo)
+e367d987	Reagisce a: cassa, rullante e hi-hat si illuminano ciascuno in modo diverso
+4a0ca652	Reagisce a: solo il suono scelto per ogni componente (zona): bassi, medi, alti o uno strumento
+3d52d090	Reagisce a: ogni strumento (su scheda video e memoria si espande sul battito con il colore dello strumento che spicca)
+630581a9	Reagisce a: una banda di luce scorre a ritmo del battito (tempo)
+e411765c	Reagisce a: cambia lentamente in base alla brillantezza del suono (basso o acuto) e al volume
+4c402832	Reagisce a: il primo battito di ogni battuta (casse forti finché il tempo non è trovato)
+e532ec45	Pulsa con il battito e lascia un lungo e morbido bagliore residuo. Il colore non cambia a ritmo, ma si trasforma lentamente

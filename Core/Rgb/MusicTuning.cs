@@ -332,11 +332,44 @@ public static class MusicTuning
             SceneColors: cfg.MusicScenes);
     }
 
-    /// <summary>光り方の表示名と説明（設定画面・タスクトレイ用）</summary>
-    public static (string Label, string Description) Describe(string effect) => effect switch
+    /// <summary>
+    /// 光り方の表示名と説明（設定画面・タスクトレイ用）。説明の 1 行目は、その光り方がどの音に反応するか（Follows）
+    /// </summary>
+    public static (string Label, string Description) Describe(string effect)
+    {
+        var (label, description) = DescribeLook(effect);
+        string follows = Follows(effect);
+        return (label, follows.Length == 0 ? description : description.Length == 0 ? follows : follows + "\n" + description);
+    }
+
+    /// <summary>
+    /// その光り方がどの音に反応するかを 1 文で（光り方を選ぶ画面のカードの 1 行目・タスクトレイの説明の 1 行目。
+    /// どの音で光っているのか分からない、という声があったため）
+    /// </summary>
+    public static string Follows(string effect) => effect switch
+    {
+        MusicStyles.BeatHue => L("反応する音: 拍で光る（テンポをつかめないときはキック。テンポを使わない設定とグラボ・メモリでは低音）。強さに応じて 1〜4 拍ごとに色が変わる"),
+        MusicStyles.Pulse => L("反応する音: 拍でふくらみ、拍の間は低音でゆるやかに動く（テンポをつかめないときはキック。テンポを使わない設定とグラボ・メモリでは低音）。色は時間でゆっくり変わる"),
+        MusicStyles.Mix => L("反応する音: 低音・中音・高音のうち、いちばん強い音の色になる"),
+        MusicStyles.Meter => L("反応する音: 音量で長さが変わり、キックとスネアで弾む"),
+        MusicStyles.Spectrum => L("反応する音: 低い音から高い音まで、高さごとの音の強さで光る"),
+        MusicStyles.Energy => L("反応する音: 低音・中音・高音の強さで、それぞれの帯が伸びる"),
+        MusicStyles.Scroll => L("反応する音: いま鳴っている低音・中音・高音の色が流れていく"),
+        MusicStyles.Ripple => L("反応する音: キック（テンポをつかめば拍）で光の輪が出る"),
+        MusicStyles.Sparkle => L("反応する音: キック・スネア・ハイハットが、それぞれ違う光り方で光る"),
+        MusicStyles.Role => L("反応する音: パーツ（ゾーン）ごとに決めた音（低音・中音・高音・楽器）だけ"),
+        MusicStyles.Ensemble => L("反応する音: 楽器ごと（グラボ・メモリでは、拍でふくらみ、目立つ楽器の色になる）"),
+        MusicStyles.Chase => L("反応する音: 拍（テンポ）に合わせて光の帯が走る"),
+        MusicStyles.Mood => L("反応する音: 音の明るさ（低い音か高い音か）と音量で、ゆっくり変わる"),
+        MusicStyles.Strobe => L("反応する音: 小節の頭の拍（テンポをつかめなければ強いキック）"),
+        _ => "",
+    };
+
+    /// <summary>光り方の表示名と、光り方の見た目の説明（Describe の 2 行目）</summary>
+    private static (string Label, string Description) DescribeLook(string effect) => effect switch
     {
         MusicStyles.BeatHue => (L("ビートで色替え"), L("ビートのたびに次の色へ切り替わり、ぱっと光って消えていく")),
-        MusicStyles.Pulse => (L("パルス"), L("低音に合わせて脈打ち、ふわっと長く残光が残る。色はビートでは変わらず、ゆっくり移り変わる")),
+        MusicStyles.Pulse => (L("パルス"), L("拍に合わせて脈打ち、ふわっと長く残光が残る。色はビートでは変わらず、ゆっくり移り変わる")),
         MusicStyles.Mix => (L("ミックス"), L("低音・中音・高音の強さで色が混ざる")),
         MusicStyles.Meter => (L("音量メーター"), L("音量の分だけ端から点き、ピークの点がゆっくり落ちてくる")),
         MusicStyles.Spectrum => (L("スペクトラム"), L("LED の並びに低音〜高音を並べ、それぞれの強さで光る")),

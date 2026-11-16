@@ -18,6 +18,8 @@ public sealed record EnsembleFrame(double T, LinColor[] Light, Rgb[] Out)
 {
     /// <summary>そのコマの手がかり（歌・パッド・ベースの大きさ・ギターと鍵盤・金管）</summary>
     public float Vocal, Pad, Bass, Guitar, Brass, FlowA, WaveA, WaveP;
+    /// <summary>更新の遅いデバイス: 最後の拍のふくらみの時刻（曲の頭からの秒。まだなければ負の無限大）</summary>
+    public double AccentT = double.NegativeInfinity;
 }
 
 /// <summary>「楽器で光る」を本物の分析に流して描き、LED ごとに記録する（MusicLight.Run と同じく、音を 80 ミリ秒先まで流しておく）</summary>
@@ -77,7 +79,8 @@ public static class EnsembleRun
             last = t;
             var fi = input.Frame;
             frames.Add(new EnsembleFrame(sec, r.LastLight.ToArray(), (Rgb[])output.Clone()) { Vocal = fi.Vocal, Pad = fi.Pad, Bass = fi.BassLevel, Guitar = fi.GuitarKeys, Brass = fi.Brass,
-                FlowA = (r.CurrentEffect as EnsembleEffect)?.Motion.Flow ?? 0, WaveA = (r.CurrentEffect as EnsembleEffect)?.Motion.Wave ?? 0, WaveP = (r.CurrentEffect as EnsembleEffect)?.Motion.WaveP ?? 0 });
+                FlowA = (r.CurrentEffect as EnsembleEffect)?.Motion.Flow ?? 0, WaveA = (r.CurrentEffect as EnsembleEffect)?.Motion.Wave ?? 0, WaveP = (r.CurrentEffect as EnsembleEffect)?.Motion.WaveP ?? 0,
+                AccentT = ((r.CurrentEffect as EnsembleEffect)?.SlowState.AccentT ?? double.NegativeInfinity) - T0 });
         }
         return frames;
     }
@@ -578,21 +581,39 @@ public static class InstrumentEnsembleTests
         }
     }
 
-    /// <summary>C11: 更新の遅いデバイス（メモリ）: 一瞬の光はなく、ゾーンの平均は 0.1 秒で 10% より大きく上がらない</summary>
+    /// <summary>
+    /// C11: 更新の遅いデバイス（メモリ）: 一瞬の光（キック・ハイハットの光）はなく、ゾーンの平均が 0.1 秒で 10% より大きく上がるのは
+    /// 拍のふくらみ（EnsembleEffect.SwellAmp）のときだけ。ふくらみは SwellGapSec 以上あけ、上がり幅は 20% まで
+    /// </summary>
+    /// <remarks>
+    /// 6.15.8 までは「0.1 秒で 10% より大きく上がらない」だけを確かめていた（遅いデバイスは明るさをゆっくり変えるだけ）。
+    /// 本物の曲では、遅いデバイスの「楽器で光る」が 84〜95% の時間止まって見え（直接書き込むグラボで 43%、単色で 86%）、
+    /// グラボがずっと同じ色に見えると言われたので、拍で明るさをふくらませるようにした（1 秒に 2.4 回まで。光感受性の目安の 3 回より少ない）。
+    /// それ以外の上がり（キック・ハイハットの一瞬の光・場所の動き）は、これまでどおり 10% までにする
+    /// </remarks>
     public static void TestSlowDeviceStaysCalm()
     {
         var buf = Everything();
         foreach (var pal in new[] { Palettes.Solid, Palettes.Rainbow })
         {
             var fr = EnsembleRun.Run(buf, EnsembleRun.Solid() with { Palette = pal }, EnsembleRun.Dram()).Where(f => f.T > 3).ToList();
-            var fl = new List<double>();
-            double worst = 0;
+            double worst = 0, worstOther = 0, worstT = 0, worstOtherT = 0;
             var m = fr.Select(f => EnsembleRun.Mean(f)).ToArray();
-            double worstT = 0;
-            for (int i = 6; i < m.Length; i++) { double r = m[i] - m.Skip(i - 6).Take(6).Min(); if (r > worst) { worst = r; worstT = fr[i].T; } }
-            T.Info($"DRAM {pal}: largest zone-mean rise within 0.1 s {worst:F3} (at {worstT:F2} s)");
-            if (Environment.GetEnvironmentVariable("ENSEMBLE_DIAG") == "slow") foreach (var f in fr.Where(x => Math.Abs(x.T - worstT) < 0.3)) T.Info($"{f.T:F3} v{f.Vocal:F2} p{f.Pad:F2} br{f.Brass:F2} g{f.Guitar:F2} " + string.Join(" ", f.Out.Take(2).Select(o => $"{o.R},{o.G},{o.B}")));
-            T.Check(worst <= 0.10, $"slow device {pal}: no rise above 10% within 100 ms ({worst:F3})");
+            for (int i = 6; i < m.Length; i++)
+            {
+                double r = m[i] - m.Skip(i - 6).Take(6).Min();
+                // 拍のふくらみ（このコマから 0.1 秒前までに始まった）による上がりか
+                bool swell = fr[i].T - fr[i].AccentT is >= -0.02 and <= 0.12;
+                if (r > worst) { worst = r; worstT = fr[i].T; }
+                if (!swell && r > worstOther) { worstOther = r; worstOtherT = fr[i].T; }
+            }
+            var accents = fr.Select(f => f.AccentT).Where(double.IsFinite).Distinct().OrderBy(x => x).ToList();
+            double minGap = accents.Zip(accents.Skip(1), (a, b) => b - a).DefaultIfEmpty(double.PositiveInfinity).Min();
+            T.Info($"DRAM {pal}: largest zone-mean rise within 0.1 s {worst:F3} (at {worstT:F2} s), apart from beat swells {worstOther:F3} (at {worstOtherT:F2} s); {accents.Count} swells, closest {minGap:F2} s apart");
+            if (Environment.GetEnvironmentVariable("ENSEMBLE_DIAG") == "slow") foreach (var f in fr.Where(x => Math.Abs(x.T - worstOtherT) < 0.3)) T.Info($"{f.T:F3} v{f.Vocal:F2} p{f.Pad:F2} br{f.Brass:F2} g{f.Guitar:F2} acc{f.AccentT:F2} " + string.Join(" ", f.Out.Take(2).Select(o => $"{o.R},{o.G},{o.B}")));
+            T.Check(worstOther <= 0.10, $"slow device {pal}: apart from beat swells, no rise above 10% within 100 ms ({worstOther:F3})");
+            T.Check(worst <= 0.20, $"slow device {pal}: a beat swell rises at most 20% ({worst:F3})");
+            T.Check(accents.Count >= 10 && minGap >= EnsembleEffect.SwellGapSec - 1e-6, $"slow device {pal}: beat swells happen ({accents.Count}) and at least {EnsembleEffect.SwellGapSec} s apart ({minGap:F2})");
         }
     }
 
@@ -661,5 +682,96 @@ public static class InstrumentEnsembleTests
         var b = EnsembleRun.Run(buf, EnsembleRun.Solid());
         bool same = a.Count == b.Count && a.Zip(b).All(x => x.First.Out.SequenceEqual(x.Second.Out));
         T.Check(same, "scenes off: injected scenes change nothing in Ensemble (byte-identical output)");
+    }
+
+    /// <summary>
+    /// C13: 更新の遅いデバイス（直接書き込むグラボ・メモリ・OpenRGB を通すグラボ）でも、「楽器で光る」が拍に合わせて動いて見える。
+    /// 本物の送り方（RgbDeviceChannel: 送る回数の上限・早めに送る・小さな変化は送らない）で送った色で確かめる（合成した 120 BPM の曲、20 秒）:
+    ///   ・2 秒の間、送った色がまったく変わらない時間は 10% まで（6.15.8 は本物の曲で 42〜95%。グラボが同じ色のまま、と言われた）
+    ///   ・明るさを変えてよいデバイス: 明るくなった送信の 70% 以上が拍（± 80 ms）。明るくなる間は 0.4 秒以上あく（1 秒に 2.5 回まで）
+    ///   ・明るさを変えないグラボ: 明るさ（いちばん強い成分）は変えず、拍で白へ寄せた色を送り、0.5 秒以内に元の色へ戻す送信がある
+    /// </summary>
+    public static void TestSlowDevicesShowTheBeat()
+    {
+        var (l, _, beats) = SlowDeviceBenchTests.Synth(120, 20, 120);
+        const double T0 = 1000, Tick = 1.0 / 60, From = 6;
+        var lanes = new List<(string Name, RgbDeviceChannel Ch, List<(double T, Rgb[] F)> Sends)>();
+        foreach (var dn in new[] { "direct", "dram", "gpu" })
+            foreach (var pal in new[] { Palettes.Solid, Palettes.Rainbow })
+            {
+                var dev = SlowDeviceBenchTests.DeviceOf(dn);
+                var ch = new RgbDeviceChannel(dev, T0) { SharedColor = new SharedColor() };
+                ch.Configure(new RgbConfig { Mode = RgbModes.Music, MusicStyle = MusicStyles.Ensemble, Brightness = 100, StaticColor = EnsembleRun.Violet },
+                    ResolvedMusic.Default with { Effect = MusicStyles.Ensemble, Palette = pal }, new RgbDeviceSettings { Name = dev.Name }, false);
+                lanes.Add(($"{dn}/{pal}", ch, new()));
+            }
+        var e = new AudioEngine(Fs) { Settings = MusicTuning.EngineSettings(new RgbConfig { Mode = RgbModes.Music }) };
+        int pos = 0;
+        double total = l.Length / (double)Fs;
+        for (int k = 0; k / 60.0 + 0.15 < total; k++)
+        {
+            double sec = k * Tick;
+            while (pos < l.Length && pos / (double)Fs < sec + 0.1)
+            {
+                int n = Math.Min(480, l.Length - pos);
+                e.Push(new ReadOnlySpan<float>(l, pos, n), T0 + pos / (double)Fs);
+                pos += n;
+            }
+            foreach (var (_, ch, sends) in lanes)
+            {
+                ch.Prepare(T0 + sec, Tick, e.Features, e.Events, e.Beat, null, false, false);
+                if (!ch.Render()) continue;
+                var reason = ch.ShouldSend(T0 + sec, Tick, true);
+                if (reason == SendReason.None) continue;
+                ch.MarkSent(T0 + sec, Tick, reason, 1);
+                sends.Add((sec + ch.EffectiveLatencyMs / 1000.0, (Rgb[])ch.Frame.Clone()));
+            }
+        }
+        static double Max(Rgb c) => Math.Max(c.R, Math.Max(c.G, c.B)) / 255.0;
+        static double Min(Rgb c) => Math.Min(c.R, Math.Min(c.G, c.B)) / 255.0;
+        foreach (var (name, ch, sends) in lanes)
+        {
+            var s = sends.Where(x => x.T >= From).ToList();
+            // 2 秒の窓で、送った色が 1 度も変わらなかった割合
+            int still = 0, wins = 0;
+            for (double w = From; w + 2 <= total - 0.2; w += 0.5)
+            {
+                wins++;
+                var inWin = sends.Where(x => x.T >= w && x.T < w + 2).ToList();
+                var prev = sends.LastOrDefault(x => x.T < w).F;
+                bool change = inWin.Any(x => prev is null || !x.F[0].Equals(prev[0])) && inWin.Count > 0;
+                if (!change) still++;
+            }
+            double stillShare = still / (double)Math.Max(1, wins);
+            if (!ch.Device.IsLowWrite)
+            {
+                // 明るくなった送信（LED 0 のいちばん強い成分が 0.03 以上上がった）
+                var rises = new List<double>();
+                for (int i = 1; i < s.Count; i++)
+                    if (Max(s[i].F[0]) - Max(s[i - 1].F[0]) >= 0.03) rises.Add(s[i].T);
+                double onBeat = rises.Count == 0 ? 0 : rises.Count(t => beats.Any(b => Math.Abs(b - t) < 0.08)) / (double)rises.Count;
+                double gap = rises.Zip(rises.Skip(1), (a, b) => b - a).DefaultIfEmpty(1).Min();
+                T.Info($"{name,-16} sends {s.Count / (total - From):F1}/s  still {stillShare * 100:F0}%  brighter sends {rises.Count} ({onBeat * 100:F0}% on the beat, closest {gap:F2} s apart)");
+                T.Check(stillShare <= 0.10, $"{name}: Ensemble does not look frozen ({stillShare * 100:F0}% of 2 s windows without a change)");
+                T.Check(rises.Count >= 10 && onBeat >= 0.7, $"{name}: brighter sends come on the beat ({onBeat * 100:F0}% of {rises.Count})");
+                T.Check(gap >= 0.4, $"{name}: brighter sends at least 0.4 s apart ({gap:F2} s)");
+            }
+            else
+            {
+                // 白へ寄せた送信（いちばん弱い成分が上がった）と、0.5 秒以内に戻す送信
+                int whiter = 0, back = 0;
+                double bright = s.Count == 0 ? 0 : s.Max(x => Math.Abs(Max(x.F[0]) - Max(s[0].F[0])));
+                for (int i = 1; i < s.Count; i++)
+                {
+                    if (Min(s[i].F[0]) - Min(s[i - 1].F[0]) < 0.03) continue;
+                    whiter++;
+                    double floor = Min(s[i - 1].F[0]) + 0.01;
+                    if (s.Skip(i + 1).TakeWhile(x => x.T <= s[i].T + 0.5).Any(x => Min(x.F[0]) <= floor)) back++;
+                }
+                T.Info($"{name,-16} sends {s.Count / (total - From):F1}/s  still {stillShare * 100:F0}%  whiter sends {whiter}, returned within 0.5 s {back}, brightness change {bright:F3}");
+                T.Check(stillShare <= 0.10, $"{name}: Ensemble does not look frozen ({stillShare * 100:F0}% of 2 s windows without a change)");
+                T.Check(whiter >= 10 && back >= whiter - 1, $"{name}: beat accents turn the colour whiter and come back within 0.5 s ({back} of {whiter})");
+            }
+        }
     }
 }
