@@ -738,6 +738,7 @@ public sealed class DeviceRenderer
         c.Slow = EffectCatalog.IsSlowVariant(variant) || SlowTiming;
         c.SlowDevice = Device.IsSlow || Device.IsLowWrite || Device.DirectGpu;   // 直接書き込むグラボも 1 秒に 10 回まで
         c.FixedBrightness = Device.IsLowWrite;
+        c.DirectWrite = Device.DirectGpu;
         c.SendNow = c.SendEvenIfSmall = false;
         c.NoFade = lowWrite;
         c.Speed = (float)music.Speed;

@@ -58,6 +58,8 @@ public sealed class BeatFlash
         internal static float UnlockedGridGain = 0.75f;
         /// <summary>つかめていないとき、キックの光のあと、拍の見当の光を出さない間隔（キックの光の間隔 GapSec の何倍か。0 = あけない）</summary>
         internal static double GridAfterKickGap = 0.5;
+        /// <summary>拍の並びが前の曲のもの（GridStale）の間は、拍の見当で光らない（false = 光る。調べる用）</summary>
+        internal static bool StaleNoGrid = true;
     }
 
     /// <summary>光らせるキックの強さの下限（BeatDriver.FlashMinStrength と同じ）</summary>
@@ -166,7 +168,8 @@ public sealed class BeatFlash
         bool quiet = tb - _drumT > Tune.QuietSec;
         // つかんでいれば拍の光。つかめていなくても、拍の見当があり、ドラムが鳴っていれば弱い光
         // （ドラムのないところでは光らない。鳴っている音がないのに、決まった速さで点滅し続けて見えた）
-        bool unlockedGrid = !_locked && Tune.UnlockedGridGain > 0 && !quiet;
+        // 曲が変わったと知らされたあと、拍の並びが前の曲のまま（GridStale）なら、拍の見当では光らない（キックで光る）
+        bool unlockedGrid = !_locked && Tune.UnlockedGridGain > 0 && !quiet && !(c.GridStale && Tune.StaleNoGrid);
         if (!(_locked || unlockedGrid)) return;
         float a = quiet ? Tune.QuietAmp : Tune.NoHitAmp;
         if (Math.Abs(tb - _hitT) <= Tune.BeatWindowSec) a = Math.Max(a, _hitA);

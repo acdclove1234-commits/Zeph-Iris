@@ -1,18 +1,17 @@
 // ==================================================
-// SceneTagger.cs - 楽器の AI（YAMNet）で、曲の部分ごとに目立つ楽器（場面）を調べる
-//   鳴っている音を 16,000 Hz にして貯め、0.48 秒ごとに直近 0.975 秒を優先度の低い専用のスレッドで調べる
-// Dependencies: .NET 8 (MIT License), NAudio (MIT License)
+// SceneTagger.cs - 楽器の AI（CED-Tiny）で、曲の部分ごとに目立つ楽器（場面）を調べる
+//   鳴っている音（ミッドとサイド）を 16,000 Hz にして貯め、1 秒ごとに直近 2 秒を優先度の低い専用のスレッドで調べる
+// Dependencies: .NET 8 (MIT License)
 // See CREDITS.txt for full license details.
 // ==================================================
 
 using System.Diagnostics;
-using NAudio.Dsp;
 
 namespace ProFanController;
 
 /// <summary>
 /// 楽器の AI で、いまの場面（目立つ楽器。<see cref="MusicScene"/>）を決める。一瞬の音ではなく曲の部分を見るので、
-/// 結果は 1.5〜2.5 秒ほど遅れて出る（光り方はそこから MusicScene.FadeSec 秒かけて移る。ビートの光には使わない）。
+/// 結果は 2〜5 秒ほど遅れて出る（2 秒の窓を 1 秒ごとに調べ、窓 2 つ続いたら切り替える。光り方はそこから MusicScene.FadeSec 秒かけて移る。ビートの光には使わない）。
 /// 取り込みスレッドから <see cref="Push"/>、分析のコマごとに <see cref="Tick"/> を呼ぶ（どちらも同じスレッド。待たない・メモリを確保しない）。
 /// AI は優先度のいちばん低い専用のスレッドで動かす（光の描画・音の取り込みを邪魔しない）。前の計算が終わっていなければ、その回は飛ばす
 /// </summary>
@@ -20,28 +19,42 @@ public sealed class SceneTagger : IDisposable
 {
     /// <summary>この音量（dBFS。窓全体の 2 乗平均）より小さい窓は、AI を使わず静かとみなす</summary>
     public const double QuietDb = -60;
-    /// <summary>AI に渡す前に、窓の音量をこの大きさ（dBFS）にそろえる（YAMNet は小さい音だと楽器を見分けにくい）。倍率の範囲</summary>
+    /// <summary>AI に渡す前に、窓の音量をこの大きさ（dBFS）にそろえる（小さい音・大きい音で楽器のらしさが変わらないように）。倍率の範囲</summary>
     public const double TargetDb = -18;
     public const float MinGain = 0.25f, MaxGain = 32f;
     /// <summary>この秒数だけ音が鳴るたびに、数字だけの統計を 1 行ログに出す</summary>
     public const double StatsEverySec = 60;
     /// <summary>リングの長さ（16,000 Hz の個数。窓より少し長い）</summary>
-    private const int RingSamples = 16000;
+    private const int RingSamples = CedTiny.WindowSamples + 4000;
+
+    /// <summary>
+    /// サイド（左右の差）の窓も AI で調べる（鍵盤・シンセ・弦だけ、ミッドとサイドの大きいほう。ギター・歌・話し声・金管・ドラムはミッドだけ）。
+    /// 鍵盤は左右に広げてあることが多く、ミッドでは歌・ドラムに隠れる（録音の鍵盤の曲で、ミッドだけでは鍵盤の場面がほとんど出なかった）。
+    /// ギターはミッドだけ: サイドも使うと、ロックの曲のほとんど（88〜99%）がギターの場面になった（ミッドだけで 19〜40%）。
+    /// サイドがミッドより SideRangeDb 以上小さい窓（ほぼモノラル）・静かな窓は、サイドを調べない（雑音を大きくして調べないように）
+    /// </summary>
+    public const double SideRangeDb = 24;
+    /// <summary>サイドのらしさをミッドと比べて大きいほうにするまとまり</summary>
+    private static readonly int[] SideGroups = { SceneClasses.Keys, SceneClasses.Synth, SceneClasses.Strings };
 
     private readonly Func<float[], float[], bool> _classify;
-    private readonly Resampler16k _rs;
-    private readonly SamplesSink _sink;
-    private readonly float[] _ring = new float[RingSamples];
-    private int _ringPos, _ringCount;
-    /// <summary>リングのいちばん新しい音の、次の音の時刻（秒）</summary>
+    private readonly AiResampler _rs, _rsSide;
+    private readonly SamplesSink _sink, _sinkSide;
+    private readonly float[] _ring = new float[RingSamples], _ringSide = new float[RingSamples];
+    private int _ringPos, _ringCount, _ringPosSide;
+    /// <summary>
+    /// リングのいちばん新しい音の、次の音の時刻（秒）。入力の音の数と取り込みの時刻から求める（AiResampler.EndT。出てきた数を足していかない）
+    /// </summary>
     private double _ringEndT = double.NaN;
 
     // AI に渡す窓（交互に使う）・音量をそろえた窓・結果
-    private readonly float[][] _win = { new float[Yamnet.WindowSamples], new float[Yamnet.WindowSamples] };
+    private readonly float[][] _win = { new float[CedTiny.WindowSamples], new float[CedTiny.WindowSamples] };
+    private readonly float[][] _winSide = { new float[CedTiny.WindowSamples], new float[CedTiny.WindowSamples] };
     private int _nextWin;
-    private readonly float[] _scaled = new float[Yamnet.WindowSamples];
-    private readonly float[] _scores = new float[Yamnet.Classes];
-    private readonly float[] _groups = new float[SceneClasses.Count];
+    private readonly float[] _scaled = new float[CedTiny.WindowSamples];
+    private readonly float[] _scores = new float[CedTiny.Classes], _scoresSide = new float[CedTiny.Classes];
+    private readonly float[] _groups = new float[SceneClasses.Count], _groupsSide = new float[SceneClasses.Count];
+    private int _sideWindows;
     /// <summary>場面の決め方（AI のスレッドだけが触る。Inline のときは取り込みスレッド）</summary>
     private readonly SceneTracker _tracker = new();
 
@@ -73,7 +86,7 @@ public sealed class SceneTagger : IDisposable
     private int _windows, _quiet, _skipped, _switches;
     private double _msTotal;
     // ログの前回の値（AI のスレッドだけ）
-    private int _logWindows, _logQuiet, _logSkipped, _logSwitches;
+    private int _logWindows, _logQuiet, _logSkipped, _logSwitches, _logSide;
     private double _logMs;
 
     /// <summary>いまの場面（どのスレッドから読んでもよい。丸ごと差し替えられる）</summary>
@@ -85,7 +98,9 @@ public sealed class SceneTagger : IDisposable
     public int Quiet => Volatile.Read(ref _quiet);
     public int Skipped => Volatile.Read(ref _skipped);
     public int Switches => Volatile.Read(ref _switches);
-    /// <summary>1 回の AI の計算の平均（ミリ秒）</summary>
+    /// <summary>サイドも AI で調べた回数（ほぼモノラルの窓は調べない）</summary>
+    public int SideWindows => Volatile.Read(ref _sideWindows);
+    /// <summary>窓 1 つ分の AI の計算の平均（ミリ秒。サイドも調べた窓は、ミッドとサイドの 2 回分）</summary>
     public double AvgMs { get { int n = Windows; return n > 0 ? Volatile.Read(ref _msTotal) / n : 0; } }
     /// <summary>調査用の記録（ログ）</summary>
     public Action<string>? Log { get; init; }
@@ -93,25 +108,31 @@ public sealed class SceneTagger : IDisposable
     public bool Inline { get; init; }
     /// <summary>テスト・調査用: AI で調べるたびに、窓の終わりの時刻・まとまりの値（そのままの値）・場面の決め方（この窓を入れたあと）を渡す（AI のスレッドから）</summary>
     internal Action<double, float[], SceneTracker>? Diag { get; init; }
+    /// <summary>調査用: AI で調べるたびに、窓の終わりの時刻・ミッドの 527 個のらしさ・サイドの 527 個のらしさ（調べなかったら null）を渡す</summary>
+    internal Action<double, float[], float[]?>? DiagScores { get; init; }
 
     /// <summary>モデルを使う（AI のスレッドが終わるまでモデルを手放さない。持ち主が先に Dispose しても、計算中に片付かない）</summary>
-    public SceneTagger(Yamnet model, int inputRate) : this(Acquire(model), inputRate, model.Release) { }
+    public SceneTagger(CedTiny model, int inputRate) : this(Acquire(model), inputRate, model.Release) { }
 
-    private static Func<float[], float[], bool> Acquire(Yamnet model)
+    private static Func<float[], float[], bool> Acquire(CedTiny model)
     {
-        if (!model.TryAcquire()) throw new ObjectDisposedException(nameof(Yamnet));
+        if (!model.TryAcquire()) throw new ObjectDisposedException(nameof(CedTiny));
         return (w, s) => { model.Classify(w, s); return true; };
     }
 
-    /// <summary>テスト用: AI の代わりに classifier（窓 → 521 個のらしさ。false なら結果なし）を使う。onExit = AI のスレッドが終わるとき</summary>
+    /// <summary>
+    /// テスト用: AI の代わりに classifier（窓 → 527 個のらしさ。false なら結果なし）を使う。onExit = AI のスレッドが終わるとき
+    /// </summary>
     internal SceneTagger(Func<float[], float[], bool> classifier, int inputRate, Action? onExit = null)
     {
         _classify = classifier;
         _onExit = onExit;
         try
         {
-            _rs = new Resampler16k(inputRate);
+            _rs = new AiResampler(inputRate, CedTiny.SampleRate);
+            _rsSide = new AiResampler(inputRate, CedTiny.SampleRate);
             _sink = OnResampled;   // 毎回ラムダを作らないよう、1 回だけ作っておく
+            _sinkSide = OnResampledSide;
             _worker = new Thread(WorkerLoop) { IsBackground = true, Name = "楽器の AI", Priority = ThreadPriority.Lowest };   // no-loc（スレッドの名前）
             _worker.Start();
         }
@@ -122,18 +143,62 @@ public sealed class SceneTagger : IDisposable
         }
     }
 
-    /// <summary>鳴っている音を足す（AudioEngine.Push と同じ音・同じ時刻）</summary>
-    public void Push(ReadOnlySpan<float> mono, double tFirst)
+    /// <summary>Push に渡す音のサンプリング周波数（AudioEngine は、これが分析の周波数なら落とした音を、取り込みの周波数なら届いたままの音を渡す）</summary>
+    public int InputRate => _rs.InputRate;
+
+    /// <summary>テスト用: ミッドを 16,000 Hz にする変換器（入れた数・出した数）</summary>
+    internal AiResampler Resampler => _rs;
+
+    /// <summary>テスト用: ミッドとサイドのリングの、新しいほうの n 個（古い順。窓と同じ切り出し方）</summary>
+    internal (float[] Mid, float[] Side) RingTail(int n)
+    {
+        n = Math.Min(n, RingSamples);
+        var mid = new float[n];
+        var side = new float[n];
+        for (int i = 0; i < n; i++)
+        {
+            mid[i] = _ring[(_ringPos - n + i + 2 * RingSamples) % RingSamples];
+            side[i] = _ringSide[(_ringPosSide - n + i + 2 * RingSamples) % RingSamples];
+        }
+        return (mid, side);
+    }
+
+    /// <summary>鳴っている音を足す（モノラル。サイドは 0 = 調べない）</summary>
+    public void Push(ReadOnlySpan<float> mono, double tFirst) => Push(mono, ReadOnlySpan<float>.Empty, tFirst);
+
+    /// <summary>
+    /// 鳴っている音を足す（AudioEngine.Push と同じ音・同じ時刻。mono = ミッド、side = サイド。side が mono と同じ長さでなければ、
+    /// この分のサイドは 0 にする）
+    /// </summary>
+    public void Push(ReadOnlySpan<float> mono, ReadOnlySpan<float> side, double tFirst)
     {
         if (_failed)
         {
             SettleToNone(tFirst);
             return;
         }
-        // 時刻が飛んだ（取り込みが途切れた）ら、たまった音を捨てる
-        if (double.IsFinite(_ringEndT) && Math.Abs(tFirst - _ringEndT) > 0.25) _ringCount = 0;
-        if (_ringCount == 0) _ringEndT = tFirst;
+        // 時刻が飛んだ・戻った（取り込みが途切れた）ら、たまった音を捨てる。少しだけ先に飛んだ（音が届かなかった）ら、その間を無音で埋める。
+        // サイドの変換器には、ミッドとまったく同じ数の音を同じ順に入れる（捨てるのも 2 つ一緒）: 2 つは同じ設定なので、出てくる数も位置もいつも同じ
+        // （前はサイドのない回のあとにサイドだけ最初からにしていて、1 回に出てくる数がちょうどでない大きさ（44.1 kHz で 448 個など）で数がずれ、
+        // そろえるためにサイドに 0 を挟んだり本物の音を上書きしたりしていた）
+        long fill = _rs.Sync(tFirst);
+        if (fill < 0)
+        {
+            _ringCount = 0;
+            _rsSide.Reset();
+            fill = 0;
+        }
+        if (fill > 0)
+        {
+            _rs.PushSilence(fill, _sink);
+            _rsSide.PushSilence(fill, _sinkSide);
+        }
         _rs.Push(mono, _sink);
+        _ringEndT = _rs.EndT;
+        // サイドがない回（モノラル・無音で埋めた回）・長さが合わない回は、サイドに同じ数の無音を入れる（左右の差がない = サイドは無音）
+        if (side.Length == mono.Length && !side.IsEmpty) _rsSide.Push(side, _sinkSide);
+        else _rsSide.PushSilence(mono.Length, _sinkSide);
+        Debug.Assert(_ringPosSide == _ringPos && _rsSide.OutputCount == _rs.OutputCount, "サイドのリングがミッドとずれた");   // no-loc（調べる用）
     }
 
     private void OnResampled(ReadOnlySpan<float> s)
@@ -147,12 +212,24 @@ public sealed class SceneTagger : IDisposable
         }
         _ringPos = pos;
         _ringCount = Math.Min(RingSamples, _ringCount + s.Length);
-        _ringEndT += s.Length / (double)Yamnet.SampleRate;
+    }
+
+    /// <summary>サイドの 16,000 Hz の音（ミッドと同じ設定の変換器に同じ数の音を入れているので、いつもミッドと同じ数・同じ位置に出てくる）</summary>
+    private void OnResampledSide(ReadOnlySpan<float> s)
+    {
+        var ring = _ringSide;
+        int pos = _ringPosSide;
+        foreach (float x in s)
+        {
+            ring[pos] = float.IsFinite(x) ? x : 0;
+            if (++pos == RingSamples) pos = 0;
+        }
+        _ringPosSide = pos;
     }
 
     /// <summary>
     /// 分析のコマごとに呼ぶ（テンポの追跡を使わないときも）。sounding = 音が鳴っている（門が開いていて反応の強さが十分）。
-    /// 0.48 秒ごとに、直近の窓を AI のスレッドに渡す（計算中なら飛ばす）。鳴っていなければ AI を使わず「静か」と数える
+    /// 1 秒ごとに、直近の窓（2 秒）を AI のスレッドに渡す（計算中なら飛ばす）。鳴っていなければ AI を使わず「静か」と数える
     /// </summary>
     public void Tick(double tHop, bool sounding)
     {
@@ -164,10 +241,10 @@ public sealed class SceneTagger : IDisposable
             _soundSec -= StatsEverySec;
             _logDue = true;
         }
-        if (tHop - _lastJobT < Yamnet.HopSec) return;
+        if (tHop - _lastJobT < CedTiny.HopSec) return;
         bool quiet = !sounding;
         // まだ窓 1 つ分たまっていない（取り直した直後は、場面の決め方を最初からにするだけの回を頼む）
-        bool resetOnly = !quiet && _ringCount < Yamnet.WindowSamples;
+        bool resetOnly = !quiet && _ringCount < CedTiny.WindowSamples;
         if (resetOnly && Volatile.Read(ref _trackerReset) == 0) return;
         _lastJobT = tHop;
         if (!Inline && Volatile.Read(ref _busy) != 0)
@@ -183,10 +260,16 @@ public sealed class SceneTagger : IDisposable
             w = _nextWin;
             _nextWin ^= 1;
             var dst = _win[w];
-            int start = (_ringPos - Yamnet.WindowSamples + RingSamples) % RingSamples;
-            int first = Math.Min(Yamnet.WindowSamples, RingSamples - start);
+            int start = (_ringPos - CedTiny.WindowSamples + RingSamples) % RingSamples;
+            int first = Math.Min(CedTiny.WindowSamples, RingSamples - start);
             Array.Copy(_ring, start, dst, 0, first);
-            if (first < Yamnet.WindowSamples) Array.Copy(_ring, 0, dst, first, Yamnet.WindowSamples - first);
+            if (first < CedTiny.WindowSamples) Array.Copy(_ring, 0, dst, first, CedTiny.WindowSamples - first);
+            // サイドも同じ長さだけ（サイドのリングの新しいほうから）
+            var dstSide = _winSide[w];
+            int startSide = (_ringPosSide - CedTiny.WindowSamples + RingSamples) % RingSamples;
+            int firstSide = Math.Min(CedTiny.WindowSamples, RingSamples - startSide);
+            Array.Copy(_ringSide, startSide, dstSide, 0, firstSide);
+            if (firstSide < CedTiny.WindowSamples) Array.Copy(_ringSide, 0, dstSide, firstSide, CedTiny.WindowSamples - firstSide);
             endT = _ringEndT;
         }
         bool log = _logDue;
@@ -214,6 +297,9 @@ public sealed class SceneTagger : IDisposable
         Interlocked.Increment(ref _gen);
         _ringCount = 0;
         _ringEndT = double.NaN;
+        // 変換器の中に残っている前の音も捨てる（ミッドとサイドを一緒に。数・位置がずれないように）
+        _rs.Reset();
+        _rsSide.Reset();
         _lastJobT = double.NegativeInfinity;
         _lastTickT = double.NaN;
         Volatile.Write(ref _trackerReset, 1);
@@ -291,9 +377,7 @@ public sealed class SceneTagger : IDisposable
         else
         {
             var win = _win[w];
-            double sum = 0;
-            for (int i = 0; i < win.Length; i++) sum += win[i] * (double)win[i];
-            double db = 10 * Math.Log10(sum / win.Length + 1e-20);
+            double db = LevelDb(win);
             if (db < QuietDb)
             {
                 Interlocked.Increment(ref _quiet);
@@ -301,12 +385,18 @@ public sealed class SceneTagger : IDisposable
             }
             else
             {
-                // 音量をそろえる（YAMNet は音の大きさで答えが大きく変わる。−20 dB 小さいだけでドラムのらしさが半分以下になる窓があった）
-                float gain = (float)Math.Clamp(Math.Pow(10, (TargetDb - db) / 20), MinGain, MaxGain);
-                for (int i = 0; i < win.Length; i++) _scaled[i] = Math.Clamp(win[i] * gain, -1f, 1f);
                 long t0 = Stopwatch.GetTimestamp();
                 bool ok;
-                try { ok = _classify(_scaled, _scores); }
+                // サイドは、ほぼモノラル（ミッドより SideRangeDb 以上小さい）・静かな窓では調べない
+                var winSide = _winSide[w];
+                double dbSide = LevelDb(winSide);
+                bool side = dbSide >= QuietDb && dbSide >= db - SideRangeDb;
+                try
+                {
+                    ok = Classify(win, db, _scores);
+                    // サイドで答えが出なかったら、ミッドだけで決める（ミッドの結果は捨てない）
+                    if (ok && side) side = Classify(winSide, dbSide, _scoresSide);
+                }
                 catch (Exception ex)
                 {
                     Fail(ex);
@@ -316,12 +406,37 @@ public sealed class SceneTagger : IDisposable
                 Volatile.Write(ref _msTotal, _msTotal + (Stopwatch.GetTimestamp() - t0) * 1000.0 / Stopwatch.Frequency);
                 Interlocked.Increment(ref _windows);
                 SceneClasses.Groups(_scores, _groups);
+                if (side)
+                {
+                    // 鍵盤・シンセ・弦は、ミッドとサイドの大きいほう（ギター・歌・話し声・金管・ドラムはミッドだけ: SideGroups）
+                    Interlocked.Increment(ref _sideWindows);
+                    SceneClasses.Groups(_scoresSide, _groupsSide);
+                    foreach (int k in SideGroups) _groups[k] = Math.Max(_groups[k], _groupsSide[k]);
+                }
+                DiagScores?.Invoke(endT, _scores, side ? _scoresSide : null);
                 res = _tracker.Update(endT, _groups);
                 Diag?.Invoke(endT, _groups, _tracker);
             }
         }
         Deliver(res, gen);
         if (log) LogStats();
+    }
+
+    /// <summary>窓全体の 2 乗平均の音量（dBFS）</summary>
+    private static double LevelDb(float[] win)
+    {
+        double sum = 0;
+        for (int i = 0; i < win.Length; i++) sum += win[i] * (double)win[i];
+        return 10 * Math.Log10(sum / win.Length + 1e-20);
+    }
+
+    /// <summary>窓 win（音量 db）を、音量をそろえてから AI で調べる（AI のスレッドだけ。_scaled を使い回す）</summary>
+    private bool Classify(float[] win, double db, float[] scores)
+    {
+        // 音量をそろえる（AI は音の大きさで答えが変わる。前の AI では −20 dB 小さいだけでドラムのらしさが半分以下になる窓があった）
+        float gain = (float)Math.Clamp(Math.Pow(10, (TargetDb - db) / 20), MinGain, MaxGain);
+        for (int i = 0; i < win.Length; i++) _scaled[i] = Math.Clamp(win[i] * gain, -1f, 1f);
+        return _classify(_scaled, scores);
     }
 
     private void Fail(Exception ex)
@@ -335,12 +450,13 @@ public sealed class SceneTagger : IDisposable
     private void LogStats()
     {
         if (Log is null) return;
-        int wn = Windows, q = Quiet, sk = Skipped, sw = Switches;
+        int wn = Windows, q = Quiet, sk = Skipped, sw = Switches, sd = SideWindows;
         double ms = Volatile.Read(ref _msTotal);
         int dw = wn - _logWindows;
         double avg = dw > 0 ? (ms - _logMs) / dw : 0;
-        Log($"楽器の AI の統計（{StatsEverySec:F0} 秒）: 調べた {dw} 回・静か {q - _logQuiet} 回・飛ばした {sk - _logSkipped} 回・場面の切り替え {sw - _logSwitches} 回・平均 {avg:F1} ms");   // no-loc（ログだけ）
+        Log($"楽器の AI の統計（{StatsEverySec:F0} 秒）: 調べた {dw} 回（サイドも {sd - _logSide} 回）・静か {q - _logQuiet} 回・飛ばした {sk - _logSkipped} 回・場面の切り替え {sw - _logSwitches} 回・窓 1 つの平均 {avg:F1} ms");   // no-loc（ログだけ）
         _logWindows = wn;
+        _logSide = sd;
         _logQuiet = q;
         _logSkipped = sk;
         _logSwitches = sw;
@@ -361,38 +477,4 @@ public sealed class SceneTagger : IDisposable
 
     /// <summary>AI のスレッドが終わるまで待つ（テスト用）</summary>
     internal bool WaitExited(int ms) => _worker.Join(ms);
-}
-
-/// <summary>鳴っている音（任意のサンプリング周波数・モノラル）を、楽器の AI 用の 16,000 Hz にする（少しずつ流し込める。Resampler22k と同じ作り）</summary>
-internal sealed class Resampler16k
-{
-    private readonly WdlResampler _r = new();
-    /// <summary>出てくる音の入れ物（一度に渡す最大 4,096 個の入力から出る分。最初に用意して、あとで大きくしない）</summary>
-    private float[] _out = new float[4096 * Yamnet.SampleRate / 8000 + 64];
-
-    public Resampler16k(int inputRate)
-    {
-        _r.SetMode(true, 2, false);
-        _r.SetFilterParms();
-        _r.SetFeedMode(true);
-        _r.SetRates(inputRate, Yamnet.SampleRate);
-    }
-
-    /// <summary>入力を流し込み、出てきた 16,000 Hz の音を sink に渡す</summary>
-    public void Push(ReadOnlySpan<float> input, SamplesSink sink)
-    {
-        while (input.Length > 0)
-        {
-            int n = Math.Min(input.Length, 4096);
-            int need = _r.ResamplePrepare(n, 1, out float[] inBuf, out int inOff);
-            n = Math.Min(n, need);
-            if (n <= 0) break;
-            input[..n].CopyTo(inBuf.AsSpan(inOff));
-            int maxOut = n * Yamnet.SampleRate / 8000 + 64;
-            if (_out.Length < maxOut) _out = new float[maxOut];
-            int got = _r.ResampleOut(_out, 0, n, _out.Length, 1);
-            if (got > 0) sink(_out.AsSpan(0, got));
-            input = input[n..];
-        }
-    }
 }

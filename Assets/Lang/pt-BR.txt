@@ -1945,9 +1945,7 @@ ce000878	Não foi possível abrir o guia do usuário.
 8703d0a3	Com o efeito "Cada peça no seu papel", qual som ou instrumento acende uma zona cujo "Som a acompanhar" é "Conforme a peça". Os sons escolhidos para cada zona permanecem como estão
 876fdd1c	Os instrumentos são deduzidos pelo som, então algumas músicas podem confundi-los. Sons rápidos (chimbal, caixa) aparecem como pequenos pontos de luz, e dispositivos de atualização lenta, como placa de vídeo e memória, acendem só com a cor do instrumento que se destaca em cada parte da música
 5519f7df	Com uma cor única, não dá para distinguir os instrumentos pela cor. Escolha o efeito "Instrumentos" para mostrá-los pelo brilho, pela posição e pelo movimento (o bumbo acende tudo, o chimbal vira pequenos pontos, a voz define o brilho geral etc.)
-0d8065a5	A cada 0,5 segundo, analisa cerca de 1 segundo do som mais recente. As cores mudam ao longo de alguns segundos e não piscam. As cores não mudam com as paletas "Somente a cor escolhida" e "Cores próximas da escolhida" nem com Medidor de volume, Estroboscópio e Cada peça no seu papel
 1b6f3970	Reconhecer instrumentos com AI
-aadf5c4a	A AI (YAMNet) reconhece o instrumento que se destaca em cada parte da música (voz, guitarra, piano, metais, sintetizador, cordas) e muda as cores devagar (azul para a voz, dourado para os metais, laranja para a guitarra etc.). Com uma cor única, muda o movimento do efeito "Instrumentos". Funciona só neste PC e usa um pouco de CPU e memória
 4e43701b	Com o efeito "Cada peça no seu papel", qual som acende esta zona. "Conforme a peça" segue a "Divisão de instrumentos" (por altura: ventoinhas nos graves, placa de vídeo nos médios, memória e teclados nos agudos). Se várias zonas do mesmo dispositivo ficarem com o mesmo som (como conectores de ventoinha), elas são divididas em sequência. Também é possível escolher um instrumento, como bumbo, caixa ou vocal
 b555c16c	AI de instrumentos
 dbb80bf4	Rotação necessária para manter o alvo de {0:F0} °C: {1:F0}% ou menos (o teste terminou antes, então rotações menores não foram medidas)
@@ -1997,3 +1995,9 @@ e367d987	Acompanha: bumbo, caixa e chimbal acendem cada um de um jeito diferente
 e411765c	Acompanha: muda devagar com o brilho do som (grave ou agudo) e o volume
 4c402832	Acompanha: o primeiro tempo de cada compasso (bumbos fortes enquanto o andamento não é captado)
 e532ec45	Pulsa com a batida e deixa um brilho residual longo e suave. A cor não muda na batida; vai mudando aos poucos
+6313ac02	A cada 1 segundo, analisa os últimos 2 segundos do som. As cores mudam ao longo de alguns segundos e não piscam. As cores não mudam com as paletas "Somente a cor escolhida" e "Cores próximas da escolhida" nem com Medidor de volume, Estroboscópio e Cada peça no seu papel
+419d7bd1	A AI (CED-Tiny) reconhece o instrumento que se destaca em cada parte da música (voz, guitarra, piano, metais, sintetizador, cordas) e muda as cores devagar (azul para a voz, dourado para os metais, laranja para a guitarra etc.). Com uma cor única, muda o movimento do efeito "Instrumentos". Funciona só neste PC e usa um pouco de CPU e memória
+eb06c11b	Placa de vídeo: escrita direta (no máximo {0} por segundo{1})
+965f43a6	O app escreve diretamente nesta placa de vídeo (pelo I2C da NVIDIA), sem passar pelo OpenRGB. Uma zona de cor única é escrita de uma vez, então é rápido, e o brilho também acompanha a música.
+0ac5666c	Quando os LEDs têm cores diferentes, cada escrita leva cerca de 35 ms, então no automático envia até 10 vezes por segundo (na batida envia na hora, sem esperar o envio regular).
+c3734abc	Dá para mudar isso em "Envios por segundo" à direita, mas mais envios usam mais CPU. Quadros em que os LEDs têm cores diferentes ficam em no máximo cerca de 14 por segundo, mesmo que você aumente (o app pausa pelo mesmo tempo que cada escrita leva)

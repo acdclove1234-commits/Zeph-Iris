@@ -1,19 +1,18 @@
 // ==================================================
 // BeatThis.cs - AI で曲の拍を見つける（Beat This!: Foscarin, Schlüter, Widmer 2024・JKU Linz・MIT）
 //   音（22,050 Hz・モノラル）→ mel スペクトログラム（ONNX・1 秒 50 コマ・128 帯）→ 拍の AI（ONNX・30 秒ずつ）→ 山を拾う
-// Dependencies: ONNX Runtime (MIT License), NAudio (MIT License), Beat This! / beat-this-rs のモデル (MIT License)
+// Dependencies: ONNX Runtime (MIT License), Beat This! / beat-this-rs のモデル (MIT License)
 // See CREDITS.txt for full license details.
 // ==================================================
 
 using Microsoft.ML.OnnxRuntime;
 using Microsoft.ML.OnnxRuntime.Tensors;
-using NAudio.Dsp;
 
 namespace ProFanController;
 
 /// <summary>
 /// 拍の AI。曲を少し後から（30 秒ぶんをまとめて）見るので、リアルタイムの拍の追跡よりずっと正確。
-/// 使い方: 鳴っている音を <see cref="Resampler22k"/> で 22,050 Hz にして貯め、数秒おきに <see cref="Analyze"/> で拍の時刻を得る。
+/// 使い方: 鳴っている音を <see cref="AiResampler"/> で 22,050 Hz にして貯め、数秒おきに <see cref="Analyze"/> で拍の時刻を得る。
 /// モデルは exe に埋め込んである（約 11 MB）。読み込みに失敗したら null（AI なしで動く）
 /// </summary>
 public sealed class BeatThis : IDisposable
@@ -164,42 +163,5 @@ public sealed class BeatThis : IDisposable
         _mel.Dispose();
         _beat.Dispose();
         _run.Dispose();
-    }
-}
-
-/// <summary>音のかたまりを受け取る</summary>
-public delegate void SamplesSink(ReadOnlySpan<float> samples);
-
-/// <summary>鳴っている音（任意のサンプリング周波数・モノラル）を、拍の AI 用の 22,050 Hz にする（少しずつ流し込める）</summary>
-public sealed class Resampler22k
-{
-    private readonly WdlResampler _r = new();
-    private float[] _out = new float[4096];
-
-    public Resampler22k(int inputRate)
-    {
-        _r.SetMode(true, 2, false);
-        _r.SetFilterParms();
-        _r.SetFeedMode(true);
-        _r.SetRates(inputRate, BeatThis.SampleRate);
-    }
-
-    /// <summary>入力を流し込み、出てきた 22,050 Hz の音を sink に渡す</summary>
-    public void Push(ReadOnlySpan<float> input, SamplesSink sink)
-    {
-        // 変換器が一度に受け取れる量には上限があるので、小分けにして全部渡す（渡しきれなかった音を捨てないように）
-        while (input.Length > 0)
-        {
-            int n = Math.Min(input.Length, 4096);
-            int need = _r.ResamplePrepare(n, 1, out float[] inBuf, out int inOff);
-            n = Math.Min(n, need);
-            if (n <= 0) break;
-            input[..n].CopyTo(inBuf.AsSpan(inOff));
-            int maxOut = n * BeatThis.SampleRate / 8000 + 64;
-            if (_out.Length < maxOut) _out = new float[maxOut];
-            int got = _r.ResampleOut(_out, 0, n, _out.Length, 1);
-            if (got > 0) sink(_out.AsSpan(0, got));
-            input = input[n..];
-        }
     }
 }

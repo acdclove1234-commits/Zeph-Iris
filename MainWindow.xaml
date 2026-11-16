@@ -2261,11 +2261,11 @@
                                     </StackPanel>
                                     <!-- 楽器の AI（Audio/SceneAi.cs・Core/Rgb/Palette.cs の ScenePalettes） -->
                                     <CheckBox Style="{StaticResource Switch}" IsChecked="{Binding Rgb.MusicScenes}" Margin="0,10,0,0"
-                                              ToolTip="直近の約 1 秒の音を 0.5 秒ごとに調べます。色は数秒かけて変わり、点滅はしません。パレット「選んだ色だけ」「選んだ色と近い色」・音量メーター・ストロボ・パーツごとの役割では色を変えません">
+                                              ToolTip="直近の 2 秒の音を 1 秒ごとに調べます。色は数秒かけて変わり、点滅はしません。パレット「選んだ色だけ」「選んだ色と近い色」・音量メーター・ストロボ・パーツごとの役割では色を変えません">
                                         <StackPanel>
                                             <TextBlock Text="AI で楽器を聞き分ける" FontWeight="SemiBold"/>
                                             <TextBlock Style="{StaticResource Caption}" TextWrapping="Wrap"
-                                                       Text="曲の部分ごとに目立つ楽器（歌・ギター・ピアノ・金管・シンセ・弦）を AI（YAMNet）で聞き分け、色をゆっくり変えます（歌は青、金管は金色、ギターはオレンジなど）。単色のときは、光り方「楽器で光る」の動き方を変えます。PC の中だけで動き、CPU とメモリを少し使います"/>
+                                                       Text="曲の部分ごとに目立つ楽器（歌・ギター・ピアノ・金管・シンセ・弦）を AI（CED-Tiny）で聞き分け、色をゆっくり変えます（歌は青、金管は金色、ギターはオレンジなど）。単色のときは、光り方「楽器で光る」の動き方を変えます。PC の中だけで動き、CPU とメモリを少し使います"/>
                                         </StackPanel>
                                     </CheckBox>
                                 </StackPanel>
@@ -2387,10 +2387,31 @@
                                                             <Run Text="{Binding LedText, Mode=OneWay}" Foreground="{DynamicResource MutedBrush}" FontSize="12"/>
                                                         </TextBlock>
                                                     </CheckBox>
-                                                    <Border Style="{StaticResource SoftBadge}" HorizontalAlignment="Left"
-                                                            Visibility="{Binding IsSlow, Converter={StaticResource BoolToVis}}"
+                                                    <!-- 直接書き込むグラボは注意ではないので、注意の色（黄）ではなくアクセントの色 -->
+                                                    <Border HorizontalAlignment="Left"
+                                                            Visibility="{Binding ShowSlowBadge, Converter={StaticResource BoolToVis}}"
                                                             ToolTip="{Binding SlowBadgeTip, Mode=OneWay}">
-                                                        <TextBlock Text="{Binding SlowBadgeText, Mode=OneWay}" FontSize="11" Foreground="{DynamicResource WarnBrush}"/>
+                                                        <Border.Style>
+                                                            <Style TargetType="Border" BasedOn="{StaticResource SoftBadge}">
+                                                                <Style.Triggers>
+                                                                    <DataTrigger Binding="{Binding IsDirectGpu}" Value="True">
+                                                                        <Setter Property="Background" Value="{DynamicResource AccentFillBrush}"/>
+                                                                    </DataTrigger>
+                                                                </Style.Triggers>
+                                                            </Style>
+                                                        </Border.Style>
+                                                        <TextBlock Text="{Binding SlowBadgeText, Mode=OneWay}" FontSize="11">
+                                                            <TextBlock.Style>
+                                                                <Style TargetType="TextBlock">
+                                                                    <Setter Property="Foreground" Value="{DynamicResource WarnBrush}"/>
+                                                                    <Style.Triggers>
+                                                                        <DataTrigger Binding="{Binding IsDirectGpu}" Value="True">
+                                                                            <Setter Property="Foreground" Value="{DynamicResource AccentBrush}"/>
+                                                                        </DataTrigger>
+                                                                    </Style.Triggers>
+                                                                </Style>
+                                                            </TextBlock.Style>
+                                                        </TextBlock>
                                                     </Border>
                                                 </DockPanel>
                                                 <ctl:LedPreview Height="12" Margin="24,8,0,0" Loaded="OnLedPreviewLoaded" Unloaded="OnLedPreviewUnloaded"

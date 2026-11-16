@@ -26,23 +26,30 @@ public sealed class BeatAssist : IDisposable
     /// <summary>このテンポより速い曲は、半分のテンポ（1 拍おき）で光らせる（BeatTracker の LockedHalveBpm と同じ考え）</summary>
     public static double HalveAboveBpm => BeatTracker.Tune.LockedHalveBpm;
 
-    private readonly BeatThis _model;
-    private readonly Resampler22k _rs;
+    private readonly Func<float[], int, (List<double> Beats, List<double> Downbeats)> _analyze;
+    private readonly AiResampler _rs;
+    /// <summary>22,050 Hz になった音をリングに入れる（毎回ラムダを作らないよう、1 回だけ作っておく）</summary>
+    private readonly SamplesSink _sink;
     private readonly float[] _ring;
     private int _ringPos, _ringCount;
-    /// <summary>リングのいちばん新しい音の、次の音の時刻（秒）</summary>
+    /// <summary>
+    /// リングのいちばん新しい音の、次の音の時刻（秒）。入力の音の数と取り込みの時刻から求める（AiResampler.EndT。出てきた数を足していかない）
+    /// </summary>
     private double _ringEndT = double.NaN;
 
     private readonly Thread _worker;
     private readonly AutoResetEvent _wake = new(false);
     private volatile bool _stop;
-    private float[]? _job;
-    private double _jobStartT;
+    /// <summary>AI に頼んだ音（Buf の先頭 Len 個・最初の音の時刻・頼んだときの取り込みの回）</summary>
+    private sealed record Job(float[] Buf, int Len, double StartT, int Gen);
+    private Job? _job;
+    /// <summary>AI に渡す音の入れ物（リングと同じ長さを 2 つ、交互に使う。頼むたびにメモリを確保しない）</summary>
+    private readonly float[][] _jobBufs = new float[2][];
+    private int _nextJobBuf;
     private volatile Tagged? _result;
     private bool _busy;
     /// <summary>取り込みの回（Reset のたびに 1 つ進める）。前の回の音で出た AI の結果は使わない</summary>
     private int _gen;
-    private int _jobGen;
 
     /// <summary>AI の結果と、それを頼んだときの取り込みの回</summary>
     private sealed record Tagged(Result R, int Gen);
@@ -64,31 +71,69 @@ public sealed class BeatAssist : IDisposable
     /// <summary>テスト・調査用: AI をその場で動かし、結果をすぐ使う（実時間より速く音を流すとき、結果の届く時刻がばらつかないように）</summary>
     public bool Inline { get; init; }
 
-    public BeatAssist(BeatThis model, int inputRate)
+    public BeatAssist(BeatThis model, int inputRate) : this((a, n) => model.Analyze(a.AsSpan(0, n)), inputRate) { }
+
+    /// <summary>テスト用: 拍の AI の代わりに analyze（22,050 Hz の音の先頭 n 個 → 音の先頭からの拍・小節の頭の秒）を使う</summary>
+    internal BeatAssist(Func<float[], int, (List<double> Beats, List<double> Downbeats)> analyze, int inputRate)
     {
-        _model = model;
-        _rs = new Resampler22k(inputRate);
+        _analyze = analyze;
+        _rs = new AiResampler(inputRate, BeatThis.SampleRate);
+        _sink = OnResampled;
         _ring = new float[(int)(WindowSec * BeatThis.SampleRate)];
+        _jobBufs[0] = new float[_ring.Length];
+        _jobBufs[1] = new float[_ring.Length];
         _worker = new Thread(WorkerLoop) { IsBackground = true, Name = "拍の AI", Priority = ThreadPriority.BelowNormal };   // no-loc（スレッドの名前）
         _worker.Start();
     }
 
-    /// <summary>鳴っている音を足す（AudioEngine.Push と同じ音・同じ時刻）</summary>
+    /// <summary>Push に渡す音のサンプリング周波数（AudioEngine は、これが分析の周波数なら落とした音を、取り込みの周波数なら届いたままの音を渡す）</summary>
+    public int InputRate => _rs.InputRate;
+
+    /// <summary>
+    /// 鳴っている音を足す（InputRate の音。tFirst = mono[0] の時刻）。時刻が飛んだ・戻った（取り込みが途切れた）ら、たまった音を捨てる。
+    /// 少しだけ先に飛んだ（音が届かなかった）ら、その間を無音で埋める
+    /// </summary>
     public void Push(ReadOnlySpan<float> mono, double tFirst)
     {
-        // 時刻が飛んだ（取り込みが途切れた）ら、たまった音を捨てる
-        if (double.IsFinite(_ringEndT) && Math.Abs(tFirst - _ringEndT) > 0.25) _ringCount = 0;
-        if (_ringCount == 0) _ringEndT = tFirst;
-        _rs.Push(mono, s =>
+        long fill = _rs.Sync(tFirst);
+        if (fill < 0) _ringCount = 0;
+        else if (fill > 0) _rs.PushSilence(fill, _sink);
+        _rs.Push(mono, _sink);
+        _ringEndT = _rs.EndT;
+    }
+
+    private void OnResampled(ReadOnlySpan<float> s)
+    {
+        var ring = _ring;
+        int pos = _ringPos;
+        foreach (float x in s)
         {
-            foreach (float x in s)
-            {
-                _ring[_ringPos] = x;
-                _ringPos = (_ringPos + 1) % _ring.Length;
-                if (_ringCount < _ring.Length) _ringCount++;
-            }
-            _ringEndT += s.Length / (double)BeatThis.SampleRate;
-        });
+            ring[pos] = x;
+            if (++pos == ring.Length) pos = 0;
+        }
+        _ringPos = pos;
+        _ringCount = Math.Min(ring.Length, _ringCount + s.Length);
+    }
+
+    /// <summary>テスト用: 22,050 Hz にする変換器（入れた数・出した数）</summary>
+    internal AiResampler Resampler => _rs;
+
+    /// <summary>テスト用: リングの音（古い順）と、その最初の音の時刻（AI に渡すときと同じ求め方）</summary>
+    internal (float[] Audio, double StartT) Snapshot()
+    {
+        var a = new float[_ringCount];
+        CopyRing(a);
+        return (a, _ringEndT - a.Length / (double)BeatThis.SampleRate);
+    }
+
+    /// <summary>リングの中身を古い順に dst の先頭に写す（写した数を返す）</summary>
+    private int CopyRing(float[] dst)
+    {
+        int start = (_ringPos - _ringCount + _ring.Length) % _ring.Length;
+        int first = Math.Min(_ringCount, _ring.Length - start);
+        Array.Copy(_ring, start, dst, 0, first);
+        if (first < _ringCount) Array.Copy(_ring, 0, dst, first, _ringCount - first);
+        return _ringCount;
     }
 
     /// <summary>曲の拍の記憶（null なら覚えない）</summary>
@@ -110,9 +155,39 @@ public sealed class BeatAssist : IDisposable
     /// <summary>キックで確かめる長さ（秒）・前後に見る幅（秒）</summary>
     public const double KickCheckSec = 12, KickWindowSec = 0.04;
 
+    /// <summary>曲が変わったと知らされた時刻（音の時刻）。これより前の拍（前の曲の拍）は、拍の並びを決めるのにも、曲の記憶にも使わない</summary>
+    private double _songT = double.NegativeInfinity;
+    /// <summary>曲が変わったとき、前の曲の拍を使わない（false = 使う。調べる用。アプリの中では変えない）</summary>
+    internal static bool SongCut = true;
+    /// <summary>
+    /// 曲が変わったあと、拍の並びを決めるのに要る新しい曲の拍の数と長さ（秒。どちらかを満たせばよい）。
+    /// 8 拍だけで決めると、速い曲を半分より遅いテンポ（180 BPM の曲を 95 BPM）に合わせてしまうことがあった
+    /// </summary>
+    internal static int SongMinBeats = 12;
+    internal static double SongMinSpanSec = 6;
+    /// <summary>曲が変わったあと、キックで表か裏かを決めるのに要る新しい曲の長さ（秒。足りなければ AI の位置のまま。前の曲のキックで決めない）</summary>
+    internal const double SongKickMinSec = 3;
+
+    /// <summary>
+    /// 曲が変わった（AudioEngine.NewSong。t = 新しい曲の始まり）: AI に見せる音には前の曲が残っているので、それより前の拍は使わない
+    /// （拍の並びを決めるのにも、キックで表か裏かを決めるのにも、曲の記憶にも）。
+    /// 前の曲の拍で直すと、新しい曲で前の曲の拍の並びにロックしてしまう（拍がそろっているので、AI の結果としては確かに見える）。
+    /// 次に AI に頼むのは、新しい曲の拍が SongMinSpanSec 秒分たまってから（それより早いと、前の曲の拍を除くと足りず、結果を使えない）
+    /// </summary>
+    public void SongChanged(double t)
+    {
+        if (!SongCut) return;
+        _songT = t;
+        _disagree = 0;
+        _memDisagree = 0;
+        _lastAgreed = false;
+        _lastStartT = Math.Max(_lastStartT, t + EdgeSec + SongMinSpanSec + 0.5 - FastEverySec);
+    }
+
     /// <summary>今の曲の頭からやり直す（出力先が変わった・取り込み直した）</summary>
     public void Reset()
     {
+        _songT = double.NegativeInfinity;
         // 前の音で頼んだ AI の結果（もう出ているもの・これから出るもの）を捨てる
         Interlocked.Increment(ref _gen);
         Interlocked.Exchange(ref _job, null);
@@ -120,6 +195,7 @@ public sealed class BeatAssist : IDisposable
         _busy = false;
         _ringCount = 0;
         _ringEndT = double.NaN;
+        _rs.Reset();   // 変換器の中に残っている前の音も捨てる
         _disagree = 0;
         _lastAgreed = false;
         _lastStartT = double.NegativeInfinity;
@@ -169,25 +245,21 @@ public sealed class BeatAssist : IDisposable
             : tracker.Lock == BeatLock.Unlocked || !_lastAgreed ? FastEverySec : SlowEverySec;
         if (tNow - _lastStartT < every) return;
         _lastStartT = tNow;
-        // リングの中身を古い順に写して、AI のスレッドに渡す
-        var job = new float[_ringCount];
-        int start = (_ringPos - _ringCount + _ring.Length) % _ring.Length;
-        int first = Math.Min(_ringCount, _ring.Length - start);
-        Array.Copy(_ring, start, job, 0, first);
-        if (first < _ringCount) Array.Copy(_ring, 0, job, first, _ringCount - first);
-        _jobStartT = _ringEndT - _ringCount / (double)BeatThis.SampleRate;
+        // リングの中身を古い順に写して、AI のスレッドに渡す（入れ物は交互に使う。前に頼んだ音を AI のスレッドがまだ読んでいても上書きしない）
+        var buf = _jobBufs[_nextJobBuf];
+        _nextJobBuf ^= 1;
+        int len = CopyRing(buf);
+        double s0 = _ringEndT - len / (double)BeatThis.SampleRate;
         if (Inline)
         {
-            var (bi, di) = _model.Analyze(job);
-            double s0 = _jobStartT;
-            var res = new Result(bi.Select(b => s0 + b).ToList(), di.Select(b => s0 + b).ToList(), s0 + job.Length / (double)BeatThis.SampleRate, 0);
+            var (bi, di) = _analyze(buf, len);
+            var res = new Result(bi.Select(b => s0 + b).ToList(), di.Select(b => s0 + b).ToList(), s0 + len / (double)BeatThis.SampleRate, 0);
             Analyzed?.Invoke(res);
             Learn(res);
             if (Memory?.Aligned != true) Decide(res, tracker);
             return;
         }
-        _jobGen = Volatile.Read(ref _gen);
-        Volatile.Write(ref _job, job);
+        Volatile.Write(ref _job, new Job(buf, len, s0, Volatile.Read(ref _gen)));
         _busy = true;
         _wake.Set();
     }
@@ -214,14 +286,14 @@ public sealed class BeatAssist : IDisposable
             if (_stop) break;
             var job = Interlocked.Exchange(ref _job, null);
             if (job is null) continue;
-            double t0 = _jobStartT;
-            int gen = Volatile.Read(ref _jobGen);
+            double t0 = job.StartT;
+            int gen = job.Gen;
             try
             {
                 var sw = System.Diagnostics.Stopwatch.StartNew();
-                var (beats, downs) = _model.Analyze(job);
+                var (beats, downs) = _analyze(job.Buf, job.Len);
                 var res = new Result(beats.Select(b => t0 + b).ToList(), downs.Select(b => t0 + b).ToList(),
-                    t0 + job.Length / (double)BeatThis.SampleRate, sw.Elapsed.TotalSeconds);
+                    t0 + job.Len / (double)BeatThis.SampleRate, sw.Elapsed.TotalSeconds);
                 Deliver(res, gen);
             }
             catch (Exception ex)
@@ -278,6 +350,7 @@ public sealed class BeatAssist : IDisposable
     /// </summary>
     private (double Period, double BeatT) PhaseByKicks((double Period, double BeatT) g, double tNow)
     {
+        if (tNow - _songT < SongKickMinSec) return g;   // 曲が変わったばかり: 新しい曲のキックが足りない
         var (on, off) = KickBalance(g, tNow);
         if (off > on * KickSideRatio && off > 0)
         {
@@ -287,12 +360,13 @@ public sealed class BeatAssist : IDisposable
         return g;
     }
 
-    /// <summary>直近 KickCheckSec 秒の、拍の位置の低音の合計と、半拍ずらした位置の低音の合計</summary>
+    /// <summary>直近 KickCheckSec 秒（曲が変わったあとなら、新しい曲の分だけ）の、拍の位置の低音の合計と、半拍ずらした位置の低音の合計</summary>
     private (double On, double Off) KickBalance((double Period, double BeatT) g, double tNow)
     {
         double p = g.Period, on = 0, off = 0;
         if (!(p > 0)) return (0, 0);
-        for (double t = g.BeatT; t > tNow - KickCheckSec; t -= p) { if (t <= tNow - KickWindowSec) { on += LowAround(t); off += LowAround(t + p / 2); } }
+        double lo = Math.Max(tNow - KickCheckSec, _songT);
+        for (double t = g.BeatT; t > lo; t -= p) { if (t <= tNow - KickWindowSec) { on += LowAround(t); off += LowAround(t + p / 2); } }
         for (double t = g.BeatT + p; t <= tNow - KickWindowSec; t += p) { on += LowAround(t); off += LowAround(t + p / 2); }
         return (on, off);
     }
@@ -305,6 +379,7 @@ public sealed class BeatAssist : IDisposable
     {
         double pt = tracker.PeriodSec, lt = tracker.GridLastBeatT;
         if (tracker.Lock == BeatLock.Unlocked || !(pt > 0) || !double.IsFinite(lt)) return false;
+        if (tNow - _songT < SongKickMinSec) return false;   // 曲が変わったばかり: キックで決めきれない（前の曲のキックで決めない）
         if (Math.Abs(pt / g.Period - 1) >= PeriodTol || Math.Abs(Wrap((lt - g.BeatT) / g.Period)) < 0.35) return false;
         var (on, off) = KickBalance(g, tNow);
         return !(on > off * KickSideRatio);
@@ -334,7 +409,7 @@ public sealed class BeatAssist : IDisposable
     private void Learn(Result r)
     {
         if (Memory is null || r.Beats.Count == 0) return;
-        double from = r.WindowEndT - WindowSec + 2, to = r.WindowEndT - EdgeSec;
+        double from = Math.Max(r.WindowEndT - WindowSec + 2, _songT), to = r.WindowEndT - EdgeSec;
         var beats = r.Beats.Where(t => t >= from && t <= to).ToList();
         if (SongMemory.FitGrid(beats) is not { } fit) return;
         double last = fit.A + Math.Round((beats[^1] - fit.A) / fit.Period) * fit.Period;
@@ -345,7 +420,12 @@ public sealed class BeatAssist : IDisposable
     private void Decide(Result r, BeatTracker tracker)
     {
         Runs++;
-        if (EstimateGrid(r.Beats, r.Downbeats, r.WindowEndT) is not { } g0) { _lastAgreed = true; return; }
+        bool cut = r.Beats.Count > 0 && r.Beats[0] < _songT;
+        var beats = cut ? r.Beats.Where(t => t >= _songT).ToList() : r.Beats;
+        var downs = r.Downbeats.Count == 0 || r.Downbeats[0] >= _songT ? r.Downbeats : r.Downbeats.Where(t => t >= _songT).ToList();
+        // 前の曲の拍を除いたあと、新しい曲の拍が少ないときは使わない（新しい曲の拍がたまるのを待って早めに調べ直す。FastEverySec）
+        if (cut && !EnoughSongBeats(beats, r.WindowEndT)) { _lastAgreed = false; return; }
+        if (EstimateGrid(beats, downs, r.WindowEndT) is not { } g0) { _lastAgreed = !cut; return; }
         var g = PhaseByKicks(g0, _lowT[(_lowPos - 1 + _lowT.Length) % _lowT.Length]);
         double pt = tracker.PeriodSec;
         bool locked = tracker.Lock != BeatLock.Unlocked && pt > 0 && double.IsFinite(tracker.GridLastBeatT);
@@ -364,6 +444,20 @@ public sealed class BeatAssist : IDisposable
         Steered++;
         Log?.Invoke($"拍の AI に合わせる: {60 / g.Period:F1} BPM（追跡は {(pt > 0 ? 60 / pt : 0):F1} BPM・{(locked ? "ロック中" : "ロックなし")}）");   // no-loc（ログだけ）
         tracker.Steer(g.Period, g.BeatT);
+    }
+
+    /// <summary>曲が変わったあとの、拍の並びを決めるのに使える拍（窓の後ろの端を除く）が、SongMinBeats 個以上か SongMinSpanSec 秒以上あるか</summary>
+    private static bool EnoughSongBeats(List<double> beats, double windowEnd)
+    {
+        int n = 0;
+        double first = double.NaN, last = double.NaN;
+        foreach (double t in beats)
+        {
+            if (t > windowEnd - EdgeSec) break;
+            if (n++ == 0) first = t;
+            last = t;
+        }
+        return n >= SongMinBeats || (n >= 2 && last - first >= SongMinSpanSec);
     }
 
     public void Dispose()

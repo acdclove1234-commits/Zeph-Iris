@@ -56,7 +56,7 @@ public static class SceneJumpTests
         var tr = new SceneTracker();
         double resetAt = double.NaN, worst = 0, uAtReset = 0;
         bool sawNoneFromVocal = false, vocalAgain = false;
-        for (double t = T0 + 0.48; t < T0 + 40; t += 0.48)
+        for (double t = T0 + SceneTracker.Tune.HopSec; t < T0 + 40; t += SceneTracker.Tune.HopSec)
         {
             var before = tr.Current;
             if (double.IsNaN(resetAt) && before.Group == SceneGroup.Vocal && t >= before.SwitchT + 0.5)
@@ -83,12 +83,12 @@ public static class SceneJumpTests
 
     private const int ModeKeys = 0, ModeVocal = 1, ModeDrums = 2;
 
-    /// <summary>mode に合わせた 521 個のらしさ（鍵盤 = Piano、歌 = Singing、ドラム = Drum kit）</summary>
+    /// <summary>mode に合わせた 527 個のらしさ（鍵盤 = Piano、歌 = Singing、ドラム = Drum kit）</summary>
     private static bool Scores(int mode, float[] s)
     {
         Array.Clear(s);
         s[SceneClasses.MusicClass] = 0.8f;
-        s[mode switch { ModeKeys => 148, ModeVocal => 24, _ => 157 }] = 0.8f;
+        s[CedTiny.IndexOf(mode switch { ModeKeys => "Piano", ModeVocal => "Singing", _ => "Drum kit" })] = 0.8f;
         return true;
     }
 

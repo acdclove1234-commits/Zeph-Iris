@@ -88,7 +88,8 @@ public sealed record RgbDevice(int Index, string Name, int LedCount, int Type = 
 /// <summary>デバイスごとの状態（表示用）</summary>
 /// <param name="Fps">実際に 1 秒に送っている回数</param>
 /// <param name="ActiveEffect">いま使っている音楽連動の光り方（更新の遅いデバイスは置き換えた後の名前）</param>
-public sealed record RgbDeviceStatus(string Name, int Leds, bool Slow, double Fps, string ActiveEffect, string LastError);
+/// <param name="Direct">OpenRGB を通さず直接書き込んでいるグラボ（RgbDeviceChannel.Direct がある）</param>
+public sealed record RgbDeviceStatus(string Name, int Leds, bool Slow, double Fps, string ActiveEffect, string LastError, bool Direct = false);
 
 /// <summary>
 /// OpenRGB SDK のネットワークプロトコル（必要な部分だけ）。
@@ -1883,7 +1884,7 @@ public sealed class RgbSync : IDisposable
         {
             var ch = channels[i];
             list[i] = new RgbDeviceStatus(ch.Device.Name, ch.Device.LedCount, ch.Device.IsSlow, Math.Round(ch.Fps.Sample(now), 1),
-                ch.Renderer.ActiveEffect, ch.StatusNote(now));
+                ch.Renderer.ActiveEffect, ch.StatusNote(now), ch.Direct is not null);
         }
         for (int i = 0; i < missing.Count; i++)
             list[channels.Count + i] = new RgbDeviceStatus(missing[i], 0, false, 0, "", L("OpenRGB に見つかりません"));

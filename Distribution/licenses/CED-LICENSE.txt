@@ -1,23 +1,27 @@
-YAMNet (instrument AI used by Zeph-Iris music sync)
-===================================================
+CED-Tiny (instrument AI used by Zeph-Iris music sync)
+======================================================
 
-YAMNet by Google / The TensorFlow Authors
+CED (Consistent Ensemble Distillation for audio tagging) by Xiaomi (mispeech)
 Licensed under the Apache License, Version 2.0 (full text below).
 
-  Model : https://www.kaggle.com/models/google/yamnet/tensorFlow2/yamnet/1
-  Code  : https://github.com/tensorflow/models/tree/master/research/audioset/yamnet
-  ONNX conversion used: https://huggingface.co/zeropointnine/yamnet-onnx
-          revision ac2ca3bd45d12ec1f19f1144205ea529b4e9dedf (tf2onnx conversion, Apache-2.0)
-  File  : yamnet.onnx, 16,093,603 bytes,
-          SHA-256 1510041dce24a2e9e84ec546807ac408ae496da6d1ed41bc3ccba649623f8e19
-          embedded unmodified in Zeph-Iris.exe
+  Model : https://huggingface.co/mispeech/ced-tiny (ONNX file model.onnx)
+          revision ace276d29dd0bb3f3517b0fa8cf300738c409019
+  Code  : https://github.com/RicherMans/CED
+  Paper : https://arxiv.org/abs/2308.11957
+  File  : ced-tiny.onnx, 6,681,767 bytes,
+          SHA-256 3890f227660be71886ff48633d11a731993e0206db8a486781412c28a0873435
+          embedded unmodified in Zeph-Iris.exe (renamed from model.onnx)
 
-Attribution (written by the Zeph-Iris authors; the upstream model ships no NOTICE file)
-  Copyright The TensorFlow Authors (Google).
+Attribution (written by the Zeph-Iris authors; no NOTICE file came with the model)
+  Copyright the CED authors (Xiaomi).
   No changes were made to the model. Zeph-Iris feeds it 16 kHz mono audio and
-  reads its per-class scores (output_0) only. The AudioSet class indices that
-  Zeph-Iris uses are constants in its source code; the class map file is not
-  shipped.
+  reads its per-class scores (logits) only. The 527 class names that Zeph-Iris
+  uses to find classes by name (Core/Audio/CedTinyLabels.cs) are copied from
+  id2label in the model's config.json (same repository and revision); they are
+  the AudioSet ontology class names by Google Inc., made available under the
+  Creative Commons Attribution-ShareAlike 4.0 International licence
+  (CC BY-SA 4.0, https://creativecommons.org/licenses/by-sa/4.0/; ontology:
+  https://github.com/audioset/ontology). Only the names are used, unchanged.
 
 -------------------------------------------------------------------------------
 

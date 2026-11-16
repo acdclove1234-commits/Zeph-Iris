@@ -360,6 +360,13 @@ public sealed class RgbDeviceVm : ObservableObject
     {
         new("0", L("自動")), new("1", L("1 回")), new("2", L("2 回")), new("3", L("3 回")), new("4", L("4 回")), new("5", L("5 回")),
     });
+    /// <summary>
+    /// 直接書き込むグラボの「1 秒に送る回数」の選択肢（自動は 10 回。下げるのも上げるのも可: RgbDeviceChannel.MaxFpsFor）。
+    /// 以前の版で選べた 1〜5 回も残す（一覧にない値を入れると、選択欄が空になるため）
+    /// </summary>
+    public static IReadOnlyList<ChoiceOption> DirectGpuFpsChoices => _directGpuFpsChoices.Value;
+    private static readonly PerLanguage<IReadOnlyList<ChoiceOption>> _directGpuFpsChoices = new(() =>
+        GpuFpsChoices.Concat(FpsChoices.Where(c => c.Id is not ("0" or "4"))).ToList());
     /// <summary>「早めに光らせる」（デバイスの遅れ）の選択肢（ミリ秒。設定では -1 = 自動）</summary>
     public static IReadOnlyList<ChoiceOption> LeadChoices => _leadChoices.Value;
     private static readonly PerLanguage<IReadOnlyList<ChoiceOption>> _leadChoices = new(() => new ChoiceOption[]
@@ -414,6 +421,32 @@ public sealed class RgbDeviceVm : ObservableObject
     }
     private bool _loading;
 
+    /// <summary>
+    /// 実際に送るときのデバイス: 直接書き込むグラボなら DirectGpu にする（OpenRGB から届いたデバイスは DirectGpu ではないので、そのままだと遅いグラボの表示になる）。
+    /// 設定の「直接書き込む」がオンで PnyEpicXGpu.Allowed なら直接書き込む候補。送っている最中（live にそのデバイスの状態がある）なら、
+    /// RgbSync が実際に選んだ送り方に従う（NvAPI で開けなかった・基板を確かめられなかった・書き込みに失敗し続けたときは OpenRGB を通している）
+    /// </summary>
+    public static RgbDevice AsDriven(RgbDevice d, RgbConfig rgb, IReadOnlyList<RgbDeviceStatus>? live = null)
+    {
+        if (d.DirectGpu) return d;
+        bool direct = rgb.DirectGpuWrite && PnyEpicXGpu.Allowed(d, rgb.DirectGpuUnverified);
+        if (direct && live is not null)
+        {
+            foreach (var st in live)
+            {
+                if (st.Name == d.Name && st.Leds > 0) { direct = st.Direct; break; }
+            }
+        }
+        return direct ? d with { DirectGpu = true } : d;
+    }
+
+    /// <summary>デバイスの行（d は AsDriven を通したもの）。設定はまだ読み込まない（Load など）</summary>
+    public static RgbDeviceVm Create(RgbDevice d) => new()
+    {
+        Name = d.Name, Leds = d.LedCount, IsSlow = d.IsSlow, IsFlickerProne = d.IsFlickerProne, IsGpu = d.IsLowWrite, IsDirectGpu = d.DirectGpu,
+        AutoFps = (int)Math.Round(RgbDeviceChannel.MaxFpsFor(d, new RgbDeviceSettings { Name = d.Name })),
+    };
+
     /// <summary>OpenRGB のデバイス名（設定の保存にも使う）</summary>
     public required string Name { get; init; }
     public required int Leds { get; init; }
@@ -425,15 +458,23 @@ public sealed class RgbDeviceVm : ObservableObject
     /// <summary>更新が遅いデバイスの目印の文字</summary>
     public string SlowBadgeText => IsFlickerProne ? L("ちかちか対策中（色が変わったときだけ送る）")
         : IsGpu ? L($"グラボ: 書き込みを最小限に（1 秒に最大 {(MaxFps > 0 ? Math.Min(MaxFps, AutoFps) : AutoFps)} 回）")
+        : IsDirectGpu ? L($"グラボに直接書き込み（1 秒に最大 {(MaxFps > 0 ? MaxFps : AutoFps)} 回{(MaxFps > 0 ? "" : L("・自動"))}）")
         : L($"更新が遅いデバイス（1 秒に {(MaxFps > 0 ? MaxFps : AutoFps)} 回{(MaxFps > 0 ? "" : L("・自動"))}）");
-    /// <summary>「自動」のときの 1 秒に送る回数（グラボ 5・メモリなど 8）</summary>
+    /// <summary>「自動」のときの 1 秒に送る回数（グラボ 5・直接書き込むグラボ 10・メモリなど 8）</summary>
     public int AutoFps { get; init; } = 8;
-    /// <summary>グラボ（書き込みに時間がかかる・ちかちかしやすい）</summary>
+    /// <summary>OpenRGB を通して書くグラボ（書き込みに時間がかかる・ちかちかしやすい。明るさは一定）</summary>
     public bool IsGpu { get; init; }
-    /// <summary>「1 秒に送る回数」を選べる（更新が遅いデバイスだけ）</summary>
-    public bool ShowFps => IsSlow;
+    /// <summary>
+    /// アプリが OpenRGB を通さず直接書き込むグラボ（PNY Epic-X。RgbDevice.DirectGpu）。速いデバイスと同じ光り方で、明るさも変わる。
+    /// 自動では 1 秒に 10 回（上げることもできる）
+    /// </summary>
+    public bool IsDirectGpu { get; init; }
+    /// <summary>目印（更新が遅いデバイス・直接書き込むグラボ）を出す</summary>
+    public bool ShowSlowBadge => IsSlow || IsDirectGpu;
+    /// <summary>「1 秒に送る回数」を選べる（更新が遅いデバイスと、直接書き込むグラボ）</summary>
+    public bool ShowFps => IsSlow || IsDirectGpu;
     /// <summary>グラボは下げる方向だけ選べる（自動の回数まで。ちかちかしやすいグラボは 4 回まで）</summary>
-    public IReadOnlyList<ChoiceOption> FpsOptions => !IsGpu ? FpsChoices
+    public IReadOnlyList<ChoiceOption> FpsOptions => IsDirectGpu ? DirectGpuFpsChoices : !IsGpu ? FpsChoices
         : _gpuFps ??= GpuFpsChoices.Where(c => int.Parse(c.Id, System.Globalization.CultureInfo.InvariantCulture) <= AutoFps).ToList();
     private IReadOnlyList<ChoiceOption>? _gpuFps;
     /// <summary>「虹・呼吸も動かす」を選べる（ちかちかしやすい ASRock の Radeon 以外のグラボ）</summary>
@@ -453,6 +494,7 @@ public sealed class RgbDeviceVm : ObservableObject
         set
         {
             if (string.IsNullOrEmpty(value) || !Set(ref _fpsId, value)) return;
+            if (!_loading) _fpsChosen = true;
             Raise(nameof(SlowBadgeText));
             NotifyEdited();
         }
@@ -470,8 +512,15 @@ public sealed class RgbDeviceVm : ObservableObject
     /// <summary>設定に保存する形の「デバイスの遅れ」（-1 = 自動）</summary>
     public int LatencyMs => int.TryParse(_leadId, out int v) ? v : -1;
 
-    /// <summary>設定に保存する形の「1 秒に送る回数」（0 = 自動）</summary>
+    /// <summary>選んでいる「1 秒に送る回数」（0 = 自動）</summary>
     public int MaxFps => int.TryParse(_fpsId, out int v) ? v : 0;
+    /// <summary>
+    /// 設定に保存する「1 秒に送る回数」: この行で選び直していなければ、読み込んだ値のまま（OpenRGB を通すグラボの行では、直接書き込んでいたときの
+    /// 8〜60 回を「自動」と表示するが、ほかの項目を変えただけで消さない。「直接書き込む」をオンに戻したとき、その回数に戻る）
+    /// </summary>
+    public int MaxFpsToSave => _fpsChosen ? MaxFps : _loadedMaxFps;
+    private int _loadedMaxFps;
+    private bool _fpsChosen;
     public string SlowBadgeTip => IsFlickerProne
         ? L("このグラボは、色を書き込むたびに一瞬ちかちかすることがあります（OpenRGB 1.1 の書き込み方が原因と考えられますが、この機種では確認中です）。書き込みを最小限にするため、明るさは変えず、色がはっきり変わったときだけ（0.25 秒以上あけて）送り、同じ色の送り直しもしません。レインボー（流れる）は止まった虹に、呼吸は固定色になります（光る場所ごとに 1 色しか出せないため）。音楽連動で音が止まったときは、色を 20 秒ごとに切り替えます。気になる場合は光り方を「固定色」にしてください")
         : IsGpu
@@ -479,6 +528,10 @@ public sealed class RgbDeviceVm : ObservableObject
               + L("明るさは一定（色の切り替えでビートを見せる）、色がはっきり変わったときだけ送る（1 秒に最大 5 回）、温度モードは温度の段が変わったときだけ切り替える、")
               + L("レインボー（流れる）・呼吸は止まった虹・固定色（「虹・呼吸も動かす」で変えられます）、同じ色の送り直しは 60 秒ごと。")
               + L("ほかのデバイスとタイミングがずれるときは「早めに光らせる」で合わせてください")
+        : IsDirectGpu
+            ? L("このグラボは、OpenRGB を通さず、アプリが直接（NVIDIA の I2C で）書き込みます。1 色のゾーンは 1 回で書けて速く、明るさも音に合わせて変わります。")
+              + L("LED ごとに色が違うときは 1 回に約 35 ミリ秒かかるので、自動では 1 秒に 10 回まで送ります（ビートの瞬間は定期便を待たずに送ります）。")
+              + L("右の「1 秒に送る回数」で変えられますが、増やすと CPU を多く使います。LED ごとに色が違うコマは、増やしても 1 秒に 14 回ほどが上限です（書き込みと同じ時間だけ休むため）")
             : L("メモリなど、基板の内側の配線（I2C）でつながる LED は、1 回送るのに時間がかかるため、自動では 1 秒に 8 回までにしています（右の「1 秒に送る回数」で変えられます）。音楽連動の色の切り替えは定期便を待たずにすぐ送ります。同じ色の送り直しは 60 秒ごとです");
     public IReadOnlyList<ChoiceOption> EffectOptions => IsSlow ? SlowEffects : FastEffects;
     public IReadOnlyList<ChoiceOption> MirrorOptions => MirrorChoices;
@@ -645,8 +698,10 @@ public sealed class RgbDeviceVm : ObservableObject
             AnimateOnGpu = animateOnGpu;
             LeadId = latencyMs >= 0 ? latencyMs.ToString(System.Globalization.CultureInfo.InvariantCulture) : "-1";
             SwapRedGreen = swapRedGreen;
-            // グラボで自動の回数より多い値（以前の版で選べた 8〜60 回）は、自動と同じなので「自動」と表示する
-            // （一覧にない値を入れると、選択欄が空になるため）
+            // グラボで自動の回数より多い値（以前の版で選べた 8〜60 回・直接書き込んでいたときの値）は、自動と同じなので「自動」と表示する
+            // （一覧にない値を入れると、選択欄が空になるため）。保存するときは読み込んだ値のまま（MaxFpsToSave）
+            _loadedMaxFps = Math.Max(0, maxFps);
+            _fpsChosen = false;
             if (IsGpu && maxFps > AutoFps) maxFps = 0;
             FpsId = maxFps > 0 ? maxFps.ToString(System.Globalization.CultureInfo.InvariantCulture) : "0";
             Effect = string.IsNullOrEmpty(effect) ? "Auto" : effect;
@@ -1180,6 +1235,9 @@ public partial class MainWindow
         // 音楽連動でなくなったら、同期テストは続けられない
         if (sender is RgbConfig && (e.PropertyName is nameof(RgbConfig.Mode) or nameof(RgbConfig.Enabled)) && !(rgb.Enabled && rgb.Mode == RgbModes.Music))
             StopSyncTest();
+        // 「直接書き込む」「確かめていない型番も」を切り替えたら、グラボの行（目印・1 秒に送る回数・光り方の一覧）を作り直す
+        if (sender is RgbConfig && (e.PropertyName is nameof(RgbConfig.DirectGpuWrite) or nameof(RgbConfig.DirectGpuUnverified)) && RgbRowsDirectStale(LiveRgbStatus()))
+            RebuildRgbDeviceRows();
         RefreshLightingUi();
     }
 
@@ -1538,6 +1596,28 @@ public partial class MainWindow
         if (devices.Count > 0) SetKnownRgbDevices(devices);
     }
 
+    /// <summary>送っている最中のデバイスごとの状態（連携していなければ null: 前に送っていたときの状態は使わない）</summary>
+    private IReadOnlyList<RgbDeviceStatus>? LiveRgbStatus() => Config.Rgb.Enabled ? CurrentApp.Rgb.DeviceStatus : null;
+
+    /// <summary>
+    /// 行の「直接書き込むグラボ」が、いまの送り方と違う（「直接書き込む」を切り替えた直後・直接開けずに OpenRGB を通しているなど）。
+    /// 違えば行を作り直す（目印・1 秒に送る回数の選択肢・光り方の一覧が変わるため）
+    /// </summary>
+    private bool RgbRowsDirectStale(IReadOnlyList<RgbDeviceStatus>? live)
+    {
+        var rgb = Config.Rgb;
+        foreach (var vm in _rgbDeviceRows)
+        {
+            foreach (var d in _rgbKnownDevices)
+            {
+                if (d.Name != vm.Name) continue;
+                if (RgbDeviceVm.AsDriven(d, rgb, live).DirectGpu != vm.IsDirectGpu) return true;
+                break;
+            }
+        }
+        return false;
+    }
+
     /// <summary>デバイスの行を作り直す（設定から、選択・光り方の上書き・向きを読み込む）</summary>
     private void RebuildRgbDeviceRows()
     {
@@ -1552,11 +1632,7 @@ public partial class MainWindow
         {
             if (d.LedCount <= 0 || !seen.Add(d.Name)) continue;
             var s = rgb.SettingsFor(d.Name);
-            var vm = new RgbDeviceVm
-            {
-                Name = d.Name, Leds = d.LedCount, IsSlow = d.IsSlow, IsFlickerProne = d.IsFlickerProne, IsGpu = d.IsLowWrite,
-                AutoFps = (int)Math.Round(RgbDeviceChannel.MaxFpsFor(d, new RgbDeviceSettings { Name = d.Name })),
-            };
+            var vm = RgbDeviceVm.Create(RgbDeviceVm.AsDriven(d, rgb, LiveRgbStatus()));
             vm.Load(rgb.SwapRedGreen.Contains(d.Name), s.Effect, s.Mirror, s.Reverse, s.MaxFps, s.LatencyMs, s.AnimateOnGpu);
             vm.LoadCalibration(s);
             vm.LoadLight(s);
@@ -1708,7 +1784,7 @@ public partial class MainWindow
         if (property == nameof(RgbDeviceVm.SwapRedGreen))
             rgb.SwapRedGreen = LightingRules.MergeNames(rgb.SwapRedGreen, PresentRgbNames(), _rgbDeviceRows.Where(r => r.SwapRedGreen).Select(r => r.Name));
         else
-            LightingRules.UpsertDeviceSettings(rgb.DeviceSettings, vm.Name, vm.Effect, vm.Mirror, vm.Reverse, vm.ShowFps ? vm.MaxFps : -1, vm.LatencyMs,
+            LightingRules.UpsertDeviceSettings(rgb.DeviceSettings, vm.Name, vm.Effect, vm.Mirror, vm.Reverse, vm.ShowFps ? vm.MaxFpsToSave : -1, vm.LatencyMs,
                 vm.ShowAnimateOnGpu ? vm.AnimateOnGpu : null, vm.WriteCalibration);
         LightingListsChanged();
     }
@@ -2135,6 +2211,8 @@ public partial class MainWindow
     {
         var statuses = CurrentApp.Rgb.DeviceStatus;
         bool enabled = Config.Rgb.Enabled;
+        // 直接書き込むかが実際の送り方と違う行は作り直す（直接開けなかった・失敗し続けて OpenRGB に切り替えた・切り替えが反映された）
+        if (RgbRowsDirectStale(enabled ? statuses : null)) RebuildRgbDeviceRows();
         for (int i = 0; i < _rgbDeviceRows.Count; i++)
         {
             var vm = _rgbDeviceRows[i];

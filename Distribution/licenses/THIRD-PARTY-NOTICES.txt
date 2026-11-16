@@ -16,12 +16,13 @@ Beat This!（音楽連動の拍の AI。小さいモデル beat_this_small と�
   Source : https://github.com/CPJKU/beat_this ・ ONNX 変換 https://github.com/danigb/beat-this-rs
   Copyright (c) 2024 Institute of Computational Perception, JKU Linz, Austria / Copyright (c) 2025 danigb
 
-YAMNet（音楽連動の楽器の AI。曲の部分ごとに目立つ楽器を聞き分ける。yamnet.onnx を exe に埋め込み）
-  License: Apache License 2.0（YAMNet-LICENSE.txt）  Copyright The TensorFlow Authors (Google)
-  Source : https://www.kaggle.com/models/google/yamnet/tensorFlow2/yamnet/1 ・ https://github.com/tensorflow/models/tree/master/research/audioset/yamnet
-           ONNX 変換 https://huggingface.co/zeropointnine/yamnet-onnx（revision ac2ca3bd45d12ec1f19f1144205ea529b4e9dedf）
-  ※ 改変せずに使用しています（SHA-256 1510041dce24a2e9e84ec546807ac408ae496da6d1ed41bc3ccba649623f8e19）。
-  The unmodified YAMNet model (Apache License 2.0) is embedded in Zeph-Iris.exe.
+CED-Tiny（音楽連動の楽器の AI。曲の部分ごとに目立つ楽器を聞き分ける。ced-tiny.onnx を exe に埋め込み）
+  License: Apache License 2.0（CED-LICENSE.txt）  Copyright the CED authors (Xiaomi)
+  Source : https://huggingface.co/mispeech/ced-tiny（revision ace276d29dd0bb3f3517b0fa8cf300738c409019）・ https://github.com/RicherMans/CED
+  ※ 改変せずに使用しています（SHA-256 3890f227660be71886ff48633d11a731993e0206db8a486781412c28a0873435）。
+     音の種類の名前（527 個）は同じリポジトリの config.json から。名前は AudioSet のオントロジー（Google Inc.・CC BY-SA 4.0
+     https://creativecommons.org/licenses/by-sa/4.0/ ・ https://github.com/audioset/ontology）のまま。
+  The unmodified CED-Tiny model by Xiaomi (mispeech/ced-tiny, Apache License 2.0) is embedded in Zeph-Iris.exe.
 
 ONNX Runtime 1.31.1（拍の AI と楽器の AI を動かす）
   License: MIT License

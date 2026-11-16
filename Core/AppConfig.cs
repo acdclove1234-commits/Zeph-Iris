@@ -903,7 +903,7 @@ public sealed class RgbConfig : ObservableObject
     /// <summary>一度聴いた曲の拍を覚え、次に同じ曲が流れたら最初から合わせる（曲名は保存せず、印だけ）</summary>
     public bool MusicMemory { get => _musicMemory; set => Set(ref _musicMemory, value); }
     /// <summary>
-    /// 楽器の AI（YAMNet）で曲の部分ごとに目立つ楽器を聞き分け、色・光り方をゆっくり変える（CPU とメモリを少し使う）。
+    /// 楽器の AI（CED-Tiny）で曲の部分ごとに目立つ楽器を聞き分け、色・光り方をゆっくり変える（CPU とメモリを少し使う）。
     /// 前からの設定の見た目を変えないよう、初めはオフ
     /// </summary>
     public bool MusicScenes { get => _musicScenes; set => Set(ref _musicScenes, value); }

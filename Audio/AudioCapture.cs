@@ -92,7 +92,10 @@ public sealed class AudioCapture : IDisposable
     /// <summary>アプリの音だけを取り込んでいるとき、そのアプリのプロセス ID（曲名を読むのに使う。全体の音なら 0）</summary>
     public int SourcePid { get; private set; }
 
-    /// <summary>拍の AI を作る（サンプリング周波数を受け取る。null を返せば使わない）。音の分析を作り直すたびに呼ぶ</summary>
+    /// <summary>
+    /// 拍の AI を作る（サンプリング周波数を受け取る。null を返せば使わない）。音の分析を作り直すたびに（出力先のサンプリング周波数が変わったときも）呼ぶ。
+    /// 渡すのは分析の周波数（AudioEngine.AnalysisRate。88.2〜384 kHz は 44.1 / 48 kHz に落としたもの）: AudioEngine が落とした音をそのまま渡す
+    /// </summary>
     public Func<int, BeatAssist?>? AssistFactory { get; set; }
 
     /// <summary>拍の AI を付け直す（設定を変えた・モデルの読み込みが終わった）</summary>
@@ -110,11 +113,11 @@ public sealed class AudioCapture : IDisposable
     private void AttachAssist()
     {
         if (Engine.Assist is not null) return;
-        try { Engine.Assist = AssistFactory?.Invoke(Engine.SampleRate); }
+        try { Engine.Assist = AssistFactory?.Invoke(Engine.AnalysisRate); }
         catch (Exception ex) { Logger.Warn($"拍の AI を付けられません: {ex.Message}"); }   // no-loc（ログだけ）
     }
 
-    /// <summary>楽器の AI を作る（サンプリング周波数を受け取る。null を返せば使わない）。音の分析を作り直すたびに呼ぶ</summary>
+    /// <summary>楽器の AI を作る（サンプリング周波数を受け取る。null を返せば使わない）。音の分析を作り直すたびに呼ぶ（渡す周波数は AssistFactory と同じ）</summary>
     public Func<int, SceneTagger?>? TaggerFactory { get; set; }
 
     /// <summary>楽器の AI を付け直す（設定を変えた・モデルの読み込みが終わった）</summary>
@@ -136,7 +139,7 @@ public sealed class AudioCapture : IDisposable
         if (Engine.Tagger is not null) return;
         try
         {
-            Engine.Tagger = TaggerFactory?.Invoke(Engine.SampleRate);
+            Engine.Tagger = TaggerFactory?.Invoke(Engine.AnalysisRate);
             if (shown is not null) Engine.Tagger?.ContinueFrom(shown);
         }
         catch (Exception ex) { Logger.Warn($"楽器の AI を付けられません: {ex.Message}"); }   // no-loc（ログだけ）

@@ -132,6 +132,72 @@ static class UiSmoke
         typeof(MainWindow).GetField("_rgbKnownDevices", Flags)!.SetValue(w, rgb);
     }
 
+    /// <summary>
+    /// 直接書き込むグラボ（PNY Epic-X）の行: 画面の行を作る本物の処理（RebuildRgbDeviceRows）で、エンジンと同じく直接書き込むグラボとして出る
+    /// （目印・説明が「書き込みを最小限に（1 秒に最大 5 回）」「明るさは一定」にならない。1 秒に送る回数は自動 10 回で、8 回などの設定も消えない）。
+    /// 「直接書き込む」をオフにすると（設定を変えるだけで、行は作り直される）、これまでどおり OpenRGB を通すグラボ（最大 5 回）。その行でほかの項目を変えても、
+    /// 直接書き込んでいたときの 8 回は消えず、オンに戻すと 8 回に戻る。送っている最中に直接開けなかった（状態が OpenRGB を通している）なら、直接書き込みの表示にしない。
+    /// 日本語の画面でだけ見る（訳はあとで入れるので、ほかの言語の画面には出さない）
+    /// </summary>
+    static void CheckDirectGpuRow(MainWindow w)
+    {
+        var known = typeof(MainWindow).GetField("_rgbKnownDevices", Flags)!;
+        var before = known.GetValue(w);
+        var cfg = (AppConfig)typeof(MainWindow).GetProperty("Config", Flags | BindingFlags.Public)!.GetValue(w)!;
+        var pny = new RgbDevice(9, "PNY GeForce RTX 5070Ti ARGB Epic-X OC", 41, RgbDevice.TypeGpu, new[] { 4, 20, 17 }, "I2C: Nvidia NvAPI I2C on GPU 0, address 0x60");
+        bool directBefore = cfg.Rgb.DirectGpuWrite;
+        var saved = cfg.Rgb.DeviceSettings.ToList();
+        RgbDeviceVm? Row() => (((ItemsControl)w.FindName("RgbDevices")).ItemsSource as IEnumerable<RgbDeviceVm>)?.FirstOrDefault(r => r.Name == pny.Name);
+        void CheckDirect(RgbDeviceVm? row, string when)
+        {
+            if (row is null) { Fail($"direct GPU row ({when}): no row"); return; }
+            var fps = row.FpsOptions.Select(o => o.Id).ToList();
+            if (!row.IsDirectGpu || row.IsGpu || row.IsSlow || row.AutoFps != 10) Fail($"direct GPU row ({when}): direct {row.IsDirectGpu}, OpenRGB GPU {row.IsGpu}, slow {row.IsSlow}, auto {row.AutoFps} fps (want direct, 10 fps)");
+            if (!row.ShowSlowBadge || !row.ShowFps) Fail($"direct GPU row ({when}): the badge and the sends-per-second choice are shown");
+            if (row.FpsId != "8" || !fps.Contains("8") || !fps.Contains("30") || !fps.Contains("5")) Fail($"direct GPU row ({when}): 8 sends per second stays selected ({row.FpsId}; choices {string.Join(",", fps)})");
+            if (row.SlowBadgeText.Contains("最小限") || row.SlowBadgeText.Contains("最大 5") || !row.SlowBadgeText.Contains("8 回")) Fail($"direct GPU row ({when}): badge \"{row.SlowBadgeText}\"");
+            if (row.SlowBadgeTip.Contains("明るさは一定") || row.SlowBadgeTip.Contains("最大 5 回")) Fail($"direct GPU row ({when}): tooltip still says the brightness is fixed / 5 per second");
+        }
+        void CheckOpenRgb(RgbDeviceVm? row, string when)
+        {
+            if (row is null) { Fail($"OpenRGB GPU row ({when}): no row"); return; }
+            var fps = row.FpsOptions.Select(o => o.Id).ToList();
+            if (row.IsDirectGpu || !row.IsGpu || row.AutoFps != 5) Fail($"OpenRGB GPU row ({when}): direct {row.IsDirectGpu}, OpenRGB GPU {row.IsGpu}, auto {row.AutoFps} fps (want OpenRGB GPU, 5 fps)");
+            if (fps.Any(id => int.Parse(id) > 5) || row.FpsId != "0") Fail($"OpenRGB GPU row ({when}): choices up to 5 ({string.Join(",", fps)}), 8 shown as automatic ({row.FpsId})");
+            if (!row.SlowBadgeText.Contains("最小限")) Fail($"OpenRGB GPU row ({when}): badge \"{row.SlowBadgeText}\"");
+        }
+        try
+        {
+            cfg.Rgb.DirectGpuWrite = true;
+            cfg.Rgb.DeviceSettings.RemoveAll(s => s.Name == pny.Name);
+            cfg.Rgb.DeviceSettings.Add(new RgbDeviceSettings { Name = pny.Name, MaxFps = 8 });
+            known.SetValue(w, new List<RgbDevice> { pny });
+            typeof(MainWindow).GetMethod("RebuildRgbDeviceRows", Flags)!.Invoke(w, null);
+            CheckDirect(Row(), "direct writing on");
+            // 設定を変えるだけ（行は自分で作り直さない）
+            cfg.Rgb.DirectGpuWrite = false;
+            var off = Row();
+            CheckOpenRgb(off, "direct writing turned off");
+            // OpenRGB を通す行でほかの項目を変えても、直接書き込んでいたときの 8 回は消えない
+            if (off is not null) off.Reverse = !off.Reverse;
+            int keptFps = cfg.Rgb.DeviceSettings.FirstOrDefault(s => s.Name == pny.Name)?.MaxFps ?? -1;
+            if (keptFps != 8) Fail($"OpenRGB GPU row: editing another item keeps the saved 8 sends per second (saved {keptFps})");
+            cfg.Rgb.DirectGpuWrite = true;
+            CheckDirect(Row(), "direct writing turned on again");
+            // 送っている最中の状態が「OpenRGB を通している」（直接開けなかった）なら、直接書き込みの表示にしない
+            var live = new[] { new RgbDeviceStatus(pny.Name, pny.LedCount, false, 5, "", "", Direct: false) };
+            if (RgbDeviceVm.AsDriven(pny, cfg.Rgb, live).DirectGpu) Fail("direct GPU row: the engine runs it through OpenRGB, but the row would say direct");
+            if (!RgbDeviceVm.AsDriven(pny, cfg.Rgb, new[] { live[0] with { Direct = true } }).DirectGpu) Fail("direct GPU row: the engine writes it directly, but the row would say OpenRGB");
+        }
+        finally
+        {
+            cfg.Rgb.DirectGpuWrite = directBefore;
+            cfg.Rgb.DeviceSettings.Clear();
+            cfg.Rgb.DeviceSettings.AddRange(saved);
+            known.SetValue(w, before);
+        }
+    }
+
     /// <summary>いま画面に出ているページで、訳していない日本語を集める（日本語の画面では見ない）</summary>
     static void Scan(MainWindow w, string lang, string where, HashSet<string> left)
     {
@@ -152,6 +218,7 @@ static class UiSmoke
                 if (nav == "NavDevices") typeof(MainWindow).GetMethod("RebuildDevices", Flags)!.Invoke(w, null);
                 if (nav == "NavLighting")
                 {
+                    if (lang == "ja") CheckDirectGpuRow(w);
                     typeof(MainWindow).GetMethod("RebuildRgbDeviceRows", Flags)!.Invoke(w, null);
                     // ゾーンの設定を開いて、ファンごとに分けた行も出す
                     if (((ItemsControl)w.FindName("RgbDevices")).ItemsSource is System.Collections.IEnumerable rows)

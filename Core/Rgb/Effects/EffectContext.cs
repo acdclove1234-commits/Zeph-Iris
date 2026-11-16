@@ -123,6 +123,11 @@ public sealed class EffectContext
     /// 明るさを変えないデバイス（OpenRGB を通すグラボ。いつも同じ明るさ）。光り方は、明るさの代わりに色（白へ寄せるなど）で音を見せる
     /// </summary>
     public bool FixedBrightness;
+    /// <summary>
+    /// アプリが直接書き込むグラボ（PnyEpicXGpu。SlowDevice でもある）。1 秒に 10 回までだが、明るさを変えても一部だけ書き換わって
+    /// ちかちかすることがない（メモリなど I2C のデバイスは、明るさをほぼ一定にする）
+    /// </summary>
+    public bool DirectWrite;
     /// <summary>光り方が「このコマは定期便を待たずに早めに送ってほしい」とき true にする（遅いデバイスの拍のふくらみなど。毎コマ false に戻る）</summary>
     public bool SendNow;
     /// <summary>
@@ -140,6 +145,8 @@ public sealed class EffectContext
     public bool HasTempo;
     /// <summary>テンポをつかんでいる（ビートを予測して光らせる）</summary>
     public bool Locked;
+    /// <summary>拍の並びが前の曲のもの（曲が変わったと知らされたあと、まだ新しい曲で拍の位置を取り直していない。BeatState.Stale）</summary>
+    public bool GridStale;
     /// <summary>テンポの確かさ（0〜1。HasTempo でなければ 0）</summary>
     public float Conf;
     /// <summary>拍の中のどこか（0 = 拍の頭）</summary>

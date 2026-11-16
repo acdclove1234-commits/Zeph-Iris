@@ -1,6 +1,25 @@
 Zeph-Iris change log (newest first)
 ===================================
 
+■ What's new in v6.15.10 (song changes, graphics cards, instrument recognition)
+  - Gapless playlists: far fewer flashes in the previous song's rhythm during the first ~2 seconds of a new song.
+    With Spotify the app checks for a song change every 0.25 s (other players every second) and flashes on kicks
+    until it finds the new song's beat (while "Remember songs already heard" is on).
+  - Fixed hi-hat sparkles in "Sparkle" being hard to see on graphics cards the app writes to directly (and other
+    slow-updating devices such as memory).
+  - "Instruments" on graphics cards the app writes to directly now moves more, so the changes are visible.
+  - Graphics cards the app writes to directly now show "Graphics card: direct writes (up to N per second)" (auto is
+    10 per second; it used to say 5), and you can choose up to 60 updates per second.
+  - "Instruments" and "Parts play their roles" mistake sustained notes for singing much less often, so guitar and
+    keys show up more.
+  - "Recognize instruments with AI" now uses CED-Tiny instead of YAMNet. It tells guitar and keys apart better and
+    the installer is smaller. It checks the last 2 seconds of sound every second. Instrument colors now change a
+    few seconds later, so they flip back and forth less.
+  - Fixed the beat AI and the instrument AI slowly drifting in time when the audio output runs at 96 kHz, 192 kHz
+    or other rates. The beat now lines up the same at any rate.
+  - Because of this, each song in the song memory is relearned once the next time it plays (that first time it
+    does not line up from the start).
+
 ■ What's new in v6.15.9 (music sync on the beat)
   - "Color change on beat" and "Pulse" now light on the beat. While the tempo is found they flash once per beat,
     brighter on beats with a kick and brightest on the first beat of a bar (flashes on the beat went from about 40%

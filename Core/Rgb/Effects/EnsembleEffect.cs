@@ -36,7 +36,8 @@ namespace ProFanController;
 /// ゾーン全体を 1 色で、次のように光らせる（UpdateSlow）:
 ///   明るさを変えてよいデバイス: 下地 0.42 + 0.22·Section + 0.12·歌 + 0.08·ギター鍵盤 + 0.06·パッド·呼吸（0.78 まで。上がる 0.6 秒・下がる 1.5 秒）に、
 ///     拍のふくらみ（SwellAmp。τ SwellTauSec で戻る。SwellGapSec 以上あける = 1 秒に 2.4 回まで）を足す。拍は、テンポをつかんでいれば予測した拍、
-///     つかんでいなければキック・スネア（ドラムがなければ強い立ち上がり）。ふくらみのコマは定期便を待たずに送る（c.SendNow）
+///     つかんでいなければキック・スネア（ドラムがなければ強い立ち上がり）。ふくらみのコマは定期便を待たずに送る（c.SendNow）。
+///     直接書き込むグラボ（c.DirectWrite）は、下地 0.25 + 0.15·Section + …（0.55 まで）に、大きく速いふくらみ（DirectSwellAmp・τ DirectSwellTauSec）
 ///   明るさを変えないグラボ（c.FixedBrightness）: 拍で白へ AccentWhite 寄せて AccentWhiteSec 保ち、一度に戻す（戻すコマは差が小さくても送る）
 ///   色: 単色（選んだ色だけ）は選んだ色のまま（明るさだけ）。ほかは、目立つ楽器（歌・パッド・ギター鍵盤・金管・ベース・ドラム）の色
 ///     （RoleEffect.OffsetOf の位置。ビートでは進めない）。別の楽器が DomRatio 倍 + DomMargin より大きい状態が DomHoldSec 続いたら替え、
@@ -88,6 +89,20 @@ public sealed class EnsembleEffect : IMusicEffect
     /// <summary>更新の遅いデバイス: 拍のふくらみの大きさ・戻る時定数（秒）・次のふくらみまで最低あける秒数</summary>
     public const float SwellAmp = 0.20f;
     public const double SwellTauSec = 0.35, SwellGapSec = 0.42;
+    /// <summary>
+    /// 直接書き込むグラボ（c.DirectWrite。明るさを変えてもちかちかしない）: 下地を低く・上限も低くして、拍のふくらみを大きく速くする。
+    /// メモリと同じ値（下地 0.42〜0.78 にふくらみ 0.2）では、ふくらみが明るさの 12〜15% にしかならず、録音 11 曲でほとんど止まって見えた
+    /// （キックでの明るさのふくらみ 0.09 → 0.21・目に見える変化 1 秒に 4.9 回 → 8.9 回。書き込みの回数は同じ）。ふくらみの間は DirectSwellGapSec 以上、
+    /// 「激しい点滅を抑える」がオンなら DirectLimitedGapSec 以上あける（ふくらみは強い点滅になるので、1 秒に 3 回まで）
+    /// </summary>
+    public const float DirectBase = 0.25f, DirectSectionShare = 0.15f, DirectBaseMax = 0.55f, DirectSwellAmp = 0.45f;
+    public const double DirectSwellTauSec = 0.30, DirectSwellGapSec = 0.30;
+    /// <summary>
+    /// 「激しい点滅を抑える」がオンのときの、直接書き込むグラボのふくらみの間（秒）: FlashLimiter.MinGapSec に 1 コマ（1/60 秒）を足す。
+    /// 拍の時刻と、ふくらみを描き始めたコマの時刻の両方で、この間をあける（拍を読むのが遅れたコマ・コマの刻みのずれで、4 回目のふくらみが
+    /// 1 秒の中に入って FlashGuard に抑えられないように）
+    /// </summary>
+    public const double DirectLimitedGapSec = FlashLimiter.MinGapSec + 1 / 60.0;
     /// <summary>テンポをつかんでいないとき: ドラムが AccentNoDrumSec 秒なければ、強さ AccentOnsetMin 以上の立ち上がりも拍の代わりにする</summary>
     public const float AccentOnsetMin = 1.5f;
     public const double AccentNoDrumSec = 1.5;
@@ -165,6 +180,8 @@ public sealed class EnsembleEffect : IMusicEffect
     private LinColor[] _pCol = Array.Empty<LinColor>();
     // 更新の遅いデバイス: 拍のふくらみ・目立つ楽器の色
     private double _accT = double.NegativeInfinity, _slowDrumT = double.NegativeInfinity;
+    /// <summary>最後にふくらみを描き始めたコマの時刻</summary>
+    private double _accFrameT = double.NegativeInfinity;
     private float _accA, _slowDrums;
     private bool _whiteOn;
     private int _dom = -1, _domCand = -1;
@@ -225,7 +242,7 @@ public sealed class EnsembleEffect : IMusicEffect
         _active = _vocal = _pad = _bass = _harm = _brass = _slowI = _flowSup = 0;
         _flow = _breath = 0;
         _breathSec = BreathSec;
-        _accT = _slowDrumT = double.NegativeInfinity;
+        _accT = _slowDrumT = _accFrameT = double.NegativeInfinity;
         _accA = _slowDrums = 0;
         _whiteOn = false;
         _dom = _domCand = -1;
@@ -434,10 +451,16 @@ public sealed class EnsembleEffect : IMusicEffect
                 accS = Math.Clamp(0.6f + 0.25f * (e.Strength - 1), 0.6f, 1f) * (snare ? 0.8f : 1f);
             }
         }
+        // 直接書き込むグラボは、下地を低く・ふくらみを大きく速く（明るさを変えないグラボ・メモリは、これまでどおり）
+        bool direct = c.DirectWrite && !c.FixedBrightness;
+        bool limited = direct && c.Music.ReduceFlashing;
+        double gap = !direct ? SwellGapSec : limited ? DirectLimitedGapSec : DirectSwellGapSec;
         bool accent = false;
-        if (!double.IsNaN(accT) && (accT - _accT >= SwellGapSec || accT < _accT - 1) && _active > 0.5f)
+        if (!double.IsNaN(accT) && (accT - _accT >= gap || accT < _accT - 1) && (!limited || c.T - _accFrameT >= gap || c.T < _accFrameT)
+            && _active > 0.5f)
         {
             _accT = accT;
+            _accFrameT = c.T;
             _accA = accS;
             accent = true;
             // ふくらみ（白へ寄せた色）は、次の定期便を待たずに送る。明るさを変えないグラボは、差が小さくても送る
@@ -445,12 +468,13 @@ public sealed class EnsembleEffect : IMusicEffect
             if (c.FixedBrightness) c.SendEvenIfSmall = true;
         }
         _slowDrums = EffectContext.Follow(_slowDrums, c.T - _slowDrumT < AccentNoDrumSec ? 1f : 0f, dt, 0.3, 1.5);
-        float env = double.IsFinite(_accT) ? _accA * (float)Math.Exp(-Math.Max(0, c.T - _accT) / SwellTauSec) : 0f;
+        float env = double.IsFinite(_accT) ? _accA * (float)Math.Exp(-Math.Max(0, c.T - _accT) / (direct ? DirectSwellTauSec : SwellTauSec)) : 0f;
 
         // 下地の明るさ（盛り上がり・歌・ギター鍵盤・パッドの呼吸）と、拍のふくらみ
-        float target = _active * (SlowBase + SlowSectionShare * c.Section + SlowVocalShare * _vocal + SlowHarmShare * _harm + SlowPadShare * _pad * breath);
-        _slowI = EffectContext.Follow(_slowI, Math.Clamp(target, 0, SlowBaseMax), dt, SlowUpSec, SlowDownSec);
-        _body = Math.Clamp(_slowI + SwellAmp * env * _active, 0, 1);
+        float target = _active * ((direct ? DirectBase : SlowBase) + (direct ? DirectSectionShare : SlowSectionShare) * c.Section
+            + SlowVocalShare * _vocal + SlowHarmShare * _harm + SlowPadShare * _pad * breath);
+        _slowI = EffectContext.Follow(_slowI, Math.Clamp(target, 0, direct ? DirectBaseMax : SlowBaseMax), dt, SlowUpSec, SlowDownSec);
+        _body = Math.Clamp(_slowI + (direct ? DirectSwellAmp : SwellAmp) * env * _active, 0, 1);
 
         // 色: 単色は選んだ色のまま。ほかは目立つ楽器の色
         Lab lab;

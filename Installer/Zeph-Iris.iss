@@ -203,6 +203,10 @@ Source: "{#SourceDir}\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs 
 Source: "{#PawnIoSetup}"; Flags: dontcopy
 #endif
 
+[InstallDelete]
+; 6.15.10 で YAMNet をやめた（CED-Tiny に替えた）ので、前の版から更新したときに残る YAMNet のライセンスを消す
+Type: files; Name: "{app}\licenses\YAMNet-LICENSE.txt"
+
 [UninstallDelete]
 ; 更新の前に取っておいた前の版と設定（Core/UpdateRecovery.cs）。アプリが作るのでインストーラーは知らないが、アンインストールでは残さない
 Type: filesandordirs; Name: "{app}\previous"

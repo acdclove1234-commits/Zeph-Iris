@@ -8,7 +8,7 @@ public static class BeatThisTests
 {
     private static float[] To22k(float[] buf, int fs)
     {
-        var r = new Resampler22k(fs);
+        var r = new AiResampler(fs, BeatThis.SampleRate);
         var outList = new List<float>();
         for (int i = 0; i < buf.Length; i += 4800)
             r.Push(buf.AsSpan(i, Math.Min(4800, buf.Length - i)), s => outList.AddRange(s.ToArray()));
@@ -217,6 +217,66 @@ public static class SongMemoryTests
         }
         finally { try { Directory.Delete(dir, true); } catch (IOException) { } }
     }
+
+    /// <summary>
+    /// 前の版の時計（SongRecord.Clock = 0。96 / 192 kHz の出力先では拍の AI の時計がずれていた）で覚えた曲は、拍の並びに使わず、
+    /// 聴き終えたら混ぜずに覚え直す（ずれた拍が正しい拍のあいだに残らない）。今の版で覚えた曲は、ふだんどおり合わせて、拍を混ぜる
+    /// </summary>
+    public static void TestOldClockRecordIsRelearned()
+    {
+        string dir = Path.Combine(Path.GetTempPath(), "zeph-songmem-test-" + Guid.NewGuid().ToString("N"));
+        try
+        {
+            Directory.CreateDirectory(dir);
+            var rng = new Random(5);
+            var pattern = Enumerable.Range(0, (int)(SongMemory.EnvelopeSec * SongMemory.EnvelopeFps) + 200).Select(_ => (float)rng.NextDouble()).ToArray();
+            // 前の版で 192 kHz の出力先で覚えた拍: 周期が 0.26% 長く、0.2 秒ずれている
+            var oldBeats = Enumerable.Range(0, 110).Select(i => (float)(0.7 + i * 0.5 * 1.0026)).ToList();
+            foreach (int clock in new[] { 0, SongMemory.ClockVersion })
+            {
+                string key = SongMemory.KeyOf($"clock {clock}");
+                var rec = new SongRecord
+                {
+                    Key = key, Beats = oldBeats.ToList(), Plays = 3, LengthSec = 60, Clock = clock,
+                    Envelope = pattern.Take((int)(SongMemory.EnvelopeSec * SongMemory.EnvelopeFps)).Select(v => (byte)(v * 255)).ToArray(),
+                };
+                File.WriteAllText(Path.Combine(dir, key + ".json"), System.Text.Json.JsonSerializer.Serialize(rec));
+                var mem = new SongMemory(dir);
+                double t0 = 1000 + clock * 1000;
+                mem.BeginSong(key);
+                bool alignedEarly = false;
+                for (int i = 0; i <= 6000; i++)
+                {
+                    double t = t0 + i * 0.01;
+                    int f = (int)((t - t0) * SongMemory.EnvelopeFps);
+                    mem.Tick(t, f < pattern.Length ? pattern[f] : 0, true);
+                    if (i == 1000) alignedEarly = mem.Aligned;
+                }
+                // 今の曲の正しい拍（0.5 秒おき。0.5 秒から）
+                var beats = Enumerable.Range(0, 118).Select(i => t0 + 0.5 + i * 0.5).ToList();
+                mem.AddBeats(beats, beats.Where((_, i) => i % 4 == 0));
+                mem.BeginSong(null);
+                mem.Tick(t0 + 60.01, 0, false);   // 曲の終わり（ここで覚える）
+                var saved = System.Text.Json.JsonSerializer.Deserialize<SongRecord>(File.ReadAllText(Path.Combine(dir, key + ".json")))!;
+                int onGrid = saved.Beats.Count(b => Math.Abs(b / 0.5 - Math.Round(b / 0.5)) < 0.002);
+                string name = clock == 0 ? "a song remembered with the old clock" : "a song remembered with the current clock";
+                T.Info($"{name}: aligned {alignedEarly}, saved {saved.Beats.Count} beats ({onGrid} on the new grid), plays {saved.Plays}, clock {saved.Clock}");
+                if (clock == 0)
+                {
+                    T.Check(!alignedEarly && mem.Recalled == 0, $"{name} is not used to steer the beat (aligned {alignedEarly})");
+                    T.Check(saved.Clock == SongMemory.ClockVersion && saved.Beats.Count == beats.Count && onGrid == beats.Count,
+                            $"{name} is learned again without its old beats ({saved.Beats.Count} beats, {onGrid} on the new grid, clock {saved.Clock})");
+                }
+                else
+                {
+                    T.Check(alignedEarly && mem.Recalled == 1, $"{name} is recalled (aligned {alignedEarly})");
+                    T.Check(saved.Clock == SongMemory.ClockVersion && saved.Beats.Count > beats.Count && saved.Plays == 4,
+                            $"{name} keeps merging new beats into the old ones ({saved.Beats.Count} beats, plays {saved.Plays})");
+                }
+            }
+        }
+        finally { try { Directory.Delete(dir, true); } catch (IOException) { } }
+    }
 }
 
 /// <summary>
@@ -280,7 +340,7 @@ public static class BeatAiDiagTests
         var refBeats = BeatReference.Track(hops, out double refBpm);
         var kicks = run.Events.Where(x => x.Kind == AudioEventKind.Kick).Select(x => x.T).ToList();
         // AI: 20 秒の窓を 6 秒ずつずらして（アプリと同じ見方）、窓ごとのテンポ
-        var r = new Resampler22k(fs);
+        var r = new AiResampler(fs, BeatThis.SampleRate);
         var a22 = new List<float>();
         r.Push(mono, s => a22.AddRange(s.ToArray()));
         var all = new List<double>();

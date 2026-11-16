@@ -1945,9 +1945,7 @@ ce000878	Tidak dapat membuka panduan pengguna.
 8703d0a3	Pada efek "Setiap komponen dengan perannya", menentukan suara atau instrumen yang menyalakan zona dengan "Suara yang diikuti" berisi "Sesuai komponen". Suara yang dipilih untuk tiap zona tidak berubah
 876fdd1c	Instrumen ditebak dari suara, jadi pada beberapa lagu bisa tertukar. Suara cepat (hi-hat, snare) ditampilkan sebagai butiran cahaya kecil; perangkat yang lambat diperbarui seperti kartu grafis dan memori hanya menyala dengan warna instrumen yang menonjol di tiap bagian lagu
 5519f7df	Dengan satu warna, instrumen tidak bisa dibedakan lewat warna. Pilih efek "Menyala sesuai instrumen" untuk menampilkan instrumen lewat kecerahan, posisi, dan gerakan (kick menyalakan semuanya, hi-hat butiran kecil, vokal kecerahan keseluruhan, dll.)
-0d8065a5	Memeriksa sekitar 1 detik suara terakhir setiap 0,5 detik. Warna berubah selama beberapa detik dan tidak berkedip. Warna tidak berubah pada palet "Hanya warna pilihan" dan "Warna yang mirip dengan warna pilihan", Meter volume, Strobo, dan Setiap komponen dengan perannya
 1b6f3970	Kenali instrumen dengan AI
-aadf5c4a	AI (YAMNet) mengenali instrumen yang menonjol di tiap bagian lagu (vokal, gitar, piano, brass, synth, gesek) dan mengubah warna perlahan (vokal biru, brass emas, gitar oranye, dll.). Dengan satu warna, yang berubah adalah gerakan efek "Menyala sesuai instrumen". Hanya berjalan di PC ini dan memakai sedikit CPU dan memori
 4e43701b	Pada efek "Setiap komponen dengan perannya", suara yang menyalakan zona ini. "Sesuai komponen" mengikuti "Pembagian instrumen" (jika per nada: kipas nada rendah, kartu grafis nada tengah, memori dan keyboard nada tinggi). Jika beberapa zona di perangkat yang sama mendapat suara yang sama (misalnya header kipas), zona itu dibagi bergantian. Anda juga bisa memilih satu instrumen, seperti kick, snare, atau vokal
 b555c16c	AI instrumen
 dbb80bf4	Putaran yang dibutuhkan untuk menjaga target {0:F0}°C: {1:F0}% atau kurang (berhenti di tengah jalan, jadi putaran lebih rendah belum terukur)
@@ -1997,3 +1995,9 @@ e367d987	Suara yang diikuti: kick, snare, dan hi-hat masing-masing menyala denga
 e411765c	Suara yang diikuti: berubah perlahan mengikuti kecerahan suara (nada rendah atau tinggi) dan volume
 4c402832	Suara yang diikuti: ketukan pertama tiap birama (kick kuat selama tempo belum tertangkap)
 e532ec45	Berdenyut mengikuti ketukan dan meninggalkan cahaya sisa yang panjang dan lembut. Warna tidak berganti mengikuti ketukan, melainkan berubah perlahan
+6313ac02	Memeriksa 2 detik suara terakhir setiap 1 detik. Warna berubah selama beberapa detik dan tidak berkedip. Warna tidak berubah pada palet "Hanya warna pilihan" dan "Warna yang mirip dengan warna pilihan", Meter volume, Strobo, dan Setiap komponen dengan perannya
+419d7bd1	AI (CED-Tiny) mengenali instrumen yang menonjol di tiap bagian lagu (vokal, gitar, piano, brass, synth, gesek) dan mengubah warna perlahan (vokal biru, brass emas, gitar oranye, dll.). Dengan satu warna, yang berubah adalah gerakan efek "Menyala sesuai instrumen". Hanya berjalan di PC ini dan memakai sedikit CPU dan memori
+eb06c11b	Kartu grafis: penulisan langsung (maksimal {0} per detik{1})
+965f43a6	Aplikasi menulis langsung ke kartu grafis ini (lewat I2C NVIDIA), tanpa melalui OpenRGB. Zona satu warna ditulis sekaligus sehingga cepat, dan kecerahannya juga mengikuti musik.
+0ac5666c	Jika warna tiap LED berbeda, satu kali penulisan memakan sekitar 35 milidetik, jadi mode otomatis mengirim hingga 10 kali per detik (saat ketukan, langsung dikirim tanpa menunggu pengiriman rutin).
+c3734abc	Bisa diubah dengan "Pengiriman per detik" di kanan, tetapi makin tinggi makin banyak memakai CPU. Bingkai dengan warna LED yang berbeda-beda tetap terbatas sekitar 14 kali per detik meski dinaikkan (aplikasi jeda selama waktu penulisan)

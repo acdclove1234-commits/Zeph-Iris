@@ -299,6 +299,114 @@ public static class InstrumentFeatureTests
         }
     }
 
+    /// <summary>ビブラートの下限の確かめ用: 512 個ごとの時刻（先頭からの秒）・下限・揺れ（セント）・ボーカルらしさ・ギター鍵盤らしさ</summary>
+    private sealed record VibRun(List<(double T, double Floor, double Vib, double Vocal, double Guitar)> Hops)
+    {
+        public double MeanVocal(double from, double to) => Hops.Where(h => h.T >= from && h.T < to).Average(h => h.Vocal);
+        public double MeanGuitar(double from, double to) => Hops.Where(h => h.T >= from && h.T < to).Average(h => h.Guitar);
+    }
+
+    /// <summary>左・右の音を 512 個ずつ流し、下限・揺れ・らしさを集める（track = 下限を追う。オフなら 6 セントのまま）</summary>
+    private static VibRun RunVib(float[] l, float[] r, bool track)
+    {
+        bool saved = InstrumentFeatures.TrackVibFloor;
+        InstrumentFeatures.TrackVibFloor = track;
+        try
+        {
+            var e = NewEngine();
+            var mid = new float[512];
+            var side = new float[512];
+            var hops = new List<(double T, double Floor, double Vib, double Vocal, double Guitar)>();
+            for (int i = 0; i + 512 <= l.Length; i += 512)
+            {
+                for (int k = 0; k < 512; k++) { mid[k] = 0.5f * (l[i + k] + r[i + k]); side[k] = 0.5f * (l[i + k] - r[i + k]); }
+                e.Push(mid, side, 1000 + i / 48000.0);
+                var ins = e.Instruments;
+                hops.Add(((i + 512) / 48000.0, ins.DiagVibFloor, ins.DiagVib, ins.Vocal, ins.GuitarKeys));
+            }
+            return new VibRun(hops);
+        }
+        finally { InstrumentFeatures.TrackVibFloor = saved; }
+    }
+
+    /// <summary>
+    /// 左右に広い、音の多い合成の曲（ドラム・ベース・和音の DenseMix は左右で別のノイズ、パッドは左右で別の揺れ、ギターは左寄り）。
+    /// vocal なら、voFrom〜voTo 秒に真ん中の声（±40 セントのビブラート）を重ねる
+    /// </summary>
+    private static (float[] L, float[] R) WideMix(double sec, double padDetune, bool vocal, double voFrom = 6, double voTo = 14, double guitarAmp = 0.08, double padAmp = 0.05, bool drums = true)
+    {
+        var l = new SignalGen(48000, sec, seed: 81);
+        var r = new SignalGen(48000, sec, seed: 82);
+        if (drums)
+        {
+            l.DenseMix(118, 0.2, sec);
+            r.DenseMix(118, 0.2, sec);
+        }
+        for (double t = 0.2; t < sec - 0.1; t += 2)
+        {
+            var c = ((int)(t / 2)) % 2 == 0 ? InstrumentSources.PadChord1 : InstrumentSources.PadChord2;
+            l.PadChord(t, Math.Min(sec, t + 2.3), c, padAmp, padDetune, seed: 61 + (int)t);
+            r.PadChord(t, Math.Min(sec, t + 2.3), c, padAmp, padDetune, seed: 71 + (int)t);
+        }
+        for (double t = 0.2; t < sec - 0.5; t += 0.5)
+        {
+            var c = ((int)(t * 2)) % 4 < 2 ? new[] { 196.0, 246.9, 293.7, 392 } : new[] { 220.0, 261.6, 329.6, 440 };
+            l.Strum(t, c, guitarAmp);
+            r.Strum(t, c, guitarAmp * 0.35);
+        }
+        if (vocal)
+        {
+            l.VocalTone(voFrom, voTo, InstrumentSources.VocalNotes, 0.6);
+            r.VocalTone(voFrom, voTo, InstrumentSources.VocalNotes, 0.6);
+        }
+        return (l.Buf, r.Buf);
+    }
+
+    /// <summary>
+    /// ビブラートの下限は、鳴っている音に合わせて追う（声らしくない回の揺れの中央値。6〜20 セント）: 声だけの音（真ん中・声の帯）では動かず 6 セントのまま
+    /// （ビブラートの声は声のまま）。左右に広い音の多い曲（楽器が重なっただけで揺れが 13〜14 セント。実際の曲と同じくらい）では、下限が上がって、
+    /// 歌のない部分のボーカルらしさが下限 6 セントのままより小さい。その曲に重ねた真ん中の声（±40 セント）は、ボーカルらしさ 0.15 以上のまま。
+    /// ギターがはっきり鳴る曲（揺れが小さい）では、下限は 6 セント近くのままで、ギター・鍵盤らしさは減らない
+    /// （合成音では、ギターが揺れに埋もれて消える曲を作れなかったので、ギターが増えることは録音で確かめた）
+    /// </summary>
+    public static void TestVibratoFloorFollowsTheMix()
+    {
+        static double Median(IEnumerable<double> v) { var s = v.OrderBy(x => x).ToList(); return s.Count == 0 ? double.NaN : s[s.Count / 2]; }
+        static double P90(IEnumerable<double> v) { var s = v.OrderBy(x => x).ToList(); return s.Count == 0 ? double.NaN : s[(int)(0.9 * (s.Count - 1))]; }
+        {
+            var (_, l, r, _) = InstrumentSources.Make("vocal");
+            var run = RunVib(l, r, true);
+            var fl = run.Hops.Where(h => h.T > 2).Select(h => h.Floor).ToList();
+            T.Check(Median(fl) <= 6.5 && P90(fl) <= 7, $"vocal alone: the vibrato floor stays at 6 cents (median {Median(fl):F1}, p90 {P90(fl):F1})");
+        }
+        {
+            // 音の多い曲（ギターは小さい）: 揺れが実際の曲くらい → 下限が上がり、歌のない部分のボーカルらしさが減る
+            var (l, r) = WideMix(16, 15, false);
+            var on = RunVib(l, r, true);
+            var off = RunVib(l, r, false);
+            double vib = Median(off.Hops.Where(h => h.T > 2).Select(h => h.Vib));
+            var fl = on.Hops.Where(h => h.T > 8).Select(h => h.Floor).ToList();
+            double vOff = off.MeanVocal(8, 16), vOn = on.MeanVocal(8, 16);
+            T.Check(vib >= 10, $"dense wide mix: the instruments alone wobble like a real mix (median {vib:F1} cents ≥ 10)");
+            T.Check(Median(fl) >= 9 && P90(fl) <= 20, $"dense wide mix: the floor rises to the mix (median after 8 s {Median(fl):F1} ≥ 9, p90 {P90(fl):F1} ≤ 20)");
+            T.Check(vOn <= 0.75 * vOff, $"dense wide mix without singing: vocal {vOff:F3} with a fixed 6-cent floor -> {vOn:F3} (≤ 75%)");
+            // 同じ曲に真ん中の声を重ねる: 声はボーカルのまま
+            var (vl, vr) = WideMix(16, 15, true, 8, 15);
+            var von = RunVib(vl, vr, true);
+            double sung = von.MeanVocal(9, 15), unsung = on.MeanVocal(9, 15);
+            T.Check(sung >= 0.15 && sung >= 1.5 * unsung, $"dense wide mix + a centred ±40-cent voice: vocal {sung:F3} ≥ 0.15 and ≥ 1.5× without the voice ({unsung:F3})");
+        }
+        {
+            // ギターがはっきり鳴る曲: 揺れが小さいので下限は 6 セント近くのまま、ギター・鍵盤らしさは減らない
+            var (l, r) = WideMix(16, 15, false, guitarAmp: 0.25);
+            var on = RunVib(l, r, true);
+            var off = RunVib(l, r, false);
+            double f = Median(on.Hops.Where(h => h.T > 8).Select(h => h.Floor));
+            double gOff = off.MeanGuitar(4, 16), gOn = on.MeanGuitar(4, 16);
+            T.Check(f <= 8 && gOn >= gOff - 0.005 && gOn >= 0.12, $"clear guitar in the mix: floor {f:F1} ≤ 8 cents, guitar {gOff:F3} -> {gOn:F3} (not lower, ≥ 0.12)");
+        }
+    }
+
     /// <summary>音のざらつき: ノイズでは大きく、和音（パッド）では小さい</summary>
     public static void TestFlatness()
     {

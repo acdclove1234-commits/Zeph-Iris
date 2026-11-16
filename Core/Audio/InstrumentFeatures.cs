@@ -69,6 +69,18 @@ public sealed class InstrumentFeatures
     /// <summary>はじく音とみなす、いちばん大きいところからの下がり（dB。ここから PluckSpanDb で 0 → 1）。合成音で、鳴り続ける音は 2.7〜3.1 dB・はじく和音は 4.4 dB</summary>
     private const double PluckFromDb = 3.4, PluckSpanDb = 0.8;
     private const double VibFastSec = 0.020, VibSlowSec = 0.150;
+    /// <summary>
+    /// ビブラートとみなす揺れの下限（セント。ここから 10 セントで 0 → 1）は、鳴っている音に合わせて追い続ける: 声らしくない回（横に広がっている・
+    /// 音の重心が声の帯の外）の揺れの中央値を、VibFloorRate セント/秒ずつ追う（VibFloorMin〜VibFloorMax）。曲が変わっても戻さない
+    /// （Reset でだけ VibFloorMin に戻す。静かな曲から音の多い曲に移ると、合うまで 4〜7 秒かかる）。
+    /// 左右に広がった歌（ダブル・残響）の回も声らしくない回に入るので、そういう曲では下限が高め（20 セントまで）になる。
+    /// 実際の曲では、楽器が重なるだけで揺れが 13〜15 セント（中央値）あり、合成音で合わせた 6 セントの下限では、ほとんどの回が
+    /// 「ビブラートあり」になって、ギター・鍵盤が消え、ボーカルが多すぎた（録音 11 曲: ギター・鍵盤 0.12 以上の回 1〜31% → 5〜47%、
+    /// ボーカル 0.15 以上 15〜42% → 5〜33%）。声らしい回では下限を動かさないので、声だけの音（合成音）では 6 セントのまま
+    /// </summary>
+    private const double VibFloorMin = 6, VibFloorMax = 20, VibFloorRate = 2.0;
+    /// <summary>下限を追う回の、声らしさ（真ん中 × 声の帯）の上限</summary>
+    private const double VibFloorVoiceMax = 0.4;
     private const double TextureSec = 0.150;
     private const double BassOnsetDecaySec = 0.120;
 
@@ -123,6 +135,10 @@ public sealed class InstrumentFeatures
     private AsymEnv _mBass, _sBass, _mMid, _sMid, _mHigh, _sHigh;
     private AsymEnv _flat, _centroidLog, _vib, _vibFast, _vibSlow, _below;
     private AsymEnv _vocal, _guitar, _pad, _brass;
+    /// <summary>ビブラートとみなす揺れの下限（セント。鳴っている音に合わせて追う）</summary>
+    private double _vibFloor = VibFloorMin;
+    /// <summary>テスト用: オフなら下限を VibFloorMin のまま動かさない（6.15.9 までと同じ。アプリは変えない）</summary>
+    internal static bool TrackVibFloor { get; set; } = true;
     private readonly double[] _chroma = new double[12];
     private readonly double[] _chromaNow = new double[12];
     private int _pitchClass = -1;
@@ -237,6 +253,8 @@ public sealed class InstrumentFeatures
 
     /// <summary>調査用: らしさの材料（ビブラートのセント・いちばん大きいところからの下がり dB・続く音らしさ・持続音の重心 Hz・持続音の中音と高音）</summary>
     internal double DiagVib, DiagPluck, DiagSteady, DiagCentroidHz, DiagHarmMH;
+    /// <summary>調査用: いまのビブラートの下限（セント）</summary>
+    internal double DiagVibFloor;
 
     public void Reset()
     {
@@ -250,6 +268,7 @@ public sealed class InstrumentFeatures
         _vibFast.V = _vibSlow.V = double.NaN;
         _centroidLog.V = Math.Log2(800);
         _vocal = _guitar = _pad = _brass = default;
+        _vibFloor = VibFloorMin;
         Array.Clear(_chroma);
         Array.Clear(Chroma);
         _pitchClass = -1;
@@ -448,7 +467,6 @@ public sealed class InstrumentFeatures
             }
         }
         double vibCents = Math.Sqrt(_vib.V);
-        double vib = Math.Clamp((vibCents - 6) / 10, 0, 1);
         // はじく音と鳴り続ける音: 持続音の中音・高音が、直近 0.4 秒のいちばん大きいところから何 dB 下にいるか（0.3 秒で平滑化）。
         // はじいた音は鳴った後ずっと減っていくので、平均で 4〜5 dB 下（0.4 秒で消える音を 1 秒に 2 回）。
         // 鳴り続ける音（パッド・声・金管）は、うなりやビブラートの揺れだけ（1〜2 dB）
@@ -473,6 +491,11 @@ public sealed class InstrumentFeatures
         double bright = Above(1100, 1600);
         double dark = 1 - Above(900, 1400);
         double voiceBand = Above(350, 500) * (1 - Above(1300, 1800));
+        // ビブラートの下限: 声らしくない回の揺れ（楽器が重なっただけの揺れ）の中央値を、ゆっくり追う
+        if (TrackVibFloor && gateOpen && double.IsFinite(vibHz) && double.IsFinite(vibCents) && harmMH > 0.05 && centre * voiceBand < VibFloorVoiceMax)
+            _vibFloor = Math.Clamp(_vibFloor + Math.Sign(vibCents - _vibFloor) * VibFloorRate * _dt, VibFloorMin, VibFloorMax);
+        double vib = Math.Clamp((vibCents - _vibFloor) / 10, 0, 1);
+        DiagVibFloor = _vibFloor;
         // ベースが中心の音（持続音の低音が、中音・高音より大きい）は、ギター・パッドにしない
         double notBass = Math.Clamp((hmh - HarmBass + 0.1) / 0.2, 0, 1);
         double vocal = hmh * centre * voiceBand * (0.15 + 0.85 * vib) * (1 - pluck);

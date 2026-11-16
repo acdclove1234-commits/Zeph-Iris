@@ -23,6 +23,11 @@ public sealed class SongRecord
     public double LengthSec { get; set; }
     public int Plays { get; set; }
     public DateTime UpdatedAt { get; set; }
+    /// <summary>
+    /// 拍の時刻の測り方の版（<see cref="SongMemory.ClockVersion"/>。前の版のファイルにはないので 0）。
+    /// 0 = 6.15.9 まで: 96 / 192 kHz などの出力先では、拍の AI の時計がずれていた（周期が約 0.26% 長く、位置が最大 0.25 秒ずれた）。どの周波数で覚えたかは分からない
+    /// </summary>
+    public int Clock { get; set; }
 }
 
 /// <summary>流れている曲の印。Legacy は 6.15.5 までの印（再生アプリごと。なければ null）</summary>
@@ -47,6 +52,12 @@ public sealed class SongMemory
     public const int MaxSongs = 2000;
     /// <summary>この長さ以上聴いて、拍がこの割合以上たまった曲だけを覚える</summary>
     public const double MinListenSec = 45, MinCoverage = 0.5;
+    /// <summary>
+    /// 拍の時刻の測り方の版（SongRecord.Clock）。1 = 拍の AI の時刻を、入力の音の数と取り込みの時刻から求める（どの周波数でもずれない）。
+    /// これより古い版で覚えた曲は、拍の並びに使わず（ずれた拍で追跡を動かさない）、次に聴き終えたときに、混ぜずに覚え直す
+    /// （ずれた拍と正しい拍が混ざったままにならないように）
+    /// </summary>
+    public const int ClockVersion = 1;
 
     private readonly string _dir;
     private readonly Dictionary<string, SongRecord> _cache = new();
@@ -144,6 +155,12 @@ public sealed class SongMemory
         _aligned = _alignTried = false;
         _known = Load(key);
         if (id.Legacy is { Length: > 0 } legacy && legacy != key) MoveLegacy(legacy, key);
+        // 前の版の時計で覚えた曲: 拍がずれているかもしれない（96 / 192 kHz の出力先）ので使わず、聴き終えたら覚え直す（ファイルは上書きする）
+        if (_known is { } k && k.Clock < ClockVersion)
+        {
+            Log?.Invoke($"覚えた曲は前の版の時計で覚えたものです（拍 {k.Beats.Count} 個）。使わずに覚え直します");   // no-loc（ログだけ）
+            _known = null;
+        }
     }
 
     /// <summary>
@@ -302,6 +319,7 @@ public sealed class SongMemory
         rec.LengthSec = Math.Max(rec.LengthSec, len);
         rec.Plays++;
         rec.UpdatedAt = DateTime.Now;
+        rec.Clock = ClockVersion;
         Save(rec);
         Saved++;
         Log?.Invoke($"曲の拍を覚えました: 拍 {rec.Beats.Count} 個・{rec.Plays} 回目");   // no-loc（ログだけ）

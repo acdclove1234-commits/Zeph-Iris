@@ -351,11 +351,11 @@ public static class SceneColorTests
     }
 
     // ================================================================
-    // 場面がばたつかない: 楽器の AI の点数が入れ替わり続けても、色は 6 秒に 1 回までしか変わらない
+    // 場面がばたつかない: 楽器の AI の点数が入れ替わり続けても、色は MinDwellSec に 1 回までしか変わらない
 
     /// <summary>
-    /// 歌とギターの点数が 1 回（0.48 秒）ごと、2 秒ごとに入れ替わる・しきい値の近くで揺れる点数を SceneTracker に入れ、
-    /// その場面で光らせる。色の切り替えは 6 秒以上あき、切り替えごとに 2.5 秒かけて変わる（途中で次の切り替えが始まらない）
+    /// 歌とギターの点数が 1 回（1 秒）ごと、2 秒ごとに入れ替わる・しきい値の近くで揺れる点数を SceneTracker に入れ、
+    /// その場面で光らせる。色の切り替えは最低の長さ（MinDwellSec）以上あき、切り替えごとに 2.5 秒かけて変わる（途中で次の切り替えが始まらない）
     /// </summary>
     public static void TestScenesDoNotFlapUnderAlternatingScores()
     {
@@ -370,7 +370,7 @@ public static class SceneColorTests
         {
             var tracker = new SceneTracker();
             var timeline = new List<MusicScene>();
-            double hop = Yamnet.HopSec;
+            double hop = CedTiny.HopSec;
             for (int k = 0; k * hop < 120; k++)
             {
                 double t = (k + 1) * hop;
@@ -407,7 +407,7 @@ public static class SceneColorTests
                 }
             }
             T.Check(minGap >= SceneTracker.Tune.MinDwellSec - 1e-6 && switches.Count <= 120 / SceneTracker.Tune.MinDwellSec,
-                $"{name}: {switches.Count} scene switches in 120 s, closest {minGap:F2} s apart (≥ 6 s)");
+                $"{name}: {switches.Count} scene switches in 120 s, closest {minGap:F2} s apart (≥ {SceneTracker.Tune.MinDwellSec} s)");
             T.Check(maxDe <= MaxFadeDe, $"{name}: scene colour never jumps (largest colour change per frame {maxDe:F4} ΔE ≤ {MaxFadeDe})");
         }
 

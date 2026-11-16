@@ -1,5 +1,5 @@
 // ==================================================
-// SceneAi.cs - 音楽連動の楽器の AI（YAMNet）をまとめる（モデルの読み込み・取り込みへの取り付け・止めたときの片付け）
+// SceneAi.cs - 音楽連動の楽器の AI（CED-Tiny）をまとめる（モデルの読み込み・取り込みへの取り付け・止めたときの片付け）
 // Dependencies: .NET 8 / WPF (MIT License)
 // See CREDITS.txt for full license details.
 // ==================================================
@@ -9,13 +9,13 @@ using System.Diagnostics;
 namespace ProFanController;
 
 /// <summary>
-/// 音楽連動が動いていて「AI で楽器を聞き分ける」がオンの間だけ、楽器の AI のモデルを読み込む（約 60 ミリ秒・メモリ約 55 MB。
+/// 音楽連動が動いていて「AI で楽器を聞き分ける」がオンの間だけ、楽器の AI のモデルを読み込む（0.1 秒ほど・メモリ約 35 MB。
 /// 使わないときは外してメモリを返す）。読み込めなかったら、アプリを起動し直すまで試さない（場面なしのまま、静かに動く）
 /// </summary>
 public sealed class SceneAi : IDisposable
 {
     private readonly AudioCapture _audio;
-    private Yamnet? _model;
+    private CedTiny? _model;
     private bool _loading;
     private bool _want;
     private bool _failed;
@@ -51,7 +51,7 @@ public sealed class SceneAi : IDisposable
         Task.Run(() =>
         {
             var sw = Stopwatch.StartNew();
-            var m = Yamnet.TryCreate(out string? err);
+            var m = CedTiny.TryCreate(out string? err);
             Logger.Info(m is null ? $"楽器の AI を読み込めません: {err}" : $"楽器の AI を読み込みました（{sw.ElapsedMilliseconds} ms）");   // no-loc（ログだけ）
             return m;
         }).ContinueWith(t =>

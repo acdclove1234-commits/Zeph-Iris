@@ -1945,9 +1945,7 @@ ce000878	Could not open the user guide.
 8703d0a3	With the "Parts play their roles" style, which sound or instrument lights a zone whose "Sound to react to" is "Match the part". Sounds you chose for individual zones stay as they are
 876fdd1c	Instruments are guessed from the sound, so some songs get mixed up. Fast sounds (hi-hats, snares) show as small sparks of light. Slow-updating devices such as graphics cards and memory only show the color of the instrument that stands out in each part of the song
 5519f7df	A single color can't tell instruments apart by color. Choose the "Instruments" style to show them by brightness, position and motion instead (the kick lights everything, hi-hats are small sparks, the voice sets the overall brightness, and so on)
-0d8065a5	Checks the last second or so of sound every 0.5 seconds. Colors change over a few seconds and never flash. Colors don't change with the "Selected color only" or "Colors close to the selected color" palettes, or with the VU meter, Strobe and "Parts play their roles" styles
 1b6f3970	Recognize instruments with AI
-aadf5c4a	AI (YAMNet) recognizes the instrument that stands out in each part of a song (vocals, guitar, piano, brass, synth, strings) and changes the colors slowly (blue for vocals, gold for brass, orange for guitar, and so on). With a single color, it changes how the "Instruments" style moves instead. It runs only on this PC and uses a little CPU and memory
 4e43701b	With the "Parts play their roles" style, which sound lights this zone. "Match the part" follows "Instrument split" (by pitch: fans take the lows, the graphics card the mids, memory and keyboards the highs). If several zones on the same device end up with the same sound (such as fan headers), they are split in turn. You can also pick one instrument, such as kick, snare or vocals
 b555c16c	Instrument AI
 dbb80bf4	Speed needed to hold {0:F0}°C: {1:F0}% or less (the run ended early, so lower speeds were not measured)
@@ -1997,3 +1995,9 @@ e367d987	Reacts to: kicks, snares and hi-hats each light up in a different way
 e411765c	Reacts to: changes slowly with the brightness of the sound (low or high pitched) and the volume
 4c402832	Reacts to: the first beat of each bar (strong kicks while the tempo isn't found)
 e532ec45	Pulses with the beat and leaves a long, soft afterglow. The color does not change on the beat; it shifts slowly
+6313ac02	Checks the last 2 seconds of sound every second. Colors change over a few seconds and never flash. Colors don't change with the "Selected color only" or "Colors close to the selected color" palettes, or with the VU meter, Strobe and "Parts play their roles" styles
+419d7bd1	AI (CED-Tiny) recognizes the instrument that stands out in each part of a song (vocals, guitar, piano, brass, synth, strings) and changes the colors slowly (blue for vocals, gold for brass, orange for guitar, and so on). With a single color, it changes how the "Instruments" style moves instead. It runs only on this PC and uses a little CPU and memory
+eb06c11b	Graphics card: direct writes (up to {0} per second{1})
+965f43a6	The app writes to this graphics card directly (over NVIDIA's I2C), not through OpenRGB. A single-color zone is written in one go, so it is fast, and the brightness follows the music too.
+0ac5666c	When the LEDs have different colors, each write takes about 35 ms, so on auto it sends up to 10 times per second (on the beat it sends right away without waiting for the regular send).
+c3734abc	You can change this with "Updates per second" on the right, but more uses more CPU. Frames where the LEDs have different colors top out at about 14 per second even if you raise it (the app rests as long as each write takes)

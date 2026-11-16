@@ -263,29 +263,42 @@ public static class BeatFlashTests
     }
 
     /// <summary>
-    /// 曲が変わった（AudioEngine.NewSong）: テンポの追跡が覚えている前の曲のテンポだけを忘れる（ロックはそのまま）。
+    /// 曲が変わった（AudioEngine.NewSong）: 覚えている前の曲のテンポを忘れ、拍の並びを確かめる（拍の並びを「前の曲のもの」とし、確かめる間はロックしていないことにする）。
+    /// 同じ音が続くなら（拍が続いている曲がつながったアルバム・DJ ミックスなど）、続く 3 拍で確かめて、ロックも拍の並びもそのまま使う。
     /// BeatTracker.Reset（取り込み直しなど）では、覚えているテンポも忘れる
     /// </summary>
     public static void TestNewSongForgetsTempoMemory()
     {
         var mem = typeof(BeatTracker).GetField("_memPeriod", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)!;
-        var g = new SignalGen(48000, 14, seed: 120);
-        g.Loop(120, 0.2, 14, hats: true);
+        var g = new SignalGen(48000, 16, seed: 120);
+        g.Loop(120, 0.2, 16, hats: true);
         var e = new AudioEngine(48000);
         var run = new EngineRun(e).Feed(g.Buf, 0, 12);
         double before = (double)mem.GetValue(e.Tracker)!;
-        T.Check(before > 0 && run.Beats[^1].Locked, $"120 BPM loop: locked and the tempo is remembered (memory {before:F1} frames)");
+        var old = run.Beats[^1];
+        int steers = e.Tracker.SteerCount;
+        T.Check(before > 0 && old.Locked, $"120 BPM loop: locked and the tempo is remembered (memory {before:F1} frames)");
         e.NewSong();
         run.Feed(g.Buf, 12, 12.2);
         T.Check((double)mem.GetValue(e.Tracker)! == 0, "NewSong: the remembered tempo is forgotten");
-        T.Check(run.Beats[^1].Locked, "NewSong: the beat lock is kept");
-        run.Feed(g.Buf, 12.2, 14);
+        T.Check(e.Tracker.Lock == BeatLock.Unlocked && e.Tracker.GridStale && run.Beats[^1].Stale && !run.Beats[^1].Locked,
+            $"NewSong: while the grid is checked, it is not trusted (lock {e.Tracker.Lock}, stale {e.Tracker.GridStale})");
+        run.Feed(g.Buf, 12.2, 16);
+        int from = run.Frames.FindIndex(f => f.T >= run.At(12.2));
+        int relock = from < 0 ? -1 : run.Locks.FindIndex(from, l => l == BeatLock.Locked);
+        double relockSec = relock < 0 ? double.NaN : run.Frames[relock].T - run.At(12);
+        var now = run.Beats[^1];
+        // 同じ並びのまま（拍の時刻が前の並びの延長から 20 ms 以内）
+        double drift = (now.LastBeatT - old.LastBeatT) / old.Period;
+        drift = Math.Abs(drift - Math.Round(drift)) * old.Period;
+        T.Check(relock >= 0 && relockSec < 2.5 && !now.Stale && now.Locked && drift < 0.02 && e.Tracker.SteerCount == steers,
+            $"same music after NewSong: the lock comes back on the same grid after the check ({relockSec:F1} s, grid moved {drift * 1000:F0} ms, stale {now.Stale})");
         e.Tracker.Reset();
-        T.Check((double)mem.GetValue(e.Tracker)! == 0, "BeatTracker.Reset: the remembered tempo is forgotten too");
+        T.Check((double)mem.GetValue(e.Tracker)! == 0 && !e.Tracker.GridStale, "BeatTracker.Reset: the remembered tempo is forgotten too (and the grid is not stale)");
     }
 
     /// <summary>
-    /// 曲が変わった（NewSong）とき、まだ前の曲の拍の並びでロックしていても、そのテンポを覚え直さない（ロックが一度外れるか、
+    /// 曲が変わった（NewSong）とき、拍の並びがそのまま続いてロックし続けても、そのテンポを覚え直さない（ロックが一度外れるか、
     /// MemHoldSec 秒たつまで）。覚え直すと、曲が変わった合図の効き目がなくなる
     /// </summary>
     public static void TestNewSongDoesNotRememberOldTempoAgain()
@@ -309,6 +322,133 @@ public static class BeatFlashTests
             T.Check((double)mem.GetValue(e.Tracker)! > 0, "NewSong: after MemHoldSec, a lock that keeps going is remembered again");
         }
         finally { BeatTracker.Tune.MemHoldSec = saved; }
+    }
+
+    /// <summary>
+    /// 曲名がちらついて NewSong が何度も届いても（0.5 秒ごと）、新しい曲のテンポでロックできる
+    /// （前の知らせから SongMinGapSec 秒たっていなければ、探し直さない。探し直すたびに立ち上がりの記録を捨てると、テンポを求められなかった）
+    /// </summary>
+    public static void TestRepeatedNewSongStillLocks()
+    {
+        var g = new SignalGen(48000, 30, seed: 123);
+        g.Loop(120, 0.2, 12, hats: true);
+        g.Loop(96, 12.17, 30, hats: true);
+        var e = new AudioEngine(48000);
+        var run = new EngineRun(e).Feed(g.Buf, 0, 12.5);
+        for (double t = 12.5; t < 24; t += 0.5)
+        {
+            e.NewSong();
+            run.Feed(g.Buf, t, t + 0.5);
+        }
+        run.Feed(g.Buf, 24, 30);
+        var end = run.Beats[^1];
+        T.Check(end.Locked && !end.Stale && Math.Abs(end.Period / 0.625 - 1) < 0.03,
+            $"NewSong every 0.5 s for 11.5 s: locked on the new song anyway ({60 / end.Period:F1} BPM, locked {end.Locked}, stale {end.Stale})");
+    }
+
+    /// <summary>
+    /// 曲が変わった（SongChanged）あとに音が止まり、拍の並びを忘れた（無音 4 秒）: 公開している値も「前の曲の拍の並び」でなくなる
+    /// </summary>
+    public static void TestStaleClearsAfterSilence()
+    {
+        var g = new SignalGen(48000, 20, seed: 124);
+        g.Loop(120, 0.2, 12, hats: true);
+        var e = new AudioEngine(48000);
+        var run = new EngineRun(e).Feed(g.Buf, 0, 12);
+        e.Tracker.SongChanged();
+        T.Check(e.Tracker.GridStale, "SongChanged while locked: the grid is the old song's");
+        run.Feed(g.Buf, 12, 20);
+        var b = run.Beats[^1];
+        T.Check(!e.Tracker.GridStale && !b.Stale && !b.Locked && b.Confidence == 0,
+            $"8 s of silence: the grid is forgotten and not published as stale (stale {b.Stale}, tracker {e.Tracker.GridStale})");
+    }
+
+    /// <summary>
+    /// 遅いデバイス用の光り方（c.Slow）は、つかめていなくても予測した拍で光るが、拍の並びが前の曲のもの（GridStale）の間は光らない
+    /// </summary>
+    public static void TestSlowDeviceDoesNotFlashOnStaleGrid()
+    {
+        foreach (bool stale in new[] { false, true })
+        {
+            var d = new BeatDriver();
+            var c = FlashContext(reduce: false);
+            c.Slow = true;
+            c.Beat = new BeatState(0.5, 1.0, 0, 0.8, false, 0) { Stale = stale };
+            c.HasTempo = true;
+            c.Locked = false;
+            c.GridStale = stale;
+            c.Conf = 0.8f;
+            c.Period = 0.5;
+            double v = d.FlashAt(c, 1.01);
+            if (stale) T.Check(v == 0, $"slow device, stale grid: no flash on the predicted beat ({v:F2})");
+            else T.Check(v > 0.5, $"slow device, unlocked grid of this song: flashes on the predicted beat ({v:F2})");
+        }
+    }
+
+    /// <summary>
+    /// 曲間なしで別のテンポの曲に変わり、少し遅れて NewSong が届いた: 前の曲の拍の並びは使わず（GridStale）、
+    /// 新しい曲のテンポと拍の位置で又ロックする（前の曲の並びのまま光り続けない）
+    /// </summary>
+    public static void TestSongChangeLocksOnTheNewSong()
+    {
+        var g = new SignalGen(48000, 30, seed: 122);
+        g.Loop(120, 0.2, 12, hats: true);
+        // 次の曲: 96 BPM、拍の位置も前の並びの延長からずらす
+        g.Loop(96, 12.17, 30, hats: true);
+        var newKicks = g.KickTimes.Where(t => t >= 12.1).ToList();
+        foreach (bool reverify in new[] { true, false })
+        {
+            bool saved = BeatTracker.Tune.SongReverify;
+            try
+            {
+                BeatTracker.Tune.SongReverify = reverify;
+                var e = new AudioEngine(48000);
+                var run = new EngineRun(e).Feed(g.Buf, 0, 13);
+                T.Check(!reverify || run.Beats[^1].Locked, "120 BPM: locked (still on the old grid 1 s after the change)");
+                e.NewSong();
+                run.Feed(g.Buf, 13, 13.1);
+                if (reverify) T.Check(e.Tracker.Lock == BeatLock.Unlocked && run.Beats[^1].Stale && !run.Beats[^1].Locked, "NewSong: the old grid is not trusted any more (unlocked, stale)");
+                run.Feed(g.Buf, 13.1, 30);
+                // 新しい曲のテンポ（±3%）で、拍の頭がキックから 40 ms 以内でロックした最初の時刻
+                double first = double.NaN;
+                for (int i = 0; i < run.Frames.Count; i++)
+                {
+                    double s = run.Frames[i].T - run.T0;
+                    var b = run.Beats[i];
+                    if (s < 13 || run.Locks[i] != BeatLock.Locked || Math.Abs(b.Period / 0.625 - 1) > 0.03) continue;
+                    double off = newKicks.Min(k => { double x = (run.At(k) - b.LastBeatT) / b.Period; return Math.Abs(x - Math.Round(x)) * b.Period; });
+                    if (off < 0.04) { first = s - 12.17; break; }
+                }
+                var end = run.Beats[^1];
+                bool onNew = Math.Abs(end.Period / 0.625 - 1) < 0.03 && end.Locked && !end.Stale;
+                if (reverify)
+                    T.Check(!double.IsNaN(first) && first < 9 && onNew,
+                        $"after the change, locked on the new song's tempo and beat {first:F1} s after the change (end {60 / end.Period:F1} BPM, stale {end.Stale})");
+                else T.Info($"SongReverify off: locked on the new song {first:F1} s after the change (end {60 / end.Period:F1} BPM)");
+            }
+            finally { BeatTracker.Tune.SongReverify = saved; }
+        }
+    }
+
+    /// <summary>
+    /// 拍の並びが前の曲のもの（GridStale）の間、つかめていないときの拍の見当では光らない。キックでは光る
+    /// （曲が変わった直後に、前の曲のテンポの拍で光り続けて見えた）
+    /// </summary>
+    public static void TestStaleGridDoesNotFlash()
+    {
+        foreach (bool stale in new[] { false, true })
+        {
+            var bf = new BeatFlash();
+            var c = FlashContext(reduce: false);
+            c.GridStale = stale;
+            Step(bf, c, 1.0, 1.1, false, evs: new AudioEvent(1, AudioEventKind.Kick, 1.05, 3f));
+            Step(bf, c, 1.9, 2.0, false, cross: 1.98);
+            bool grid = bf.BeatStarted;
+            Step(bf, c, 2.4, 2.5, false, evs: new AudioEvent(2, AudioEventKind.Kick, 2.45, 3f));
+            bool kick = bf.KickStarted;
+            if (stale) T.Check(!grid && kick, $"stale grid: no flash on the predicted beat (grid {grid}), the kick still flashes ({kick})");
+            else T.Check(grid && kick, $"grid of this song: the predicted beat makes a weak flash ({grid}) and the kick flashes ({kick})");
+        }
     }
 
     /// <summary>

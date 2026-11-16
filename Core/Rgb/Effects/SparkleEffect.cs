@@ -10,7 +10,7 @@ namespace ProFanController;
 /// きらめき: どの音で光ったかが見て分かるように、音ごとに光り方を分ける。
 ///   下地 = P(t / 20 秒) × Ilin(0.10 + 0.25 × 中音 + 0.45 × キックの光)   … キックのたびにゾーン全体がふわっと明るくなる（τ 0.25 秒）
 ///   スネア（強さ s）: ランダムな位置から続けて並んだ LED（ゾーンの 12%、強いほど長い）が、いまの色の反対側の色で光る（τ 0.18 秒）
-///   ハイハット: 1 個ずつ離れた LED（ゾーンの 2% × s 個。多くても 1/12）が、白に近い色で一瞬だけ光る（τ 0.07 秒）
+///   ハイハット: 1 個ずつ離れた LED（ゾーンの 2% × s 個。多くても 1/12）が、白に近い色で一瞬だけ光る（τ 0.07 秒。更新の遅いデバイスは 0.12 秒）
 ///   LED の色 = 下地 + 粒の色 × exp(−(t − 光った時刻)/τ)
 /// 粒は光った本当の時刻を覚えるので、1 秒間のコマ数が違っても同じ明るさで消えていく。
 /// 6 個未満のゾーンは、スネアでゾーン全体が 0.8、ハイハットで 0.4 の明るさで光る
@@ -21,6 +21,11 @@ public sealed class SparkleEffect : IMusicEffect
     public const double BaseCycleSec = 20;
     /// <summary>ハイハットの粒が消える時定数（秒）</summary>
     public const float HatTauSec = 0.07f;
+    /// <summary>
+    /// 更新の遅いデバイス（直接書き込むグラボ・メモリなど。1 秒に 10 回まで: c.SlowDevice）での、ハイハットの粒が消える時定数（秒）。
+    /// 0.07 秒だと、1 秒に 10 回の送り方では粒が 1 回の送りにしか出ず、ほとんど見えない（録音 11 曲の直接書き込むグラボで、0.2 秒以上見える粒が 1 秒に 5.2 回 → 7.1 回。粒の数・書き込みの回数は変わらない）
+    /// </summary>
+    public const float SlowHatTauSec = 0.12f;
     /// <summary>スネアの光が消える時定数（秒）</summary>
     public const float SnareTauSec = 0.18f;
     /// <summary>キックで下地が明るくなる光の時定数（秒）</summary>
@@ -98,6 +103,8 @@ public sealed class SparkleEffect : IMusicEffect
     private void SpawnHat(EffectContext c, double t0, float strength)
     {
         var (gain, minGap) = MusicTuning.HatResponse(c.Music);
+        // 更新の遅いデバイスは、粒を少し長く残す（送る回数が少ないので、短い粒は 1 回の送りにしか出ない）
+        float tau = c.SlowDevice ? SlowHatTauSec : HatTauSec;
         // 強いハイハット（オープン・シンバル）ほど明るく、弱い刻みは控えめに
         float level = gain * c.SectionGain(SectionMin) * (0.6f + 0.4f * Math.Clamp((strength - 1f) / 2f, 0f, 1f));
         if (_lastHatT.Length != c.SegmentCount)
@@ -113,7 +120,7 @@ public sealed class SparkleEffect : IMusicEffect
             if (s.Small)
             {
                 var zc = HatColor(c) * (SmallHatLevel * level);
-                for (int j = s.Start; j < s.Start + s.Count; j++) Set(j, t0, HatTauSec, zc);
+                for (int j = s.Start; j < s.Start + s.Count; j++) Set(j, t0, tau, zc);
                 continue;
             }
             int n = Math.Clamp((int)MathF.Round(0.02f * s.Count * strength * gain), 1, Math.Max(1, s.Count / 12));
@@ -121,7 +128,7 @@ public sealed class SparkleEffect : IMusicEffect
             {
                 // 少し前に粒が光った LED は避けて、別の LED を選ぶ（見つからなければ、この粒は出さない）
                 for (int tryNo = 0; tryNo < PickTries; tryNo++)
-                    if (Set(s.Start + c.Rng.NextInt(s.Count), t0, HatTauSec, HatColor(c) * level)) break;
+                    if (Set(s.Start + c.Rng.NextInt(s.Count), t0, tau, HatColor(c) * level)) break;
             }
         }
     }

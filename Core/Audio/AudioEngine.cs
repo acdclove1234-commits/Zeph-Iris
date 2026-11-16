@@ -94,6 +94,9 @@ public sealed class AudioEngine
     /// <summary>サイド（(L − R) / 2）を落とすフィルター（88.2 kHz 以上のとき。ミッドと同じ遅れ）</summary>
     private readonly Decimator? _decSide;
     private readonly double _decDelaySec;
+    /// <summary>落としたミッドとサイド（DecBlock 個ずつ。分析に回す前に、分析の周波数で作った AI にも渡す）</summary>
+    private const int DecBlock = 1024;
+    private readonly float[] _decMid = Array.Empty<float>(), _decSideBuf = Array.Empty<float>();
     private readonly int _nLow, _nHigh, _ringMask;
     private readonly float[] _ring;
     /// <summary>サイド（(L − R) / 2）の直近の音（ステレオで届いたときだけ 0 以外になる）</summary>
@@ -151,6 +154,13 @@ public sealed class AudioEngine
     private volatile bool _resetRequested;
     private volatile bool _resetTempoRequested;
     private volatile bool _newSongRequested;
+    // 曲が変わったと知らされたときの、知らせの遅れの見積もり（秒。_newSongRequested より先に書く）
+    private double _newSongAge;
+    // 曲が変わったと知らされたのが無音の間だった: 音が出始めたところを、新しい曲の始まりとする
+    private bool _songPending;
+    // 無音の続いた長さ（コマ）と、最後に無音が終わった時刻（曲の始まりの手がかり。曲の頭には短い無音があることが多い）
+    private int _silentHops;
+    private double _silenceEndT = double.NegativeInfinity;
     private AudioEngineSettings _settings = AudioEngineSettings.Default;
     private AudioEngineSettings? _effFor;
     private AudioEngineSettings _eff = AudioEngineSettings.Default;
@@ -169,6 +179,8 @@ public sealed class AudioEngine
             _dec = new Decimator(factor);
             _decSide = new Decimator(factor);
             _decDelaySec = _dec.DelaySamples / SampleRate;
+            _decMid = new float[DecBlock];
+            _decSideBuf = new float[DecBlock];
         }
         AnalysisRate = SampleRate / factor;
         // 窓の長さ（時間）をサンプリング周波数によらずそろえる: 48 kHz で 2048 / 1024 個、96 kHz で 4096 / 2048 個
@@ -255,10 +267,30 @@ public sealed class AudioEngine
     /// <summary>楽器ごとの手がかりを求めるか（テストで、求めないときの計算の重さと比べるため。アプリの中では変えない）</summary>
     internal static bool InstrumentsEnabled = true;
 
-    /// <summary>拍の AI で追跡を確かめて直す（null なら使わない。取り込みのスレッドで動かす）</summary>
+    /// <summary>
+    /// 拍の AI で追跡を確かめて直す（null なら使わない。取り込みのスレッドで動かす）。分析の周波数（AnalysisRate）で作れば、ここで落とした音を渡す
+    /// （88.2〜384 kHz でも、AI の側でもう一度落とさない）。取り込みの周波数（SampleRate）で作れば、届いたままの音を渡す。どちらでもなければ渡さない
+    /// </summary>
     public BeatAssist? Assist { get; set; }
-    /// <summary>楽器の AI で、曲の部分ごとに目立つ楽器（場面）を調べる（null なら使わない。取り込みのスレッドで音を渡す）</summary>
+    /// <summary>楽器の AI で、曲の部分ごとに目立つ楽器（場面）を調べる（null なら使わない。取り込みのスレッドで音を渡す。周波数は Assist と同じ）</summary>
     public SceneTagger? Tagger { get; set; }
+    /// <summary>周波数を確かめた AI（付け替えられたら確かめ直す。取り込みのスレッドだけ）</summary>
+    private object? _checkedAssist, _checkedTagger;
+    /// <summary>
+    /// 分析の周波数でも取り込みの周波数でもない周波数で作った AI が付いていた回数（その AI には音を渡さない。付けるたびに 1 回だけログに書く）。
+    /// いまのアプリでは起きない（AudioCapture は分析の周波数で作る）。テスト・調査用の作り方を間違えたときに気づけるように
+    /// </summary>
+    internal int AiRateMismatches { get; private set; }
+
+    /// <summary>付いている AI の周波数が、渡せる周波数（分析の周波数・取り込みの周波数）か確かめる（付け替えられたときだけ。違えばログに 1 回）</summary>
+    private void CheckAiRate(object? ai, ref object? checkedAi, int rate, string name)
+    {
+        if (ReferenceEquals(ai, checkedAi)) return;
+        checkedAi = ai;
+        if (ai is null || rate == SampleRate || rate == AnalysisRate) return;
+        AiRateMismatches++;
+        Logger.Warn($"{name}は {rate} Hz 用に作られているので、音を渡しません（取り込み {SampleRate} Hz・分析 {AnalysisRate} Hz）");   // no-loc（ログだけ）
+    }
     /// <summary>いまの場面（楽器の AI を使っていなければ場面なし。どのスレッドから読んでもよい）</summary>
     public MusicScene Scene => Tagger?.Current ?? MusicScene.None;
     internal OnsetDetector Onsets => _onsets;
@@ -285,30 +317,64 @@ public sealed class AudioEngine
     public void Push(ReadOnlySpan<float> mono, ReadOnlySpan<float> side, double tFirst)
     {
         if (_resetRequested) ResetInternal();
-        Assist?.Push(mono, tFirst);
-        Tagger?.Push(mono, tFirst);
+        var assist = Assist;
+        var tagger = Tagger;
+        if (!ReferenceEquals(assist, _checkedAssist)) CheckAiRate(assist, ref _checkedAssist, assist?.InputRate ?? 0, "拍の AI");   // no-loc（ログだけ）
+        if (!ReferenceEquals(tagger, _checkedTagger)) CheckAiRate(tagger, ref _checkedTagger, tagger?.InputRate ?? 0, "楽器の AI");   // no-loc（ログだけ）
         bool click = ClickDetect;
         bool stereo = !side.IsEmpty;
         // ステレオで届いたら、リングの音がすべて入れ替わるまで（リングの長さ分）サイドの FFT を続ける
         if (stereo) _stereoHops = _ring.Length / Hop + 1;
         double invFs = 1.0 / SampleRate;
         var dec = _dec;
-        for (int i = 0; i < mono.Length; i++)
+        if (dec is null)
         {
-            float x = mono[i];
-            if (!float.IsFinite(x)) x = 0;
-            float sd = stereo && i < side.Length ? side[i] : 0;
-            if (!float.IsFinite(sd)) sd = 0;
-            double t = tFirst + i * invFs;
-            // 同期テストのクリックは、届いたままの細かさで時刻を測る
-            if (click) DetectClick(x, t);
-            if (dec is null) Analyze(x, sd, t);
-            else
+            // 落とさない（44.1 / 48 kHz など）: AI にもそのまま渡す
+            if (assist?.InputRate == SampleRate) assist.Push(mono, tFirst);
+            if (tagger?.InputRate == SampleRate) tagger.Push(mono, side, tFirst);   // 楽器の AI はサイドも調べる（鍵盤・シンセ・弦だけ）
+            for (int i = 0; i < mono.Length; i++)
             {
-                // 落とした音の時刻は、フィルターの遅れの分だけ前（線形位相なので、どの高さの音も同じ遅れ）
-                _decSide!.Push(sd, out float ys);
-                if (dec.Push(x, out float y)) Analyze(y, ys, t - _decDelaySec);
+                float x = mono[i];
+                if (!float.IsFinite(x)) x = 0;
+                float sd = stereo && i < side.Length ? side[i] : 0;
+                if (!float.IsFinite(sd)) sd = 0;
+                double t = tFirst + i * invFs;
+                // 同期テストのクリックは、届いたままの細かさで時刻を測る
+                if (click) DetectClick(x, t);
+                Analyze(x, sd, t);
             }
+            ProbeBetweenHops();
+            return;
+        }
+        // 88.2〜384 kHz: 取り込みの周波数で作った AI には、届いたままの音を渡す（AI の側で落とす）
+        bool assistDec = assist?.InputRate == AnalysisRate, taggerDec = tagger?.InputRate == AnalysisRate;
+        if (assist is not null && !assistDec && assist.InputRate == SampleRate) assist.Push(mono, tFirst);
+        if (tagger is not null && !taggerDec && tagger.InputRate == SampleRate) tagger.Push(mono, side, tFirst);
+        // DecBlock 個ずつ落とし、分析の周波数で作った AI に渡してから分析する（AI に渡す音の時刻 = 分析と同じ、落とした音の時刻）
+        int factor = dec.Factor;
+        for (int i = 0; i < mono.Length;)
+        {
+            int end = Math.Min(mono.Length, i + DecBlock * factor);
+            int m = 0, first = -1;
+            for (; i < end; i++)
+            {
+                float x = mono[i];
+                if (!float.IsFinite(x)) x = 0;
+                float sd = stereo && i < side.Length ? side[i] : 0;
+                if (!float.IsFinite(sd)) sd = 0;
+                if (click) DetectClick(x, tFirst + i * invFs);
+                _decSide!.Push(sd, out float ys);
+                if (!dec.Push(x, out float y)) continue;
+                if (m == 0) first = i;
+                _decMid[m] = y;
+                _decSideBuf[m++] = ys;
+            }
+            if (m == 0) continue;
+            // 落とした音の時刻は、フィルターの遅れの分だけ前（線形位相なので、どの高さの音も同じ遅れ）。落とした音は factor 個おきに出る
+            double t0 = tFirst + first * invFs - _decDelaySec;
+            if (assistDec) assist!.Push(_decMid.AsSpan(0, m), t0);
+            if (taggerDec) tagger!.Push(_decMid.AsSpan(0, m), stereo ? _decSideBuf.AsSpan(0, m) : ReadOnlySpan<float>.Empty, t0);
+            for (int k = 0; k < m; k++) Analyze(_decMid[k], _decSideBuf[k], tFirst + (first + k * factor) * invFs - _decDelaySec);
         }
         ProbeBetweenHops();
     }
@@ -350,10 +416,24 @@ public sealed class AudioEngine
     }
 
     /// <summary>
-    /// 曲が変わった（曲名の見張りで分かったとき）: テンポの追跡が覚えている前の曲のテンポを忘れる（拍の並びとロックはそのまま）。
+    /// 曲名が変わってから NewSong が呼ばれるまでの遅れの見積もり（秒。MusicAi が渡す）: Spotify のウィンドウを 0.25 秒ごとに見ていて分かったとき
+    /// （間隔の半分と、読む時間）と、それ以外（メディアの情報・初めて見つけた Spotify のウィンドウ。1 秒ごと）
+    /// </summary>
+    public const double SongNoticeQuickSec = 0.15, SongNoticeFullSec = 0.6;
+    /// <summary>無音とみなす音量（dBFS）・曲の始まりの手がかりにする無音の長さ（秒）・知らせより前を見る幅（秒）</summary>
+    private const double SongSilenceDb = -70, SongSilenceSec = 0.1, SongLookBackSec = 0.5;
+
+    /// <summary>
+    /// 曲が変わった（曲名の見張りで分かったとき）: テンポの追跡に前の曲のテンポを忘れさせ、前の曲の拍の並びを確かめ直させる（BeatTracker.SongChanged）。
+    /// ageSec = 曲名が変わってから知らせるまでの遅れの見積もり（秒）。新しい曲の始まりは「今 − ageSec」とするが、
+    /// その少し前（SongLookBackSec）から後に短い無音があれば、無音の終わりとする（無音の間に知らされたら、音が出始めたところ）。
     /// どのスレッドから呼んでもよい（取り込みスレッドが次の分析の回で行う）
     /// </summary>
-    public void NewSong() => _newSongRequested = true;
+    public void NewSong(double ageSec = 0)
+    {
+        _newSongAge = double.IsFinite(ageSec) ? Math.Clamp(ageSec, 0, 5) : 0;
+        _newSongRequested = true;
+    }
 
     private void ResetInternal()
     {
@@ -362,6 +442,9 @@ public sealed class AudioEngine
         Tagger?.Reset();
         _resetTempoRequested = false;
         _newSongRequested = false;
+        _songPending = false;
+        _silentHops = 0;
+        _silenceEndT = double.NegativeInfinity;
         _dec?.Reset();
         _decSide?.Reset();
         Array.Clear(_ring);
@@ -503,7 +586,12 @@ public sealed class AudioEngine
         if (_newSongRequested)
         {
             _newSongRequested = false;
-            _tracker.ForgetTempoMemory();
+            double start = tHop - _newSongAge;
+            if (_silenceEndT >= start - SongLookBackSec) start = _silenceEndT;
+            // 無音の間に知らされた: 音が出始めたところで、始まりを決め直す
+            _songPending = _silentHops > 0;
+            _tracker.SongChanged(start);
+            Assist?.SongChanged(start);
         }
 
         // 1. 窓をかけて FFT（古い順に並べる。窓は直近 N 個を覆う）
@@ -549,6 +637,20 @@ public sealed class AudioEngine
         // 2. 無音判定の門と、反応の強さ（門 × アプリの割合）
         double rmsDb = 10 * Math.Log10(sumSq / _nHigh + 1e-12);
         bool open = _gate.Update(rmsDb, _dt, GateOpenDb, GateCloseDb, GateHoldSec);
+        // 曲の変わり目: 無音の終わりを覚えておき、知らされた新しい曲の始まりを決める（音が出始めたところで、テンポの追跡に知らせる）
+        bool silent = rmsDb < SongSilenceDb;
+        if (silent) _silentHops++;
+        else
+        {
+            if (_silentHops * _dt >= SongSilenceSec) _silenceEndT = tHop;
+            _silentHops = 0;
+        }
+        if (_songPending && !silent)
+        {
+            _songPending = false;
+            _tracker.SongStartsAt(tHop);
+            Assist?.SongChanged(tHop);
+        }
         double g = _gateEnv.StepA(open ? 1 : 0, 1.0, _aGateRelease);
         double app = _appEnv.StepA(SafeAppGate(), _aApp, _aApp);
         double activity = Math.Clamp(g * app, 0, 1);
@@ -573,7 +675,7 @@ public sealed class AudioEngine
         // ベースの音の高さと出だし（キックの直後は出だしにしない）
         if (InstrumentsEnabled) _inst.EndHop(tHop, _onsets.PercussiveKick, _onsets.KickTime, _onsets.BassCandidate, _onsets.BassCandidateTime);
 
-        // 楽器の AI（テンポの追跡を使わないときも。0.48 秒ごとに、別のスレッドに頼むだけ）
+        // 楽器の AI（テンポの追跡を使わないときも。1 秒ごとに、別のスレッドに頼むだけ）
         Tagger?.Tick(tHop, open && activity >= OnsetDetector.MinActivity);
 
         // 6. テンポとビート（Off のときは計算もしない）

@@ -1945,9 +1945,7 @@ ce000878	Kullanım kılavuzu açılamadı.
 8703d0a3	"Her parça kendi rolünde" efektinde, "Tepki verilecek ses" ayarı "Parçaya göre" olan bir bölgenin hangi ses veya enstrümanla yanacağı. Bölge bazında seçtiğiniz sesler olduğu gibi kalır
 876fdd1c	Enstrümanlar sesten tahmin edildiği için bazı şarkılarda karışabilir. Hızlı sesler (hi-hat, trampet) küçük ışık noktalarıyla gösterilir; ekran kartı ve bellek gibi yavaş güncellenen cihazlar ise şarkının her bölümünde öne çıkan enstrümanın rengiyle yanar
 5519f7df	Tek renkte enstrümanlar renkle ayırt edilemez. Efekti "Enstrümanlar" yaparsanız enstrümanlar parlaklık, konum ve hareketle gösterilir (kick her yeri yakar, hi-hat küçük noktalar olur, vokal genel parlaklığı belirler vb.)
-0d8065a5	Son yaklaşık 1 saniyelik sesi 0,5 saniyede bir inceler. Renkler birkaç saniyede değişir ve yanıp sönmez. "Yalnızca seçilen renk" ve "Seçilen renge yakın renkler" paletlerinde ve Ses seviyesi göstergesi, Stroboskop ve Her parça kendi rolünde efektlerinde renkler değişmez
 1b6f3970	Enstrümanları AI ile tanı
-aadf5c4a	AI (YAMNet), şarkının her bölümünde öne çıkan enstrümanı (vokal, gitar, piyano, bakır nefesliler, sentezleyici, yaylılar) tanır ve renkleri yavaşça değiştirir (vokal için mavi, bakır nefesliler için altın, gitar için turuncu vb.). Tek renkte ise "Enstrümanlar" efektinin hareketini değiştirir. Yalnızca bu PC'de çalışır, biraz CPU ve bellek kullanır
 4e43701b	"Her parça kendi rolünde" efektinde bu bölgenin hangi sesle yanacağı. "Parçaya göre" seçiliyse "Enstrüman dağılımı" ayarına uyar (perdeye göre: fanlar bas, ekran kartı orta, bellek ve klavyeler tiz sesler). Aynı cihazda aynı sese düşen birden çok bölge varsa (fan konnektörleri gibi) sırayla paylaştırılır. Kick, trampet veya vokal gibi tek bir enstrüman da seçebilirsiniz
 b555c16c	Enstrüman tanıma (AI)
 dbb80bf4	{0:F0}°C hedefini korumak için gereken devir: %{1:F0} veya daha az (test erken bittiği için daha düşük devirler ölçülemedi)
@@ -1997,3 +1995,9 @@ e367d987	Tepki: kick, trampet ve hi-hat her biri farklı şekilde yanar
 e411765c	Tepki: sesin parlaklığına (pes mi tiz mi) ve ses yüksekliğine göre yavaşça değişir
 4c402832	Tepki: her ölçünün ilk vuruşu (tempo yakalanamazken güçlü kick'ler)
 e532ec45	Vuruşla birlikte atar ve uzun, yumuşak bir iz bırakır. Renk vuruşta değişmez, yavaşça geçiş yapar
+6313ac02	Son 2 saniyelik sesi saniyede bir inceler. Renkler birkaç saniyede değişir ve yanıp sönmez. "Yalnızca seçilen renk" ve "Seçilen renge yakın renkler" paletlerinde ve Ses seviyesi göstergesi, Stroboskop ve Her parça kendi rolünde efektlerinde renkler değişmez
+419d7bd1	AI (CED-Tiny), şarkının her bölümünde öne çıkan enstrümanı (vokal, gitar, piyano, bakır nefesliler, sentezleyici, yaylılar) tanır ve renkleri yavaşça değiştirir (vokal için mavi, bakır nefesliler için altın, gitar için turuncu vb.). Tek renkte ise "Enstrümanlar" efektinin hareketini değiştirir. Yalnızca bu PC'de çalışır, biraz CPU ve bellek kullanır
+eb06c11b	Ekran kartı: doğrudan yazma (saniyede en fazla {0}{1})
+965f43a6	Uygulama bu ekran kartına OpenRGB üzerinden değil, doğrudan (NVIDIA'nın I2C'si üzerinden) yazar. Tek renkli bir bölge tek seferde yazılır, bu yüzden hızlıdır ve parlaklık da müziği izler.
+0ac5666c	LED'lerin renkleri farklı olduğunda her yazma yaklaşık 35 ms sürer, bu yüzden otomatikte saniyede en fazla 10 kez gönderir (vuruş anında düzenli gönderimi beklemeden hemen gönderir).
+c3734abc	Bunu sağdaki "Saniyedeki güncelleme" ile değiştirebilirsiniz, ancak artırmak daha fazla CPU kullanır. LED'lerin renkleri farklı olduğu kareler, artırsanız bile saniyede yaklaşık 14 ile sınırlıdır (uygulama her yazma süresi kadar bekler)

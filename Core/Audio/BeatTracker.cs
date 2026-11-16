@@ -105,6 +105,33 @@ public sealed class BeatTracker
         internal static int MemMinBeats = 8;
         /// <summary>曲が変わった（ForgetTempoMemory）あと、ロックが一度外れるまで、テンポを覚え直さない時間の上限（秒）</summary>
         internal static double MemHoldSec = 20;
+        /// <summary>
+        /// 曲が変わったと知らされたとき（SongChanged）、前の曲の拍の並びを確かめ直す（拍の並びを「前の曲のもの」とし、合わなければロックを外して探し直す。
+        /// false = テンポの記憶を忘れるだけ）
+        /// </summary>
+        internal static bool SongReverify = true;
+        /// <summary>
+        /// 曲の始まりが分からないとき（SongChanged に時刻が渡されない）、探し直すときに残す立ち上がりの記録の長さ（秒）。
+        /// 始まりが分かれば、そこから後だけを残す（前の曲の周期で、新しい曲のテンポを決めない）
+        /// </summary>
+        internal static double SongKeepSec = 1.0;
+        /// <summary>探し直すときに残す立ち上がりの記録の、いちばん短い長さ（秒。新しい曲の始まりの直後でも、これだけは残す。無音なら害はなく、テンポを早く求め始められる）</summary>
+        internal static double SongMinKeepSec = 1.0;
+        /// <summary>
+        /// 曲が変わったと知らされたとき、ロック中の拍の並びがそのまま新しい曲にも合うかを確かめる拍の数（0 = 確かめずにすぐ探し直す）。
+        /// 続けて SongCheckBeats 拍、予測した拍の SongCheckErrSec 秒以内に音があれば、ロックも拍の並びもそのまま使う
+        /// （曲がつながったアルバム・DJ ミックス・同じ曲で曲名だけ変わったとき）。1 拍でも外れたら、ロックを外して探し直す
+        /// </summary>
+        internal static int SongCheckBeats = 3;
+        internal static double SongCheckErrSec = 0.020;
+        /// <summary>前の曲の変わり目からこの秒数たっていなければ、続けて知らされても探し直さない（曲名がちらついても、テンポを求められなくならない）</summary>
+        internal static double SongMinGapSec = 4;
+        /// <summary>曲の始まりよりこの秒数以上あとにロックしていれば、もう新しい曲の拍の並び（知らせが遅れて届いた）。確かめない</summary>
+        internal static double SongFreshSec = 1.0;
+        /// <summary>曲が変わったと知らされたとき、テンポの記録（ビタビ）を一様に戻す割合（0 = そのまま、1 = 全部忘れる）</summary>
+        internal static double SongPostMix = 0.5;
+        /// <summary>前の曲の拍の並びとみなす時間の上限（秒。その前に、新しい曲で拍の位置を取り直すかロックすれば終わる）</summary>
+        internal static double StaleMaxSec = 8;
         /// <summary>予測した拍の並びのずれの見分け: 離れた音がこの回数続いて、同じ向き・ばらつき OffsetSpreadSec 秒以内なら、ずれとして直す（0 = しない）</summary>
         internal static int OffsetRun = 3;
         internal static double OffsetSpreadSec = 0.03;
@@ -240,6 +267,16 @@ public sealed class BeatTracker
     // 曲が変わったあと、テンポを覚え直さない（ロックが一度外れるか、この時刻まで）
     private bool _memHold;
     private double _memHoldUntil;
+    // 拍の並びが前の曲のもの（曲が変わったと知らされてから、新しい曲で拍の位置を取り直すかロックするまで。長くても _staleUntil まで）
+    private bool _stale;
+    private double _staleUntil;
+    // 曲が変わったあと、ロック中の拍の並びが新しい曲にも合うかを確かめている（合った拍の数）。新しい曲の始まりのコマ・最後に知らされた時刻
+    private bool _check;
+    private int _checkHits;
+    private long _songStartN;
+    private double _songT = double.NegativeInfinity;
+    // 最後にロックした（ロックが外れていた状態から・外からの拍の並びで）時刻
+    private double _lockSinceT = double.NegativeInfinity;
     // 直近の離れた音のずれ（コマ。予測した拍の並びがずれているかを見分ける）
     private readonly double[] _offErr = new double[6];
     private int _offHead, _offCount;
@@ -356,7 +393,10 @@ public sealed class BeatTracker
 
     /// <summary>公開しているテンポとビートの位置（テンポの倍率を反映したもの）</summary>
     public BeatState Published => _published;
-    public BeatLock Lock => _lock;
+    /// <summary>ロックの状態（曲が変わったあと、拍の並びが新しい曲にも合うかを確かめている間は Unlocked）</summary>
+    public BeatLock Lock => _check ? BeatLock.Unlocked : _lock;
+    /// <summary>拍の並びが前の曲のもの（曲が変わったと知らされたあと、まだ新しい曲で拍の位置を取り直していない・合うか確かめている）</summary>
+    public bool GridStale => _stale;
     /// <summary>確かさ（0〜1）= ビートの位置の確かさ × (0.5 + 0.5 × テンポの確かさ)</summary>
     public double Confidence => _conf;
     public double TempoConfidence => _tempoConf;
@@ -395,6 +435,8 @@ public sealed class BeatTracker
         _goodBeats = LockBeats;
         _badBeats = 0;
         _stuckFrames = 0;
+        _stale = _check = false;
+        _lockSinceT = _tNow;
         SteerCount++;
     }
     /// <summary>くし形のフィルターの結果（テスト・調査用。添え字 j が周期 TauMin + j コマ）</summary>
@@ -449,10 +491,15 @@ public sealed class BeatTracker
         _memBeats = 0;
         _memHold = false;
         _memHoldUntil = 0;
+        _stale = _check = false;
+        _staleUntil = 0;
+        _checkHits = 0;
+        _songStartN = 0;
+        _songT = _lockSinceT = double.NegativeInfinity;
     }
 
     /// <summary>
-    /// 曲が変わった: 覚えているテンポ（前の曲のテンポ・その倍・半分に寄せる重み）だけを忘れる。拍の並びとロックはそのまま。
+    /// 曲が変わった: 覚えているテンポ（前の曲のテンポ・その倍・半分に寄せる重み）だけを忘れる。拍の並びとロックはそのまま（SongChanged が最初に呼ぶ）。
     /// 曲の間に無音のない再生（続けて流れるプレイリスト）では SilenceReset が起きないので、前の曲のテンポに 1〜2 分引っぱられていた
     /// 曲が変わった合図は少し遅れて届き、そのときはまだ前の曲の拍の並びでロックしていることが多い。そのまま 8 拍ロックが続くと、
     /// 前の曲のテンポをまた覚えてしまうので、ロックが一度外れるまで（長くても MemHoldSec 秒）は覚え直さない
@@ -463,6 +510,84 @@ public sealed class BeatTracker
         _memBeats = 0;
         _memHold = true;
         _memHoldUntil = _tNow + Tune.MemHoldSec;
+    }
+
+    /// <summary>
+    /// 曲が変わった（曲名の見張りで分かったとき。AudioEngine.NewSong）: 覚えているテンポを忘れ（ForgetTempoMemory）、
+    /// 前の曲の拍の並びを確かめ直す。曲の間に無音のない再生では、知らせが届いたときもまだ前の曲の拍の並びでロックしていることが多く、
+    /// そのまま光ると 2 秒ほど前の曲の拍で光っていた（ロック中は、くし形のフィルターが別のテンポを言っても乗り換えない）。
+    ///   ・ロック中なら、拍の並びを「前の曲のもの」（GridStale）とし、続く SongCheckBeats 拍で、予測した拍に音があるかを確かめる。
+    ///     その間はロックしていないことにする（「ビートで色替え」「パルス」は拍の見当では光らず、キックで光る）。
+    ///     全部の拍に音があれば、ロックも拍の並びもそのまま（曲がつながったアルバム・DJ ミックスなど、拍が続いている）。
+    ///     1 拍でも外れたら探し直す（Restart）
+    ///   ・ロックしていなければ、すぐ探し直す
+    ///   ・知らせが遅れて届き、もう新しい曲でロックし直していれば（曲の始まりから SongFreshSec 秒以上あと）、確かめない
+    ///   ・前の知らせから SongMinGapSec 秒たっていなければ、テンポの記憶を忘れるだけ（曲名がちらついても、テンポを求められなくならない）
+    /// </summary>
+    /// <param name="startT">新しい曲が始まった時刻（音の時刻。分からなければ NaN = 今から SongKeepSec 秒前）。探し直すとき、これより後の立ち上がりだけを残す</param>
+    public void SongChanged(double startT = double.NaN)
+    {
+        ForgetTempoMemory();
+        if (!Tune.SongReverify) return;
+        bool again = _tNow - _songT < Tune.SongMinGapSec;
+        _songT = _tNow;
+        if (again)
+        {
+            DiagLog?.Invoke($"song changed t {_tNow:F2}: again within {Tune.SongMinGapSec:F0} s, keep the current check");
+            return;
+        }
+        double t0 = double.IsFinite(startT) ? Math.Min(startT, _tNow) : _tNow - Math.Max(0, Tune.SongKeepSec);
+        _songStartN = _n - (long)Math.Round((_tNow - t0) * _f);
+        if (_hasGrid && _lock != BeatLock.Unlocked && _lockSinceT >= t0 + Tune.SongFreshSec)
+        {
+            DiagLog?.Invoke($"song changed t {_tNow:F2}: locked {_tNow - _lockSinceT:F1} s ago, already on the new song");
+            return;
+        }
+        if (_hasGrid && _lock != BeatLock.Unlocked && Tune.SongCheckBeats > 0)
+        {
+            _check = true;
+            _checkHits = 0;
+            _stale = true;
+            _staleUntil = _tNow + Tune.StaleMaxSec;
+            DiagLog?.Invoke($"song changed t {_tNow:F2}: check the grid on the next {Tune.SongCheckBeats} beats");
+            return;
+        }
+        Restart();
+    }
+
+    /// <summary>曲が変わったと知らされたあと、新しい曲の始まりが分かった（無音の間に知らされ、音が出始めた。t = 音の時刻）: 探し直すときは、これより後を残す</summary>
+    public void SongStartsAt(double t)
+    {
+        if (!Tune.SongReverify || _tNow - _songT >= Tune.SongMinGapSec) return;
+        _songStartN = _n - (long)Math.Round((_tNow - Math.Min(t, _tNow)) * _f);
+    }
+
+    /// <summary>
+    /// 曲が変わったあと、前の曲の拍の並びが合わなかった（またはロックしていなかった）: 探し直す。
+    /// ロックを外し、確かさの記録を消し、立ち上がりの記録は新しい曲の始まり（_songStartN）から後だけ残す。テンポの記録も SongPostMix だけ一様に戻す。
+    /// 拍の並びは「前の曲のもの」のまま（GridStale）。新しい曲で拍の位置を取り直す・ロックする・拍の AI で合わせる・StaleMaxSec 秒たつ、のどれかで終わる。
+    /// 小節の頭の数え方（_downbeat）は、新しい曲の拍で決め直すまで今のまま（どちらにしても新しい曲とは関係がない）
+    /// </summary>
+    private void Restart()
+    {
+        _check = false;
+        _count = (int)Math.Clamp(Math.Max(_n - _songStartN, Math.Round(Tune.SongMinKeepSec * _f)), 0, _count);
+        double mix = Math.Clamp(Tune.SongPostMix, 0, 1);
+        if (mix > 0) for (int j = 0; j < _m; j++) _post[j] = (1 - mix) * _post[j] + mix / _m;
+        Array.Fill(_veto, 1.0);
+        _candidateCount = 0;
+        _halfRun = 0;
+        _sideRun = 0;
+        _stuckFrames = 0;
+        ClearHist();
+        _phaseConf = _conf = 0;
+        _lock = BeatLock.Unlocked;
+        _goodBeats = _badBeats = 0;
+        Array.Clear(_sdb);
+        _sdbCount = 0;
+        _stale = _hasGrid;
+        _staleUntil = _tNow + Tune.StaleMaxSec;
+        DiagLog?.Invoke($"song changed t {_tNow:F2}: re-verify the grid (keep {_count / _f:F2} s)");
     }
 
     /// <summary>
@@ -542,6 +667,9 @@ public sealed class BeatTracker
             _goodBeats = 0;
         }
 
+        // 確かめている間にロックが外れた（音が止まったなど）: 探し直す
+        if (_check && _lock == BeatLock.Unlocked) Restart();
+        if (_stale && (_tNow >= _staleUntil || !_hasGrid)) _stale = _check = false;
         _glide *= _glideDecay;
         if (Math.Abs(_glide) < 1e-7) _glide = 0;
         Publish(tempoFactor);
@@ -958,6 +1086,7 @@ public sealed class BeatTracker
         }
         _nextBeat = next;
         _hasGrid = true;
+        _stale = _check = false;
         _pendCount = 0;
         ClearHist();
         _goodBeats = _badBeats = 0;
@@ -1072,6 +1201,22 @@ public sealed class BeatTracker
             }
         }
         else if (!outlier) _offCount = 0;
+        // 曲が変わったあと、ロック中の拍の並びが新しい曲にも合うかを確かめている: 予測した拍のすぐ近くに音がなければ探し直す
+        if (_check)
+        {
+            bool hit = s > 0.2 && Math.Abs(e) <= Tune.SongCheckErrSec * _f;
+            DiagLog?.Invoke($"song check beat {idx} t {_tNow:F2} e {e * 1000 / _f:F0}ms s {s:F2}: {(hit ? "hit" : "miss")}");
+            if (!hit)
+            {
+                Restart();
+                return;
+            }
+            if (++_checkHits >= Tune.SongCheckBeats)
+            {
+                _check = _stale = false;
+                DiagLog?.Invoke($"song changed: the grid goes on in the new song (t {_tNow:F2})");
+            }
+        }
         double gain = outlier ? s * OutlierGain : s;
 
         // 位置と周期の修正（比例・積分）。公開する位置は、なめらかに追いつかせる
@@ -1141,7 +1286,7 @@ public sealed class BeatTracker
         _badBeats = _conf < UnlockConf ? _badBeats + 1 : 0;
         if (_lock == BeatLock.Unlocked)
         {
-            if (_goodBeats >= LockBeats) _lock = BeatLock.Locked;
+            if (_goodBeats >= LockBeats) { _lock = BeatLock.Locked; _stale = false; _lockSinceT = _tNow; }
         }
         else if (_badBeats >= LockBeats)
         {
@@ -1304,8 +1449,8 @@ public sealed class BeatTracker
         if (!_hasGrid || _period <= 0)
         {
             // ビートの位置を忘れたとき: 拍の数え方は残し、ロックと確かさだけ 0 にする
-            if (_published.Locked || _published.Confidence > 0)
-                _published = _published with { Locked = false, Confidence = 0 };
+            if (_published.Locked || _published.Confidence > 0 || _published.Stale)
+                _published = _published with { Locked = false, Confidence = 0, Stale = false };
             return;
         }
         double periodSec = _period / _f;
@@ -1330,12 +1475,13 @@ public sealed class BeatTracker
             idxP = even / 2;
             db = _downbeat >> 1;
         }
-        bool locked = _lock != BeatLock.Unlocked;
+        bool locked = _lock != BeatLock.Unlocked && !_check;
         double conf = Math.Round(_conf, 3);
 
         var old = _published;
         bool changed = !old.HasTempo
             || old.Locked != locked
+            || old.Stale != _stale
             || old.DownbeatOffset != db
             || Math.Abs(old.Confidence - conf) >= 0.02
             || Math.Abs(old.Period - pp) >= 2e-4 * pp
@@ -1347,7 +1493,7 @@ public sealed class BeatTracker
             double predicted = old.LastBeatT + (idxP - old.IndexAtLast) * old.Period;
             changed = Math.Abs(predicted - tP) >= 0.0005;
         }
-        if (changed) _published = new BeatState(pp, tP, idxP, conf, locked, db);
+        if (changed) _published = new BeatState(pp, tP, idxP, conf, locked, db) { Stale = _stale };
     }
 
     // ================================================================

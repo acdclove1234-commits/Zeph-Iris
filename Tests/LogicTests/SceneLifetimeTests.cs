@@ -17,7 +17,7 @@ public static class SceneLifetimeTests
     private static bool VocalScores(float[] w, float[] s)
     {
         Array.Clear(s);
-        s[24] = 0.8f;
+        s[CedTiny.IndexOf("Singing")] = 0.8f;
         s[SceneClasses.MusicClass] = 0.8f;
         return true;
     }
@@ -25,7 +25,7 @@ public static class SceneLifetimeTests
     private static bool DrumScores(float[] w, float[] s)
     {
         Array.Clear(s);
-        s[157] = 0.8f;
+        s[CedTiny.IndexOf("Drum kit")] = 0.8f;
         s[SceneClasses.MusicClass] = 0.8f;
         return true;
     }
@@ -60,7 +60,7 @@ public static class SceneLifetimeTests
         T.Check(exitOrder > 0 && finished > 0 && exitOrder > finished, $"the model is released after the inference returned (order {finished} → {exitOrder})");
 
         // 2. 本物のモデル: 持ち主が先に Dispose しても、AI が使っている間は片付かない
-        var m = Yamnet.TryCreate(out string? err);
+        var m = CedTiny.TryCreate(out string? err);
         T.Check(m is not null, $"model loads ({err ?? "ok"})");
         if (m is null) return;
         var real = new SceneTagger(m, 48000);
@@ -77,12 +77,12 @@ public static class SceneLifetimeTests
         catch (ObjectDisposedException) { threw = true; }
         T.Check(threw, "a new tagger on a freed model is refused (not a crash)");
         threw = false;
-        try { m.Classify(new float[Yamnet.WindowSamples], new float[Yamnet.Classes]); }
+        try { m.Classify(new float[CedTiny.WindowSamples], new float[CedTiny.Classes]); }
         catch (ObjectDisposedException) { threw = true; }
         T.Check(threw, "Classify on a freed model throws ObjectDisposedException (not an access violation)");
 
         // 3. 作り直しの直後のように、2 つの AI が同じモデルを同時に使っても、1 つずつ計算する
-        var shared = Yamnet.TryCreate(out err);
+        var shared = CedTiny.TryCreate(out err);
         if (shared is null) { T.Check(false, $"model loads again ({err})"); return; }
         var a = new SceneTagger(shared, 48000);
         var b = new SceneTagger(shared, 44100);
@@ -137,11 +137,11 @@ public static class SceneLifetimeTests
         g[SceneClasses.Music] = 0.8f;
         g[SceneClasses.Keys] = 0.5f;
         double t = T0;
-        for (; t < T0 + 10; t += 0.48) tr.Update(t, g);
+        for (; t < T0 + 10; t += SceneTracker.Tune.HopSec) tr.Update(t, g);
         var shown = tr.Current;
         g[SceneClasses.Keys] = 0;
         g[SceneClasses.Vocal] = 0.6f;
-        for (; tr.Current.Group != SceneGroup.Vocal && t < T0 + 30; t += 0.48) tr.Update(t, g);
+        for (; tr.Current.Group != SceneGroup.Vocal && t < T0 + 30; t += SceneTracker.Tune.HopSec) tr.Update(t, g);
         T.Check(shown.Group == SceneGroup.Keys && tr.Current.Group == SceneGroup.Vocal, "the tracker has moved on to Vocal while Keys is shown");
         tr.Reset(t, shown);
         T.Check(tr.Current is { Group: SceneGroup.None, From: SceneGroup.Keys } && tr.Current.SwitchT == t, $"Reset fades from the shown Keys ({tr.Current.From})");

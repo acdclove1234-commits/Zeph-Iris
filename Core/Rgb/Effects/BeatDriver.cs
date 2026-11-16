@@ -88,6 +88,7 @@ public sealed class BeatDriver
         c.HasTempo = auto && beat.HasTempo && beat.Period > 0;
         c.Conf = c.HasTempo ? (float)Math.Clamp(beat.Confidence, 0, 1) : 0f;
         c.Locked = c.HasTempo && beat.Locked;
+        c.GridStale = c.HasTempo && beat.Stale;
         c.Period = c.HasTempo ? beat.Period : 0.5;
         c.Phase = c.HasTempo ? beat.Phase(t1) : 0;
         c.BeatIndex = c.HasTempo ? beat.Index(t1) : 0;
@@ -161,9 +162,10 @@ public sealed class BeatDriver
 
     /// <summary>
     /// 予測した拍で光らせるか（テンポをつかんでいるときだけ。遅いデバイス用の光り方（c.Slow）は、つかんでいなくても光らせる:
-    /// 光も色の切り替えもゆっくりなので、キックの光と色の切り替えが重なると、送った 1 回だけ新しい色で明るく光って見えるため）
+    /// 光も色の切り替えもゆっくりなので、キックの光と色の切り替えが重なると、送った 1 回だけ新しい色で明るく光って見えるため）。
+    /// ただし、つかめていない拍の並びが前の曲のもの（c.GridStale。曲が変わったと知らされた直後）なら光らせない（前の曲の拍で光る）
     /// </summary>
-    private static bool PredictFlash(EffectContext c) => c.HasTempo && c.Conf > 0 && (c.Locked || UnlockedPrediction || c.Slow);
+    private static bool PredictFlash(EffectContext c) => c.HasTempo && c.Conf > 0 && (c.Locked || ((UnlockedPrediction || c.Slow) && !c.GridStale));
 
     /// <summary>時刻 tStart に強さ a で始まり、時定数 tau で消えていく光の、時刻 t の値</summary>
     private static double Pulse(double t, double tStart, double a, double tau)

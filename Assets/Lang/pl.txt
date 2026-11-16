@@ -1945,9 +1945,7 @@ ce000878	Nie udało się otworzyć instrukcji.
 8703d0a3	Przy efekcie „Każda część w swojej roli”: jaki dźwięk lub instrument rozświetla strefę, której „Dźwięk, na który reagować” to „Według części”. Dźwięki wybrane dla poszczególnych stref pozostają bez zmian
 876fdd1c	Instrumenty są rozpoznawane z dźwięku, więc w niektórych utworach mogą się mylić. Szybkie dźwięki (hi-hat, werbel) są pokazywane jako małe iskry światła, a wolno odświeżane urządzenia, takie jak karty graficzne i pamięć, świecą tylko kolorem instrumentu wyróżniającego się w danej części utworu
 5519f7df	Jednym kolorem nie da się odróżnić instrumentów po barwie. Wybierz efekt „Instrumenty”, aby pokazywać je jasnością, miejscem i ruchem (stopa rozświetla wszystko, hi-hat to małe iskry, wokal ustala ogólną jasność itd.)
-0d8065a5	Co 0,5 sekundy sprawdza dźwięk z mniej więcej ostatniej sekundy. Kolory zmieniają się przez kilka sekund i nie migają. Kolory nie zmieniają się przy paletach „Tylko wybrany kolor” i „Kolory zbliżone do wybranego” ani przy efektach Wskaźnik głośności, Stroboskop i Każda część w swojej roli
 1b6f3970	Rozpoznawaj instrumenty za pomocą AI
-aadf5c4a	AI (YAMNet) rozpoznaje instrument wyróżniający się w każdej części utworu (wokal, gitara, fortepian, dęte blaszane, syntezator, smyczki) i powoli zmienia kolory (niebieski dla wokalu, złoty dla dętych blaszanych, pomarańczowy dla gitary itd.). Przy jednym kolorze zmienia zamiast tego sposób ruchu efektu „Instrumenty”. Działa tylko na tym PC i zużywa trochę CPU i pamięci
 4e43701b	Przy efekcie „Każda część w swojej roli”: na jaki dźwięk świeci ta strefa. „Według części” stosuje „Podział instrumentów” (przy wysokości dźwięku: wentylatory basy, karta graficzna średnie, pamięć i klawiatury wysokie). Jeśli kilka stref na tym samym urządzeniu dostaje ten sam dźwięk (np. złącza wentylatorów), są dzielone po kolei. Możesz też wybrać jeden instrument, np. stopę, werbel lub wokal
 b555c16c	AI instrumentów
 dbb80bf4	Obroty potrzebne do utrzymania celu {0:F0}°C: {1:F0}% lub mniej (pomiar zakończył się przedwcześnie, więc niższych obrotów nie zmierzono)
@@ -1997,3 +1995,9 @@ e367d987	Reaguje na: stopa, werbel i hi-hat świecą każdy w inny sposób
 e411765c	Reaguje na: zmienia się powoli według jasności dźwięku (niski czy wysoki) i głośności
 4c402832	Reaguje na: pierwsze uderzenie każdego taktu (mocna stopa, dopóki tempo nie jest uchwycone)
 e532ec45	Pulsuje w rytm uderzeń i zostawia długą, łagodną poświatę. Kolor nie zmienia się w rytm, tylko powoli przechodzi w kolejny
+6313ac02	Co sekundę sprawdza dźwięk z ostatnich 2 sekund. Kolory zmieniają się przez kilka sekund i nie migają. Kolory nie zmieniają się przy paletach „Tylko wybrany kolor” i „Kolory zbliżone do wybranego” ani przy efektach Wskaźnik głośności, Stroboskop i Każda część w swojej roli
+419d7bd1	AI (CED-Tiny) rozpoznaje instrument wyróżniający się w każdej części utworu (wokal, gitara, fortepian, dęte blaszane, syntezator, smyczki) i powoli zmienia kolory (niebieski dla wokalu, złoty dla dętych blaszanych, pomarańczowy dla gitary itd.). Przy jednym kolorze zmienia zamiast tego sposób ruchu efektu „Instrumenty”. Działa tylko na tym PC i zużywa trochę CPU i pamięci
+eb06c11b	Karta graficzna: zapis bezpośredni (najwyżej {0} na sekundę{1})
+965f43a6	Aplikacja zapisuje do tej karty graficznej bezpośrednio (przez I2C NVIDIA), a nie przez OpenRGB. Strefa w jednym kolorze jest zapisywana za jednym razem, więc działa szybko, a jasność też podąża za muzyką.
+0ac5666c	Gdy LED-y mają różne kolory, każdy zapis trwa ok. 35 ms, więc w trybie automatycznym aplikacja wysyła najwyżej 10 razy na sekundę (w momencie uderzenia wysyła od razu, nie czekając na regularną wysyłkę).
+c3734abc	Można to zmienić opcją „Odświeżeń na sekundę” po prawej, ale więcej zużywa więcej CPU. Klatki, w których LED-y mają różne kolory, nawet po zwiększeniu osiągają najwyżej ok. 14 na sekundę (aplikacja odczekuje tyle, ile trwa każdy zapis)

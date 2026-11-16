@@ -192,6 +192,9 @@ public sealed record BeatState(double Period, double LastBeatT, long IndexAtLast
 {
     public static readonly BeatState None = new(0.5, double.NegativeInfinity, 0, 0, false, 0);
 
+    /// <summary>拍の並びが前の曲のもの（曲が変わったと知らされたあと、まだ新しい曲で拍の位置を取り直していない。BeatTracker.GridStale）</summary>
+    public bool Stale { get; init; }
+
     public double Bpm => Period > 0 ? 60 / Period : 0;
     public bool HasTempo => Period > 0 && !double.IsInfinity(LastBeatT);
 

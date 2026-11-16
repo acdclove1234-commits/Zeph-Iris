@@ -618,6 +618,65 @@ public static class InstrumentEnsembleTests
     }
 
     /// <summary>
+    /// C11b: 直接書き込むグラボ（明るさを変えてもちかちかしない）は、下地を低くして拍のふくらみを大きくする（メモリと同じ大きさでは、
+    /// ほとんど止まって見えた）。ふくらみはメモリより大きく、「激しい点滅を抑える」がオンなら FlashLimiter.MinGapSec 以上あけ、
+    /// 強い点滅（0.1 秒で平均 +0.2）は 1 秒に 3 回まで。メモリは今までどおり（C11）
+    /// </summary>
+    public static void TestDirectGpuSwellIsVisible()
+    {
+        var buf = Everything();
+        var pny = new RgbDevice(7, "PNY GeForce RTX 5070Ti ARGB Epic-X OC", 41, RgbDevice.TypeGpu, new[] { 4, 20, 17 }, "I2C: Nvidia NvAPI I2C on GPU 0, address 0x60") { DirectGpu = true };
+        var music = EnsembleRun.Solid() with { Palette = Palettes.Rainbow, ReduceFlashing = true };
+        double MedianSwell(List<EnsembleFrame> fr)
+        {
+            // ふくらみの始まりから 0.15 秒の、いちばん明るい平均 − 始まる直前の平均（送った値）
+            var rises = new List<double>();
+            foreach (double a in fr.Select(f => f.AccentT).Where(double.IsFinite).Distinct())
+            {
+                var before = fr.LastOrDefault(f => f.T < a);
+                var during = fr.Where(f => f.T >= a && f.T <= a + 0.15).ToList();
+                if (before is null || during.Count == 0) continue;
+                rises.Add(during.Max(f => EnsembleRun.Mean(f)) - EnsembleRun.Mean(before));
+            }
+            rises.Sort();
+            return rises.Count == 0 ? 0 : rises[rises.Count / 2];
+        }
+        var direct = EnsembleRun.Run(buf, music, pny).Where(f => f.T > 3).ToList();
+        var dram = EnsembleRun.Run(buf, music, EnsembleRun.Dram()).Where(f => f.T > 3).ToList();
+        double sDirect = MedianSwell(direct), sDram = MedianSwell(dram);
+        var accents = direct.Select(f => f.AccentT).Where(double.IsFinite).Distinct().OrderBy(x => x).ToList();
+        double minGap = accents.Zip(accents.Skip(1), (a, b) => b - a).DefaultIfEmpty(double.PositiveInfinity).Min();
+        int most = FlashGuardTests.MostPerSecond(direct.Select(f => f.T).ToList(), direct.Select(f => EnsembleRun.Mean(f)).ToList());
+        T.Info($"direct GPU: {accents.Count} swells, closest {minGap:F2} s apart, median swell {sDirect:F3} (DRAM {sDram:F3}), most strong flashes in 1 s {most}");
+        T.Check(accents.Count >= 10 && minGap >= FlashLimiter.MinGapSec - 1e-6, $"direct GPU: beat swells happen ({accents.Count}) and at least {FlashLimiter.MinGapSec} s apart with reduce flashing ({minGap:F2})");
+        T.Check(sDirect >= 0.15 && sDirect >= 2 * sDram, $"direct GPU: the swell is clearly visible ({sDirect:F3}) and larger than on DRAM ({sDram:F3})");
+        T.Check(most <= 3, $"direct GPU: ≤ 3 strong flashes in every 1 s window ({most})");
+
+        // 速い拍（テンポをつかめない 0.2〜0.4 秒おきのキック・スネア）: 「激しい点滅を抑える」がオンなら、拍の時刻でもふくらみを描き始めたコマでも
+        // DirectLimitedGapSec 以上あけ、強い点滅は 1 秒に 3 回まで（FlashGuard に頼らない）。オフなら DirectSwellGapSec まで詰める
+        var fast = new SignalGen(Fs, 20, seed: 13);
+        fast.PadChord(0.5, 19.8, InstrumentSources.PadChord1);
+        fast.RandomHits(0.5, 19.5, meanGap: 0.3, minGap: 0.2);
+        (int N, double Beat, double Frame, int Most) Gaps(bool reduce)
+        {
+            var fr = EnsembleRun.Run(fast.Buf, music with { ReduceFlashing = reduce }, pny).Where(f => f.T > 3).ToList();
+            var beats = fr.Select(f => f.AccentT).Where(double.IsFinite).Distinct().OrderBy(x => x).ToList();
+            var starts = new List<double>();
+            for (int i = 1; i < fr.Count; i++) if (fr[i].AccentT != fr[i - 1].AccentT && double.IsFinite(fr[i].AccentT)) starts.Add(fr[i].T);
+            static double Closest(List<double> v) => v.Zip(v.Skip(1), (a, b) => b - a).DefaultIfEmpty(double.PositiveInfinity).Min();
+            int m = FlashGuardTests.MostPerSecond(fr.Select(f => f.T).ToList(), fr.Select(f => EnsembleRun.Mean(f)).ToList());
+            return (beats.Count, Closest(beats), Closest(starts), m);
+        }
+        var on = Gaps(true);
+        var off = Gaps(false);
+        T.Info($"direct GPU, fast hits: reduce flashing on {on.N} swells, closest {on.Beat:F3} s (beats) / {on.Frame:F3} s (frames), most strong flashes in 1 s {on.Most}; off {off.N} swells, closest {off.Beat:F3} / {off.Frame:F3} s");
+        T.Check(on.N >= 20 && on.Beat >= EnsembleEffect.DirectLimitedGapSec - 1e-6 && on.Frame >= EnsembleEffect.DirectLimitedGapSec - 1e-6 && on.Most <= 3,
+            $"direct GPU, fast hits, reduce flashing on: swells ≥ {EnsembleEffect.DirectLimitedGapSec:F3} s apart in beat time ({on.Beat:F3}) and frame time ({on.Frame:F3}), ≤ 3 strong flashes in 1 s ({on.Most})");
+        T.Check(off.Beat >= EnsembleEffect.DirectSwellGapSec - 1e-6 && off.Beat < EnsembleEffect.DirectLimitedGapSec && off.N > on.N,
+            $"direct GPU, fast hits, reduce flashing off: swells may come closer ({off.Beat:F3} s, ≥ {EnsembleEffect.DirectSwellGapSec} s) and more often ({off.N} vs {on.N})");
+    }
+
+    /// <summary>
     /// C12: 場面で光の形を切り替える（場面なし → 歌 10 秒 → ギター 20 秒。パッドと低い音が続く曲）: 切り替えの間も、1 コマの変化は
     /// 切り替えない場合のいちばん大きな変化 + 1 段まで。場面の重みは 2.5 秒かけて移り、ドラムの重みは 1 を超えない
     /// </summary>

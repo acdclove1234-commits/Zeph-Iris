@@ -1945,9 +1945,7 @@ ce000878	Không thể mở hướng dẫn sử dụng.
 8703d0a3	Với hiệu ứng "Mỗi linh kiện một vai", chọn âm thanh hay nhạc cụ làm sáng vùng có "Âm thanh để phản ứng" là "Theo linh kiện". Âm thanh đã chọn riêng cho từng vùng vẫn giữ nguyên
 876fdd1c	Nhạc cụ được đoán từ âm thanh nên với một số bài sẽ bị nhầm. Âm nhanh (hi-hat, snare) hiện thành các hạt sáng nhỏ; thiết bị cập nhật chậm như card đồ họa, RAM chỉ sáng theo màu của nhạc cụ nổi bật trong từng đoạn bài hát
 5519f7df	Khi dùng một màu thì không phân biệt được nhạc cụ bằng màu. Chọn hiệu ứng "Sáng theo nhạc cụ" để thể hiện nhạc cụ bằng độ sáng, vị trí sáng và chuyển động (kick sáng toàn bộ, hi-hat là hạt nhỏ, giọng hát là độ sáng chung...)
-0d8065a5	Phân tích khoảng 1 giây âm thanh gần nhất mỗi 0,5 giây. Màu đổi dần trong vài giây và không nhấp nháy. Không đổi màu với bảng màu "Chỉ màu đã chọn", "Các màu gần với màu đã chọn", Đồng hồ âm lượng, Đèn chớp và Mỗi linh kiện một vai
 1b6f3970	Nhận biết nhạc cụ bằng AI
-aadf5c4a	Dùng AI (YAMNet) nhận biết nhạc cụ nổi bật trong từng đoạn bài hát (giọng hát, guitar, piano, kèn đồng, synth, đàn dây) và đổi màu chậm rãi (giọng hát màu xanh dương, kèn đồng màu vàng kim, guitar màu cam...). Khi dùng một màu, sẽ đổi cách chuyển động của hiệu ứng "Sáng theo nhạc cụ". Chỉ chạy trong PC và dùng một ít CPU và RAM
 4e43701b	Với hiệu ứng "Mỗi linh kiện một vai", vùng này sáng theo âm nào. "Theo linh kiện" sẽ theo "Cách chia nhạc cụ" (nếu chia theo cao độ: quạt âm trầm, card đồ họa âm trung, RAM và bàn phím âm cao). Nếu nhiều vùng trên cùng thiết bị trùng âm (như các cổng quạt), chúng được chia lần lượt. Cũng có thể chọn một nhạc cụ như kick, snare hoặc giọng hát
 b555c16c	AI nhạc cụ
 dbb80bf4	Tốc độ cần để giữ mục tiêu {0:F0}°C: {1:F0}% trở xuống (đã dừng giữa chừng nên chưa đo được tốc độ thấp hơn)
@@ -1997,3 +1995,9 @@ e367d987	Âm thanh để phản ứng: trống kick, snare và hi-hat mỗi lo�
 e411765c	Âm thanh để phản ứng: thay đổi chậm rãi theo độ sáng của âm (trầm hay cao) và âm lượng
 4c402832	Âm thanh để phản ứng: nhịp đầu của mỗi ô nhịp (trống kick mạnh khi chưa bắt được tempo)
 e532ec45	Đập theo nhịp và để lại vệt sáng mờ kéo dài. Màu không đổi theo nhịp mà chuyển dần chậm rãi
+6313ac02	Phân tích 2 giây âm thanh gần nhất mỗi 1 giây. Màu đổi dần trong vài giây và không nhấp nháy. Không đổi màu với bảng màu "Chỉ màu đã chọn", "Các màu gần với màu đã chọn", Đồng hồ âm lượng, Đèn chớp và Mỗi linh kiện một vai
+419d7bd1	Dùng AI (CED-Tiny) nhận biết nhạc cụ nổi bật trong từng đoạn bài hát (giọng hát, guitar, piano, kèn đồng, synth, đàn dây) và đổi màu chậm rãi (giọng hát màu xanh dương, kèn đồng màu vàng kim, guitar màu cam...). Khi dùng một màu, sẽ đổi cách chuyển động của hiệu ứng "Sáng theo nhạc cụ". Chỉ chạy trong PC và dùng một ít CPU và RAM
+eb06c11b	Card đồ họa: ghi trực tiếp (tối đa {0} lần mỗi giây{1})
+965f43a6	Ứng dụng ghi trực tiếp vào card đồ họa này (qua I2C của NVIDIA), không qua OpenRGB. Vùng một màu được ghi trong một lần nên nhanh, và độ sáng cũng thay đổi theo nhạc.
+0ac5666c	Khi mỗi LED có màu khác nhau, mỗi lần ghi mất khoảng 35 mili giây, nên ở chế độ tự động sẽ gửi tối đa 10 lần mỗi giây (đúng nhịp thì gửi ngay, không chờ lượt gửi định kỳ).
+c3734abc	Có thể thay đổi bằng "Số lần gửi mỗi giây" ở bên phải, nhưng tăng lên sẽ dùng nhiều CPU hơn. Khung hình có màu LED khác nhau chỉ đạt tối đa khoảng 14 lần mỗi giây dù tăng lên (vì ứng dụng nghỉ đúng bằng thời gian ghi)
