@@ -35,6 +35,7 @@ if ($PublishOnly) {
     exit 0
 }
 if (-not $OutputDir) { $OutputDir = $root }
+$OutputDir = $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($OutputDir)
 
 $iscc = @($env:ISCC,
           (Join-Path $env:LOCALAPPDATA 'Programs\Inno Setup 6\ISCC.exe'),
