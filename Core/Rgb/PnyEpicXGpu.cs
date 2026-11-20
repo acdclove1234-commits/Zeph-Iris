@@ -100,7 +100,8 @@ public sealed class PnyEpicXEncoder
         bool uniform = spread <= SkipDelta;
         // 固定色と直接の切り替えに時間の幅を持たせる: 直接モードからは、1 色のコマが StaticAfterFrames 回続いてから固定色に戻す
         // （1 色と LED ごとに違う色のコマが交互に来ると、そのたびに直接モードに入り直し、書き終わるまでの間、前の色が混ざって見えるため）
-        if (z.Mode == ZoneMode.Direct && !full)
+        // 全灯の再送時も同じ基準で判定し、単色が一瞬だけなら直接モードで書き直す。
+        if (z.Mode == ZoneMode.Direct)
         {
             z.UniformRun = uniform ? z.UniformRun + 1 : 0;
             if (z.UniformRun < StaticAfterFrames) uniform = false;

@@ -51,6 +51,21 @@ public static class PnyDirectTests
         T.Check(Apply(enc, Uniform(new Rgb(0, 0, 255)), bus) == 2, "new colour: 2 writes");
     }
 
+    public static void TestFullRefreshKeepsDirectModeOnBriefUniformFrame()
+    {
+        var enc = new PnyEpicXEncoder();
+        var bus = new FakeBus();
+        var frame = Uniform(new Rgb(0, 0, 180));
+        frame[30] = new Rgb(0, 0, 100);
+        Apply(enc, frame, bus);
+        var flat = Uniform(frame[0]);
+        Apply(enc, flat, bus, full: true);
+        var arrow = bus.Log.Where(x => x.Reg == PnyEpicXEncoder.RegArrow).ToArray();
+        T.Check(arrow.Length == 17 && arrow.All(x => x.Data[0] == PnyEpicXEncoder.ModeDirect),
+            "a full refresh on one uniform frame rewrites the 17 LEDs in direct mode");
+        T.Check(Apply(enc, frame, bus) == 1, "restoring the gradient updates only the one changed LED");
+    }
+
     public static void TestMixedZoneWritesOnlyChangedLeds()
     {
         var enc = new PnyEpicXEncoder();
