@@ -84,9 +84,7 @@ public sealed class BeatHueEffect : IMusicEffect
 
     private float _i, _mel, _trRef, _midRef, _body, _drumless;
     private double _hitT = double.NegativeInfinity;   // 直近の音の出だしの時刻（メロディの光が明るくなってよいか）
-#if BEATHUE_BETA
     private float _toneBalance, _toneOffset;
-#endif
     private float _slowW;   // 遅いデバイス: テンポをつかんでいるときの光り方の割合（0〜1。SlowBeatOnBed）
     private bool _wasQuiet = true;                     // 無音だった（次に大きな音が鳴り始めたら、音の出だしとみなす）
     private SteadyLevel _bedSteady;   // 低音で光る明るさを、ずっと続く音（エンジン・風）の小さな上下で揺らさない
@@ -126,9 +124,7 @@ public sealed class BeatHueEffect : IMusicEffect
     {
         _i = _mel = _trRef = _midRef = _body = _drumless = 0;
         _hitT = double.NegativeInfinity;
-#if BEATHUE_BETA
         _toneBalance = _toneOffset = 0;
-#endif
         _slowW = 0;
         _slowKickT = double.NegativeInfinity;
         _wasQuiet = true;
@@ -144,7 +140,6 @@ public sealed class BeatHueEffect : IMusicEffect
     {
         var f = c.Frame;
         UpdateMelody(c);
-#if BEATHUE_BETA
         // 音域のバランスで基調色を動かす。ドラムが休む間もフレーズの変化が色に残る。
         if ((_beat is not null || c.Music.Effect == MusicStyles.BeatHue) && c.Music.TempoMode == TempoModes.Auto)
         {
@@ -154,7 +149,6 @@ public sealed class BeatHueEffect : IMusicEffect
             if (!c.NoFade || c.Trigger) _toneOffset = _toneBalance;
         }
         else _toneBalance = _toneOffset = 0;
-#endif
         // 拍をつかんでいる曲では拍の光が主役、つかめていない静かな曲（ベル・アルペジオ）ではメロディの光が主役。
         // ドラムが鳴っている曲では、テンポをつかめていなくても、キック・スネアの光を主役にする
         float melShare = Tune.MelodyShare * (1 - Tune.MelodyDuck * c.Conf) * (1 - Tune.DrumDuck * DrumPresence(c));
@@ -285,9 +279,7 @@ public sealed class BeatHueEffect : IMusicEffect
     {
         float k = c.Ilin(_i);
         double offset = 0;
-#if BEATHUE_BETA
         offset = _toneOffset * c.Pal.Step * (c.Music.ReduceFlashing ? 0.45 : 0.75);
-#endif
         for (int j = s.Start; j < s.Start + s.Count; j++)
             dst[j] = c.ColorAt(offset + GradientWidth * (c.P[j] - 0.5f)) * k;
     }

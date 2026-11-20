@@ -4,7 +4,7 @@ Zeph-Iris change log (newest first)
 ■ What's new in v6.15.11 (fewer, more distinct music styles)
   - There are now seven music styles. Pulse, Strobe and Tempo follow switch to Color change on beat. Mix and
     Energy switch to Spectrum, per-device and zone Mix settings switch to Auto, and Movies & games switches to Custom.
-  - The beta follows changes in tempo and tone. Ensemble shows bass at one end of four- and five-LED strips. On directly controlled GPUs, bass lights one end and guitar or keys move along the zone.
+  - Lighting follows changes in tempo and tone. Ensemble shows bass at one end of four- and five-LED strips. On directly controlled GPUs, bass lights one end and guitar or keys move along the zone.
   - Flowing wave has been removed. Mood runs without sound and keeps its previous palette.
   - Color change on beat follows kicks and section changes and shows differences in drum strength. The bass end
     of Spectrum responds closer to the kick, and Ripple responds to kicks and loud sounds such as thunder.

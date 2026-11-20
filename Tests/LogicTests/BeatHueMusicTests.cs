@@ -647,7 +647,6 @@ public static class BeatHueMusicTests
         T.Info("done");
     }
 
-#if BEATHUE_BETA
     public static void TestBeatHueRespondsToTimbreBetweenColourSteps()
     {
         var c = new EffectContext { P = new[] { 0.5f }, F0 = 1, Dt = 1f / 60,
@@ -673,7 +672,6 @@ public static class BeatHueMusicTests
         float distance = Math.Max(Math.Abs(low.R - high.R), Math.Max(Math.Abs(low.G - high.G), Math.Abs(low.B - high.B)));
         T.Check(distance > 0.2f, $"with no beat or brightness change, bass and treble phrases produce distinct colours (RGB difference {distance:F2})");
     }
-#endif
 
     // ===== テスト（ハウス・ロック・ヒップホップ。メモリ（1 秒に 8 回）とテープ（60 回）、「激しい点滅を抑える」オフ・オン）
 

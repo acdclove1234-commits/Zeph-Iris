@@ -522,7 +522,6 @@ public sealed class EnsembleEffect : IMusicEffect
         }
         // 直接書き込むグラボは、下地を低く・ふくらみを大きく速く（明るさを変えないグラボ・メモリは、これまでどおり）
         bool direct = c.DirectWrite && !c.FixedBrightness;
-#if BEATHUE_BETA
         if (direct)
         {
             // 低速更新でも追える、持続するベースと幅の広いギター・鍵盤の帯。
@@ -532,7 +531,6 @@ public sealed class EnsembleEffect : IMusicEffect
             _bassA = BassAmp * _bass * _w.Wbass;
             _flowA = FlowAmp * _harm * _w.Wf;
         }
-#endif
         bool limited = direct && c.Music.ReduceFlashing;
         double gap = !direct ? SwellGapSec : limited ? DirectLimitedGapSec : DirectSwellGapSec;
         bool accent = false;
@@ -576,9 +574,7 @@ public sealed class EnsembleEffect : IMusicEffect
             {
                 if (best != _domCand) { _domCand = best; _domCandT = c.T; }
                 else if (c.T - _domCandT >= DomHoldSec && (!c.FixedBrightness || accent
-#if BEATHUE_BETA
                     || (_active > 0.5f && c.T - _slowDrumT > DomHoldSec && c.T - _accT > AccentWhiteSec)
-#endif
                     ))
                 {
                     _domFrom = _slowLab;
@@ -779,7 +775,6 @@ public sealed class EnsembleEffect : IMusicEffect
         int end = s.Start + s.Count;
         if (SlowMode(c))
         {
-#if BEATHUE_BETA
             if (c.DirectWrite && !c.FixedBrightness && s.Count >= 4)
             {
                 const float width = 0.32f;
@@ -796,16 +791,11 @@ public sealed class EnsembleEffect : IMusicEffect
                 }
                 return;
             }
-#endif
             var sc = _col[CBody] * c.Ilin(_body);
             for (int j = s.Start; j < end; j++) dst[j] = sc.FitToOne();
             return;
         }
-#if BEATHUE_BETA
         if (s.Count < 4)
-#else
-        if (s.Small)
-#endif
         {
             // 小さいゾーン: 場所を使う層はなし（全体の明るさだけ。スネアは弱め・ハイハットは出さない）
             float i0 = Screen(_body, _kickA);

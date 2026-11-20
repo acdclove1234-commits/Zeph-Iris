@@ -965,7 +965,6 @@ public static class InstrumentEnsembleTests
         T.Check(bassKicks.Count == 0 || kick >= 1.6 * bass, $"bass notes taken for kicks light much less than real kicks ({bass:F3} vs {kick:F3}, ≥ 1.6×)");
     }
 
-#if BEATHUE_BETA
     public static void TestFixedBrightnessTracksInstrumentWithoutDrums()
     {
         var c = new EffectContext { SlowDevice = true, FixedBrightness = true, F0 = 1, Dt = 0.1f,
@@ -1019,6 +1018,5 @@ public static class InstrumentEnsembleTests
         double median = ratios[ratios.Length / 2];
         T.Check(median >= 1.5, $"four LEDs: bass lights the low end (median end-to-end ratio {median:F2})");
     }
-#endif
 
 }

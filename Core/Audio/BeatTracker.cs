@@ -1311,14 +1311,12 @@ public sealed class BeatTracker
 
         // 位置と周期の修正（比例・積分）。公開する位置は、なめらかに追いつかせる
         double oldLast = _nextBeat - _period;
-#if BEATHUE_BETA
         // 強い立ち上がりが同じ側に続くときだけ、拍の位置と周期を速く追い直す。
         int previous = (_histHead + HistLen - 1) % HistLen;
         int earlier = (previous + HistLen - 1) % HistLen;
         if (!outlier && s >= 0.7 && Math.Abs(e) >= 0.010 * _f && _histCount >= 2
             && _hitHist[previous] && _hitHist[earlier] && _errHist[previous] * e > 0 && _errHist[earlier] * e > 0)
             gain *= 2;
-#endif
         _nextBeat += PhaseGain * gain * e;
         double newPeriod = Math.Clamp(_period + PeriodGain * gain * e, _tauMin * 0.9, _tauMax * 1.1);
         _period = newPeriod;
