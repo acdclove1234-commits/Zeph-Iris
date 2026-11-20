@@ -35,8 +35,7 @@ public static class FlickerProneTests
         var mem = new DeviceRenderer(new RgbDevice(2, "ENE DRAM", 8, RgbDevice.TypeDram));
         T.Check(mem.ModeFor(RgbModes.Rainbow) == RgbModes.Rainbow, "other devices keep flowing modes");
         T.Check(DeviceRenderer.FlickerProneVariant(EffectVariant.MixSlow, "Auto") == EffectVariant.BeatHueSlow
-            && DeviceRenderer.FlickerProneVariant(EffectVariant.Mood, "Auto") == EffectVariant.BeatHueSlow
-            && DeviceRenderer.FlickerProneVariant(EffectVariant.Mood, MusicStyles.Mood) == EffectVariant.Mood
+            && DeviceRenderer.FlickerProneVariant(EffectVariant.Meter, "Auto") == EffectVariant.PulseLoudSlow
             && DeviceRenderer.FlickerProneVariant(EffectVariant.Spectrum, MusicStyles.Spectrum) == EffectVariant.BeatHueSlow,
             "music effects mapped to low-write versions");
 
@@ -71,39 +70,34 @@ public static class FlickerProneTests
         T.Check(OpenRgbClient.ParseActiveMode(new byte[5], 1) == ("", 0), "broken data gives empty result");
     }
 
-    public static void TestGpuMoodSendsRarelyAndKeepsBrightness()
+    /// <summary>
+    /// PNY のグラボで全体が音に反応しない「ムード」: グラボは止まった絵にする（ほかの動きのある光り方と同じ）ので、
+    /// 最初に送ったあとは、ほとんど送らない（書き込むたびにちかちかしない）。音を入れても変わらない
+    /// </summary>
+    public static void TestGpuStandaloneModesSendRarely()
     {
-        // PNY のグラボで全体が「ムード」: 光り方はムードのまま、明るさは一定で、わずかな変化では送らない
         var pny = new RgbDevice(2, "PNY GeForce RTX 5070Ti ARGB Epic-X OC", 41, RgbDevice.TypeGpu, new[] { 4, 20, 17 });
-        var cfg = new RgbConfig { Mode = RgbModes.Music, MusicStyle = MusicStyles.Mood, Gamma = false };
-        var ch = new RgbDeviceChannel(pny, 0);
-        ch.Configure(cfg, MusicTuning.Resolve(cfg), new RgbDeviceSettings { Name = pny.Name }, false);
-        var ring = new FeatureRing();
-        var f = new AudioFrame { GateOpen = true, Activity = 1 };
-        int sends = 0;
-        float minBright = 255, maxBright = 0;
-        var rng = new Random(3);
-        for (double t = 0; t < 20; t += 1.0 / 60)
+        foreach (var mode in new[] { RgbModes.Mood })
         {
-            f.T = t;
-            f.LoudVU = (float)(0.3 + 0.7 * rng.NextDouble());   // 音量が細かく揺れる
-            f.CentroidHz = 800;
-            ring.Write(f);
-            ch.Prepare(t, 1.0 / 60, ring, null, BeatState.None, null, false, false);
-            if (!ch.Render()) continue;
-            if (t > 3)
+            var cfg = new RgbConfig { Mode = mode, Gamma = false };
+            var ch = new RgbDeviceChannel(pny, 0);
+            ch.Configure(cfg, MusicTuning.Resolve(cfg), new RgbDeviceSettings { Name = pny.Name }, false);
+            var ring = new FeatureRing();
+            var f = new AudioFrame { GateOpen = true, Activity = 1 };
+            int sends = 0;
+            var rng = new Random(3);
+            for (double t = 0; t < 20; t += 1.0 / 60)
             {
-                var c = ch.Frame[10];
-                float b = Math.Max(c.R, Math.Max(c.G, c.B));
-                minBright = Math.Min(minBright, b);
-                maxBright = Math.Max(maxBright, b);
+                f.T = t;
+                f.LoudVU = (float)(0.3 + 0.7 * rng.NextDouble());   // 音があっても使わない
+                ring.Write(f);
+                ch.Prepare(t, 1.0 / 60, ring, null, BeatState.None, null, false, false);
+                if (!ch.Render()) continue;
+                var reason = ch.ShouldSend(t, 1.0 / 60, true);
+                if (reason != SendReason.None) { ch.MarkSent(t, 1.0 / 60, reason, 1); sends++; }
             }
-            var reason = ch.ShouldSend(t, 1.0 / 60, true);
-            if (reason != SendReason.None) { ch.MarkSent(t, 1.0 / 60, reason, 1); sends++; }
+            T.Info($"PNY + {mode}: 20 秒で {sends} 回送信");
+            T.Check(sends <= 6, $"{mode}: the GPU is written rarely ({sends} writes in 20 s)");
         }
-        T.Info($"PNY + ムード: 20 秒で {sends} 回送信、明るさ {minBright}〜{maxBright}");
-        T.Check(ch.Renderer.ActiveEffect == MusicStyles.Mood, "GPU keeps the global effect (Mood)");
-        T.Check(maxBright - minBright <= 8, $"GPU brightness stays constant while loudness jitters ({minBright}-{maxBright})");
-        T.Check(sends <= 20, $"GPU is written rarely in Mood ({sends} writes in 20 s)");
     }
 }

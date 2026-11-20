@@ -213,7 +213,6 @@ a08b7324	At or below this temperature the color is light blue (cool)
 0582db54	Red temperature
 74068713	At or above this temperature the color is full red (hot). In between it goes green → yellow
 181b9ba1	Speed
-6f30cf75	Rainbow at 1× takes 30 s per cycle (10 s at 3×, 3 s at 10×); breathing at 1× takes 6 s per breath. For the music "flowing wave" it is the flow speed
 36bcf3d7	{0:F1}×
 f9dafe1e	Analyzes the sound coming from the PC and lights up with the drum hits, the tempo and the pitch. Start by choosing a preset, then adjust only what bothers you below.
 5414b5c1	The current sound split into the 10 bands of a standard equalizer (31 Hz to 16 kHz), from bass (left) to treble (right). The bright bars inside are "attacks" such as drums; the white line is the recent peak
@@ -224,11 +223,10 @@ a8d258f0	Lights up whenever a kick (bass drum) is found. During the sync test it
 2f3d51ba	Sets the effect, intensity and palette to a recommended combination. Changing the settings below yourself makes it "Custom"
 932cdbc7	Music style
 2c274961	How the LEDs move with the music. To choose per device, use "Devices" below
-4d0abffb	"Strobe" flashes hard, so it can be chosen only when "Reduce flashing" below is off.
 c87d9699	Intensity
 541920a5	How strongly the beat lights up and how often the color changes. Choosing one also sets "Smoothness", "Punch" and "Darkest" below to match
 a800602a	Palette
-5c25c402	The set of colors used for music sync. On every beat it moves to the next color in the set
+3ec973ca	Color palette for music lighting.
 758ca518	Gain
 ab2026d3	+ makes quiet sound light up brightly, for quiet songs or low listening volume. − makes it bright only for loud sound
 65d61087	Beat sensitivity
@@ -250,9 +248,9 @@ a48b2636	Moves the light 10 ms earlier
 61644194	Use + when the light comes before the sound, − when it comes after. Bluetooth earphones and speakers and TVs (HDMI) play sound late, so use +
 0e36045a	Bluetooth plays sound late, so +150–200 ms is recommended
 ece319ca	Set +180 ms
-e02412ea	While on, strong flashes are limited to 3 per second (to protect the eyes and health of people sensitive to light). Strobe is not used either
+32e5db89	While on, strong flashes are limited to 3 per second (to protect the eyes and health of people sensitive to light)
 ff4e5cc2	Reduce flashing
-a2bb37bc	Limits strong flashes to 3 per second. Turning it off makes "Strobe" available
+68a5628b	Limits strong flashes to 3 per second
 03e1f9ef	⚠ The lights may flash intensely. If flashing light makes you feel unwell, turn "Reduce flashing" back on right away.
 dc8c4f99	Tempo
 9c0a6ff9	Auto: once it has the song's tempo, it predicts the beats and lights up without delay. Kick only: no prediction; lights up only when the bass drum hits. Off: uses neither tempo nor beats, only the loudness
@@ -694,7 +692,6 @@ d3d56cef	The target {0:F0}°C cannot be reached even at full speed ({1:F1}°C at
 7c323904	Starting the load…
 be843d5e	Start a game or benchmark (it begins automatically once GPU usage exceeds 70%)
 83a5ad8f	Waiting for it to heat up at full speed…
-ac818524	Waiting for the temperature to settle at {0:F0}%… (step {1} / {2})
 f8650f35	Stopping the load and returning to normal control…
 882d4f38	Done
 9ea783e1	Stopped: {0}
@@ -1037,36 +1034,23 @@ f7121884	Chill (relaxed)
 40238fad	Party
 4c4b9639	Club (intense)
 58c4acf6	Visualizer
-1ffc1da1	Movies & games
 a4d4ce26	Custom
 68a0416e	Slowly changing colors
 2ee44588	Off
 9a137ab5	{0} {1} (default {2})
 975db0d4	Color change on beat
-6f6c9db1	Switches to the next color on every beat, flashes brightly and fades out
-1acb0fe4	Pulse
-fac18e83	Mix
-143bf4c6	Colors blend according to the strength of the bass, mids and highs
+24bb482c	Flashes on every kick and switches to the next color at the start of a bar or a new section
 d47d8919	VU meter
 c9601c4a	Lights up from the edge as far as the volume reaches, with a peak dot that slowly falls
 b9056e5c	Spectrum
 1f55a216	Spreads bass to treble along the LEDs, each lighting up by its strength
-ae14d063	Energy
-9097b7af	Bands for the bass, mids and highs each grow by their strength
-a8728d89	Flowing wave
-0dbddecd	The color of the current sound flows in from the edge (waterfall)
 7579942a	Ripple
 8f1dc3a2	A ring of light spreads out on every kick
 5c1949b1	Sparkle
-6ddfa1c0	Kicks make everything glow softly, snares give a burst of light, and hi-hats make white specks sparkle
+88272375	Kicks make everything glow softly, snares give a burst of light, hi-hats make white specks sparkle, and guitar attacks run a coloured streak
 fa793be1	Parts play their roles
-2683fb56	Each part lights up to its own sound, such as fans to the bass, the graphics card to the mids and memory to the highs. Several fan headers are split between bass, mids and highs (change it with the zone setting "Sound to react to")
-74a4376d	Tempo follow
-934997b6	A band of light runs to the beat
+e92a2994	Each part lights up to its own sound, such as fans to the bass, the graphics card to the mids and memory to the highs. Bass, mids and highs can be told apart by color. Several fan headers are split between bass, mids and highs (change it with the zone setting "Sound to react to")
 5d88da90	Mood
-e134b40a	Colors change slowly with the mood of the song (no flashing)
-c3873745	Strobe
-e266b3b4	Flashes strongly on the beat (only when "Reduce flashing" is off)
 3cada106	Match the part
 78733543	Bass (kick, bass)
 23099007	Mids (snare, vocals)
@@ -1219,7 +1203,6 @@ fb923916	 rainbow (flowing) and breathing become a still rainbow and a static co
 8ed6eae0	If the timing differs from other devices, adjust it with "Light earlier"
 8444c4be	LEDs connected through on-board wiring (I2C), such as memory, take time for each send, so in auto mode they are limited to 8 updates per second (change this with "Updates per second" on the right). Color changes in music sync are sent right away without waiting for the regular update. The same color is resent every 60 seconds
 2a5ce6d5	Auto (global setting)
-7a4362e3	 (intense flashing)
 2e7616aa	Purple
 d624abb5	Blue
 1740eec3	Light blue
@@ -1231,11 +1214,8 @@ f88712a8	White
 f73d92df	Off (turn the LEDs off)
 faccb7c6	Static color (use the color chosen in "Color")
 8261ae67	Leave as is (stop at the last color)
-d24118e5	\nDo not use this if you are sensitive to flashing light. It can't be chosen while "Reduce flashing" is on
-fa397c65	⚠ Flashes intensely
 5812e0db	Lights up only in the color chosen in "Color & brightness". The color stays the same; only the brightness follows the sound
 a3ff6ad5	Lights up in the color chosen in "Color & brightness" and its neighboring colors on both sides
-a0c6bf54	Lights up in the colors of {0}. On every beat, it switches to the next color in the set
 b4e8382b	Auto (predictive)
 3084a002	Once it has caught the song's tempo, it predicts the next beat and lights up without delay (recommended)
 90659e1d	Kick only
@@ -1247,12 +1227,10 @@ df788b17	The color chosen in "Color" slowly brightens and dims
 3b1d43a4	Turns the LEDs off when the sound stops
 25525b81	{0} ({1})
 bb1834e5	You have adjusted the settings below yourself. Choosing another preset returns to its combination
-1cf255e8	For work or night time. Colors shift slowly and gently
 9df36e7d	The safe choice. Pulses pleasantly with the bass
 4beab2e2	A lively effect where a ring of light spreads with every drum hit
 f6ac23cd	The most intense effect, with strong color changes on every beat
 b7e7d574	Spreads bass to treble along the LEDs so you can see the sound
-7c3c3b30	A subtle, warm effect that doesn't get in the way of movies or games
 355fd781	{0}\nEffect: {1} · Intensity: {2} · Colors: {3}
 67f5dc44	\n(Turning off "Reduce flashing" makes it flash even more intensely)
 e3c74af7	Relaxed and calm. Colors change slowly every bar
@@ -1260,7 +1238,6 @@ e3c74af7	Relaxed and calm. Colors change slowly every bar
 39194da9	Snappy response. Colors change every beat
 283c2191	Maximum response. Colors change instantly on every beat and the start of each bar is emphasized
 899bfdf5	{0}\nWhen chosen: response {1:F0} ms · smoothing {2:F0} ms · contrast {3:F0}% · darkest {4:F0}%
-1763988d	Flow speed
 782c7098	Currently at half tempo
 3da3fc0d	Currently at double tempo
 587c7525	All values are defaults (those of intensity "{0}")
@@ -1486,7 +1463,6 @@ bb5165cb	Turn LED link off
 9803ac5d	LED effect: off
 633b3564	LED effect: lights off
 79fe6abe	LED effect: {0}
-88443ff4	Flashes intensely. Can be chosen after turning off "Reduce flashing" on the Lighting screen
 d6903426	Profile: {0}
 9dc4a781	Deletes the {0} in the app folder after the app exits.
 e0cb734a	The app itself (exe, etc.) and other files are kept. If you might use it again, leave this off.
@@ -1689,9 +1665,7 @@ d92849da	Report a problem…
 42a72e3a	Auto setup
 4610da9f	GPU: could not measure because no temperature or usage sensor was found
 462bc50c	• You check the result before applying it, so stopping midway changes nothing.
-47647013	Steps: {0} · about {1} min. Pumps are excluded.
 48090db5	During measurement
-4ac2f56e	Starting auto setup (about {0} min).\n\n
 50136e19	Choose the fans to measure and the CPU and/or GPU. Pumps are excluded (they run as usual).
 53661bf6	measure {0} fan(s)
 5899b660	• Measure with CPU: loads the CPU fully and lowers the fans step by step from 100%.
@@ -1737,7 +1711,6 @@ fdc48725	Choose at least one fan to measure, and the CPU and/or GPU.
 fe39437d	Tip: afterwards, measure on the "Auto setup" page to build the quietest curves that suit this PC (about 20–30 min).
 140786db	About 1–2 min per fan. Once the stop speed is known, the minimum speed is also set to a safe value
 14e2760b	Measure fans not measured yet first
-08749344	Measuring again gives curves that stay quiet and safe in this season too (about 20–30 min).
 5f83a291	The CPU idle temperature is about {0:F0}°C higher than when auto setup measured it (the room seems warmer).
 8d7a30b2	Open auto setup
 c66cfe16	The room is about {0:F0}°C warmer than when auto setup measured it.
@@ -1961,7 +1934,7 @@ d71badc6	Switch to a curve based on "{0}"
 d0514409	In profile "{0}", switched to the standard curve based on "{1}".
 dc31499c	Virtual sensor "{0}": the source sensors ({1}) can't be read, so it is calculated from the remaining sensors only.
 a0b3b7dd	Instruments
-3c260d3f	The kick lights everything, the snare one side, hi-hats small sparks, the bass the far end, the voice the overall brightness, and guitar or keys a flowing light. You can tell instruments apart even with a single color (Selected color only)
+139d2c30	The kick lights everything, the snare one side, hi-hats small sparks, the bass the far end, the voice the overall brightness, and guitar or keys a flowing light. You can tell instruments apart even with a single color (Selected color only). Small zones and slow devices show fewer details.
 d3efe37c	By instrument
 e8d8b63a	Drums only
 31b76718	By pitch (lows, mids, highs)
@@ -1980,24 +1953,29 @@ d5a051f9	Speed needed to hold {0:F0}°C: {1:F0}% or less (lower speeds were not 
 0c8c7106	* The lowest speed that holds the target was not measured, so this curve won't be applied even if you press Apply (the current curve stays)
 e2a336cd	The lowest speed that holds the target was not measured, so no curve was applied (the current curve stays).
 90a68504	Below {0:F0}%, the speed barely changes (the fan's own minimum speed).
-97a3aac7	Reacts to: lights up on the beat (on kicks while the tempo isn't found; on the bass when tempo is turned off and on graphics cards and memory). The color changes every 1–4 beats, depending on the intensity
-6d6e85e7	Reacts to: swells on the beat and moves gently with the bass between beats (on kicks while the tempo isn't found; on the bass when tempo is turned off and on graphics cards and memory). The color shifts slowly over time
-3704a505	Reacts to: takes the color of whichever is strongest of the lows, mids and highs
+f82e6ca4	Reacts to: lights up on kicks (snares lighter, beats without drums stay dark; on the bass when tempo is turned off). The color changes on the kick at the start of a bar and at section changes
 ba3eca1b	Reacts to: the length follows the volume, and it bounces on kicks and snares
-81cd1e18	Reacts to: lights up with the strength of each pitch, from low to high
-210faf7d	Reacts to: each band grows with the strength of the lows, mids and highs
-a35cc263	Reacts to: the colors of the lows, mids and highs playing right now flow along
-a0098d0d	Reacts to: a ring of light appears on each kick (on the beat once the tempo is found)
-e367d987	Reacts to: kicks, snares and hi-hats each light up in a different way
+55d26131	Reacts to: the bass end lights on the kick, and the rest up to the highs lights with the strength of each pitch (each pitch has its own color)
+1b304b0e	Reacts to: a ring of light appears on each kick (bass drum), and on big sounds such as explosions. Once the tempo is found, it lights ahead of time for repeating kicks
+06cc66f6	Reacts to: kicks, snares, hi-hats and note attacks such as guitar (once the tempo is locked) each light up in a different way
 4a0ca652	Reacts to: only the sound chosen for each part (zone): lows, mids, highs or an instrument
 3d52d090	Reacts to: each instrument (on graphics cards and memory, it swells on the beat in the color of the instrument that stands out)
-630581a9	Reacts to: a band of light runs in time with the beat (tempo)
-e411765c	Reacts to: changes slowly with the brightness of the sound (low or high pitched) and the volume
-4c402832	Reacts to: the first beat of each bar (strong kicks while the tempo isn't found)
-e532ec45	Pulses with the beat and leaves a long, soft afterglow. The color does not change on the beat; it shifts slowly
-6313ac02	Checks the last 2 seconds of sound every second. Colors change over a few seconds and never flash. Colors don't change with the "Selected color only" or "Colors close to the selected color" palettes, or with the VU meter, Strobe and "Parts play their roles" styles
+db443d49	Checks the last 2 seconds of sound every second. Colors change over a few seconds and never flash. Colors don't change with the "Selected color only" or "Colors close to the selected color" palettes, or with the VU meter and "Parts play their roles" styles
 419d7bd1	AI (CED-Tiny) recognizes the instrument that stands out in each part of a song (vocals, guitar, piano, brass, synth, strings) and changes the colors slowly (blue for vocals, gold for brass, orange for guitar, and so on). With a single color, it changes how the "Instruments" style moves instead. It runs only on this PC and uses a little CPU and memory
 eb06c11b	Graphics card: direct writes (up to {0} per second{1})
 965f43a6	The app writes to this graphics card directly (over NVIDIA's I2C), not through OpenRGB. A single-color zone is written in one go, so it is fast, and the brightness follows the music too.
 0ac5666c	When the LEDs have different colors, each write takes about 35 ms, so on auto it sends up to 10 times per second (on the beat it sends right away without waiting for the regular send).
 c3734abc	You can change this with "Updates per second" on the right, but more uses more CPU. Frames where the LEDs have different colors top out at about 14 per second even if you raise it (the app rests as long as each write takes)
+8dcbb878	 (still rising; predicted from the measured {0:F1} °C)
+f4726ccb	Waiting for the temperature to settle at {0:F0}%. This step decides the speed you need, so it waits up to {1:F0} min for the liquid cooler's coolant to warm up fully (step {2} / {3}, {4} elapsed)
+42c9f249	Waiting for the temperature to settle at {0:F0}%… (step {1} / {2}, {3} elapsed, up to {4:F0} min)
+10e83d72	Steps: {0} · about {1}–{2} min (the longer time with a liquid cooler). Pumps are excluded.
+bc5be07b	• A liquid cooler's coolant warms up slowly, so the steps that decide the speed you need are measured for up to {0:F0} min until the temperature settles.
+0b51d73d	Starting auto setup (about {0}–{1} min).\n\n
+bbdc7d0b	Now {0:F0}°C / fan {1:F0}% / expected to settle at {2:F0}°C
+19569812	* Steps marked ↑ were still warming up when measured. The app predicted where they settle and added a margin when working out the speed you need
+5cbcfec8	* So the fans do not suddenly speed up under a long load, the curve rises gradually from 10°C below the target and reaches {0:F0}% at 2°C below the target
+903dee0e	Measuring again gives curves that stay quiet and safe in this season too (about 30–60 min).
+47437bdc	Slowly shifts through the palette colors. It stays on one color for a while, then glides smoothly to the next (does not react to sound, no flashing)
+cb281e71	Rainbow at 1× takes 30 s per cycle (10 s at 3×, 3 s at 10×); breathing at 1× takes 6 s per breath. Mood at 1× moves to the next color every 8 s
+9409032e	For work or night time. Lights up softly and subtly with the instruments

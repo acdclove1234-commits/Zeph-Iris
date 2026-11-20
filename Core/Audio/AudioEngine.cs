@@ -723,7 +723,7 @@ public sealed class AudioEngine
         // 強調した値は、それぞれの最近の中央値を基準に広げる（音圧の高い曲では強調した値もいつも 0.8 前後になり、拍が見えないため）
         bool track = open && activity >= OnsetDetector.MinActivity;
         f.SubE = _expSub.Apply(_bands.GroupPunch[0], track);
-        // 低音の強調した値には、遅れの少ないキックの検出も混ぜる（パルス・ビートで色替えが使う）
+        // 低音の強調した値には、遅れの少ないキックの検出も混ぜる（ビートで色替えなどが使う）
         f.BassE = _expBass.Apply(Math.Max(_bands.GroupPunch[1], KickIntoBass * _kick.KickPunch), track);
         f.MidE = _expMid.Apply(_bands.GroupPunch[2], track);
         f.TrebleE = _expTreble.Apply(_bands.GroupPunch[3], track);
@@ -732,6 +732,7 @@ public sealed class AudioEngine
         f.LoudDb = (float)Math.Max(-120, _bands.LoudDb);
         f.RmsDb = (float)Math.Max(-120, rmsDb);
         f.CeilingDb = (float)_bands.CeilingDb;
+        f.ProgramPeakDb = (float)Math.Max(-120, _bands.ProgramPeakDb);
         f.CentroidHz = (float)_bands.CentroidHz;
         f.Activity = (float)activity;
         f.GateOpen = open;

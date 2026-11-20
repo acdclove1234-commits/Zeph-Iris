@@ -34,9 +34,11 @@ public sealed class TuneStepVm
     public required AutoTuneStep Step { get; init; }
     public required double Target { get; init; }
     public string DutyText => $"{Step.Duty:F0}%";
-    public string TempText => $"{Step.SteadyTemp:F1} °C";
+    /// <summary>落ち着く温度（測り終えたときもまだ上がっていた段は ↑ を付ける）</summary>
+    public string TempText => $"{Step.SteadyTemp:F1} °C{(Step.StillRising ? " ↑" : "")}";
     public string RpmText => Step.AvgRpm is double r ? $"{r:N0} rpm" : "";
-    public SolidColorBrush Brush => Step.SteadyTemp <= Target - 1.5 ? Palette.Ok : Step.SteadyTemp <= Target + 2 ? Palette.Warn : Palette.Danger;
+    /// <summary>色は、必要な回転数を決めるときの温度（まだ上がっていた段は余裕を足した温度）で付ける</summary>
+    public SolidColorBrush Brush => Step.SafeTemp <= Target - AutoTuner.NeedMargin ? Palette.Ok : Step.SafeTemp <= Target + 2 ? Palette.Warn : Palette.Danger;
 }
 
 public partial class MainWindow
@@ -132,7 +134,8 @@ public partial class MainWindow
         if (cal > 0) parts.Add(L($"特性を測る {cal} 台"));
         foreach (var s in steps.Where(s => s.Kind != SetupStepKind.Calibrate))
             parts.Add(s.Kind == SetupStepKind.TuneGpu ? L($"GPU で測る（{s.Fans.Count} 台）") : L($"CPU で測る（{s.Fans.Count} 台）"));
-        TuneStatus.Text = L($"手順: {string.Join(" → ", parts)}・約 {AutoSetupPlan.EstimateMinutes(steps)} 分。ポンプは対象外です。");
+        int quick = AutoSetupPlan.EstimateMinutes(steps), slow = AutoSetupPlan.EstimateLongMinutes(steps);
+        TuneStatus.Text = L($"手順: {string.Join(" → ", parts)}・約 {quick}〜{slow} 分（簡易水冷は長いほう）。ポンプは対象外です。");
     }
 
     private void OnTuneTargetChanged(object sender, RoutedEventArgs e) => ShowSetupPlan();
@@ -191,11 +194,13 @@ public partial class MainWindow
         if (cal > 0) lines.Add(L($"・特性を測る（{cal} 台）: ファンが 1 台ずつ全開になったり止まったりします。"));
         if (cpu) lines.Add(L("・CPU で測る: CPU に全力で負荷をかけ、ファンを 100% から少しずつ下げます。"));
         if (gpu) lines.Add(L("・GPU で測る: アプリが GPU に全力で負荷をかけ、同じように測ります（ゲームの起動は要りません）。"));
+        lines.Add(L($"・簡易水冷は冷却液がゆっくり温まるので、必要な回転数が決まる段は、温度が落ち着くまで長くて {AutoTuner.DecisiveMaxHold.TotalMinutes:F0} 分かけて測ります。"));
         lines.Add(L("・ファンの音が大きくなったり小さくなったりします。重いアプリは閉じておいてください。"));
         lines.Add(L($"・CPU は {CpuAbortTemp():F0}°C、GPU は {GpuAbortTemp:F0}°C に達したら、すぐに中止していつもの制御に戻します。"));
         lines.Add(L("・結果は確かめてから適用するので、途中で中止しても設定は変わりません。"));
+        int quick = AutoSetupPlan.EstimateMinutes(steps), slow = AutoSetupPlan.EstimateLongMinutes(steps);
         var answer = MessageBox.Show(this,
-            L($"自動セットアップを始めます（約 {AutoSetupPlan.EstimateMinutes(steps)} 分）。\n\n") + string.Join("\n", lines),
+            L($"自動セットアップを始めます（約 {quick}〜{slow} 分）。\n\n") + string.Join("\n", lines),
             L("自動セットアップ"), MessageBoxButton.OKCancel, MessageBoxImage.Information);
         if (answer != MessageBoxResult.OK) return;
 
@@ -328,9 +333,12 @@ public partial class MainWindow
         _tuner.OnSnapshot(s);
         UpdateSetupProgress(_tuner.Progress);
         TuneStatus.Text = StepPrefix() + (CurrentSetupStep?.Kind == SetupStepKind.TuneGpu ? "GPU: " : "CPU: ") + _tuner.StatusText;
-        TuneLive.Text = _tuner.Current is AutoTuner.Phase.Warmup or AutoTuner.Phase.Steps
-            ? L($"現在 {_tuner.LastTemp:F0}°C ／ ファン {_tuner.CurrentDuty:F0}%")
-            : L($"現在 {_tuner.LastTemp:F0}°C");
+        // まだ温度が上がっている段は、落ち着くと予測した温度も見せる（長く待つ理由が分かるように）
+        TuneLive.Text = _tuner.PredictedTemp is double predicted && predicted >= _tuner.LastTemp + 1
+            ? L($"現在 {_tuner.LastTemp:F0}°C ／ ファン {_tuner.CurrentDuty:F0}% ／ 落ち着く予測 {predicted:F0}°C")
+            : _tuner.Current is AutoTuner.Phase.Warmup or AutoTuner.Phase.Steps
+                ? L($"現在 {_tuner.LastTemp:F0}°C ／ ファン {_tuner.CurrentDuty:F0}%")
+                : L($"現在 {_tuner.LastTemp:F0}°C");
         TestChart.Range = (s.Time - _tuner.StartedAt) + TimeSpan.FromSeconds(10);
         if (TestPage.Visibility == Visibility.Visible) TestChart.Refresh();
         if (_tuner.Current == AutoTuner.Phase.Done)
@@ -428,7 +436,7 @@ public partial class MainWindow
         Logger.Info($"季節: 自動セットアップのときより {(byRoom ? "室温" : "CPU の休んでいるときの温度")} が {rise:F1}°C 高いので、測り直しを勧めました");
         ShowAlert((byRoom ? L($"室温が、自動セットアップで測ったときより約 {rise:F0}°C 高くなっています。")
                           : L($"CPU が休んでいるときの温度が、自動セットアップで測ったときより約 {rise:F0}°C 高くなっています（室温が上がったようです）。"))
-                  + L("もう一度測ると、今の季節でも静かで安全なカーブにできます（約 20〜30 分）。"),
+                  + L("もう一度測ると、今の季節でも静かで安全なカーブにできます（約 30〜60 分）。"),
             AlertLevel.Info, L("自動セットアップを開く"), () => NavTest.IsChecked = true);
     }
 
@@ -480,9 +488,16 @@ public partial class MainWindow
                 ? L($"{target:F0}°C を守るのに必要な回転数: {Math.Max(need, minDuty):F0}% 以下（これより低い回転は測れていません）")
                 : L($"{target:F0}°C を守るのに必要な回転数: 約 {Math.Max(need, minDuty):F0}%");
         TuneNeedText.Foreground = insufficient ? Palette.Danger : known ? Palette.Ok : Palette.Warn;
-        TuneAbortText.Text = !known
-            ? L("※ 目標を守れるいちばん低い回転数まで測れていないため、適用してもこのカーブは入れません（今のカーブのままです）")
-            : r.AbortReason is null ? "" : L($"※ 途中で終わったため、測れた段だけで作っています（{r.AbortReason}）");
+        var notes = new List<string>();
+        if (!known) notes.Add(L("※ 目標を守れるいちばん低い回転数まで測れていないため、適用してもこのカーブは入れません（今のカーブのままです）"));
+        else if (r.AbortReason is not null) notes.Add(L($"※ 途中で終わったため、測れた段だけで作っています（{r.AbortReason}）"));
+        bool warn = notes.Count > 0;
+        if (known && r.Steps.Any(st => st.StillRising))
+            notes.Add(L("※ ↑ の段は、測り終えたときもまだ温度が上がっていました。落ち着く温度を予測し、余裕を足して必要な回転数を決めています"));
+        if (known && !insufficient && Math.Max(need, minDuty) < AutoTuner.CurveFloor)
+            notes.Add(L($"※ 長い負荷で急に回り出さないよう、カーブは目標の 10°C 手前から少しずつ上げ、目標の 2°C 手前で {AutoTuner.CurveFloor:F0}% にしています"));
+        TuneAbortText.Text = string.Join("\n", notes);
+        TuneAbortText.SetResourceReference(System.Windows.Controls.TextBlock.ForegroundProperty, warn ? "WarnBrush" : "MutedBrush");
         TuneCurve.Points = TuneCurveFor(kind, target);
         TuneCurve.Calibration = Config.FindCalibration(r.Fans[0].ControlId);
         TuneCurve.SetRange(20, 100);

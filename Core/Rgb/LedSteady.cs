@@ -24,7 +24,6 @@ namespace ProFanController;
 /// 新しい色が保った明るさで一瞬光る（色替えの途中のちかっとした光）ことがない。
 /// 色が大きく変わったとき（いちばん強い成分を 1 にそろえた色の差が ColorJump 以上）は、新しい音とみなして
 /// 向きを変えるのを待たない（暗くなる速さの上限だけで、前の色から新しい色へ混ぜる）。
-/// ストロボ（白く短く光らせるのが光り方そのもの）には使わない
 /// </summary>
 public sealed class LedSteady
 {
@@ -49,22 +48,19 @@ public sealed class LedSteady
         /// <summary>1〜3 をすべて</summary>
         Full,
         /// <summary>
-        /// 光が LED の上を動く光り方（波紋・流れる波）: 2 の「明るくなってから暗くし始めない」を使わない
-        /// （通り過ぎた光が 75 ミリ秒残って、輪や波が尾を引くため）。小さな上下の無視・暗くなる速さの上限は使う
+        /// 光が LED の上を動く光り方（波紋）: 2 の「明るくなってから暗くし始めない」を使わない
+        /// （通り過ぎた光が 75 ミリ秒残って、輪が尾を引くため）。小さな上下の無視・暗くなる速さの上限は使う
         /// </summary>
         Moving,
         /// <summary>直さない</summary>
         Skip,
     }
 
-    /// <summary>
-    /// 光り方ごとの直し方。ストロボ（短い点滅が光り方そのもの）と、ムード（点滅せず、曲の雰囲気でゆっくり変わる。
-    /// 向きを変えるところで待つと、音の大きさへの付き方が鈍る）は直さない
-    /// </summary>
-    public static Kind KindOf(EffectVariant v) => !Enabled || v is EffectVariant.Strobe or EffectVariant.Mood ? Kind.Skip
-        : v is EffectVariant.Ripple or EffectVariant.Scroll ? Kind.Moving : Kind.Full;
+    /// <summary>光り方ごとの直し方（光が動く波紋は Moving、ほかは Full。使わない設定なら Skip）</summary>
+    public static Kind KindOf(EffectVariant v) => !Enabled ? Kind.Skip
+        : v is EffectVariant.Ripple ? Kind.Moving : Kind.Full;
 
-    /// <summary>使う光り方（ストロボ以外）</summary>
+    /// <summary>使う光り方（使わない設定でなければ、どれも）</summary>
     public static bool Applies(EffectVariant v) => KindOf(v) != Kind.Skip;
 
     /// <summary>使うか（調べる用に、テストから前と比べるために変えられる。アプリの中では変えない）</summary>
@@ -83,7 +79,7 @@ public sealed class LedSteady
 
     /// <summary>
     /// 光の量（明るさを掛けたあと）を、その場で直す。kinds[i] は LED ごとの直し方（null なら全部 kind）。
-    /// Skip の LED は直さず、状態も今の値にそろえる（ゾーンだけストロボにしたときなど）
+    /// Skip の LED は直さず、状態も今の値にそろえる
     /// </summary>
     public void Apply(LinColor[] px, int n, float dt, Kind[]? kinds = null, Kind kind = Kind.Full)
     {

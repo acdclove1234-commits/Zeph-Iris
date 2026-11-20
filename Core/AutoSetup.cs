@@ -21,8 +21,13 @@ public static class AutoSetupPlan
 {
     /// <summary>キャリブレーション 1 台の目安（秒。各段で回転数が落ち着くまで待つので、回転がゆっくり変わるファンは長くなる）</summary>
     public const double CalibrateSec = 140;
-    /// <summary>CPU・GPU の測定 1 回の目安（秒）</summary>
-    public const double TuneSec = 600;
+    /// <summary>CPU・GPU の測定 1 回の目安（秒。空冷のように温度がすぐ落ち着くとき）</summary>
+    public const double TuneSec = 1500;
+    /// <summary>
+    /// CPU・GPU の測定 1 回の長いほうの目安（秒）。簡易水冷は冷却液がゆっくり温まるので、
+    /// 必要な回転数が決まる段を最長 10 分待つ（AutoTuner.DecisiveMaxHold）
+    /// </summary>
+    public const double TuneLongSec = 1800;
 
     /// <summary>
     /// 手順を作る。
@@ -56,4 +61,8 @@ public static class AutoSetupPlan
     /// <summary>全体の目安（分。進み具合の表示用）</summary>
     public static int EstimateMinutes(IEnumerable<SetupStep> steps)
         => (int)Math.Ceiling(steps.Sum(s => s.Kind == SetupStepKind.Calibrate ? CalibrateSec : TuneSec) / 60);
+
+    /// <summary>全体の長いほうの目安（分。簡易水冷で、冷却液が温まりきるまで待ったとき）</summary>
+    public static int EstimateLongMinutes(IEnumerable<SetupStep> steps)
+        => (int)Math.Ceiling(steps.Sum(s => s.Kind == SetupStepKind.Calibrate ? CalibrateSec : TuneLongSec) / 60);
 }

@@ -11,7 +11,7 @@ namespace ProFanController;
 /// 低音の強さは 10.7 ミリ秒ごとに読むので、ベースの波（50〜60 Hz）と読むタイミングがずれて、値が少しずつ上下する。
 /// そのため 1 回のキックの光が「明るく → 少し暗く → もっと明るく」と段をつけて立ち上がり、ちかちかして見えていた。
 /// 明るくなった直後の小さな下がりだけを止めるので、光り始めの時刻は変わらない。
-/// 半分より下へ一気に暗くなるとき（ストロボ・消灯・光り方の切り替え）は、待たずに暗くする。
+/// 半分より下へ一気に暗くなるとき（消灯・光り方の切り替えなど）は、待たずに暗くする。
 /// 保つ間は、今の色を山の明るさにするのではなく、足りない分を前に出した光の色で足す（LedSteady.Hold。色が変わったときに、
 /// 新しい色が山の明るさで一瞬光らないように）。保ち終わったら、一気に落とさず時定数 ReleaseTauSec で暗くする。
 /// 色が大きく変わったとき（LedSteady.ColorChanged）は保たない（新しい色の音として、混ぜながら暗くするだけ）
@@ -29,13 +29,13 @@ public sealed class AttackHold
     public static double HoldSec { get; set; } = DefaultHoldSec;
 
     /// <summary>
-    /// 使う光り方: パルス・ビートで色替え・ミックス・パーツごとの役割・スペクトラムと、テンポ追従・流れる波・きらめき
-    /// （テンポ追従の帯・流れる波・きらめきの下地も、拍の光と低音で明るさが決まるので、立ち上がりが段つきになる）。
+    /// 使う光り方: ビートで色替え・パーツごとの役割・楽器で光る・スペクトラムと、きらめき
+    /// （きらめきの下地も、拍の光と低音で明るさが決まるので、立ち上がりが段つきになる）。
     /// 波紋は使わない: 細い輪が 1 コマに 1〜2 個ずつ進むので、通り過ぎた LED を 2 コマ保つと、いちばん明るい所が輪の
     /// 3 個後ろになって輪が遅れて見える（波紋のちらつきは LedSteady の「光が動く光り方」の直し方で止める）
     /// </summary>
-    public static bool Applies(EffectVariant v) => v is EffectVariant.Pulse or EffectVariant.BeatHue or EffectVariant.Mix or EffectVariant.Role
-        or EffectVariant.Ensemble or EffectVariant.Spectrum or EffectVariant.Chase or EffectVariant.Scroll or EffectVariant.Sparkle;
+    public static bool Applies(EffectVariant v) => v is EffectVariant.BeatHue or EffectVariant.Role
+        or EffectVariant.Ensemble or EffectVariant.Spectrum or EffectVariant.Sparkle;
 
     private float[] _peak = Array.Empty<float>();
     private float[] _age = Array.Empty<float>();

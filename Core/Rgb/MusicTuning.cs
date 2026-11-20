@@ -71,9 +71,8 @@ public static class MusicPresets
     public const string Party = "Party";
     public const string Club = "Club";
     public const string Visualizer = "Visualizer";
-    public const string Cinema = "Cinema";
     public const string Custom = "Custom";
-    public static readonly string[] All = { Chill, Groove, Party, Club, Visualizer, Cinema, Custom };
+    public static readonly string[] All = { Chill, Groove, Party, Club, Visualizer, Custom };
 
     public static string Label(string id) => id switch
     {
@@ -82,7 +81,6 @@ public static class MusicPresets
         Party => L("パーティー"),
         Club => L("クラブ（激しい）"),
         Visualizer => L("ビジュアライザー"),
-        Cinema => L("映画・ゲーム"),
         Custom => L("カスタム"),
         _ => id,
     };
@@ -112,7 +110,7 @@ public static class IdleEffects
 /// </summary>
 public sealed record IntensityProfile(
     string Name, double ReactionMs, double SmoothnessMs, double MinBrightness, double FlashAmp, double Punch,
-    int ColorStepBeats, double CrossfadeMs, bool DownbeatAccent, bool StrobeAllowed);
+    int ColorStepBeats, double CrossfadeMs, bool DownbeatAccent);
 
 /// <summary>LED の描画で使う、音楽連動の設定を決めたもの（1 コマごとに作り直さない。設定が変わったときだけ作る）</summary>
 /// <param name="Effect">光り方（MusicStyles）</param>
@@ -120,14 +118,13 @@ public sealed record IntensityProfile(
 /// <param name="FlashAmp">ビートの光の強さ（0〜1）</param>
 /// <param name="ColorStepBeats">色を次へ進める間隔（拍。1 / 2 / 4）</param>
 /// <param name="CrossfadeMs">色の切り替えにかける時間（ミリ秒）</param>
-/// <param name="StrobeAllowed">ストロボを使ってよい（強さ「激しい」で、点滅を抑える設定がオフ）</param>
 /// <param name="AudioDelayMs">音の遅れの補正（ミリ秒。+ で LED を遅らせる）</param>
 /// <param name="Speed">流れる速さの倍率（RgbConfig.Speed）</param>
 /// <param name="RoleSet">「パーツに合わせる」のゾーンの分け方（MusicRoleSets。音の高さ・楽器・ドラムだけ）</param>
 /// <param name="SceneColors">楽器の AI の場面ごとに色を変える（RgbConfig.MusicScenes。ScenePalettes）</param>
 public sealed record ResolvedMusic(
     string Effect, string Intensity, string Palette, double MinBrightness, double FlashAmp, int ColorStepBeats,
-    double CrossfadeMs, bool DownbeatAccent, bool StrobeAllowed, bool ReduceFlashing, double AudioDelayMs,
+    double CrossfadeMs, bool DownbeatAccent, bool ReduceFlashing, double AudioDelayMs,
     string IdleEffect, double IdleDelaySec, string TempoMode, double Speed, string RoleSet = MusicRoleSets.Bands,
     bool SceneColors = false)
 {
@@ -138,10 +135,10 @@ public static class MusicTuning
 {
     private static readonly IntensityProfile[] Profiles =
     {
-        new(Intensities.Subtle, 40, 500, 28, 0.3, 32, 4, 500, false, false),
-        new(Intensities.Moderate, 8, 220, 17, 0.55, 55, 2, 200, false, false),
-        new(Intensities.High, 3, 150, 8, 0.85, 68, 1, 80, false, false),
-        new(Intensities.Intense, 0, 90, 3, 1.0, 85, 1, 0, true, true),
+        new(Intensities.Subtle, 40, 500, 28, 0.3, 32, 4, 500, false),
+        new(Intensities.Moderate, 8, 220, 17, 0.55, 55, 2, 200, false),
+        new(Intensities.High, 3, 150, 8, 0.85, 68, 1, 80, false),
+        new(Intensities.Intense, 0, 90, 3, 1.0, 85, 1, 0, true),
     };
 
     public static IntensityProfile Profile(string intensity) =>
@@ -180,31 +177,22 @@ public static class MusicTuning
         m.MinBrightness = p.MinBrightness;
     }
 
-    /// <summary>「映画」のプリセットだけ、強さの値と違うメリハリ・いちばん暗いとき（明るめで、穏やか）</summary>
-    public const double CinemaPunch = 30, CinemaMinBrightness = 40;
-
     /// <summary>プリセットを選んだとき: 光り方・強さ・パレットなどをまとめて書き換える</summary>
     public static void ApplyPreset(RgbConfig cfg, string preset)
     {
         var m = cfg.Music;
         (string effect, string intensity, string palette) = preset switch
         {
-            MusicPresets.Chill => (MusicStyles.Mood, Intensities.Subtle, Palettes.Ocean),
+            MusicPresets.Chill => (MusicStyles.Ensemble, Intensities.Subtle, Palettes.Ocean),
             MusicPresets.Groove => (MusicStyles.BeatHue, Intensities.Moderate, Palettes.Neon),
             MusicPresets.Party => (MusicStyles.Ripple, Intensities.High, Palettes.Vaporwave),
             MusicPresets.Club => (MusicStyles.BeatHue, Intensities.Intense, Palettes.Neon),
             MusicPresets.Visualizer => (MusicStyles.Spectrum, Intensities.High, Palettes.Rainbow),
-            MusicPresets.Cinema => (MusicStyles.Pulse, Intensities.Subtle, Palettes.Fire),
             _ => (cfg.MusicStyle, m.Intensity, m.Palette),
         };
         cfg.MusicStyle = effect;
         ApplyIntensity(m, intensity);
         m.Palette = palette;
-        if (preset == MusicPresets.Cinema)
-        {
-            m.Punch = CinemaPunch;
-            m.MinBrightness = CinemaMinBrightness;
-        }
         m.Preset = MusicPresets.All.Contains(preset) ? preset : MusicPresets.Custom;
     }
 
@@ -218,7 +206,7 @@ public static class MusicTuning
 
     /// <summary>
     /// 「反応のしかた」の値と、その初期値。「強さ」に結びついた 4 つ（反応の速さ・滑らかさ・メリハリ・いちばん暗いとき）は
-    /// 今の強さの値（「映画」のプリセットを選んでいるときは、その値）、それ以外はアプリの初期値。
+    /// 今の強さの値、それ以外はアプリの初期値。
     /// 音の遅れの補正は、イヤホン・スピーカーに合わせた値なので含めない
     /// </summary>
     public static IReadOnlyList<TuningValue> TuningValues(RgbConfig cfg)
@@ -227,14 +215,13 @@ public static class MusicTuning
         var p = Profile(m.Intensity);
         var d = new MusicConfig();
         var dr = new RgbConfig();
-        bool cinema = m.Preset == MusicPresets.Cinema;
         return new[]
         {
             new TuningValue(L("感度"), m.GainDb, d.GainDb, "{0:+0;-0;0} dB"),
             new TuningValue(L("反応の感度"), cfg.Sensitivity, dr.Sensitivity, "{0:F1}"),
             new TuningValue(L("滑らかさ"), m.SmoothnessMs, p.SmoothnessMs, "{0:F0} ms"),
-            new TuningValue(L("メリハリ"), m.Punch, cinema ? CinemaPunch : p.Punch, "{0:F0}%"),
-            new TuningValue(L("いちばん暗いとき"), m.MinBrightness, cinema ? CinemaMinBrightness : p.MinBrightness, "{0:F0}%"),
+            new TuningValue(L("メリハリ"), m.Punch, p.Punch, "{0:F0}%"),
+            new TuningValue(L("いちばん暗いとき"), m.MinBrightness, p.MinBrightness, "{0:F0}%"),
             new TuningValue(L("反応の速さ"), m.ReactionMs, p.ReactionMs, "{0:F0} ms"),
             new TuningValue(L("明るさに使う音量の幅"), m.DynamicRangeDb, d.DynamicRangeDb, "{0:F0} dB"),
             new TuningValue(L("音の高さのバランス"), m.AutoBalance, d.AutoBalance, "{0:F0}%"),
@@ -255,13 +242,7 @@ public static class MusicTuning
     {
         var m = cfg.Music;
         var d = new MusicConfig();
-        bool cinema = m.Preset == MusicPresets.Cinema;
         ApplyIntensity(m, m.Intensity);
-        if (cinema)
-        {
-            m.Punch = CinemaPunch;
-            m.MinBrightness = CinemaMinBrightness;
-        }
         m.GainDb = d.GainDb;
         m.DynamicRangeDb = d.DynamicRangeDb;
         m.AutoBalance = d.AutoBalance;
@@ -311,9 +292,8 @@ public static class MusicTuning
     {
         var m = cfg.Music ?? new MusicConfig();
         var p = Profile(m.Intensity);
-        bool reduce = m.ReduceFlashing;
         return new ResolvedMusic(
-            Effect: MusicStyles.All.Contains(cfg.MusicStyle) ? cfg.MusicStyle : MusicStyles.BeatHue,
+            Effect: MusicStyles.Normalize(cfg.MusicStyle),
             Intensity: p.Name,
             Palette: Palettes.All.Contains(m.Palette) ? m.Palette : Palettes.Rainbow,
             MinBrightness: Math.Clamp(m.MinBrightness, 0, 40) / 100,
@@ -321,8 +301,7 @@ public static class MusicTuning
             ColorStepBeats: p.ColorStepBeats,
             CrossfadeMs: p.CrossfadeMs,
             DownbeatAccent: p.DownbeatAccent,
-            StrobeAllowed: p.StrobeAllowed && !reduce,
-            ReduceFlashing: reduce,
+            ReduceFlashing: m.ReduceFlashing,
             AudioDelayMs: Math.Clamp(m.AudioDelayMs, -100, 400),
             IdleEffect: IdleEffects.All.Contains(m.IdleEffect) ? m.IdleEffect : IdleEffects.Mood,
             IdleDelaySec: Math.Clamp(m.IdleDelaySec, 1, 10),
@@ -348,40 +327,26 @@ public static class MusicTuning
     /// </summary>
     public static string Follows(string effect) => effect switch
     {
-        MusicStyles.BeatHue => L("反応する音: 拍で光る（テンポをつかめないときはキック。テンポを使わない設定とグラボ・メモリでは低音）。強さに応じて 1〜4 拍ごとに色が変わる"),
-        MusicStyles.Pulse => L("反応する音: 拍でふくらみ、拍の間は低音でゆるやかに動く（テンポをつかめないときはキック。テンポを使わない設定とグラボ・メモリでは低音）。色は時間でゆっくり変わる"),
-        MusicStyles.Mix => L("反応する音: 低音・中音・高音のうち、いちばん強い音の色になる"),
+        MusicStyles.BeatHue => L("反応する音: キックで光る（スネアは弱く、ドラムのない拍は暗いまま。テンポを使わない設定では低音）。色は小節の頭のキックと曲の区切りで変わる"),
         MusicStyles.Meter => L("反応する音: 音量で長さが変わり、キックとスネアで弾む"),
-        MusicStyles.Spectrum => L("反応する音: 低い音から高い音まで、高さごとの音の強さで光る"),
-        MusicStyles.Energy => L("反応する音: 低音・中音・高音の強さで、それぞれの帯が伸びる"),
-        MusicStyles.Scroll => L("反応する音: いま鳴っている低音・中音・高音の色が流れていく"),
-        MusicStyles.Ripple => L("反応する音: キック（テンポをつかめば拍）で光の輪が出る"),
-        MusicStyles.Sparkle => L("反応する音: キック・スネア・ハイハットが、それぞれ違う光り方で光る"),
+        MusicStyles.Spectrum => L("反応する音: 低音の端はキックで光り、その先は高い音まで、高さごとの音の強さで光る（色は音の高さごとに決まっている）"),
+        MusicStyles.Ripple => L("反応する音: キック（バスドラム）で光の輪が出る（爆発など大きな音でも）。テンポをつかむと、続けて鳴るキックに先回りして光る"),
+        MusicStyles.Sparkle => L("反応する音: キック・スネア・ハイハットと、ギターなどの音の出だし（テンポをつかんでいるとき）が、それぞれ違う光り方で光る"),
         MusicStyles.Role => L("反応する音: パーツ（ゾーン）ごとに決めた音（低音・中音・高音・楽器）だけ"),
         MusicStyles.Ensemble => L("反応する音: 楽器ごと（グラボ・メモリでは、拍でふくらみ、目立つ楽器の色になる）"),
-        MusicStyles.Chase => L("反応する音: 拍（テンポ）に合わせて光の帯が走る"),
-        MusicStyles.Mood => L("反応する音: 音の明るさ（低い音か高い音か）と音量で、ゆっくり変わる"),
-        MusicStyles.Strobe => L("反応する音: 小節の頭の拍（テンポをつかめなければ強いキック）"),
         _ => "",
     };
 
     /// <summary>光り方の表示名と、光り方の見た目の説明（Describe の 2 行目）</summary>
     private static (string Label, string Description) DescribeLook(string effect) => effect switch
     {
-        MusicStyles.BeatHue => (L("ビートで色替え"), L("ビートのたびに次の色へ切り替わり、ぱっと光って消えていく")),
-        MusicStyles.Pulse => (L("パルス"), L("拍に合わせて脈打ち、ふわっと長く残光が残る。色はビートでは変わらず、ゆっくり移り変わる")),
-        MusicStyles.Mix => (L("ミックス"), L("低音・中音・高音の強さで色が混ざる")),
+        MusicStyles.BeatHue => (L("ビートで色替え"), L("キックのたびにぱっと光り、小節の頭や曲の区切りで次の色へ切り替わる")),
         MusicStyles.Meter => (L("音量メーター"), L("音量の分だけ端から点き、ピークの点がゆっくり落ちてくる")),
         MusicStyles.Spectrum => (L("スペクトラム"), L("LED の並びに低音〜高音を並べ、それぞれの強さで光る")),
-        MusicStyles.Energy => (L("エナジー"), L("低音・中音・高音の帯が、それぞれの強さの分だけ伸びる")),
-        MusicStyles.Scroll => (L("流れる波"), L("今の音の色が端から流れていく（ウォーターフォール）")),
         MusicStyles.Ripple => (L("波紋"), L("キックのたびに光の輪が広がる")),
-        MusicStyles.Sparkle => (L("きらめき"), L("キックで全体がふわっと、スネアでまとまった光、ハイハットで白い粒が光る")),
-        MusicStyles.Role => (L("パーツごとの役割"), L("ファンは低音、グラボは中音、メモリは高音のように、パーツごとに決まった音で光る。ファンの端子がいくつもあれば、低音・中音・高音に分ける（ゾーンの設定「反応する音」で変えられる）")),
-        MusicStyles.Ensemble => (L("楽器で光る"), L("キックは全体、スネアは片側、ハイハットは小さな粒、ベースは端のほう、歌は全体の明るさ、ギターや鍵盤は流れる光で見せる。単色（選んだ色だけ）でも楽器が分かる")),
-        MusicStyles.Chase => (L("テンポ追従"), L("ビートに合わせて光の帯が走る")),
-        MusicStyles.Mood => (L("ムード"), L("曲の雰囲気で色がゆっくり変わる（点滅しない）")),
-        MusicStyles.Strobe => (L("ストロボ"), L("ビートで強く点滅する（「激しい点滅を抑える」をオフにしたときだけ）")),
+        MusicStyles.Sparkle => (L("きらめき"), L("キックで全体がふわっと、スネアでまとまった光、ハイハットで白い粒、ギターの音の出だしで色の帯が走る")),
+        MusicStyles.Role => (L("パーツごとの役割"), L("ファンは低音、グラボは中音、メモリは高音のように、パーツごとに決まった音で光る。低音・中音・高音は色で見分けられる。ファンの端子がいくつもあれば、低音・中音・高音に分ける（ゾーンの設定「反応する音」で変えられる）")),
+        MusicStyles.Ensemble => (L("楽器で光る"), L("キックは全体、スネアは片側、ハイハットは小さな粒、ベースは端のほう、歌は全体の明るさ、ギターや鍵盤は流れる光で見せる。単色（選んだ色だけ）でも楽器が分かる。小さいゾーンや更新の遅い機器では、一部の動きを省きます")),
         _ => (effect, ""),
     };
 }

@@ -1,5 +1,5 @@
 // ==================================================
-// BeatFlashBench.cs - 「ビートで色替え」「パルス」の光が拍に乗っているかを、録音した曲で測る（BFL_WAV を渡したときだけ動く）
+// BeatFlashBench.cs - 「ビートで色替え」の光が拍に乗っているかを、録音した曲で測る（BFL_WAV を渡したときだけ動く）
 //   ・アプリと同じに、ミッドとサイド・拍の AI つきで AudioEngine に 10 ミリ秒ずつ流し、60 コマ／秒で描く
 //   ・光の立ち上がりの数え方は ModeSyncBench と同じ（LED ごとに明るくなった分の山）
 //   ・光ごとに、そのときテンポをつかんでいたか（Locked / Coasting / Unlocked）と、どの経路で光ったか（予測した拍・キックの光・低音・その他）を記録する
@@ -11,7 +11,7 @@
 //     lit    … 物差しの拍のうち、光が立ち上がった割合（±70 ms）
 //     hash   … 送った値すべての指紋（ほかの光り方が変わっていないかを比べる）
 //     br     … 明るさ（LED ごとの max(R,G,B)/255 の平均）の中央値・90 パーセンタイル・0.08 未満のコマの割合（拍に乗せても暗くなりすぎていないか）
-//   調べる用: BFL_WAV=フォルダー;フォルダー（まとまりの名前は BFL_SETS=A;B）、BFL_STYLES=BeatHue,Pulse,…、BFL_DEV=strip,pny,dram（both = strip,pny。OpenRGB を通すグラボ gpu は、このベンチの送り方では何も描かれないので測らない。SlowDeviceBench で測る）、
+//   調べる用: BFL_WAV=フォルダー;フォルダー（まとまりの名前は BFL_SETS=A;B）、BFL_STYLES=BeatHue,Spectrum,…、BFL_DEV=strip,pny,dram（both = strip,pny。OpenRGB を通すグラボ gpu は、このベンチの送り方では何も描かれないので測らない。SlowDeviceBench で測る）、
 //            BFL_SEC=90、BFL_INTENS=Moderate、BFL_AI=0（拍の AI を付けない）、BFL_SONGS=song_01,…、BFL_DUMP=光り方（光ごとの記録を出す）
 //   曲の名前は出さない（song_NN だけ）
 // Dependencies: .NET 8 (MIT License)
@@ -74,7 +74,7 @@ public static class BeatFlashBenchTests
         if (string.IsNullOrEmpty(spec)) return;
         var dirs = spec.Split(';', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
         var setNames = (Environment.GetEnvironmentVariable("BFL_SETS") ?? "A;B;C;D").Split(';');
-        string[] styles = (Environment.GetEnvironmentVariable("BFL_STYLES") ?? $"{MusicStyles.BeatHue},{MusicStyles.Pulse}")
+        string[] styles = (Environment.GetEnvironmentVariable("BFL_STYLES") ?? MusicStyles.BeatHue)
             .Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
         string devSpec = Environment.GetEnvironmentVariable("BFL_DEV") ?? "strip";
         double maxSec = double.TryParse(Environment.GetEnvironmentVariable("BFL_SEC"), System.Globalization.CultureInfo.InvariantCulture, out double ms) && ms > 0 ? ms : 90;
@@ -212,7 +212,6 @@ public static class BeatFlashBenchTests
             {
                 var dev = DeviceOf(dn);
                 var music = MusicTuning.Resolve(cfg) with { Effect = st };
-                if (st == MusicStyles.Strobe) music = music with { StrobeAllowed = true, ReduceFlashing = false };
                 var input = new RenderInput { Cfg = cfg, Music = music, Device = new RgbDeviceSettings { Name = dev.Name } };
                 lanes.Add(new Lane { Label = devs.Length > 1 || dn != "strip" ? $"{st}/{dn}" : st, Style = st, R = new DeviceRenderer(dev), In = input, Out = new Rgb[dev.LedCount], Prev = new int[dev.LedCount] });
             }

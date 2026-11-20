@@ -18,7 +18,7 @@
 //   SYNC_MINPERC=0.3（すべての組のキックの門の下限を変える）
 //   SYNC_STYLE_APP=1（光り方の値も、ミッドとサイド・拍の AI つきで求める。既定はミッドだけ・AI なし）
 //   SYNC_AI=0（拍の AI を付けない。既定は付ける: アプリの既定と同じ）
-//   SYNC_STYLES=0（光り方ごとの値を出さない）・SYNC_STYLE_LIST=BeatHue,Pulse（光り方を変える）
+//   SYNC_STYLES=0（光り方ごとの値を出さない）・SYNC_STYLE_LIST=BeatHue,Spectrum（光り方を変える）
 //   SYNC_SEC=90（曲の頭からこの秒数だけ流す）
 //   SYNC_PREDEC=1（96 / 192 kHz の録音を、ここで別の長い FIR で 48 kHz に落としてから流す。アプリの中で落とした結果と比べる）
 //   SYNC_DIAG=1（キックの候補の手がかり: 目立ち・「カチッ」の上がり・キックからの大きさの分布を、拍の上と外で分けて出す。
@@ -156,7 +156,7 @@ public static class SyncRegressionBenchTests
         bool styleApp = Environment.GetEnvironmentVariable("SYNC_STYLE_APP") == "1";
         double maxSec = double.TryParse(Environment.GetEnvironmentVariable("SYNC_SEC"), out double ms) && ms > 0 ? ms : double.PositiveInfinity;
         string[] styleList = (Environment.GetEnvironmentVariable("SYNC_STYLE_LIST")
-            ?? string.Join(",", MusicStyles.BeatHue, MusicStyles.Pulse, MusicStyles.Mix, MusicStyles.Role, MusicStyles.Ensemble))
+            ?? string.Join(",", MusicStyles.BeatHue, MusicStyles.Spectrum, MusicStyles.Role, MusicStyles.Ensemble))
             .Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
         BeatThis? model = useAi ? Model.Value : null;
         T.Info($"configs {string.Join(", ", cfgs.Select(c => c.Name))}; kick gate min {minPerc:F2}; beat AI {(model is null ? "off" : "on")}; styles {(styles ? string.Join(",", styleList) : "off")}");

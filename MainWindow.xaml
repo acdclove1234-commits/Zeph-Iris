@@ -148,7 +148,6 @@
             <Setter Property="FontSize" Value="13"/>
             <Setter Property="Cursor" Value="Hand"/>
             <Setter Property="Margin" Value="0,0,6,6"/>
-            <Setter Property="ToolTipService.ShowOnDisabled" Value="True"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
@@ -164,9 +163,6 @@
                                 <Setter TargetName="Bd" Property="Background" Value="{DynamicResource AccentGradient}"/>
                                 <Setter Property="Foreground" Value="White"/>
                             </DataTrigger>
-                            <Trigger Property="IsEnabled" Value="False">
-                                <Setter TargetName="Bd" Property="Opacity" Value="0.45"/>
-                            </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Setter.Value>
@@ -177,9 +173,8 @@
             <Setter Property="Foreground" Value="{DynamicResource TextBrush}"/>
             <Setter Property="Cursor" Value="Hand"/>
             <Setter Property="Margin" Value="0,0,8,8"/>
-            <Setter Property="Width" Value="200"/>
-            <Setter Property="Height" Value="92"/>
-            <Setter Property="ToolTipService.ShowOnDisabled" Value="True"/>
+            <!-- 高さは 92 から。名前が 2 行になるカードは高くなり、同じ行のカードもその高さにそろう（AdaptiveWrapPanel） -->
+            <Setter Property="MinHeight" Value="92"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
@@ -195,9 +190,6 @@
                                 <Setter TargetName="Bd" Property="BorderBrush" Value="{DynamicResource AccentBrush}"/>
                                 <Setter TargetName="Bd" Property="Background" Value="{DynamicResource CardHoverBrush}"/>
                             </DataTrigger>
-                            <Trigger Property="IsEnabled" Value="False">
-                                <Setter TargetName="Bd" Property="Opacity" Value="0.45"/>
-                            </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Setter.Value>
@@ -251,7 +243,7 @@
         </Style>
 
         <DataTemplate x:Key="ChoiceChipTemplate">
-            <Button Style="{StaticResource ChoiceChip}" Click="OnLightingChoiceClick" IsEnabled="{Binding IsEnabled}" ToolTip="{Binding Tip}">
+            <Button Style="{StaticResource ChoiceChip}" Click="OnLightingChoiceClick" ToolTip="{Binding Tip}">
                 <TextBlock Text="{Binding Label}"/>
             </Button>
         </DataTemplate>
@@ -264,14 +256,17 @@
             </Button>
         </DataTemplate>
         <DataTemplate x:Key="EffectTileTemplate">
-            <Button Style="{StaticResource EffectTile}" Click="OnLightingChoiceClick" IsEnabled="{Binding IsEnabled}" ToolTip="{Binding Tip}">
-                <StackPanel>
-                    <TextBlock Text="{Binding Label}" FontWeight="SemiBold" TextTrimming="CharacterEllipsis"/>
-                    <TextBlock Text="{Binding Description}" Style="{StaticResource Caption}" FontSize="12" Margin="0,3,0,0"
-                               MaxHeight="44" TextTrimming="CharacterEllipsis"/>
-                    <TextBlock Text="{Binding Warning}" FontSize="12" Foreground="{DynamicResource WarnBrush}" Margin="0,2,0,0"
-                               TextTrimming="CharacterEllipsis" Visibility="{Binding HasWarning, Converter={StaticResource BoolToVis}}"/>
-                </StackPanel>
+            <!-- 名前は 2 行まで折り返す（長い言語でも切れにくく）。説明は 3 行まで（全文はマウスを乗せたときの説明） -->
+            <Button Style="{StaticResource EffectTile}" Click="OnLightingChoiceClick" ToolTip="{Binding Tip}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Text="{Binding Label}" FontWeight="SemiBold" TextWrapping="Wrap" TextTrimming="CharacterEllipsis" MaxHeight="40"/>
+                    <TextBlock Grid.Row="1" Text="{Binding Description}" Style="{StaticResource Caption}" FontSize="12" Margin="0,3,0,0"
+                               TextWrapping="Wrap" TextTrimming="CharacterEllipsis" MaxHeight="48"/>
+                </Grid>
             </Button>
         </DataTemplate>
         <!-- 色の候補（選ばれている色には白い輪を付ける） -->
@@ -1959,6 +1954,9 @@
                                 <RadioButton Style="{StaticResource Segment}" GroupName="RgbMode" Content="心拍" Margin="0,0,6,6"
                                              ToolTip="選んだ色が「ドクン、ドクン」と 2 回ずつ脈打ちます（速さ 1 で 1 分に 60 回）"
                                              IsChecked="{Binding Rgb.Mode, Converter={StaticResource Equals}, ConverterParameter=Heartbeat}"/>
+                                <RadioButton Style="{StaticResource Segment}" GroupName="RgbMode" Content="ムード" Margin="0,0,6,6"
+                                             ToolTip="色の組み合わせの色に、ゆっくり移り変わります。1 色にしばらくとどまってから、次の色へなめらかに移ります（音には反応しません。点滅しません）"
+                                             IsChecked="{Binding Rgb.Mode, Converter={StaticResource Equals}, ConverterParameter=Mood}"/>
                                 <RadioButton Style="{StaticResource Segment}" GroupName="RgbMode" Content="音楽連動" Margin="0,0,6,6"
                                              ToolTip="PC で流れている音（スピーカー・ヘッドホンに出ている音）に合わせて光ります。マイクは使いません"
                                              IsChecked="{Binding Rgb.Mode, Converter={StaticResource Equals}, ConverterParameter=Music}"/>
@@ -1986,13 +1984,25 @@
                                 </DockPanel>
                             </StackPanel>
 
-                            <!-- 速さ（レインボー・呼吸、音楽連動の「流れる波」） -->
+                            <!-- 色の組み合わせ（ムード。MainWindow.Lighting.cs の RefreshLightingUi） -->
+                            <DockPanel x:Name="ModePaletteRow" Margin="0,6,0,0" Visibility="Collapsed">
+                                <TextBlock Text="色の組み合わせ" Style="{StaticResource RowLabelTop}"/>
+                                <ItemsControl x:Name="ModePaletteChoices" ItemTemplate="{StaticResource PaletteChipTemplate}">
+                                    <ItemsControl.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <WrapPanel/>
+                                        </ItemsPanelTemplate>
+                                    </ItemsControl.ItemsPanel>
+                                </ItemsControl>
+                            </DockPanel>
+
+                            <!-- 速さ（レインボー・呼吸・雷・波などの動きのある光り方） -->
                             <DockPanel x:Name="SpeedRow" Style="{StaticResource LightRow}" Margin="0,6,0,0" Visibility="Collapsed">
-                                <TextBlock x:Name="SpeedLabel" Text="速さ" Style="{StaticResource RowLabel}"
-                                           ToolTip="レインボーは 1 倍で 1 周 30 秒（3 倍で 10 秒・10 倍で 3 秒）、呼吸は 1 倍で 1 回 6 秒。音楽連動の「流れる波」では流れる速さ"/>
+                                <TextBlock Text="速さ" Style="{StaticResource RowLabel}"
+                                           ToolTip="レインボーは 1 倍で 1 周 30 秒（3 倍で 10 秒・10 倍で 3 秒）、呼吸は 1 倍で 1 回 6 秒。ムードは 1 倍で 8 秒ごとに次の色"/>
                                 <TextBlock Style="{StaticResource RowValue}" Text="{Binding Rgb.Speed, StringFormat={}{0:F1} 倍}"/>
                                 <Slider Minimum="0.3" Maximum="10" Value="{Binding Rgb.Speed}" IsSnapToTickEnabled="True" TickFrequency="0.1"
-                                        ToolTip="レインボーは 1 倍で 1 周 30 秒（3 倍で 10 秒・10 倍で 3 秒）、呼吸は 1 倍で 1 回 6 秒。音楽連動の「流れる波」では流れる速さ"/>
+                                        ToolTip="レインボーは 1 倍で 1 周 30 秒（3 倍で 10 秒・10 倍で 3 秒）、呼吸は 1 倍で 1 回 6 秒。ムードは 1 倍で 8 秒ごとに次の色"/>
                             </DockPanel>
                         </StackPanel>
                     </Border>
@@ -2047,15 +2057,15 @@
                                 <!-- 音楽の表現（光り方のギャラリー） -->
                                 <TextBlock Text="音楽の表現" Style="{StaticResource Label}" Margin="0,12,0,8"
                                            ToolTip="音楽に合わせてどう光らせるか。デバイスごとに変えたいときは、下の「デバイス」で選べます"/>
-                                <ItemsControl x:Name="EffectChoices" ItemTemplate="{StaticResource EffectTileTemplate}">
+                                <!-- カードは幅いっぱいに広げ、行が欠けないように列の数を選ぶ（7 枚なら 4 列で 4 + 3・狭いと 3 列で 3 + 2 + 2・広いと 7 列で 1 行）。
+                                     右の -8 は、いちばん右のカードの右の余白（Margin 8）の分。カードの右端をほかの行の右端にそろえる -->
+                                <ItemsControl x:Name="EffectChoices" ItemTemplate="{StaticResource EffectTileTemplate}" Margin="0,0,-8,0">
                                     <ItemsControl.ItemsPanel>
                                         <ItemsPanelTemplate>
-                                            <WrapPanel/>
+                                            <ctl:AdaptiveWrapPanel ItemMinWidth="176" CompleteRows="True"/>
                                         </ItemsPanelTemplate>
                                     </ItemsControl.ItemsPanel>
                                 </ItemsControl>
-                                <TextBlock x:Name="StrobeNote" Style="{StaticResource Caption}" Margin="0,0,0,4"
-                                           Text="「ストロボ」は激しく点滅するため、下の「激しい点滅を抑える」をオフにしたときだけ選べます。"/>
 
                                 <!-- 楽器の分け方（光り方「パーツごとの役割」のときだけ。MainWindow.Lighting.cs の RefreshLightingUi） -->
                                 <DockPanel x:Name="RoleSetRow" Margin="0,10,0,0" Visibility="Collapsed">
@@ -2088,7 +2098,7 @@
                                 </DockPanel>
                                 <DockPanel Margin="0,6,0,0">
                                     <TextBlock Text="色の組み合わせ" Style="{StaticResource RowLabelTop}"
-                                               ToolTip="音楽連動で使う色のセット（パレット）。ビートのたびに、この中の次の色へ切り替わります"/>
+                                               ToolTip="音楽連動で使う色のセット（パレット）"/>
                                     <ItemsControl x:Name="PaletteChoices" ItemTemplate="{StaticResource PaletteChipTemplate}">
                                         <ItemsControl.ItemsPanel>
                                             <ItemsPanelTemplate>
@@ -2176,10 +2186,10 @@
                                     <TextBlock x:Name="OutputSoftwareNote" Style="{StaticResource Caption}" TextWrapping="Wrap" Margin="170,0,0,6" Visibility="Collapsed"/>
 
                                     <CheckBox Style="{StaticResource Switch}" IsChecked="{Binding Rgb.Music.ReduceFlashing, Mode=OneWay}" Click="OnReduceFlashingClick" Margin="0,8,0,0"
-                                              ToolTip="オンのあいだは、強い点滅を 1 秒に 3 回までにします（光に敏感な方の目や体調を守るため）。ストロボも使いません">
+                                              ToolTip="オンのあいだは、強い点滅を 1 秒に 3 回までにします（光に敏感な方の目や体調を守るため）">
                                         <StackPanel>
                                             <TextBlock Text="激しい点滅を抑える" FontWeight="SemiBold"/>
-                                            <TextBlock Text="強い点滅を 1 秒に 3 回までにします。オフにすると「ストロボ」が選べるようになります" Style="{StaticResource Caption}"/>
+                                            <TextBlock Text="強い点滅を 1 秒に 3 回までにします" Style="{StaticResource Caption}"/>
                                         </StackPanel>
                                     </CheckBox>
                                     <TextBlock x:Name="FlashWarning" Style="{StaticResource Caption}" Foreground="{DynamicResource WarnBrush}" Margin="0,6,0,0" Visibility="Collapsed"
@@ -2261,7 +2271,7 @@
                                     </StackPanel>
                                     <!-- 楽器の AI（Audio/SceneAi.cs・Core/Rgb/Palette.cs の ScenePalettes） -->
                                     <CheckBox Style="{StaticResource Switch}" IsChecked="{Binding Rgb.MusicScenes}" Margin="0,10,0,0"
-                                              ToolTip="直近の 2 秒の音を 1 秒ごとに調べます。色は数秒かけて変わり、点滅はしません。パレット「選んだ色だけ」「選んだ色と近い色」・音量メーター・ストロボ・パーツごとの役割では色を変えません">
+                                              ToolTip="直近の 2 秒の音を 1 秒ごとに調べます。色は数秒かけて変わり、点滅はしません。パレット「選んだ色だけ」「選んだ色と近い色」・音量メーター・パーツごとの役割では色を変えません">
                                         <StackPanel>
                                             <TextBlock Text="AI で楽器を聞き分ける" FontWeight="SemiBold"/>
                                             <TextBlock Style="{StaticResource Caption}" TextWrapping="Wrap"

@@ -161,7 +161,7 @@ public static class SceneLifetimeTests
     {
         var dev = new RgbDevice(0, "Strip", 24, 4, null, "HID: x");
         var r = new DeviceRenderer(dev);
-        var music = ResolvedMusic.Default with { Effect = MusicStyles.Mood, Palette = Palettes.Rainbow, SceneColors = true };
+        var music = ResolvedMusic.Default with { Effect = MusicStyles.Spectrum, Palette = Palettes.Rainbow, SceneColors = true };
         var input = new RenderInput { Cfg = new RgbConfig { Mode = RgbModes.Music }, Music = music, Device = new RgbDeviceSettings { Name = dev.Name } };
         var output = new Rgb[dev.LedCount];
         double t = T0;

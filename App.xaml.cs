@@ -955,8 +955,16 @@ public partial class App : Application
                 if (arg == "off") _controller.Config.Rgb.Enabled = true;
                 _controller.Commit(recordUndo: false);
                 break;
-            case "music" when MusicStyles.All.Contains(arg):
-                _controller.Config.Rgb.MusicStyle = arg;
+            // 6.15.10 までの「ムード」（ショートカットなど）は、音に反応しない同じ名前の光り方にする
+            case "music" when MusicStyles.StandaloneMode(arg) is { } standalone:
+                _controller.Config.Rgb.Mode = standalone;
+                _controller.Config.Rgb.Enabled = true;
+                _controller.Config.Rgb.LightsOff = false;
+                _controller.Commit(recordUndo: false);
+                break;
+            // なくした光り方の名前（6.15.10 までのショートカットなど）は、置き換え先の光り方にする
+            case "music" when MusicStyles.Normalize(arg, "") is { Length: > 0 } style:
+                _controller.Config.Rgb.MusicStyle = style;
                 _controller.Config.Rgb.Mode = RgbModes.Music;
                 _controller.Config.Rgb.Enabled = true;
                 _controller.Config.Rgb.LightsOff = false; // 光り方を選んだら点灯する

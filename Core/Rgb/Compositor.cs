@@ -10,7 +10,9 @@ namespace ProFanController;
 /// <summary>
 /// 激しい点滅を抑える（「激しい点滅を抑える」がオンのとき。光過敏への配慮: WCAG 2.3.1 の「1 秒に 3 回まで」）。
 /// 新しいビートの光は、前に受け付けた光から 333 ミリ秒以上たっていれば受け付ける（強さ 1 倍）。
-/// それより短い間隔の光は 0.35 倍に弱める。60 ミリ秒以内の合図（キックと予測ビートがほぼ同時など）は同じ 1 回の光とみなす
+/// それより短い間隔の光は 0.35 倍に弱める。60 ミリ秒以内の合図（キックと予測ビートがほぼ同時など）は同じ 1 回の光とみなす。
+/// 音量（dB）を渡したときは、受け付けた光より RaiseDb 以上大きい音を、1 回だけ弱めずに通す（小さな銃声のすぐあとの爆発が
+/// 0.35 倍に消えていた）。このとき、間隔の起点（受け付けた光の時刻）は動かさない（動かすと、そのあとの拍がずっと弱められた）
 /// </summary>
 public sealed class FlashLimiter
 {
@@ -21,7 +23,17 @@ public sealed class FlashLimiter
     /// <summary>受け付けなかった光の強さの倍率</summary>
     public const float RejectedGain = 0.35f;
 
+    /// <summary>受け付けた光より、これだけ大きい音（dB）は 1 回だけ弱めずに通す</summary>
+    public const float RaiseDb = 6f;
+    /// <summary>光の音が上がりきるまでの秒数（この間のいちばん大きい音量を、その光の音量として次の光とくらべる）</summary>
+    public const double SettleSec = 0.12;
+
     private double _lastAccepted = double.NegativeInfinity;
+    // 受け付けた光の音量（dB。分からなければ NaN）と、その光のあとに 1 回通したか
+    private float _lastDb = float.NaN;
+    private bool _raised;
+    // 受け付けた光が音から来たか（音の光は、あとで上がりきった音量を読み直す。予測した拍の光は読み直さない）
+    private bool _lastSound;
 
     /// <summary>制限する（オフなら Decide は常に 1）</summary>
     public bool Enabled { get; set; } = true;
@@ -29,27 +41,64 @@ public sealed class FlashLimiter
     public int Accepted { get; private set; }
     /// <summary>弱めた光の数</summary>
     public int Rejected { get; private set; }
+    /// <summary>大きい音なので、間隔が短くても弱めずに通した光の数</summary>
+    public int Raised { get; private set; }
     /// <summary>受け付けた光どうしの、いちばん短い間隔（秒。テスト用）</summary>
     public double MinAcceptedGap { get; private set; } = double.PositiveInfinity;
 
     public void Reset()
     {
         _lastAccepted = double.NegativeInfinity;
-        Accepted = Rejected = 0;
+        _lastDb = float.NaN;
+        _raised = false;
+        _lastSound = false;
+        Accepted = Rejected = Raised = 0;
         MinAcceptedGap = double.PositiveInfinity;
     }
 
     /// <summary>時刻 t に始まる光の強さの倍率を決める（1 = そのまま、0.35 = 弱める）。t は光の本当の時刻</summary>
-    public float Decide(double t)
+    public float Decide(double t) => Decide(t, float.NaN);
+
+    /// <summary>時刻 t に始まる、音量 db（dBFS。分からなければ NaN）の光の強さの倍率を決める</summary>
+    public float Decide(double t, float db) => Decide(t, db, null);
+
+    /// <summary>
+    /// 時刻 t に始まる、音量 db の光の強さの倍率を決める。c を渡すと、音から来た光とみなす
+    /// （次の光とくらべるとき、この光の音が上がりきった音量を読み直す）
+    /// </summary>
+    public float Decide(double t, float db, EffectContext? c)
     {
         if (!Enabled) return 1f;
         double gap = Math.Abs(t - _lastAccepted);
-        if (gap < MergeSec) return 1f;
+        if (gap < MergeSec)
+        {
+            // 同じ 1 回の光: 大きいほうの音量を覚える
+            if (!(db <= _lastDb)) _lastDb = db;
+            if (c is not null) _lastSound = true;
+            return 1f;
+        }
         if (gap >= MinGapSec)
         {
             if (!double.IsInfinity(_lastAccepted)) MinAcceptedGap = Math.Min(MinAcceptedGap, gap);
+            if (t >= _lastAccepted) { _lastDb = db; _raised = false; _lastSound = c is not null; }
             _lastAccepted = Math.Max(_lastAccepted, t);
             Accepted++;
+            return 1f;
+        }
+        // 鳴り始めの直後に読んだ音量は低すぎる（聞こえ方の音量は 0.1 秒ほどかけて上がる）。
+        // 受け付けた光の音が上がりきった音量とくらべる（ピッという音の終わりで、もう一度光らない）
+        float refDb = _lastDb;
+        if (c is not null && _lastSound)
+        {
+            float settled = c.EventDbSpan(_lastAccepted, Math.Min(_lastAccepted + SettleSec, t - 0.01));
+            if (settled > refDb) refDb = settled;
+        }
+        // 受け付けた光よりはっきり大きい音は、1 回だけ通す（間隔の起点は動かさない）
+        if (!_raised && t > _lastAccepted && db >= refDb + RaiseDb)
+        {
+            _lastDb = db;
+            _raised = true;
+            Raised++;
             return 1f;
         }
         Rejected++;
@@ -59,7 +108,7 @@ public sealed class FlashLimiter
 
 /// <summary>
 /// 音が止まったときの光り方へ切り替える割合（0 = 音楽連動、1 = 止まっているときの光り方）。
-/// 無音（門が閉じている、または反応の強さが 0.05 未満）が IdleDelaySec 続いたら 1 秒かけて 1 へ、
+/// 無音（門が閉じている、反応の強さが 0.05 未満、または映画の静かな場面のようなずっと小さな音）が IdleDelaySec 続いたら 1 秒かけて 1 へ、
 /// 音が戻ったら 80 ミリ秒で 0 へ戻す
 /// </summary>
 public sealed class IdleMixer
@@ -85,10 +134,10 @@ public sealed class IdleMixer
         Weight = weight;
     }
 
-    /// <summary>1 コマ進める</summary>
-    public void Update(AudioFrame f, double idleDelaySec, float dt)
+    /// <summary>1 コマ進める（hushed = 映画の静かな場面のような、ずっと小さな音。PresenceMeter）</summary>
+    public void Update(AudioFrame f, double idleDelaySec, float dt, bool hushed = false)
     {
-        bool quiet = !f.GateOpen || f.Activity < QuietActivity;
+        bool quiet = !f.GateOpen || f.Activity < QuietActivity || hushed;
         _quietFor = quiet ? _quietFor + dt : 0;
         if (_quietFor >= idleDelaySec) Weight = (float)Math.Min(1, Weight + dt / RampInSec);
         else Weight = (float)Math.Max(0, Weight - dt / RampOutSec);

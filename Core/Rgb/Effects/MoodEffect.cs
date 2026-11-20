@@ -1,5 +1,5 @@
 // ==================================================
-// MoodEffect.cs - 光り方 E10「ムード」 (曲の雰囲気 = 音の明るさで色がゆっくり変わる。点滅しない)
+// MoodEffect.cs - 音楽連動で音が止まっているときの光り方「ゆっくり色が変わる」 (点滅しない)
 // Dependencies: .NET 8 (MIT License)
 // See CREDITS.txt for full license details.
 // ==================================================
@@ -7,7 +7,9 @@
 namespace ProFanController;
 
 /// <summary>
-/// ムード: 点滅させず、曲の雰囲気でパレットの中の位置をゆっくり動かす（更新の遅いデバイスと、音が止まったときの既定）。
+/// ムード: 点滅させず、曲の雰囲気でパレットの中の位置をゆっくり動かす。
+/// 今は音楽連動で音が止まっているときの光り方（IdleEffects.Mood。idle）だけで使う（音楽連動の光り方「ムード」は、
+/// 6.15.11 で音に反応しない光り方 RgbModes.Mood になった。下の音で動かす決め方は、idle でないときのもの）。
 ///   xm = 音の重心（低い音が中心か、明るい音か）を 150 Hz〜4 kHz で 0〜1 にしたもの（1.5 秒でならす）
 ///   x = lerp(0.5, xm, 音の確かさ) + 小節の数 / 見本の数（テンポをつかんでいれば 1 小節ごとに 0.6 秒かけて進む）
 ///   LED の色 = P(x + 0.12 × (p − 0.5) + 0.04 × sin(2πt / 20 秒)) × Ilin(0.35 + 0.65 × 音量（0.6 秒でならす）)
@@ -44,8 +46,6 @@ public sealed class MoodEffect : IMusicEffect
     /// 書き込むたびに一瞬乱れるデバイス用。音の雰囲気では色を動かさない（無音のときのほかのデバイスと同じ色になる）
     /// </summary>
     public double IdleStepSec { get; init; }
-
-    public string Name => MusicStyles.Mood;
 
     public void Reset(EffectContext c)
     {

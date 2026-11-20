@@ -65,17 +65,12 @@ public static class LightingReviewTests
 
     public static void TestGpuSkipsTinyChangesInEffectsWithoutSharedColour()
     {
-        // ムード・ミックスは共有の色（ビートの色替え）を描かないので、色替えのたびに小さな変化を送ってはいけない
-        var mood = new RgbConfig { Mode = RgbModes.Music, MusicStyle = MusicStyles.Mood, Gamma = false };
-        mood.Music.Intensity = Intensities.Moderate;
-        var pny = Run(Pny(), mood, new RgbDeviceSettings { Name = Pny().Name }, true, 50, 5, RgbDeviceChannel.GpuChangeThreshold);
-        T.Info($"PNY + ムード: {pny.Writes} 回（うち差 24 以下 {pny.Small} 回）/ 45 秒");
-        T.Check(pny.Small == 0, $"PNY in Mood never writes a sub-threshold change ({pny.Small})");
-
-        var rxMood = Run(Rx(), mood, new RgbDeviceSettings { Name = Rx().Name, Effect = MusicStyles.Mood }, true, 50, 5, RgbDeviceChannel.FlickerProneChangeThreshold);
-        T.Info($"ASRock RX + ムード（デバイスで指定）: {rxMood.Writes} 回（うち差 40 以下 {rxMood.Small} 回）/ 45 秒");
-        T.Check(rxMood.Small == 0, $"flicker-prone RX in Mood never writes a sub-threshold change ({rxMood.Small})");
-
+        // グラボのスペクトラムの遅い版のミックスは共有の色（ビートの色替え）を描かないので、色替えのたびに小さな変化を送ってはいけない
+        var mix = new RgbConfig { Mode = RgbModes.Music, MusicStyle = MusicStyles.Spectrum, Gamma = false };
+        mix.Music.Intensity = Intensities.Moderate;
+        var pny = Run(Pny(), mix, new RgbDeviceSettings { Name = Pny().Name }, true, 50, 5, RgbDeviceChannel.GpuChangeThreshold);
+        T.Info($"PNY + スペクトラム（遅い版のミックス）: {pny.Writes} 回（うち差 24 以下 {pny.Small} 回）/ 45 秒");
+        T.Check(pny.Small == 0, $"PNY in Spectrum (slow mix) never writes a sub-threshold change ({pny.Small})");
     }
 
     /// <summary>
@@ -97,6 +92,9 @@ public static class LightingReviewTests
         var beat = new BeatState(60.0 / 123, 0.2, 0, 0.9, true, downbeat);
         var rng = new Random(11);
         const double Tick = 1.0 / 60;
+        // 拍ごとのキック（「ビートで色替え」は、テンポをつかんでいても拍に乗ったキックで色を進める）。少し先まで入れておく
+        var events = new EventRing();
+        double nextKick = 0.2;
         int steps = 0, late = 0, writes = 0, frames = 0;
         double mismatch = 0, seenStep = shared.LastStepT, checkAt = double.PositiveInfinity;
         for (double t = 0; t < 45; t += Tick)
@@ -107,7 +105,8 @@ public static class LightingReviewTests
             f.LoudVU = (float)(0.5 + 0.3 * rng.NextDouble());
             f.CentroidHz = 1000;
             ring.Write(f);
-            ch.Prepare(t, Tick, ring, null, beat, null, false, false);
+            for (; nextKick <= t + 0.3; nextKick += 60.0 / 123) events.Add(AudioEventKind.Kick, nextKick + 0.005, 3f);
+            ch.Prepare(t, Tick, ring, events, beat, null, false, false);
             if (!ch.Render()) continue;
             if (shared.LastStepT != seenStep)
             {
@@ -139,32 +138,20 @@ public static class LightingReviewTests
 
     public static void TestGpuReceivesEveryColourStep()
     {
-        // 自動（ビートで色替えの遅い版）: どの色替えも、差が小さくてもグラボに届く。
-        // （パルスは色をビートで切り替えず、時刻でゆっくり変えるので、ここでは数えない）
-        foreach (var style in new[] { MusicStyles.BeatHue })
+        // 自動（ビートで色替えの遅い版）: どの色替えも、差が小さくてもグラボに届く
+        var style = MusicStyles.BeatHue;
         foreach (var intensity in new[] { Intensities.Moderate, Intensities.Intense })
         foreach (var dev in new[] { Pny(), Rx() })
         {
-            int tolerance = style == MusicStyles.Pulse && intensity == Intensities.Intense ? 12 : 0;
-            var r = RunSteps(dev, style, intensity, new RgbDeviceSettings { Name = dev.Name }, steady: true, tolerance);
-            T.Check(r.Steps >= 20 && r.Late == 0, $"{dev.Name[..4]} {style}/{intensity}: every colour step reaches the GPU ({r.Late} late of {r.Steps}, {r.Writes} writes)");
+            var r = RunSteps(dev, style, intensity, new RgbDeviceSettings { Name = dev.Name }, steady: true);
+            T.Check(r.Steps >= 18 && r.Late == 0, $"{dev.Name[..4]} {style}/{intensity}: every colour step reaches the GPU ({r.Late} late of {r.Steps}, {r.Writes} writes)");
         }
-        // デバイスごとに選んだエナジー（グラボでも選べる）: 色替えの最後の色まで届く
+        // デバイスごとに選んだ波紋（グラボでも選べる。共有の色で色替えする）: 色替えの最後の色まで届く
         {
-            var r = RunSteps(Pny(), MusicStyles.BeatHue, Intensities.Intense, new RgbDeviceSettings { Name = Pny().Name, Effect = MusicStyles.Energy }, steady: false);
-            T.Info($"PNY Energy/Intense: 色替え {r.Steps} 回、書き込み {r.Writes} 回、送った色と描いた色の差の平均 {r.Mismatch:F1}");
-            T.Check(r.Writes >= r.Steps * 0.8 && r.Mismatch <= 8, $"PNY Energy/Intense: colour steps are delivered (mismatch {r.Mismatch:F1}, {r.Writes} writes for {r.Steps} steps)");
+            var r = RunSteps(Pny(), MusicStyles.BeatHue, Intensities.Intense, new RgbDeviceSettings { Name = Pny().Name, Effect = MusicStyles.Ripple }, steady: false);
+            T.Info($"PNY Ripple/Intense: 色替え {r.Steps} 回、書き込み {r.Writes} 回、送った色と描いた色の差の平均 {r.Mismatch:F1}");
+            T.Check(r.Writes >= r.Steps * 0.8 && r.Mismatch <= 8, $"PNY Ripple/Intense: colour steps are delivered (mismatch {r.Mismatch:F1}, {r.Writes} writes for {r.Steps} steps)");
         }
-        // テンポ追従: 共有の色とは別に 2 拍ごとに帯の色が変わる。小節の頭の位置（曲ごとに違う）・強さによらず届く
-        double worstChase = 0;
-        foreach (var intensity in new[] { Intensities.Subtle, Intensities.Moderate, Intensities.Intense })
-        for (int downbeat = 0; downbeat < 4; downbeat++)
-        {
-            var r = RunSteps(Pny(), MusicStyles.BeatHue, intensity, new RgbDeviceSettings { Name = Pny().Name, Effect = MusicStyles.Chase }, steady: false, downbeat: downbeat);
-            worstChase = Math.Max(worstChase, r.Mismatch);
-            T.Check(r.Mismatch <= 6, $"PNY Chase/{intensity}, downbeat {downbeat}: the band colour reaches the GPU (mismatch {r.Mismatch:F1}, {r.Writes} writes)");
-        }
-        T.Info($"PNY テンポ追従: 送った色と描いた色の差の平均（いちばん大きいもの）{worstChase:F1}");
     }
 
     public static void TestGpuIdleRampEndIsSent()
@@ -221,8 +208,8 @@ public static class LightingReviewTests
     public static void TestGpuNoTinyWritesWhenSoundFlickersOnAndOff()
     {
         // 短い音がときどき鳴る（ゲーム・会話など）: 止まっているときの光り方へ切り替わりかけて戻るたびに、
-        // ムード・ミックスのグラボへ小さな差を書き込まない
-        foreach (var style in new[] { MusicStyles.Mood, MusicStyles.Mix })
+        // スペクトラム（グラボでは遅い版のミックス）のグラボへ小さな差を書き込まない
+        foreach (var style in new[] { MusicStyles.Spectrum })
         {
             var dev = Pny();
             var cfg = new RgbConfig { Mode = RgbModes.Music, MusicStyle = style, Gamma = true, Brightness = 30 };
@@ -259,41 +246,6 @@ public static class LightingReviewTests
             }
             T.Check(small == 0, $"PNY {style} with short sounds every 2.5 s: no sub-threshold writes ({small} of {writes})");
         }
-    }
-
-    public static void TestFlickerProneMoodStepsBarsAtOnce()
-    {
-        // ASRock の Radeon でムードを選んだとき: 小節ごとの色替えを一度に送る（途中の色を 3 回に分けて書かない）
-        var cfg = new RgbConfig { Mode = RgbModes.Music, MusicStyle = MusicStyles.BeatHue, Gamma = false };
-        var ch = new RgbDeviceChannel(Rx(), 0) { SharedColor = new SharedColor() };
-        ch.Configure(cfg, MusicTuning.Resolve(cfg), new RgbDeviceSettings { Name = Rx().Name, Effect = MusicStyles.Mood }, false);
-        var ring = new FeatureRing();
-        var f = new AudioFrame { GateOpen = true, Activity = 1, LoudVU = 0.6f, CentroidHz = 1000 };
-        double period = 60.0 / 123;
-        var beat = new BeatState(period, 0.2, 0, 0.9, true, 0);
-        const double Tick = 1.0 / 60;
-        var writes = new List<double>();
-        for (double t = 0; t < 45; t += Tick)
-        {
-            f.T = t;
-            ring.Write(f);
-            ch.Prepare(t, Tick, ring, null, beat, null, false, false);
-            if (!ch.Render()) continue;
-            var reason = ch.ShouldSend(t, Tick, true);
-            if (reason == SendReason.None) continue;
-            ch.MarkSent(t, Tick, reason, 1);
-            if (t > 5) writes.Add(t);
-        }
-        // 小節の頭の前後 0.7 秒に入った書き込みの数（小節ごと）
-        int bars = 0, worst = 0;
-        for (double bar = 0.2; bar < 45; bar += 4 * period)
-        {
-            if (bar < 6 || bar > 44) continue;
-            bars++;
-            worst = Math.Max(worst, writes.Count(w => w >= bar - 0.1 && w < bar + 0.6));
-        }
-        T.Info($"RX + ムード: 40 秒で {writes.Count} 回、小節ごとの最多 {worst} 回（小節 {bars} 個）");
-        T.Check(worst <= 1, $"one write per bar change on the flicker-prone GPU (worst {worst} in a bar)");
     }
 
     public static void TestGpuHeldDuringMusicPause()

@@ -87,7 +87,10 @@ public sealed record RgbDevice(int Index, string Name, int LedCount, int Type = 
 
 /// <summary>デバイスごとの状態（表示用）</summary>
 /// <param name="Fps">実際に 1 秒に送っている回数</param>
-/// <param name="ActiveEffect">いま使っている音楽連動の光り方（更新の遅いデバイスは置き換えた後の名前）</param>
+/// <param name="ActiveEffect">
+/// いま使っている音楽連動の光り方（EffectCatalog.NameOf。更新の遅いデバイスの遅い版は、スペクトラム・音量メーターの代わりなら
+/// その名前のまま、ほかの光り方の代わりの「ビートで色替え」の遅い版は「ビートで色替え」と出る）
+/// </param>
 /// <param name="Direct">OpenRGB を通さず直接書き込んでいるグラボ（RgbDeviceChannel.Direct がある）</param>
 public sealed record RgbDeviceStatus(string Name, int Leds, bool Slow, double Fps, string ActiveEffect, string LastError, bool Direct = false);
 
@@ -687,6 +690,9 @@ public sealed class RgbDeviceChannel
     private double _nextBeatIn = double.PositiveInfinity;
     private bool _hasSent;
     private double _lastErrorAt = double.NegativeInfinity;
+    // 帯で描く光り方の、キックのあとの早めの送信を待っているコマ数（-1 = 待っていない）と、前のコマの明るさの平均
+    private int _accentWait = -1;
+    private double _prevMean;
 
     /// <param name="now">作った時刻（AudioClock の秒。1 秒あたりの回数を数え始める）</param>
     public RgbDeviceChannel(RgbDevice device, double now)
@@ -817,6 +823,8 @@ public sealed class RgbDeviceChannel
         else input.Frame.Clear();
         // ディザリングは、毎コマ送るデバイスだけ（間引いて送ると、持ち越した端数の平均がずれて暗い色がちらつく）
         input.AllowDither = SendsEveryFrame(tick);
+        // 描いたコマを全部は送らないデバイスは、強い点滅を送ったコマだけで数える（MarkSent）
+        Renderer.DeferGuardCommit = !input.AllowDither;
 
         input.Events.Clear();
         if (!ReferenceEquals(events, _events))
@@ -845,9 +853,15 @@ public sealed class RgbDeviceChannel
         _beatCue = _beatCrossing.Step(beat, predictive, input.TPrevEval, tEval, out _);
         // 次のビートまでの秒数（読む時刻で数えても、表示の時刻で数えても同じ）
         _nextBeatIn = predictive ? beat.NextBeatAfter(tEval) - tEval : double.PositiveInfinity;
+        // スペクトラム（と遅いデバイスの「楽器で光る」）は、帯の明るさがキックの 1〜2 コマ後に上がる。
+        // 毎コマ送らないデバイスでは、キックのコマですぐ送ると上がる前のコマが届き、上がったコマは次の定期便（0.1 秒後）まで遅れた。
+        // そこで、上がりきったコマ（AccentMaxWait コマまで）を待って送る
+        bool bandDrawn = Renderer.ActiveVariant is EffectVariant.Spectrum or EffectVariant.MixSlow && Interval > tick * 1.0001;
         for (int i = 0; i < input.Events.Count; i++)
         {
-            if (IsAccent(input.Events[i], predictive)) Scheduler.Latch();
+            if (!IsAccent(input.Events[i], predictive)) continue;
+            if (bandDrawn) { if (_accentWait < 0) _accentWait = 0; }
+            else Scheduler.Latch();
         }
         _lastEval = tEval;
         _lastRender = tNow;
@@ -859,6 +873,11 @@ public sealed class RgbDeviceChannel
     /// </summary>
     public bool SendsEveryFrame(double tick) =>
         !Device.IsSlow && !Device.DirectGpu && EffectiveFps >= DitherMinFps && Interval <= tick * 1.05;
+
+    /// <summary>帯で描く光り方で、キックのあと、明るさの平均の上がりがこれより小さくなったコマで送る（0〜1）</summary>
+    public const double AccentRiseEps = 0.03;
+    /// <summary>帯で描く光り方で、キックのあと送るのを待つコマ数の上限（約 33 ミリ秒）</summary>
+    public const int AccentMaxWait = 2;
 
     /// <summary>遅いデバイスへ早めに送るきっかけになる出来事か</summary>
     public static bool IsAccent(AudioEvent e, bool predictive) => e.Kind switch
@@ -878,6 +897,7 @@ public sealed class RgbDeviceChannel
         try
         {
             Renderer.Render(Input, Frame);
+            AccentWaitStep();
             if (WhiteOnly)
             {
                 // 白い LED だけのデバイス（G610 など）: 色相の変化が明るさの変化にならないよう、R・G・B の最大を白として送る。
@@ -900,7 +920,7 @@ public sealed class RgbDeviceChannel
                 }
                 // グラボは小さな色の変化を送らない（しきい値）ので、パレットの隣の色が近いと色替えが届かない。
                 // ビートの色替えを描く光り方なら、色替え（クロスフェード）が終わったところで、差が小さくても 1 回送る
-                // （ムード・ミックスなど色替えを描かない光り方で送ると、わずかな変化を書き込んでちかちかする）
+                // （ムード・スペクトラムなど色替えを描かない光り方で送ると、わずかな変化を書き込んでちかちかする）
                 if (Device.IsLowWrite && Renderer.DrawsColorSteps) _stepDueT = Input.T + Math.Max(Renderer.ColorStepSettleSec, toEnd);
             }
             if (Input.T >= _latchDueT)
@@ -913,8 +933,6 @@ public sealed class RgbDeviceChannel
                 _stepPending = true;
                 _stepDueT = double.PositiveInfinity;
             }
-            // テンポ追従は、共有の色とは別に 2 拍ごとに帯の色を一度に変える: グラボには差が小さくてもすぐ送る
-            if (Device.IsLowWrite && Renderer.DrawsColorSteps && Renderer.OwnColorStep) _stepPending = true;
             // 音が止まったときの光り方への切り替えが終わった・音楽連動に戻った: グラボは、切り替えの最後のわずかな差
             // （ちかちかしやすいグラボは、一度の切り替えでも差が 40 以下）を送っていないので、ここで 1 回送る
             // （止まっている間・戻ったあと、色が少しずれたままにならない。同じ色なら送らない）
@@ -932,6 +950,33 @@ public sealed class RgbDeviceChannel
             _lastErrorAt = Input.T;
             return false;
         }
+    }
+
+    /// <summary>
+    /// キックのあと送るのを待っているとき: このコマの明るさの平均（各 LED の R・G・B の最大）が上がりきった
+    /// （前のコマより AccentRiseEps 未満しか上がっていない）か、AccentMaxWait コマ待ったら送る
+    /// </summary>
+    private void AccentWaitStep()
+    {
+        double mean = MeanLevel(Frame);
+        if (_accentWait >= 0)
+        {
+            if (_accentWait >= 1 && (mean - _prevMean < AccentRiseEps || _accentWait >= AccentMaxWait))
+            {
+                Scheduler.Latch();
+                _accentWait = -1;
+            }
+            else _accentWait++;
+        }
+        _prevMean = mean;
+    }
+
+    /// <summary>コマの明るさの平均（各 LED の R・G・B の最大。0〜1）</summary>
+    private static double MeanLevel(Rgb[] frame)
+    {
+        double sum = 0;
+        foreach (var q in frame) sum += Math.Max(q.R, Math.Max(q.G, q.B));
+        return sum / (Math.Max(1, frame.Length) * 255.0);
     }
 
     /// <summary>白い LED だけのデバイスか（G610 などの機種、またはデバイスの設定で「白だけ」）</summary>
@@ -955,9 +1000,11 @@ public sealed class RgbDeviceChannel
     /// <remarks>
     /// 更新の遅いデバイスも、ビートの頭・色の切り替えでは定期便を待たずに送る（ほかのデバイスより遅れて見えないように）。
     /// ただし、ちかちかしやすいデバイス（ASRock の Radeon グラボ）は、ビートに合わせた臨時の送信をしない
-    /// （色が変わったときだけ、0.25 秒以上あけて送る）
+    /// （色が変わったときだけ、0.25 秒以上あけて送る）。
+    /// 帯で描く光り方が、キックのあとの上がりきったコマを待っている間は送らない
     /// </remarks>
     public SendReason Decide(double tNow, double tick) =>
+        _accentWait >= 0 ? SendReason.None :
         Device.IsFlickerProne ? Scheduler.Decide(tNow, tick, Interval, false) : Scheduler.Decide(tNow, tick, Interval, _beatCue, _nextBeatIn);
 
     /// <summary>
@@ -1002,6 +1049,7 @@ public sealed class RgbDeviceChannel
             Array.Copy(Frame, _sent, Frame.Length);
             _hasSent = true;
         }
+        if (Renderer.DeferGuardCommit) Renderer.CommitSent(Frame, Frame.Length);
         LastSendAny = tNow;
         Fps.Count();
     }

@@ -32,7 +32,8 @@ public enum BeatLock
 ///   予測したビートの前後（周期の ±15%）で実際の立ち上がりの山を探し、ずれの 30% を位置に、4% を周期に反映する
 /// 確かさとロック:
 ///   直近 8 拍のずれの大きさと、ビートの位置の立ち上がりが平均よりどれだけ強いかから確かさを求め、
-///   0.55 以上が 4 拍続いたらロック、0.30 未満が 4 拍続くか、2 秒間低音の立ち上がりがなければ解除する
+///   0.55 以上が 4 拍続いたらロック、0.30 未満が 4 拍続くか、2 秒間低音の立ち上がりがなければ解除する。
+///   ロックした直後に確かさが下がったとき・予測した拍に音のない拍が続いて低音も消えたとき（曲が終わって話し声になった）も、すぐ解除する
 /// 取り込みスレッドからだけ使う。結果は変更しない BeatState（Published）として丸ごと差し替える
 /// </summary>
 public sealed class BeatTracker
@@ -87,6 +88,37 @@ public sealed class BeatTracker
         /// <summary>この確かさ以上が LockBeats 拍続いたらロック</summary>
         internal static double LockConf = 0.55;
         internal static int LockBeats = 4;
+        /// <summary>
+        /// ロックする前に、いちばん新しい 2 拍のどちらかに、これまでの拍のふだんの音（立ち上がり・低音の山の中央値）のこの割合以上の音があること（0 = 見ない）。
+        /// ニュースのジングルが終わったあと、シンバルの余韻の小さな山を拍とみなしてロックし、話し声の上で拍の見当で光っていた
+        /// </summary>
+        internal static double LockStillRatio = 0.5;
+        /// <summary>
+        /// 自分でロックした直後の ProbationBeats 拍は、確かさが ProbationConf 未満になったらすぐにロックを外す（0 = しない）。
+        /// 大声の言い合いが偶然そろって一度ロックすると、そのあと 2〜8 秒ほど拍の見当で光っていた（0.45 以上にすると、少しばらつく足音を追えなくなる）
+        /// </summary>
+        internal static double ProbationBeats = 8, ProbationConf = 0.30;
+        /// <summary>
+        /// ロック中に、予測した拍に音のない拍が MissUnlockBeats 拍続き、低音の立ち上がりも MissUnlockLowBeats 拍（短くても MissUnlockMinSec 秒）ないなら、
+        /// すぐにロックを外す（0 = しない）。曲が終わって話し声だけになっても、前の曲の拍で 3〜4 秒光っていた。
+        /// 音のない拍の近くの音が、いつも拍から同じくらいずれている（キックの抜けた間奏の、拍のすぐあとのハイハットなど）ときは、
+        /// MissUnlockSlowSec 秒まで待つ（1.5 秒ほどの間奏は、今までどおり拍の予測を続ける）
+        /// </summary>
+        internal static int MissUnlockBeats = 2;
+        internal static double MissUnlockLowBeats = 2, MissUnlockMinSec = 1.0, MissUnlockSlowSec = 2.0;
+        /// <summary>拍の上の山が、これまでの音のあった拍の山（中央値）のこの割合より小さければ、音のない拍として数える（0 = 見ない）</summary>
+        internal static double MissPeakRatio = 0.15;
+        /// <summary>
+        /// 音のない拍が続いたとき、低音の立ち上がりがあっても、拍の前後の低音の山がこれまでの拍の低音（中央値）のこの割合より小さい拍が
+        /// MissUnlockMinSec 秒分（短くても MissUnlockBeats 拍）続いたら、低音が拍から消えたとみなして外す（0 = 見ない）。曲が止まって話し声になると、声の低い音で外せなかった
+        /// </summary>
+        internal static double LowGoneRatio = 0.35;
+        /// <summary>
+        /// くし形のフィルターのテンポの確かさがこれ以上で、今の拍の並びと同じテンポ（倍・半分を含む）を言っていて、
+        /// 低音の立ち上がりが今の拍の上にそろっている間は、曲が続いているとみなして、確かさが下がってもロックを外さない（0 = 見ない）。
+        /// シンコペーションの多い曲で拍の位置を取り直したときに確かさが下がり、曲の途中で 4 秒ほどロックが外れていた
+        /// </summary>
+        internal static double SteadyTempoConf = 0.5;
         /// <summary>くし形のフィルターで、周期の何倍の自己相関を足すか</summary>
         internal static int[] CombMultiples = { 1, 2, 3, 4 };
         /// <summary>拍の位置の取り直しで、ちょうど半拍ずれた位置へ移るのに必要な、そろい方の比（今の位置の何倍か）</summary>
@@ -218,6 +250,11 @@ public sealed class BeatTracker
     private static double LockConf => Tune.LockConf;
     /// <summary>この確かさ未満が LockBeats 拍続いたらロックを外す</summary>
     private const double UnlockConf = 0.30;
+    /// <summary>
+    /// 確かさが UnlockConf 未満のまま、この秒数（短くても LockBeats 拍）たったらロックを外す。
+    /// 曲が止まって足音や銃声だけが続くと、拍の位置の取り直しのたびに数が 0 に戻り、前の曲の拍で光り続けていた
+    /// </summary>
+    private const double CoastMaxSec = 2.0;
     private static int LockBeats => Tune.LockBeats;
     /// <summary>低音の立ち上がりがこの秒数ないとロックを外す</summary>
     private static double NoOnsetUnlockSec => Tune.NoOnsetUnlockSec;
@@ -267,6 +304,12 @@ public sealed class BeatTracker
     // 曲が変わったあと、テンポを覚え直さない（ロックが一度外れるか、この時刻まで）
     private bool _memHold;
     private double _memHoldUntil;
+    // 確かさの低い拍が続いてロックを外したあと、覚えたテンポと違うテンポが続いたら忘れる（見張っているか・その候補の周期・続いた回数）
+    private bool _memWatch;
+    private double _memRival;
+    private int _memRivalCount;
+    // くし形の結果から選んだ周期（テンポの記憶の重みを掛ける前。コマ。なければ 0）
+    private double _rawTau;
     // 拍の並びが前の曲のもの（曲が変わったと知らされてから、新しい曲で拍の位置を取り直すかロックするまで。長くても _staleUntil まで）
     private bool _stale;
     private double _staleUntil;
@@ -305,11 +348,26 @@ public sealed class BeatTracker
     private readonly double[] _errHist = new double[HistLen];
     private readonly double[] _ratioHist = new double[HistLen];
     private readonly bool[] _hitHist = new bool[HistLen];
+    // 拍ごとの、予測の前後の立ち上がりと低音のいちばん大きな値（ロックする前に、今も拍に音があるかを見る）
+    private readonly double[] _peakHist = new double[HistLen];
+    private readonly double[] _lowHist = new double[HistLen];
     private int _histCount, _histHead;
     private double _phaseConf, _conf;
     private BeatLock _lock;
     private int _goodBeats, _badBeats;
+    // 自分でロックした直後（確かさが下がったらすぐ外す）・ロックしてから確かめた拍の数
+    private bool _probation;
+    private int _probationBeats;
+    // 予測した拍に音のない拍が続いた数・それでロックを外したあと、まだ低音の立ち上がりがない
+    private int _missRun, _lowGoneRun;
+    // 音のない拍の近くの音のずれ（コマ）・その拍に近くの音があったか・ずれがばらばらだったか
+    private double _missE;
+    private bool _missSound, _missScattered;
+    private bool _missReleased;
+    private double _okConfT;                // 確かさが UnlockConf 以上だった最後の時刻（ロックを外すまでの時間を数える）
     private long _lastLowOnset;
+    // 低音の立ち上がりがあったか（コマごと。覚えたテンポを忘れる前に、新しいテンポの拍の上の低音を確かめる）
+    private readonly bool[] _lowOn;
     private int _closedFrames;
     private bool _silenceDone;
     private readonly double[] _sdb = new double[4];
@@ -344,6 +402,7 @@ public sealed class BeatTracker
         _odf = new double[_len];
         _low = new double[_len];
         _acc = new double[_len];
+        _lowOn = new bool[_len];
         _acfFft = new Fft(_acfN);
         _x = new double[_len];
         _cum = new double[_len + 1];
@@ -414,10 +473,16 @@ public sealed class BeatTracker
     /// 外から分かった拍の並び（拍の AI・覚えた曲）に合わせる。周期は秒、beatT はその並びの拍の 1 つの時刻（音の時刻）。
     /// 拍の番号は今の並びから引き継ぎ、すぐにロックする。そのあとはいつもどおり、立ち上がりに合わせて少しずつ直していく
     /// </summary>
-    public void Steer(double periodSec, double beatT)
+    /// <param name="probation">true なら、自分でロックしたときと同じように、直後の ProbationBeats 拍は確かさが下がったらすぐ外す
+    /// （ロックを外したあとの音だけで決めた並び。話し声でも AI はそろった拍を返すことがある）</param>
+    public void Steer(double periodSec, double beatT, bool probation = false)
     {
-        if (!(periodSec > 0) || !double.IsFinite(beatT)) return;
-        double period = Math.Clamp(periodSec * _f, _tauMin * 0.9, _tauMax * 1.1);
+        if (!(periodSec > 0) || !double.IsFinite(periodSec) || !double.IsFinite(beatT)) return;
+        // 範囲の外のテンポは、倍・半分にして範囲に入れる（範囲の端で切ると、どのテンポとも合わない値になっていた）
+        double period = periodSec * _f;
+        while (period > _tauMax * 1.1) period /= 2;
+        while (period < _tauMin * 0.9) period *= 2;
+        period = Math.Clamp(period, _tauMin * 0.9, _tauMax * 1.1);
         // 公開する時刻は「コマの時刻 − BeatLatencySec」なので、その逆でコマの位置にする
         double pos = _n + (beatT + BeatLatencySec - _tNow) * _f;
         double next = pos;
@@ -434,6 +499,10 @@ public sealed class BeatTracker
         _lock = BeatLock.Locked;
         _goodBeats = LockBeats;
         _badBeats = 0;
+        _okConfT = _tNow;
+        // 拍の AI・覚えた曲で合わせたロックは、ふつうどおりに見る（probation のときだけ、ロックした直後を見張る）
+        _probation = probation && Tune.ProbationBeats > 0;
+        _probationBeats = 0;
         _stuckFrames = 0;
         _stale = _check = false;
         _lockSinceT = _tNow;
@@ -477,7 +546,9 @@ public sealed class BeatTracker
         _phaseConf = _conf = 0;
         _lock = BeatLock.Unlocked;
         _goodBeats = _badBeats = 0;
+        _probation = _missReleased = false;
         _lastLowOnset = long.MinValue / 4;
+        Array.Clear(_lowOn);
         _closedFrames = 0;
         _silenceDone = false;
         Array.Clear(_sdb);
@@ -491,6 +562,8 @@ public sealed class BeatTracker
         _memBeats = 0;
         _memHold = false;
         _memHoldUntil = 0;
+        _memWatch = false;
+        _memRivalCount = 0;
         _stale = _check = false;
         _staleUntil = 0;
         _checkHits = 0;
@@ -517,7 +590,7 @@ public sealed class BeatTracker
     /// 前の曲の拍の並びを確かめ直す。曲の間に無音のない再生では、知らせが届いたときもまだ前の曲の拍の並びでロックしていることが多く、
     /// そのまま光ると 2 秒ほど前の曲の拍で光っていた（ロック中は、くし形のフィルターが別のテンポを言っても乗り換えない）。
     ///   ・ロック中なら、拍の並びを「前の曲のもの」（GridStale）とし、続く SongCheckBeats 拍で、予測した拍に音があるかを確かめる。
-    ///     その間はロックしていないことにする（「ビートで色替え」「パルス」は拍の見当では光らず、キックで光る）。
+    ///     その間はロックしていないことにする（「ビートで色替え」は拍の見当では光らず、キックで光る）。
     ///     全部の拍に音があれば、ロックも拍の並びもそのまま（曲がつながったアルバム・DJ ミックスなど、拍が続いている）。
     ///     1 拍でも外れたら探し直す（Restart）
     ///   ・ロックしていなければ、すぐ探し直す
@@ -609,7 +682,12 @@ public sealed class BeatTracker
         _low[slot] = double.IsFinite(low) ? low : 0;
         _acc[slot] = double.IsFinite(accent) ? accent : 0;
         if (_count < _len) _count++;
-        if (lowOnset) _lastLowOnset = _n;
+        if (lowOnset)
+        {
+            _lastLowOnset = _n;
+            _missReleased = false;
+        }
+        _lowOn[slot] = lowOnset;
 
         // 無音: 0.5 秒でテンポの更新を止め、4 秒でビートの位置を忘れる（テンポは半分だけ覚えておく）
         if (gateOpen)
@@ -653,7 +731,8 @@ public sealed class BeatTracker
         }
 
         // 音楽が鳴っているのに、今のテンポでロックできないまま StuckSec 続いたら、そのテンポをしばらく抑えて別の候補を試す
-        if (_hasGrid && _lock == BeatLock.Unlocked && gateOpen && _n - _lastLowOnset <= _noOnsetFrames)
+        // （音のない拍が続いてロックを外したあとは、次の低音の立ち上がりまで数えない。曲が終わる前の低音を、まだ鳴っていると数えていた）
+        if (_hasGrid && _lock == BeatLock.Unlocked && gateOpen && _n - _lastLowOnset <= _noOnsetFrames && !_missReleased)
         {
             if (++_stuckFrames >= _stuckLimit) VetoCurrentTempo();
         }
@@ -682,6 +761,7 @@ public sealed class BeatTracker
     {
         RecoverVeto();
         double tf = EstimateTempo();
+        WatchMemory();
         if (tf <= 0) return;
         if (_period > 0 && Math.Abs(Math.Log(tf / _period)) < CloseLogRatio)
         {
@@ -809,6 +889,7 @@ public sealed class BeatTracker
     /// <summary>テンポの候補を求める（周期。コマ単位の小数）。求められなければ 0</summary>
     private double EstimateTempo()
     {
+        _rawTau = 0;
         int len = _count;
         long oldest = _n - len + 1;
         for (int t = 0; t < len; t++) _x[t] = _odf[(int)((oldest + t) % _len)];
@@ -886,6 +967,9 @@ public sealed class BeatTracker
             return 0;
         }
         for (int j = 0; j < _m; j++) _obs[j] /= obsSum;
+        int jRaw = 0;
+        for (int j = 1; j < _m; j++) if (_obs[j] > _obs[jRaw]) jRaw = j;
+        _rawTau = _tauMin + jRaw;
         ApplyTempoMemory();
         double postSum = 0;
         for (int j = 0; j < _m; j++)
@@ -1089,7 +1173,10 @@ public sealed class BeatTracker
         _stale = _check = false;
         _pendCount = 0;
         ClearHist();
-        _goodBeats = _badBeats = 0;
+        _goodBeats = 0;
+        // ロック中の位置の取り直しでは、確かさの低い拍の数を消さない（拍のない音で取り直しをくり返し、いつまでもロックを外せなかった）。
+        // ただし曲が続いている（SteadyTempo）なら消す（シンコペーションで取り直しただけ）
+        if (_lock == BeatLock.Unlocked || SteadyTempo()) _badBeats = 0;
         if (!allowGlide)
         {
             Array.Clear(_sdb);
@@ -1128,6 +1215,8 @@ public sealed class BeatTracker
         _pendCount = 0;
         ClearHist();
         _goodBeats = _badBeats = 0;
+        // ロック中にテンポの判定が何度も同じ半分を言った: 曲の拍の並びとみなし、ロックした直後の見張りをやめる
+        _probation = false;
         Array.Clear(_sdb);
         _sdbCount = 0;
     }
@@ -1156,10 +1245,11 @@ public sealed class BeatTracker
         }
         long c = (long)Math.Round(pb);
         int best = 0;
-        double mx = double.NegativeInfinity, segSum = 0;
+        double mx = double.NegativeInfinity, segSum = 0, lowMx = 0;
         for (int j = 0; j <= 2 * w; j++)
         {
             double v = OdfAt(c - w + j);
+            lowMx = Math.Max(lowMx, LowAt(c - w + j));
             segSum += v;
             if (v > mx)
             {
@@ -1221,13 +1311,48 @@ public sealed class BeatTracker
 
         // 位置と周期の修正（比例・積分）。公開する位置は、なめらかに追いつかせる
         double oldLast = _nextBeat - _period;
+#if BEATHUE_BETA
+        // 強い立ち上がりが同じ側に続くときだけ、拍の位置と周期を速く追い直す。
+        int previous = (_histHead + HistLen - 1) % HistLen;
+        int earlier = (previous + HistLen - 1) % HistLen;
+        if (!outlier && s >= 0.7 && Math.Abs(e) >= 0.010 * _f && _histCount >= 2
+            && _hitHist[previous] && _hitHist[earlier] && _errHist[previous] * e > 0 && _errHist[earlier] * e > 0)
+            gain *= 2;
+#endif
         _nextBeat += PhaseGain * gain * e;
         double newPeriod = Math.Clamp(_period + PeriodGain * gain * e, _tauMin * 0.9, _tauMax * 1.1);
         _period = newPeriod;
         _glide -= (_nextBeat - _period - oldLast) / _f;
 
-        AddHist(e, (segSum / (2 * w + 1)) / meanAll, s > 0.2 && !outlier);
-        DiagLog?.Invoke($"beat {idx} t {_tNow:F2} e {e * 1000 / _f:F0}ms s {s:F2} ratio {(segSum / (2 * w + 1)) / meanAll:F2} w {w * 1000 / _f:F0}ms{(outlier ? " outlier" : "")}");
+        bool hitBeat = s > 0.2 && !outlier;
+        // 音のない拍が続いた数。拍の上の音が、これまでの拍の音（中央値）の MissPeakRatio 倍より小さければ、音のない拍として数える
+        // （ジングルのあと、シンバルの余韻の小さな山を拍の音とみなして、話し声の上でロックしたままだった）
+        bool heard = hitBeat, refs = HitMedians(out double refOdf, out double refLow);
+        if (heard && Tune.MissPeakRatio > 0 && refs)
+            heard = (refOdf <= 0 && refLow <= 0) || (refOdf > 0 && mx >= Tune.MissPeakRatio * refOdf) || (refLow > 0 && lowMx >= Tune.MissPeakRatio * refLow);
+        if (heard) _missRun = 0;
+        else
+        {
+            // 音のない拍の近くの音のずれが、前の音のない拍とばらばら（話し声の音節）か。音がない拍どうしは、ばらばらとみなさない
+            bool scattered = _missRun > 0 && s > 0.2 && _missSound
+                             && (Math.Sign(e) != Math.Sign(_missE) || Math.Abs(e - _missE) > Tune.OffsetSpreadSec * _f);
+            _missScattered = _missRun > 0 && (_missScattered || scattered);
+            _missRun++;
+            _missE = e;
+            _missSound = s > 0.2;
+        }
+        // 低音が拍から消えた拍が続いた数（前の拍からこの拍までの低音の山が、これまでの拍の低音の LowGoneRatio 倍より小さい。話し声の低い音は、キックやベースよりずっと小さい。
+        // 1 拍分さかのぼって見るのは、テンポがゆれて拍の並びが先に進んでも、遅れて届くキックがあれば消えたとみなさないため）
+        bool lowGone = false;
+        if (Tune.LowGoneRatio > 0 && refs && refLow > 0 && lowMx < Tune.LowGoneRatio * refLow)
+        {
+            double wide = 0;
+            for (long i = c - (long)Math.Round(_period); i <= c + w; i++) wide = Math.Max(wide, LowAt(i));
+            lowGone = wide < Tune.LowGoneRatio * refLow;
+        }
+        _lowGoneRun = lowGone ? _lowGoneRun + 1 : 0;
+        AddHist(e, (segSum / (2 * w + 1)) / meanAll, hitBeat, mx, lowMx);
+        DiagLog?.Invoke($"beat {idx} t {_tNow:F2} e {e * 1000 / _f:F0}ms s {s:F2} peak {mx:F2} low {lowMx:F2} ratio {(segSum / (2 * w + 1)) / meanAll:F2} w {w * 1000 / _f:F0}ms{(outlier ? " outlier" : "")}");
         UpdateConfidence();
         UpdateLock();
         UpdateDownbeat(idx, c, w);
@@ -1279,18 +1404,114 @@ public sealed class BeatTracker
         _conf = _phaseConf * (0.5 + 0.5 * _tempoConf);
     }
 
+    /// <summary>
+    /// ロックする前に: いちばん新しい 2 拍のどちらかに、音のあった拍の山（立ち上がり・低音それぞれの中央値）の LockStillRatio 倍以上の音があるか。
+    /// 曲が終わったあとの余韻や話し声の小さな山だけで、終わった曲の拍の並びにロックしないように
+    /// </summary>
+    private bool StillSounding()
+    {
+        if (Tune.LockStillRatio <= 0 || _histCount < 3 || !HitMedians(out double refOdf, out double refLow)) return true;
+        for (int k = 1; k <= 2; k++)
+        {
+            int i = (_histHead - k + HistLen) % HistLen;
+            if ((refOdf > 0 && _peakHist[i] >= Tune.LockStillRatio * refOdf) || (refLow > 0 && _lowHist[i] >= Tune.LockStillRatio * refLow)) return true;
+        }
+        DiagLog?.Invoke($"lock: no sound on the newest beats (t {_tNow:F2}), wait");
+        return false;
+    }
+
+    /// <summary>直近の確かさの記録のうち、音のあった拍の山（立ち上がり・低音）の中央値。音のあった拍がなければ false</summary>
+    private bool HitMedians(out double refOdf, out double refLow)
+    {
+        Span<double> po = stackalloc double[HistLen], pl = stackalloc double[HistLen];
+        int hits = 0;
+        for (int i = 0; i < _histCount; i++)
+        {
+            if (!_hitHist[i]) continue;
+            po[hits] = _peakHist[i];
+            pl[hits] = _lowHist[i];
+            hits++;
+        }
+        refOdf = refLow = 0;
+        if (hits == 0) return false;
+        po[..hits].Sort();
+        pl[..hits].Sort();
+        refOdf = po[hits / 2];
+        refLow = pl[hits / 2];
+        return true;
+    }
+
+    /// <summary>音のない拍が続いてロックを外すまでの、低音のない時間（秒）。近くの音のずれがばらばら（話し声）なら短く、そろっていれば長く待つ</summary>
+    private double MissSec() => _missScattered ? Tune.MissUnlockMinSec : Math.Max(Tune.MissUnlockMinSec, Tune.MissUnlockSlowSec);
+
+    /// <summary>
+    /// 曲が続いている: くし形のフィルターが今の拍の並びのテンポをはっきり見ていて、低音の立ち上がりも拍の上にそろっている
+    /// （今の周期から KickSpread までずれた周期の並びでもよい。生演奏のテンポがゆっくり揺れて、拍の位置が少しずつずれても曲とみなす）
+    /// </summary>
+    private bool SteadyTempo() =>
+        Tune.SteadyTempoConf > 0 && _tempoConf >= Tune.SteadyTempoConf && _rawTau > 0 && _period > 0
+        && OctaveDistance(_rawTau, _period) < CloseLogRatio && KicksNearGrid(_period);
+
+    /// <summary>SteadyTempo で、低音の立ち上がりの並びを探す周期の幅（今の周期に対する割合）</summary>
+    private const double KickSpread = 0.08;
+
+    /// <summary>周期 tau か、tau から KickSpread までずれた周期（0.5 コマごと）で、低音の立ち上がりが拍の上にそろっている（KicksOnGrid）</summary>
+    private bool KicksNearGrid(double tau)
+    {
+        if (KicksOnGrid(tau)) return true;
+        for (double d = 0.5; d <= tau * KickSpread; d += 0.5)
+            if (KicksOnGrid(tau + d) || KicksOnGrid(tau - d)) return true;
+        return false;
+    }
+
     private void UpdateLock()
     {
         RememberTempo();
         _goodBeats = _conf >= LockConf ? _goodBeats + 1 : 0;
-        _badBeats = _conf < UnlockConf ? _badBeats + 1 : 0;
+        // 曲が続いている（SteadyTempo）間は、確かさが下がっても拍の数でも時間でも外さない
+        // （シンコペーションで拍の位置を取り直した・生演奏のテンポがゆっくり揺れただけ）
+        bool steady = SteadyTempo();
+        _badBeats = _conf < UnlockConf && !steady ? _badBeats + 1 : 0;
+        if (_conf >= UnlockConf || _lock == BeatLock.Unlocked || steady) _okConfT = _tNow;
+        // 自分でロックした直後（ProbationBeats 拍まで）に確かさが下がった（曲が続いているときは見ない）
+        if (_probation && _lock != BeatLock.Unlocked && ++_probationBeats > Tune.ProbationBeats) _probation = false;
+        bool probationFail = _probation && _lock != BeatLock.Unlocked && _conf < Tune.ProbationConf && !steady;
         if (_lock == BeatLock.Unlocked)
         {
-            if (_goodBeats >= LockBeats) { _lock = BeatLock.Locked; _stale = false; _lockSinceT = _tNow; }
+            if (_goodBeats >= LockBeats && StillSounding())
+            {
+                _lock = BeatLock.Locked;
+                _stale = false;
+                _lockSinceT = _tNow;
+                // 覚えているテンポ（さっきまで曲でしっかりロックしていた）でのロックは見張らない（テンポの揺れる演奏で、つかみ直すたびに外れていた）
+                _probation = Tune.ProbationBeats > 0 && !(MemoryWeight() >= Tune.MemKeepMin && _memPeriod > 0 && MemoryDistance(_period) < CloseLogRatio);
+                _probationBeats = 0;
+            }
         }
-        else if (_badBeats >= LockBeats)
+        else if (Tune.MissUnlockBeats > 0 && _missRun >= Tune.MissUnlockBeats
+                 && (_n - _lastLowOnset > Math.Max(MissSec() * _f, Tune.MissUnlockLowBeats * _period) || _lowGoneRun >= Math.Max(Tune.MissUnlockBeats, MissSec() * _f / _period)))
         {
+            // 予測した拍に音がなく、低音も止まった（曲が終わって話し声だけになった）: すぐに外す。
+            // 確かさの記録も消す（消さないと、残った曲の拍の記録で次の拍にまたロックしていた）
+            DiagLog?.Invoke($"miss unlock t {_tNow:F2}");
             _lock = BeatLock.Unlocked;
+            ClearHist();
+            _phaseConf = _conf = 0;
+            _goodBeats = 0;
+            _probation = false;
+            _missReleased = true;
+            // 別のテンポの曲に変わったのかもしれないので、覚えたテンポを見張る（WatchMemory）
+            _memWatch = true;
+            _memRivalCount = 0;
+        }
+        else if (_badBeats >= LockBeats || _tNow - _okConfT > Math.Max(CoastMaxSec, LockBeats * _period / _f)
+                 || probationFail)
+        {
+            _probation = false;
+            _lock = BeatLock.Unlocked;
+            // 拍が合わなくなって外した: 曲のテンポが変わったかもしれないので、覚えたテンポを見張る（WatchMemory）
+            _memWatch = true;
+            _memRivalCount = 0;
         }
         else
         {
@@ -1376,6 +1597,87 @@ public sealed class BeatTracker
         if (_memBeats < Tune.MemMinBeats) return;
         _memPeriod = _period;
         _memAtSec = _tNow;
+    }
+
+    /// <summary>
+    /// 確かさの低い拍が続いてロックを外したあと（_memWatch）: くし形の結果（記憶の重みを掛ける前）が、覚えたテンポ（倍・半分を含む）から
+    /// CloseLogRatio 以上離れた同じテンポ（倍・半分を含む）を ConfirmUpdates 回続けて言い、その拍の上に低音の立ち上がりがそろっていたら、
+    /// 覚えたテンポを忘れる。曲の間に無音のないまま別のテンポの曲に変わると、前の曲のテンポに引っぱられ、
+    /// 新しいテンポでロックするまで 12〜15 秒かかっていた。
+    /// 連射の銃声では、くし形の結果は同じテンポを言い続けるが、低音が拍の並びに乗らないので忘れない（忘れると、拍の見当の光が変わった）。
+    /// ロックしたら見張りをやめる
+    /// </summary>
+    private void WatchMemory()
+    {
+        if (!_memWatch) return;
+        if (_lock != BeatLock.Unlocked || _memPeriod <= 0)
+        {
+            _memWatch = false;
+            return;
+        }
+        double raw = _rawTau;
+        if (raw <= 0 || MemoryDistance(raw) < CloseLogRatio)
+        {
+            _memRivalCount = 0;
+            return;
+        }
+        bool kicks = KicksOnGrid(raw) || (2 * raw <= _tauMax * 1.03 && KicksOnGrid(2 * raw));
+        if (!kicks)
+        {
+            _memRivalCount = 0;
+            return;
+        }
+        _memRivalCount = _memRivalCount > 0 && OctaveDistance(raw, _memRival) < CloseLogRatio ? _memRivalCount + 1 : 1;
+        _memRival = raw;
+        if (_memRivalCount < ConfirmUpdates) return;
+        DiagLog?.Invoke($"tempo memory: {60 * _f / _memPeriod:F1} BPM forgotten ({60 * _f / raw:F1} BPM {ConfirmUpdates} times after the unlock) t {_tNow:F2}");
+        _memPeriod = 0;
+        _memBeats = 0;
+        _memWatch = false;
+        _memRivalCount = 0;
+    }
+
+    /// <summary>
+    /// 周期 tau の拍の並び（いちばんそろう位置）の直近 MemKickBeats 拍のうち、低音の立ち上がりがあった拍が 1 拍を除いて全部で、
+    /// 並びから外れた低音の立ち上がりが、並びの上の数より多くないか（連射の銃声のように、拍の並びと関係なく続く音では false）
+    /// </summary>
+    private bool KicksOnGrid(double tau)
+    {
+        if (tau <= 0) return false;
+        int beats = MemKickBeats;
+        long span = (long)Math.Ceiling(beats * tau);
+        if (span + 3 >= _count) return false;
+        bool On(long q) => q >= 0 && q <= _n && _n - q < _count && _lowOn[(int)(q % _len)];
+        int p = Math.Max(1, (int)Math.Ceiling(tau)), best = -1, bestPhi = 0;
+        for (int phi = 0; phi < p; phi++)
+        {
+            int hits = 0;
+            for (int k = 0; k < beats; k++)
+            {
+                long c = _n - phi - (long)Math.Round(k * tau);
+                for (long q = c - 2; q <= c + 2; q++) if (On(q)) { hits++; break; }
+            }
+            if (hits > best) { best = hits; bestPhi = phi; }
+        }
+        int all = 0, onGrid = 0;
+        for (long q = _n - span; q <= _n; q++)
+        {
+            if (!On(q)) continue;
+            all++;
+            double ph = (_n - bestPhi - q) / tau;
+            if (Math.Abs(ph - Math.Round(ph)) * tau <= 2.5) onGrid++;
+        }
+        return best >= beats - 1 && all - onGrid <= onGrid;
+    }
+
+    /// <summary>覚えたテンポを忘れる前に、新しいテンポの拍の上の低音を確かめる拍の数</summary>
+    private const int MemKickBeats = 8;
+
+    /// <summary>2 つの周期の距離（対数の比。倍・半分も同じテンポとみなす）</summary>
+    private static double OctaveDistance(double a, double b)
+    {
+        double d = Math.Abs(Math.Log(a / b));
+        return Math.Min(d, Math.Min(Math.Abs(Math.Log(a / (2 * b))), Math.Abs(Math.Log(2 * a / b))));
     }
 
     /// <summary>覚えているテンポの重み（0〜1。最後にしっかりロックしてから MemFadeSec で 1/e に薄れる）</summary>
@@ -1525,11 +1827,13 @@ public sealed class BeatTracker
         _pendCount--;
     }
 
-    private void AddHist(double err, double ratio, bool hit)
+    private void AddHist(double err, double ratio, bool hit, double peak, double low)
     {
         _errHist[_histHead] = err;
         _ratioHist[_histHead] = ratio;
         _hitHist[_histHead] = hit;
+        _peakHist[_histHead] = peak;
+        _lowHist[_histHead] = low;
         _histHead = (_histHead + 1) % HistLen;
         if (_histCount < HistLen) _histCount++;
     }
@@ -1538,6 +1842,8 @@ public sealed class BeatTracker
     {
         _histCount = _histHead = 0;
         _offCount = 0;
+        _missRun = _lowGoneRun = 0;
+        _missScattered = false;
     }
 }
 

@@ -22,8 +22,6 @@ public static class LightingUiTests
             MusicTuning.ApplyPreset(cfg, preset);
             T.Check(cfg.Music.Preset == preset, $"{preset}: Preset stays {preset}");
             T.Check(MusicStyles.All.Contains(cfg.MusicStyle), $"{preset}: effect is a known style ({cfg.MusicStyle})");
-            // プリセットはストロボを選ばない（ストロボは利用者が「激しい点滅を抑える」をオフにして自分で選ぶものだけ）
-            T.Check(cfg.MusicStyle != MusicStyles.Strobe, $"{preset}: never selects Strobe");
             T.Check(Intensities.All.Contains(cfg.Music.Intensity), $"{preset}: intensity known");
             T.Check(Palettes.All.Contains(cfg.Music.Palette), $"{preset}: palette known");
         }
@@ -78,8 +76,8 @@ public static class LightingUiTests
         var cfg = new RgbConfig();
         var got = cfg.SettingsFor("Some Device");
         T.Check(got.Name == "Some Device" && cfg.DeviceSettings.Count == 0, "SettingsFor does not add an entry");
-        cfg.DeviceSettings.Add(new RgbDeviceSettings { Name = "A", Effect = MusicStyles.Mood, Mirror = true });
-        T.Check(cfg.SettingsFor("A").Effect == MusicStyles.Mood && cfg.SettingsFor("A").Mirror == true, "SettingsFor finds the saved entry");
+        cfg.DeviceSettings.Add(new RgbDeviceSettings { Name = "A", Effect = MusicStyles.Ripple, Mirror = true });
+        T.Check(cfg.SettingsFor("A").Effect == MusicStyles.Ripple && cfg.SettingsFor("A").Mirror == true, "SettingsFor finds the saved entry");
     }
 
     /// <summary>×2・÷2 のボタンは 0.5 / 1 / 2 だけを使う。保存のときの正規化でもその 3 つにそろう</summary>
@@ -91,17 +89,6 @@ public static class LightingUiTests
             m.Normalize();
             T.Near(m.TempoFactor, expected, 1e-9, $"TempoFactor {input} → {expected}");
         }
-    }
-
-    /// <summary>「激しい点滅を抑える」がオンなら、強さ「激しい」でもストロボは使わない</summary>
-    public static void TestStrobeOnlyWithoutReduceFlashing()
-    {
-        var cfg = new RgbConfig { MusicStyle = MusicStyles.Strobe };
-        MusicTuning.ApplyIntensity(cfg.Music, Intensities.Intense);
-        cfg.Music.ReduceFlashing = true;
-        T.Check(!MusicTuning.Resolve(cfg).StrobeAllowed, "reduce flashing on → strobe not allowed");
-        cfg.Music.ReduceFlashing = false;
-        T.Check(MusicTuning.Resolve(cfg).StrobeAllowed, "reduce flashing off + Intense → strobe allowed");
     }
 
     /// <summary>「更新が遅いデバイス」の印（I2C・SMBus・GPU・メモリ）</summary>

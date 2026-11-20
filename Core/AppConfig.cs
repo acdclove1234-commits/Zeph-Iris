@@ -241,18 +241,83 @@ public sealed class AppConfig : ObservableObject
         Rgb.Brightness = Math.Clamp(Rgb.Brightness, 10, 100);
         Rgb.Sensitivity = Math.Clamp(Rgb.Sensitivity, 0.5, 3);
         Rgb.Music ??= new();
+        bool knownPreset = MusicPresets.All.Contains(Rgb.Music.Preset);
         Rgb.Music.Normalize();
         Rgb.DeviceSettings ??= new();
         Rgb.DeviceSettings.RemoveAll(d => d is null || string.IsNullOrEmpty(d.Name));
+        // 旧ベータの「流れる波」は既定の表示へ戻す。既存の「波」は別の設定。
+        if (Rgb.Mode == "FlowWave") Rgb.Mode = RgbModes.Temperature;
+        MigrateStandaloneStyles(Rgb);
+        Rgb.ModePalette = Palettes.All.Contains(Rgb.ModePalette) ? Rgb.ModePalette : Palettes.Rainbow;
         foreach (var d in Rgb.DeviceSettings) d.Normalize();
         Rgb.DeviceSettings = Rgb.DeviceSettings.GroupBy(d => d.Name).Select(g => g.Last()).ToList();
         Rgb.Devices ??= new();
         Rgb.SwapRedGreen ??= new();
-        if (!MusicStyles.All.Contains(Rgb.MusicStyle)) Rgb.MusicStyle = MusicStyles.BeatHue;
+        // なくした光り方（パルス・ストロボ・ミックス・エナジー）は置き換え先に、知らない名前は「ビートで色替え」にする。
+        // 置き換えたときと、なくしたプリセット（「映画・ゲーム」など）のときは、光り方・強さ・色・反応のしかたの値はそのままで、
+        // プリセットは同じ組み合わせのものがあればそれ、なければ「カスタム」にする
+        string savedStyle = Rgb.MusicStyle;
+        Rgb.MusicStyle = MusicStyles.Normalize(savedStyle);
+        if (MusicStyles.Replacement(savedStyle) is not null || !knownPreset)
+            Rgb.Music.Preset = MusicTuning.MatchingPreset(Rgb) ?? MusicPresets.Custom;
         if (Rgb.OnStop is not (RgbStopBehaviors.Off or RgbStopBehaviors.Static or RgbStopBehaviors.Keep)) Rgb.OnStop = RgbStopBehaviors.Off;
         if (string.IsNullOrWhiteSpace(Notify.NtfyServer)) Notify.NtfyServer = "https://ntfy.sh";
         if (string.IsNullOrWhiteSpace(Notify.NtfyTopic)) Notify.NtfyTopic = NotifyConfig.NewTopic();
         SensorLabels = new Dictionary<string, SensorLabel>(SensorLabels ?? new(), StringComparer.OrdinalIgnoreCase);
+    }
+
+    /// <summary>
+    /// 6.15.10 までの音楽連動の「ムード」を、音に反応しない光り方「ムード」（RgbModes）にする。
+    ///   ・全体: 光り方が音楽連動で、音楽の光り方がムードなら、光り方をその新しい光り方にする
+    ///     （音楽の光り方は、あとで MusicStyles.Replacement の置き換え先にする）
+    ///   ・デバイス: 全体が音楽連動で、デバイスの光り方を上書きしていなければ、デバイスの光り方をその新しい光り方にする。
+    ///     ただし、ゾーンで別の音楽の光り方を選んでいれば（デバイスの光り方にすると、そのゾーンが音楽に反応しなくなる）、「自動」
+    ///   ・ゾーン: デバイスと同じ決め方（全体が音楽連動で、デバイス・ゾーンの光り方を上書きしていなければ、ゾーンの光り方）
+    ///   ・そのほか（全体が音楽連動でない、光り方を上書きしている）は、デバイス・ゾーンの音楽の光り方を「自動」にする
+    ///     （その音楽の光り方は、もともと使われていなかった）
+    /// 置き換えたら、新しい光り方の色の組み合わせは、音楽連動の色の組み合わせにする（今までと同じ色で光る）
+    /// </summary>
+    internal static void MigrateStandaloneStyles(RgbConfig rgb)
+    {
+        bool music = rgb.Mode == RgbModes.Music;
+        bool moved = false;
+        if (music && MusicStyles.StandaloneMode(rgb.MusicStyle) is { } global)
+        {
+            rgb.Mode = global;
+            moved = true;
+        }
+        foreach (var d in rgb.DeviceSettings ?? new())
+        {
+            if (d is null) continue;
+            bool devFree = RgbLightModes.Normalize(d.LightMode).Length == 0;
+            string devNew = "";
+            if (MusicStyles.StandaloneMode(d.Effect) is { } dm)
+            {
+                // ゾーンで、ほかの音楽の光り方（自動を含む）を選んでいたら、デバイスの光り方にはしない
+                bool zoneMusic = d.Zones?.Exists(z => z is not null && RgbLightModes.Normalize(z.LightMode).Length == 0
+                    && !string.IsNullOrEmpty(z.Effect) && z.Effect != RgbZoneSettings.SameAsDevice && MusicStyles.StandaloneMode(z.Effect) is null) ?? false;
+                if (music && devFree && !zoneMusic)
+                {
+                    d.LightMode = devNew = dm;
+                    moved = true;
+                }
+                d.Effect = EffectCatalog.Auto;
+            }
+            if (d.Zones is null) continue;
+            foreach (var z in d.Zones)
+            {
+                if (z is null || MusicStyles.StandaloneMode(z.Effect) is not { } zm) continue;
+                if (music && devFree && RgbLightModes.Normalize(z.LightMode).Length == 0)
+                {
+                    // デバイスも同じ光り方にしたなら、ゾーンはデバイスと同じのまま
+                    if (zm != devNew) z.LightMode = zm;
+                    z.Effect = RgbZoneSettings.SameAsDevice;
+                    moved = true;
+                }
+                else z.Effect = EffectCatalog.Auto;
+            }
+        }
+        if (moved && rgb.Music is { } m && Palettes.All.Contains(m.Palette)) rgb.ModePalette = m.Palette;
     }
 
     /// <summary>設定のどこかで参照しているセンサー（温度・回転数）と制御端子の ID</summary>
@@ -842,6 +907,7 @@ public sealed class RgbConfig : ObservableObject
     private double _brightness = 100;
     private string _staticColor = "#6A00FF";
     private string _musicStyle = MusicStyles.BeatHue;
+    private string _modePalette = Palettes.Rainbow;
     private string _musicSource = "";
     private bool _musicAi = true;
     private bool _musicMemory = true;
@@ -894,7 +960,9 @@ public sealed class RgbConfig : ObservableObject
     public double Brightness { get => _brightness; set => Set(ref _brightness, value); }
     /// <summary>固定色・呼吸・音楽（ビート）の色 "#RRGGBB"</summary>
     public string StaticColor { get => _staticColor; set { if (!string.IsNullOrEmpty(value)) Set(ref _staticColor, value); } }
-    /// <summary>音楽連動の光り方: BeatHue / Mix / Pulse / Meter</summary>
+    /// <summary>光り方「ムード」（音に反応しない）の色の組み合わせ（Palettes の名前）</summary>
+    public string ModePalette { get => _modePalette; set { if (!string.IsNullOrEmpty(value)) Set(ref _modePalette, value); } }
+    /// <summary>音楽連動の光り方（MusicStyles の値: BeatHue / Spectrum / Meter など）</summary>
     public string MusicStyle { get => _musicStyle; set { if (!string.IsNullOrEmpty(value)) Set(ref _musicStyle, value); } }
     /// <summary>反応する音（空ならすべての音。アプリ名ならそのアプリの音が鳴っているときだけ）</summary>
     public string MusicSource { get => _musicSource; set => Set(ref _musicSource, value ?? ""); }
@@ -957,7 +1025,7 @@ public sealed class MusicConfig : ObservableObject
     private string _idleEffect = IdleEffects.Mood;
     private double _idleDelaySec = 2;
 
-    /// <summary>プリセット: Chill / Groove / Party / Club / Visualizer / Cinema / Custom（表示用。値を変えたら Custom）</summary>
+    /// <summary>プリセット: Chill / Groove / Party / Club / Visualizer / Custom（表示用。値を変えたら Custom）</summary>
     public string Preset { get => _preset; set { if (!string.IsNullOrEmpty(value)) Set(ref _preset, value); } }
     /// <summary>強さ: Subtle / Moderate / High / Intense（ビートの光の強さ・色の切り替えの間隔に使う）</summary>
     public string Intensity { get => _intensity; set { if (!string.IsNullOrEmpty(value)) Set(ref _intensity, value); } }
@@ -983,7 +1051,7 @@ public sealed class MusicConfig : ObservableObject
     public double Contrast { get => _contrast; set => Set(ref _contrast, value); }
     /// <summary>音の遅れの補正（ミリ秒、−100〜+400）。Bluetooth のイヤホンなど、音が遅れて聞こえるときに + にする</summary>
     public double AudioDelayMs { get => _audioDelayMs; set => Set(ref _audioDelayMs, value); }
-    /// <summary>激しい点滅を抑える（1 秒に 3 回まで。ストロボは使わない）</summary>
+    /// <summary>激しい点滅を抑える（強い点滅を 1 秒に 3 回まで）</summary>
     public bool ReduceFlashing { get => _reduceFlashing; set => Set(ref _reduceFlashing, value); }
     /// <summary>テンポの追跡: Auto / KickOnly / Off</summary>
     public string TempoMode { get => _tempoMode; set { if (!string.IsNullOrEmpty(value)) Set(ref _tempoMode, value); } }
@@ -1097,7 +1165,8 @@ public sealed class RgbDeviceSettings
     public void Normalize()
     {
         Name ??= "";
-        if (string.IsNullOrEmpty(Effect)) Effect = "Auto";
+        // 光り方は "Auto" か MusicStyles の値。なくした光り方は置き換え先（ミックスは "Auto"）に、知らない名前は "Auto"（選択欄が空にならないように）
+        Effect = MusicStyles.NormalizeOverride(Effect);
         MaxFps = MaxFps <= 0 ? 0 : Math.Clamp(MaxFps, 1, 60);
         LatencyMs = LatencyMs < 0 ? -1 : Math.Clamp(LatencyMs, 0, 200);
         GainR = Math.Clamp(GainR, 0, 100);
@@ -1163,7 +1232,9 @@ public sealed class RgbZoneSettings
         Fans = Fans <= 1 ? 0 : Math.Min(Fans, RgbZoneSplit.MaxFans);
         LightColor = RgbLightModes.NormalizeColor(LightColor);
         Sound = MusicSounds.Normalize(Sound);
-        if (string.IsNullOrEmpty(Effect)) Effect = SameAsDevice;
+        // 光り方は SameAsDevice・"Auto"・MusicStyles の値。なくした光り方は置き換え先（ミックスは "Auto"）に、知らない名前は "Auto"
+        // （描くときも自動として描くのと同じ。選択欄も空にならない）
+        Effect = string.IsNullOrEmpty(Effect) || Effect == SameAsDevice ? SameAsDevice : MusicStyles.NormalizeOverride(Effect);
         GainR = Math.Clamp(GainR, 0, 100);
         GainG = Math.Clamp(GainG, 0, 100);
         GainB = Math.Clamp(GainB, 0, 100);

@@ -12,12 +12,15 @@ namespace ProFanController;
 /// 楽器で光る: 1 つのゾーンに、楽器ごとの光の層を重ねる（層の強さ a は 0〜1。重ね方は I = 1 − Π(1 − a)）。
 ///   下地（全体）: 0.12 + 0.35·Wv·歌 + 0.15·Wbr·パッド·呼吸(t)。歌の大きさで全体がなめらかに明るくなり（上がる 0.25 秒・下がる 0.8 秒）、
 ///                 パッドは BreathSec の周期でゆっくり呼吸する（拍が分かれば 8 拍を 3〜6 秒に収める。分からなければ 4 秒）
-///   キック（全体）: Wk·0.45·exp(−Δt/0.22)。予測した拍でも光るのは、最後のキックから KickBeatSec 秒まで（RoleEffect と同じ）。
+///   キック（全体）: Wk·0.9·exp(−Δt/0.22) に、強さの設定と曲の盛り上がりの倍率（DrumIntensityShare・DrumSectionMin）をかける。
+///                 太鼓の「カツッ」という高い音のないキック（ベースの音の出だしを取り違えたもの）は半分（KickClick）。
+///                 予測した拍でも光るのは、最後のキックから KickBeatSec 秒まで（RoleEffect と同じ）。
 ///                 キックの光の間は、場所を使う層（ベース・流れる光）を下げて、ゾーン全体を同じ明るさで光らせる（KickDuck）
-///   スネア（片側）: Ws·0.55·exp(−Δt/0.18)。光る側はスネアのたびに入れかわる。キックとスネアは同じ FlashLimiter
+///   スネア（片側）: Ws·0.85·exp(−Δt/0.18)（キックと同じ倍率をかける）。光る側はスネアのたびに入れかわる。キックとスネアは同じ FlashLimiter
 ///                 （ゾーンの広い所が急に明るくなるのはこの 2 つだけなので、合わせて 1 秒に 3 回まで）。
+///                 テンポをつかんでいれば、拍の間の音には制限を使わせず、拍のキック・スネアのためにとっておく（AreaGain）。
 ///                 最近 DrumContextSec 秒にキックか打楽器らしいハイハットがあったときだけ（歌・ギターの出だしをスネアと取り違えた出来事では光らせない）
-///   ハイハット: 離れた LED が 1〜(N/12) 個だけ光る粒（τ 0.07 秒。1 つの LED は 0.333 秒に 1 回まで）。ゾーン全体は光らせない。
+///   ハイハット: 離れた LED が 1〜(N/12) 個だけ光る粒（キックより暗い。τ 0.07 秒。1 つの LED は 0.333 秒に 1 回まで）。ゾーン全体は光らせない。
 ///              単色のときは白を混ぜない（白は金管の印）。キック・スネアと同じ時刻（HatVetoSec 以内）のハイハットは粒にしない
 ///              （キックの出来事は 1 コマ遅れて届くことがあるので、HatWaitSec 待ってから決める）
 ///   ベース（端のほう）: p = 0 の側（ケースの下・始まりの側）が、音が続く間だけ明るい（上がる 0.08 秒・下がる 0.35 秒）。出だしで少しふくらむ。
@@ -34,10 +37,10 @@ namespace ProFanController;
 /// 小さいゾーン（6 個未満）は場所を使う層を使わない。
 /// 更新の遅いデバイス（メモリ・直接書き込むグラボ・OpenRGB を通すグラボ。1 秒に 4〜10 回しか送れない）は、一瞬の光も場所の動きも見せられないので、
 /// ゾーン全体を 1 色で、次のように光らせる（UpdateSlow）:
-///   明るさを変えてよいデバイス: 下地 0.42 + 0.22·Section + 0.12·歌 + 0.08·ギター鍵盤 + 0.06·パッド·呼吸（0.78 まで。上がる 0.6 秒・下がる 1.5 秒）に、
+///   明るさを変えてよいデバイス: 下地 0.2 + 0.3·Section + 0.12·歌 + 0.08·ギター鍵盤 + 0.06·パッド·呼吸（0.55 まで。上がる 0.6 秒・下がる 1.5 秒）に、
 ///     拍のふくらみ（SwellAmp。τ SwellTauSec で戻る。SwellGapSec 以上あける = 1 秒に 2.4 回まで）を足す。拍は、テンポをつかんでいれば予測した拍、
 ///     つかんでいなければキック・スネア（ドラムがなければ強い立ち上がり）。ふくらみのコマは定期便を待たずに送る（c.SendNow）。
-///     直接書き込むグラボ（c.DirectWrite）は、下地 0.25 + 0.15·Section + …（0.55 まで）に、大きく速いふくらみ（DirectSwellAmp・τ DirectSwellTauSec）
+///     直接書き込むグラボ（c.DirectWrite）は、下地 0.15 + 0.15·Section + …（0.42 まで）に、大きく速いふくらみ（DirectSwellAmp・τ DirectSwellTauSec）
 ///   明るさを変えないグラボ（c.FixedBrightness）: 拍で白へ AccentWhite 寄せて AccentWhiteSec 保ち、一度に戻す（戻すコマは差が小さくても送る）
 ///   色: 単色（選んだ色だけ）は選んだ色のまま（明るさだけ）。ほかは、目立つ楽器（歌・パッド・ギター鍵盤・金管・ベース・ドラム）の色
 ///     （RoleEffect.OffsetOf の位置。ビートでは進めない）。別の楽器が DomRatio 倍 + DomMargin より大きい状態が DomHoldSec 続いたら替え、
@@ -47,7 +50,24 @@ namespace ProFanController;
 public sealed class EnsembleEffect : IMusicEffect
 {
     public const float BodyLevel = 0.12f, VocalBody = 0.35f, BreathBody = 0.15f;
-    public const float KickAmp = 0.45f, SnareAmp = 0.55f, HatAmp = 0.5f, BassAmp = 0.5f, FlowAmp = 0.4f;
+    public const float KickAmp = 0.9f, SnareAmp = 0.85f, HatAmp = 0.4f, BassAmp = 0.5f, FlowAmp = 0.4f;
+    /// <summary>
+    /// キック・スネアの光の大きさの倍率: 1 − DrumIntensityShare + DrumIntensityShare × FlashAmp（強さ「控えめ」0.72・「ふつう」0.82・「強め」0.94・「最大」1）
+    /// × 曲の盛り上がり（EffectContext.SectionGain(DrumSectionMin)）
+    /// </summary>
+    public const float DrumIntensityShare = 0.4f, DrumSectionMin = 0.7f;
+    /// <summary>
+    /// キックの「カツッ」という高い音（PercHigh）の大きさを 0〜1 にする幅。高い音のないキック（ベースの音の出だしを取り違えたもの）は
+    /// KickNoClickShare 倍の大きさ（6.15.10 と同じ）で光らせる
+    /// </summary>
+    public const float KickClickFrom = 0.03f, KickClickSpan = 0.09f, KickNoClickShare = 0.5f;
+    /// <summary>
+    /// 「激しい点滅を抑える」がオンでテンポをつかんでいるとき、拍の頭から ReservePhase 拍より離れた音で、次の拍の頭が FlashLimiter.MinGapSec より近いものは、
+    /// 点滅の制限を使わず ReserveGain 倍で光らせる（次の拍のキック・スネアのために、制限をとっておく）。
+    /// 拍の頭の音（ReserveAvg でならした音量）より ReserveLouderDb 以上大きい音（銃声・爆発など）は、これまでどおり制限にかける
+    /// </summary>
+    public const float ReserveGain = 0.45f, ReserveLouderDb = 3f, ReserveAvg = 0.25f;
+    public const double ReservePhase = 0.2;
     public const float BassSwellShare = 0.2f, BrassWhite = 0.25f, BrassLift = 0.12f;
     public const double KickTauSec = 0.22, SnareTauSec = 0.18, HatTauSec = 0.07, BassSwellTauSec = 0.15;
     public const double KickBeatSec = 2.0, ParticleGapSec = 0.333;
@@ -83,19 +103,23 @@ public sealed class EnsembleEffect : IMusicEffect
     public const float FlowHalfWidth = 0.18f;
     /// <summary>パッドの呼吸の周期: 拍が分かれば 8 拍（MinBreathSec〜MaxBreathSec に収める）、分からなければ BreathSec。周期の変化をならす秒数</summary>
     public const double BreathBeats = 8, MinBreathSec = 3, MaxBreathSec = 6, BreathSec = 4, BreathFollowSec = 2;
-    /// <summary>更新の遅いデバイス: 下地の明るさ（いちばん下・盛り上がり・歌・ギター鍵盤・パッドの呼吸の分）と上限、追従（秒。上がる・下がる）</summary>
-    public const float SlowBase = 0.42f, SlowSectionShare = 0.22f, SlowVocalShare = 0.12f, SlowHarmShare = 0.08f, SlowPadShare = 0.06f, SlowBaseMax = 0.78f;
+    /// <summary>
+    /// 更新の遅いデバイス: 下地の明るさ（いちばん下・盛り上がり・歌・ギター鍵盤・パッドの呼吸の分）と上限、追従（秒。上がる・下がる）。
+    /// 6.15.10 までは下地 0.42〜0.78・ふくらみ 0.2 で、明るすぎて拍のふくらみがほとんど見えなかった（キックでの目で見た上がり幅 0.034 → 0.049）
+    /// </summary>
+    public const float SlowBase = 0.2f, SlowSectionShare = 0.3f, SlowVocalShare = 0.12f, SlowHarmShare = 0.08f, SlowPadShare = 0.06f, SlowBaseMax = 0.55f;
     public const double SlowUpSec = 0.6, SlowDownSec = 1.5;
     /// <summary>更新の遅いデバイス: 拍のふくらみの大きさ・戻る時定数（秒）・次のふくらみまで最低あける秒数</summary>
-    public const float SwellAmp = 0.20f;
+    public const float SwellAmp = 0.3f;
     public const double SwellTauSec = 0.35, SwellGapSec = 0.42;
     /// <summary>
     /// 直接書き込むグラボ（c.DirectWrite。明るさを変えてもちかちかしない）: 下地を低く・上限も低くして、拍のふくらみを大きく速くする。
-    /// メモリと同じ値（下地 0.42〜0.78 にふくらみ 0.2）では、ふくらみが明るさの 12〜15% にしかならず、録音 11 曲でほとんど止まって見えた
-    /// （キックでの明るさのふくらみ 0.09 → 0.21・目に見える変化 1 秒に 4.9 回 → 8.9 回。書き込みの回数は同じ）。ふくらみの間は DirectSwellGapSec 以上、
+    /// 以前のメモリと同じ値（下地 0.42〜0.78 にふくらみ 0.2）では、ふくらみが明るさの 12〜15% にしかならず、録音 11 曲でほとんど止まって見えた
+    /// （キックでの明るさのふくらみ 0.09 → 0.21・目に見える変化 1 秒に 4.9 回 → 8.9 回。書き込みの回数は同じ）。
+    /// 6.15.11 で下地 0.25〜0.55・ふくらみ 0.45 から、さらに下地を下げてふくらみを大きくした（キックでの目で見た上がり幅 0.23 → 0.33）。ふくらみの間は DirectSwellGapSec 以上、
     /// 「激しい点滅を抑える」がオンなら DirectLimitedGapSec 以上あける（ふくらみは強い点滅になるので、1 秒に 3 回まで）
     /// </summary>
-    public const float DirectBase = 0.25f, DirectSectionShare = 0.15f, DirectBaseMax = 0.55f, DirectSwellAmp = 0.45f;
+    public const float DirectBase = 0.15f, DirectSectionShare = 0.15f, DirectBaseMax = 0.42f, DirectSwellAmp = 0.65f;
     public const double DirectSwellTauSec = 0.30, DirectSwellGapSec = 0.30;
     /// <summary>
     /// 「激しい点滅を抑える」がオンのときの、直接書き込むグラボのふくらみの間（秒）: FlashLimiter.MinGapSec に 1 コマ（1/60 秒）を足す。
@@ -114,6 +138,9 @@ public sealed class EnsembleEffect : IMusicEffect
     /// <summary>明るさを変えないグラボ: 拍で白へ寄せる量と、保つ秒数</summary>
     public const float AccentWhite = 0.22f;
     public const double AccentWhiteSec = 0.18;
+    /// <summary>静かな間（WakeQuietSec 以上）のあとの最初のキック（WakeNearSec 以内）は、キックの層を WakeKickAmp まで強くする（止まっているときの光より明るく見せる）</summary>
+    public const float WakeKickAmp = 0.8f;
+    public const double WakeQuietSec = 1.0, WakeNearSec = 0.15;
 
     /// <summary>
     /// 場面ごとの層の重み。Wk・Ws・Wh はドラム（1 を超えない）、Speed は流れる光の速さの倍率、Width はかたまりの幅の倍率、
@@ -159,7 +186,8 @@ public sealed class EnsembleEffect : IMusicEffect
     private int _drumHead;
 
     private double _kickT = double.NegativeInfinity, _snareT = double.NegativeInfinity, _lastHatT = double.NegativeInfinity, _confidentHatT = double.NegativeInfinity;
-    private float _kickS, _snareS, _beatGain = 1f;
+    private float _kickS, _snareS, _beatGain = 1f, _kickWake, _kickClick = 1f, _beatDb = float.NaN;
+    private double _activeT = double.NegativeInfinity, _wakeT = double.NegativeInfinity;
     private bool _snareSide;
     private double _bassSwellT = double.NegativeInfinity;
     private float _bassSwellS, _prevBassOnset, _bassPres;
@@ -204,8 +232,6 @@ public sealed class EnsembleEffect : IMusicEffect
 
     public EnsembleEffect(bool slow = false) => _slow = slow;
 
-    public string Name => MusicStyles.Ensemble;
-
     /// <summary>いまの層の重み（テスト用）</summary>
     public Pattern Weights => _w;
 
@@ -229,7 +255,11 @@ public sealed class EnsembleEffect : IMusicEffect
         Array.Fill(_drumT, double.NegativeInfinity);
         _drumHead = 0;
         _kickT = _snareT = _lastHatT = _confidentHatT = double.NegativeInfinity;
-        _kickS = _snareS = 0;
+        _kickS = _snareS = _kickWake = 0;
+        _kickClick = 1f;
+        _beatDb = float.NaN;
+        _activeT = c.T;
+        _wakeT = double.NegativeInfinity;
         _beatGain = 1f;
         _hatCount = 0;
         _snareSide = false;
@@ -263,6 +293,25 @@ public sealed class EnsembleEffect : IMusicEffect
 
     private bool SlowMode(EffectContext c) => _slow || c.SlowDevice;
 
+    /// <summary>
+    /// キック・スネアの点滅の制限の倍率。テンポをつかんでいるとき、拍の間の音で次の拍の頭が近いものは、制限を使わずに ReserveGain 倍にする
+    /// （拍の間の音が制限を先に使うと、次の拍のキック・スネアが弱められ、そのあともずっと拍の間だけが強く光ることがあった）
+    /// </summary>
+    private float AreaGain(EffectContext c, double t, float db)
+    {
+        if (_area.Enabled && c.Locked && c.Beat.HasTempo)
+        {
+            double ph = c.Beat.Phase(t);
+            float loud = c.LoudDbAt(t);
+            if (Math.Min(ph, 1 - ph) <= ReservePhase)
+            {
+                if (!float.IsNaN(loud)) _beatDb = float.IsNaN(_beatDb) ? loud : _beatDb + ReserveAvg * (loud - _beatDb);
+            }
+            else if (c.Beat.NextBeatAfter(t) - t < FlashLimiter.MinGapSec && !(loud >= _beatDb + ReserveLouderDb)) return ReserveGain;
+        }
+        return _area.Decide(t, db);
+    }
+
     /// <summary>a〜a + span を 0〜1 にする</summary>
     private static float Span01(float x, float from, float span) => Math.Clamp((x - from) / span, 0f, 1f);
 
@@ -281,6 +330,15 @@ public sealed class EnsembleEffect : IMusicEffect
 
         // 楽器の大きさ（どの層も、上がるのに 0.08 秒以上・下がるのに 0.3 秒以上かける）
         bool active = f.Activity > 0.3f;
+        // 音が止まっていた・静かな場面だった（WakeQuietSec 以上）あとで、音が戻ったコマ
+        bool heard = active && c.Presence >= PresenceMeter.QuietValue;
+        if (heard && c.T - _activeT >= WakeQuietSec)
+        {
+            _wakeT = c.T;
+            // キックの出来事が、音が戻ったと分かるより 1〜2 コマ先に届いたとき
+            if (c.T >= _kickT && c.T - _kickT < WakeNearSec) _kickWake = WakeKickAmp;
+        }
+        if (heard || c.T < _activeT) _activeT = c.T;
         _active = EffectContext.Follow(_active, active ? 1f : 0f, dt, ActiveUpSec, ActiveDownSec);
         _vocal = EffectContext.Follow(_vocal, w.VocalMul * Span01(f.Vocal, TextureFrom, TextureSpan), dt, VocalUpSec, VocalDownSec);
         _pad = EffectContext.Follow(_pad, Span01(f.Pad, TextureFrom, TextureSpan), dt, PadUpSec, PadDownSec);
@@ -295,7 +353,7 @@ public sealed class EnsembleEffect : IMusicEffect
         // 低い音の高さが BassTopHz より上（男声・ギター・鍵盤の低い音）は、ベースとしては弱める
         float bassLow = f.BassF0Hz > 0 ? 1 - Span01(f.BassF0Hz, BassTopHz, BassTopSpanHz) : 1f;
         _bass = EffectContext.Follow(_bass, _bassPres * bassLow * Span01(f.BassLevel, BassFrom, BassSpan), dt, BassUpSec, BassDownSec);
-        _brass =EffectContext.Follow(_brass, w.BrassMul * Span01(f.Brass, TextureFrom, TextureSpan), dt, BrassUpSec, BrassDownSec);
+        _brass = EffectContext.Follow(_brass, w.BrassMul * Span01(f.Brass, TextureFrom, TextureSpan), dt, BrassUpSec, BrassDownSec);
 
         // パッドの呼吸（周期は拍から。周期が変わっても位相は続けて進める）
         double breathTarget = c.HasTempo && c.Period > 0 ? Math.Clamp(BreathBeats * c.Period, MinBreathSec, MaxBreathSec) : BreathSec;
@@ -319,12 +377,18 @@ public sealed class EnsembleEffect : IMusicEffect
         for (int i = 0; i < ev.Count; i++)
         {
             var e = ev[i];
-            float s = Math.Clamp(0.55f + 0.25f * e.Strength, 0, 1);
+            if (e.Kind is not (AudioEventKind.Kick or AudioEventKind.Snare)) continue;
+            // テンポをつかんでいないとき: 大きな音のすぐあとの小さな音は弱く光る。前の光よりはっきり大きい音は、点滅の制限で弱めない（FlashLimiter）
+            float db = c.EventDb(e.T);
+            float s = Math.Clamp(0.55f + 0.25f * e.Strength, 0, 1) * c.RelAt(db);
             switch (e.Kind)
             {
                 case AudioEventKind.Kick:
                     _kickT = e.T;
-                    _kickS = s * _area.Decide(e.T);
+                    // 高い音のないキック（ベースの音の出だしなど）は小さく光らせる
+                    _kickClick = KickClick(c, e.T);
+                    _kickS = (KickNoClickShare + (1 - KickNoClickShare) * _kickClick) * s * AreaGain(c, e.T, db);
+                    _kickWake = Math.Abs(e.T - _wakeT) < WakeNearSec ? WakeKickAmp : 0f;
                     RememberDrum(e.T);
                     break;
                 case AudioEventKind.Snare:
@@ -337,7 +401,7 @@ public sealed class EnsembleEffect : IMusicEffect
                     // 光る側はスネアのたびに入れかえる（ほぼ同時の 2 つの出来事は同じ 1 回）
                     if (e.T - _snareT > FlashLimiter.MergeSec || e.T < _snareT) _snareSide = !_snareSide;
                     _snareT = e.T;
-                    _snareS = g * s * _area.Decide(e.T);
+                    _snareS = g * s * AreaGain(c, e.T, db);
                     break;
                 }
             }
@@ -374,7 +438,7 @@ public sealed class EnsembleEffect : IMusicEffect
             SpawnHat(c, c.T, hs, hatGain * g * w.Wh);
         }
         // 予測した拍の光も、キック・スネアと同じ点滅の制限にかける（キックの曲で、キックを検出しそこねた拍でも光る）
-        if (c.Trigger) _beatGain = _area.Decide(c.TriggerT);
+        if (c.Trigger) _beatGain = _area.Decide(c.TriggerT, c.EventDb(c.TriggerT));
 
         UpdateStrum(c);
         if (c.T - _strumHoldT > PresenceHoldSec) _strumHold = 0;
@@ -392,8 +456,9 @@ public sealed class EnsembleEffect : IMusicEffect
         _prevBassOnset = f.BassOnset;
 
         float beatFl = Math.Max(c.Fl, c.FlPeak * (float)Math.Exp(-Math.Max(0, c.T - c.FlPeakT) / KickTauSec));
-        float kickBeat = c.T - _kickT < KickBeatSec ? beatFl * _beatGain : 0f;
-        float kick = Math.Max(_kickS * (float)Math.Exp(-Math.Max(0, c.T - _kickT) / KickTauSec), kickBeat);
+        float kickBeat = c.T - _kickT < KickBeatSec ? beatFl * _beatGain * (KickNoClickShare + (1 - KickNoClickShare) * _kickClick) : 0f;
+        float kickEv = _kickS * (float)Math.Exp(-Math.Max(0, c.T - _kickT) / KickTauSec);
+        float kick = Math.Max(kickEv, kickBeat);
         float snare = _snareS * (float)Math.Exp(-Math.Max(0, c.T - _snareT) / SnareTauSec);
         float swell = _bassSwellS * (float)Math.Exp(-Math.Max(0, c.T - _bassSwellT) / BassSwellTauSec);
 
@@ -404,8 +469,12 @@ public sealed class EnsembleEffect : IMusicEffect
         double waveAge = Math.Max(0, c.T - _strumT);
 
         _body = body;
-        _kickA = w.Wk * KickAmp * kick;
-        _snareA = w.Ws * SnareAmp * snare;
+        // 強さの設定と曲の盛り上がりで、キック・スネアの光の大きさを変える（静かな間のあとの最初のキックは変えない）
+        float drum = (1 - DrumIntensityShare + DrumIntensityShare * (float)c.Music.FlashAmp) * c.SectionGain(DrumSectionMin);
+        // 拍をまだつかめない間は、声の子音まで強いドラムとして光らせない。
+        bool musical = c.HasTempo && c.Locked;
+        _kickA = Math.Max(Math.Min(1f, drum * w.Wk * (musical ? KickAmp : 0.60f) * kick), _kickWake * kickEv);
+        _snareA = Math.Min(1f, drum * w.Ws * (musical ? SnareAmp : 0.55f) * snare);
         float duck = 1 - KickDuck * Math.Clamp(kick, 0, 1);
         _bassA = duck * w.Wbass * BassAmp * Math.Min(1f, _bass + BassSwellShare * swell * _bassPres * bassLow);
         // はじいた瞬間の波が出ている間は、流れ続ける光を弱める（動く光が 2 つ重なって、行き先が分からなくならないように）
@@ -448,16 +517,27 @@ public sealed class EnsembleEffect : IMusicEffect
             if (use && (double.IsNaN(accT) || e.T < accT))
             {
                 accT = e.T;
-                accS = Math.Clamp(0.6f + 0.25f * (e.Strength - 1), 0.6f, 1f) * (snare ? 0.8f : 1f);
+                accS = Math.Clamp(0.6f + 0.25f * (e.Strength - 1), 0.6f, 1f) * (snare ? 0.8f : 1f) * c.LoudRel(e.T);
             }
         }
         // 直接書き込むグラボは、下地を低く・ふくらみを大きく速く（明るさを変えないグラボ・メモリは、これまでどおり）
         bool direct = c.DirectWrite && !c.FixedBrightness;
+#if BEATHUE_BETA
+        if (direct)
+        {
+            // 低速更新でも追える、持続するベースと幅の広いギター・鍵盤の帯。
+            double rate = c.HasTempo && c.Period > 0 ? 1 / (FlowBeats * c.Period) : FlowNoTempo;
+            _flow += dt * rate * _w.Speed * c.Speed;
+            _flow -= Math.Floor(_flow);
+            _bassA = BassAmp * _bass * _w.Wbass;
+            _flowA = FlowAmp * _harm * _w.Wf;
+        }
+#endif
         bool limited = direct && c.Music.ReduceFlashing;
         double gap = !direct ? SwellGapSec : limited ? DirectLimitedGapSec : DirectSwellGapSec;
         bool accent = false;
         if (!double.IsNaN(accT) && (accT - _accT >= gap || accT < _accT - 1) && (!limited || c.T - _accFrameT >= gap || c.T < _accFrameT)
-            && _active > 0.5f)
+            && (_active > 0.5f || f.Activity > 0.3f))
         {
             _accT = accT;
             _accFrameT = c.T;
@@ -473,7 +553,9 @@ public sealed class EnsembleEffect : IMusicEffect
         // 下地の明るさ（盛り上がり・歌・ギター鍵盤・パッドの呼吸）と、拍のふくらみ
         float target = _active * ((direct ? DirectBase : SlowBase) + (direct ? DirectSectionShare : SlowSectionShare) * c.Section
             + SlowVocalShare * _vocal + SlowHarmShare * _harm + SlowPadShare * _pad * breath);
-        _slowI = EffectContext.Follow(_slowI, Math.Clamp(target, 0, direct ? DirectBaseMax : SlowBaseMax), dt, SlowUpSec, SlowDownSec);
+        float slowTarget = Math.Clamp(target, 0, direct ? DirectBaseMax : SlowBaseMax);
+        if (c.T - _wakeT < WakeNearSec && c.T >= _wakeT) _slowI = Math.Max(_slowI, slowTarget);
+        _slowI = EffectContext.Follow(_slowI, slowTarget, dt, SlowUpSec, SlowDownSec);
         _body = Math.Clamp(_slowI + (direct ? DirectSwellAmp : SwellAmp) * env * _active, 0, 1);
 
         // 色: 単色は選んだ色のまま。ほかは目立つ楽器の色
@@ -493,7 +575,11 @@ public sealed class EnsembleEffect : IMusicEffect
             else if (best != _dom && _domLevel[best] > DomRatio * _domLevel[_dom] + DomMargin)
             {
                 if (best != _domCand) { _domCand = best; _domCandT = c.T; }
-                else if (c.T - _domCandT >= DomHoldSec && (!c.FixedBrightness || accent))
+                else if (c.T - _domCandT >= DomHoldSec && (!c.FixedBrightness || accent
+#if BEATHUE_BETA
+                    || (_active > 0.5f && c.T - _slowDrumT > DomHoldSec && c.T - _accT > AccentWhiteSec)
+#endif
+                    ))
                 {
                     _domFrom = _slowLab;
                     _dom = best;
@@ -591,6 +677,21 @@ public sealed class EnsembleEffect : IMusicEffect
         _drumHead = (_drumHead + 1) % _drumT.Length;
     }
 
+    /// <summary>キックの出来事に、太鼓を叩いた「カツッ」という高い音があるか（0〜1。ベースの音の出だしにはない。分析結果の記録がなければ 1）</summary>
+    private float KickClick(EffectContext c, double t)
+    {
+        if (c.Features is not { } ring) return 1f;
+        float perc = 0;
+        bool any = false;
+        for (int k = 0; k < 4; k++)
+        {
+            if (!ring.Sample(t + 0.002 + 0.008 * k, _probe)) continue;
+            any = true;
+            perc = Math.Max(perc, _probe.PercHigh);
+        }
+        return any ? Span01(perc, KickClickFrom, KickClickSpan) : 1f;
+    }
+
     /// <summary>スネア・ハイハットの出来事が本当に打楽器の音か（0〜1。RoleEffect.DrumConfidence と同じ）</summary>
     private float DrumConfidence(EffectContext c, double t)
     {
@@ -678,11 +779,33 @@ public sealed class EnsembleEffect : IMusicEffect
         int end = s.Start + s.Count;
         if (SlowMode(c))
         {
+#if BEATHUE_BETA
+            if (c.DirectWrite && !c.FixedBrightness && s.Count >= 4)
+            {
+                const float width = 0.32f;
+                float center = s.Ring ? (float)_flow : (float)(_flow * (1 + 2 * width) - width);
+                // ケースの流れに直交する直線では全灯の投影位置が重なる。楽器の形はゾーン内に描く。
+                bool useZonePosition = s.Placed && !s.Ring && c.P[s.Start] == c.P[end - 1];
+                for (int j = s.Start; j < end; j++)
+                {
+                    float p = useZonePosition ? (float)(j - s.Start) / (s.Count - 1) : c.P[j];
+                    float bass = _bassA * (1 - EffectContext.Smoothstep((p - 0.2f) / 0.3f));
+                    float harmony = _flowA * Blob(p - center, width, s.Ring);
+                    float level = Screen(_body, Math.Clamp(Math.Max(bass, harmony), 0, 1));
+                    dst[j] = (_col[CBody] * c.Ilin(level)).FitToOne();
+                }
+                return;
+            }
+#endif
             var sc = _col[CBody] * c.Ilin(_body);
             for (int j = s.Start; j < end; j++) dst[j] = sc.FitToOne();
             return;
         }
+#if BEATHUE_BETA
+        if (s.Count < 4)
+#else
         if (s.Small)
+#endif
         {
             // 小さいゾーン: 場所を使う層はなし（全体の明るさだけ。スネアは弱め・ハイハットは出さない）
             float i0 = Screen(_body, _kickA);

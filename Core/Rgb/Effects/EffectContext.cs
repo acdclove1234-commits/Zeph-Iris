@@ -14,8 +14,6 @@ namespace ProFanController;
 /// </summary>
 public interface IMusicEffect
 {
-    /// <summary>光り方の名前（MusicStyles の値。表示用）</summary>
-    string Name { get; }
     /// <summary>使い始めるとき・LED の並びが変わったとき。配列を用意し、状態を最初に戻す</summary>
     void Reset(EffectContext c);
     /// <summary>1 コマに 1 回。状態を進める（減衰・粒の発生など）</summary>
@@ -89,13 +87,48 @@ public sealed class EffectContext
     /// </summary>
     public readonly double[] LoudT = new double[MaxWindowSamples];
     public readonly float[] LoudV = new float[MaxWindowSamples];
-    /// <summary>LoudT と同じ時刻の、低音・中音・高音の強さ（BassE・MidE・TrebleE）。エナジーの帯の長さを、決まった時刻ごとに追いかけるのに使う</summary>
-    public readonly float[] BassV = new float[MaxWindowSamples], MidV = new float[MaxWindowSamples], TrebleV = new float[MaxWindowSamples];
     public int LoudCount;
     /// <summary>LoudT・LoudV に入れられる数の上限</summary>
     public const int MaxWindowSamples = 160;
-    /// <summary>分析結果の記録（なければ null。流れる波が、決まった時刻ごとの音を読むのに使う）</summary>
+    /// <summary>分析結果の記録（なければ null。コマの間の時刻の音を読むのに使う）</summary>
     public FeatureRing? Features;
+
+    /// <summary>出来事の音量を見る長さ（秒。出来事の時刻からこの秒数のうちの、いちばん大きい音量）</summary>
+    public const double EventLoudSec = 0.04;
+    /// <summary>
+    /// 出来事の光の倍率（LoudRel）: 直近の大きな音（AudioFrame.ProgramPeakDb）から RelDeadDb 下までは 1（音楽のキックの大小では変えない）。
+    /// そこから RelSpanDb 下がると RelFloor（小さい音でも少しは光る）
+    /// </summary>
+    public const float RelDeadDb = 8f, RelSpanDb = 18f, RelFloor = 0.35f;
+
+    /// <summary>時刻 t から EventLoudSec 秒のうちの、いちばん大きい聞こえ方の音量（dBFS。分析結果の記録がなければ NaN）</summary>
+    public float LoudDbAt(double t) => Features?.MaxLoudDb(t, t + EventLoudSec) ?? float.NaN;
+
+    /// <summary>
+    /// 出来事の音量（LoudDbAt）。テンポをつかんでいる（曲の）ときは NaN（音量では光り方を変えない。曲のキック・スネアの光り方は今までどおり。
+    /// キックごとに倍率を変えると、拍の光の明るさがばらついて見えた）
+    /// </summary>
+    public float EventDb(double t) => HasTempo && Locked ? float.NaN : LoudDbAt(t);
+
+    /// <summary>時刻 from〜to の、いちばん大きい聞こえ方の音量（dBFS）。テンポをつかんでいるとき・記録がないときは NaN</summary>
+    public float EventDbSpan(double from, double to) =>
+        HasTempo && Locked || Features is null || !(to > from) ? float.NaN : Features.MaxLoudDb(from, to);
+
+    /// <summary>
+    /// 時刻 t の出来事（銃声・爆発・キックなど）の光の倍率（RelFloor〜1）。大きな音のすぐあとの小さな音は弱く光る
+    /// （自動音量調整は小さな音も最大まで光らせるので、音の大きさの違いが見えなかった）。分からなければ 1
+    /// </summary>
+    public float LoudRel(double t) => RelAt(EventDb(t));
+
+    /// <summary>音量 db（dBFS。EventDb の値。NaN なら 1）の出来事の光の倍率</summary>
+    public float RelAt(float db) => RelOf(db, Frame.ProgramPeakDb);
+
+    /// <summary>音量 db（dBFS）の、直近の大きな音 peak（dBFS）とくらべた光の倍率（RelFloor〜1。どちらか分からなければ 1）</summary>
+    public static float RelOf(float db, float peak)
+    {
+        if (float.IsNaN(db) || !(peak > -100)) return 1f;
+        return Math.Clamp(1f - Math.Max(0f, peak - db - RelDeadDb) / RelSpanDb, RelFloor, 1f);
+    }
     /// <summary>ビートの計算（任意の時刻のビートの光を求めるのに使う）</summary>
     public BeatDriver? Beats;
     public BeatState Beat = BeatState.None;
@@ -169,10 +202,20 @@ public sealed class EffectContext
     /// <summary>ビートの光（0〜1。強さの設定 FlashAmp と、点滅の制限をかけた後）</summary>
     public float Fl;
     /// <summary>
+    /// Fl のうち予測した拍の光を、その拍で実際に鳴った音の強さ倍にしたもの（キック 1・スネア・音のない拍。
+    /// 遅いデバイスの「ビートで色替え」だけが使う。キックのない拍まで同じ強さで光らないように）
+    /// </summary>
+    public float FlHit;
+    /// <summary>
     /// 曲の盛り上がり（0〜1。SectionMeter）。いまの部分の音量（1.5 秒でならす）が、曲の大きいところから何 dB 下か。
     /// 静かな A メロで 0.3〜0.6、サビで 1 くらい。自動の音量調整は数秒で静かな部分も「最大」に合わせるので、その前の値で見る
     /// </summary>
     public float Section = 1;
+    /// <summary>
+    /// 音の手ごたえ（0〜1。PresenceMeter）。映画の夜の環境音・部屋の音のような、ずっと小さな音で 0 へ下がる
+    /// （自動の音量調整が小さな音を大きく見せるので、光り方の明るさをまとめて下げるのに使う）
+    /// </summary>
+    public float Presence = 1;
 
     /// <summary>盛り上がりに合わせた明るさの倍率（静かな部分で min、盛り上がりで 1）</summary>
     public float SectionGain(float min) => min + (1 - min) * Section;

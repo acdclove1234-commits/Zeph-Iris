@@ -19,7 +19,7 @@ public static class MusicFlickerTests
     /// <summary>合成する曲のテンポ（ModeSyncBench の TestWriteSynthSongs と同じ）</summary>
     private static readonly double[] Bpms = { 92, 118, 128, 140 };
 
-    /// <summary>ちらつきの上限（LED 1 個・1 秒あたり）。ストロボは光り方そのものが点滅なので数えない</summary>
+    /// <summary>ちらつきの上限（LED 1 個・1 秒あたり）</summary>
     public const double MaxJit = 1.0, MaxToggle = 1.0, MaxBlink = 0.2;
 
     private static readonly Dictionary<string, Dictionary<string, ModeScore>> Cache = new();
@@ -72,16 +72,15 @@ public static class MusicFlickerTests
     }
 
     /// <summary>
-    /// 光が LED の上を動く光り方（メーター・帯・波紋・流れる波・スペクトラム）。いちばん暗いときの明るさが 3% の「激しい」では、
+    /// 光が LED の上を動く光り方（メーター・波紋・スペクトラム）。いちばん暗いときの明るさが 3% の「激しい」では、
     /// 光が通り過ぎるたびに LED が消えて点く（拍ごとに 1 回点いて 1 回消える = 140 BPM で 1 秒に 4.7 回まで）のは光り方そのもの
     /// </summary>
-    private static bool Moving(string mode) => mode is MusicStyles.Meter or MusicStyles.Energy or MusicStyles.Ripple or MusicStyles.Chase
-        or MusicStyles.Scroll or MusicStyles.Spectrum;
+    private static bool Moving(string mode) => mode is MusicStyles.Meter or MusicStyles.Ripple or MusicStyles.Spectrum;
 
     /// <summary>光が通り過ぎて消えたり点いたりする回数の上限（LED 1 個・1 秒あたり。Moving の光り方）</summary>
     public const double MaxBlinkMoving = 3.0;
 
-    private static void CheckSteady(string label, ModeScore s)
+    internal static void CheckSteady(string label, ModeScore s)
     {
         string per = string.Join(" / ", s.Jits.Select(j => j.ToString("F2")));
         double maxBlink = Moving(s.Mode) ? MaxBlinkMoving : MaxBlink;
@@ -91,19 +90,13 @@ public static class MusicFlickerTests
 
     /// <summary>
     /// どの光り方も、音の多い曲でちらつかない（6.15.7 では、スペクトラム 5.67・パーツごとの役割 2.56・きらめき 2.48・
-    /// ミックス 2.30・ビートで色替え 2.29・テンポ追従 1.73 回／秒。暗い LED のディザリングで 1 段の行き来は 4〜14 回／秒）。
-    /// ストロボは点滅そのものが光り方なので、ちらつき（暗いところの行き来）だけを見る
+    /// ミックス 2.30・ビートで色替え 2.29・テンポ追従 1.73 回／秒。暗い LED のディザリングで 1 段の行き来は 4〜14 回／秒）
     /// </summary>
     public static void TestNoMusicStyleFlickers()
     {
         foreach (var s in Scores().Values)
         {
             T.Info(Format(s));
-            if (s.Mode == MusicStyles.Strobe)
-            {
-                T.Check(s.Toggle < MaxToggle && s.Blink < MaxBlink, $"Strobe: no dithering flicker between flashes (1-step toggles {s.Toggle:F2}/s, blinks {s.Blink:F2}/s)");
-                continue;
-            }
             CheckSteady("strip", s);
         }
     }
@@ -117,10 +110,9 @@ public static class MusicFlickerTests
         // 6.15.7 の値（4 曲の平均）から 5 ポイントまで下がってよい
         var before = new Dictionary<string, (double Hit, double Beat)>
         {
-            [MusicStyles.BeatHue] = (0.96, 1.00), [MusicStyles.Pulse] = (0.94, 1.00), [MusicStyles.Mix] = (0.71, 1.00),
-            [MusicStyles.Meter] = (0.99, 1.00), [MusicStyles.Spectrum] = (0.58, 1.00), [MusicStyles.Energy] = (0.67, 0.97),
+            [MusicStyles.BeatHue] = (0.96, 1.00),
+            [MusicStyles.Meter] = (0.99, 1.00), [MusicStyles.Spectrum] = (0.58, 1.00),
             [MusicStyles.Ripple] = (0.98, 1.00), [MusicStyles.Sparkle] = (0.97, 1.00), [MusicStyles.Role] = (0.98, 1.00),
-            [MusicStyles.Chase] = (0.99, 0.98), [MusicStyles.Strobe] = (0.97, 0.25),
             // 楽器で光る（新しい光り方。入れたときの値 hit 98%・beat 100% から 2 ポイント下げた値を元にする）
             [MusicStyles.Ensemble] = (0.96, 1.00),
         };
@@ -181,10 +173,10 @@ public static class MusicFlickerTests
         }
     }
 
-    /// <summary>強さ「激しい」・点滅の制限オフ（ハイハット・スネアの粒がいちばん多い）でも、ストロボ以外はちらつかない</summary>
+    /// <summary>強さ「激しい」・点滅の制限オフ（ハイハット・スネアの粒がいちばん多い）でも、ちらつかない</summary>
     public static void TestIntenseStylesDoNotFlicker()
     {
-        var modes = MusicStyles.All.Where(m => m != MusicStyles.Strobe).ToArray();
+        var modes = MusicStyles.All.ToArray();
         foreach (var s in Scores("intense", modes, null, _ => WithIntensity(Intensities.Intense, false)).Values)
         {
             T.Info(Format(s));
@@ -202,23 +194,14 @@ public static class MusicFlickerTests
         var cycle = SceneColorTests.Cycle(60);
         foreach (var (intensity, reduce, offKey) in new[] { (Intensities.Moderate, true, "default"), (Intensities.Intense, false, "intense") })
         {
-            var modes = reduce ? MusicStyles.All.ToArray() : MusicStyles.All.Where(m => m != MusicStyles.Strobe).ToArray();
+            var modes = MusicStyles.All.ToArray();
             var off = reduce ? Scores() : Scores("intense", modes, null, _ => WithIntensity(Intensities.Intense, false));
             var on = Scores($"scenes-{intensity}", modes, null, _ => WithIntensity(intensity, reduce) with { SceneColors = true }, scenes: cycle);
-            // 流れる波（Scroll）の「場面なし」は、拍の前から色を切り替え始める（BeatDriver.PreFade）ようにしてから、拍に合う割合が
-            // 38% → 66% に上がった（色が拍の頭で新しい色になるので、輝度の山が拍にそろう）。場面ありは 6.15.8 と同じ 39% のまま。
-            // このテストは「場面の色で悪くならない」を見るので、Scroll は色の切り替えの時刻を 6.15.8 と同じにした「場面なし」と比べる
-            Dictionary<string, ModeScore> offOld;
-            BeatDriver.PreFade = false;
-            try { offOld = Scores($"{offKey}-noprefade", new[] { MusicStyles.Scroll }, null, reduce ? null : _ => WithIntensity(Intensities.Intense, false)); }
-            finally { BeatDriver.PreFade = true; }
             foreach (var s in on.Values)
             {
-                var o = s.Mode == MusicStyles.Scroll ? offOld[s.Mode] : off[s.Mode];
+                var o = off[s.Mode];
                 T.Info($"scenes {intensity,-8} " + Format(s));
-                if (s.Mode == MusicStyles.Strobe)
-                    T.Check(s.Toggle < MaxToggle && s.Blink < MaxBlink, $"scenes {intensity} Strobe: no dithering flicker between flashes (toggles {s.Toggle:F2}/s, blinks {s.Blink:F2}/s)");
-                else CheckSteady($"scenes {intensity}", s);
+                CheckSteady($"scenes {intensity}", s);
                 T.Check(s.Hit >= o.Hit - 0.05 && s.Beat >= o.Beat - 0.05 && !(s.OffMs > 25),
                     $"scenes {intensity} {s.Mode}: still on the beat (hit {s.Hit:P0} vs {o.Hit:P0} without scenes, beats lit {s.Beat:P0} vs {o.Beat:P0}, offset {s.OffMs:F0} ms)");
             }

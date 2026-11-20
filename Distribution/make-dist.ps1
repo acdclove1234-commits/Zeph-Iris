@@ -5,11 +5,12 @@
 #   2. この Distribution フォルダーの説明書・バッチ・ライセンスと一緒に、1 つのフォルダーへまとめる
 #   3. Inno Setup（ISCC.exe）で Installer\Zeph-Iris.iss から setup.exe を作り、リポジトリの一番上に置く（設定・ログ・記録は入れない）
 # 使い方（リポジトリの一番上で）: powershell -ExecutionPolicy Bypass -File Distribution\make-dist.ps1
+#   -BeatHueBeta で「ビートで色替え」とテンポ追従を調整したベータ版を作る。
 #   Inno Setup 6 が必要（winget install JRSoftware.InnoSetup）。別の場所に入れたときは、環境変数 ISCC に ISCC.exe の場所を入れる
 #   署名つきで作るとき（.github/workflows/release.yml）: -PublishOnly <フォルダー> で exe だけを発行し、
 #     署名済みの exe を -Exe <exe> で渡して setup.exe を作る（-OutputDir で置き場所を変えられる）
 # ==================================================
-param([string]$PublishOnly, [string]$Exe, [string]$OutputDir)
+param([string]$PublishOnly, [string]$Exe, [string]$OutputDir, [switch]$BeatHueBeta)
 $ErrorActionPreference = 'Stop'
 $root = Split-Path $PSScriptRoot -Parent
 $project = Join-Path $root 'ProFanController.csproj'
@@ -17,9 +18,19 @@ $script = Join-Path $root 'Installer\Zeph-Iris.iss'
 $version = ([xml](Get-Content $project -Raw)).Project.PropertyGroup.Version | Where-Object { $_ } | Select-Object -First 1
 if (-not $version) { throw 'ProFanController.csproj に <Version> がありません' }
 
+$numericVersion = $version
+$publishArgs = @()
+if ($BeatHueBeta) {
+    $version = "$version-beta.3"
+    $publishArgs = @('-p:BeatHueBeta=true')
+    if ($Exe -and ((Get-Item -LiteralPath $Exe).VersionInfo.ProductVersion -split '\+')[0] -ne $version) {
+        throw "Beta executable version must be $version"
+    }
+}
+
 if ($PublishOnly) {
     Write-Host "Zeph-Iris $version の exe だけを発行しています..." -ForegroundColor Cyan
-    dotnet publish $project -p:PublishProfile=Portable "-p:PublishDir=$PublishOnly\" --nologo -v quiet
+    dotnet publish $project -p:PublishProfile=Portable "-p:PublishDir=$PublishOnly\" @publishArgs --nologo -v quiet
     if ($LASTEXITCODE -ne 0) { throw 'dotnet publish に失敗しました' }
     exit 0
 }
@@ -40,7 +51,7 @@ try {
         $publish = Split-Path (Resolve-Path $Exe) -Parent
     } else {
         Write-Host "Zeph-Iris $version を発行しています..." -ForegroundColor Cyan
-        dotnet publish $project -p:PublishProfile=Portable "-p:PublishDir=$publish\" --nologo -v quiet
+        dotnet publish $project -p:PublishProfile=Portable "-p:PublishDir=$publish\" @publishArgs --nologo -v quiet
         if ($LASTEXITCODE -ne 0) { throw 'dotnet publish に失敗しました' }
     }
 
@@ -89,7 +100,7 @@ try {
     $setup = Join-Path $OutputDir "Zeph-Iris-$version-setup.exe"
     if (Test-Path $setup) { Remove-Item $setup }
     Write-Host "インストーラーを作っています（$iscc）..." -ForegroundColor Cyan
-    & $iscc /Q "/DAppVersion=$version" "/DSourceDir=$package" "/DOutputDir=$OutputDir" "/DPawnIoSetup=$pawnSetup" $script
+    & $iscc /Q "/DAppVersion=$version" "/DNumericVersion=$numericVersion" "/DSourceDir=$package" "/DOutputDir=$OutputDir" "/DPawnIoSetup=$pawnSetup" $script
     if ($LASTEXITCODE -ne 0) { throw "ISCC.exe に失敗しました（終了コード $LASTEXITCODE）" }
     if (-not (Test-Path $setup)) { throw "インストーラーができていません: $setup" }
     Write-Host "できました: $setup" -ForegroundColor Green

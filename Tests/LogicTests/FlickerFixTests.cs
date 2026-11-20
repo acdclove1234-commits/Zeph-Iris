@@ -1,5 +1,5 @@
 // ==================================================
-// FlickerFixTests.cs - ちらつき止めの部品ごとのテスト (LedSteady・音楽連動でディザリングしない・ストロボの光の長さ・
+// FlickerFixTests.cs - ちらつき止めの部品ごとのテスト (LedSteady・音楽連動でディザリングしない・
 //                      呼吸のいちばん暗いところ・きらめきの粒の間隔・スペクトラムのならし)
 // Dependencies: .NET 8 (MIT License)
 // See CREDITS.txt for full license details.
@@ -130,7 +130,7 @@ public static class FlickerFixTests
         T.Check(worst <= Math.Max(Y(blue), Y(new LinColor(0, 0.1f, 0))) * 1.001f + 1e-6f,
             $"bright blue then a dim green background: no frame is brighter than both (worst Y {worst:F3}, blue {Y(blue):F3}, green {Y(new LinColor(0, 0.1f, 0)):F3})");
 
-        // 外した LED（ゾーンだけストロボ）はそのまま。光が動く光り方の LED は、明るくなった直後でも暗くし始める（尾を引かない）。
+        // 外した LED（ゾーンだけムード）はそのまま。光が動く光り方の LED は、明るくなった直後でも暗くし始める（尾を引かない）。
         // 暗くなる速さの上限はどちらにも使う
         var st = new LedSteady();
         var px = new[] { new LinColor(0.1f, 0, 0), new LinColor(0.1f, 0, 0), new LinColor(0.1f, 0, 0) };
@@ -143,9 +143,9 @@ public static class FlickerFixTests
         float k = EffectContext.Decay(Dt, LedSteady.MovingReleaseTauSec);
         T.Check(Math.Abs(px[0].R - 0.9f) < 1e-5 && Math.Abs(px[1].R - 0.1f) < 1e-6 && Math.Abs(px[2].R - 0.9f * k) < 1e-4,
             $"full: held ({px[0].R:F2}); skipped: unchanged ({px[1].R:F2}); moving light: starts fading at once ({px[2].R:F2})");
-        T.Check(!LedSteady.Applies(EffectVariant.Strobe) && !LedSteady.Applies(EffectVariant.Mood) && LedSteady.KindOf(EffectVariant.Spectrum) == LedSteady.Kind.Full
-            && LedSteady.KindOf(EffectVariant.Ripple) == LedSteady.Kind.Moving && LedSteady.KindOf(EffectVariant.Scroll) == LedSteady.Kind.Moving,
-            "used for every music style except Strobe and Mood; Ripple and Scroll as moving light");
+        T.Check(Enum.GetValues<EffectVariant>().All(LedSteady.Applies) && LedSteady.KindOf(EffectVariant.Spectrum) == LedSteady.Kind.Full
+            && LedSteady.KindOf(EffectVariant.Ripple) == LedSteady.Kind.Moving,
+            "used for every music style; Ripple as moving light");
     }
 
     /// <summary>
@@ -159,7 +159,8 @@ public static class FlickerFixTests
         var input = new RenderInput
         {
             Cfg = new RgbConfig { Mode = RgbModes.Music, Brightness = 100, Gamma = true, StaticColor = "#6A00FF" },
-            Music = ResolvedMusic.Default with { Effect = MusicStyles.Pulse, MinBrightness = 0, TempoMode = TempoModes.Off },
+            // 4 個の LED の音量メーターは、全体で光るパルス（音量で光る）になる
+            Music = ResolvedMusic.Default with { Effect = MusicStyles.Meter, MinBrightness = 0, TempoMode = TempoModes.Off },
             Device = new RgbDeviceSettings { Name = "Strip" },
         };
         input.Frame.GateOpen = true;
@@ -188,55 +189,6 @@ public static class FlickerFixTests
             prev = v;
         }
         T.Check(reversals == 0, $"a slow fade in music mode steps down without going back up ({reversals} reversals)");
-    }
-
-    /// <summary>
-    /// ストロボ: 全開のコマの数が、光の始まりとコマの位置の関係で変わらない（60 コマ／秒なら、どの光も 3 コマ）。
-    /// キックを見つけたのが遅れて届いても同じ長さ
-    /// </summary>
-    public static void TestStrobeFlashLengthDoesNotDependOnFramePhase()
-    {
-        var counts = new List<int>();
-        foreach (double phase in new[] { 0.0, 0.003, 0.006, 0.009, 0.012, 0.015 })
-        {
-            var dev = new RgbDevice(3, "Strip", 8, 4, null, "HID: x");
-            var r = new DeviceRenderer(dev);
-            var input = new RenderInput
-            {
-                Cfg = new RgbConfig { Mode = RgbModes.Music, Brightness = 100, Gamma = false },
-                Music = ResolvedMusic.Default with { Effect = MusicStyles.Strobe, StrobeAllowed = true, ReduceFlashing = false, TempoMode = TempoModes.Off, MinBrightness = 0 },
-                Device = new RgbDeviceSettings { Name = "Strip" },
-            };
-            input.Frame.GateOpen = true;
-            input.Frame.Activity = 1;
-            var o = new Rgb[8];
-            var kicks = Enumerable.Range(0, 6).Select(k => 2.0 + k * 0.6 + phase).ToList();
-            double last = double.NaN;
-            int lit = 0, flashes = 0;
-            bool wasLit = false;
-            long id = 0;
-            for (int i = 0; i < 360; i++)
-            {
-                double t = 1 + i / 60.0;
-                input.Events.Clear();
-                // キックは鳴ってから 20 ms 後に見つかる
-                foreach (double kt in kicks)
-                    if (kt + 0.02 <= t && kt + 0.02 > (double.IsNaN(last) ? double.NegativeInfinity : last))
-                        input.Events.Add(new AudioEvent(++id, AudioEventKind.Kick, kt, 3f));
-                input.T = input.TEval = input.Frame.T = t;
-                input.TPrevEval = double.IsNaN(last) ? t : last;
-                input.Dt = double.IsNaN(last) ? 0 : t - last;
-                r.Render(input, o);
-                last = t;
-                bool on = r.LastLight[0].MaxChannel >= 0.95f;
-                if (on) lit++;
-                if (on && !wasLit) flashes++;
-                if (!on && wasLit) { counts.Add(lit); lit = 0; }
-                wasLit = on;
-            }
-            T.Check(flashes == kicks.Count, $"phase {phase * 1000:F0} ms: every kick flashes ({flashes}/{kicks.Count})");
-        }
-        T.Check(counts.Count > 0 && counts.All(c => c == 3), $"every flash is fully on for 3 frames at 60 fps, whatever the frame phase ({string.Join(" ", counts)})");
     }
 
     /// <summary>

@@ -44,7 +44,7 @@ public static class MusicFinishTests
         Step(0.9f);
         float same = Step(0.8f);
         T.Check(Math.Abs(same - 0.9f) < 1e-4 && Math.Abs(px[0].G / px[0].R - 0.5f) < 1e-4, $"same colour: held at the peak, colour unchanged ({same:F3})");
-        // 半分より下へ一気に暗くなるとき（ストロボ・切り替え）は待たない
+        // 半分より下へ一気に暗くなるとき（消灯・光り方の切り替えなど）は待たない
         Step(0.9f);
         float cut = Step(0.3f);
         T.Check(Math.Abs(cut - 0.3f) < 1e-4, "a cut below half goes through at once");
@@ -55,12 +55,12 @@ public static class MusicFinishTests
         q[0] = new LinColor(0.6f, 0, 0);
         slow.Apply(q, 1, 0.125f);
         T.Check(Math.Abs(q[0].R - 0.6f) < 1e-4, "at 8 fps nothing is held");
-        T.Check(AttackHold.Applies(EffectVariant.Pulse) && AttackHold.Applies(EffectVariant.BeatHue),
-            "used for whole-zone flashes");
-        T.Check(AttackHold.Applies(EffectVariant.Chase) && AttackHold.Applies(EffectVariant.Scroll) && AttackHold.Applies(EffectVariant.Sparkle),
-            "also used for Chase, Scroll and Sparkle (their brightness also follows the beat flash and the bass)");
-        T.Check(!AttackHold.Applies(EffectVariant.Ripple) && !AttackHold.Applies(EffectVariant.Strobe) && !AttackHold.Applies(EffectVariant.Mood),
-            "not for Ripple (a held LED behind the thin ring would look like the ring lagging), Strobe or Mood");
+        T.Check(AttackHold.Applies(EffectVariant.BeatHue) && AttackHold.Applies(EffectVariant.Role) && AttackHold.Applies(EffectVariant.Spectrum),
+            "used for beat flashes and band lights (BeatHue, Role, Spectrum)");
+        T.Check(AttackHold.Applies(EffectVariant.Sparkle) && AttackHold.Applies(EffectVariant.Ensemble),
+            "also used for Sparkle and Ensemble (their brightness also follows the beat flash and the bass)");
+        T.Check(!AttackHold.Applies(EffectVariant.Ripple) && !AttackHold.Applies(EffectVariant.Meter),
+            "not for Ripple (a held LED behind the thin ring would look like the ring lagging) or Meter");
     }
 
     private static AudioFrame Frame(float loudDb, bool open = true) => new() { LoudDb = loudDb, GateOpen = open };

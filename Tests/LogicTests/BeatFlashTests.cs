@@ -1,5 +1,5 @@
 // ==================================================
-// BeatFlashTests.cs - 「ビートで色替え」「パルス」が拍（つかめないときはキック）だけで光ることの確かめ
+// BeatFlashTests.cs - 「ビートで色替え」が拍（つかめないときはキック）だけで光ることの確かめ
 //   （合成の分析結果を手で渡して描く。録音で測るのは BeatFlashBench）
 // Dependencies: .NET 8 (MIT License)
 // See CREDITS.txt for full license details.
@@ -53,6 +53,8 @@ public static class BeatFlashTests
         var input = new RenderInput { Cfg = cfg, Music = m, Device = new RgbDeviceSettings { Name = dev.Name } };
         input.Frame.GateOpen = true;
         input.Frame.Activity = 1;
+        // 音は鳴っている（デジタルの無音の中の予測の拍では光らないため）
+        input.Frame.RmsDb = -20;
         var output = new Rgb[dev.LedCount];
         var tr = new Trace(new List<double>(), new List<float>());
         double last = double.NaN;
@@ -94,7 +96,7 @@ public static class BeatFlashTests
 
     /// <summary>
     /// テンポをつかんでいるとき: 光り始めるのは予測した拍の頭だけ。拍の間のキック（裏拍）・8 分のベースでは光らない。
-    /// 拍はどれも光り、「ビートで色替え」と「パルス」は同じ時刻に光る
+    /// 拍はどれも光る
     /// </summary>
     public static void TestLockedFlashesOnlyOnBeats()
     {
@@ -107,37 +109,78 @@ public static class BeatFlashTests
             events.Add(new AudioEvent(id++, AudioEventKind.Kick, tb + 0.25, 3f));                   // 裏拍のキック
         }
         var beats = Enumerable.Range(0, 13).Select(k => T0 + k * Period).ToList();
-        var rises = new Dictionary<string, List<double>>();
-        foreach (var style in new[] { MusicStyles.BeatHue, MusicStyles.Pulse })
+        foreach (var style in new[] { MusicStyles.BeatHue })
         {
             var tr = Run(style, Locked120, EighthBass, events);
             var r = tr.Rises(2.0);
-            rises[style] = r;
             var off = r.Where(t => Nearest(beats, t) > 0.03).ToList();
             T.Check(r.Count > 0 && off.Count == 0, $"{style} locked: every flash starts on a predicted beat ({r.Count} flashes, {off.Count} off the beat: {string.Join(" ", off.Take(4).Select(t => t.ToString("F2")))})");
             var lit = beats.Where(b => b >= 2.0 && b <= 6.5).ToList();
             int missed = lit.Count(b => Nearest(r, b) > 0.03);
             T.Check(missed == 0, $"{style} locked: every beat flashes ({lit.Count - missed}/{lit.Count})");
         }
-        bool same = rises[MusicStyles.BeatHue].Count == rises[MusicStyles.Pulse].Count
-                    && rises[MusicStyles.BeatHue].Zip(rises[MusicStyles.Pulse]).All(p => Math.Abs(p.First - p.Second) <= 1 / Fps + 1e-9);
-        T.Check(same, "locked: BeatHue and Pulse flash at the same moments (within 1 frame: Pulse also swells slowly with the bass)");
     }
 
-    /// <summary>テンポをつかんでいるとき: キックのある拍はキックのない拍より明るく、小節の頭はいちばん明るい（ビートで色替え）</summary>
-    public static void TestBeatStrengthFollowsKickAndBarHead()
+    /// <summary>
+    /// テンポをつかんでいるとき: 拍の光の強さは、その拍で鳴った音で決まる（キック > スネアだけ > 何もない）。小節の頭だからとは強くしない
+    /// （6.15.10 までは、何もない拍もキックの 6 割ほどで光り、小節の頭がいちばん明るかった。小節の頭の見当は外れやすい）
+    /// </summary>
+    public static void TestBeatStrengthFollowsTheHit()
+    {
+        // 小節の 1・2 拍目にキック、3 拍目にスネアだけ、4 拍目は何もない（少し遅れて検出）
+        var events = new List<AudioEvent>();
+        int id = 1;
+        for (int k = 0; k < 19; k++)
+        {
+            double tb = T0 + k * Period + 0.01;
+            if (k % 4 is 0 or 1) events.Add(new AudioEvent(id++, AudioEventKind.Kick, tb, 3f));
+            else if (k % 4 == 2) events.Add(new AudioEvent(id++, AudioEventKind.Snare, tb, 3f));
+        }
+        (double Head, double Kick, double Snare, double None) Peaks()
+        {
+            var tr = Run(MusicStyles.BeatHue, Locked120, _ => 0.2f, events, end: 10);
+            double Avg(int slot) => Enumerable.Range(8, 10).Where(k => k % 4 == slot).Average(k => tr.PeakAfter(T0 + k * Period));
+            return (Avg(0), Avg(1), Avg(2), Avg(3));
+        }
+        var (head, kick2, snare, none) = Peaks();
+        BeatFlash.Tune.HitDriven = false;
+        (double Head, double Kick, double Snare, double None) old;
+        try { old = Peaks(); }
+        finally { BeatFlash.Tune.HitDriven = true; }
+        T.Info($"BeatHue peaks: kick on the bar head {head:F2}, kick on beat 2 {kick2:F2}, snare only {snare:F2}, nothing {none:F2} " +
+               $"(6.15.10: {old.Head:F2}, {old.Kick:F2}, {old.Snare:F2}, {old.None:F2})");
+        T.Check(Math.Abs(head - kick2) <= 0.03, $"the bar head is not brighter than another kick beat (the bar position is often wrong) ({head:F2} vs {kick2:F2})");
+        T.Check(snare <= kick2 - 0.1 && snare >= none + 0.05, $"a snare-only beat is weaker than a kick beat and brighter than an empty beat ({snare:F2}, kick {kick2:F2}, empty {none:F2})");
+        T.Check(none <= 0.5 * kick2 && none <= old.None - 0.15, $"a beat with no hit stays dim ({none:F2} vs kick {kick2:F2}; 6.15.10 {old.None:F2})");
+        T.Check(old.Head >= old.Kick + 0.03 && old.None >= 0.6 * old.Kick, $"(reference) 6.15.10: the bar head was brightest and an empty beat still flashed ({old.Head:F2}, {old.Kick:F2}, {old.None:F2})");
+    }
+
+    /// <summary>
+    /// テンポをつかんでいても、ドラムのない間奏では拍で光り続けない（6.15.10 は鳴っている音がないのに同じ速さで点滅し続けた）。
+    /// キックが戻れば、最初のキックからまた明るく光る
+    /// </summary>
+    public static void TestLockedBreakWithoutDrumsStaysDim()
     {
         var events = new List<AudioEvent>();
         int id = 1;
-        for (int k = 0; k < 13; k++)
-            if (k % 4 != 2) events.Add(new AudioEvent(id++, AudioEventKind.Kick, T0 + k * Period + 0.01, 3f));
-        var tr = Run(MusicStyles.BeatHue, Locked120, _ => 0.2f, events);
-        double Avg(int slot) => Enumerable.Range(2, 10).Where(k => k % 4 == slot).Average(k => tr.PeakAfter(T0 + k * Period));
-        double head = Avg(0), kick = (Avg(1) + Avg(3)) / 2, none = Avg(2);
-        T.Info($"BeatHue peaks: bar head {head:F2}, beat with kick {kick:F2}, beat without kick {none:F2}");
-        T.Check(kick >= none + 0.05, $"a beat with a kick is brighter than a beat without one ({kick:F2} vs {none:F2})");
-        T.Check(head >= kick + 0.03, $"the bar head is the brightest ({head:F2} vs {kick:F2})");
-        T.Check(none > 0.1, $"a beat without a kick still flashes ({none:F2})");
+        for (int k = 0; k < 25; k++)
+            if (k < 8 || k >= 16) events.Add(new AudioEvent(id++, AudioEventKind.Kick, T0 + k * Period + 0.01, 3f));
+        (double Kick, double Break, double Back) Measure()
+        {
+            var tr = Run(MusicStyles.BeatHue, Locked120, _ => 0.2f, events, end: 13.5);
+            double kick = Enumerable.Range(4, 4).Average(k => tr.PeakAfter(T0 + k * Period));
+            // 間奏の 3 拍目から（はじめの 2 拍は、覚えていた強さで光り始めることがある）
+            double brk = Enumerable.Range(10, 6).Max(k => tr.PeakAfter(T0 + k * Period));
+            return (kick, brk, tr.PeakAfter(T0 + 16 * Period));
+        }
+        var now = Measure();
+        BeatFlash.Tune.HitDriven = false;
+        (double Kick, double Break, double Back) old;
+        try { old = Measure(); }
+        finally { BeatFlash.Tune.HitDriven = true; }
+        T.Info($"locked break: kick beats {now.Kick:F2}, brightest break beat {now.Break:F2}, first kick back {now.Back:F2} (6.15.10: {old.Kick:F2}, {old.Break:F2}, {old.Back:F2})");
+        T.Check(now.Break <= 0.5 * now.Kick && now.Break <= old.Break - 0.15, $"locked break without drums: the beats stay dim ({now.Break:F2}, kick beats {now.Kick:F2}; 6.15.10 {old.Break:F2})");
+        T.Check(now.Back >= 0.9 * now.Kick, $"locked break: the first kick after the break is a full flash ({now.Back:F2} vs {now.Kick:F2})");
     }
 
     /// <summary>
@@ -155,7 +198,7 @@ public static class BeatFlashTests
             events.Add(new AudioEvent(id++, AudioEventKind.Kick, tk, 3f));
             events.Add(new AudioEvent(id++, AudioEventKind.Kick, tk + 0.2, 2f));
         }
-        foreach (var style in new[] { MusicStyles.BeatHue, MusicStyles.Pulse })
+        foreach (var style in new[] { MusicStyles.BeatHue })
         {
             var tr = Run(style, null, EighthBass, events);
             var r = tr.Rises(2.0);
@@ -171,7 +214,7 @@ public static class BeatFlashTests
     {
         // 0.6 秒ごとの低音（ベースの音。キックの出来事はない）
         static float Notes(double t) => (float)(0.9 * Math.Exp(-((t - T0) % 0.6) / 0.12));
-        foreach (var style in new[] { MusicStyles.BeatHue, MusicStyles.Pulse })
+        foreach (var style in new[] { MusicStyles.BeatHue })
         {
             var tr = Run(style, null, Notes, Array.Empty<AudioEvent>());
             var notes = Enumerable.Range(0, 12).Select(k => T0 + k * 0.6).Where(t => t >= 3 && t <= 6.5).ToList();
@@ -224,17 +267,14 @@ public static class BeatFlashTests
         }
     }
 
-    /// <summary>拍に乗せるのは光り方「ビートで色替え」「パルス」の速いデバイス用だけ（ほかの光り方の代わり・遅いデバイス用は今までどおり）</summary>
+    /// <summary>
+    /// 拍に乗せるのは光り方「ビートで色替え」の速いデバイス用。ほかの光り方の代わり・遅いデバイス用は今までどおり
+    /// </summary>
     public static void TestOnlyTheStylesThemselvesFollowTheBeat()
     {
         T.Check(EffectCatalog.Create(EffectVariant.BeatHue) is BeatHueEffect { FollowsBeat: true }, "BeatHue: follows the beat");
-        T.Check(EffectCatalog.Create(EffectVariant.Pulse) is PulseEffect { FollowsBeat: true }, "Pulse: follows the beat");
         T.Check(EffectCatalog.Create(EffectVariant.BeatHueSlow) is BeatHueEffect { FollowsBeat: false }, "BeatHue (slow devices, also used for other styles there): unchanged");
-        T.Check(EffectCatalog.Create(EffectVariant.PulseSlow) is PulseEffect { FollowsBeat: false }, "Pulse (slow devices): unchanged");
-        T.Check(EffectCatalog.Create(EffectVariant.PulseLoudSlow) is PulseEffect { FollowsBeat: false }, "loudness pulse (meter on slow devices): unchanged");
-        T.Check(!new PulseEffect().FollowsBeat, "the small-zone pulse used by other styles: unchanged");
-        var small = typeof(ChaseEffect).GetField("_small", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)?.GetValue(new ChaseEffect());
-        T.Check(small is BeatHueEffect { FollowsBeat: false }, "the small-zone BeatHue used by Chase: unchanged");
+        T.Check(EffectCatalog.Create(EffectVariant.PulseLoudSlow) is PulseEffect, "loudness pulse (meter on slow devices): a plain pulse, no beat flash");
     }
 
     /// <summary>
@@ -251,7 +291,7 @@ public static class BeatFlashTests
             foreach (bool noGuard in new[] { false, true })
             {
                 DeviceRenderer.NoFlashGuard = noGuard;
-                foreach (var style in new[] { MusicStyles.BeatHue, MusicStyles.Pulse })
+                foreach (var style in new[] { MusicStyles.BeatHue })
                 {
                     var tr = Run(style, beat, _ => 0.2f, events, end: 7, tweak: m => m with { ReduceFlashing = true, FlashAmp = 1 });
                     int strong = tr.Rises(2.0, 0.15).Count;
@@ -460,7 +500,7 @@ public static class BeatFlashTests
         var beat = new BeatState(Period, T0, 0, 0.6, false, 0);
         // 1〜3.5 秒はキック（拍の頭）、そのあとはドラムなし。低音はパッドの一定の音
         var events = Enumerable.Range(0, 6).Select(k => new AudioEvent(k + 1, AudioEventKind.Kick, T0 + k * Period + 0.01, 3f)).ToList();
-        foreach (var style in new[] { MusicStyles.BeatHue, MusicStyles.Pulse })
+        foreach (var style in new[] { MusicStyles.BeatHue })
         {
             var tr = Run(style, beat, _ => 0.5f, events, end: 9);
             int during = tr.Rises(1.4).Count(t => t < 3.6);
@@ -476,6 +516,8 @@ public static class BeatFlashTests
     {
         Music = ResolvedMusic.Default with { TempoMode = TempoModes.Auto, ReduceFlashing = reduce, FlashAmp = 1 },
         Gamma = false,
+        // 音は鳴っている（デジタルの無音の中の予測の拍では光らないため）
+        Frame = new AudioFrame { RmsDb = -20 },
     };
 
     /// <summary>1 コマ分: 前のコマの時刻 prev から t まで。cross = またいだ拍の頭の時刻、trigger = 色を進める合図の時刻</summary>
@@ -510,7 +552,10 @@ public static class BeatFlashTests
         Step(bf, c, 1.0, 1.1, false, evs: new AudioEvent(1, AudioEventKind.Kick, 1.05, 3f));
         Step(bf, c, 1.8, 1.9, false);
         Step(bf, c, 1.9, 2.0, false, cross: 1.98, trigger: 1.88, evs: new AudioEvent(2, AudioEventKind.Kick, 1.88, 3f));
-        T.Check(bf.KickStarted && Math.Abs(bf.PeakT - 1.88) < 1e-6, $"a colour-trigger kick before the beat head in the same frame starts a flash at the kick (peak at {bf.PeakT:F3})");
+        // 光はキックの時刻（1.88）から始まる: その直前は前の光の残りだけ、直後は光り始めの明るさ
+        double before = bf.At(1.88 - 1e-4), after = bf.At(1.88 + 1e-6);
+        T.Check(bf.KickStarted && after > 0.3 && after > before + 0.2,
+            $"a colour-trigger kick before the beat head in the same frame starts a flash at the kick ({before:F2} → {after:F2} at 1.88)");
         T.Check(!bf.BeatStarted, "the beat head right after that kick does not flash again");
         T.Check(bf.Limiter.Accepted == 2, $"the flash limiter counts only flashes that really start ({bf.Limiter.Accepted} accepted)");
 
@@ -549,7 +594,9 @@ public static class BeatFlashTests
         for (double t = back + 1 / Fps; t <= back + 1.2; t += 1 / Fps)
         {
             double? cross = Math.Floor((t - T0) / Period) > Math.Floor((prev - T0) / Period) ? T0 + Math.Floor((t - T0) / Period) * Period : null;
-            Step(bf, c, prev, t, true, cross);
+            // 戻ったあともキックは鳴り続ける（キックのない拍は弱く光るだけなので）
+            var evs = cross is double tb ? new[] { new AudioEvent(id++, AudioEventKind.Kick, tb, 3f) } : Array.Empty<AudioEvent>();
+            Step(bf, c, prev, t, true, cross, evs: evs);
             if (bf.BeatStarted && bf.Value > 0.3) beats++;
             prev = t;
         }

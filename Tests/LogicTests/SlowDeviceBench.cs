@@ -1,6 +1,7 @@
 // ==================================================
 // SlowDeviceBench.cs - 更新の遅いデバイス（グラボ・メモリ）で、光り方ごとに「見た目がどれだけ音楽で変わるか」を数値にする
-//   環境変数を渡したときだけ動く（ふつうのテストでは何もしない）:
+//   環境変数を渡したときだけ動く（ふつうのテストでは何もしない。「パーツごとの役割」の 3 つ、TestRoleSlowDeviceOnBeat・
+//   TestRoleSlowDeviceSlowAndFastTempos・TestRoleGridHatDimming だけは、いつも動く判定）:
 //     SLOWDEV_BENCH=1        合成した曲（ドラム・ベース・歌・パッド・金管）で測る
 //     SLOWDEV_WAV=フォルダー  録音した曲（ステレオの WAV。48 kHz でも 96 / 192 kHz でもよい: アプリと同じに、そのままの周波数で AudioEngine に渡す。song_NN.wav）で測る。曲の名前は出さず、song_NN（なければ file_k）だけ出す
 //   本物の送り方（RgbDeviceChannel: 送る回数の上限・ビートの頭で早めに送る・小さな変化は送らない・LED に届くまでの遅れ）で送り、
@@ -95,6 +96,171 @@ public static class SlowDeviceBenchTests
         Average(all);
     }
 
+    /// <summary>
+    /// 遅いデバイス（直接書き込むグラボ・メモリ）の「パーツごとの役割」: 合成した 128 BPM の曲で、見て分かる始まりの多くが拍に乗る。
+    /// 6.15.10 は拍に乗った割合が直接書き込むグラボで 25%・19%（虹・選んだ色）、メモリで 9%。8 分音符のハイハットで高音のパーツが強く光り、
+    /// 強い点滅の制限（1 秒に 3 回）を拍の間の光で使い切って、拍の光が 1 回おきに暗くなっていた（RoleEffect.SlowGridHatGain）。
+    /// 拍ごとに見える始まりがあり、ハイハットでの変化も残り、強い点滅は 1 秒に 3 回まで
+    /// </summary>
+    public static void TestRoleSlowDeviceOnBeat()
+    {
+        const double bpm = 128;
+        var (l, _, beats) = Synth(bpm, 32, (int)bpm);
+        var scores = Run(l, null, beats, Fs, new[] { MusicStyles.Role }, new[] { "direct", "dram" }, new[] { Palettes.Rainbow, Palettes.Solid },
+            protos: false, unlock: false, envOptions: false);
+        double beatRate = bpm / 60;
+        foreach (var sc in scores)
+        {
+            T.Info(Format(sc));
+            T.Check(sc.OnBeat >= 0.5, $"{sc.Label}: 見て分かる始まりの 50% 以上が拍に乗る（{sc.OnBeat * 100:F0}%。6.15.10 は 9〜25%）");
+            T.Check(sc.Starts >= 0.85 * beatRate, $"{sc.Label}: 始まりが拍の数くらいある（{sc.Starts:F2}/s。拍 {beatRate:F2}/s）");
+            T.Check(sc.Vis >= 3 * beatRate, $"{sc.Label}: 拍の間も見て分かる変化がある（{sc.Vis:F2}/s。ハイハットで高音のパーツが変わる）");
+            T.Check(sc.Flash <= 3, $"{sc.Label}: 強い点滅は 1 秒に 3 回まで（{sc.Flash:F1}）");
+        }
+        // 比べる: 刻みの裏のハイハットを弱めないと、拍に乗る割合は 6.15.10 と同じくらい低い
+        try
+        {
+            RoleEffect.GridHatDim = false;
+            foreach (var sc in Run(l, null, beats, Fs, new[] { MusicStyles.Role }, new[] { "direct", "dram" }, new[] { Palettes.Rainbow, Palettes.Solid },
+                protos: false, unlock: false, envOptions: false))
+                T.Info("弱めないとき: " + Format(sc));
+        }
+        finally { RoleEffect.GridHatDim = true; }
+    }
+
+    /// <summary>
+    /// 遅いデバイスの「パーツごとの役割」: ゆっくりした曲（90 BPM）では刻みの裏のハイハットを弱めない（RoleEffect.GridHatMinBpm。
+    /// 拍と刻みの裏を全部光らせても 1 秒に 3 回に収まる）。弱めるのをオフにしたときと、見えている色の並びの数値がまったく同じ。
+    /// 速い曲（174 BPM）は、弱めないときより拍に乗る割合が下がらず、強い点滅は 1 秒に 3 回まで
+    /// （174 BPM のまま拍をつかめば刻みの裏は本当の 8 分音符の裏。半分の 87 BPM でつかんだときは GridHatMinBpm より遅いので弱めない）
+    /// </summary>
+    public static void TestRoleSlowDeviceSlowAndFastTempos()
+    {
+        foreach (double bpm in new[] { 90.0, 174 })
+        {
+            var (l, _, beats) = Synth(bpm, 24, (int)bpm);
+            List<Score> Measure() => Run(l, null, beats, Fs, new[] { MusicStyles.Role }, new[] { "direct", "dram" }, new[] { Palettes.Rainbow },
+                protos: false, unlock: false, envOptions: false);
+            var on = Measure();
+            List<Score> off;
+            try { RoleEffect.GridHatDim = false; off = Measure(); }
+            finally { RoleEffect.GridHatDim = true; }
+            for (int i = 0; i < on.Count; i++)
+            {
+                T.Info($"{bpm:0} BPM " + Format(on[i]));
+                T.Info($"{bpm:0} BPM 弱めないとき: " + Format(off[i]));
+                string label = $"{bpm:0} BPM {on[i].Label}";
+                if (bpm < RoleEffect.GridHatMinBpm)
+                    T.Check(on[i] == off[i], $"{label}: 弱めるのをオフにしたときと同じ（拍に乗る {on[i].OnBeat * 100:F0}% / {off[i].OnBeat * 100:F0}%）");
+                else
+                {
+                    T.Check(on[i].OnBeat >= off[i].OnBeat - 0.01, $"{label}: 拍に乗る割合が、弱めないときより下がらない（{on[i].OnBeat * 100:F0}% / {off[i].OnBeat * 100:F0}%）");
+                    T.Check(on[i].Flash <= 3, $"{label}: 強い点滅は 1 秒に 3 回まで（{on[i].Flash:F1}）");
+                }
+            }
+        }
+    }
+
+    /// <summary>
+    /// 高音のパーツ（RoleEffect）に、テンポをつかんだ状態（拍の頭が 0 秒）でハイハットの出来事を渡し、出来事ごとの明るさの上がりを返す。
+    /// 1/60 秒ごとに描く。キック・拍の光は渡さない（高音のパーツのハイハットの光だけを見る）
+    /// </summary>
+    private static List<(double T, float Rise)> RoleHatRises(double bpm, IEnumerable<double> hats, bool slowDevice = true, bool reduce = true,
+        bool fixedBrightness = false, bool directWrite = true)
+    {
+        var cfg = new RgbConfig { Mode = RgbModes.Music };
+        cfg.Music.ReduceFlashing = reduce;
+        var m = MusicTuning.Resolve(cfg);
+        double p = 60 / bpm;
+        var fx = new RoleEffect(slow: true);
+        var c = new EffectContext
+        {
+            Music = m, Slow = true, SlowDevice = slowDevice, FixedBrightness = fixedBrightness, DirectWrite = directWrite,
+            HasTempo = true, Locked = true, Period = p, Beat = new BeatState(p, 0, 0, 1, true, 0),
+        };
+        c.Frame.Activity = 1;
+        c.Frame.GateOpen = true;
+        fx.Reset(c);
+        var hs = hats.OrderBy(x => x).ToList();
+        var lv = new List<(double T, float V)>();
+        int next = 0;
+        for (int k = 0; k / 60.0 <= hs[^1] + 0.3; k++)
+        {
+            double t = k / 60.0;
+            c.TPrev = c.T;
+            c.T = t;
+            c.Dt = k == 0 ? 0 : 1 / 60f;
+            c.Frame.T = t;
+            c.Events.Clear();
+            while (next < hs.Count && hs[next] <= t) { c.Events.Add(new AudioEvent(next + 1, AudioEventKind.Hat, hs[next], 2f)); next++; }
+            fx.Update(c);
+            lv.Add((t, fx.LevelOf(MusicRole.Treble)));
+        }
+        return hs.Select(h =>
+        {
+            float before = lv.Where(x => x.T < h).Select(x => x.V).DefaultIfEmpty(0).Last();
+            float peak = lv.Where(x => x.T >= h && x.T < h + 0.05).Select(x => x.V).DefaultIfEmpty(0).Max();
+            return (h, peak - before);
+        }).ToList();
+    }
+
+    /// <summary>
+    /// 遅いデバイスの「パーツごとの役割」の高音のパーツ: 128 BPM で 8 分音符の刻みのハイハット（拍の頭と裏）なら、裏の光だけ弱める
+    /// （SlowGridHatGain）。それでも裏のハイハットではっきり明るくなる（高音のパーツはハイハットで光るのが役割）。
+    /// 弱めないもの: 刻みに乗っていない高音（ゲームのクリック音など）、テンポと合わない刻み（曲が変わった直後の、前の曲の拍の予測のまま）、
+    /// 90 BPM の刻みと 16 分音符の位置のクリック、半分にしてつかんだテンポ（87 BPM）の本当の 8 分音符、「激しい点滅を抑える」がオフ、
+    /// 更新の速いデバイス、明るさを変えないグラボ
+    /// </summary>
+    public static void TestRoleGridHatDimming()
+    {
+        const double bpm = 128, p = 60 / bpm;
+        // 弱めるのをオフにしたときの上がり（比べる相手）
+        static List<(double T, float Rise)> Plain(Func<List<(double T, float Rise)>> f)
+        {
+            try { RoleEffect.GridHatDim = false; return f(); }
+            finally { RoleEffect.GridHatDim = true; }
+        }
+
+        var eighths = Enumerable.Range(4, 16).Select(k => k * p / 2).ToList();
+        var r = RoleHatRises(bpm, eighths);
+        var r0 = Plain(() => RoleHatRises(bpm, eighths));
+        float on = r.Where((_, i) => i % 2 == 0).Average(x => x.Rise), off = r.Where((_, i) => i % 2 == 1).Average(x => x.Rise);
+        float off0 = r0.Where((_, i) => i % 2 == 1).Average(x => x.Rise);
+        T.Info($"128 BPM 8 分音符: 拍の頭 {on:F3}、裏 {off:F3}（弱めないと {off0:F3}）");
+        T.Check(off <= 0.7f * off0, "刻みの裏のハイハットは弱く光る");
+        T.Check(off >= 0.35f * off0 && off >= 0.1f, "それでも刻みの裏のハイハットで高音のパーツがはっきり明るくなる（0.1 以上）");
+        T.Check(on >= 0.95f * off0, "拍の頭のハイハットは弱めない");
+
+        // 裏だけのハイハット（拍の頭にはない）も、曲の刻み
+        var offs = Enumerable.Range(2, 8).Select(k => k * p + p / 2).ToList();
+        var ro = RoleHatRises(bpm, offs);
+        var ro0 = Plain(() => RoleHatRises(bpm, offs));
+        T.Check(ro.Skip(1).Zip(ro0.Skip(1)).All(x => x.First.Rise <= 0.7f * x.Second.Rise), "裏だけのハイハットも弱く光る");
+
+        // 弱めないもの: 弱めるのをオフにしたときとまったく同じ上がり
+        void Same(string name, double b, List<double> hats, bool slowDevice = true, bool reduce = true, bool fixedBrightness = false, bool directWrite = true)
+        {
+            var a = RoleHatRises(b, hats, slowDevice, reduce, fixedBrightness, directWrite);
+            var a0 = Plain(() => RoleHatRises(b, hats, slowDevice, reduce, fixedBrightness, directWrite));
+            float worst = a.Zip(a0).Min(x => x.First.Rise - x.Second.Rise);
+            T.Check(a.Zip(a0).All(x => x.First.Rise == x.Second.Rise), $"{name}: 弱めない（弱めないときとの差 {worst:F4}。いちばん小さい上がり {a.Min(x => x.Rise):F3}）");
+        }
+        // 刻みに乗っていないクリック音（拍の頭のハイハットの 0.6 拍あと）
+        var beatsOnly = Enumerable.Range(2, 8).Select(k => k * p).ToList();
+        Same("128 BPM の拍の頭のハイハットと、刻みに乗っていないクリック", bpm, beatsOnly.Concat(beatsOnly.Select(x => x + 0.6 * p)).ToList());
+        // テンポと合わない刻み（96 BPM の 8 分音符。拍の予測は 128 BPM のまま: 曲が変わった直後）
+        Same("拍の予測とテンポの合わない刻み", bpm, Enumerable.Range(0, 12).Select(k => 1.1 + k * 60 / 96.0 / 2).ToList());
+        // 90 BPM の 8 分音符の刻みと、16 分音符の位置のクリック（1 秒に 3 回に収まる）
+        double p90 = 60 / 90.0;
+        Same("90 BPM の刻みと 16 分音符の位置のクリック", 90,
+            Enumerable.Range(4, 12).Select(k => k * p90 / 2).Concat(Enumerable.Range(2, 6).Select(k => k * p90 + 0.75 * p90)).ToList());
+        // 半分にしてつかんだテンポ（174 BPM の曲を 87 BPM で）: 予測の裏は本当の拍
+        Same("半分にしてつかんだテンポの曲の 8 分音符", 87, Enumerable.Range(6, 16).Select(k => k * 60 / 174.0 / 2).ToList());
+        Same("「激しい点滅を抑える」がオフ", bpm, eighths, reduce: false);
+        Same("更新の速いデバイス", bpm, eighths, slowDevice: false, directWrite: false);
+        Same("明るさを変えないグラボ", bpm, eighths, fixedBrightness: true, directWrite: false);
+    }
+
     public static void TestSlowDeviceWavBench()
     {
         string? dir = Environment.GetEnvironmentVariable("SLOWDEV_WAV");
@@ -142,11 +308,18 @@ public static class SlowDeviceBenchTests
     /// 曲を本物の分析に流し、光り方 × デバイス × パレットごとに RgbDeviceChannel で描いて送る。
     /// r が null ならモノラル。beats は物差しの拍（曲の頭からの秒）。fs は音のサンプリング周波数（アプリと同じに、そのまま AudioEngine に 10 ミリ秒ずつ渡す）
     /// </summary>
-    private static List<Score> Run(float[] l, float[]? r, List<double> beats, int fs)
+    private static List<Score> Run(float[] l, float[]? r, List<double> beats, int fs) =>
+        Run(l, r, beats, fs, List("SLOWDEV_STYLES", string.Join(",", MusicStyles.All)), List("SLOWDEV_DEVICES", "gpu,direct,dram"),
+            List("SLOWDEV_PAL", $"{Palettes.Rainbow},{Palettes.Solid}"), protos: Environment.GetEnvironmentVariable("SLOWDEV_PROTO") != "0",
+            unlock: Environment.GetEnvironmentVariable("SLOWDEV_UNLOCK") == "1", envOptions: true);
+
+    /// <summary>
+    /// Run と同じ（光り方・デバイス・パレットを引数で選ぶ）。protos = 設計案の試作 PROTO も測る、unlock = 拍の予測を渡さない、
+    /// envOptions = 直接書き込むグラボの描き方・送り方を環境変数 DIRECT_OPTS で変えてよい（判定のテストは false: いつも製品の既定）
+    /// </summary>
+    private static List<Score> Run(float[] l, float[]? r, List<double> beats, int fs, string[] styles, string[] devices, string[] pals,
+        bool protos, bool unlock, bool envOptions)
     {
-        var styles = List("SLOWDEV_STYLES", string.Join(",", MusicStyles.All.Where(x => x != MusicStyles.Strobe)));
-        var devices = List("SLOWDEV_DEVICES", "gpu,direct,dram");
-        var pals = List("SLOWDEV_PAL", $"{Palettes.Rainbow},{Palettes.Solid}");
         var lanes = new List<Lane>();
         foreach (var dn in devices)
             foreach (var st in styles)
@@ -160,21 +333,21 @@ public static class SlowDeviceBenchTests
                     lanes.Add(new Lane { Style = st, DeviceName = dn, Pal = pal, Ch = ch });
                 }
         // 設計案の試作（SLOWDEV_PROTO=0 で外す）: 遅いデバイスの「楽器で光る」。SLOWDEV_PROTO_TUNE=ふくらみの大きさ,時定数,最小の間隔 で試せる
-        if (Environment.GetEnvironmentVariable("SLOWDEV_PROTO_TUNE") is { Length: > 0 } tune && tune.Split(",") is [var ta, var tt, var tg])
+        if (protos && Environment.GetEnvironmentVariable("SLOWDEV_PROTO_TUNE") is { Length: > 0 } tune && tune.Split(",") is [var ta, var tt, var tg])
         {
             var ic = System.Globalization.CultureInfo.InvariantCulture;
             SlowEnsembleProto.SwellAmp = double.Parse(ta, ic);
             SlowEnsembleProto.SwellTauSec = double.Parse(tt, ic);
             SlowEnsembleProto.SwellGapSec = double.Parse(tg, ic);
         }
-        if (Environment.GetEnvironmentVariable("SLOWDEV_PROTO") != "0")
+        if (protos)
             foreach (var dn in devices.Where(d => d is "gpu" or "direct" or "dram"))
                 foreach (var pal in pals)
                     lanes.Add(new Lane { Style = "PROTO", DeviceName = dn, Pal = pal, P = new SlowEnsembleProto(DeviceOf(dn), pal) });
 
         var e = new AudioEngine(fs) { Settings = MusicTuning.EngineSettings(new RgbConfig { Mode = RgbModes.Music }) };
-        bool unlock = Environment.GetEnvironmentVariable("SLOWDEV_UNLOCK") == "1";
-        DirectGpuOptions.Apply();
+        if (envOptions) DirectGpuOptions.Apply();
+        else DirectGpuOptions.Reset();
         int pos = 0, chunk = Math.Max(1, fs / 100);
         var mid = new float[chunk];
         var side = new float[chunk];

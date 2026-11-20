@@ -14,6 +14,9 @@
 #ifndef AppVersion
   #define AppVersion "0.0.0"
 #endif
+#ifndef NumericVersion
+  #define NumericVersion AppVersion
+#endif
 #ifndef SourceDir
   #error SourceDir is required (Distribution\make-dist.ps1 passes it)
 #endif
@@ -45,7 +48,8 @@ OutputBaseFilename={#AppName}-{#AppVersion}-setup
 SetupIconFile=..\Assets\app.ico
 UninstallDisplayIcon={app}\{#AppExe}
 UninstallDisplayName={#AppName}
-VersionInfoVersion={#AppVersion}
+VersionInfoVersion={#NumericVersion}
+VersionInfoProductTextVersion={#AppVersion}
 VersionInfoProductName={#AppName}
 VersionInfoDescription={#AppName} Setup
 Compression=lzma2

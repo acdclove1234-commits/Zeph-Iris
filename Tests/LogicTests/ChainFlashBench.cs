@@ -1,6 +1,6 @@
 // ==================================================
 // ChainFlashBench.cs - 調査用: 続けて録音した曲（曲の間に無音がない）を、録音したとおりに続けて流し、
-//                      曲が変わった直後に「ビートで色替え」「パルス」の光が新しい曲の拍に乗っているかを測る（CHAIN_WAV を渡したときだけ動く）
+//                      曲が変わった直後に「ビートで色替え」の光が新しい曲の拍に乗っているかを測る（CHAIN_WAV を渡したときだけ動く）
 //   ・CHAIN_WAV=<フォルダー>: 中の song_NN.wav を番号順に。segments.txt（「song_NN<TAB>区切りの番号」）があれば、
 //     番号が続いていて区切りの番号が同じファイルどうしだけを「曲間なしの曲の変わり目」とし、それ以外は分析を作り直す（続きではない）
 //   ・表示するのは RNN（song_NN の NN）だけ。曲名・パスは出さない
@@ -11,7 +11,7 @@
 //   出す値: 変わり目ごと・まとめて、変わり目から 0-2・2-5・5-10・10-30 秒の、光の数・拍に乗った割合（±60 ms）・拍にも拍の間にも乗らない割合（stray）・
 //           光った拍の割合（lit）。曲全体（各ファイルの 8 秒以降。BeatFlashBench と同じ）のロックの割合・ロック中の拍に乗った割合・lit・ロックが外れた回数
 //           色替えのちかっとした光（BlipMeter を描いた値に。全部と、変わり目から 10 秒の間）・送った値すべての指紋（hash）も出す
-// 調べる用: CHAIN_STYLES=BeatHue,Pulse、CHAIN_DEV=strip,pny、CHAIN_AI=0（拍の AI なし）、CHAIN_FILES=02,03（この番号の曲だけ。区切りは作り直す）、
+// 調べる用: CHAIN_STYLES=BeatHue,Spectrum、CHAIN_DEV=strip,pny、CHAIN_AI=0（拍の AI なし）、CHAIN_FILES=02,03（この番号の曲だけ。区切りは作り直す）、
 //           CHAIN_PAIRS=60（変わり目ごとに、前の曲の最後 60 秒と次の曲の頭 CHAIN_POST 秒（既定 30）だけを新しい分析で流す。速く比べる用）、
 //           CHAIN_CROSS=1（曲の組をすべて試す: X の最後 CHAIN_PAIRS 秒（既定 45）→ Y の頭 CHAIN_POST 秒。実際に続けて流れた組でなくても、
 //           曲の終わり方・始まり方は録音のまま。変わり目の数を増やして、ばらつきを小さくする）、CHAIN_DUMP=BeatHue/strip（変わり目の 10 秒の光を 1 つずつ）、
@@ -76,7 +76,7 @@ public static class ChainFlashBenchTests
         if (!Directory.Exists(dir)) { T.Skip("CHAIN_WAV is not a folder"); return; }
         var songs = ListSongs(dir);
         if (songs.Count == 0) { T.Skip("CHAIN_WAV has no song_NN.wav"); return; }
-        string[] styles = (Environment.GetEnvironmentVariable("CHAIN_STYLES") ?? $"{MusicStyles.BeatHue},{MusicStyles.Pulse}")
+        string[] styles = (Environment.GetEnvironmentVariable("CHAIN_STYLES") ?? MusicStyles.BeatHue)
             .Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
         string[] devs = (Environment.GetEnvironmentVariable("CHAIN_DEV") ?? "strip,pny").Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
         string delaySpec = Environment.GetEnvironmentVariable("CHAIN_DELAY") ?? "1.0";

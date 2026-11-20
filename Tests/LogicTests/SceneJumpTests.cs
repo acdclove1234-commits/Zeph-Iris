@@ -365,7 +365,7 @@ public static class SceneJumpTests
     public static void TestTurningScenesOffCrossfades()
     {
         var vocal = new MusicScene(SceneGroup.Vocal, SceneGroup.None, T0 - 10, 0.8f);
-        foreach (var (style, pal) in new[] { (MusicStyles.Mood, Palettes.Rainbow), (MusicStyles.BeatHue, Palettes.Fire), (MusicStyles.Ensemble, Palettes.Solid) })
+        foreach (var (style, pal) in new[] { (MusicStyles.Spectrum, Palettes.Rainbow), (MusicStyles.BeatHue, Palettes.Fire), (MusicStyles.Ensemble, Palettes.Solid) })
             CheckSmooth("switch off", style, pal, t => t < 8 ? (true, vocal, pal) : (false, MusicScene.None, pal));
     }
 
@@ -373,7 +373,7 @@ public static class SceneJumpTests
     public static void TestSceneDroppedToNoneCrossfades()
     {
         var vocal = new MusicScene(SceneGroup.Vocal, SceneGroup.None, T0 - 10, 0.8f);
-        foreach (var (style, pal) in new[] { (MusicStyles.Mood, Palettes.Rainbow), (MusicStyles.Ensemble, Palettes.Rainbow) })
+        foreach (var (style, pal) in new[] { (MusicStyles.Spectrum, Palettes.Rainbow), (MusicStyles.Ensemble, Palettes.Rainbow) })
             CheckSmooth("scene dropped to None", style, pal, t => (true, t < 8 ? vocal : MusicScene.None, pal));
     }
 }

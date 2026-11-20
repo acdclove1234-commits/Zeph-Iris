@@ -165,7 +165,7 @@ public static class ReviewFixRgbTests
             var input = new RenderInput
             {
                 Cfg = new RgbConfig { Mode = RgbModes.Music, Brightness = 100, Gamma = true, StaticColor = "#6A00FF" },
-                Music = ResolvedMusic.Default with { Effect = MusicStyles.Mood, Palette = Palettes.Neon, MinBrightness = 0.05 },
+                Music = ResolvedMusic.Default with { Effect = MusicStyles.Spectrum, Palette = Palettes.Neon, MinBrightness = 0.05 },
                 Device = new RgbDeviceSettings { Name = "Strip" },
                 AllowDither = allow,
             };

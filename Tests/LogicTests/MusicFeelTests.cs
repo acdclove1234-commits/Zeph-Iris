@@ -34,7 +34,7 @@ public static class MusicFeel
 
     /// <summary>
     /// 光り方の見た目の特徴: 色が一度に変わった回数（12 秒・24 拍の間）と、拍の直後・拍の 0.2 秒後・次の拍の直前の明るさ。
-    /// 「ビートで色替え」と「パルス」の違いを数で見るため
+    /// 「ビートで色替え」の特徴（拍で色が一度に変わり、拍の直後に光って次の拍の前に暗くなる）を数で見るため
     /// </summary>
     public static (int ColorChanges, double On, double Mid, double Off) Character(ResolvedMusic m, int from, int n)
     {
@@ -136,23 +136,17 @@ public static class MusicFeelTests
     }
 
     /// <summary>
-    /// 「ビートで色替え」と「パルス」は見て分かるほど違う（6.14.3 までは、どちらもビートで色が変わり、明るさの形もほぼ同じだった:
-    /// 色替え 24 回 / 27 回、拍の 0.2 秒後 0.31 / 0.48）。
-    ///   ビートで色替え: ビートで色が変わり（12 秒で 8 回以上）、拍の後すぐ暗くなる
-    ///   パルス: 色はゆっくり（4 回以下）、残光が長い（拍の 0.2 秒後も、拍の直後の 6 割以上残る）。それでも拍で脈打つ
+    /// 「ビートで色替え」: ビートで色が変わり（12 秒で 8 回以上）、拍の後すぐ暗くなる（拍の 0.2 秒後は、拍の直後の 6 割以下）
     /// </summary>
-    public static void TestBeatHueVsPulseCharacter()
+    public static void TestBeatHueCharacter()
     {
         foreach (var preset in new[] { MusicPresets.Groove, MusicPresets.Party })
         {
             // テンポ「自動」: 強いキックで色が進む（テンポをつかむ分析はここでは動かさない）
             var hue = MusicFeel.Character(MusicFeel.Preset(preset, MusicStyles.BeatHue) with { Palette = Palettes.Neon, TempoMode = TempoModes.Auto }, 1, 24);
-            var pulse = MusicFeel.Character(MusicFeel.Preset(preset, MusicStyles.Pulse) with { Palette = Palettes.Neon, TempoMode = TempoModes.Auto }, 1, 24);
             T.Info($"{preset,-7} BeatHue  color changes {hue.ColorChanges,2}  on {hue.On:F2}  +0.2s {hue.Mid:F2}  before next {hue.Off:F2}");
-            T.Info($"{preset,-7} Pulse    color changes {pulse.ColorChanges,2}  on {pulse.On:F2}  +0.2s {pulse.Mid:F2}  before next {pulse.Off:F2}");
-            T.Check(hue.ColorChanges >= 8 && pulse.ColorChanges <= 4, $"{preset}: BeatHue changes colour on beats ({hue.ColorChanges}), Pulse drifts slowly ({pulse.ColorChanges})");
-            T.Check(pulse.Mid / pulse.On >= 0.6 && hue.Mid / hue.On <= 0.6, $"{preset}: Pulse glows longer after the beat ({pulse.Mid / pulse.On:F2} vs {hue.Mid / hue.On:F2})");
-            T.Check(pulse.Off / pulse.On <= 0.6, $"{preset}: Pulse still pulses with the beat ({pulse.Off:F2} before the next beat vs {pulse.On:F2})");
+            T.Check(hue.ColorChanges >= 8, $"{preset}: BeatHue changes colour on beats ({hue.ColorChanges})");
+            T.Check(hue.Mid / hue.On <= 0.6, $"{preset}: BeatHue fades soon after the beat ({hue.Mid / hue.On:F2})");
         }
     }
 
@@ -161,8 +155,8 @@ public static class MusicFeelTests
     {
         string[] styles =
         {
-            MusicStyles.BeatHue, MusicStyles.Pulse, MusicStyles.Mix, MusicStyles.Meter, MusicStyles.Spectrum, MusicStyles.Energy,
-            MusicStyles.Scroll, MusicStyles.Ripple, MusicStyles.Sparkle, MusicStyles.Role, MusicStyles.Chase,
+            MusicStyles.BeatHue, MusicStyles.Meter, MusicStyles.Spectrum,
+            MusicStyles.Ripple, MusicStyles.Sparkle, MusicStyles.Role,
         };
         foreach (var preset in new[] { MusicPresets.Groove, MusicPresets.Party })
         {

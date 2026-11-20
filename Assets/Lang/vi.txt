@@ -213,7 +213,6 @@ a08b7324	Bằng hoặc dưới nhiệt độ này, màu là xanh nhạt (mát)
 0582db54	Nhiệt độ chuyển đỏ
 74068713	Bằng hoặc trên nhiệt độ này, màu là đỏ hoàn toàn (nóng). Ở giữa sẽ qua xanh lá → vàng
 181b9ba1	Tốc độ
-6f30cf75	Cầu vồng ở 1× mất 30 giây một vòng (3× là 10 giây, 10× là 3 giây); nhịp thở ở 1× mất 6 giây một lần. Với "sóng chảy" khi đồng bộ nhạc thì đây là tốc độ chảy
 36bcf3d7	{0:F1}×
 f9dafe1e	Phân tích âm thanh phát ra từ PC và phát sáng theo nhịp trống, tiết tấu và cao độ. Hãy chọn cấu hình sẵn trước, rồi chỉ chỉnh bên dưới những chỗ bạn thấy chưa ưng.
 5414b5c1	Âm thanh hiện tại chia thành 10 dải như bộ chỉnh âm (equalizer) thông thường (31 Hz đến 16 kHz), từ trầm (trái) đến cao (phải). Các thanh sáng bên trong là "tiếng đánh" như trống, đường trắng là đỉnh gần đây
@@ -224,11 +223,10 @@ a8d258f0	Sáng lên mỗi khi phát hiện tiếng kick (trống bass). Trong l�
 2f3d51ba	Đặt hiệu ứng, cường độ và bảng màu thành tổ hợp được đề xuất. Tự thay đổi các cài đặt bên dưới sẽ chuyển thành "Tùy chỉnh"
 932cdbc7	Phong cách nhạc
 2c274961	Cách LED chuyển động theo nhạc. Muốn chọn riêng cho từng thiết bị, hãy dùng "Thiết bị" bên dưới
-4d0abffb	"Đèn chớp" nhấp nháy mạnh nên chỉ chọn được khi tắt "Giảm nhấp nháy" bên dưới.
 c87d9699	Cường độ
 541920a5	Độ mạnh khi sáng theo nhịp và tần suất đổi màu. Khi chọn, "Độ mượt", "Độ nhấn" và "Tối nhất" bên dưới cũng được đặt theo cường độ đó
 a800602a	Bảng màu
-5c25c402	Bộ màu dùng khi đồng bộ nhạc. Mỗi nhịp sẽ chuyển sang màu kế tiếp trong bộ
+3ec973ca	Bảng màu cho đèn đồng bộ với nhạc.
 758ca518	Độ khuếch đại
 ab2026d3	Đặt + để cả âm nhỏ cũng sáng rõ, dành cho bài nhạc nhỏ hoặc khi nghe ở âm lượng thấp. Đặt − để chỉ sáng khi âm lớn
 65d61087	Độ nhạy nhịp
@@ -250,9 +248,9 @@ a48b2636	Cho đèn sớm hơn 10 ms
 61644194	Đặt + khi đèn sáng trước âm thanh, − khi sáng sau. Tai nghe, loa Bluetooth và TV (HDMI) phát âm thanh trễ nên hãy đặt +
 0e36045a	Bluetooth làm âm thanh trễ, nên dùng +150–200 ms
 ece319ca	Đặt +180 ms
-e02412ea	Khi bật, nhấp nháy mạnh bị giới hạn 3 lần mỗi giây (để bảo vệ mắt và sức khỏe của người nhạy cảm với ánh sáng). Cũng không dùng đèn chớp
+32e5db89	Khi bật, nhấp nháy mạnh bị giới hạn 3 lần mỗi giây (để bảo vệ mắt và sức khỏe của người nhạy cảm với ánh sáng)
 ff4e5cc2	Giảm nhấp nháy
-a2bb37bc	Giới hạn nhấp nháy mạnh ở 3 lần mỗi giây. Tắt đi thì có thể chọn "Đèn chớp"
+68a5628b	Giới hạn nhấp nháy mạnh ở 3 lần mỗi giây
 03e1f9ef	⚠ Đèn có thể nhấp nháy mạnh. Nếu ánh sáng nhấp nháy làm bạn khó chịu, hãy bật lại "Giảm nhấp nháy" ngay.
 dc8c4f99	Tiết tấu
 9c0a6ff9	Tự động: khi bắt được tiết tấu, dự đoán trước nhịp và sáng không trễ. Chỉ kick: không dự đoán, chỉ sáng khi trống bass vang. Không dùng: không dùng tiết tấu hay nhịp, chỉ sáng theo độ lớn âm thanh
@@ -694,7 +692,6 @@ d3d56cef	Mục tiêu {0:F0}°C không đạt được kể cả khi chạy tối
 7c323904	Đang bắt đầu tạo tải…
 be843d5e	Hãy chạy game hoặc benchmark (tự bắt đầu khi mức dùng GPU vượt 70%)
 83a5ad8f	Đang chờ nóng lên ở tốc độ tối đa…
-ac818524	Đang chờ nhiệt độ ổn định ở {0:F0}%… (bước {1} / {2})
 f8650f35	Đang ngừng tải và trở về điều khiển thường lệ…
 882d4f38	Đã xong
 9ea783e1	Đã dừng: {0}
@@ -1037,36 +1034,23 @@ f7121884	Chill (thư thái)
 40238fad	Tiệc tùng
 4c4b9639	Club (sôi động)
 58c4acf6	Trình hiển thị âm thanh
-1ffc1da1	Phim · game
 a4d4ce26	Tùy chỉnh
 68a0416e	Đổi màu chậm
 2ee44588	Tắt đèn
 9a137ab5	{0} {1} (mặc định {2})
 975db0d4	Đổi màu theo nhịp
-6f6c9db1	Mỗi nhịp chuyển sang màu kế tiếp, lóe sáng rồi tắt dần
-1acb0fe4	Nhịp đập
-fac18e83	Pha trộn
-143bf4c6	Màu pha trộn theo độ mạnh của âm trầm, trung và cao
+24bb482c	Lóe sáng mỗi tiếng kick và chuyển sang màu kế tiếp ở đầu ô nhịp hoặc đoạn mới
 d47d8919	Đồng hồ âm lượng
 c9601c4a	Sáng từ một đầu tương ứng với âm lượng, điểm đỉnh rơi xuống chậm
 b9056e5c	Phổ âm
 1f55a216	Xếp âm trầm đến âm cao dọc dãy LED, mỗi điểm sáng theo độ mạnh riêng
-ae14d063	Năng lượng
-9097b7af	Các dải âm trầm, trung, cao dài ra theo độ mạnh riêng
-a8728d89	Sóng chảy
-0dbddecd	Màu của âm thanh hiện tại chảy từ một đầu (thác nước)
 7579942a	Gợn sóng
 8f1dc3a2	Mỗi tiếng trống kick lại lan ra một vòng sáng
 5c1949b1	Lấp lánh
-6ddfa1c0	Trống kick làm toàn bộ sáng dịu, trống snare cho chùm sáng gọn, hi-hat làm các hạt trắng lấp lánh
+88272375	Trống kick làm toàn bộ sáng dịu, trống snare cho chùm sáng gọn, hi-hat làm các hạt trắng lấp lánh, tiếng bật guitar chạy một dải màu
 fa793be1	Mỗi linh kiện một vai
-2683fb56	Mỗi linh kiện sáng theo âm riêng, như quạt theo âm trầm, card đồ họa theo âm trung, RAM theo âm cao. Nếu có nhiều cổng quạt, chúng được chia cho âm trầm, trung và cao (đổi trong cài đặt vùng "Âm thanh để phản ứng")
-74a4376d	Theo tempo
-934997b6	Dải sáng chạy theo nhịp
+e92a2994	Mỗi linh kiện sáng theo âm riêng, như quạt theo âm trầm, card đồ họa theo âm trung, RAM theo âm cao. Có thể phân biệt âm trầm, trung và cao qua màu sắc. Nếu có nhiều cổng quạt, chúng được chia cho âm trầm, trung và cao (đổi trong cài đặt vùng "Âm thanh để phản ứng")
 5d88da90	Tâm trạng
-e134b40a	Màu đổi chậm theo không khí bài hát (không nhấp nháy)
-c3873745	Đèn chớp
-e266b3b4	Nhấp nháy mạnh theo nhịp (chỉ khi tắt "Giảm nhấp nháy")
 3cada106	Theo linh kiện
 78733543	Âm trầm (kick · bass)
 23099007	Âm trung (snare · giọng hát)
@@ -1219,7 +1203,6 @@ fb923916	 cầu vồng (chảy) và nhịp thở trở thành cầu vồng đứ
 8ed6eae0	Nếu thời điểm sáng lệch với thiết bị khác, hãy chỉnh bằng "Sáng sớm hơn"
 8444c4be	Các LED nối qua đường dây bên trong bo mạch (I2C), như RAM, mất thời gian cho mỗi lần gửi, nên ở chế độ tự động bị giới hạn tối đa 8 lần mỗi giây (đổi trong "Số lần gửi mỗi giây" bên phải). Việc đổi màu khi đồng bộ nhạc được gửi ngay, không chờ lượt gửi định kỳ. Cùng một màu được gửi lại mỗi 60 giây
 2a5ce6d5	Tự động (cài đặt chung)
-7a4362e3	 (nhấp nháy mạnh)
 2e7616aa	Tím
 d624abb5	Xanh dương
 1740eec3	Xanh nhạt
@@ -1231,11 +1214,8 @@ f88712a8	Trắng
 f73d92df	Tắt đèn (tắt LED)
 faccb7c6	Màu cố định (màu đã chọn trong "Màu")
 8261ae67	Giữ nguyên (dừng ở màu cuối cùng)
-d24118e5	\nKhông dùng nếu bạn nhạy cảm với ánh sáng nhấp nháy. Không chọn được khi đang bật "Giảm nhấp nháy"
-fa397c65	⚠ Nhấp nháy mạnh
 5812e0db	Chỉ sáng bằng màu đã chọn trong "Màu và độ sáng". Màu không đổi, chỉ độ sáng thay đổi theo âm thanh
 a3ff6ad5	Sáng bằng màu đã chọn trong "Màu và độ sáng" và các màu kề hai bên
-a0c6bf54	Sáng bằng các màu của {0}. Mỗi nhịp chuyển sang màu kế tiếp trong nhóm
 b4e8382b	Tự động (đoán trước)
 3084a002	Khi đã nắm được tempo của bài, sẽ đoán trước nhịp tiếp theo và sáng không trễ (khuyên dùng)
 90659e1d	Chỉ trống kick
@@ -1247,12 +1227,10 @@ df788b17	Màu đã chọn trong "Màu" từ từ sáng lên rồi tối đi
 3b1d43a4	Tắt LED khi âm thanh dừng
 25525b81	{0} ({1})
 bb1834e5	Bạn đã tự chỉnh các cài đặt bên dưới. Chọn cài sẵn khác sẽ trở về tổ hợp của cài sẵn đó
-1cf255e8	Khi làm việc hoặc ban đêm. Màu chuyển đổi chậm rãi, nhẹ nhàng
 9df36e7d	Phân vân thì chọn cái này. Đập nhịp dễ chịu theo âm trầm
 4beab2e2	Hiệu ứng sôi động, mỗi tiếng trống lại lan ra một vòng sáng
 f6ac23cd	Hiệu ứng dữ dội nhất, đổi màu mạnh theo từng nhịp
 b7e7d574	Xếp âm trầm đến âm cao dọc dãy LED để nhìn thấy âm thanh
-7c3c3b30	Hiệu ứng ấm áp, nhẹ nhàng, không làm phiền khi xem phim hay chơi game
 355fd781	{0}\nHiệu ứng: {1} · Cường độ: {2} · Màu: {3}
 67f5dc44	\n(Nếu tắt "Giảm nhấp nháy", đèn sẽ nhấp nháy còn mạnh hơn)
 e3c74af7	Thư thái, êm ả. Màu đổi chậm theo từng ô nhịp
@@ -1260,7 +1238,6 @@ e3c74af7	Thư thái, êm ả. Màu đổi chậm theo từng ô nhịp
 39194da9	Phản ứng nhanh nhạy. Màu đổi mỗi phách
 283c2191	Phản ứng tối đa. Màu đổi tức thì mỗi phách và nhấn mạnh đầu ô nhịp
 899bfdf5	{0}\nKhi chọn: phản ứng {1:F0} ms · độ mượt {2:F0} ms · độ tương phản {3:F0}% · tối nhất {4:F0}%
-1763988d	Tốc độ chảy
 782c7098	Hiện đang ở nửa tempo
 3da3fc0d	Hiện đang ở gấp đôi tempo
 587c7525	Tất cả là giá trị mặc định (của cường độ "{0}")
@@ -1486,7 +1463,6 @@ bb5165cb	Tắt liên kết LED
 9803ac5d	Hiệu ứng LED: tắt
 633b3564	Hiệu ứng LED: đang tắt đèn
 79fe6abe	Hiệu ứng LED: {0}
-88443ff4	Nhấp nháy mạnh. Có thể chọn sau khi tắt "Giảm nhấp nháy" ở màn hình Đèn LED
 d6903426	Cấu hình: {0}
 9dc4a781	Sau khi ứng dụng thoát, xóa {0} trong thư mục ứng dụng.
 e0cb734a	Bản thân ứng dụng (exe…) và các tệp khác được giữ lại. Nếu có thể sẽ dùng lại, hãy để tắt.
@@ -1689,9 +1665,7 @@ d92849da	Báo lỗi…
 42a72e3a	Thiết lập tự động
 4610da9f	GPU: không thể đo vì không có cảm biến nhiệt độ hoặc mức sử dụng
 462bc50c	• Bạn xem kết quả trước khi áp dụng, nên dừng giữa chừng không thay đổi gì.
-47647013	Các bước: {0} · khoảng {1} phút. Bơm không được tính.
 48090db5	Trong khi đo
-4ac2f56e	Bắt đầu thiết lập tự động (khoảng {0} phút).\n\n
 50136e19	Chọn các quạt cần đo và CPU và/hoặc GPU. Bơm không được tính (vẫn chạy như thường).
 53661bf6	đo {0} quạt
 5899b660	• Đo bằng CPU: tạo tải tối đa cho CPU và giảm quạt dần từ 100%.
@@ -1737,7 +1711,6 @@ fdc48725	Chọn ít nhất một quạt cần đo và CPU và/hoặc GPU.
 fe39437d	Mẹo: sau đó, hãy đo ở trang "Thiết lập tự động" để tạo đường cong êm nhất phù hợp với PC này (khoảng 20–30 phút).
 140786db	Mỗi quạt khoảng 1–2 phút. Khi biết tốc độ dừng, tốc độ tối thiểu cũng được đặt về giá trị an toàn
 14e2760b	Đo trước các quạt chưa được đo
-08749344	Đo lại sẽ cho đường cong vẫn êm và an toàn trong mùa này (khoảng 20–30 phút).
 5f83a291	Nhiệt độ CPU khi nghỉ cao hơn khoảng {0:F0}°C so với lúc thiết lập tự động đo (có vẻ phòng đã ấm lên).
 8d7a30b2	Mở thiết lập tự động
 c66cfe16	Phòng ấm hơn khoảng {0:F0}°C so với lúc thiết lập tự động đo.
@@ -1961,7 +1934,7 @@ d71badc6	Chuyển sang dựa trên "{0}"
 d0514409	Đã chuyển sang đường cong chuẩn dựa trên "{1}" trong cấu hình "{0}".
 dc31499c	Cảm biến ảo "{0}": không đọc được cảm biến nguồn ({1}) nên chỉ tính từ các cảm biến còn lại.
 a0b3b7dd	Sáng theo nhạc cụ
-3c260d3f	Kick sáng toàn bộ, snare sáng một bên, hi-hat là hạt nhỏ, bass ở phía rìa, giọng hát là độ sáng chung, guitar và phím đàn là dải sáng chạy. Vẫn phân biệt được nhạc cụ dù chỉ một màu (Chỉ màu đã chọn)
+139d2c30	Kick sáng toàn bộ, snare sáng một bên, hi-hat là hạt nhỏ, bass ở phía rìa, giọng hát là độ sáng chung, guitar và phím đàn là dải sáng chạy. Vẫn phân biệt được nhạc cụ dù chỉ một màu (Chỉ màu đã chọn). Vùng nhỏ và thiết bị có tốc độ cập nhật thấp hiển thị ít chi tiết hơn.
 d3efe37c	Theo từng nhạc cụ
 e8d8b63a	Chỉ trống
 31b76718	Cao độ (trầm, trung, cao)
@@ -1980,24 +1953,29 @@ d5a051f9	Tốc độ cần để giữ {0:F0}°C: {1:F0}% trở xuống (chưa �
 0c8c7106	* Chưa đo tới tốc độ thấp nhất giữ được mục tiêu, nên dù bấm Áp dụng, đường cong này cũng không được đặt (giữ đường cong hiện tại)
 e2a336cd	Chưa đo tới tốc độ thấp nhất giữ được mục tiêu, nên đã không đặt đường cong (giữ đường cong hiện tại).
 90a68504	Dưới {0:F0}%, tốc độ quay gần như không đổi (tốc độ tối thiểu của chính quạt).
-97a3aac7	Âm thanh để phản ứng: sáng theo nhịp (theo trống kick khi chưa bắt được tempo; theo âm trầm khi không dùng tempo và trên card đồ họa, RAM). Màu đổi sau mỗi 1–4 nhịp tùy cường độ
-6d6e85e7	Âm thanh để phản ứng: phồng lên theo nhịp, giữa các nhịp chuyển động nhẹ theo âm trầm (theo trống kick khi chưa bắt được tempo; theo âm trầm khi không dùng tempo và trên card đồ họa, RAM). Màu chuyển dần chậm rãi theo thời gian
-3704a505	Âm thanh để phản ứng: lấy màu của âm mạnh nhất trong âm trầm, trung và cao
+f82e6ca4	Âm thanh để phản ứng: sáng theo trống kick (trống snare sáng nhẹ hơn, nhịp không có trống vẫn tối; theo âm trầm khi không dùng tempo). Màu đổi ở tiếng kick đầu ô nhịp và khi sang đoạn mới
 ba3eca1b	Âm thanh để phản ứng: độ dài thay đổi theo âm lượng, nảy lên theo trống kick và snare
-81cd1e18	Âm thanh để phản ứng: sáng theo độ mạnh của từng cao độ, từ âm trầm đến âm cao
-210faf7d	Âm thanh để phản ứng: mỗi dải dài ra theo độ mạnh của âm trầm, trung và cao
-a35cc263	Âm thanh để phản ứng: màu của âm trầm, trung, cao đang vang chảy dọc theo đèn
-a0098d0d	Âm thanh để phản ứng: mỗi tiếng trống kick (theo nhịp khi đã bắt được tempo) lan ra một vòng sáng
-e367d987	Âm thanh để phản ứng: trống kick, snare và hi-hat mỗi loại sáng theo một cách khác nhau
+55d26131	Âm thanh để phản ứng: đầu âm trầm sáng theo trống kick, phần còn lại đến âm cao sáng theo độ mạnh của từng cao độ (mỗi cao độ có màu riêng)
+1b304b0e	Âm thanh để phản ứng: mỗi tiếng trống kick (trống bass) lan ra một vòng sáng (cả với âm thanh lớn như tiếng nổ). Khi đã bắt được tempo, vòng sáng đi trước các tiếng kick lặp lại
+06cc66f6	Âm thanh để phản ứng: trống kick, snare, hi-hat và tiếng bật nốt như guitar (khi đã bắt được nhịp) mỗi loại sáng theo một cách khác nhau
 4a0ca652	Âm thanh để phản ứng: chỉ âm đã chọn cho từng linh kiện (vùng): âm trầm, trung, cao hoặc nhạc cụ
 3d52d090	Âm thanh để phản ứng: theo từng nhạc cụ (trên card đồ họa, RAM thì phồng lên theo nhịp với màu của nhạc cụ nổi bật)
-630581a9	Âm thanh để phản ứng: dải sáng chạy theo nhịp (tempo)
-e411765c	Âm thanh để phản ứng: thay đổi chậm rãi theo độ sáng của âm (trầm hay cao) và âm lượng
-4c402832	Âm thanh để phản ứng: nhịp đầu của mỗi ô nhịp (trống kick mạnh khi chưa bắt được tempo)
-e532ec45	Đập theo nhịp và để lại vệt sáng mờ kéo dài. Màu không đổi theo nhịp mà chuyển dần chậm rãi
-6313ac02	Phân tích 2 giây âm thanh gần nhất mỗi 1 giây. Màu đổi dần trong vài giây và không nhấp nháy. Không đổi màu với bảng màu "Chỉ màu đã chọn", "Các màu gần với màu đã chọn", Đồng hồ âm lượng, Đèn chớp và Mỗi linh kiện một vai
+db443d49	Phân tích 2 giây âm thanh gần nhất mỗi 1 giây. Màu đổi dần trong vài giây và không nhấp nháy. Không đổi màu với bảng màu "Chỉ màu đã chọn", "Các màu gần với màu đã chọn", Đồng hồ âm lượng và Mỗi linh kiện một vai
 419d7bd1	Dùng AI (CED-Tiny) nhận biết nhạc cụ nổi bật trong từng đoạn bài hát (giọng hát, guitar, piano, kèn đồng, synth, đàn dây) và đổi màu chậm rãi (giọng hát màu xanh dương, kèn đồng màu vàng kim, guitar màu cam...). Khi dùng một màu, sẽ đổi cách chuyển động của hiệu ứng "Sáng theo nhạc cụ". Chỉ chạy trong PC và dùng một ít CPU và RAM
 eb06c11b	Card đồ họa: ghi trực tiếp (tối đa {0} lần mỗi giây{1})
 965f43a6	Ứng dụng ghi trực tiếp vào card đồ họa này (qua I2C của NVIDIA), không qua OpenRGB. Vùng một màu được ghi trong một lần nên nhanh, và độ sáng cũng thay đổi theo nhạc.
 0ac5666c	Khi mỗi LED có màu khác nhau, mỗi lần ghi mất khoảng 35 mili giây, nên ở chế độ tự động sẽ gửi tối đa 10 lần mỗi giây (đúng nhịp thì gửi ngay, không chờ lượt gửi định kỳ).
 c3734abc	Có thể thay đổi bằng "Số lần gửi mỗi giây" ở bên phải, nhưng tăng lên sẽ dùng nhiều CPU hơn. Khung hình có màu LED khác nhau chỉ đạt tối đa khoảng 14 lần mỗi giây dù tăng lên (vì ứng dụng nghỉ đúng bằng thời gian ghi)
+8dcbb878	 (vẫn đang tăng; dự đoán từ {0:F1} °C đo được)
+f4726ccb	Đang chờ nhiệt độ ổn định ở {0:F0}%. Bước này quyết định tốc độ cần thiết, nên chờ tối đa {1:F0} phút để chất lỏng của tản nhiệt nước nóng lên hoàn toàn (bước {2} / {3}, đã qua {4})
+42c9f249	Đang chờ nhiệt độ ổn định ở {0:F0}%… (bước {1} / {2}, đã qua {3}, tối đa {4:F0} phút)
+10e83d72	Các bước: {0} · khoảng {1}–{2} phút (tản nhiệt nước thì lâu hơn). Bơm không được tính.
+bc5be07b	• Chất lỏng của tản nhiệt nước nóng lên chậm, nên các bước quyết định tốc độ cần thiết được đo tối đa {0:F0} phút cho đến khi nhiệt độ ổn định.
+0b51d73d	Bắt đầu thiết lập tự động (khoảng {0}–{1} phút).\n\n
+bbdc7d0b	Hiện tại {0:F0}°C / quạt {1:F0}% / dự kiến ổn định ở {2:F0}°C
+19569812	* Các bước có ↑ vẫn đang nóng lên khi đo xong. Ứng dụng đã dự đoán nhiệt độ ổn định và cộng thêm phần dư khi xác định tốc độ cần thiết
+5cbcfec8	* Để quạt không đột ngột quay nhanh khi tải nặng kéo dài, đường cong tăng dần từ 10°C dưới mục tiêu và đạt {0:F0}% ở 2°C dưới mục tiêu
+903dee0e	Đo lại sẽ cho đường cong vẫn êm và an toàn trong mùa này (khoảng 30–60 phút).
+47437bdc	Chuyển chậm qua các màu trong bảng màu. Dừng ở một màu một lúc rồi chuyển mượt sang màu tiếp theo (không phản ứng với âm thanh, không nhấp nháy)
+cb281e71	Cầu vồng ở 1× mất 30 giây một vòng (3× là 10 giây, 10× là 3 giây); nhịp thở ở 1× mất 6 giây một lần. Tâm trạng ở 1× chuyển sang màu tiếp theo sau mỗi 8 giây
+9409032e	Khi làm việc hoặc ban đêm. Sáng dịu nhẹ, vừa phải theo các nhạc cụ

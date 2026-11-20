@@ -344,12 +344,12 @@ public static class ColorBlipTests
     /// </summary>
     public static readonly Dictionary<string, double> ColorBlipLimit = new()
     {
-        // 6.15.8 → 直したあと（このテストの合成した曲で）: BeatHue 36.3 → 1.3、Mix 31.2 → 0.2、Energy 33.7 → 4.3、Role 16.9 → 0.2、
-        // Ensemble 15.3 → 0.6、Meter 7.5 → 3.7、Chase 3.0 → 1.1、Sparkle 1.5 → 0.2、Scroll 1.2 → 1.0、Ripple 10.9 → 10.3。
-        // 波紋（細い輪が暗い LED を通る）・ストロボ（白い点滅）は光り方そのものが短い光なので、上限は今の値から大きく増えないことだけを見る
-        [MusicStyles.BeatHue] = 4, [MusicStyles.Pulse] = 1, [MusicStyles.Mix] = 2, [MusicStyles.Meter] = 6,
-        [MusicStyles.Spectrum] = 1, [MusicStyles.Energy] = 8, [MusicStyles.Scroll] = 2, [MusicStyles.Ripple] = 14,
-        [MusicStyles.Sparkle] = 1, [MusicStyles.Chase] = 2.5, [MusicStyles.Mood] = 1, [MusicStyles.Strobe] = 60,
+        // 6.15.8 → 直したあと（このテストの合成した曲で）: BeatHue 36.3 → 1.3、Role 16.9 → 0.2、
+        // Ensemble 15.3 → 0.6、Meter 7.5 → 3.7、Sparkle 1.5 → 0.2、Ripple 10.9 → 10.3。
+        // 波紋（細い輪が暗い LED を通る）は光り方そのものが短い光なので、上限は今の値から大きく増えないことだけを見る
+        [MusicStyles.BeatHue] = 4, [MusicStyles.Meter] = 6,
+        [MusicStyles.Spectrum] = 1, [MusicStyles.Ripple] = 14,
+        [MusicStyles.Sparkle] = 1,
         [MusicStyles.Role] = 2, [MusicStyles.Ensemble] = 3,
     };
 
@@ -651,9 +651,8 @@ public static class ColorBlipTests
         BeatDriver.PreFade = Environment.GetEnvironmentVariable("BLIP_PREFADE") != "0";
         // DIRECT_OPTS: 直接書き込むグラボの描き方・送り方を選ぶ（DirectGpuOptions。付けなければ製品と同じ）
         DirectGpuOptions.Apply();
-        // BLIP_OLDFX=1: ミックス・エナジーを 6.15.8 までの計算にする
+        // BLIP_OLDFX=1: ミックス（スペクトラムの小さいゾーン・遅いデバイス用）を 6.15.8 までの計算にする
         bool oldFx = Environment.GetEnvironmentVariable("BLIP_OLDFX") == "1";
-        EnergyEffect.Smooth = !oldFx;
         MixEffect.Smooth = !oldFx;
         try
         {
@@ -671,7 +670,7 @@ public static class ColorBlipTests
             DirectGpuOptions.Reset();
             BeatDriver.UnlockedPrediction = false;
             BeatDriver.PreFade = true;
-            EnergyEffect.Smooth = MixEffect.Smooth = true;
+            MixEffect.Smooth = true;
         }
     }
 
@@ -810,7 +809,6 @@ public static class ColorBlipTests
             cfg.Music.Intensity = inten;
             cfg.Music.Palette = palette;
             var music = MusicTuning.Resolve(cfg);
-            if (style == MusicStyles.Strobe) music = music with { StrobeAllowed = true, ReduceFlashing = false };
             Lane? leader = null;
             foreach (var d in devs)
             {
@@ -845,7 +843,7 @@ public static class ColorBlipTests
     {
         if (!L.Switch) return;
         var pals = new[] { Palettes.Rainbow, Palettes.Neon, Palettes.Ocean, Palettes.Sunset };
-        var sty = new[] { MusicStyles.BeatHue, MusicStyles.Pulse, MusicStyles.Mix, MusicStyles.Spectrum, MusicStyles.Mood };
+        var sty = new[] { MusicStyles.BeatHue, MusicStyles.Meter, MusicStyles.Spectrum, MusicStyles.Ensemble };
         string p = pals[(int)(songT / 4.3) % pals.Length];
         string st = sty[(int)(songT / 6.1) % sty.Length];
         if (L.Cfg.Music.Palette == p && L.Cfg.MusicStyle == st) return;

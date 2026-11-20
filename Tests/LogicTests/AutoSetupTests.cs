@@ -35,6 +35,9 @@ public static class AutoSetupTests
         T.Check(gpuOnly.Count == 0, "no GPU-linked fan: no empty GPU run");
         T.Check(AutoSetupPlan.EstimateMinutes(steps) == (int)Math.Ceiling((2 * AutoSetupPlan.CalibrateSec + 2 * AutoSetupPlan.TuneSec) / 60),
             "estimate sums the steps");
+        T.Check(AutoSetupPlan.EstimateLongMinutes(steps) > AutoSetupPlan.EstimateMinutes(steps)
+                && AutoSetupPlan.TuneLongSec >= AutoTuner.DecisiveMaxHold.TotalSeconds + 6 * AutoTuner.MaxHold.TotalSeconds,
+            "long estimate (liquid cooler) covers the longest step plus the other steps");
     }
 
     private sealed class FakeLoad : ILoadGenerator
@@ -224,7 +227,10 @@ public static class AutoSetupTests
             "results made elsewhere (no ReachedLowestStep given) keep the old meaning");
     }
 
-    /// <summary>「落ち着いた」の判断は記録の秒数で見る（読み取りの間隔が 2 秒・5 秒でも、20 回に届かないせいで毎段 3 分待たない）</summary>
+    /// <summary>
+    /// 「落ち着いた」の判断は、直近 90 秒の温度の傾きで見る（記録の秒数で見るので、読み取りの間隔が 2 秒・5 秒でも同じ）。
+    /// 以前の 30 秒の比べ方では「落ち着いた」になった、1 分に 0.4°C ずつ温まり続ける温度（簡易水冷の冷却液）も見逃さない
+    /// </summary>
     public static void TestSteadyIsTimeBased()
     {
         var t0 = new DateTime(2026, 11, 15, 10, 0, 0);
@@ -234,18 +240,22 @@ public static class AutoSetupTests
             for (double s = 0; s <= seconds + 1e-9; s += interval) w.Add((t0.AddSeconds(s), temp(s)));
             return w;
         }
-        T.Check(AutoTuner.IsSteady(W(2, 30, _ => 70)), "2 s polling, 30 s flat (16 samples): steady");
-        T.Check(AutoTuner.IsSteady(W(5, 30, _ => 70)), "5 s polling, 30 s flat (7 samples): steady");
-        T.Check(AutoTuner.IsSteady(W(0.25, 30, s => 70 + 0.2 * Math.Sin(s))), "250 ms polling, small ripple: steady");
-        T.Check(!AutoTuner.IsSteady(W(1, 20, _ => 70)), "only 20 s of data: not yet");
-        T.Check(!AutoTuner.IsSteady(W(2, 30, s => 70 + s * 0.04)), "still rising 1.2 °C over 30 s: not steady");
-        T.Check(!AutoTuner.IsSteady(W(5, 30, s => 70 + s * 0.04)), "5 s polling, still rising: not steady");
+        T.Check(AutoTuner.IsSteady(W(2, 90, _ => 70)), "2 s polling, 90 s flat: steady");
+        T.Check(AutoTuner.IsSteady(W(5, 90, _ => 70)), "5 s polling, 90 s flat (19 samples): steady");
+        T.Check(AutoTuner.IsSteady(W(0.25, 90, s => 70 + 0.2 * Math.Sin(s))), "250 ms polling, small ripple: steady");
+        T.Check(AutoTuner.IsSteady(W(2, 90, s => 70 + s * 0.1 / 60)), "drifting 0.1 °C/min: steady");
+        T.Check(!AutoTuner.IsSteady(W(1, 60, _ => 70)), "only 60 s of data: not yet");
+        T.Check(!AutoTuner.IsSteady(W(2, 90, s => 70 + s / 60)), "still rising 1 °C/min: not steady");
+        T.Check(!AutoTuner.IsSteady(W(5, 90, s => 70 + s * 0.4 / 60)), "5 s polling, heat soak 0.4 °C/min: not steady (the old 30 s check called this steady)");
 
-        // 2 秒ごとの読み取りでも、各段は温度が落ち着いたら次へ進む（以前は 20 回に届かず、毎段 180 秒の上限まで待った）
+        // 2 秒ごとの読み取りでも、各段は温度が落ち着いたら次へ進む（最長まで待たない）
         var (tuner, _) = SimulateTune(2, Steady97);
         var r = tuner.Result!;
         T.Check(r.AbortReason is null && r.Steps.Count >= 4, $"2 s polling: run completed ({r.Steps.Count} steps)");
-        T.Check(r.Steps.Skip(1).All(st => st.Seconds < 150), $"2 s polling: steps end when steady, not at the 180 s cap ({string.Join(", ", r.Steps.Select(st => $"{st.Seconds:F0}s"))})");
+        string secs = string.Join(", ", r.Steps.Select(st => $"{st.Duty:F0}%:{st.Seconds:F0}s"));
+        // 目標より十分低い段は 2 分まで、目標に近い段も（すぐ落ち着く PC なので）5 分より前に終わる
+        T.Check(r.Steps.Where(st => st.SteadyTemp < 80 - AutoTuner.NeedMargin - 6).All(st => st.Seconds < AutoTuner.MaxHold.TotalSeconds - 1)
+                && r.Steps.All(st => st.Seconds < 300), $"2 s polling: steps end when steady, not at the cap ({secs})");
         T.Check(r.Steps.All(st => Math.Abs(st.SteadyTemp - SteadyAt(st.Duty)) < 2.0), "2 s polling: measured temps close to the model");
     }
 }

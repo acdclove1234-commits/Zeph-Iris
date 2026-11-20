@@ -190,7 +190,7 @@ public static class PnyDirectTests
         T.Check(RgbDeviceChannel.MaxFpsFor(viaOpenRgb, settings) == RgbDeviceChannel.GpuMaxFps, "through OpenRGB: still capped");
         var ch = new RgbDeviceChannel(direct, 0);
         T.Check(!ch.SendsEveryFrame(RgbSync.AnimatedPeriod), "direct: no dithering (keeps zones in one colour)");
-        T.Check(EffectCatalog.Resolve(MusicStyles.Meter, EffectCatalog.Auto, direct.IsSlow, false) == EffectVariant.Meter,
+        T.Check(EffectCatalog.Resolve(MusicStyles.Meter, EffectCatalog.Auto, direct.IsSlow) == EffectVariant.Meter,
             "direct: the volume meter is drawn as a meter (not the slow pulse)");
     }
 }

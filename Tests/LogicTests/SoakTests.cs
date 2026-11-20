@@ -145,7 +145,7 @@ public static class SoakTests
             var r = new DeviceRenderer(dev);
             var input = new RenderInput
             {
-                Cfg = cfg, Music = ResolvedMusic.Default with { Effect = style, StrobeAllowed = true },
+                Cfg = cfg, Music = ResolvedMusic.Default with { Effect = style },
                 Device = new RgbDeviceSettings { Name = dev.Name, Zones = dev.Index == 1 ? new() { new RgbZoneSettings { Name = "Header 2", Fans = 2 } } : new() },
                 Temperature = 50,
             };

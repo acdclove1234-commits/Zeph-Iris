@@ -213,7 +213,6 @@ a08b7324	Pada suhu ini atau di bawahnya, warnanya biru muda (dingin)
 0582db54	Suhu merah
 74068713	Pada suhu ini atau di atasnya, warnanya merah penuh (panas). Di antaranya menjadi hijau → kuning
 181b9ba1	Kecepatan
-6f30cf75	Pelangi pada 1× butuh 30 dtk per putaran (10 dtk pada 3×, 3 dtk pada 10×); napas pada 1× butuh 6 dtk per tarikan. Untuk "gelombang mengalir" musik, ini kecepatan alirnya
 36bcf3d7	{0:F1}×
 f9dafe1e	Menganalisis suara dari PC dan menyala mengikuti pukulan drum, tempo, dan tinggi nada. Pilih preset dulu, lalu sesuaikan di bawah hanya bagian yang mengganggu.
 5414b5c1	Suara saat ini dibagi menjadi 10 pita seperti equalizer pada umumnya (31 Hz hingga 16 kHz), dari bas (kiri) ke treble (kanan). Batang terang di dalamnya adalah "serangan" seperti drum; garis putih adalah puncak terkini
@@ -224,11 +223,10 @@ a8d258f0	Menyala setiap kali kick (bass drum) terdeteksi. Saat uji sinkron, berk
 2f3d51ba	Menyetel efek, intensitas, dan palet ke kombinasi yang disarankan. Jika Anda sendiri mengubah pengaturan di bawah, jadinya "Kustom"
 932cdbc7	Gaya musik
 2c274961	Cara LED mengikuti musik. Untuk memilih per perangkat, gunakan "Perangkat" di bawah
-4d0abffb	"Strobo" berkedip keras, jadi hanya bisa dipilih jika "Kurangi kedipan" di bawah dimatikan.
 c87d9699	Intensitas
 541920a5	Seberapa kuat ketukan menyala dan seberapa sering warna berganti. Memilihnya juga menyetel "Kelembutan", "Hentakan", dan "Paling redup" di bawah agar sesuai
 a800602a	Palet
-5c25c402	Kumpulan warna untuk sinkron musik. Setiap ketukan berganti ke warna berikutnya
+3ec973ca	Palet warna untuk pencahayaan musik.
 758ca518	Penguatan
 ab2026d3	+ membuat suara pelan pun menyala terang, untuk lagu pelan atau volume rendah. − hanya memberi terang pada suara keras
 65d61087	Kepekaan ketukan
@@ -250,9 +248,9 @@ a48b2636	Majukan cahaya 10 md
 61644194	+ jika cahaya datang sebelum suara, − jika sesudahnya. Earphone dan speaker Bluetooth serta TV (HDMI) memutar suara terlambat, jadi gunakan +
 0e36045a	Bluetooth membuat suara terlambat; disarankan +150–200 ms
 ece319ca	Setel +180 ms
-e02412ea	Selama aktif, kedipan kuat dibatasi 3 kali per detik (untuk melindungi mata dan kesehatan orang yang peka cahaya). Strobo juga tidak digunakan
+32e5db89	Selama aktif, kedipan kuat dibatasi 3 kali per detik (untuk melindungi mata dan kesehatan orang yang peka cahaya)
 ff4e5cc2	Kurangi kedipan
-a2bb37bc	Membatasi kedipan kuat 3 kali per detik. Jika dimatikan, "Strobo" bisa dipilih
+68a5628b	Membatasi kedipan kuat 3 kali per detik
 03e1f9ef	⚠ Lampu dapat berkedip hebat. Jika kedipan cahaya membuat Anda tidak nyaman, segera aktifkan lagi "Kurangi kedipan".
 dc8c4f99	Tempo
 9c0a6ff9	Otomatis: setelah menangkap tempo lagu, ketukan diprediksi dan lampu menyala tanpa jeda. Hanya kick: tanpa prediksi; menyala hanya saat bass drum berbunyi. Mati: tidak memakai tempo maupun ketukan, hanya kerasnya suara
@@ -694,7 +692,6 @@ d3d56cef	Target {0:F0}°C tidak tercapai meski kecepatan penuh ({1:F1}°C pada k
 7c323904	Memulai beban…
 be843d5e	Jalankan gim atau benchmark (dimulai otomatis setelah penggunaan GPU melebihi 70%)
 83a5ad8f	Menunggu memanas pada kecepatan penuh…
-ac818524	Menunggu suhu stabil pada {0:F0}%… (langkah {1} / {2})
 f8650f35	Menghentikan beban dan kembali ke kendali biasa…
 882d4f38	Selesai
 9ea783e1	Dihentikan: {0}
@@ -1037,36 +1034,23 @@ f7121884	Chill (santai)
 40238fad	Pesta
 4c4b9639	Klub (intens)
 58c4acf6	Visualizer
-1ffc1da1	Film & gim
 a4d4ce26	Kustom
 68a0416e	Warna berubah perlahan
 2ee44588	Mati
 9a137ab5	{0} {1} (bawaan {2})
 975db0d4	Ganti warna tiap ketukan
-6f6c9db1	Berganti ke warna berikutnya pada setiap ketukan, menyala terang lalu memudar
-1acb0fe4	Denyut
-fac18e83	Campur
-143bf4c6	Warna bercampur menurut kekuatan nada rendah, tengah, dan tinggi
+24bb482c	Menyala pada setiap kick dan berganti ke warna berikutnya di awal birama atau bagian lagu baru
 d47d8919	Meter volume
 c9601c4a	Menyala dari tepi sesuai volume, dengan titik puncak yang turun perlahan
 b9056e5c	Spektrum
 1f55a216	Menyusun nada rendah sampai tinggi di sepanjang LED, masing-masing menyala sesuai kekuatannya
-ae14d063	Energi
-9097b7af	Pita nada rendah, tengah, dan tinggi memanjang sesuai kekuatannya masing-masing
-a8728d89	Gelombang mengalir
-0dbddecd	Warna suara saat ini mengalir dari tepi (air terjun)
 7579942a	Riak
 8f1dc3a2	Cincin cahaya menyebar pada setiap kick
 5c1949b1	Kilau
-6ddfa1c0	Pada kick semuanya menyala lembut, pada snare cahaya terkumpul, pada hi-hat butiran putih berkilau
+88272375	Pada kick semuanya menyala lembut, pada snare cahaya terkumpul, pada hi-hat butiran putih berkilau, dan pada petikan gitar pita warna melintas
 fa793be1	Setiap komponen dengan perannya
-2683fb56	Setiap komponen menyala mengikuti suaranya sendiri, misalnya kipas pada nada rendah, kartu grafis pada nada tengah, dan memori pada nada tinggi. Beberapa header kipas dibagi ke nada rendah, tengah, dan tinggi (bisa diubah di pengaturan zona "Suara yang diikuti")
-74a4376d	Ikuti tempo
-934997b6	Pita cahaya berlari mengikuti ketukan
+e92a2994	Setiap komponen menyala mengikuti suaranya sendiri, misalnya kipas pada nada rendah, kartu grafis pada nada tengah, dan memori pada nada tinggi. Nada rendah, tengah, dan tinggi bisa dibedakan dari warnanya. Beberapa header kipas dibagi ke nada rendah, tengah, dan tinggi (bisa diubah di pengaturan zona "Suara yang diikuti")
 5d88da90	Suasana
-e134b40a	Warna berubah perlahan mengikuti suasana lagu (tanpa berkedip)
-c3873745	Strobo
-e266b3b4	Berkedip kuat mengikuti ketukan (hanya jika "Kurangi kedipan" dimatikan)
 3cada106	Sesuai komponen
 78733543	Nada rendah (kick, bass)
 23099007	Nada tengah (snare, vokal)
@@ -1219,7 +1203,6 @@ fb923916	 pelangi (mengalir) dan napas menjadi pelangi diam dan warna tetap (bis
 8ed6eae0	Jika waktunya tidak pas dengan perangkat lain, sesuaikan dengan "Nyalakan lebih awal"
 8444c4be	LED yang terhubung lewat jalur di dalam papan (I2C), seperti memori, butuh waktu untuk setiap pengiriman, jadi dalam mode otomatis dibatasi maksimal 8 kali per detik (bisa diubah di "Pengiriman per detik" di kanan). Pergantian warna sinkron musik langsung dikirim tanpa menunggu pengiriman rutin. Warna yang sama dikirim ulang setiap 60 detik
 2a5ce6d5	Otomatis (pengaturan umum)
-7a4362e3	 (kedipan intens)
 2e7616aa	Ungu
 d624abb5	Biru
 1740eec3	Biru muda
@@ -1231,11 +1214,8 @@ f88712a8	Putih
 f73d92df	Mati (padamkan LED)
 faccb7c6	Warna tetap (warna yang dipilih di "Warna")
 8261ae67	Biarkan (berhenti di warna terakhir)
-d24118e5	\nJangan gunakan jika Anda peka terhadap cahaya berkedip. Tidak bisa dipilih selama "Kurangi kedipan" aktif
-fa397c65	⚠ Berkedip intens
 5812e0db	Menyala hanya dengan warna yang dipilih di "Warna & kecerahan". Warna tidak berubah; hanya kecerahan yang mengikuti suara
 a3ff6ad5	Menyala dengan warna yang dipilih di "Warna & kecerahan" serta warna di kedua sisinya
-a0c6bf54	Menyala dengan warna-warna {0}. Pada setiap ketukan, berganti ke warna berikutnya di dalamnya
 b4e8382b	Otomatis (prediktif)
 3084a002	Setelah menangkap tempo lagu, memprediksi ketukan berikutnya dan menyala tanpa jeda (disarankan)
 90659e1d	Hanya kick
@@ -1247,12 +1227,10 @@ df788b17	Warna yang dipilih di "Warna" perlahan menjadi terang dan redup
 3b1d43a4	Mematikan LED saat suara berhenti
 25525b81	{0} ({1})
 bb1834e5	Anda menyesuaikan sendiri pengaturan di bawah. Memilih preset lain akan kembali ke kombinasinya
-1cf255e8	Untuk bekerja atau malam hari. Warna berganti perlahan dan lembut
 9df36e7d	Pilihan aman. Berdenyut nyaman mengikuti bass
 4beab2e2	Efek meriah dengan cincin cahaya yang menyebar setiap pukulan drum
 f6ac23cd	Efek paling intens, dengan pergantian warna kuat di setiap ketukan
 b7e7d574	Menyusun nada rendah sampai tinggi di sepanjang LED agar suara terlihat
-7c3c3b30	Efek lembut dan hangat yang tidak mengganggu film atau gim
 355fd781	{0}\nEfek: {1} · Intensitas: {2} · Warna: {3}
 67f5dc44	\n(Jika "Kurangi kedipan" dimatikan, kedipannya akan lebih intens lagi)
 e3c74af7	Santai dan tenang. Warna berganti perlahan setiap birama
@@ -1260,7 +1238,6 @@ e3c74af7	Santai dan tenang. Warna berganti perlahan setiap birama
 39194da9	Respons sigap. Warna berganti setiap ketukan
 283c2191	Respons maksimal. Warna berganti seketika setiap ketukan dan awal birama ditonjolkan
 899bfdf5	{0}\nSaat dipilih: respons {1:F0} ms · kehalusan {2:F0} ms · kontras {3:F0}% · paling redup {4:F0}%
-1763988d	Kecepatan aliran
 782c7098	Saat ini setengah tempo
 3da3fc0d	Saat ini dua kali tempo
 587c7525	Semua nilai bawaan (nilai intensitas "{0}")
@@ -1486,7 +1463,6 @@ bb5165cb	Matikan tautan LED
 9803ac5d	Efek LED: mati
 633b3564	Efek LED: dipadamkan
 79fe6abe	Efek LED: {0}
-88443ff4	Berkedip intens. Bisa dipilih setelah "Kurangi kedipan" dimatikan di layar Pencahayaan
 d6903426	Profil: {0}
 9dc4a781	Setelah aplikasi ditutup, menghapus {0} di folder aplikasi.
 e0cb734a	Aplikasi itu sendiri (exe, dll.) dan file lain tetap ada. Jika mungkin akan dipakai lagi, biarkan mati.
@@ -1689,9 +1665,7 @@ d92849da	Laporkan masalah…
 42a72e3a	Penyiapan otomatis
 4610da9f	GPU: tidak dapat diukur karena sensor suhu atau penggunaan tidak ditemukan
 462bc50c	• Anda memeriksa hasilnya sebelum menerapkan, jadi berhenti di tengah tidak mengubah apa pun.
-47647013	Langkah: {0} · sekitar {1} menit. Pompa tidak termasuk.
 48090db5	Selama pengukuran
-4ac2f56e	Memulai penyiapan otomatis (sekitar {0} menit).\n\n
 50136e19	Pilih kipas yang akan diukur serta CPU dan/atau GPU. Pompa tidak termasuk (tetap berjalan seperti biasa).
 53661bf6	ukur {0} kipas
 5899b660	• Ukur dengan CPU: membebani CPU penuh dan menurunkan kipas bertahap dari 100%.
@@ -1737,7 +1711,6 @@ fdc48725	Pilih minimal satu kipas untuk diukur, serta CPU dan/atau GPU.
 fe39437d	Tips: setelah selesai, ukur di halaman "Penyiapan otomatis" untuk membuat kurva paling senyap yang cocok untuk PC ini (sekitar 20–30 menit).
 140786db	Sekitar 1–2 menit per kipas. Setelah kecepatan berhentinya diketahui, kecepatan minimum juga diatur ke nilai aman
 14e2760b	Ukur dulu kipas yang belum diukur
-08749344	Mengukur ulang menghasilkan kurva yang tetap senyap dan aman di musim ini juga (sekitar 20–30 menit).
 5f83a291	Suhu CPU saat idle sekitar {0:F0}°C lebih tinggi dibanding saat pengaturan otomatis mengukur (ruangan tampaknya lebih hangat).
 8d7a30b2	Buka pengaturan otomatis
 c66cfe16	Ruangan sekitar {0:F0}°C lebih hangat dibanding saat pengaturan otomatis mengukur.
@@ -1961,7 +1934,7 @@ d71badc6	Ganti ke kurva berbasis "{0}"
 d0514409	Di profil "{0}", diganti ke kurva standar berbasis "{1}".
 dc31499c	Sensor virtual "{0}": sensor sumber ({1}) tidak bisa dibaca, jadi dihitung hanya dari sensor yang tersisa.
 a0b3b7dd	Menyala sesuai instrumen
-3c260d3f	Kick menyalakan semuanya, snare satu sisi, hi-hat butiran kecil, bass bagian ujung, vokal kecerahan keseluruhan, gitar dan kibor cahaya mengalir. Instrumen tetap bisa dibedakan meski dengan satu warna (Hanya warna pilihan)
+139d2c30	Kick menyalakan semuanya, snare satu sisi, hi-hat butiran kecil, bass bagian ujung, vokal kecerahan keseluruhan, gitar dan kibor cahaya mengalir. Instrumen tetap bisa dibedakan meski dengan satu warna (Hanya warna pilihan). Zona kecil dan perangkat dengan pembaruan lambat menampilkan lebih sedikit detail.
 d3efe37c	Per instrumen
 e8d8b63a	Hanya drum
 31b76718	Nada (rendah, tengah, tinggi)
@@ -1980,24 +1953,29 @@ d5a051f9	Putaran yang dibutuhkan untuk menjaga {0:F0}°C: {1:F0}% atau kurang (p
 0c8c7106	* Putaran terendah yang menjaga target belum terukur, jadi kurva ini tidak dipasang meski Anda menekan Terapkan (kurva saat ini tetap)
 e2a336cd	Putaran terendah yang menjaga target belum terukur, jadi kurva tidak dipasang (kurva saat ini tetap).
 90a68504	Di bawah {0:F0}%, putaran hampir tidak berubah (putaran minimum kipas itu sendiri).
-97a3aac7	Suara yang diikuti: menyala pada ketukan (pada kick selama tempo belum tertangkap; pada nada rendah jika tempo dimatikan serta pada kartu grafis dan memori). Warna berganti setiap 1–4 ketukan sesuai intensitas
-6d6e85e7	Suara yang diikuti: membesar pada ketukan dan bergerak lembut mengikuti nada rendah di antara ketukan (pada kick selama tempo belum tertangkap; pada nada rendah jika tempo dimatikan serta pada kartu grafis dan memori). Warna berubah perlahan seiring waktu
-3704a505	Suara yang diikuti: mengambil warna yang paling kuat di antara nada rendah, tengah, dan tinggi
+f82e6ca4	Suara yang diikuti: menyala pada kick (snare lebih redup, ketukan tanpa drum tetap gelap; pada nada rendah jika tempo dimatikan). Warna berganti pada kick di awal birama dan saat bagian lagu berganti
 ba3eca1b	Suara yang diikuti: panjangnya mengikuti volume, dan memantul pada kick dan snare
-81cd1e18	Suara yang diikuti: menyala sesuai kekuatan tiap tinggi nada, dari rendah sampai tinggi
-210faf7d	Suara yang diikuti: tiap pita memanjang sesuai kekuatan nada rendah, tengah, dan tinggi
-a35cc263	Suara yang diikuti: warna nada rendah, tengah, dan tinggi yang sedang berbunyi mengalir
-a0098d0d	Suara yang diikuti: cincin cahaya muncul pada setiap kick (pada ketukan setelah tempo tertangkap)
-e367d987	Suara yang diikuti: kick, snare, dan hi-hat masing-masing menyala dengan cara berbeda
+55d26131	Suara yang diikuti: ujung bass menyala pada kick, sisanya sampai nada tinggi menyala sesuai kekuatan tiap tinggi nada (tiap tinggi nada punya warnanya sendiri)
+1b304b0e	Suara yang diikuti: cincin cahaya muncul pada setiap kick (bass drum), juga pada suara keras seperti ledakan. Setelah tempo tertangkap, cahaya mendahului kick yang berulang
+06cc66f6	Suara yang diikuti: kick, snare, hi-hat, dan awal nada seperti gitar (saat tempo sudah terkunci) masing-masing menyala dengan cara berbeda
 4a0ca652	Suara yang diikuti: hanya suara yang dipilih untuk tiap komponen (zona): nada rendah, tengah, tinggi, atau instrumen
 3d52d090	Suara yang diikuti: per instrumen (pada kartu grafis dan memori, membesar pada ketukan dengan warna instrumen yang paling menonjol)
-630581a9	Suara yang diikuti: pita cahaya berlari mengikuti ketukan (tempo)
-e411765c	Suara yang diikuti: berubah perlahan mengikuti kecerahan suara (nada rendah atau tinggi) dan volume
-4c402832	Suara yang diikuti: ketukan pertama tiap birama (kick kuat selama tempo belum tertangkap)
-e532ec45	Berdenyut mengikuti ketukan dan meninggalkan cahaya sisa yang panjang dan lembut. Warna tidak berganti mengikuti ketukan, melainkan berubah perlahan
-6313ac02	Memeriksa 2 detik suara terakhir setiap 1 detik. Warna berubah selama beberapa detik dan tidak berkedip. Warna tidak berubah pada palet "Hanya warna pilihan" dan "Warna yang mirip dengan warna pilihan", Meter volume, Strobo, dan Setiap komponen dengan perannya
+db443d49	Memeriksa 2 detik suara terakhir setiap 1 detik. Warna berubah selama beberapa detik dan tidak berkedip. Warna tidak berubah pada palet "Hanya warna pilihan" dan "Warna yang mirip dengan warna pilihan", Meter volume, dan Setiap komponen dengan perannya
 419d7bd1	AI (CED-Tiny) mengenali instrumen yang menonjol di tiap bagian lagu (vokal, gitar, piano, brass, synth, gesek) dan mengubah warna perlahan (vokal biru, brass emas, gitar oranye, dll.). Dengan satu warna, yang berubah adalah gerakan efek "Menyala sesuai instrumen". Hanya berjalan di PC ini dan memakai sedikit CPU dan memori
 eb06c11b	Kartu grafis: penulisan langsung (maksimal {0} per detik{1})
 965f43a6	Aplikasi menulis langsung ke kartu grafis ini (lewat I2C NVIDIA), tanpa melalui OpenRGB. Zona satu warna ditulis sekaligus sehingga cepat, dan kecerahannya juga mengikuti musik.
 0ac5666c	Jika warna tiap LED berbeda, satu kali penulisan memakan sekitar 35 milidetik, jadi mode otomatis mengirim hingga 10 kali per detik (saat ketukan, langsung dikirim tanpa menunggu pengiriman rutin).
 c3734abc	Bisa diubah dengan "Pengiriman per detik" di kanan, tetapi makin tinggi makin banyak memakai CPU. Bingkai dengan warna LED yang berbeda-beda tetap terbatas sekitar 14 kali per detik meski dinaikkan (aplikasi jeda selama waktu penulisan)
+8dcbb878	 (masih naik; diperkirakan dari {0:F1} °C yang terukur)
+f4726ccb	Menunggu suhu stabil pada {0:F0}%. Langkah ini menentukan putaran yang dibutuhkan, jadi menunggu hingga {1:F0} menit sampai cairan pendingin water cooling benar-benar hangat (langkah {2} / {3}, berjalan {4})
+42c9f249	Menunggu suhu stabil pada {0:F0}%… (langkah {1} / {2}, berjalan {3}, paling lama {4:F0} menit)
+10e83d72	Langkah: {0} · sekitar {1}–{2} menit (lebih lama dengan water cooling). Pompa tidak termasuk.
+bc5be07b	• Cairan pendingin water cooling memanas perlahan, jadi langkah yang menentukan putaran yang dibutuhkan diukur hingga {0:F0} menit sampai suhunya stabil.
+0b51d73d	Memulai penyiapan otomatis (sekitar {0}–{1} menit).\n\n
+bbdc7d0b	Saat ini {0:F0}°C / kipas {1:F0}% / diperkirakan stabil di {2:F0}°C
+19569812	* Langkah bertanda ↑ masih menghangat saat diukur. Aplikasi memperkirakan suhu stabilnya dan menambahkan margin saat menentukan putaran yang dibutuhkan
+5cbcfec8	* Agar kipas tidak tiba-tiba kencang saat beban lama, kurva naik perlahan mulai 10°C di bawah target dan mencapai {0:F0}% pada 2°C di bawah target
+903dee0e	Mengukur ulang menghasilkan kurva yang tetap senyap dan aman di musim ini juga (sekitar 30–60 menit).
+47437bdc	Berganti perlahan melalui warna-warna palet. Bertahan sebentar di satu warna, lalu berpindah mulus ke warna berikutnya (tidak bereaksi terhadap suara, tanpa kedip)
+cb281e71	Pelangi pada 1× butuh 30 dtk per putaran (10 dtk pada 3×, 3 dtk pada 10×); napas pada 1× butuh 6 dtk per tarikan. Suasana pada 1× pindah ke warna berikutnya tiap 8 dtk
+9409032e	Untuk bekerja atau malam hari. Menyala lembut dan tidak mencolok mengikuti instrumen

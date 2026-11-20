@@ -33,7 +33,8 @@ public static class TuningResetTests
         T.Check(cfg.Music.AudioDelayMs == 180, "the audio delay is kept");
     }
 
-    public static void TestDefaultsFollowTheIntensityAndCinema()
+    /// <summary>強さに結びついた 4 つの値の初期値は、選んだ強さの値。戻すとその値になり、プリセットと同じならそのプリセットになる</summary>
+    public static void TestDefaultsFollowTheIntensity()
     {
         var cfg = new RgbConfig { Mode = RgbModes.Music };
         MusicTuning.ApplyPreset(cfg, MusicPresets.Groove);
@@ -43,13 +44,26 @@ public static class TuningResetTests
         var smooth = MusicTuning.TuningValues(cfg).First(v => v.Label == "滑らかさ");
         T.Check(smooth.Default == hi.SmoothnessMs && !smooth.Changed, $"defaults of the intensity-linked values follow the chosen intensity ({smooth.Default} ms)");
 
-        MusicTuning.ApplyPreset(cfg, MusicPresets.Cinema);
-        var punch = MusicTuning.TuningValues(cfg).First(v => v.Label == "メリハリ");
-        T.Check(punch.Default == MusicTuning.CinemaPunch && !punch.Changed, "cinema preset: its own punch counts as the default");
+        // どの強さでも、4 つの値の初期値はその強さの値
+        foreach (var intensity in Intensities.All)
+        {
+            var p = MusicTuning.Profile(intensity);
+            MusicTuning.ApplyIntensity(cfg.Music, intensity);
+            var v = MusicTuning.TuningValues(cfg).ToDictionary(x => x.Label);
+            T.Check(v["滑らかさ"].Default == p.SmoothnessMs && v["メリハリ"].Default == p.Punch && v["いちばん暗いとき"].Default == p.MinBrightness
+                && v["反応の速さ"].Default == p.ReactionMs && v.Values.All(x => !x.Changed),
+                $"{intensity}: the defaults are that intensity's values and nothing counts as changed");
+        }
+
+        // 強さに結びついた値を変えて戻すと、強さの値に戻り、同じ組み合わせのプリセットが選ばれる
+        MusicTuning.ApplyPreset(cfg, MusicPresets.Chill);
         cfg.Music.MinBrightness = 10;
+        cfg.Music.Punch = 90;
+        cfg.Music.Preset = MusicPresets.Custom;
+        var sub = MusicTuning.Profile(Intensities.Subtle);
         MusicTuning.ResetTuning(cfg);
-        T.Check(cfg.Music.MinBrightness == MusicTuning.CinemaMinBrightness && cfg.Music.Preset == MusicPresets.Cinema,
-            $"cinema: reset brings back the cinema values ({cfg.Music.MinBrightness}%, {cfg.Music.Preset})");
+        T.Check(cfg.Music.MinBrightness == sub.MinBrightness && cfg.Music.Punch == sub.Punch && cfg.Music.Preset == MusicPresets.Chill,
+            $"reset brings back the intensity values and the matching preset ({cfg.Music.MinBrightness}%, {cfg.Music.Punch}%, {cfg.Music.Preset})");
 
         // プリセットと違う光り方なら、戻しても「カスタム」のまま
         cfg.MusicStyle = MusicStyles.Sparkle;

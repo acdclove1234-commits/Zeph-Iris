@@ -146,7 +146,6 @@ public static class SceneColorTests
         foreach (var pal in new[] { Palettes.Rainbow, Palettes.Fire, Palettes.Solid, Palettes.Mono })
         {
             var m = ResolvedMusic.Default with { Effect = style, Palette = pal };
-            if (style == MusicStyles.Strobe) m = m with { StrobeAllowed = true, ReduceFlashing = false };
             if (tweak is not null) m = tweak(m);
             lanes.Add(new LaneSpec($"{dev.Name}/{style}/{pal}", dev, m, scenes));
         }
@@ -156,7 +155,7 @@ public static class SceneColorTests
     /// <summary>このレーンで実際に動く光り方に、場面の色を使うか（パレット・光り方で決まる）</summary>
     private static bool Tinted(LaneSpec l)
     {
-        var v = EffectCatalog.Resolve(l.Music.Effect, null, l.Dev.IsSlow, l.Music.StrobeAllowed);
+        var v = EffectCatalog.Resolve(l.Music.Effect, null, l.Dev.IsSlow);
         if (l.Dev.IsFlickerProne) v = DeviceRenderer.FlickerProneVariant(v, null);
         return ScenePalettes.Applies(l.Music with { SceneColors = true }, v);
     }
@@ -167,7 +166,7 @@ public static class SceneColorTests
     /// <summary>
     /// B1: 「AI で楽器を聞き分ける」がオフなら、場面が来ても出力は 1 バイトも変わらない。オンでも場面なしなら同じ。
     /// （B0: 場面の色を入れる前の版で、同じ 156 本の出力の FNV-1a を書き出し、入れた後のオフの出力と全部同じことを確かめた）
-    /// B5: 音量メーター・ストロボ・パーツごとの役割と、パレット「選んだ色だけ」「選んだ色と近い色」は、場面が巡っても同じ出力
+    /// B5: 音量メーター・パーツごとの役割と、パレット「選んだ色だけ」「選んだ色と近い色」は、場面が巡っても同じ出力
     /// </summary>
     public static void TestOffIsByteIdenticalAndExclusionsUnchanged()
     {
@@ -206,7 +205,7 @@ public static class SceneColorTests
         foreach (var b in bad.Take(20)) T.Info(b);
         T.Check(same1 == n, $"scene colours off: injected scenes change nothing ({same1}/{n} lanes byte-identical, all styles × Rainbow/Fire/Solid/Mono × strip/DRAM/GPU)");
         T.Check(same2 == n, $"scene colours on with no scene: byte-identical to off ({same2}/{n})");
-        T.Check(exclSame == excl && excl > 0, $"Meter, Strobe, Role and the Solid/Mono palettes ignore scenes ({exclSame}/{excl} lanes byte-identical)");
+        T.Check(exclSame == excl && excl > 0, $"Meter, Role and the Solid/Mono palettes ignore scenes ({exclSame}/{excl} lanes byte-identical)");
         T.Check(tintedDiff == tinted && tinted > 0, $"every other style recolours with scenes on ({tintedDiff}/{tinted} lanes changed)");
         T.Check(pattern == 6 && patternDiff >= 2, $"Ensemble on Solid/Mono switches its light pattern with scenes instead of its colour ({patternDiff}/{pattern} lanes changed; the GPU keeps a constant brightness)");
     }
@@ -225,12 +224,12 @@ public static class SceneColorTests
 
     /// <summary>
     /// B2: パレット「炎」・歌の場面を 5 秒から、場面なしを 13 秒から。光っている LED の、明るさで重みをつけた色相の平均。
-    /// 戻ったあとは、場面の色を使わないレーンの同じ時間と比べる（パルス・ムードは色が時刻でゆっくり移るので、5 秒前の色とは違う）
+    /// 戻ったあとは、場面の色を使わないレーンの同じ時間と比べる（ムードは色が時刻でゆっくり移るので、5 秒前の色とは違う）
     /// </summary>
     public static void TestVocalSceneTurnsBlueAndBack()
     {
         var sched = Schedule((5.0, SceneGroup.Vocal), (13.0, SceneGroup.None));
-        var styles = MusicStyles.All.Where(s => ScenePalettes.Applies(EffectCatalog.Resolve(s, null, false, true))).ToList();
+        var styles = MusicStyles.All.Where(s => ScenePalettes.Applies(EffectCatalog.Resolve(s, null, false))).ToList();
         var lanes = styles.Select(s => new LaneSpec(s, StripDev(), ResolvedMusic.Default with { Effect = s, Palette = Palettes.Fire, SceneColors = true }, sched))
             .Concat(styles.Select(s => new LaneSpec(s + " off", StripDev(), ResolvedMusic.Default with { Effect = s, Palette = Palettes.Fire }))).ToList();
         int ns = styles.Count;
@@ -381,7 +380,7 @@ public static class SceneColorTests
             // その場面で光らせたときの色（PaletteView。光り方の中で引く色）の、1 コマの変化。
             // 切り替えが前の移り変わりの途中で始まると、色が跳ぶ
             var r = new DeviceRenderer(StripDev());
-            var input = new RenderInput { Cfg = Cfg(), Music = ResolvedMusic.Default with { Effect = MusicStyles.Mood, Palette = Palettes.Fire, SceneColors = true } };
+            var input = new RenderInput { Cfg = Cfg(), Music = ResolvedMusic.Default with { Effect = MusicStyles.Spectrum, Palette = Palettes.Fire, SceneColors = true } };
             input.Frame.GateOpen = true;
             input.Frame.Activity = 1;
             var outp = new Rgb[24];
@@ -459,8 +458,8 @@ public static class SceneColorTests
             if (limiter[i] == limiter[i + 1]) same++; else bad.Add($"{lanes[i].Label}: limiter {limiter[i]} vs {limiter[i + 1]}");
             var (a, aw) = StrongFlashes(means[i]);
             var (b, bw) = StrongFlashes(means[i + 1]);
-            // 点滅を抑える設定（ストロボ以外）では 1 秒に 3 回まで。オフのときより 1 秒あたりの最大が増えない
-            bool reduce = lanes[i].Music.ReduceFlashing && lanes[i].Music.Effect != MusicStyles.Strobe;
+            // 点滅を抑える設定では 1 秒に 3 回まで。オフのときより 1 秒あたりの最大が増えない
+            bool reduce = lanes[i].Music.ReduceFlashing;
             bool pass = bw <= Math.Max(aw, reduce ? 3 : aw);
             if (pass) ok++;
             if (!pass || a != b) bad.Add($"{lanes[i].Label}: strong flashes {a} → {b} in 20 s, most in 1 s {aw} → {bw}");
@@ -508,7 +507,7 @@ public static class SceneColorTests
         var sched = Schedule((4.0, SceneGroup.Vocal), (10.0, SceneGroup.Brass), (16.0, SceneGroup.Keys));
         var lanes = new List<LaneSpec>();
         foreach (var dev in new[] { GpuDev(), FlickerProneDev() })
-        foreach (var s in new[] { MusicStyles.BeatHue, MusicStyles.Pulse, MusicStyles.Mood, MusicStyles.Mix })
+        foreach (var s in new[] { MusicStyles.BeatHue, MusicStyles.Ensemble, MusicStyles.Spectrum })
             lanes.Add(new LaneSpec($"{dev.Name}/{s}", dev, ResolvedMusic.Default with { Effect = s, Palette = Palettes.Neon, SceneColors = true }, sched));
         var mid = new int[lanes.Count];
         var swaps = new int[lanes.Count];
@@ -542,7 +541,7 @@ public static class SceneColorTests
     public static void TestDevicesWithDifferentLatencyStayInStep()
     {
         var sched = Schedule((6.0, SceneGroup.Synth));
-        var m = ResolvedMusic.Default with { Effect = MusicStyles.Pulse, Palette = Palettes.Ocean, SceneColors = true };
+        var m = ResolvedMusic.Default with { Effect = MusicStyles.BeatHue, Palette = Palettes.Ocean, SceneColors = true };
         var lanes = new List<LaneSpec>
         {
             new("8 ms", StripDev(), m, sched, 0.008),

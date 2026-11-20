@@ -97,7 +97,7 @@ public static class BandTiming
     /// <summary>光る時刻を測る光り方</summary>
     public static readonly string[] Styles =
     {
-        MusicStyles.BeatHue, MusicStyles.Pulse, MusicStyles.Mix, MusicStyles.Spectrum, MusicStyles.Meter, MusicStyles.Energy, MusicStyles.Strobe,
+        MusicStyles.BeatHue, MusicStyles.Spectrum, MusicStyles.Meter,
     };
 
     /// <summary>
@@ -166,12 +166,12 @@ public static class BandTimingTests
     }
 
     /// <summary>
-    /// 拍で光る: 合成した曲を、アプリと同じ時間の流れで光らせたとき、ビートで色替え・パルスは拍の 78% 以上で光り始め、
+    /// 拍で光る: 合成した曲を、アプリと同じ時間の流れで光らせたとき、ビートで色替えは拍の 78% 以上で光り始め、
     /// 遅れは 0〜25 ミリ秒（中央値）。まとめた帯（低音など）を 10 帯から作ったときは 65〜67% に下がった（帯の数を変えるときの見張り）
     /// </summary>
     public static void TestBeatsStillFlash()
     {
-        foreach (string style in new[] { MusicStyles.BeatHue, MusicStyles.Pulse })
+        foreach (string style in new[] { MusicStyles.BeatHue })
         {
             var f = BandTiming.FlashStats(style);
             T.Info($"{style}: {BandTiming.Summary(f)}");

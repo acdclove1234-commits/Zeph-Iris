@@ -41,7 +41,7 @@ public static class LightingHistoryTests
         T.Check(h.Undo(cfg, out _), "an unsaved change can be undone right away");
         T.Check(cfg.Brightness == 100, $"brightness is back ({cfg.Brightness})");
 
-        cfg.MusicStyle = MusicStyles.Pulse;
+        cfg.MusicStyle = MusicStyles.Ripple;
         h.Checkpoint(cfg);
         T.Check(!h.CanRedo, "a new change clears redo");
     }
@@ -50,7 +50,7 @@ public static class LightingHistoryTests
     {
         var cfg = new RgbConfig { Mode = RgbModes.Music, Enabled = true };
         cfg.Music.ReduceFlashing = false;
-        cfg.MusicStyle = MusicStyles.Strobe;
+        cfg.MusicStyle = MusicStyles.Ripple;
         var h = new LightingHistory(cfg);
 
         cfg.MusicStyle = MusicStyles.BeatHue;
@@ -61,7 +61,7 @@ public static class LightingHistoryTests
 
         T.Check(h.Undo(cfg, out _), "undo works");
         T.Check(cfg.Music.ReduceFlashing, "reduce flashing stays on (not turned off without the warning)");
-        T.Check(cfg.MusicStyle == MusicStyles.BeatHue, $"no strobe while reduce flashing is on ({cfg.MusicStyle})");
+        T.Check(cfg.MusicStyle == MusicStyles.Ripple, $"the style is undone ({cfg.MusicStyle})");
         T.Check(!cfg.Enabled && cfg.Port == 6800, "the connection settings are kept");
 
         // 戻さない値だけを変えても、元に戻す段は増えない

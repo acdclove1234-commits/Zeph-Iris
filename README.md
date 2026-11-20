@@ -20,7 +20,7 @@
 
 - **One-button auto setup** — measures every fan, loads the CPU and GPU, and builds the quietest curve that still holds your target temperature. You check the result before it is applied.
 - **Safe by design** — emergency full speed, bad-sensor filtering, pump watch, a watchdog that restarts the app, and fans handed back to the BIOS on exit or sleep.
-- **Music sync lighting** — kick and snare detection and beat tracking, tuned on recorded songs; a dozen styles, with OpenRGB.
+- **Music sync lighting** — kick and snare detection and beat tracking, tuned on recorded songs; seven styles, with OpenRGB.
 - **No account, no telemetry** — see the [privacy policy](PRIVACY.md).
 
 > This app was called **ProFanController** up to 6.6.1 and **Fanlume** from 6.7.0 to 6.7.3. Settings and records carry over (see [Moving from Fanlume or ProFanController](#moving-from-fanlume-or-profancontroller)).
@@ -43,7 +43,7 @@
 - **Auto setup**: one button measures each fan (stop and start speeds), then loads the CPU and GPU and lowers the fans step by step to build the quietest safe curve. When the room gets 5°C or more warmer than when you measured, the app suggests measuring again
 - **Safety**: emergency full speed (also watches the CPU and GPU temperatures when no curve uses them), filtering of bad sensor values and stuck sensors, pump speed watch, a watchdog process (sets safe fan speeds and restarts the app if it crashes), and handing the fans back to the BIOS on exit and sleep
 - **Monitoring and diagnostics**: dashboard, history, electricity estimate, fan wear and dust checks that compare like with like (room temperature and fan-curve changes are taken into account), and a flight recorder for incidents
-- **LEDs (with OpenRGB)**: temperature, rainbow, breathing, static colour and music sync (kick and snare detection, beat tracking, a dozen styles), per device and per zone. Music sync can listen to one app only (for example Spotify). PNY ARGB Epic-X graphics cards are written directly, without OpenRGB
+- **LEDs (with OpenRGB)**: temperature, rainbow, breathing, static colour and music sync (kick and snare detection, beat tracking, seven styles), per device and per zone. Music sync can listen to one app only (for example Spotify). PNY ARGB Epic-X graphics cards are written directly, without OpenRGB
 - **Switching from another app**: import curves and fan names from FanControl, and a warning (with how to fix it) when vendor software such as Armoury Crate, iCUE or L-Connect fights over the same fans or LEDs
 - **Other**: automatic profile switching, a phone view on the same network, ntfy / Discord notifications, tray icon and start at logon, "Report a problem" in the sidebar and tray menu, and a user interface in 18 languages
 - **Optional**: an AI cooling advisor using a local [Ollama](https://ollama.com/) model (off by default; turn it on at the top of the Diagnostics page; your data stays on the PC)
@@ -88,7 +88,7 @@ What happens with unsupported or unchecked parts:
 1. Download `Zeph-Iris-<version>-setup.exe` from [Releases](../../releases/latest) and run it. It installs to `C:\Program Files\Zeph-Iris` and adds a Start menu entry. The installer is not code-signed yet (signing through SignPath is being prepared, see [Code signing policy](CODE_SIGNING.md)), so Windows may show "Windows protected your PC": press "More info" → "Run anyway"
 2. Leave "Launch Zeph-Iris" ticked on the last page. If PawnIO (the fan control driver) is not installed, the installer installs it with the official PawnIO installer it contains
    (if that fails: right-click `1_PawnIO をインストール.bat` ("install PawnIO") in the app folder → Run as administrator, or use the installer from the [official site](https://pawnio.eu/))
-3. Follow the first setup to name your fan headers, then press **Start auto setup** on the Auto setup page (about 20–30 minutes; leave the PC alone while it measures)
+3. Follow the first setup to name your fan headers, then press **Start auto setup** on the Auto setup page (about 30–60 minutes; leave the PC alone while it measures)
 
 See `README_en.txt` in the app folder (in this repository under `Distribution/`) for details. To update, use Settings → General → Updates → "Update" in the app (from 6.7.1 on): it downloads the new installer, checks it against the file published on GitHub (size and SHA-256), and replaces the app without any screens. You can also run the newer installer yourself. Either way the running Zeph-Iris is closed properly (the fans go back to the BIOS settings for a moment) and settings and records are kept.
 

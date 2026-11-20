@@ -175,19 +175,7 @@ public sealed class TrayIcon : IDisposable
         _ledMenu.Text = cfg is null ? L("LED の光り方") : !enabled ? L("LED の光り方: オフ") : cfg.LightsOff ? L("LED の光り方: 消灯中") : L($"LED の光り方: {ModeLabel(cfg.Mode)}");
 
         bool music = enabled && cfg!.Mode == RgbModes.Music;
-        bool reduceFlashing = cfg?.Music?.ReduceFlashing ?? true;
-        foreach (var (item, style) in _musicItems)
-        {
-            item.Checked = music && cfg!.MusicStyle == style;
-            // ストロボは「激しい点滅を抑える」をオフにしたときだけ選べる（画面の設定と同じ）
-            if (style == MusicStyles.Strobe)
-            {
-                item.Enabled = !reduceFlashing;
-                item.ToolTipText = reduceFlashing
-                    ? L("激しく点滅します。ライティング画面で「激しい点滅を抑える」をオフにすると選べます")
-                    : MusicTuning.Describe(style).Description;
-            }
-        }
+        foreach (var (item, style) in _musicItems) item.Checked = music && cfg!.MusicStyle == style;
     }
 
     /// <summary>LED 連携のオン・オフを切り替える（押した時点の設定を読み直してから決める）</summary>

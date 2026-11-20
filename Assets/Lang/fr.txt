@@ -213,7 +213,6 @@ a08b7324	À cette température ou en dessous, la couleur est bleu clair (froid)
 0582db54	Température du rouge
 74068713	À cette température ou au-dessus, la couleur est rouge vif (chaud). Entre les deux : vert → jaune
 181b9ba1	Vitesse
-6f30cf75	L'arc-en-ciel à 1× fait un tour en 30 s (10 s à 3×, 3 s à 10×) ; la respiration à 1× dure 6 s. Pour la « vague » musicale, c'est la vitesse de défilement
 36bcf3d7	{0:F1}×
 f9dafe1e	Analyse le son du PC et s'allume avec les frappes de batterie, le tempo et la hauteur. Choisissez d'abord un préréglage, puis ajustez ci-dessous seulement ce qui vous gêne.
 5414b5c1	Le son actuel découpé selon les 10 bandes d'un égaliseur classique (de 31 Hz à 16 kHz), des graves (gauche) aux aigus (droite). Les barres claires à l'intérieur sont les « attaques » comme la batterie ; la ligne blanche est le pic récent
@@ -224,11 +223,10 @@ a8d258f0	S'allume à chaque grosse caisse détectée. Pendant le test de synchro
 2f3d51ba	Règle l'effet, l'intensité et la palette sur une combinaison recommandée. Si vous modifiez vous-même les réglages ci-dessous, cela devient « Personnalisé »
 932cdbc7	Style musical
 2c274961	Comment les LED suivent la musique. Pour choisir par appareil, utilisez « Appareils » ci-dessous
-4d0abffb	« Stroboscope » clignote fortement : il n'est disponible que si « Réduire les flashs » ci-dessous est désactivé.
 c87d9699	Intensité
 541920a5	La force des flashs sur le temps et la fréquence des changements de couleur. Le choix règle aussi « Douceur », « Impact » et « Minimum » ci-dessous en conséquence
 a800602a	Palette
-5c25c402	L'ensemble de couleurs de la synchro musicale. À chaque temps, on passe à la couleur suivante
+3ec973ca	Palette de couleurs pour l’éclairage musical.
 758ca518	Gain
 ab2026d3	+ rend lumineux même les sons faibles, pour les morceaux calmes ou un volume bas. − n'éclaire que les sons forts
 65d61087	Sensibilité aux temps
@@ -250,9 +248,9 @@ a48b2636	Avance la lumière de 10 ms
 61644194	+ si la lumière arrive avant le son, − si elle arrive après. Les écouteurs et enceintes Bluetooth et les téléviseurs (HDMI) jouent le son en retard : utilisez +
 0e36045a	Le Bluetooth retarde le son : +150–200 ms recommandés
 ece319ca	Régler à +180 ms
-e02412ea	Tant que c'est activé, les flashs forts sont limités à 3 par seconde (pour protéger les yeux et la santé des personnes sensibles à la lumière). Le stroboscope n'est pas utilisé non plus
+32e5db89	Tant que c'est activé, les flashs forts sont limités à 3 par seconde (pour protéger les yeux et la santé des personnes sensibles à la lumière)
 ff4e5cc2	Réduire les flashs
-a2bb37bc	Limite les flashs forts à 3 par seconde. Le désactiver rend « Stroboscope » disponible
+68a5628b	Limite les flashs forts à 3 par seconde
 03e1f9ef	⚠ L'éclairage peut clignoter intensément. Si les flashs vous incommodent, réactivez immédiatement « Réduire les flashs ».
 dc8c4f99	Tempo
 9c0a6ff9	Auto : une fois le tempo trouvé, les temps sont anticipés et s'allument sans retard. Grosse caisse seule : pas d'anticipation, s'allume seulement sur la grosse caisse. Désactivé : ni tempo ni temps, seulement le volume
@@ -694,7 +692,6 @@ d3d56cef	La cible de {0:F0} °C n'est pas atteignable même à pleine vitesse ({
 7c323904	Démarrage de la charge…
 be843d5e	Lancez un jeu ou un benchmark (le test démarre automatiquement dès que l'utilisation du GPU dépasse 70 %)
 83a5ad8f	Attente de la montée en température à pleine vitesse…
-ac818524	Attente de la stabilisation de la température à {0:F0} %… (palier {1} / {2})
 f8650f35	Arrêt de la charge et retour au contrôle normal…
 882d4f38	Terminé
 9ea783e1	Interrompu : {0}
@@ -1037,36 +1034,23 @@ f7121884	Chill (détendu)
 40238fad	Fête
 4c4b9639	Club (intense)
 58c4acf6	Visualiseur
-1ffc1da1	Films et jeux
 a4d4ce26	Personnalisé
 68a0416e	Couleurs qui changent lentement
 2ee44588	Éteint
 9a137ab5	{0} {1} (par défaut {2})
 975db0d4	Changement de couleur au rythme
-6f6c9db1	Passe à la couleur suivante à chaque temps, s'allume vivement puis s'estompe
-1acb0fe4	Pulsation
-fac18e83	Mélange
-143bf4c6	Les couleurs se mélangent selon l'intensité des basses, médiums et aigus
+24bb482c	S'allume à chaque grosse caisse et passe à la couleur suivante en début de mesure ou de nouvelle partie
 d47d8919	VU-mètre
 c9601c4a	S'allume depuis le bord selon le volume, avec un point de crête qui retombe lentement
 b9056e5c	Spectre
 1f55a216	Répartit les basses aux aigus le long des LED, chacune selon son intensité
-ae14d063	Énergie
-9097b7af	Les bandes des basses, médiums et aigus s'allongent chacune selon leur intensité
-a8728d89	Vague qui défile
-0dbddecd	La couleur du son actuel défile depuis le bord (cascade)
 7579942a	Ondes
 8f1dc3a2	Un anneau de lumière s'étend à chaque grosse caisse
 5c1949b1	Scintillement
-6ddfa1c0	Avec la grosse caisse tout s'éclaire doucement, avec la caisse claire une lumière concentrée, avec le charleston des points blancs scintillent
+88272375	Avec la grosse caisse tout s'éclaire doucement, avec la caisse claire une lumière concentrée, avec le charleston des points blancs scintillent, et les attaques de guitare font courir une bande de couleur
 fa793be1	Rôles des composants
-2683fb56	Chaque composant s'allume selon son propre son, par exemple les ventilateurs sur les basses, la carte graphique sur les médiums et la mémoire sur les aigus. Plusieurs connecteurs de ventilateur se répartissent entre basses, médiums et aigus (modifiable dans le réglage de zone « Son à suivre »)
-74a4376d	Suivi du tempo
-934997b6	Une bande de lumière court au rythme
+e92a2994	Chaque composant s'allume selon son propre son, par exemple les ventilateurs sur les basses, la carte graphique sur les médiums et la mémoire sur les aigus. Basses, médiums et aigus se distinguent par la couleur. Plusieurs connecteurs de ventilateur se répartissent entre basses, médiums et aigus (modifiable dans le réglage de zone « Son à suivre »)
 5d88da90	Ambiance
-e134b40a	La couleur change lentement selon l'ambiance du morceau (sans clignotement)
-c3873745	Stroboscope
-e266b3b4	Clignote fortement au rythme (uniquement si « Réduire les flashs » est désactivé)
 3cada106	Selon le composant
 78733543	Basses (grosse caisse, basse)
 23099007	Médiums (caisse claire, voix)
@@ -1219,7 +1203,6 @@ fb923916	 l'arc-en-ciel (défilant) et la respiration deviennent un arc-en-ciel 
 8ed6eae0	Si la synchronisation avec les autres appareils est décalée, ajustez-la avec « Allumer plus tôt »
 8444c4be	Les LED reliées par le câblage interne de la carte (I2C), comme celles de la mémoire, mettent du temps à chaque envoi ; en mode auto, elles sont donc limitées à 8 envois par seconde (modifiable avec « Envois par seconde » à droite). Les changements de couleur de la synchro musicale sont envoyés immédiatement, sans attendre l'envoi régulier. Une même couleur est renvoyée toutes les 60 secondes
 2a5ce6d5	Auto (réglage global)
-7a4362e3	 (clignotement intense)
 2e7616aa	Violet
 d624abb5	Bleu
 1740eec3	Bleu clair
@@ -1231,11 +1214,8 @@ f88712a8	Blanc
 f73d92df	Éteint (éteindre les LED)
 faccb7c6	Couleur fixe (la couleur choisie dans « Couleur »)
 8261ae67	Laisser tel quel (s'arrêter sur la dernière couleur)
-d24118e5	\nNe l'utilisez pas si vous êtes sensible aux lumières clignotantes. Impossible à choisir tant que « Réduire les flashs » est activé
-fa397c65	⚠ Clignote intensément
 5812e0db	S'allume uniquement dans la couleur choisie dans « Couleur et luminosité ». La couleur ne change pas ; seule la luminosité suit le son
 a3ff6ad5	S'allume dans la couleur choisie dans « Couleur et luminosité » et ses deux couleurs voisines
-a0c6bf54	S'allume dans les couleurs de {0}. À chaque temps, passe à la couleur suivante de cet ensemble
 b4e8382b	Auto (anticipation)
 3084a002	Une fois le tempo du morceau saisi, anticipe le temps suivant et s'allume sans retard (recommandé)
 90659e1d	Grosse caisse seulement
@@ -1247,12 +1227,10 @@ df788b17	La couleur choisie dans « Couleur » s'éclaircit et s'assombrit lente
 3b1d43a4	Éteint les LED quand le son s'arrête
 25525b81	{0} ({1})
 bb1834e5	Vous avez ajusté vous-même les réglages ci-dessous. Choisir un autre préréglage rétablit sa combinaison
-1cf255e8	Pour le travail ou la nuit. Les couleurs changent lentement et en douceur
 9df36e7d	Le choix sûr. Pulse agréablement avec les basses
 4beab2e2	Un effet animé où un anneau de lumière s'étend à chaque coup de batterie
 f6ac23cd	L'effet le plus intense, avec de forts changements de couleur à chaque temps
 b7e7d574	Répartit les basses aux aigus le long des LED pour voir le son
-7c3c3b30	Un effet discret et chaleureux qui ne gêne pas les films ni les jeux
 355fd781	{0}\nEffet : {1} · Intensité : {2} · Couleurs : {3}
 67f5dc44	\n(En désactivant « Réduire les flashs », le clignotement devient encore plus intense)
 e3c74af7	Calme et posé. Les couleurs changent lentement à chaque mesure
@@ -1260,7 +1238,6 @@ e3c74af7	Calme et posé. Les couleurs changent lentement à chaque mesure
 39194da9	Réaction vive. Les couleurs changent à chaque temps
 283c2191	Réaction maximale. Les couleurs changent instantanément à chaque temps et le début de chaque mesure est accentué
 899bfdf5	{0}\nUne fois choisi : réaction {1:F0} ms · lissage {2:F0} ms · contraste {3:F0} % · minimum {4:F0} %
-1763988d	Vitesse de défilement
 782c7098	Actuellement à mi-tempo
 3da3fc0d	Actuellement à tempo double
 587c7525	Toutes les valeurs par défaut (celles de l'intensité « {0} »)
@@ -1486,7 +1463,6 @@ bb5165cb	Désactiver la liaison LED
 9803ac5d	Effet des LED : désactivé
 633b3564	Effet des LED : éteint
 79fe6abe	Effet des LED : {0}
-88443ff4	Clignote intensément. Disponible après avoir désactivé « Réduire les flashs » dans l'écran Éclairage
 d6903426	Profil : {0}
 9dc4a781	Supprime les {0} du dossier de l'application après sa fermeture.
 e0cb734a	L'application elle-même (exe, etc.) et les autres fichiers sont conservés. Si vous pensez la réutiliser, laissez cette option désactivée.
@@ -1689,9 +1665,7 @@ d92849da	Signaler un problème…
 42a72e3a	Configuration automatique
 4610da9f	GPU : mesure impossible, aucun capteur de température ou d'utilisation trouvé
 462bc50c	• Vous vérifiez le résultat avant de l'appliquer : un arrêt en cours de route ne change rien.
-47647013	Étapes : {0} · env. {1} min. Les pompes sont exclues.
 48090db5	Pendant la mesure
-4ac2f56e	Lancement de la configuration automatique (env. {0} min).\n\n
 50136e19	Choisissez les ventilateurs à mesurer et le CPU et/ou le GPU. Les pompes sont exclues (elles tournent normalement).
 53661bf6	mesurer {0} ventilateur(s)
 5899b660	• Mesurer avec le CPU : charge le CPU à fond et baisse les ventilateurs pas à pas depuis 100 %.
@@ -1737,7 +1711,6 @@ fdc48725	Choisissez au moins un ventilateur à mesurer, et le CPU et/ou le GPU.
 fe39437d	Astuce : ensuite, mesurez sur la page « Configuration automatique » pour créer les courbes les plus silencieuses adaptées à ce PC (env. 20–30 min).
 140786db	Env. 1–2 min par ventilateur. Une fois la vitesse d'arrêt connue, la vitesse minimale est aussi réglée sur une valeur sûre
 14e2760b	Mesurer d'abord les ventilateurs pas encore mesurés
-08749344	Une nouvelle mesure donne des courbes qui restent silencieuses et sûres en cette saison aussi (env. 20–30 min).
 5f83a291	La température au repos du CPU est environ {0:F0}°C plus élevée que lors de la mesure de la configuration automatique (la pièce semble plus chaude).
 8d7a30b2	Ouvrir la configuration automatique
 c66cfe16	La pièce est environ {0:F0}°C plus chaude que lors de la mesure de la configuration automatique.
@@ -1961,7 +1934,7 @@ d71badc6	Passer à une courbe basée sur « {0} »
 d0514409	Dans le profil « {0} », passage à la courbe standard basée sur « {1} ».
 dc31499c	Capteur virtuel « {0} » : les capteurs sources ({1}) ne peuvent pas être lus, le calcul utilise donc uniquement les capteurs restants.
 a0b3b7dd	Instruments
-3c260d3f	La grosse caisse allume tout, la caisse claire un côté, le charleston de petits points, la basse l'extrémité, la voix la luminosité globale, la guitare ou les claviers une lumière qui défile. Les instruments restent reconnaissables même en couleur unie (Couleur choisie uniquement)
+139d2c30	La grosse caisse allume tout, la caisse claire un côté, le charleston de petits points, la basse l'extrémité, la voix la luminosité globale, la guitare ou les claviers une lumière qui défile. Les instruments restent reconnaissables même en couleur unie (Couleur choisie uniquement). Les petites zones et les appareils à rafraîchissement lent affichent moins de détails.
 d3efe37c	Par instrument
 e8d8b63a	Batterie seulement
 31b76718	Par hauteur (basses, médiums, aigus)
@@ -1980,24 +1953,29 @@ d5a051f9	Vitesse nécessaire pour tenir {0:F0} °C : {1:F0} % ou moins (les vite
 0c8c7106	* La vitesse la plus basse qui tient la cible n'a pas été mesurée : cette courbe ne sera donc pas appliquée, même en cliquant sur Appliquer (la courbe actuelle est conservée)
 e2a336cd	La vitesse la plus basse qui tient la cible n'a pas été mesurée, aucune courbe n'a donc été appliquée (la courbe actuelle est conservée).
 90a68504	Sous {0:F0} %, la vitesse ne change presque plus (vitesse minimale propre au ventilateur).
-97a3aac7	Réagit à : s'allume sur les temps (sur la grosse caisse tant que le tempo n'est pas trouvé ; sur les basses quand le tempo est désactivé et sur les cartes graphiques et la mémoire). La couleur change tous les 1–4 temps selon l'intensité
-6d6e85e7	Réagit à : enfle sur les temps et bouge doucement avec les basses entre les temps (sur la grosse caisse tant que le tempo n'est pas trouvé ; sur les basses quand le tempo est désactivé et sur les cartes graphiques et la mémoire). La couleur évolue lentement
-3704a505	Réagit à : prend la couleur du plus fort des basses, médiums et aigus
+f82e6ca4	Réagit à : s'allume sur la grosse caisse (la caisse claire plus faiblement, les temps sans batterie restent sombres ; sur les basses quand le tempo est désactivé). La couleur change sur la grosse caisse en début de mesure et à chaque nouvelle partie
 ba3eca1b	Réagit à : la longueur suit le volume et rebondit sur la grosse caisse et la caisse claire
-81cd1e18	Réagit à : s'allume selon l'intensité de chaque hauteur, des graves aux aigus
-210faf7d	Réagit à : les bandes des basses, médiums et aigus s'allongent chacune selon leur intensité
-a35cc263	Réagit à : les couleurs des basses, médiums et aigus du moment défilent
-a0098d0d	Réagit à : un anneau de lumière apparaît à chaque grosse caisse (à chaque temps une fois le tempo trouvé)
-e367d987	Réagit à : grosse caisse, caisse claire et charleston s'allument chacun à leur manière
+55d26131	Réagit à : l'extrémité grave s'allume sur la grosse caisse, le reste jusqu'aux aigus selon l'intensité de chaque hauteur (chaque hauteur a sa propre couleur)
+1b304b0e	Réagit à : un anneau de lumière apparaît à chaque grosse caisse (et aux sons forts comme les explosions). Une fois le tempo trouvé, il s'allume en avance sur les grosses caisses qui se répètent
+06cc66f6	Réagit à : grosse caisse, caisse claire, charleston et attaques de notes comme la guitare (une fois le tempo trouvé) s'allument chacun à leur manière
 4a0ca652	Réagit à : uniquement le son (basses, médiums, aigus ou instrument) choisi pour chaque composant (zone)
 3d52d090	Réagit à : chaque instrument (sur les cartes graphiques et la mémoire, enfle sur les temps dans la couleur de l'instrument dominant)
-630581a9	Réagit à : une bande de lumière défile au rythme des temps (tempo)
-e411765c	Réagit à : change lentement selon la brillance du son (grave ou aigu) et le volume
-4c402832	Réagit à : le premier temps de chaque mesure (les grosses caisses fortes tant que le tempo n'est pas trouvé)
-e532ec45	Pulse sur les temps et laisse une longue et douce rémanence. La couleur ne change pas au rythme, elle évolue lentement
-6313ac02	Analyse les 2 dernières secondes de son chaque seconde. Les couleurs changent en quelques secondes et ne clignotent jamais. Les couleurs ne changent pas avec les palettes « Couleur choisie uniquement » et « Couleurs proches de la couleur choisie », ni avec VU-mètre, Stroboscope et « Rôles des composants »
+db443d49	Analyse les 2 dernières secondes de son chaque seconde. Les couleurs changent en quelques secondes et ne clignotent jamais. Les couleurs ne changent pas avec les palettes « Couleur choisie uniquement » et « Couleurs proches de la couleur choisie », ni avec VU-mètre et « Rôles des composants »
 419d7bd1	L'AI (CED-Tiny) reconnaît l'instrument dominant dans chaque partie du morceau (voix, guitare, piano, cuivres, synthé, cordes) et change lentement les couleurs (bleu pour la voix, or pour les cuivres, orange pour la guitare, etc.). Avec une couleur unie, elle modifie plutôt le mouvement de l'effet « Instruments ». Fonctionne uniquement sur ce PC et utilise un peu de CPU et de mémoire
 eb06c11b	Carte graphique : écriture directe ({0} par seconde au maximum{1})
 965f43a6	L'application écrit directement sur cette carte graphique (via l'I2C de NVIDIA), sans passer par OpenRGB. Une zone d'une seule couleur s'écrit en une fois, c'est donc rapide, et la luminosité suit aussi la musique.
 0ac5666c	Quand les LED ont des couleurs différentes, chaque écriture prend environ 35 ms ; en auto, l'envoi est donc limité à 10 fois par seconde (sur le temps, l'envoi est immédiat, sans attendre l'envoi régulier).
 c3734abc	Modifiable avec « Envois par seconde » à droite, mais augmenter utilise plus de CPU. Les images où les LED ont des couleurs différentes plafonnent à environ 14 par seconde même si vous augmentez (l'application fait une pause aussi longue que chaque écriture)
+8dcbb878	 (encore en hausse ; estimé à partir des {0:F1} °C mesurés)
+f4726ccb	Attente de la stabilisation de la température à {0:F0} %. Ce palier détermine la vitesse nécessaire : il attend jusqu'à {1:F0} min que le liquide du watercooling soit bien chaud (palier {2} / {3}, {4} écoulé)
+42c9f249	Attente de la stabilisation de la température à {0:F0} %… (palier {1} / {2}, {3} écoulé, {4:F0} min au plus)
+10e83d72	Étapes : {0} · env. {1}–{2} min (plutôt la durée longue avec un watercooling). Les pompes sont exclues.
+bc5be07b	• Le liquide d'un watercooling chauffe lentement : les paliers qui déterminent la vitesse nécessaire sont mesurés jusqu'à {0:F0} min, le temps que la température se stabilise.
+0b51d73d	Lancement de la configuration automatique (env. {0}–{1} min).\n\n
+bbdc7d0b	Actuellement {0:F0} °C / ventilateur {1:F0} % / se stabilisera vers {2:F0} °C
+19569812	* Les paliers marqués ↑ chauffaient encore à la fin de la mesure. L'app a estimé leur température stable et ajouté une marge pour calculer la vitesse nécessaire
+5cbcfec8	* Pour que les ventilateurs n'accélèrent pas d'un coup sous une longue charge, la courbe monte peu à peu dès 10 °C sous la cible et atteint {0:F0} % à 2 °C sous la cible
+903dee0e	Une nouvelle mesure donne des courbes qui restent silencieuses et sûres en cette saison aussi (env. 30–60 min).
+47437bdc	Passe lentement d'une couleur de la palette à l'autre. Reste un moment sur une couleur, puis glisse en douceur vers la suivante (ne réagit pas au son, sans clignotement)
+cb281e71	L'arc-en-ciel à 1× fait un tour en 30 s (10 s à 3×, 3 s à 10×) ; la respiration à 1× dure 6 s. Ambiance à 1× passe à la couleur suivante toutes les 8 s
+9409032e	Pour le travail ou la nuit. S'allume doucement et discrètement avec les instruments

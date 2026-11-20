@@ -27,18 +27,23 @@ public static class RgbModes
     public const string Aurora = "Aurora";
     public const string Meteor = "Meteor";
     public const string Heartbeat = "Heartbeat";
+    /// <summary>ムード: 色の組み合わせ（パレット）の色に、ゆっくり移り変わる（音には反応しない）</summary>
+    public const string Mood = "Mood";
 
     /// <summary>動きのある光り方（雷・波など）</summary>
-    public static readonly string[] Ambient = { Lightning, Wave, Birdsong, Fire, Aurora, Meteor, Heartbeat };
+    public static readonly string[] Ambient = { Lightning, Wave, Birdsong, Fire, Aurora, Meteor, Heartbeat, Mood };
 
     /// <summary>全体の「光り方」で選べるもの（画面・トレイのメニューの並び順）</summary>
     public static readonly string[] All =
-        { Temperature, Rainbow, RainbowStatic, Breathing, Static, Lightning, Wave, Birdsong, Fire, Aurora, Meteor, Heartbeat, Music };
+        { Temperature, Rainbow, RainbowStatic, Breathing, Static, Lightning, Wave, Birdsong, Fire, Aurora, Meteor, Heartbeat, Mood, Music };
 
     public static bool IsKnown(string? mode) => mode is not null && Array.IndexOf(All, mode) >= 0;
 
     /// <summary>「色」で選んだ色を使う光り方</summary>
     public static bool UsesColor(string mode) => mode is Static or Breathing or Wave or Heartbeat;
+
+    /// <summary>「色の組み合わせ」（RgbConfig.ModePalette）を使う光り方</summary>
+    public static bool UsesPalette(string mode) => mode == Mood;
 
     /// <summary>「速さ」を使う光り方</summary>
     public static bool UsesSpeed(string mode) => mode is Rainbow or Breathing || Array.IndexOf(Ambient, mode) >= 0;
@@ -59,6 +64,7 @@ public static class RgbModes
         Aurora => L("オーロラ"),
         Meteor => L("流れ星"),
         Heartbeat => L("心拍"),
+        Mood => L("ムード"),
         _ => mode,
     };
 }
@@ -74,7 +80,8 @@ public static class RgbLightModes
     /// <summary>選べる光り方（Same のほか）</summary>
     public static readonly string[] Overrides =
         { RgbModes.Static, RgbModes.Rainbow, RgbModes.RainbowStatic, RgbModes.Breathing, RgbModes.Temperature,
-          RgbModes.Lightning, RgbModes.Wave, RgbModes.Birdsong, RgbModes.Fire, RgbModes.Aurora, RgbModes.Meteor, RgbModes.Heartbeat, Off };
+          RgbModes.Lightning, RgbModes.Wave, RgbModes.Birdsong, RgbModes.Fire, RgbModes.Aurora, RgbModes.Meteor, RgbModes.Heartbeat,
+          RgbModes.Mood, Off };
 
     public static string Normalize(string? mode) => mode is not null && Array.IndexOf(Overrides, mode) >= 0 ? mode : Same;
 
@@ -171,36 +178,62 @@ public sealed class RgbLightPlan
 /// <summary>音楽連動の光り方（RgbConfig.MusicStyle の値）</summary>
 public static class MusicStyles
 {
-    /// <summary>ビートのたびに次の色へ切り替わり、ぱっと光って消えていく</summary>
+    /// <summary>キックのたびにぱっと光り、小節の頭や曲の区切りで次の色へ切り替わる</summary>
     public const string BeatHue = "BeatHue";
-    /// <summary>拍に合わせて脈打ち、ふわっと長く残光が残る。色はビートでは変わらず、ゆっくり移り変わる</summary>
-    public const string Pulse = "Pulse";
-    /// <summary>低音・中音・高音の強さで色が混ざる（濁らないよう色相で混ぜる）</summary>
-    public const string Mix = "Mix";
     /// <summary>音量メーター（重力で落ちてくるピークの点つき）</summary>
     public const string Meter = "Meter";
     /// <summary>スペクトラム: LED の並びに低音〜高音の帯を並べる</summary>
     public const string Spectrum = "Spectrum";
-    /// <summary>エナジー: 低音・中音・高音の帯が、それぞれの強さの分だけ伸びる</summary>
-    public const string Energy = "Energy";
-    /// <summary>流れる波: 今の音の色が端から流れていく（ウォーターフォール）</summary>
-    public const string Scroll = "Scroll";
     /// <summary>波紋: キックのたびに中央から光の輪が広がる</summary>
     public const string Ripple = "Ripple";
     /// <summary>きらめき: ハイハットやスネアで、ランダムな LED がきらっと光る</summary>
     public const string Sparkle = "Sparkle";
-    /// <summary>テンポ追従: ビートに合わせて光の帯が走る</summary>
-    public const string Chase = "Chase";
-    /// <summary>ムード: 曲の雰囲気（音の明るさ）で色がゆっくり変わる。点滅しない</summary>
-    public const string Mood = "Mood";
-    /// <summary>ストロボ: ビートで白く強く点滅する（「激しい点滅を抑える」をオフにしたときだけ）</summary>
-    public const string Strobe = "Strobe";
     /// <summary>パーツごとの役割: ゾーンごとに、低音・中音・高音・音全体のどれかに反応する</summary>
     public const string Role = "Role";
     /// <summary>楽器で光る: 1 つのゾーンの中で、楽器ごとに光り方の形を変える（単色でも楽器が分かる）</summary>
     public const string Ensemble = "Ensemble";
 
-    public static readonly string[] All = { BeatHue, Pulse, Mix, Meter, Spectrum, Energy, Scroll, Ripple, Sparkle, Role, Ensemble, Chase, Mood, Strobe };
+    public static readonly string[] All = { BeatHue, Meter, Spectrum, Ripple, Sparkle, Role, Ensemble };
+
+    /// <summary>選べる光り方の名前か</summary>
+    public static bool IsKnown(string? name) => name is not null && Array.IndexOf(All, name) >= 0;
+
+    /// <summary>
+    /// 6.15.10 までにあって、なくした光り方の置き換え先（なくした光り方でなければ null）。
+    /// パルス・ストロボは「ビートで色替え」（ストロボは「激しい点滅を抑える」がオンのとき「ビートで色替え」と同じに光っていた）、
+    /// ミックス・エナジーは同じ低音・中音・高音の強さで光る「スペクトラム」（1 個の LED・遅いデバイスでは同じ光り方だった）、
+    /// テンポ追従は「ビートで色替え」。
+    /// ムードは音に反応しない光り方になった。音楽連動で光らせていた設定の置き換えは
+    /// AppConfig.Normalize がする。ここでは、残しておく音楽連動の光り方として、流れる波は同じ低音・中音・高音の色で光る
+    /// 「スペクトラム」、ムードはプリセット「チル」の「楽器で光る」にする
+    /// </summary>
+    public static string? Replacement(string? name) => name switch
+    {
+        "Pulse" or "Strobe" or "Chase" => BeatHue,
+        "Mix" or "Energy" or "Scroll" => Spectrum,
+        "Mood" => Ensemble,
+        _ => null,
+    };
+
+    /// <summary>音に反応しない光り方になった、6.15.10 までの音楽連動の光り方の、新しい光り方（RgbModes。ほかは null）</summary>
+    public static string? StandaloneMode(string? name) => name switch
+    {
+        "Mood" => RgbModes.Mood,
+        _ => null,
+    };
+
+    /// <summary>保存してあった光り方の名前を、今の光り方にする（なくした光り方は置き換え先、知らない名前は fallback）</summary>
+    public static string Normalize(string? name, string fallback = BeatHue) => IsKnown(name) ? name! : Replacement(name) ?? fallback;
+
+    /// <summary>
+    /// デバイス・ゾーンで選んでいた光り方を、今の光り方か "Auto"（全体の光り方に合わせる）にする。
+    /// なくした光り方は置き換え先。ただしミックスは "Auto"（遅いデバイスは今までと同じ、全体で 1 色の遅い版で光る。
+    /// 「スペクトラム」にすると、遅いデバイスでも LED ごとの帯で光ってしまうため）。
+    /// 旧「流れる波」も "Auto"。「ムード」のデバイス・ゾーンの移行は AppConfig.Normalize で行う。
+    /// 空・知らない名前も "Auto"
+    /// </summary>
+    public static string NormalizeOverride(string? name) =>
+        IsKnown(name) ? name! : name is "Mix" or "Scroll" || StandaloneMode(name) is not null ? EffectCatalog.Auto : Replacement(name) ?? EffectCatalog.Auto;
 }
 
 public readonly record struct Rgb(byte R, byte G, byte B)

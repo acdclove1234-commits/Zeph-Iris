@@ -149,11 +149,23 @@ public sealed class BeatAssist : IDisposable
 
     /// <summary>直近の低音の強さ（分析のコマごと。約 16 秒ぶん）。拍の位置が表か裏かを、キックで確かめるのに使う</summary>
     private readonly double[] _lowT = new double[1600], _lowV = new double[1600];
+    /// <summary>同じコマの、立ち上がりの強さと、音が鳴っていたか（拍の並びに今も音があるかを確かめるのに使う）</summary>
+    private readonly double[] _odfV = new double[1600];
+    private readonly bool[] _gateV = new bool[1600];
     private int _lowPos;
+    /// <summary>ロックしていないとき: 決めた窓のあとの拍に、窓の中の拍のこの割合以上の音がひとつもなければ、合わせない</summary>
+    public const double StillThereRatio = 0.5;
     /// <summary>半拍ずらした位置の低音が、この倍以上強ければ、そちらを拍とする</summary>
     public const double KickSideRatio = 1.15;
     /// <summary>キックで確かめる長さ（秒）・前後に見る幅（秒）</summary>
     public const double KickCheckSec = 12, KickWindowSec = 0.04;
+    /// <summary>AI の並びに使う拍が、並びの枠のこの割合以上うまっていること（抜けの多い並びは、拍のない音のことが多い）</summary>
+    public const double MinGridCover = 0.8;
+    /// <summary>追跡がロックを外したあと: 外してからの AI の拍の上のキックが、半拍ずらした位置のこの倍以上強ければ、外す前の拍も使ってよい</summary>
+    public const double ReleaseKickRatio = 3;
+    private BeatLock _prevLock = BeatLock.Unlocked;
+    /// <summary>追跡がロックを外した時刻（音の時刻）</summary>
+    private double _releaseT = double.NegativeInfinity;
 
     /// <summary>曲が変わったと知らされた時刻（音の時刻）。これより前の拍（前の曲の拍）は、拍の並びを決めるのにも、曲の記憶にも使わない</summary>
     private double _songT = double.NegativeInfinity;
@@ -199,6 +211,8 @@ public sealed class BeatAssist : IDisposable
         _disagree = 0;
         _lastAgreed = false;
         _lastStartT = double.NegativeInfinity;
+        _prevLock = BeatLock.Unlocked;
+        _releaseT = double.NegativeInfinity;
     }
 
     /// <summary>分析のコマごとに呼ぶ: 時間が来たら AI に頼み、結果が出ていれば追跡と比べて直す。覚えた曲なら、覚えた拍で直す</summary>
@@ -206,7 +220,13 @@ public sealed class BeatAssist : IDisposable
     {
         _lowT[_lowPos] = tNow;
         _lowV[_lowPos] = double.IsFinite(low) ? low : 0;
+        _odfV[_lowPos] = double.IsFinite(odf) ? odf : 0;
+        _gateV[_lowPos] = gateOpen;
         _lowPos = (_lowPos + 1) % _lowT.Length;
+        // 追跡がロックを外した時刻（このあとは、それより前の拍で並びを押しつけない）
+        var lk = tracker.Lock;
+        if (lk == BeatLock.Unlocked && _prevLock != BeatLock.Unlocked) _releaseT = tNow;
+        _prevLock = lk;
         Memory?.Tick(tNow, odf, gateOpen);
         if (_result is { } tagged)
         {
@@ -229,7 +249,7 @@ public sealed class BeatAssist : IDisposable
             _memoryGrid = mgOpt is not null;
             if (mgOpt is { } mg)
             {
-                var g = PhaseByKicks(HalveFast(mg.Period, mg.BeatT, Array.Empty<double>()), tNow);
+                var g = PhaseByKicks(FoldSlow(HalveFast(mg.Period, mg.BeatT, Array.Empty<double>())), tNow);
                 if (Agrees(tracker, g) || KeepTrackerPhase(tracker, g, tNow)) _memDisagree = 0;
                 else if (tracker.Lock == BeatLock.Unlocked || ++_memDisagree >= 2)
                 {
@@ -325,7 +345,21 @@ public sealed class BeatAssist : IDisposable
         double p = sxy / sxx, a = mt - p * mk;
         double rms = Math.Sqrt(b.Select((t, i) => Math.Pow(t - (a + p * k[i]), 2)).Average());
         if (rms > 0.030) return null;
-        return HalveFast(p, a + p * k[^1], downbeats);
+        // 拍の抜けが多い並びは使わない（話し声で、2 秒以上あいた拍を「抜けた拍」として並びにしていた。曲の拍はほとんど抜けない）
+        if (b.Count < MinGridCover * (k[^1] + 1)) return null;
+        return FoldSlow(HalveFast(p, a + p * k[^1], downbeats));
+    }
+
+    /// <summary>
+    /// 追跡の範囲（BeatTracker.MinBpm）より遅いテンポは、倍の速さにする（拍の時刻はそのまま）。
+    /// AI が半分のテンポ（84 BPM の曲で 42 BPM）を言うと、追跡と合わないとして合わせ直し、範囲の端で切られて
+    /// どのテンポとも合わない 63 BPM になっていた。倍の速さの並びは AI の拍を全部ふくむので、そのまま比べられる
+    /// </summary>
+    internal static (double Period, double BeatT) FoldSlow((double Period, double BeatT) g)
+    {
+        double p = g.Period;
+        while (p > 0 && 60 / p < BeatTracker.MinBpm) p /= 2;
+        return (p, g.BeatT);
     }
 
     /// <summary>
@@ -361,11 +395,11 @@ public sealed class BeatAssist : IDisposable
     }
 
     /// <summary>直近 KickCheckSec 秒（曲が変わったあとなら、新しい曲の分だけ）の、拍の位置の低音の合計と、半拍ずらした位置の低音の合計</summary>
-    private (double On, double Off) KickBalance((double Period, double BeatT) g, double tNow)
+    private (double On, double Off) KickBalance((double Period, double BeatT) g, double tNow, double from = double.NegativeInfinity)
     {
         double p = g.Period, on = 0, off = 0;
         if (!(p > 0)) return (0, 0);
-        double lo = Math.Max(tNow - KickCheckSec, _songT);
+        double lo = Math.Max(Math.Max(tNow - KickCheckSec, _songT), from);
         for (double t = g.BeatT; t > lo; t -= p) { if (t <= tNow - KickWindowSec) { on += LowAround(t); off += LowAround(t + p / 2); } }
         for (double t = g.BeatT + p; t <= tNow - KickWindowSec; t += p) { on += LowAround(t); off += LowAround(t + p / 2); }
         return (on, off);
@@ -394,6 +428,50 @@ public sealed class BeatAssist : IDisposable
         return m;
     }
 
+    /// <summary>時刻 t の前後 KickWindowSec 秒の、いちばん強い立ち上がり</summary>
+    private double OdfAround(double t)
+    {
+        double m = 0;
+        for (int i = 0; i < _lowT.Length; i++)
+            if (Math.Abs(_lowT[i] - t) <= KickWindowSec && _odfV[i] > m) m = _odfV[i];
+        return m;
+    }
+
+    /// <summary>時刻 t の前後 KickWindowSec 秒に、音が鳴っていたコマがあるか</summary>
+    private bool GateAround(double t)
+    {
+        for (int i = 0; i < _lowT.Length; i++)
+            if (_gateV[i] && Math.Abs(_lowT[i] - t) <= KickWindowSec) return true;
+        return false;
+    }
+
+    /// <summary>
+    /// AI の拍の並びに、今も音があるか（ロックしていないときに合わせる前に確かめる）。
+    /// 足音が止まったあとに、足音でできた AI の並びに合わせてロックし、音のない間に拍の見当で光っていた。
+    /// 窓の中の拍の音（立ち上がり・低音の中央値）を基準にし、窓のあと（いちばん新しい EdgeSec 秒と、AI を待つ間）の
+    /// 並びの拍のうち、音が鳴っている拍で、どちらかが基準の StillThereRatio 倍以上の拍が 1 つでもあれば true。
+    /// 音が鳴っている拍がひとつもなければ、判定せずに true（いつもどおり合わせる。音が戻ったばかりの曲で合わせ損ねないように）
+    /// </summary>
+    private bool StillThere((double Period, double BeatT) g, List<double> beats, double windowEnd, double tNow)
+    {
+        double edge = windowEnd - EdgeSec;
+        var refB = beats.Where(t => t <= edge && t >= edge - 16).ToList();
+        if (refB.Count == 0 || !(g.Period > 0)) return true;
+        var ro = refB.Select(OdfAround).OrderBy(x => x).ToList();
+        var rl = refB.Select(LowAround).OrderBy(x => x).ToList();
+        double refOdf = ro[ro.Count / 2], refLow = rl[rl.Count / 2];
+        double p = g.Period, t0 = g.BeatT;
+        while (t0 > edge) t0 -= p;
+        int n = 0;
+        for (double t = t0 + p; t <= tNow - KickWindowSec; t += p)
+        {
+            if (!GateAround(t)) continue;
+            n++;
+            if ((refOdf > 0 && OdfAround(t) >= StillThereRatio * refOdf) || (refLow > 0 && LowAround(t) >= StillThereRatio * refLow)) return true;
+        }
+        return n == 0;
+    }
+
     /// <summary>追跡が、この拍の並びとテンポも位置も合っているか（ロックしていなければ合っていない）</summary>
     private static bool Agrees(BeatTracker tracker, (double Period, double BeatT) g)
     {
@@ -420,9 +498,29 @@ public sealed class BeatAssist : IDisposable
     private void Decide(Result r, BeatTracker tracker)
     {
         Runs++;
-        bool cut = r.Beats.Count > 0 && r.Beats[0] < _songT;
-        var beats = cut ? r.Beats.Where(t => t >= _songT).ToList() : r.Beats;
-        var downs = r.Downbeats.Count == 0 || r.Downbeats[0] >= _songT ? r.Downbeats : r.Downbeats.Where(t => t >= _songT).ToList();
+        // 追跡がロックを外したあとは、外したあとに聞こえた拍だけで決める（窓に残った前の曲の拍で、話し声や効果音に拍の並びを
+        // 押しつけていた）。今のキックがはっきり AI の拍の上にあるときだけは、窓の拍をそのまま使う
+        double cutT = _songT;
+        // 外したあとに聞こえた拍だけで決めた並び（話し声でも AI はそろった拍を返すことがある）
+        bool afterRelease = false;
+        if (tracker.Lock == BeatLock.Unlocked && _releaseT > cutT)
+        {
+            double tNow = _lowT[(_lowPos - 1 + _lowT.Length) % _lowT.Length];
+            bool kicksNow = false;
+            if (tNow - _releaseT >= 2 && EstimateGrid(r.Beats.Where(t => t >= _songT).ToList(), r.Downbeats, r.WindowEndT) is { } fg)
+            {
+                var (on, off) = KickBalance(PhaseByKicks(fg, tNow), tNow, _releaseT);
+                kicksNow = on > ReleaseKickRatio * off && on > 0;
+            }
+            if (!kicksNow)
+            {
+                cutT = _releaseT;
+                afterRelease = true;
+            }
+        }
+        bool cut = r.Beats.Count > 0 && r.Beats[0] < cutT;
+        var beats = cut ? r.Beats.Where(t => t >= cutT).ToList() : r.Beats;
+        var downs = r.Downbeats.Count == 0 || r.Downbeats[0] >= cutT ? r.Downbeats : r.Downbeats.Where(t => t >= cutT).ToList();
         // 前の曲の拍を除いたあと、新しい曲の拍が少ないときは使わない（新しい曲の拍がたまるのを待って早めに調べ直す。FastEverySec）
         if (cut && !EnoughSongBeats(beats, r.WindowEndT)) { _lastAgreed = false; return; }
         if (EstimateGrid(beats, downs, r.WindowEndT) is not { } g0) { _lastAgreed = !cut; return; }
@@ -439,11 +537,29 @@ public sealed class BeatAssist : IDisposable
             return;
         }
         _lastAgreed = false;
+        // ロックしていないときは、AI の拍の並びに今も音があるかを確かめてから合わせる（足音が止まったあとに、足音の並びでロックしていた）
+        if (!locked && !StillThere(g, beats, r.WindowEndT, tLast))
+        {
+            Log?.Invoke("拍の AI の並びに今は音がない: 合わせない");   // no-loc（ログだけ）
+            return;
+        }
+        // 外したあとの音だけで決めた並びは、外したあとの低音（キック）がその拍の上にあるときだけ使う
+        // （曲が止まったあと、話し声の上で、窓に残った前の曲の拍の続きや、話し声にそろえた拍に合わせていた）
+        if (afterRelease)
+        {
+            var (on, off) = KickBalance(g, tLast, _releaseT);
+            if (!(on > KickSideRatio * off && on > 0))
+            {
+                Log?.Invoke("ロックを外したあとの低音が AI の拍の上にない: 合わせない");   // no-loc（ログだけ）
+                return;
+            }
+        }
         if (locked && ++_disagree < 2) return;   // 1 回だけの食い違いは様子を見る（AI が迷う部分もある）
         _disagree = 0;
         Steered++;
         Log?.Invoke($"拍の AI に合わせる: {60 / g.Period:F1} BPM（追跡は {(pt > 0 ? 60 / pt : 0):F1} BPM・{(locked ? "ロック中" : "ロックなし")}）");   // no-loc（ログだけ）
-        tracker.Steer(g.Period, g.BeatT);
+        // 外したあとの音だけで決めた並びは、追跡が拍に音がないと分かればすぐ外す（大声の言い合いで、AI の並びに合わせて 1.5 秒光っていた）
+        tracker.Steer(g.Period, g.BeatT, probation: afterRelease);
     }
 
     /// <summary>曲が変わったあとの、拍の並びを決めるのに使える拍（窓の後ろの端を除く）が、SongMinBeats 個以上か SongMinSpanSec 秒以上あるか</summary>

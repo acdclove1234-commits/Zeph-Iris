@@ -150,6 +150,26 @@ public struct Biquad
 }
 
 /// <summary>
+/// 直近の大きな音の高さ（dB）。大きな音が来たらすぐその高さにして、holdSec 秒止めてから、1 秒に fallDbPerSec ずつ下げる（minDb より下げない）。
+/// 高さを上げるのは、音が鳴っているとき（capture）だけ。下げるのは無音の間も続ける
+/// </summary>
+public struct PeakHold
+{
+    /// <summary>いまの高さ（dB）</summary>
+    public double V;
+    private double _hold;
+
+    public void Reset(double v) { V = v; _hold = 0; }
+
+    public void Update(double x, bool capture, double dt, double holdSec, double fallDbPerSec, double minDb)
+    {
+        if (capture && x >= V) { V = x; _hold = holdSec; return; }
+        if (_hold > 0) { _hold -= dt; return; }
+        if (V > minDb) V = Math.Max(minDb, V - fallDbPerSec * dt);
+    }
+}
+
+/// <summary>
 /// 自動音量調整の基準（「この音量を最大として光らせる」dB 値）。
 ///   基準より大きい音が来たら、0.3 秒の時定数で追いつく（1 回の大きな音で、すぐに全体が暗くならないように）
 ///   基準より小さいときは、1 秒に 3 dB ずつ下がる（静かな曲になっても、数秒でちょうどよい明るさに戻る）

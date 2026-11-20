@@ -6,6 +6,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <NoWarn>CA1416;CS8321</NoWarn>
+    <DefineConstants Condition="'$(BeatHueBeta)' == 'true'">$(DefineConstants);BEATHUE_BETA</DefineConstants>
     <RootNamespace>LogicTests</RootNamespace>
   </PropertyGroup>
   <ItemGroup>

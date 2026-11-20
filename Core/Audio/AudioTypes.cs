@@ -33,12 +33,16 @@ public enum AudioEventKind
     Drop,
     /// <summary>同期テストのクリック音（AudioEngine.ClickDetect が true のときだけ）</summary>
     Click,
+    /// <summary>打楽器ではない中音の立ち上がり（ギターのストローク・はじく音など。響き線の音がないのでスネアにしなかった音）。きらめきだけが使う</summary>
+    Tonal,
 }
 
 /// <param name="Id">通し番号（1 から増えていく）。LED 側はどこまで読んだかをこれで覚える</param>
 /// <param name="T">音が鳴った本当の時刻（AudioClock の秒。検出した時刻ではない）</param>
 /// <param name="Strength">強さ（しきい値の何倍か。1 以上）</param>
-public readonly record struct AudioEvent(long Id, AudioEventKind Kind, double T, float Strength);
+/// <param name="BodyDb">キックだけ: 低音の包絡線の山が、最近のキックの大きさから何 dB か（ベースの音・スネアの胴はたいてい −5 dB より小さい。わからなければ NaN）</param>
+/// <param name="RiseDb">キックだけ: 低音の包絡線の立ち上がり（谷から山までの dB。わからなければ NaN）</param>
+public readonly record struct AudioEvent(long Id, AudioEventKind Kind, double T, float Strength, float BodyDb = float.NaN, float RiseDb = float.NaN);
 
 /// <summary>
 /// ある瞬間の音の分析結果（約 10.7 ミリ秒ごとに 1 つ）。値は特に書いていなければ 0〜1。
@@ -72,6 +76,8 @@ public sealed class AudioFrame
     public float RmsDb = -120;
     /// <summary>自動音量調整の基準（dBFS。この値が「最大」として光る）</summary>
     public float CeilingDb = -30;
+    /// <summary>直近の大きな音（dBFS。LoudDb のいちばん大きい値を 3 秒止めてから、ゆっくり下げたもの。なければ −120）</summary>
+    public float ProgramPeakDb = -120;
     /// <summary>音の重心（Hz。低い音が中心なら小さく、明るい音なら大きい）</summary>
     public float CentroidHz = 500;
     /// <summary>反応の強さ（音が鳴っているか × 「特定のアプリだけ」の割合）</summary>
@@ -113,7 +119,7 @@ public sealed class AudioFrame
         Array.Copy(o.Punch, Punch, BandCount);
         Sub = o.Sub; Bass = o.Bass; Mid = o.Mid; Treble = o.Treble;
         SubE = o.SubE; BassE = o.BassE; MidE = o.MidE; TrebleE = o.TrebleE;
-        KickEnv = o.KickEnv; LoudVU = o.LoudVU; LoudDb = o.LoudDb; RmsDb = o.RmsDb; CeilingDb = o.CeilingDb;
+        KickEnv = o.KickEnv; LoudVU = o.LoudVU; LoudDb = o.LoudDb; RmsDb = o.RmsDb; CeilingDb = o.CeilingDb; ProgramPeakDb = o.ProgramPeakDb;
         CentroidHz = o.CentroidHz; Activity = o.Activity; GateOpen = o.GateOpen; Extrapolated = o.Extrapolated;
         PercLow = o.PercLow; PercMid = o.PercMid; PercHigh = o.PercHigh;
         HarmBass = o.HarmBass; HarmMid = o.HarmMid; HarmHigh = o.HarmHigh;
@@ -140,6 +146,7 @@ public sealed class AudioFrame
         SubE = L(a.SubE, b.SubE); BassE = L(a.BassE, b.BassE); MidE = L(a.MidE, b.MidE); TrebleE = L(a.TrebleE, b.TrebleE);
         KickEnv = L(a.KickEnv, b.KickEnv); LoudVU = L(a.LoudVU, b.LoudVU); LoudDb = L(a.LoudDb, b.LoudDb);
         RmsDb = L(a.RmsDb, b.RmsDb); CeilingDb = L(a.CeilingDb, b.CeilingDb); CentroidHz = L(a.CentroidHz, b.CentroidHz);
+        ProgramPeakDb = L(a.ProgramPeakDb, b.ProgramPeakDb);
         Activity = L(a.Activity, b.Activity);
         GateOpen = k < 0.5 ? a.GateOpen : b.GateOpen;
         Extrapolated = false;
@@ -166,7 +173,7 @@ public sealed class AudioFrame
         Array.Clear(Band);
         Array.Clear(Punch);
         Sub = Bass = Mid = Treble = SubE = BassE = MidE = TrebleE = KickEnv = LoudVU = Activity = 0;
-        LoudDb = RmsDb = -120;
+        LoudDb = RmsDb = ProgramPeakDb = -120;
         CeilingDb = -30;
         CentroidHz = 500;
         GateOpen = Extrapolated = false;
@@ -265,6 +272,29 @@ public sealed class FeatureRing
         lock (_gate) { _count = 0; _head = 0; }
     }
 
+    /// <summary>
+    /// 時刻 from〜to のコマの、聞こえ方の音量（LoudDb）のいちばん大きい値（dBFS）。その間にコマがなければ、いちばん近いコマの値。
+    /// 記録が空なら NaN（コピーしないので、毎コマ呼んでもよい）
+    /// </summary>
+    public float MaxLoudDb(double from, double to)
+    {
+        lock (_gate)
+        {
+            if (_count == 0) return float.NaN;
+            float m = float.NaN, near = float.NaN;
+            double nearD = double.PositiveInfinity;
+            for (int k = 0; k < _count; k++)
+            {
+                var f = _frames[(_head - 1 - k + 2 * Capacity) % Capacity];
+                if (f.T >= from && f.T <= to) { if (!(f.LoudDb <= m)) m = f.LoudDb; continue; }
+                double d = f.T < from ? from - f.T : f.T - to;
+                if (d < nearD) { nearD = d; near = f.LoudDb; }
+                if (f.T < from) break;
+            }
+            return float.IsNaN(m) ? near : m;
+        }
+    }
+
     /// <summary>いちばん新しいコマを dst にコピーする（なければ無音にして false）</summary>
     public bool Latest(AudioFrame dst)
     {
@@ -341,15 +371,15 @@ public sealed class EventRing
     /// <summary>これまでに追加した最後の通し番号（まだなければ 0）</summary>
     public long LastId { get { lock (_gate) return _nextId - 1; } }
 
-    /// <summary>出来事を追加し、付けた通し番号を返す</summary>
-    public long Add(AudioEventKind kind, double t, float strength)
+    /// <summary>出来事を追加し、付けた通し番号を返す（bodyDb・riseDb はキックの手がかり。AudioEvent を参照）</summary>
+    public long Add(AudioEventKind kind, double t, float strength, float bodyDb = float.NaN, float riseDb = float.NaN)
     {
         lock (_gate)
         {
             long id = _nextId++;
             int ki = (int)kind;
             if (ki >= 0 && ki < CountByKind.Length) CountByKind[ki]++;
-            _items[_head] = new AudioEvent(id, kind, t, strength);
+            _items[_head] = new AudioEvent(id, kind, t, strength, bodyDb, riseDb);
             _head = (_head + 1) % Capacity;
             if (_count < Capacity) _count++;
             return id;

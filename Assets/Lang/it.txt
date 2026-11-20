@@ -213,7 +213,6 @@ a08b7324	A questa temperatura o sotto, il colore è azzurro (fresco)
 0582db54	Temperatura del rosso
 74068713	A questa temperatura o sopra, il colore è rosso pieno (caldo). In mezzo passa per verde → giallo
 181b9ba1	Velocità
-6f30cf75	L'arcobaleno a 1× fa un giro in 30 s (10 s a 3×, 3 s a 10×); il respiro a 1× dura 6 s. Per l'«onda» musicale è la velocità di scorrimento
 36bcf3d7	{0:F1}×
 f9dafe1e	Analizza il suono del PC e si illumina con i colpi di batteria, il tempo e l'altezza dei suoni. Scegli prima una preimpostazione, poi regola qui sotto solo ciò che ti disturba.
 5414b5c1	Il suono attuale diviso nelle 10 bande di un normale equalizzatore (da 31 Hz a 16 kHz), dai bassi (sinistra) agli acuti (destra). Le barre luminose interne sono gli «attacchi» come la batteria; la linea bianca è il picco recente
@@ -224,11 +223,10 @@ a8d258f0	Si illumina ogni volta che rileva una cassa (grancassa). Durante il tes
 2f3d51ba	Imposta effetto, intensità e palette su una combinazione consigliata. Se modifichi da solo le impostazioni sotto, diventa «Personalizzato»
 932cdbc7	Stile musicale
 2c274961	Come i LED seguono la musica. Per scegliere per dispositivo, usa «Dispositivi» qui sotto
-4d0abffb	«Stroboscopio» lampeggia forte, quindi si può scegliere solo con «Riduci i lampeggi» qui sotto disattivato.
 c87d9699	Intensità
 541920a5	Quanto si illumina il battito e ogni quanto cambia il colore. La scelta imposta anche «Morbidezza», «Incisività» e «Minimo» qui sotto
 a800602a	Palette
-5c25c402	L'insieme di colori della sincronizzazione musicale. A ogni battito passa al colore successivo
+3ec973ca	Tavolozza per l’illuminazione musicale.
 758ca518	Guadagno
 ab2026d3	+ fa brillare anche i suoni deboli, per brani tranquilli o volume basso. − dà luce solo ai suoni forti
 65d61087	Sensibilità al battito
@@ -250,9 +248,9 @@ a48b2636	Anticipa la luce di 10 ms
 61644194	+ se la luce arriva prima del suono, − se arriva dopo. Auricolari e altoparlanti Bluetooth e TV (HDMI) riproducono il suono in ritardo, quindi usa +
 0e36045a	Il Bluetooth ritarda il suono: consigliati +150–200 ms
 ece319ca	Imposta +180 ms
-e02412ea	Quando è attivo, i lampeggi forti sono limitati a 3 al secondo (per proteggere gli occhi e la salute delle persone sensibili alla luce). Anche lo stroboscopio non viene usato
+32e5db89	Quando è attivo, i lampeggi forti sono limitati a 3 al secondo (per proteggere gli occhi e la salute delle persone sensibili alla luce)
 ff4e5cc2	Riduci i lampeggi
-a2bb37bc	Limita i lampeggi forti a 3 al secondo. Disattivandolo, «Stroboscopio» diventa disponibile
+68a5628b	Limita i lampeggi forti a 3 al secondo
 03e1f9ef	⚠ Le luci possono lampeggiare intensamente. Se i lampeggi ti fanno sentire male, riattiva subito «Riduci i lampeggi».
 dc8c4f99	Tempo
 9c0a6ff9	Auto: una volta trovato il tempo, anticipa i battiti e si illumina senza ritardo. Solo cassa: nessuna previsione, si illumina solo quando suona la grancassa. Disattivato: né tempo né battiti, solo il volume
@@ -694,7 +692,6 @@ d3d56cef	L'obiettivo di {0:F0} °C non si raggiunge nemmeno alla massima velocit
 7c323904	Avvio del carico…
 be843d5e	Avvia un gioco o un benchmark (parte da solo quando l'uso della GPU supera il 70%)
 83a5ad8f	In attesa che si scaldi alla massima velocità…
-ac818524	In attesa che la temperatura si stabilizzi al {0:F0}%… (passo {1} / {2})
 f8650f35	Arresto del carico e ritorno al controllo normale…
 882d4f38	Completato
 9ea783e1	Interrotto: {0}
@@ -1037,36 +1034,23 @@ f7121884	Chill (rilassato)
 40238fad	Festa
 4c4b9639	Club (intenso)
 58c4acf6	Visualizzatore
-1ffc1da1	Film e giochi
 a4d4ce26	Personalizzato
 68a0416e	Colori che cambiano lentamente
 2ee44588	Spento
 9a137ab5	{0} {1} (predefinito {2})
 975db0d4	Cambio colore a ritmo
-6f6c9db1	A ogni battito passa al colore successivo, si accende di colpo e svanisce
-1acb0fe4	Pulsazione
-fac18e83	Mix
-143bf4c6	I colori si mescolano in base all'intensità di bassi, medi e alti
+24bb482c	Si accende a ogni colpo di cassa e passa al colore successivo a inizio battuta o di una nuova sezione
 d47d8919	VU meter
 c9601c4a	Si accende dal bordo in base al volume, con un punto di picco che scende lentamente
 b9056e5c	Spettro
 1f55a216	Distribuisce dai bassi agli alti lungo i LED, ciascuno acceso in base alla sua intensità
-ae14d063	Energia
-9097b7af	Le bande di bassi, medi e alti si allungano ciascuna in base alla sua intensità
-a8728d89	Onda che scorre
-0dbddecd	Il colore del suono attuale scorre dal bordo (cascata)
 7579942a	Increspature
 8f1dc3a2	A ogni cassa si espande un anello di luce
 5c1949b1	Scintillio
-6ddfa1c0	Con la cassa tutto si illumina dolcemente, con il rullante una luce concentrata, con l'hi-hat scintillano punti bianchi
+88272375	Con la cassa tutto si illumina dolcemente, con il rullante una luce concentrata, con l'hi-hat scintillano punti bianchi e con gli attacchi di chitarra scorre una striscia colorata
 fa793be1	Ogni componente il suo ruolo
-2683fb56	Ogni componente si illumina con il proprio suono, ad esempio le ventole con i bassi, la scheda video con i medi e la memoria con gli alti. Più connettori delle ventole si dividono tra bassi, medi e alti (modificabile nell'impostazione di zona «Suono da seguire»)
-74a4376d	Segui il tempo
-934997b6	Una banda di luce corre a ritmo
+e92a2994	Ogni componente si illumina con il proprio suono, ad esempio le ventole con i bassi, la scheda video con i medi e la memoria con gli alti. Bassi, medi e alti si distinguono dal colore. Più connettori delle ventole si dividono tra bassi, medi e alti (modificabile nell'impostazione di zona «Suono da seguire»)
 5d88da90	Atmosfera
-e134b40a	Il colore cambia lentamente con l'atmosfera del brano (senza lampeggi)
-c3873745	Stroboscopio
-e266b3b4	Lampeggia forte a ritmo (solo se «Riduci i lampeggi» è disattivato)
 3cada106	In base al componente
 78733543	Bassi (cassa, basso)
 23099007	Medi (rullante, voce)
@@ -1219,7 +1203,6 @@ fb923916	 arcobaleno (scorrevole) e respiro diventano arcobaleno fermo e colore 
 8ed6eae0	Se la sincronia con gli altri dispositivi non coincide, regolala con «Illumina prima»
 8444c4be	I LED collegati tramite le piste interne della scheda (I2C), come quelli della memoria, richiedono tempo per ogni invio, quindi in automatico sono limitati a 8 invii al secondo (modificabile con «Invii al secondo» a destra). I cambi di colore della sincronizzazione musicale vengono inviati subito, senza attendere l'invio periodico. Lo stesso colore viene reinviato ogni 60 secondi
 2a5ce6d5	Automatico (impostazione generale)
-7a4362e3	 (lampeggio intenso)
 2e7616aa	Viola
 d624abb5	Blu
 1740eec3	Azzurro
@@ -1231,11 +1214,8 @@ f88712a8	Bianco
 f73d92df	Spento (spegni i LED)
 faccb7c6	Colore fisso (il colore scelto in «Colore»)
 8261ae67	Lascia invariato (fermati sull'ultimo colore)
-d24118e5	\nNon usarlo se sei sensibile alle luci lampeggianti. Non selezionabile finché «Riduci i lampeggi» è attivo
-fa397c65	⚠ Lampeggia intensamente
 5812e0db	Si illumina solo con il colore scelto in «Colore e luminosità». Il colore non cambia; solo la luminosità segue il suono
 a3ff6ad5	Si illumina con il colore scelto in «Colore e luminosità» e con i colori vicini ai due lati
-a0c6bf54	Si illumina con i colori di {0}. A ogni battito passa al colore successivo del gruppo
 b4e8382b	Automatico (anticipo)
 3084a002	Quando ha colto il tempo del brano, anticipa il battito successivo e si illumina senza ritardo (consigliato)
 90659e1d	Solo cassa
@@ -1247,12 +1227,10 @@ df788b17	Il colore scelto in «Colore» si schiarisce e si scurisce lentamente
 3b1d43a4	Spegne i LED quando il suono si ferma
 25525b81	{0} ({1})
 bb1834e5	Hai regolato tu le impostazioni qui sotto. Scegliendo un'altra preimpostazione si torna alla sua combinazione
-1cf255e8	Per il lavoro o la notte. I colori cambiano lentamente e con calma
 9df36e7d	La scelta sicura. Pulsa piacevolmente con i bassi
 4beab2e2	Un effetto vivace in cui un anello di luce si espande a ogni colpo di batteria
 f6ac23cd	L'effetto più intenso, con forti cambi di colore a ogni battito
 b7e7d574	Distribuisce dai bassi agli alti lungo i LED per vedere il suono
-7c3c3b30	Un effetto discreto e caldo che non disturba film e giochi
 355fd781	{0}\nEffetto: {1} · Intensità: {2} · Colori: {3}
 67f5dc44	\n(Disattivando «Riduci i lampeggi» lampeggia in modo ancora più intenso)
 e3c74af7	Rilassato e calmo. I colori cambiano lentamente a ogni battuta
@@ -1260,7 +1238,6 @@ e3c74af7	Rilassato e calmo. I colori cambiano lentamente a ogni battuta
 39194da9	Reazione scattante. I colori cambiano a ogni movimento
 283c2191	Reazione massima. I colori cambiano all'istante a ogni movimento e l'inizio della battuta viene accentuato
 899bfdf5	{0}\nSe scelto: reazione {1:F0} ms · morbidezza {2:F0} ms · contrasto {3:F0}% · minimo {4:F0}%
-1763988d	Velocità di scorrimento
 782c7098	Ora a metà tempo
 3da3fc0d	Ora a tempo doppio
 587c7525	Tutti valori predefiniti (quelli dell'intensità «{0}»)
@@ -1486,7 +1463,6 @@ bb5165cb	Disattiva il collegamento LED
 9803ac5d	Effetto LED: disattivo
 633b3564	Effetto LED: spento
 79fe6abe	Effetto LED: {0}
-88443ff4	Lampeggia intensamente. Selezionabile dopo aver disattivato «Riduci i lampeggi» nella schermata Illuminazione
 d6903426	Profilo: {0}
 9dc4a781	Dopo la chiusura dell'app elimina {0} nella cartella dell'app.
 e0cb734a	L'app stessa (exe, ecc.) e gli altri file vengono mantenuti. Se pensi di riusarla, lascia questa opzione disattivata.
@@ -1689,9 +1665,7 @@ d92849da	Segnala un problema…
 42a72e3a	Configurazione automatica
 4610da9f	GPU: impossibile misurare, nessun sensore di temperatura o utilizzo trovato
 462bc50c	• Controlli il risultato prima di applicarlo, quindi interrompere non cambia nulla.
-47647013	Passi: {0} · circa {1} min. Le pompe sono escluse.
 48090db5	Durante la misura
-4ac2f56e	Avvio della configurazione automatica (circa {0} min).\n\n
 50136e19	Scegli le ventole da misurare e la CPU e/o la GPU. Le pompe sono escluse (funzionano come sempre).
 53661bf6	misura {0} ventola/e
 5899b660	• Misura con CPU: carica la CPU al massimo e abbassa le ventole a passi dal 100%.
@@ -1737,7 +1711,6 @@ fdc48725	Scegli almeno una ventola da misurare e la CPU e/o la GPU.
 fe39437d	Suggerimento: dopo, misura nella pagina «Configurazione automatica» per creare le curve più silenziose adatte a questo PC (circa 20–30 min).
 140786db	Circa 1–2 min per ventola. Nota la velocità di arresto, anche la velocità minima viene portata a un valore sicuro
 14e2760b	Misura prima le ventole non ancora misurate
-08749344	Misurando di nuovo si ottengono curve silenziose e sicure anche in questa stagione (circa 20–30 min).
 5f83a291	La temperatura a riposo della CPU è circa {0:F0}°C più alta di quando la configurazione automatica ha misurato (la stanza sembra più calda).
 8d7a30b2	Apri la configurazione automatica
 c66cfe16	La stanza è circa {0:F0}°C più calda di quando la configurazione automatica ha misurato.
@@ -1961,7 +1934,7 @@ d71badc6	Passa a una curva basata su «{0}»
 d0514409	Nel profilo «{0}», è stata impostata la curva standard basata su «{1}».
 dc31499c	Sensore virtuale «{0}»: i sensori di origine ({1}) non sono leggibili, quindi viene calcolato solo con i sensori rimanenti.
 a0b3b7dd	Strumenti
-3c260d3f	La cassa illumina tutto, il rullante un lato, l'hi-hat piccole scintille, il basso l'estremità, la voce la luminosità generale, chitarra e tastiere una luce che scorre. Gli strumenti si distinguono anche con una tinta unita (Solo il colore scelto)
+139d2c30	La cassa illumina tutto, il rullante un lato, l'hi-hat piccole scintille, il basso l'estremità, la voce la luminosità generale, chitarra e tastiere una luce che scorre. Gli strumenti si distinguono anche con una tinta unita (Solo il colore scelto). Le zone piccole e i dispositivi con aggiornamento lento mostrano meno dettagli.
 d3efe37c	Per strumento
 e8d8b63a	Solo batteria
 31b76718	Per altezza (bassi, medi, alti)
@@ -1980,24 +1953,29 @@ d5a051f9	Velocità necessaria per mantenere {0:F0}°C: {1:F0}% o meno (le veloci
 0c8c7106	* La velocità più bassa che mantiene l'obiettivo non è stata misurata, quindi questa curva non verrà usata anche se applichi il risultato (resta la curva attuale)
 e2a336cd	La velocità più bassa che mantiene l'obiettivo non è stata misurata, quindi la curva non è stata applicata (resta quella attuale).
 90a68504	Sotto il {0:F0}%, la velocità cambia appena (la velocità minima propria della ventola).
-97a3aac7	Reagisce a: si illumina sul battito (sulla cassa finché il tempo non è trovato; sui bassi con il tempo disattivato e su scheda video e memoria). Il colore cambia ogni 1–4 battiti in base all'intensità
-6d6e85e7	Reagisce a: si espande sul battito e tra un battito e l'altro si muove dolcemente con i bassi (sulla cassa finché il tempo non è trovato; sui bassi con il tempo disattivato e su scheda video e memoria). Il colore cambia lentamente nel tempo
-3704a505	Reagisce a: prende il colore del più forte tra bassi, medi e alti
+f82e6ca4	Reagisce a: si illumina sulla cassa (il rullante più debole, i battiti senza batteria restano scuri; sui bassi con il tempo disattivato). Il colore cambia sulla cassa a inizio battuta e a ogni nuova sezione
 ba3eca1b	Reagisce a: la lunghezza segue il volume e rimbalza su cassa e rullante
-81cd1e18	Reagisce a: si illumina in base all'intensità di ogni altezza, dai suoni bassi a quelli acuti
-210faf7d	Reagisce a: ogni banda si allunga in base all'intensità di bassi, medi e alti
-a35cc263	Reagisce a: scorrono i colori dei bassi, medi e alti che suonano in questo momento
-a0098d0d	Reagisce a: a ogni cassa compare un anello di luce (sul battito una volta trovato il tempo)
-e367d987	Reagisce a: cassa, rullante e hi-hat si illuminano ciascuno in modo diverso
+55d26131	Reagisce a: l'estremità dei bassi si illumina sulla cassa, il resto fino agli acuti in base all'intensità di ogni altezza (ogni altezza ha il suo colore)
+1b304b0e	Reagisce a: a ogni cassa compare un anello di luce (anche con suoni forti come le esplosioni). Una volta trovato il tempo, anticipa le casse che si ripetono
+06cc66f6	Reagisce a: cassa, rullante, hi-hat e attacchi di note come la chitarra (quando il tempo è agganciato) si illuminano ciascuno in modo diverso
 4a0ca652	Reagisce a: solo il suono scelto per ogni componente (zona): bassi, medi, alti o uno strumento
 3d52d090	Reagisce a: ogni strumento (su scheda video e memoria si espande sul battito con il colore dello strumento che spicca)
-630581a9	Reagisce a: una banda di luce scorre a ritmo del battito (tempo)
-e411765c	Reagisce a: cambia lentamente in base alla brillantezza del suono (basso o acuto) e al volume
-4c402832	Reagisce a: il primo battito di ogni battuta (casse forti finché il tempo non è trovato)
-e532ec45	Pulsa con il battito e lascia un lungo e morbido bagliore residuo. Il colore non cambia a ritmo, ma si trasforma lentamente
-6313ac02	Analizza gli ultimi 2 secondi di suono ogni secondo. I colori cambiano nell'arco di alcuni secondi e non lampeggiano mai. I colori non cambiano con le tavolozze «Solo il colore scelto» e «Colori vicini a quello scelto», né con VU meter, Stroboscopio e «Ogni componente il suo ruolo»
+db443d49	Analizza gli ultimi 2 secondi di suono ogni secondo. I colori cambiano nell'arco di alcuni secondi e non lampeggiano mai. I colori non cambiano con le tavolozze «Solo il colore scelto» e «Colori vicini a quello scelto», né con VU meter e «Ogni componente il suo ruolo»
 419d7bd1	L'AI (CED-Tiny) riconosce lo strumento che spicca in ogni parte del brano (voce, chitarra, pianoforte, ottoni, synth, archi) e cambia lentamente i colori (blu per la voce, oro per gli ottoni, arancione per la chitarra, ecc.). Con una tinta unita cambia invece il movimento dell'effetto «Strumenti». Funziona solo su questo PC e usa un po' di CPU e memoria
 eb06c11b	Scheda video: scrittura diretta (al massimo {0} al secondo{1})
 965f43a6	L'app scrive direttamente su questa scheda video (tramite l'I2C di NVIDIA), senza passare da OpenRGB. Una zona a colore singolo si scrive in una volta sola, quindi è veloce, e anche la luminosità segue la musica.
 0ac5666c	Quando i LED hanno colori diversi, ogni scrittura richiede circa 35 ms, quindi in automatico invia fino a 10 volte al secondo (sul battito invia subito, senza aspettare l'invio periodico).
 c3734abc	Puoi cambiarlo con «Invii al secondo» a destra, ma aumentarlo usa più CPU. I fotogrammi in cui i LED hanno colori diversi arrivano al massimo a circa 14 al secondo anche se lo aumenti (l'app si ferma per lo stesso tempo che richiede ogni scrittura)
+8dcbb878	 (ancora in salita; stimata dai {0:F1} °C misurati)
+f4726ccb	In attesa che la temperatura si stabilizzi al {0:F0}%. Questo passo decide la velocità necessaria, quindi attende fino a {1:F0} min che il liquido del dissipatore a liquido si scaldi del tutto (passo {2} / {3}, trascorso {4})
+42c9f249	In attesa che la temperatura si stabilizzi al {0:F0}%… (passo {1} / {2}, trascorso {3}, al massimo {4:F0} min)
+10e83d72	Passi: {0} · circa {1}–{2} min (più a lungo con un dissipatore a liquido). Le pompe sono escluse.
+bc5be07b	• Il liquido di un dissipatore a liquido si scalda lentamente, quindi i passi che decidono la velocità necessaria vengono misurati fino a {0:F0} min, finché la temperatura si stabilizza.
+0b51d73d	Avvio della configurazione automatica (circa {0}–{1} min).\n\n
+bbdc7d0b	Ora {0:F0} °C / ventola {1:F0}% / si stabilizzerà verso {2:F0} °C
+19569812	* I passi con ↑ si stavano ancora scaldando alla fine della misura. L'app ha stimato dove si stabilizzano e ha aggiunto un margine per calcolare la velocità necessaria
+5cbcfec8	* Perché le ventole non accelerino di colpo con un carico lungo, la curva sale piano da 10 °C sotto l'obiettivo e arriva al {0:F0}% a 2 °C sotto l'obiettivo
+903dee0e	Misurando di nuovo si ottengono curve silenziose e sicure anche in questa stagione (circa 30–60 min).
+47437bdc	Passa lentamente tra i colori della palette. Resta un po' su un colore, poi scivola dolcemente al successivo (non reagisce al suono, nessun lampeggio)
+cb281e71	L'arcobaleno a 1× fa un giro in 30 s (10 s a 3×, 3 s a 10×); il respiro a 1× dura 6 s. Atmosfera a 1× passa al colore successivo ogni 8 s
+9409032e	Per il lavoro o la notte. Si illumina in modo morbido e discreto con gli strumenti

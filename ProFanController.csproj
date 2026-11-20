@@ -18,7 +18,9 @@
     <!-- 画面は WPF なので、高 DPI の設定は app.manifest に書く（WinForms 用の ApplicationHighDpiMode を勧める警告は出さない） -->
     <NoWarn>$(NoWarn);WFAC010</NoWarn>
     <AssemblyName>Zeph-Iris</AssemblyName>
-    <Version>6.15.10</Version>
+    <Version>6.15.11</Version>
+    <InformationalVersion Condition="'$(BeatHueBeta)' == 'true'">$(Version)-beta.3</InformationalVersion>
+    <DefineConstants Condition="'$(BeatHueBeta)' == 'true'">$(DefineConstants);BEATHUE_BETA</DefineConstants>
     <Product>Zeph-Iris</Product>
     <!-- exe のアイコン（エクスプローラー・デスクトップのショートカットに表示される） -->
     <ApplicationIcon>Assets\app.ico</ApplicationIcon>

@@ -213,7 +213,6 @@ a08b7324	Bij deze temperatuur of lager is de kleur lichtblauw (koel)
 0582db54	Temperatuur voor rood
 74068713	Bij deze temperatuur of hoger is de kleur volledig rood (heet). Daartussen gaat het via groen → geel
 181b9ba1	Snelheid
-6f30cf75	Regenboog op 1× doet 30 s per ronde (10 s op 3×, 3 s op 10×); ademen op 1× duurt 6 s per ademhaling. Bij de muzikale "golf" is het de stroomsnelheid
 36bcf3d7	{0:F1}×
 f9dafe1e	Analyseert het geluid van de pc en licht op met drumslagen, tempo en toonhoogte. Kies eerst een voorinstelling en pas daarna hieronder alleen aan wat stoort.
 5414b5c1	Het huidige geluid verdeeld in de 10 banden van een gewone equalizer (31 Hz tot 16 kHz), van bas (links) tot hoog (rechts). De heldere balkjes binnenin zijn "aanslagen" zoals drums; de witte lijn is de recente piek
@@ -224,11 +223,10 @@ a8d258f0	Licht op bij elke gevonden kick (basdrum). Tijdens de synchronisatietes
 2f3d51ba	Zet effect, intensiteit en palet in één keer op een aanbevolen combinatie. Pas je hieronder zelf iets aan, dan wordt het "Aangepast"
 932cdbc7	Muziekstijl
 2c274961	Hoe de leds met de muziek meebewegen. Kies per apparaat via "Apparaten" hieronder
-4d0abffb	"Stroboscoop" flitst hevig en kan alleen gekozen worden als "Flitsen beperken" hieronder uit staat.
 c87d9699	Intensiteit
 541920a5	Hoe sterk de slag oplicht en hoe vaak de kleur wisselt. Kiezen zet ook "Zachtheid", "Punch" en "Donkerst" hieronder passend
 a800602a	Palet
-5c25c402	De kleurenset voor muzieksynchronisatie. Bij elke slag gaat hij naar de volgende kleur
+3ec973ca	Kleurenpalet voor muziekverlichting.
 758ca518	Versterking
 ab2026d3	+ laat ook zachte geluiden fel oplichten, voor rustige nummers of laag volume. − maakt het alleen bij harde geluiden fel
 65d61087	Slaggevoeligheid
@@ -250,9 +248,9 @@ a48b2636	Licht 10 ms eerder
 61644194	+ als het licht voor het geluid komt, − als het erna komt. Bluetooth-oortjes en -luidsprekers en tv's (HDMI) spelen geluid vertraagd af, dus gebruik +
 0e36045a	Bluetooth vertraagt het geluid; +150–200 ms aanbevolen
 ece319ca	+180 ms instellen
-e02412ea	Zolang dit aan staat, zijn sterke flitsen beperkt tot 3 per seconde (om de ogen en gezondheid van lichtgevoelige mensen te beschermen). Ook de stroboscoop wordt niet gebruikt
+32e5db89	Zolang dit aan staat, zijn sterke flitsen beperkt tot 3 per seconde (om de ogen en gezondheid van lichtgevoelige mensen te beschermen)
 ff4e5cc2	Flitsen beperken
-a2bb37bc	Beperkt sterke flitsen tot 3 per seconde. Uitzetten maakt "Stroboscoop" beschikbaar
+68a5628b	Beperkt sterke flitsen tot 3 per seconde
 03e1f9ef	⚠ De verlichting kan hevig flitsen. Als je je onwel voelt door het flitsen, zet "Flitsen beperken" dan meteen weer aan.
 dc8c4f99	Tempo
 9c0a6ff9	Auto: zodra het tempo bekend is, worden de slagen voorspeld en licht hij zonder vertraging op. Alleen kick: geen voorspelling; licht alleen op als de basdrum klinkt. Uit: geen tempo of slagen, alleen de luidheid
@@ -694,7 +692,6 @@ d3d56cef	Het doel van {0:F0} °C is zelfs op volle snelheid niet haalbaar ({1:F1
 7c323904	Belasting wordt gestart…
 be843d5e	Start een game of benchmark (begint vanzelf zodra het GPU-gebruik boven 70% komt)
 83a5ad8f	Wachten tot hij op volle snelheid opwarmt…
-ac818524	Wachten tot de temperatuur stabiliseert bij {0:F0}%… (stap {1} / {2})
 f8650f35	Belasting stoppen en terug naar normale regeling…
 882d4f38	Klaar
 9ea783e1	Afgebroken: {0}
@@ -1037,36 +1034,23 @@ f7121884	Chill (rustig)
 40238fad	Feest
 4c4b9639	Club (heftig)
 58c4acf6	Visualizer
-1ffc1da1	Films en games
 a4d4ce26	Aangepast
 68a0416e	Langzaam wisselende kleuren
 2ee44588	Uit
 9a137ab5	{0} {1} (standaard {2})
 975db0d4	Kleurwissel op de beat
-6f6c9db1	Wisselt bij elke beat naar de volgende kleur, licht fel op en dooft
-1acb0fe4	Puls
-fac18e83	Mix
-143bf4c6	Kleuren mengen op basis van de sterkte van lage, midden- en hoge tonen
+24bb482c	Licht op bij elke kick en wisselt naar de volgende kleur aan het begin van een maat of een nieuw deel
 d47d8919	VU-meter
 c9601c4a	Licht vanaf de rand op zover het volume reikt, met een piekpunt dat langzaam zakt
 b9056e5c	Spectrum
 1f55a216	Verdeelt laag tot hoog over de leds, elk oplichtend naar zijn sterkte
-ae14d063	Energie
-9097b7af	Banden voor lage, midden- en hoge tonen groeien elk naar hun sterkte
-a8728d89	Stromende golf
-0dbddecd	De kleur van het huidige geluid stroomt vanaf de rand (waterval)
 7579942a	Rimpeling
 8f1dc3a2	Bij elke kick verspreidt zich een ring van licht
 5c1949b1	Fonkeling
-6ddfa1c0	Bij de kick gloeit alles zacht, bij de snare een gebundelde lichtflits, bij de hi-hat fonkelen witte puntjes
+88272375	Bij de kick gloeit alles zacht, bij de snare een gebundelde lichtflits, bij de hi-hat fonkelen witte puntjes en bij gitaaraanslagen loopt een gekleurde streep
 fa793be1	Elk onderdeel zijn rol
-2683fb56	Elk onderdeel licht op bij zijn eigen geluid, zoals ventilatoren bij de bas, de videokaart bij de middentonen en het geheugen bij de hoge tonen. Meerdere ventilatoraansluitingen worden verdeeld over laag, midden en hoog (te wijzigen in de zone-instelling "Geluid om op te reageren")
-74a4376d	Tempo volgen
-934997b6	Een lichtband loopt mee op de beat
+e92a2994	Elk onderdeel licht op bij zijn eigen geluid, zoals ventilatoren bij de bas, de videokaart bij de middentonen en het geheugen bij de hoge tonen. Laag, midden en hoog zijn te herkennen aan de kleur. Meerdere ventilatoraansluitingen worden verdeeld over laag, midden en hoog (te wijzigen in de zone-instelling "Geluid om op te reageren")
 5d88da90	Sfeer
-e134b40a	De kleur verandert langzaam met de sfeer van het nummer (zonder knipperen)
-c3873745	Stroboscoop
-e266b3b4	Knippert sterk op de beat (alleen als "Flitsen beperken" uit staat)
 3cada106	Volgens onderdeel
 78733543	Laag (kick, bas)
 23099007	Midden (snare, zang)
@@ -1219,7 +1203,6 @@ fb923916	 regenboog (stromend) en ademen worden stilstaande regenboog en vaste k
 8ed6eae0	Loopt de timing niet gelijk met andere apparaten, stem die dan af met "Eerder oplichten"
 8444c4be	Leds die via de bedrading op de printplaat (I2C) zijn aangesloten, zoals bij geheugen, hebben tijd nodig per verzending; daarom zijn ze automatisch beperkt tot 8 keer per seconde (te wijzigen met "Updates per seconde" rechts). Kleurwissels bij muzieksynchronisatie worden meteen verstuurd, zonder op de vaste update te wachten. Dezelfde kleur wordt elke 60 seconden opnieuw verstuurd
 2a5ce6d5	Automatisch (algemene instelling)
-7a4362e3	 (heftig knipperen)
 2e7616aa	Paars
 d624abb5	Blauw
 1740eec3	Lichtblauw
@@ -1231,11 +1214,8 @@ f88712a8	Wit
 f73d92df	Uit (leds uitzetten)
 faccb7c6	Vaste kleur (de kleur die bij "Kleur" is gekozen)
 8261ae67	Ongewijzigd (op de laatste kleur blijven staan)
-d24118e5	\nNiet gebruiken als je gevoelig bent voor knipperend licht. Niet te kiezen zolang "Flitsen beperken" aan staat
-fa397c65	⚠ Knippert heftig
 5812e0db	Licht alleen op in de kleur die bij "Kleur & helderheid" is gekozen. De kleur blijft gelijk; alleen de helderheid volgt het geluid
 a3ff6ad5	Licht op in de kleur die bij "Kleur & helderheid" is gekozen en de kleuren ernaast aan beide kanten
-a0c6bf54	Licht op in de kleuren van {0}. Bij elke beat wisselt het naar de volgende kleur uit de set
 b4e8382b	Automatisch (vooruitlopend)
 3084a002	Zodra het tempo van het nummer is gevonden, wordt de volgende beat voorspeld en zonder vertraging opgelicht (aanbevolen)
 90659e1d	Alleen kick
@@ -1247,12 +1227,10 @@ df788b17	De kleur die bij "Kleur" is gekozen, wordt langzaam lichter en donkerde
 3b1d43a4	Zet de leds uit als het geluid wegvalt
 25525b81	{0} ({1})
 bb1834e5	Je hebt de instellingen hieronder zelf aangepast. Kies je een andere voorinstelling, dan geldt weer de combinatie daarvan
-1cf255e8	Voor werk of 's nachts. De kleuren wisselen langzaam en rustig
 9df36e7d	De veilige keuze. Pulseert prettig mee met de bas
 4beab2e2	Een levendig effect waarbij bij elke drumslag een ring van licht uitwaaiert
 f6ac23cd	Het heftigste effect, met sterke kleurwissels bij elke beat
 b7e7d574	Verdeelt laag tot hoog over de leds, zodat je het geluid kunt zien
-7c3c3b30	Een subtiel, warm effect dat films en games niet stoort
 355fd781	{0}\nEffect: {1} · Sterkte: {2} · Kleuren: {3}
 67f5dc44	\n(Zet je "Flitsen beperken" uit, dan knippert het nog heftiger)
 e3c74af7	Rustig en kalm. De kleuren wisselen langzaam per maat
@@ -1260,7 +1238,6 @@ e3c74af7	Rustig en kalm. De kleuren wisselen langzaam per maat
 39194da9	Vlotte reactie. De kleuren wisselen elke tel
 283c2191	Maximale reactie. De kleuren wisselen direct op elke tel en het begin van elke maat wordt benadrukt
 899bfdf5	{0}\nBij keuze: reactie {1:F0} ms · demping {2:F0} ms · contrast {3:F0}% · donkerst {4:F0}%
-1763988d	Stroomsnelheid
 782c7098	Nu op half tempo
 3da3fc0d	Nu op dubbel tempo
 587c7525	Alles standaardwaarden (die van sterkte "{0}")
@@ -1486,7 +1463,6 @@ bb5165cb	Ledkoppeling uitzetten
 9803ac5d	Ledeffect: uit
 633b3564	Ledeffect: gedoofd
 79fe6abe	Ledeffect: {0}
-88443ff4	Knippert heftig. Te kiezen nadat je "Flitsen beperken" op het scherm Verlichting hebt uitgezet
 d6903426	Profiel: {0}
 9dc4a781	Wist na het afsluiten van de app de {0} in de app-map.
 e0cb734a	De app zelf (exe enz.) en andere bestanden blijven bewaard. Gebruik je hem misschien nog eens, laat dit dan uit.
@@ -1689,9 +1665,7 @@ d92849da	Probleem melden…
 42a72e3a	Automatische instelling
 4610da9f	GPU: kon niet meten, geen temperatuur- of gebruikssensor gevonden
 462bc50c	• U controleert het resultaat voor het toepassen, dus halverwege stoppen verandert niets.
-47647013	Stappen: {0} · ca. {1} min. Pompen doen niet mee.
 48090db5	Tijdens het meten
-4ac2f56e	Automatische instelling wordt gestart (ca. {0} min).\n\n
 50136e19	Kies de te meten ventilatoren en de CPU en/of GPU. Pompen doen niet mee (ze draaien zoals gewoonlijk).
 53661bf6	{0} ventilator(en) meten
 5899b660	• Meten met CPU: belast de CPU volledig en verlaagt de ventilatoren stap voor stap vanaf 100%.
@@ -1737,7 +1711,6 @@ fdc48725	Kies minstens één ventilator om te meten, en de CPU en/of GPU.
 fe39437d	Tip: meet daarna op de pagina "Automatische instelling" om de stilste curves voor deze pc te maken (ca. 20–30 min).
 140786db	Ca. 1–2 min per ventilator. Zodra het stoptoerental bekend is, wordt ook het minimumtoerental op een veilige waarde gezet
 14e2760b	Nog niet gemeten ventilatoren eerst meten
-08749344	Opnieuw meten geeft curves die ook in dit seizoen stil en veilig blijven (ca. 20–30 min).
 5f83a291	De CPU-temperatuur in rust is ongeveer {0:F0}°C hoger dan toen de automatische instelling mat (de kamer lijkt warmer).
 8d7a30b2	Automatische instelling openen
 c66cfe16	De kamer is ongeveer {0:F0}°C warmer dan toen de automatische instelling mat.
@@ -1961,7 +1934,7 @@ d71badc6	Overschakelen naar een curve op basis van "{0}"
 d0514409	In profiel "{0}" is overgeschakeld naar de standaardcurve op basis van "{1}".
 dc31499c	Virtuele sensor "{0}": de bronsensoren ({1}) kunnen niet worden gelezen, dus wordt alleen met de overige sensoren gerekend.
 a0b3b7dd	Instrumenten
-3c260d3f	De kick laat alles oplichten, de snare één kant, hi-hats kleine puntjes, de bas het uiteinde, de zang de totale helderheid en gitaar of toetsen een stromend licht. Zelfs met één kleur (Alleen de gekozen kleur) zie je de instrumenten
+139d2c30	De kick laat alles oplichten, de snare één kant, hi-hats kleine puntjes, de bas het uiteinde, de zang de totale helderheid en gitaar of toetsen een stromend licht. Zelfs met één kleur (Alleen de gekozen kleur) zie je de instrumenten. Kleine zones en apparaten met een lage verversingssnelheid tonen minder details.
 d3efe37c	Per instrument
 e8d8b63a	Alleen drums
 31b76718	Toonhoogte (laag, midden, hoog)
@@ -1980,24 +1953,29 @@ d5a051f9	Toerental nodig om {0:F0} °C te halen: {1:F0}% of minder (lagere toere
 0c8c7106	* Het laagste toerental dat het doel haalt is niet gemeten, dus deze curve wordt niet ingesteld, ook niet als je hem toepast (de huidige curve blijft)
 e2a336cd	Het laagste toerental dat het doel haalt is niet gemeten, dus er is geen curve ingesteld (de huidige curve blijft).
 90a68504	Onder {0:F0}% verandert het toerental nauwelijks (het eigen minimumtoerental van de ventilator).
-97a3aac7	Reageert op: licht op bij elke beat (op de kick zolang het tempo niet gevonden is; op de bas als tempo uit staat en bij videokaarten en geheugen). De kleur wisselt elke 1–4 beats, afhankelijk van de intensiteit
-6d6e85e7	Reageert op: zwelt aan op de beat en beweegt tussen de beats rustig mee met de bas (op de kick zolang het tempo niet gevonden is; op de bas als tempo uit staat en bij videokaarten en geheugen). De kleur verloopt langzaam in de tijd
-3704a505	Reageert op: neemt de kleur aan van de sterkste van de lage, midden- en hoge tonen
+f82e6ca4	Reageert op: licht op bij de kick (snare zwakker, tellen zonder drums blijven donker; op de bas als tempo uit staat). De kleur wisselt op de kick aan het begin van een maat en bij een nieuw deel
 ba3eca1b	Reageert op: de lengte volgt het volume en veert op bij kicks en snares
-81cd1e18	Reageert op: licht op met de sterkte van elke toonhoogte, van laag tot hoog
-210faf7d	Reageert op: elke band groeit met de sterkte van de lage, midden- en hoge tonen
-a35cc263	Reageert op: de kleuren van de lage, midden- en hoge tonen die nu klinken stromen mee
-a0098d0d	Reageert op: bij elke kick verschijnt een ring van licht (op de beat zodra het tempo gevonden is)
-e367d987	Reageert op: kick, snare en hi-hat lichten elk op een andere manier op
+55d26131	Reageert op: het baseinde licht op bij kicks, de rest tot de hoge tonen met de sterkte van elke toonhoogte (elke toonhoogte heeft een eigen kleur)
+1b304b0e	Reageert op: bij elke kick (basdrum) verschijnt een ring van licht (ook bij harde geluiden zoals explosies). Zodra het tempo gevonden is, licht hij al op vóór terugkerende kicks
+06cc66f6	Reageert op: kick, snare, hi-hat en aanslagen zoals gitaar (zodra het tempo vastligt) lichten elk op een andere manier op
 4a0ca652	Reageert op: alleen het geluid dat per onderdeel (zone) is gekozen: laag, midden, hoog of een instrument
 3d52d090	Reageert op: elk instrument (bij videokaarten en geheugen zwelt het aan op de beat in de kleur van het instrument dat opvalt)
-630581a9	Reageert op: een lichtband loopt mee op de beat (tempo)
-e411765c	Reageert op: verandert langzaam met de helderheid van het geluid (laag of hoog) en het volume
-4c402832	Reageert op: de eerste beat van elke maat (sterke kicks zolang het tempo niet gevonden is)
-e532ec45	Pulseert met de beat en laat een lange, zachte nagloed achter. De kleur wisselt niet op de beat, maar verloopt langzaam
-6313ac02	Controleert elke seconde het geluid van de laatste 2 seconden. Kleuren veranderen in een paar seconden en knipperen niet. Bij de paletten "Alleen de gekozen kleur" en "Kleuren dicht bij de gekozen kleur" en bij VU-meter, Stroboscoop en Elk onderdeel zijn rol veranderen de kleuren niet
+db443d49	Controleert elke seconde het geluid van de laatste 2 seconden. Kleuren veranderen in een paar seconden en knipperen niet. Bij de paletten "Alleen de gekozen kleur" en "Kleuren dicht bij de gekozen kleur" en bij VU-meter en Elk onderdeel zijn rol veranderen de kleuren niet
 419d7bd1	AI (CED-Tiny) herkent het instrument dat in elk deel van een nummer opvalt (zang, gitaar, piano, koper, synth, strijkers) en verandert de kleuren langzaam (blauw voor zang, goud voor koper, oranje voor gitaar enz.). Met één kleur verandert het in plaats daarvan hoe het effect "Instrumenten" beweegt. Draait alleen op deze PC en gebruikt een beetje CPU en geheugen
 eb06c11b	Videokaart: direct schrijven (hooguit {0} per seconde{1})
 965f43a6	De app schrijft direct naar deze videokaart (via I2C van NVIDIA), niet via OpenRGB. Een zone met één kleur wordt in één keer geschreven, dus dat gaat snel, en de helderheid volgt ook de muziek.
 0ac5666c	Als de leds verschillende kleuren hebben, duurt elke schrijfactie ongeveer 35 ms, dus automatisch wordt hooguit 10 keer per seconde verstuurd (op de beat wordt meteen verstuurd, zonder op de vaste verzending te wachten).
 c3734abc	Je kunt dit rechts wijzigen met "Updates per seconde", maar meer kost meer CPU. Frames waarin de leds verschillende kleuren hebben, halen ook bij een hogere waarde hooguit zo’n 14 per seconde (de app pauzeert even lang als elke schrijfactie duurt)
+8dcbb878	 (stijgt nog; voorspeld uit gemeten {0:F1} °C)
+f4726ccb	Wachten tot de temperatuur stabiliseert bij {0:F0}%. Deze stap bepaalt het benodigde toerental, dus er wordt tot {1:F0} min gewacht tot de koelvloeistof van de waterkoeling helemaal warm is (stap {2} / {3}, {4} verstreken)
+42c9f249	Wachten tot de temperatuur stabiliseert bij {0:F0}%… (stap {1} / {2}, {3} verstreken, hooguit {4:F0} min)
+10e83d72	Stappen: {0} · ca. {1}–{2} min (met waterkoeling de langere tijd). Pompen doen niet mee.
+bc5be07b	• De koelvloeistof van een waterkoeling warmt langzaam op, dus de stappen die het benodigde toerental bepalen worden tot {0:F0} min gemeten, tot de temperatuur stabiel is.
+0b51d73d	Automatische instelling wordt gestart (ca. {0}–{1} min).\n\n
+bbdc7d0b	Nu {0:F0} °C / ventilator {1:F0}% / stabiliseert naar verwachting op {2:F0} °C
+19569812	* Stappen met ↑ werden bij het meten nog warmer. De app heeft voorspeld waar ze stabiliseren en een marge opgeteld bij het bepalen van het benodigde toerental
+5cbcfec8	* Zodat de ventilatoren bij een lange belasting niet plots harder gaan, stijgt de curve geleidelijk vanaf 10 °C onder het doel en haalt {0:F0}% op 2 °C onder het doel
+903dee0e	Opnieuw meten geeft curves die ook in dit seizoen stil en veilig blijven (ca. 30–60 min).
+47437bdc	Gaat langzaam door de kleuren van het palet. Blijft even op één kleur en gaat dan vloeiend over naar de volgende (reageert niet op geluid, knippert niet)
+cb281e71	Regenboog op 1× doet 30 s per ronde (10 s op 3×, 3 s op 10×); ademen op 1× duurt 6 s per ademhaling. Sfeer gaat op 1× elke 8 s naar de volgende kleur
+9409032e	Voor werk of 's nachts. Licht zacht en ingetogen op met de instrumenten

@@ -351,16 +351,18 @@ public static class ReactiveLatencyTests
     }
 
     /// <summary>
-    /// 先読み（デバイスの遅れ 8・20・60 ミリ秒）があっても、届いたばかりの低音の光は同じ明るさ（以前は先読みの分だけ
-    /// 先に減らしていたので、60 ミリ秒では暗かった）。新しい分析結果が届かなくなったら、時間とともに暗くなる
+    /// 先読み（デバイスの遅れ 8・20・60 ミリ秒）があっても、届いたばかりの大きな音の光は同じ明るさ（以前は先読みの分だけ
+    /// 先に減らしていたので、60 ミリ秒では暗かった）。新しい分析結果が届かなくなったら、時間とともに暗くなる。
+    /// 小さいゾーンで全体が 1 色のパルスになる光り方（音量メーター。音量で光る PulseEffect）で見る
     /// </summary>
     public static void TestDeviceLeadDoesNotDimFreshSound()
     {
         float Render(double leadSec, double staleSec)
         {
-            var cfg = new RgbConfig { Mode = RgbModes.Music, MusicStyle = MusicStyles.Pulse, Brightness = 100, Gamma = false, StaticColor = "#FF0000" };
+            // 4 個の LED の音量メーターは、音量で光るパルス（全体で 1 色）になる
+            var cfg = new RgbConfig { Mode = RgbModes.Music, MusicStyle = MusicStyles.Meter, Brightness = 100, Gamma = false, StaticColor = "#FF0000" };
             var m = MusicTuning.Resolve(cfg);
-            var dev = new RgbDevice(2, "Strip", 30, 4, null, "HID: x");
+            var dev = new RgbDevice(2, "Strip", 4, 4, null, "HID: x");
             var r = new DeviceRenderer(dev);
             var input = new RenderInput { Cfg = cfg, Music = m, Device = new RgbDeviceSettings { Name = dev.Name } };
             var ring = new FeatureRing();
@@ -369,13 +371,13 @@ public static class ReactiveLatencyTests
             const double hop = 512 / 48000.0;
             double tf = 100;
             double last = double.NaN;
-            // 1 秒の静かな低音のあと、1 コマだけ大きな低音（そこで分析結果が止まる）
+            // 1 秒の静かな音のあと、1 コマだけ大きな音（そこで分析結果が止まる）
             for (int k = 0; k < 94; k++)
             {
                 tf += hop;
                 f.T = tf;
                 f.BassE = f.Bass = k == 93 ? 1f : 0.1f;
-                f.LoudVU = 0.5f;
+                f.LoudVU = k == 93 ? 1f : 0.1f;
                 ring.Write(f);
                 double now = tf + 0.004 + (k == 93 ? staleSec : 0);
                 input.T = now;
@@ -396,9 +398,9 @@ public static class ReactiveLatencyTests
         }
         float b8 = Render(0.008, 0), b20 = Render(0.020, 0), b60 = Render(0.060, 0);
         float stale = Render(0.020, 0.150);
-        T.Info($"Pulse brightness right after a bass hit: lead 8 ms {b8:F3}, 20 ms {b20:F3}, 60 ms {b60:F3}; 150 ms later without new frames {stale:F3}");
-        T.Check(b8 > 0.3f, "the bass hit lights the LEDs");
-        T.Check(Math.Abs(b60 - b8) <= 0.02f * b8 && Math.Abs(b20 - b8) <= 0.02f * b8, "the device lead does not dim a fresh bass hit (within 2 %)");
+        T.Info($"small-zone pulse brightness right after a loud hit: lead 8 ms {b8:F3}, 20 ms {b20:F3}, 60 ms {b60:F3}; 150 ms later without new frames {stale:F3}");
+        T.Check(b8 > 0.3f, "the loud hit lights the LEDs");
+        T.Check(Math.Abs(b60 - b8) <= 0.02f * b8 && Math.Abs(b20 - b8) <= 0.02f * b8, "the device lead does not dim a fresh loud hit (within 2 %)");
         T.Check(stale < 0.9f * b20, "without new frames the light still fades with time");
     }
 

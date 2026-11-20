@@ -1,5 +1,5 @@
 // ==================================================
-// SparkleEffect.cs - 光り方 E8「きらめき」 (キックで全体がふわっと明るくなり、スネアでまとまった光、ハイハットで白い粒が光る)
+// SparkleEffect.cs - 光り方 E8「きらめき」 (キックで全体がふわっと明るくなり、スネアでまとまった光、ハイハットで白い粒、ギターの音の出だしで色の帯が光る)
 // Dependencies: .NET 8 (MIT License)
 // See CREDITS.txt for full license details.
 // ==================================================
@@ -11,9 +11,13 @@ namespace ProFanController;
 ///   下地 = P(t / 20 秒) × Ilin(0.10 + 0.25 × 中音 + 0.45 × キックの光)   … キックのたびにゾーン全体がふわっと明るくなる（τ 0.25 秒）
 ///   スネア（強さ s）: ランダムな位置から続けて並んだ LED（ゾーンの 12%、強いほど長い）が、いまの色の反対側の色で光る（τ 0.18 秒）
 ///   ハイハット: 1 個ずつ離れた LED（ゾーンの 2% × s 個。多くても 1/12）が、白に近い色で一瞬だけ光る（τ 0.07 秒。更新の遅いデバイスは 0.12 秒）
-///   LED の色 = 下地 + 粒の色 × exp(−(t − 光った時刻)/τ)
+///   ギター（Tonal の出来事。テンポをつかんでいるときだけ）: 続けて並んだ LED（ゾーンの 12%、3 個以上）が、端から端へ 45 ミリ秒かけて
+///     順に光る（弦をなでるように。向きは 1 回ごとに変える）。色は下地から 1/4 周ずらした色（τ 0.26 秒。更新の遅いデバイスは 0.30 秒）
+///   LED の色 = 下地 + 粒の色 × exp(−(t − 光った時刻)/τ) + ギターの光の色 × exp(−(t − 光った時刻)/τ)
 /// 粒は光った本当の時刻を覚えるので、1 秒間のコマ数が違っても同じ明るさで消えていく。
-/// 6 個未満のゾーンは、スネアでゾーン全体が 0.8、ハイハットで 0.4 の明るさで光る
+/// ギターの光は粒とは別に覚える（ハイハット・スネアの粒を消したり、次の粒を止めたりしない）。
+/// 6 個未満のゾーンは、スネアでゾーン全体が 0.8、ハイハットで 0.4、ギターで 0.3 の明るさで光る
+/// （ギターは「激しい点滅を抑える」がオンなら 1 秒に 3 回まで。それより詰めた分は 0.35 倍）
 /// </summary>
 public sealed class SparkleEffect : IMusicEffect
 {
@@ -44,6 +48,34 @@ public sealed class SparkleEffect : IMusicEffect
     /// <summary>ハイハットの粒の場所を選び直す回数（少し前に光った LED に当たったとき）</summary>
     private const int PickTries = 4;
 
+    // ===== ギター（Tonal の出来事）
+    /// <summary>ギターの光が端から端へ走る秒数</summary>
+    public const double GtrSweepSec = 0.045;
+    /// <summary>次のギターの光を出せるまでの秒数（ゾーンごとではなく、光り方全体で）</summary>
+    public const double GtrGapSec = 0.1;
+    /// <summary>同じ LED に次のギターの光を置けるまでの秒数</summary>
+    public const double GtrLedGapSec = 0.12;
+    /// <summary>ギターの光が消える時定数（秒）と、更新の遅いデバイスでの下限</summary>
+    public const float GtrTauSec = 0.26f, SlowGtrTauSec = 0.30f;
+    /// <summary>ギターの光の色を、下地の色からずらす量（パレットの 1/4 周。スネアの反対側の色・ハイハットの白とは別の色）</summary>
+    public const float GtrHueShift = 0.25f;
+    /// <summary>ギターの光の長さ（ゾーンに対する割合。強さで 0.7〜1 倍。3 個以上）</summary>
+    public const float GtrLength = 0.12f;
+    /// <summary>ギターの光の明るさ（ハイハット・スネアより控えめ。0.45 では録音した曲で拍から外れた光が少し増えた）</summary>
+    public const float GtrLevel = 0.40f;
+    /// <summary>小さいゾーンでの、ギターの光の明るさ</summary>
+    public const float SmallGtrLevel = 0.3f;
+    /// <summary>調査・テスト用: ギターの光を出したとき（時刻・強さ）</summary>
+    internal static Action<double, float>? DiagGuitar;
+
+    private double[] _gT0 = Array.Empty<double>();
+    private float[] _gTau = Array.Empty<float>();
+    private LinColor[] _gCol = Array.Empty<LinColor>();
+    private double _gLastT = double.NegativeInfinity;
+    private bool _gUp;
+    /// <summary>小さいゾーンのギターの光（「激しい点滅を抑える」がオンなら 1 秒に 3 回まで）</summary>
+    private readonly FlashLimiter _gLimit = new();
+
     private double[] _t0 = Array.Empty<double>();
     private float[] _tau = Array.Empty<float>();
     private LinColor[] _col = Array.Empty<LinColor>();
@@ -53,8 +85,6 @@ public sealed class SparkleEffect : IMusicEffect
     /// <summary>まとまりごとの、最後にハイハットで光らせた時刻</summary>
     private double[] _lastHatT = Array.Empty<double>();
 
-    public string Name => MusicStyles.Sparkle;
-
     public void Reset(EffectContext c)
     {
         int n = c.LedCount;
@@ -63,10 +93,19 @@ public sealed class SparkleEffect : IMusicEffect
             _t0 = new double[n];
             _tau = new float[n];
             _col = new LinColor[n];
+            _gT0 = new double[n];
+            _gTau = new float[n];
+            _gCol = new LinColor[n];
         }
         Array.Fill(_t0, double.NegativeInfinity);
         Array.Fill(_tau, HatTauSec);
         Array.Clear(_col);
+        Array.Fill(_gT0, double.NegativeInfinity);
+        Array.Fill(_gTau, GtrTauSec);
+        Array.Clear(_gCol);
+        _gLastT = double.NegativeInfinity;
+        _gUp = false;
+        _gLimit.Reset();
         _kickT = double.NegativeInfinity;
         _kickS = 0;
         _lastHatT = Array.Empty<double>();
@@ -75,10 +114,13 @@ public sealed class SparkleEffect : IMusicEffect
     public void Update(EffectContext c)
     {
         var ev = c.Events;
+        _gLimit.Enabled = c.Music.ReduceFlashing;
         for (int i = 0; i < ev.Count; i++)
         {
             var e = ev[i];
             if (e.Kind == AudioEventKind.Hat) SpawnHat(c, e.T, e.Strength);
+            // ギターの音の出だしは、テンポをつかんでいるときだけ（話し声・映画の効果音で光らせない）
+            else if (e.Kind == AudioEventKind.Tonal) { if (c.Locked) SpawnGuitar(c, e.T, Math.Clamp(0.5f + 0.25f * (e.Strength - 1.2f), 0.5f, 1f)); }
             else if (e.Kind == AudioEventKind.Snare) SpawnSnare(c, e.T, e.Strength);
             else if (e.Kind == AudioEventKind.Kick)
             {
@@ -158,6 +200,50 @@ public sealed class SparkleEffect : IMusicEffect
         }
     }
 
+    /// <summary>
+    /// ギター: 続けて並んだ LED を、端から端へ GtrSweepSec かけて順に光らせる（強さ 0.5〜1）。
+    /// 光り方全体で GtrGapSec より詰めない。同じ LED は GtrLedGapSec より詰めない
+    /// </summary>
+    private void SpawnGuitar(EffectContext c, double t0, float strength)
+    {
+        if (t0 - _gLastT < GtrGapSec && t0 >= _gLastT) return;
+        _gLastT = t0;
+        DiagGuitar?.Invoke(t0, strength);
+        var col = c.PalAt(c.T / BaseCycleSec + GtrHueShift) * (GtrLevel * c.SectionGain(SectionMin) * strength);
+        float tau = c.SlowDevice ? Math.Max(GtrTauSec, SlowGtrTauSec) : GtrTauSec;
+        _gUp = !_gUp;
+        float lim = float.NaN;
+        for (int k = 0; k < c.SegmentCount; k++)
+        {
+            var s = c.Segments[k];
+            if (s.Small)
+            {
+                if (float.IsNaN(lim)) lim = _gLimit.Decide(t0);
+                var zc = col * (SmallGtrLevel * lim);
+                for (int j = s.Start; j < s.Start + s.Count; j++) SetGuitar(j, t0, tau, zc);
+                continue;
+            }
+            int len = Math.Clamp((int)MathF.Round(GtrLength * s.Count * (0.7f + 0.3f * strength)), 3, s.Count);
+            int start = c.Rng.NextInt(s.Count);
+            for (int q = 0; q < len; q++)
+            {
+                int qq = _gUp ? q : len - 1 - q;
+                // 両端を 4 割暗くして、光の帯に見えるようにする
+                float edge = 1f - 0.4f * MathF.Abs(2f * qq / (len - 1) - 1f);
+                int j = s.Start + (start + qq) % s.Count;
+                if (_gT0[j] < t0 && t0 - _gT0[j] < GtrLedGapSec) continue;
+                SetGuitar(j, t0 + GtrSweepSec * q / (len - 1), tau, col * edge);
+            }
+        }
+    }
+
+    private void SetGuitar(int j, double t0, float tau, LinColor col)
+    {
+        _gT0[j] = t0;
+        _gTau[j] = tau;
+        _gCol[j] = col;
+    }
+
     /// <summary>ハイハットの粒の色: パレットのランダムな色を白へ寄せる（OKLab で混ぜる）</summary>
     private static LinColor HatColor(EffectContext c)
         => OkLab.ToLed(Lab.Lerp(c.PalLabAt(c.Rng.NextFloat()), Lab.White, HatWhiteMix), c.Gamma);
@@ -183,6 +269,8 @@ public sealed class SparkleEffect : IMusicEffect
             double age = t - _t0[j];
             var col = _base;
             if (age >= 0 && age < _tau[j] * 8) col += _col[j] * (float)Math.Exp(-age / _tau[j]);
+            double ga = t - _gT0[j];
+            if (ga >= 0 && ga < _gTau[j] * 8) col += _gCol[j] * (float)Math.Exp(-ga / _gTau[j]);
             dst[j] = col.Clamp01();
         }
     }

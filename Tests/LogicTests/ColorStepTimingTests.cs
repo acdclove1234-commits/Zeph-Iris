@@ -21,15 +21,21 @@ public static class ColorStepTimingTests
         public readonly BeatDriver Driver = new();
         public double T;
 
-        public Lane(BeatState beat, string intensity, SharedColor? shared)
+        /// <param name="style">
+        /// 全体の光り方。ふつうは拍の数で色を進める光り方（波紋）。「ビートで色替え」は、テンポをつかんでいても拍に乗ったキックで色を進める
+        /// （TestBeatHueStepsOnKicksNotOnTheGrid）
+        /// </param>
+        public Lane(BeatState beat, string intensity, SharedColor? shared, string style = MusicStyles.Ripple)
         {
             var cfg = new RgbConfig { Mode = RgbModes.Music };
             MusicTuning.ApplyIntensity(cfg.Music, intensity);
-            C.Music = MusicTuning.Resolve(cfg);
+            C.Music = MusicTuning.Resolve(cfg) with { Effect = style };
             C.Beat = beat;
             C.Shared = shared;
             C.Color.Reset();
             C.Beats = Driver;
+            // 音は鳴っている（デジタルの無音の中の予測の拍では光らないため）
+            C.Frame.RmsDb = -20;
         }
 
         public void Step(params AudioEvent[] events)
@@ -200,6 +206,87 @@ public static class ColorStepTimingTests
             }
             return (steps, crossings, shifts);
         }
+    }
+
+    /// <summary>
+    /// 「ビートで色替え」は、テンポをつかんでいても、色を拍の数ではなく拍に乗ったキックで進める
+    /// （6.15.10 までは決まった拍の数ごとで、ドラムのない間奏でも同じ間隔で変わり続けた）。120 BPM・強さ「ふつう」で:
+    ///   1〜8 秒 毎拍キック: キックのある拍で、4 拍ごとに進む。キックの拍のコマで、もう切り替え終わっている（光が新しい色で光る）
+    ///   8〜11 秒 裏拍のキックだけ・11〜14 秒 キックなし（音は鳴っている）: キックでは進まない（拍に乗ったキックがないまま 8 拍たったら、1 回だけ拍で進める）
+    ///   14 秒 キックが戻る: 戻った最初のキックで進み、そのコマで切り替え終わっている
+    /// 色を共有する 2 台（速いデバイスと遅いデバイス）でも、1 回のキックで 1 回だけ進む
+    /// </summary>
+    public static void TestBeatHueStepsOnKicksNotOnTheGrid()
+    {
+        foreach (string kind in new[] { "alone", "shared", "shared+slow" })
+        {
+            var r = KickLane(kind);
+            T.Check(r.Groove >= 3 && r.OnKick == r.Groove, $"BeatHue {kind}: in the groove the colour steps on kick beats ({r.OnKick} of {r.Groove} steps on a kick)");
+            T.Check(r.GrooveGapMin >= 3.5, $"BeatHue {kind}: steps are at least 4 beats apart in the groove (closest {r.GrooveGapMin:F1} beats)");
+            T.Check(r.Done == r.Groove + (r.Return ? 1 : 0), $"BeatHue {kind}: the new colour is finished on the kick frame ({r.Done} of {r.Groove + (r.Return ? 1 : 0)})");
+            T.Check(r.Break <= 1 && r.BreakFirstBeats >= 7.9, $"BeatHue {kind}: while only off-beat kicks or no kicks play, at most one slow step, 8 beats after the last kick step ({r.Break} steps in 8-14 s, first {r.BreakFirstBeats:F1} beats after)");
+            T.Check(r.Return, $"BeatHue {kind}: the first kick after the break steps the colour");
+            T.Check(r.Double == 0, $"BeatHue {kind}: one kick never steps the colour twice ({r.Double} double steps)");
+        }
+        // 6.15.10 と同じく拍の数で進めると（BeatDriver.HitSteps = false）、キックのない間奏でも進んでいた
+        BeatDriver.HitSteps = false;
+        try
+        {
+            var o = KickLane("alone");
+            T.Check(o.Break >= 4, $"(reference) 6.15.10: the colour kept stepping on the grid through the break ({o.Break} steps in 8-14 s)");
+        }
+        finally { BeatDriver.HitSteps = true; }
+    }
+
+    /// <summary>TestBeatHueStepsOnKicksNotOnTheGrid の 1 回分（kind = alone・shared・shared+slow）</summary>
+    private static (int Groove, int OnKick, double GrooveGapMin, int Done, int Break, double BreakFirstBeats, bool Return, int Double) KickLane(string kind)
+    {
+        const double P = 0.5, B0 = 0.25;
+        var beat = new BeatState(P, B0, 0, 0.9, true, 0);
+        SharedColor? shared = kind == "alone" ? null : new SharedColor();
+        var fast = new Lane(beat, Intensities.Moderate, shared, MusicStyles.BeatHue);
+        Lane? slow = null;
+        if (kind == "shared+slow") { slow = new Lane(beat, Intensities.Moderate, shared, MusicStyles.BeatHue); slow.C.Slow = true; }
+        // キック: 1〜8 秒と 14 秒からは拍の 5 ms 後、8〜11 秒は裏拍だけ
+        var kicks = new List<double>();
+        for (int k = 0; B0 + k * P < 18; k++)
+        {
+            double tb = B0 + k * P;
+            if ((tb >= 1 && tb < 8) || tb >= 14) kicks.Add(tb + 0.005);
+            else if (tb >= 8 && tb < 11) kicks.Add(tb + 0.25);
+        }
+        // 色を進めた時刻（速いデバイスの切り替えが終わったコマ。拍の前から切り替え始めたら拍の頭、キックで一度に切り替えたらキックのコマ）と、
+        // キックが届いたコマで切り替え終わっていたか
+        var stepT = new List<double>();
+        var doneAtKick = new Dictionary<double, bool>();
+        int next = 0;
+        long id = 1;
+        double last = fast.C.Color.Target;
+        bool pending = false;
+        for (int f = 0; f < 60 * 18; f++)
+        {
+            double t1 = fast.T + 1 / Fps;
+            var evs = new List<AudioEvent>();
+            while (next < kicks.Count && kicks[next] <= t1) evs.Add(new AudioEvent(id++, AudioEventKind.Kick, kicks[next++], 3f));
+            var arr = evs.ToArray();
+            if (slow is not null) slow.Step(arr);
+            fast.Step(arr);
+            bool done = fast.C.Color.ProgressAt(fast.C.T) >= 0.999f;
+            foreach (var ev in arr) doneAtKick[ev.T] = done;
+            if (fast.C.Color.Target != last) { last = fast.C.Color.Target; pending = true; }
+            if (pending && done) { stepT.Add(fast.T); pending = false; }
+        }
+        double? KickNear(double s) => kicks.Where(k => Math.Abs(s - k) <= 0.03).Select(k => (double?)k).FirstOrDefault();
+        var groove = stepT.Where(s => s >= 2 && s < 8.1).ToList();
+        int onKick = groove.Count(s => KickNear(s) is not null);
+        double gapMin = groove.Count < 2 ? double.PositiveInfinity : groove.Zip(groove.Skip(1), (a, b) => (b - a) / P).Min();
+        int brk = stepT.Count(s => s >= 8.1 && s < 14);
+        double brkFirst = brk == 0 || groove.Count == 0 ? double.PositiveInfinity : (stepT.First(s => s >= 8.1) - groove[^1]) / P;
+        bool ret = stepT.Any(s => Math.Abs(s - (14.25 + 0.005)) <= 0.03);
+        var checkedSteps = groove.Concat(stepT.Where(s => Math.Abs(s - 14.255) <= 0.03)).ToList();
+        int doneN = checkedSteps.Count(s => KickNear(s) is double k && doneAtKick.TryGetValue(k, out bool d) && d);
+        int dbl = stepT.Zip(stepT.Skip(1), (a, b) => b - a).Count(g => g < 0.3);
+        return (groove.Count, onKick, gapMin, doneN, brk, brkFirst, ret, dbl);
     }
 
     /// <summary>

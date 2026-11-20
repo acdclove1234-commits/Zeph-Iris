@@ -32,6 +32,8 @@ public enum LightingChoiceKind
     Intensity,
     /// <summary>色の組み合わせ（MusicConfig.Palette）</summary>
     Palette,
+    /// <summary>光り方「ムード」の色の組み合わせ（RgbConfig.ModePalette）</summary>
+    ModePalette,
     /// <summary>テンポの追跡（MusicConfig.TempoMode）</summary>
     Tempo,
     /// <summary>音が止まったときの光り方（MusicConfig.IdleEffect）</summary>
@@ -76,6 +78,7 @@ public static class LightOverrideChoices
         new(RgbModes.Birdsong, RgbModes.Label(RgbModes.Birdsong)), new(RgbModes.Fire, RgbModes.Label(RgbModes.Fire)),
         new(RgbModes.Aurora, RgbModes.Label(RgbModes.Aurora)), new(RgbModes.Meteor, RgbModes.Label(RgbModes.Meteor)),
         new(RgbModes.Heartbeat, RgbModes.Label(RgbModes.Heartbeat)),
+        new(RgbModes.Mood, RgbModes.Label(RgbModes.Mood)),
         new(RgbLightModes.Off, L("消灯")),
     };
 
@@ -114,11 +117,10 @@ public static class LightOverrideChoices
 public sealed class LightingChoiceVm : ObservableObject
 {
     private bool _selected;
-    private bool _enabled = true;
     private Brush? _swatch;
 
     public required LightingChoiceKind Kind { get; init; }
-    /// <summary>設定に保存する値（"Groove"・"Pulse"・"#6A00FF" など）</summary>
+    /// <summary>設定に保存する値（"Groove"・"BeatHue"・"#6A00FF" など）</summary>
     public required string Id { get; init; }
     /// <summary>画面に出す名前</summary>
     public required string Label { get; init; }
@@ -126,13 +128,9 @@ public sealed class LightingChoiceVm : ObservableObject
     public string Description { get; init; } = "";
     /// <summary>マウスを乗せたときの説明</summary>
     public string? Tip { get; init; }
-    /// <summary>注意書き（ストロボなど）</summary>
-    public string Warning { get; init; } = "";
-    public bool HasWarning => Warning.Length > 0;
     /// <summary>色の見本（パレットのグラデーション・色の候補の丸）</summary>
     public Brush? Swatch { get => _swatch; set => Set(ref _swatch, value); }
     public bool IsSelected { get => _selected; set => Set(ref _selected, value); }
-    public bool IsEnabled { get => _enabled; set => Set(ref _enabled, value); }
 }
 
 /// <summary>
@@ -374,11 +372,8 @@ public sealed class RgbDeviceVm : ObservableObject
         new("-1", L("自動")), new("0", L("0 ミリ秒")), new("20", L("20 ミリ秒")), new("40", L("40 ミリ秒")), new("60", L("60 ミリ秒")),
         new("80", L("80 ミリ秒")), new("100", L("100 ミリ秒")), new("150", L("150 ミリ秒")), new("200", L("200 ミリ秒")),
     });
-    private static IReadOnlyList<ChoiceOption> FastEffects => _fastEffects.Value;
-    private static readonly PerLanguage<IReadOnlyList<ChoiceOption>> _fastEffects = new(() => CreateEffectOptions(slow: false));
-    // 更新が遅いデバイスでは、ストロボは使わない（一部しか書き換わらずチカチカするため）
-    private static IReadOnlyList<ChoiceOption> SlowEffects => _slowEffects.Value;
-    private static readonly PerLanguage<IReadOnlyList<ChoiceOption>> _slowEffects = new(() => CreateEffectOptions(slow: true));
+    private static IReadOnlyList<ChoiceOption> Effects => _effects.Value;
+    private static readonly PerLanguage<IReadOnlyList<ChoiceOption>> _effects = new(CreateEffectOptions);
 
     private bool _selected, _canSelect, _showEffect, _swap, _reverse, _animateOnGpu, _showDetails;
     private int _gainR = 100, _gainG = 100, _gainB = 100, _level = 100;
@@ -533,7 +528,7 @@ public sealed class RgbDeviceVm : ObservableObject
               + L("LED ごとに色が違うときは 1 回に約 35 ミリ秒かかるので、自動では 1 秒に 10 回まで送ります（ビートの瞬間は定期便を待たずに送ります）。")
               + L("右の「1 秒に送る回数」で変えられますが、増やすと CPU を多く使います。LED ごとに色が違うコマは、増やしても 1 秒に 14 回ほどが上限です（書き込みと同じ時間だけ休むため）")
             : L("メモリなど、基板の内側の配線（I2C）でつながる LED は、1 回送るのに時間がかかるため、自動では 1 秒に 8 回までにしています（右の「1 秒に送る回数」で変えられます）。音楽連動の色の切り替えは定期便を待たずにすぐ送ります。同じ色の送り直しは 60 秒ごとです");
-    public IReadOnlyList<ChoiceOption> EffectOptions => IsSlow ? SlowEffects : FastEffects;
+    public IReadOnlyList<ChoiceOption> EffectOptions => Effects;
     public IReadOnlyList<ChoiceOption> MirrorOptions => MirrorChoices;
 
     /// <summary>色を変える対象（「すべてのデバイス」のときは常に true）</summary>
@@ -671,7 +666,7 @@ public sealed class RgbDeviceVm : ObservableObject
         set { if (Set(ref _reverse, value)) NotifyEdited(); }
     }
 
-    /// <summary>送っている回数といまの光り方（例: "60 fps ・ パルス"）</summary>
+    /// <summary>送っている回数といまの光り方（例: "60 fps ・ ビートで色替え"）</summary>
     public string StatusText { get => _statusText; set => Set(ref _statusText, value ?? ""); }
 
     /// <summary>このデバイスへの送信で起きた最後のエラー（なければ空）</summary>
@@ -719,15 +714,10 @@ public sealed class RgbDeviceVm : ObservableObject
         if (!_loading) Edited?.Invoke(this, name ?? "");
     }
 
-    private static IReadOnlyList<ChoiceOption> CreateEffectOptions(bool slow)
+    private static IReadOnlyList<ChoiceOption> CreateEffectOptions()
     {
         var list = new List<ChoiceOption> { new("Auto", L("自動（全体の設定）")) };
-        foreach (var style in MusicStyles.All)
-        {
-            if (slow && style == MusicStyles.Strobe) continue;
-            string label = MusicTuning.Describe(style).Label;
-            list.Add(new(style, style == MusicStyles.Strobe ? label + L("（激しい点滅）") : label));
-        }
+        foreach (var style in MusicStyles.All) list.Add(new(style, MusicTuning.Describe(style).Label));
         return list;
     }
 }
@@ -881,8 +871,8 @@ internal static class LightingRules
     /// <summary>テンポの倍率を 1 段下げる（2 → 1 → 0.5）</summary>
     public static double TempoDown(double factor) => factor > 1.5 ? 1.0 : 0.5;
 
-    /// <summary>その光り方で「メリハリ」が効くか（ムード・音量メーターは音量だけを使うので効かない）</summary>
-    public static bool UsesPunch(string effect) => effect is not (MusicStyles.Mood or MusicStyles.Meter);
+    /// <summary>その光り方で「メリハリ」が効くか（音量メーターは音量だけを使うので効かない）</summary>
+    public static bool UsesPunch(string effect) => effect != MusicStyles.Meter;
 
     /// <summary>その光り方でテンポを使うか（音量メーターは使わない）</summary>
     public static bool UsesTempo(string effect) => effect != MusicStyles.Meter;
@@ -893,14 +883,12 @@ internal static class LightingRules
     /// <summary>単色なのに「楽器で光る」を使っていない（案内を出す）</summary>
     public static bool SuggestEnsemble(RgbConfig cfg) => Palettes.SuggestEnsemble(cfg);
 
-    /// <summary>その光り方で「流れる速さ」を使うか</summary>
-    public static bool UsesSpeed(string effect) => effect == MusicStyles.Scroll;
-
     /// <summary>「色」（StaticColor）を使う設定か（固定色・呼吸・パレット「選んだ色」・止まったとき／止めるときの固定色）</summary>
     public static bool UsesStaticColor(RgbConfig cfg)
     {
         var m = cfg.Music ?? new MusicConfig();
         return RgbModes.UsesColor(cfg.Mode)
+            || (RgbModes.UsesPalette(cfg.Mode) && Palettes.UsesStaticColor(cfg.ModePalette))
             || (cfg.Mode == RgbModes.Music && (Palettes.UsesStaticColor(m.Palette) || m.IdleEffect is IdleEffects.Static or IdleEffects.Breathing))
             || cfg.OnStop == RgbStopBehaviors.Static;
     }
@@ -972,6 +960,7 @@ public partial class MainWindow
     private readonly List<LightingChoiceVm> _effectChoices = new();
     private readonly List<LightingChoiceVm> _intensityChoices = new();
     private readonly List<LightingChoiceVm> _paletteChoices = new();
+    private readonly List<LightingChoiceVm> _modePaletteChoices = new();
     private readonly List<LightingChoiceVm> _tempoChoices = new();
     private readonly List<LightingChoiceVm> _idleChoices = new();
     private readonly List<LightingChoiceVm> _roleSetChoices = new();
@@ -1021,6 +1010,7 @@ public partial class MainWindow
         EffectChoices.ItemsSource = _effectChoices;
         IntensityChoices.ItemsSource = _intensityChoices;
         PaletteChoices.ItemsSource = _paletteChoices;
+        ModePaletteChoices.ItemsSource = _modePaletteChoices;
         TempoChoices.ItemsSource = _tempoChoices;
         IdleChoices.ItemsSource = _idleChoices;
         RoleSetChoices.ItemsSource = _roleSetChoices;
@@ -1051,15 +1041,7 @@ public partial class MainWindow
         foreach (var id in MusicStyles.All)
         {
             var (label, description) = MusicTuning.Describe(id);
-            bool strobe = id == MusicStyles.Strobe;
-            _effectChoices.Add(new LightingChoiceVm
-            {
-                Kind = LightingChoiceKind.Effect, Id = id, Label = label, Description = description,
-                Tip = strobe
-                    ? description + L("\n光に敏感な方は使わないでください。「激しい点滅を抑える」がオンのあいだは選べません")
-                    : description,
-                Warning = strobe ? L("⚠ 激しく点滅します") : "",
-            });
+            _effectChoices.Add(new LightingChoiceVm { Kind = LightingChoiceKind.Effect, Id = id, Label = label, Description = description, Tip = description });
         }
 
         foreach (var id in Intensities.All)
@@ -1074,8 +1056,15 @@ public partial class MainWindow
                     ? L("「色と明るさ」で選んだ色だけで光ります。色は変わらず、音に合わせて明るさだけが変わります")
                     : id == Palettes.Mono
                     ? L("「色と明るさ」で選んだ色と、その両隣の色で光ります")
-                    : L($"{Palettes.Label(id)}の色で光ります。ビートのたびに、この中の次の色へ切り替わります"),
+                    : Palettes.Label(id),
                 Swatch = LightingRules.PaletteStops.TryGetValue(id, out var stops) ? GradientBrush(stops) : null,
+            });
+            // 光り方「ムード」用（音楽連動とは別に選ぶ）
+            _modePaletteChoices.Add(new LightingChoiceVm
+            {
+                Kind = LightingChoiceKind.ModePalette, Id = id, Label = Palettes.Label(id),
+                Tip = id == Palettes.Mono ? L("「色と明るさ」で選んだ色と、その両隣の色で光ります") : Palettes.Label(id),
+                Swatch = LightingRules.PaletteStops.TryGetValue(id, out var mstops) ? GradientBrush(mstops) : null,
             });
         }
 
@@ -1117,12 +1106,11 @@ public partial class MainWindow
         MusicTuning.ApplyPreset(sample, id);
         string scene = id switch
         {
-            MusicPresets.Chill => L("作業中や夜に。ゆったりと色が移り変わります"),
+            MusicPresets.Chill => L("作業中や夜に。楽器に合わせて、控えめにやわらかく光ります"),
             MusicPresets.Groove => L("迷ったらこれ。低音に合わせて気持ちよく脈打ちます"),
             MusicPresets.Party => L("ドラムのたびに光の輪が広がる、にぎやかな光り方です"),
             MusicPresets.Club => L("ビートごとに強く色が切り替わる、いちばん激しい光り方です"),
             MusicPresets.Visualizer => L("LED の並びに低音〜高音を並べて、音を目で見る光り方です"),
-            MusicPresets.Cinema => L("映画やゲームの邪魔をしない、控えめで暖かい光り方です"),
             _ => "",
         };
         string tip = L($"{scene}\n光り方: {MusicTuning.Describe(sample.MusicStyle).Label} ・ 強さ: {Intensities.Label(sample.Music.Intensity)} ・ 色: {Palettes.Label(sample.Music.Palette)}");
@@ -1229,9 +1217,6 @@ public partial class MainWindow
         // 個別の値を手で変えたら、プリセットは「カスタム」（プリセットを当てている間は除く）
         if (!_applyingPreset && m.Preset != MusicPresets.Custom && LightingRules.IsPresetProperty(sender, e.PropertyName))
             m.Preset = MusicPresets.Custom;
-        // 「激しい点滅を抑える」をオンに戻したら、ストロボは使えないので「ビートで色替え」にする
-        if (sender is MusicConfig && e.PropertyName == nameof(MusicConfig.ReduceFlashing) && m.ReduceFlashing && rgb.MusicStyle == MusicStyles.Strobe)
-            rgb.MusicStyle = MusicStyles.BeatHue;
         // 音楽連動でなくなったら、同期テストは続けられない
         if (sender is RgbConfig && (e.PropertyName is nameof(RgbConfig.Mode) or nameof(RgbConfig.Enabled)) && !(rgb.Enabled && rgb.Mode == RgbModes.Music))
             StopSyncTest();
@@ -1247,14 +1232,10 @@ public partial class MainWindow
         var rgb = Config.Rgb;
         var m = rgb.Music;
         foreach (var c in _presetChoices) c.IsSelected = c.Id == m.Preset;
-        foreach (var c in _effectChoices)
-        {
-            c.IsSelected = c.Id == rgb.MusicStyle;
-            // ストロボは「激しい点滅を抑える」をオフにしたときだけ選べる
-            c.IsEnabled = c.Id != MusicStyles.Strobe || !m.ReduceFlashing;
-        }
+        foreach (var c in _effectChoices) c.IsSelected = c.Id == rgb.MusicStyle;
         foreach (var c in _intensityChoices) c.IsSelected = c.Id == m.Intensity;
         foreach (var c in _paletteChoices) c.IsSelected = c.Id == m.Palette;
+        foreach (var c in _modePaletteChoices) c.IsSelected = c.Id == rgb.ModePalette;
         foreach (var c in _tempoChoices) c.IsSelected = c.Id == m.TempoMode;
         foreach (var c in _idleChoices) c.IsSelected = c.Id == m.IdleEffect;
         foreach (var c in _roleSetChoices) c.IsSelected = c.Id == MusicRoleSets.Normalize(m.RoleSet);
@@ -1264,7 +1245,7 @@ public partial class MainWindow
         if (_monoSwatchFor != rgb.StaticColor)
         {
             _monoSwatchFor = rgb.StaticColor;
-            foreach (var c in _paletteChoices)
+            foreach (var c in _paletteChoices.Concat(_modePaletteChoices))
             {
                 if (c.Id == Palettes.Mono) c.Swatch = GradientBrush(LightingRules.MonoStops(rgb.StaticColor));
                 else if (c.Id == Palettes.Solid) c.Swatch = GradientBrush(new[] { rgb.StaticColor, rgb.StaticColor });
@@ -1285,15 +1266,14 @@ public partial class MainWindow
 
         // 選んだ光り方で使う設定だけを表示する
         bool music = rgb.Mode == RgbModes.Music;
-        SpeedRow.Visibility = VisibleIf(RgbModes.UsesSpeed(rgb.Mode) || (music && LightingRules.UsesSpeed(rgb.MusicStyle)));
-        SpeedLabel.Text = music ? L("流れる速さ") : L("速さ");
+        SpeedRow.Visibility = VisibleIf(RgbModes.UsesSpeed(rgb.Mode));
+        ModePaletteRow.Visibility = VisibleIf(RgbModes.UsesPalette(rgb.Mode));
         PunchRow.Visibility = VisibleIf(LightingRules.UsesPunch(rgb.MusicStyle));
         RefreshTuningDefaults();
         TempoRow.Visibility = VisibleIf(LightingRules.UsesTempo(rgb.MusicStyle));
         RoleSetRow.Visibility = VisibleIf(music && LightingRules.UsesRoles(rgb));
         ColorRow.Visibility = VisibleIf(LightingRules.UsesStaticColor(rgb));
         SolidEnsembleNote.Visibility = VisibleIf(LightingRules.SuggestEnsemble(rgb));
-        StrobeNote.Visibility = VisibleIf(m.ReduceFlashing);
         FlashWarning.Visibility = VisibleIf(!m.ReduceFlashing);
 
         // テンポの倍率（×2・÷2）
@@ -1312,7 +1292,7 @@ public partial class MainWindow
 
     private void OnLightingChoiceClick(object sender, RoutedEventArgs e)
     {
-        if (sender is not FrameworkElement { DataContext: LightingChoiceVm c } || !c.IsEnabled) return;
+        if (sender is not FrameworkElement { DataContext: LightingChoiceVm c }) return;
         if (c.Kind is not (LightingChoiceKind.Accent or LightingChoiceKind.Background or LightingChoiceKind.TextColor))
             FlushCommit(); // 直前のスライダーの変更とは別の 1 段にする
         var rgb = Config.Rgb;
@@ -1339,6 +1319,9 @@ public partial class MainWindow
                 break;
             case LightingChoiceKind.Palette:
                 m.Palette = c.Id;
+                break;
+            case LightingChoiceKind.ModePalette:
+                rgb.ModePalette = c.Id;
                 break;
             case LightingChoiceKind.Tempo:
                 m.TempoMode = c.Id;

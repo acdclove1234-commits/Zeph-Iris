@@ -152,10 +152,9 @@ public static class CaptureTests
         MusicTuning.ApplyPreset(cfg.Rgb, MusicPresets.Party);
         T.Check(cfg.Rgb.MusicStyle == MusicStyles.Ripple && cfg.Rgb.Music.Intensity == Intensities.High && cfg.Rgb.Music.Preset == MusicPresets.Party, "preset applies effect + intensity");
         var r = MusicTuning.Resolve(cfg.Rgb);
-        T.Check(r.ColorStepBeats == 1 && r.FlashAmp > 0.8 && !r.StrobeAllowed, "resolved intensity values");
+        T.Check(r.ColorStepBeats == 1 && r.FlashAmp > 0.8 && !r.DownbeatAccent, "resolved intensity values");
         cfg.Rgb.Music.Intensity = Intensities.Intense;
-        cfg.Rgb.Music.ReduceFlashing = false;
-        T.Check(MusicTuning.Resolve(cfg.Rgb).StrobeAllowed, "strobe only when intense and reduce-flashing is off");
+        T.Check(MusicTuning.Resolve(cfg.Rgb).DownbeatAccent, "downbeat accent only when intense");
         var es = MusicTuning.EngineSettings(cfg.Rgb);
         T.Check(es.Punch is >= 0 and <= 1 && es.AutoBalance is >= 0 and <= 1, "engine settings use 0..1 fractions");
     }

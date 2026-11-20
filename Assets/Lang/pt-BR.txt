@@ -213,7 +213,6 @@ a08b7324	Nesta temperatura ou abaixo, a cor é azul-claro (frio)
 0582db54	Temperatura do vermelho
 74068713	Nesta temperatura ou acima, a cor é vermelho total (quente). No meio passa por verde → amarelo
 181b9ba1	Velocidade
-6f30cf75	O arco-íris em 1× leva 30 s por volta (10 s em 3×, 3 s em 10×); a respiração em 1× leva 6 s. Na "onda" musical é a velocidade do fluxo
 36bcf3d7	{0:F1}×
 f9dafe1e	Analisa o som do PC e acende com as batidas da bateria, o andamento e a altura do som. Escolha primeiro uma predefinição e depois ajuste abaixo só o que incomodar.
 5414b5c1	O som atual dividido nas 10 faixas de um equalizador comum (de 31 Hz a 16 kHz), dos graves (esquerda) aos agudos (direita). As barras claras de dentro são os "ataques" como a bateria; a linha branca é o pico recente
@@ -224,11 +223,10 @@ a8d258f0	Acende sempre que detecta um bumbo. Durante o teste de sincronia, pisca
 2f3d51ba	Coloca efeito, intensidade e paleta numa combinação recomendada. Se você mudar as configurações abaixo, vira "Personalizado"
 932cdbc7	Estilo musical
 2c274961	Como os LEDs acompanham a música. Para escolher por dispositivo, use "Dispositivos" abaixo
-4d0abffb	"Estroboscópio" pisca forte, então só pode ser escolhido com "Reduzir piscadas" abaixo desligado.
 c87d9699	Intensidade
 541920a5	A força com que a batida acende e a frequência de troca de cor. Escolher uma também ajusta "Suavidade", "Impacto" e "Mínimo" abaixo
 a800602a	Paleta
-5c25c402	O conjunto de cores da sincronização com música. A cada batida passa para a próxima cor
+3ec973ca	Paleta de cores da iluminação sincronizada com música.
 758ca518	Ganho
 ab2026d3	+ faz até sons baixos brilharem, para músicas calmas ou volume baixo. − só dá brilho aos sons altos
 65d61087	Sensibilidade à batida
@@ -250,9 +248,9 @@ a48b2636	Adianta a luz em 10 ms
 61644194	+ se a luz vier antes do som, − se vier depois. Fones e caixas Bluetooth e TVs (HDMI) tocam o som atrasado, então use +
 0e36045a	O Bluetooth atrasa o som; recomenda-se +150–200 ms
 ece319ca	Definir +180 ms
-e02412ea	Enquanto ligado, as piscadas fortes ficam limitadas a 3 por segundo (para proteger os olhos e a saúde de pessoas sensíveis à luz). O estroboscópio também não é usado
+32e5db89	Enquanto ligado, as piscadas fortes ficam limitadas a 3 por segundo (para proteger os olhos e a saúde de pessoas sensíveis à luz)
 ff4e5cc2	Reduzir piscadas
-a2bb37bc	Limita as piscadas fortes a 3 por segundo. Ao desligar, o "Estroboscópio" fica disponível
+68a5628b	Limita as piscadas fortes a 3 por segundo
 03e1f9ef	⚠ As luzes podem piscar intensamente. Se as piscadas fizerem você se sentir mal, ligue "Reduzir piscadas" de novo imediatamente.
 dc8c4f99	Andamento
 9c0a6ff9	Auto: ao captar o andamento, antecipa as batidas e acende sem atraso. Só bumbo: sem antecipar; acende só quando o bumbo toca. Desligado: sem andamento nem batidas, só o volume
@@ -694,7 +692,6 @@ d3d56cef	O alvo de {0:F0} °C não é atingido nem na velocidade máxima ({1:F1}
 7c323904	Iniciando a carga…
 be843d5e	Abra um jogo ou benchmark (começa sozinho quando o uso da GPU passar de 70%)
 83a5ad8f	Esperando esquentar na velocidade máxima…
-ac818524	Esperando a temperatura estabilizar em {0:F0}%… (etapa {1} / {2})
 f8650f35	Parando a carga e voltando ao controle normal…
 882d4f38	Concluído
 9ea783e1	Interrompido: {0}
@@ -1037,36 +1034,23 @@ f7121884	Chill (tranquilo)
 40238fad	Festa
 4c4b9639	Club (intenso)
 58c4acf6	Visualizador
-1ffc1da1	Filmes e jogos
 a4d4ce26	Personalizado
 68a0416e	Cores que mudam devagar
 2ee44588	Desligado
 9a137ab5	{0} {1} (padrão {2})
 975db0d4	Troca de cor na batida
-6f6c9db1	A cada batida muda para a próxima cor, acende forte e se apaga
-1acb0fe4	Pulso
-fac18e83	Mistura
-143bf4c6	As cores se misturam conforme a força dos graves, médios e agudos
+24bb482c	Acende a cada bumbo e muda para a próxima cor no início do compasso ou de uma nova parte
 d47d8919	Medidor de volume
 c9601c4a	Acende a partir da borda conforme o volume, com um ponto de pico que cai devagar
 b9056e5c	Espectro
 1f55a216	Distribui dos graves aos agudos ao longo dos LEDs, cada um aceso conforme sua força
-ae14d063	Energia
-9097b7af	As faixas de graves, médios e agudos crescem conforme sua força
-a8728d89	Onda que corre
-0dbddecd	A cor do som atual corre a partir da borda (cascata)
 7579942a	Ondulação
 8f1dc3a2	A cada bumbo, um anel de luz se espalha
 5c1949b1	Brilho
-6ddfa1c0	No bumbo tudo acende suavemente, na caixa uma luz concentrada, no chimbal pontos brancos cintilam
+88272375	No bumbo tudo acende suavemente, na caixa uma luz concentrada, no chimbal pontos brancos cintilam e nos ataques de guitarra corre uma faixa colorida
 fa793be1	Cada peça no seu papel
-2683fb56	Cada peça acende com seu próprio som, como as ventoinhas com os graves, a placa de vídeo com os médios e a memória com os agudos. Vários conectores de ventoinha são divididos entre graves, médios e agudos (altere na configuração de zona "Som a acompanhar")
-74a4376d	Seguir o tempo
-934997b6	Uma faixa de luz corre no ritmo
+e92a2994	Cada peça acende com seu próprio som, como as ventoinhas com os graves, a placa de vídeo com os médios e a memória com os agudos. Graves, médios e agudos se distinguem pela cor. Vários conectores de ventoinha são divididos entre graves, médios e agudos (altere na configuração de zona "Som a acompanhar")
 5d88da90	Clima
-e134b40a	A cor muda devagar conforme o clima da música (sem piscar)
-c3873745	Estroboscópio
-e266b3b4	Pisca forte na batida (somente quando "Reduzir piscadas" estiver desligado)
 3cada106	Conforme a peça
 78733543	Graves (bumbo, baixo)
 23099007	Médios (caixa, vocal)
@@ -1219,7 +1203,6 @@ fb923916	 arco-íris (fluindo) e respiração viram arco-íris parado e cor fixa
 8ed6eae0	Se o tempo não bater com outros dispositivos, ajuste com "Acender antes"
 8444c4be	LEDs ligados pela fiação interna da placa (I2C), como os da memória, levam tempo a cada envio, por isso no automático ficam limitados a 8 envios por segundo (altere em "Envios por segundo" à direita). As trocas de cor da sincronização com música são enviadas na hora, sem esperar o envio periódico. A mesma cor é reenviada a cada 60 segundos
 2a5ce6d5	Automático (configuração geral)
-7a4362e3	 (piscadas intensas)
 2e7616aa	Roxo
 d624abb5	Azul
 1740eec3	Azul-claro
@@ -1231,11 +1214,8 @@ f88712a8	Branco
 f73d92df	Desligado (apagar os LEDs)
 faccb7c6	Cor fixa (a cor escolhida em "Cor")
 8261ae67	Manter como está (parar na última cor)
-d24118e5	\nNão use se você for sensível a luzes piscantes. Não pode ser escolhido enquanto "Reduzir piscadas" estiver ligado
-fa397c65	⚠ Pisca intensamente
 5812e0db	Acende só com a cor escolhida em "Cor e brilho". A cor não muda; só o brilho acompanha o som
 a3ff6ad5	Acende com a cor escolhida em "Cor e brilho" e as cores vizinhas dos dois lados
-a0c6bf54	Acende com as cores de {0}. A cada batida muda para a próxima cor do conjunto
 b4e8382b	Automático (antecipação)
 3084a002	Depois de captar o tempo da música, antecipa a próxima batida e acende sem atraso (recomendado)
 90659e1d	Só bumbo
@@ -1247,12 +1227,10 @@ df788b17	A cor escolhida em "Cor" clareia e escurece devagar
 3b1d43a4	Apaga os LEDs quando o som para
 25525b81	{0} ({1})
 bb1834e5	Você ajustou por conta própria as configurações abaixo. Escolher outra predefinição volta à combinação dela
-1cf255e8	Para trabalhar ou à noite. As cores mudam devagar e suavemente
 9df36e7d	A escolha segura. Pulsa de forma agradável com os graves
 4beab2e2	Um efeito animado em que um anel de luz se espalha a cada batida de bateria
 f6ac23cd	O efeito mais intenso, com fortes trocas de cor a cada batida
 b7e7d574	Distribui dos graves aos agudos ao longo dos LEDs para você ver o som
-7c3c3b30	Um efeito discreto e quente que não atrapalha filmes nem jogos
 355fd781	{0}\nEfeito: {1} · Intensidade: {2} · Cores: {3}
 67f5dc44	\n(Desligando "Reduzir piscadas", pisca de forma ainda mais intensa)
 e3c74af7	Tranquilo e calmo. As cores mudam devagar a cada compasso
@@ -1260,7 +1238,6 @@ e3c74af7	Tranquilo e calmo. As cores mudam devagar a cada compasso
 39194da9	Reação ágil. As cores mudam a cada tempo
 283c2191	Reação máxima. As cores mudam na hora a cada tempo e o início do compasso é destacado
 899bfdf5	{0}\nAo escolher: reação {1:F0} ms · suavização {2:F0} ms · contraste {3:F0}% · mínimo {4:F0}%
-1763988d	Velocidade do fluxo
 782c7098	Agora em meio tempo
 3da3fc0d	Agora em tempo dobrado
 587c7525	Tudo nos valores padrão (os da intensidade "{0}")
@@ -1486,7 +1463,6 @@ bb5165cb	Desligar a ligação de LEDs
 9803ac5d	Efeito dos LEDs: desligado
 633b3564	Efeito dos LEDs: apagados
 79fe6abe	Efeito dos LEDs: {0}
-88443ff4	Pisca intensamente. Pode ser escolhido depois de desligar "Reduzir piscadas" na tela Iluminação
 d6903426	Perfil: {0}
 9dc4a781	Exclui {0} da pasta do app depois que ele fechar.
 e0cb734a	O app em si (exe etc.) e os outros arquivos são mantidos. Se talvez for usar de novo, deixe desligado.
@@ -1689,9 +1665,7 @@ d92849da	Relatar um problema…
 42a72e3a	Configuração automática
 4610da9f	GPU: não foi possível medir, sem sensor de temperatura ou de uso
 462bc50c	• Você confere o resultado antes de aplicar, então parar no meio não muda nada.
-47647013	Etapas: {0} · cerca de {1} min. Bombas ficam de fora.
 48090db5	Durante a medição
-4ac2f56e	Iniciando a configuração automática (cerca de {0} min).\n\n
 50136e19	Escolha as ventoinhas a medir e a CPU e/ou a GPU. Bombas ficam de fora (funcionam como sempre).
 53661bf6	medir {0} ventoinha(s)
 5899b660	• Medir com CPU: carrega a CPU ao máximo e baixa as ventoinhas aos poucos a partir de 100%.
@@ -1737,7 +1711,6 @@ fdc48725	Escolha pelo menos uma ventoinha a medir e a CPU e/ou a GPU.
 fe39437d	Dica: depois, meça na página "Configuração automática" para criar as curvas mais silenciosas para este PC (cerca de 20–30 min).
 140786db	Cerca de 1–2 min por ventoinha. Sabendo onde param, a velocidade mínima também é ajustada para um valor seguro
 14e2760b	Medir primeiro as ventoinhas ainda não medidas
-08749344	Medir de novo gera curvas que continuam silenciosas e seguras nesta estação também (cerca de 20–30 min).
 5f83a291	A temperatura da CPU em repouso está cerca de {0:F0}°C mais alta do que quando a configuração automática mediu (o cômodo parece mais quente).
 8d7a30b2	Abrir a configuração automática
 c66cfe16	O cômodo está cerca de {0:F0}°C mais quente do que quando a configuração automática mediu.
@@ -1961,7 +1934,7 @@ d71badc6	Mudar para uma curva baseada em "{0}"
 d0514409	No perfil "{0}", foi aplicada a curva padrão baseada em "{1}".
 dc31499c	Sensor virtual "{0}": os sensores de origem ({1}) não podem ser lidos, então o cálculo usa só os sensores restantes.
 a0b3b7dd	Instrumentos
-3c260d3f	O bumbo acende tudo, a caixa um lado, o chimbal pequenos pontos, o baixo as extremidades, a voz o brilho geral, e guitarra ou teclados uma luz que corre. Dá para distinguir os instrumentos mesmo com cor única (Somente a cor escolhida)
+139d2c30	O bumbo acende tudo, a caixa um lado, o chimbal pequenos pontos, o baixo as extremidades, a voz o brilho geral, e guitarra ou teclados uma luz que corre. Dá para distinguir os instrumentos mesmo com cor única (Somente a cor escolhida). Zonas pequenas e dispositivos com atualização lenta exibem menos detalhes.
 d3efe37c	Por instrumento
 e8d8b63a	Só bateria
 31b76718	Por altura (graves, médios, agudos)
@@ -1980,24 +1953,29 @@ d5a051f9	Rotação necessária para manter {0:F0} °C: {1:F0}% ou menos (rotaç�
 0c8c7106	* A menor rotação que mantém o alvo não foi medida, então esta curva não será aplicada mesmo se você clicar em Aplicar (a curva atual é mantida)
 e2a336cd	A menor rotação que mantém o alvo não foi medida, então nenhuma curva foi aplicada (a curva atual foi mantida).
 90a68504	Abaixo de {0:F0}%, a rotação quase não muda (a rotação mínima da própria ventoinha).
-97a3aac7	Acompanha: acende na batida (no bumbo enquanto o andamento não é captado; nos graves com o andamento desligado e em placas de vídeo e memórias). A cor muda a cada 1–4 batidas, conforme a intensidade
-6d6e85e7	Acompanha: cresce na batida e se move suavemente com os graves entre as batidas (no bumbo enquanto o andamento não é captado; nos graves com o andamento desligado e em placas de vídeo e memórias). A cor muda aos poucos com o tempo
-3704a505	Acompanha: assume a cor do mais forte entre graves, médios e agudos
+f82e6ca4	Acompanha: acende no bumbo (a caixa mais fraca; batidas sem bateria ficam escuras; nos graves com o andamento desligado). A cor muda no bumbo do início do compasso e a cada nova parte da música
 ba3eca1b	Acompanha: o comprimento segue o volume e salta com o bumbo e a caixa
-81cd1e18	Acompanha: acende com a força de cada altura do som, dos graves aos agudos
-210faf7d	Acompanha: cada faixa cresce com a força dos graves, médios e agudos
-a35cc263	Acompanha: as cores dos graves, médios e agudos que tocam agora vão fluindo
-a0098d0d	Acompanha: um anel de luz surge a cada bumbo (na batida quando o andamento é captado)
-e367d987	Acompanha: bumbo, caixa e chimbal acendem cada um de um jeito diferente
+55d26131	Acompanha: a ponta dos graves acende com o bumbo, e o resto até os agudos acende com a força de cada altura do som (cada altura tem sua própria cor)
+1b304b0e	Acompanha: um anel de luz surge a cada bumbo (e também em sons fortes, como explosões). Quando o andamento é captado, acende antes dos bumbos que se repetem
+06cc66f6	Acompanha: bumbo, caixa, chimbal e ataques de notas como a guitarra (com o tempo detectado) acendem cada um de um jeito diferente
 4a0ca652	Acompanha: só o som escolhido para cada peça (zona): graves, médios, agudos ou um instrumento
 3d52d090	Acompanha: cada instrumento (em placas de vídeo e memórias, cresce na batida com a cor do instrumento que se destaca)
-630581a9	Acompanha: uma faixa de luz corre no ritmo da batida (andamento)
-e411765c	Acompanha: muda devagar com o brilho do som (grave ou agudo) e o volume
-4c402832	Acompanha: o primeiro tempo de cada compasso (bumbos fortes enquanto o andamento não é captado)
-e532ec45	Pulsa com a batida e deixa um brilho residual longo e suave. A cor não muda na batida; vai mudando aos poucos
-6313ac02	A cada 1 segundo, analisa os últimos 2 segundos do som. As cores mudam ao longo de alguns segundos e não piscam. As cores não mudam com as paletas "Somente a cor escolhida" e "Cores próximas da escolhida" nem com Medidor de volume, Estroboscópio e Cada peça no seu papel
+db443d49	A cada 1 segundo, analisa os últimos 2 segundos do som. As cores mudam ao longo de alguns segundos e não piscam. As cores não mudam com as paletas "Somente a cor escolhida" e "Cores próximas da escolhida" nem com Medidor de volume e Cada peça no seu papel
 419d7bd1	A AI (CED-Tiny) reconhece o instrumento que se destaca em cada parte da música (voz, guitarra, piano, metais, sintetizador, cordas) e muda as cores devagar (azul para a voz, dourado para os metais, laranja para a guitarra etc.). Com uma cor única, muda o movimento do efeito "Instrumentos". Funciona só neste PC e usa um pouco de CPU e memória
 eb06c11b	Placa de vídeo: escrita direta (no máximo {0} por segundo{1})
 965f43a6	O app escreve diretamente nesta placa de vídeo (pelo I2C da NVIDIA), sem passar pelo OpenRGB. Uma zona de cor única é escrita de uma vez, então é rápido, e o brilho também acompanha a música.
 0ac5666c	Quando os LEDs têm cores diferentes, cada escrita leva cerca de 35 ms, então no automático envia até 10 vezes por segundo (na batida envia na hora, sem esperar o envio regular).
 c3734abc	Dá para mudar isso em "Envios por segundo" à direita, mas mais envios usam mais CPU. Quadros em que os LEDs têm cores diferentes ficam em no máximo cerca de 14 por segundo, mesmo que você aumente (o app pausa pelo mesmo tempo que cada escrita leva)
+8dcbb878	 (ainda subindo; previsto a partir dos {0:F1} °C medidos)
+f4726ccb	Esperando a temperatura estabilizar em {0:F0}%. Esta etapa decide a rotação necessária, então espera até {1:F0} min até o líquido do water cooler esquentar por completo (etapa {2} / {3}, {4} decorrido)
+42c9f249	Esperando a temperatura estabilizar em {0:F0}%… (etapa {1} / {2}, {3} decorrido, no máximo {4:F0} min)
+10e83d72	Etapas: {0} · cerca de {1}–{2} min (o tempo maior com water cooler). Bombas ficam de fora.
+bc5be07b	• O líquido de um water cooler esquenta devagar, então as etapas que decidem a rotação necessária são medidas por até {0:F0} min, até a temperatura estabilizar.
+0b51d73d	Iniciando a configuração automática (cerca de {0}–{1} min).\n\n
+bbdc7d0b	Agora {0:F0} °C / ventoinha {1:F0}% / deve estabilizar em {2:F0} °C
+19569812	* As etapas com ↑ ainda estavam esquentando ao fim da medição. O app previu onde estabilizam e somou uma margem ao definir a rotação necessária
+5cbcfec8	* Para as ventoinhas não acelerarem de repente numa carga longa, a curva sobe aos poucos a partir de 10 °C abaixo do alvo e chega a {0:F0}% a 2 °C abaixo do alvo
+903dee0e	Medir de novo gera curvas que continuam silenciosas e seguras nesta estação também (cerca de 30–60 min).
+47437bdc	Passa devagar pelas cores da paleta. Fica um tempo em uma cor e depois passa suavemente para a próxima (não reage ao som, sem piscar)
+cb281e71	O arco-íris em 1× leva 30 s por volta (10 s em 3×, 3 s em 10×); a respiração em 1× leva 6 s. Clima em 1× passa para a próxima cor a cada 8 s
+9409032e	Para trabalhar ou à noite. Acende de forma suave e discreta com os instrumentos

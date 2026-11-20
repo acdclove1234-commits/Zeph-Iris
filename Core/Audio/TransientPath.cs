@@ -39,7 +39,8 @@ public sealed class TransientPath
     /// <param name="attackSec">包絡線の上がる速さ（秒）</param>
     /// <param name="releaseSec">包絡線の下がる速さ（秒）</param>
     /// <param name="searchSec">立ち上がりを探す範囲（秒。新しい端から）</param>
-    public TransientPath(int sampleRate, double highPassHz, double lowPassHz, double attackSec, double releaseSec, double searchSec)
+    /// <param name="ringSec">包絡線を覚えておく長さの下限（秒。0 なら探す範囲の 2 倍あまり）</param>
+    public TransientPath(int sampleRate, double highPassHz, double lowPassHz, double attackSec, double releaseSec, double searchSec, double ringSec = 0)
     {
         _sampleRate = sampleRate;
         _highHz = highPassHz;
@@ -48,7 +49,7 @@ public sealed class TransientPath
         _aRelease = 1 - Math.Exp(-1.0 / (releaseSec * sampleRate));
         _search = Math.Max(8, (int)Math.Round(searchSec * sampleRate));
         int size = 1;
-        while (size < 2 * _search + 2) size <<= 1;
+        while (size < 2 * _search + 2 || size < ringSec * sampleRate) size <<= 1;
         _envRing = new float[size];
         _envMask = size - 1;
         Reset();
@@ -57,8 +58,11 @@ public sealed class TransientPath
     /// <summary>ハイハット用（5 kHz 以上・上がり 1 ミリ秒・下がり 30 ミリ秒・直近 24 ミリ秒を探す）</summary>
     public static TransientPath ForHat(int sampleRate) => new(sampleRate, 5000, 0, 0.001, 0.030, 0.024);
 
-    /// <summary>スネアの響き線用（1〜5 kHz・上がり 1 ミリ秒・下がり 50 ミリ秒・直近 32 ミリ秒を探す）</summary>
-    public static TransientPath ForSnare(int sampleRate) => new(sampleRate, 1000, 5000, 0.001, 0.050, 0.032);
+    /// <summary>
+    /// スネアの響き線用（1〜5 kHz・上がり 1 ミリ秒・下がり 50 ミリ秒・直近 32 ミリ秒を探す）。
+    /// 長い FFT のスネアの候補を、少しあとから RiseOverMaxAt で確かめるので、包絡線は 120 ミリ秒以上覚えておく
+    /// </summary>
+    public static TransientPath ForSnare(int sampleRate) => new(sampleRate, 1000, 5000, 0.001, 0.050, 0.032, 0.120);
 
     /// <summary>スネアの胴の音用（150〜400 Hz・上がり 2 ミリ秒・下がり 40 ミリ秒・直近 24 ミリ秒を探す）</summary>
     public static TransientPath ForSnareBody(int sampleRate) => new(sampleRate, 150, 400, 0.002, 0.040, 0.024);
@@ -97,6 +101,26 @@ public sealed class TransientPath
         peakDb = 20 * Math.Log10(peak + 1e-12);
         if (peak <= 1e-9f || trough == float.MaxValue) return 0;
         return 20 * Math.Log10(peak / Math.Max(trough, 1e-9f));
+    }
+
+    /// <summary>
+    /// 新しい端から agoSamples 個前の時刻で、この帯の包絡線が、その前よりどれだけ上がったか（dB。状態は変えない）。
+    /// 山 = agoSamples から afterSec 後（新しい端まで）のいちばん大きい値、前 = その前 beforeSec のいちばん大きい値。
+    /// RiseAt は前のいちばん小さい値（谷）と比べるが、こちらはいちばん大きい値と比べる。
+    /// 低い音がずっと鳴っていると包絡線が細かく揺れて、谷と比べると 3〜4 dB 上がって見えるが、いちばん大きい値と比べると 1 dB も上がらない。
+    /// 見る範囲が記録より長ければ、記録のある分だけ見る
+    /// </summary>
+    public double RiseOverMaxAt(int agoSamples, double beforeSec, double afterSec)
+    {
+        int newest = (_envPos - 1) & _envMask;
+        int to = Math.Clamp(agoSamples, 0, _envMask);
+        int from = Math.Max(0, to - (int)Math.Round(afterSec * _sampleRate));
+        int pre = Math.Min(_envMask, to + (int)Math.Round(beforeSec * _sampleRate));
+        float peak = 0, before = 0;
+        for (int k = from; k <= to; k++) peak = Math.Max(peak, _envRing[(newest - k) & _envMask]);
+        for (int k = to + 1; k <= pre; k++) before = Math.Max(before, _envRing[(newest - k) & _envMask]);
+        if (peak <= 1e-9f || pre <= to) return 0;
+        return 20 * Math.Log10(peak / Math.Max(before, 1e-9f));
     }
 
     public void Reset()

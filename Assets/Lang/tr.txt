@@ -213,7 +213,6 @@ a08b7324	Bu sıcaklıkta ve altında renk açık mavidir (serin)
 0582db54	Kırmızı sıcaklığı
 74068713	Bu sıcaklıkta ve üstünde renk tam kırmızıdır (sıcak). Arada yeşil → sarı olur
 181b9ba1	Hız
-6f30cf75	Gökkuşağı 1× hızda bir turu 30 sn'de (3× hızda 10 sn, 10× hızda 3 sn), nefes 1× hızda bir nefesi 6 sn'de tamamlar. Müzikteki "akan dalga"da akış hızıdır
 36bcf3d7	{0:F1}×
 f9dafe1e	Bilgisayardan gelen sesi analiz eder ve davul vuruşlarına, tempoya ve perdeye göre yanar. Önce bir hazır ayar seçin, sonra aşağıda yalnızca rahatsız edeni ayarlayın.
 5414b5c1	Mevcut ses, yaygın bir ekolayzırdaki gibi 10 banda (31 Hz ile 16 kHz arası) bölünerek bastan (sol) tize (sağ) gösterilir. İçerideki parlak çubuklar davul gibi "atak"lar, beyaz çizgi yakın zamandaki tepe değeridir
@@ -224,11 +223,10 @@ a8d258f0	Her kick (bas davul) bulunduğunda yanar. Senkron testi sırasında tı
 2f3d51ba	Efekti, yoğunluğu ve paleti önerilen bir birleşime ayarlar. Aşağıdaki ayarları kendiniz değiştirirseniz "Özel" olur
 932cdbc7	Müzik tarzı
 2c274961	LED'lerin müziğe nasıl eşlik edeceği. Cihaz başına seçmek için aşağıdaki "Cihazlar"ı kullanın
-4d0abffb	"Stroboskop" sert yanıp söndüğü için yalnızca aşağıdaki "Yanıp sönmeyi azalt" kapalıyken seçilebilir.
 c87d9699	Yoğunluk
 541920a5	Vuruşun ne kadar güçlü yanacağı ve rengin ne sıklıkla değişeceği. Seçim, aşağıdaki "Yumuşaklık", "Vurgu" ve "En karanlık" değerlerini de buna göre ayarlar
 a800602a	Palet
-5c25c402	Müzik senkronunda kullanılan renk takımı. Her vuruşta takımdaki bir sonraki renge geçer
+3ec973ca	Müzikle eşzamanlı aydınlatmanın renk paleti.
 758ca518	Kazanç
 ab2026d3	+ kısık seslerin de parlak yanmasını sağlar; sessiz şarkılar veya düşük ses için. − yalnızca yüksek seslerde parlaklık verir
 65d61087	Vuruş hassasiyeti
@@ -250,9 +248,9 @@ a48b2636	Işığı 10 ms öne alır
 61644194	Işık sesten önce geliyorsa +, sonra geliyorsa −. Bluetooth kulaklık ve hoparlörler ile TV'ler (HDMI) sesi geç çalar, bu yüzden + kullanın
 0e36045a	Bluetooth sesi geciktirir; +150–200 ms önerilir
 ece319ca	+180 ms yap
-e02412ea	Açıkken güçlü yanıp sönmeler saniyede 3 ile sınırlanır (ışığa duyarlı kişilerin gözlerini ve sağlığını korumak için). Stroboskop da kullanılmaz
+32e5db89	Açıkken güçlü yanıp sönmeler saniyede 3 ile sınırlanır (ışığa duyarlı kişilerin gözlerini ve sağlığını korumak için)
 ff4e5cc2	Yanıp sönmeyi azalt
-a2bb37bc	Güçlü yanıp sönmeleri saniyede 3 ile sınırlar. Kapatınca "Stroboskop" seçilebilir olur
+68a5628b	Güçlü yanıp sönmeleri saniyede 3 ile sınırlar
 03e1f9ef	⚠ Işıklar yoğun şekilde yanıp sönebilir. Yanıp sönen ışık sizi rahatsız ederse hemen "Yanıp sönmeyi azalt"ı tekrar açın.
 dc8c4f99	Tempo
 9c0a6ff9	Otomatik: şarkının temposunu yakalayınca vuruşları önceden tahmin eder ve gecikmeden yanar. Yalnızca kick: tahmin yok; yalnızca bas davul çaldığında yanar. Kapalı: tempo ve vuruş kullanmaz, yalnızca ses yüksekliğine göre yanar
@@ -694,7 +692,6 @@ d3d56cef	{0:F0}°C hedefine tam hızda bile ulaşılamıyor (tam hızda {1:F1}°
 7c323904	Yük başlatılıyor…
 be843d5e	Bir oyun veya benchmark başlatın (GPU kullanımı %70'i geçince otomatik başlar)
 83a5ad8f	Tam hızda ısınması bekleniyor…
-ac818524	%{0:F0} hızda sıcaklığın oturması bekleniyor… (adım {1} / {2})
 f8650f35	Yük durduruluyor ve normal kontrole dönülüyor…
 882d4f38	Tamamlandı
 9ea783e1	Durduruldu: {0}
@@ -1037,36 +1034,23 @@ f7121884	Chill (sakin)
 40238fad	Parti
 4c4b9639	Kulüp (yoğun)
 58c4acf6	Görselleştirici
-1ffc1da1	Film ve oyun
 a4d4ce26	Özel
 68a0416e	Yavaşça değişen renkler
 2ee44588	Kapalı
 9a137ab5	{0} {1} (varsayılan {2})
 975db0d4	Vuruşta renk değiştir
-6f6c9db1	Her vuruşta sonraki renge geçer, parlayıp söner
-1acb0fe4	Nabız
-fac18e83	Karışım
-143bf4c6	Renkler bas, orta ve tiz seslerin gücüne göre karışır
+24bb482c	Her kick'te parlar, ölçü başında veya yeni bir bölümde sonraki renge geçer
 d47d8919	Ses seviyesi göstergesi
 c9601c4a	Ses seviyesi kadar kenardan yanar, tepe noktası yavaşça düşer
 b9056e5c	Spektrum
 1f55a216	Bastan tize kadar sesleri LED'lere dizer, her biri kendi gücüyle yanar
-ae14d063	Enerji
-9097b7af	Bas, orta ve tiz bantları kendi güçleri kadar uzar
-a8728d89	Akan dalga
-0dbddecd	Şu anki sesin rengi kenardan akar (şelale)
 7579942a	Halkalar
 8f1dc3a2	Her kick'te bir ışık halkası yayılır
 5c1949b1	Pırıltı
-6ddfa1c0	Kick'te her şey yumuşakça parlar, trampette toplu bir ışık, hi-hat'te beyaz noktalar pırıldar
+88272375	Kick'te her şey yumuşakça parlar, trampette toplu bir ışık, hi-hat'te beyaz noktalar pırıldar, gitar vuruşlarında renkli bir şerit akar
 fa793be1	Her parça kendi rolünde
-2683fb56	Fanlar basla, ekran kartı orta seslerle, bellek tiz seslerle olduğu gibi her parça kendi sesiyle yanar. Birden çok fan başlığı bas, orta ve tiz arasında paylaştırılır (bölge ayarındaki "Tepki verilecek ses" ile değiştirilebilir)
-74a4376d	Tempo takibi
-934997b6	Vuruşa göre bir ışık şeridi koşar
+e92a2994	Fanlar basla, ekran kartı orta seslerle, bellek tiz seslerle olduğu gibi her parça kendi sesiyle yanar. Bas, orta ve tiz renginden ayırt edilir. Birden çok fan başlığı bas, orta ve tiz arasında paylaştırılır (bölge ayarındaki "Tepki verilecek ses" ile değiştirilebilir)
 5d88da90	Ruh hâli
-e134b40a	Renk, şarkının havasına göre yavaşça değişir (yanıp sönmez)
-c3873745	Stroboskop
-e266b3b4	Vuruşta güçlü yanıp söner (yalnızca "Yanıp sönmeyi azalt" kapalıyken)
 3cada106	Parçaya göre
 78733543	Bas (kick, bas gitar)
 23099007	Orta (trampet, vokal)
@@ -1219,7 +1203,6 @@ fb923916	 gökkuşağı (akan) ve nefes, duran gökkuşağı ve sabit renk olur 
 8ed6eae0	Diğer cihazlarla zamanlama kayıyorsa "Daha erken yak" ile ayarlayın
 8444c4be	Bellek gibi kart üzerindeki iç bağlantıyla (I2C) bağlanan LED'ler her gönderimde zaman aldığından otomatikte saniyede en fazla 8 kezle sınırlıdır (sağdaki "Saniyedeki güncelleme" ile değiştirilebilir). Müzik senkronundaki renk değişimleri düzenli gönderimi beklemeden hemen gönderilir. Aynı renk her 60 saniyede yeniden gönderilir
 2a5ce6d5	Otomatik (genel ayar)
-7a4362e3	 (yoğun yanıp sönme)
 2e7616aa	Mor
 d624abb5	Mavi
 1740eec3	Açık mavi
@@ -1231,11 +1214,8 @@ f88712a8	Beyaz
 f73d92df	Kapalı (LED'leri söndür)
 faccb7c6	Sabit renk ("Renk" ile seçilen renk)
 8261ae67	Olduğu gibi bırak (son renkte kal)
-d24118e5	\nIşığa duyarlıysanız kullanmayın. "Yanıp sönmeyi azalt" açıkken seçilemez
-fa397c65	⚠ Yoğun yanıp söner
 5812e0db	Yalnızca "Renk ve parlaklık" ile seçilen renkte yanar. Renk değişmez, sese göre yalnızca parlaklık değişir
 a3ff6ad5	"Renk ve parlaklık" ile seçilen renk ve iki yanındaki renklerle yanar
-a0c6bf54	{0} renkleriyle yanar. Her vuruşta bunların içindeki sonraki renge geçer
 b4e8382b	Otomatik (öngörülü)
 3084a002	Şarkının temposunu yakaladığında sonraki vuruşu öngörür ve gecikmesiz yanar (önerilir)
 90659e1d	Yalnızca kick
@@ -1247,12 +1227,10 @@ df788b17	"Renk" ile seçilen renk yavaşça parlayıp kararır
 3b1d43a4	Ses kesilince LED'leri söndürür
 25525b81	{0} ({1})
 bb1834e5	Aşağıdaki ayarları kendiniz değiştirdiniz. Başka bir ön ayar seçerseniz onun birleşimine dönülür
-1cf255e8	Çalışırken veya gece için. Renkler yavaşça ve sakince değişir
 9df36e7d	Kararsızsanız bu. Basla birlikte hoş bir şekilde atar
 4beab2e2	Her davul vuruşunda bir ışık halkasının yayıldığı canlı bir efekt
 f6ac23cd	Her vuruşta güçlü renk değişimiyle en yoğun efekt
 b7e7d574	Bastan tize sesleri LED'lere dizerek sesi görmenizi sağlayan efekt
-7c3c3b30	Film ve oyunları rahatsız etmeyen sade, sıcak bir efekt
 355fd781	{0}\nEfekt: {1} · Yoğunluk: {2} · Renkler: {3}
 67f5dc44	\n("Yanıp sönmeyi azalt" kapatılırsa daha da yoğun yanıp söner)
 e3c74af7	Rahat ve sakin. Renkler her ölçüde yavaşça değişir
@@ -1260,7 +1238,6 @@ e3c74af7	Rahat ve sakin. Renkler her ölçüde yavaşça değişir
 39194da9	Çevik tepki. Renkler her vuruşta değişir
 283c2191	En yüksek tepki. Renkler her vuruşta anında değişir ve ölçü başı vurgulanır
 899bfdf5	{0}\nSeçildiğinde: tepki {1:F0} ms · yumuşatma {2:F0} ms · kontrast %{3:F0} · en karanlık %{4:F0}
-1763988d	Akış hızı
 782c7098	Şu an yarım tempo
 3da3fc0d	Şu an çift tempo
 587c7525	Tümü varsayılan değerler ("{0}" yoğunluğunun değerleri)
@@ -1486,7 +1463,6 @@ bb5165cb	LED bağlantısını kapat
 9803ac5d	LED efekti: kapalı
 633b3564	LED efekti: söndürüldü
 79fe6abe	LED efekti: {0}
-88443ff4	Yoğun yanıp söner. Aydınlatma ekranında "Yanıp sönmeyi azalt" kapatılınca seçilebilir
 d6903426	Profil: {0}
 9dc4a781	Uygulama kapandıktan sonra uygulama klasöründeki {0} silinir.
 e0cb734a	Uygulamanın kendisi (exe vb.) ve diğer dosyalar kalır. Tekrar kullanabilecekseniz kapalı bırakın.
@@ -1689,9 +1665,7 @@ d92849da	Sorun bildir…
 42a72e3a	Otomatik kurulum
 4610da9f	GPU: sıcaklık veya kullanım sensörü bulunamadığı için ölçülemedi
 462bc50c	• Sonucu uygulamadan önce kontrol ettiğiniz için yarıda durdurmak hiçbir şeyi değiştirmez.
-47647013	Adımlar: {0} · yaklaşık {1} dk. Pompalar dahil değildir.
 48090db5	Ölçüm sırasında
-4ac2f56e	Otomatik kurulum başlıyor (yaklaşık {0} dk).\n\n
 50136e19	Ölçülecek fanları ve CPU ve/veya GPU'yu seçin. Pompalar dahil değildir (her zamanki gibi çalışır).
 53661bf6	{0} fanı ölç
 5899b660	• CPU ile ölç: CPU'ya tam yük bindirir ve fanları %100'den adım adım düşürür.
@@ -1737,7 +1711,6 @@ fdc48725	Ölçülecek en az bir fan ile CPU ve/veya GPU'yu seçin.
 fe39437d	İpucu: ardından "Otomatik kurulum" sayfasında ölçerek bu PC'ye uygun en sessiz eğrileri oluşturun (yaklaşık 20–30 dk).
 140786db	Fan başına yaklaşık 1–2 dk. Durma devri bilinince en düşük devir de güvenli bir değere ayarlanır
 14e2760b	Henüz ölçülmemiş fanları önce ölç
-08749344	Yeniden ölçmek, bu mevsimde de sessiz ve güvenli kalan eğriler verir (yaklaşık 20–30 dk).
 5f83a291	CPU boşta sıcaklığı, otomatik kurulumun ölçtüğü zamana göre yaklaşık {0:F0}°C daha yüksek (oda ısınmış görünüyor).
 8d7a30b2	Otomatik kurulumu aç
 c66cfe16	Oda, otomatik kurulumun ölçtüğü zamana göre yaklaşık {0:F0}°C daha sıcak.
@@ -1961,7 +1934,7 @@ d71badc6	"{0}" tabanlı eğriye geç
 d0514409	"{0}" profilinde "{1}" tabanlı standart eğriye geçildi.
 dc31499c	Sanal sensör "{0}": kaynak sensörler ({1}) okunamadığı için yalnızca kalan sensörlerle hesaplanıyor.
 a0b3b7dd	Enstrümanlar
-3c260d3f	Kick her yeri, trampet bir tarafı, hi-hat küçük noktaları, bas uçları yakar; vokal genel parlaklığı belirler, gitar ve tuşlular akan bir ışıkla gösterilir. Tek renkte (Yalnızca seçilen renk) bile enstrümanlar ayırt edilir
+139d2c30	Kick her yeri, trampet bir tarafı, hi-hat küçük noktaları, bas uçları yakar; vokal genel parlaklığı belirler, gitar ve tuşlular akan bir ışıkla gösterilir. Tek renkte (Yalnızca seçilen renk) bile enstrümanlar ayırt edilir. Küçük bölgelerde ve yavaş güncellenen cihazlarda daha az ayrıntı görünür.
 d3efe37c	Enstrümana göre
 e8d8b63a	Yalnızca davul
 31b76718	Perdeye göre (bas, orta, tiz)
@@ -1980,24 +1953,29 @@ d5a051f9	{0:F0}°C'yi korumak için gereken devir: %{1:F0} veya daha az (daha d�
 0c8c7106	* Hedefi koruyan en düşük devir ölçülemediği için Uygula'ya bassanız bile bu eğri uygulanmaz (mevcut eğri korunur)
 e2a336cd	Hedefi koruyan en düşük devir ölçülemediği için eğri uygulanmadı (mevcut eğri korundu).
 90a68504	%{0:F0} altında devir neredeyse değişmez (fanın kendi en düşük devri).
-97a3aac7	Tepki: vuruşta yanar (tempo yakalanamazken kick'te; tempo kapalıyken ve ekran kartı ile bellekte basta). Renk, yoğunluğa göre her 1–4 vuruşta bir değişir
-6d6e85e7	Tepki: vuruşta kabarır, vuruşlar arasında basla yumuşakça hareket eder (tempo yakalanamazken kick'te; tempo kapalıyken ve ekran kartı ile bellekte basta). Renk zamanla yavaşça değişir
-3704a505	Tepki: bas, orta ve tiz seslerden en güçlü olanın rengini alır
+f82e6ca4	Tepki: kick'te yanar (trampet daha sönük, davulsuz vuruşlar karanlık kalır; tempo kapalıyken basta). Renk, ölçü başındaki kick'te ve yeni bölümlerde değişir
 ba3eca1b	Tepki: uzunluk ses yüksekliğine göre değişir, kick ve trampette zıplar
-81cd1e18	Tepki: bastan tize her perdedeki sesin gücüne göre yanar
-210faf7d	Tepki: bas, orta ve tiz seslerin gücüyle her bant uzar
-a35cc263	Tepki: o an çalan bas, orta ve tiz seslerin renkleri akıp gider
-a0098d0d	Tepki: her kick'te bir ışık halkası çıkar (tempo yakalanınca vuruşta)
-e367d987	Tepki: kick, trampet ve hi-hat her biri farklı şekilde yanar
+55d26131	Tepki: bas ucu kick ile yanar, geri kalanı tize kadar her perdedeki sesin gücüne göre yanar (her perdenin kendi rengi var)
+1b304b0e	Tepki: her kick'te (bas davul) bir ışık halkası çıkar (patlama gibi yüksek seslerde de). Tempo yakalanınca tekrar eden kick'lerden önce davranıp yanar
+06cc66f6	Tepki: kick, trampet, hi-hat ve gitar gibi nota başlangıçları (tempo yakalandığında) her biri farklı şekilde yanar
 4a0ca652	Tepki: yalnızca her parça (bölge) için seçilen ses: bas, orta, tiz veya bir enstrüman
 3d52d090	Tepki: her enstrüman (ekran kartı ve bellekte vuruşta kabarır ve öne çıkan enstrümanın renginde yanar)
-630581a9	Tepki: vuruşa (tempoya) uyumlu bir ışık bandı koşar
-e411765c	Tepki: sesin parlaklığına (pes mi tiz mi) ve ses yüksekliğine göre yavaşça değişir
-4c402832	Tepki: her ölçünün ilk vuruşu (tempo yakalanamazken güçlü kick'ler)
-e532ec45	Vuruşla birlikte atar ve uzun, yumuşak bir iz bırakır. Renk vuruşta değişmez, yavaşça geçiş yapar
-6313ac02	Son 2 saniyelik sesi saniyede bir inceler. Renkler birkaç saniyede değişir ve yanıp sönmez. "Yalnızca seçilen renk" ve "Seçilen renge yakın renkler" paletlerinde ve Ses seviyesi göstergesi, Stroboskop ve Her parça kendi rolünde efektlerinde renkler değişmez
+db443d49	Son 2 saniyelik sesi saniyede bir inceler. Renkler birkaç saniyede değişir ve yanıp sönmez. "Yalnızca seçilen renk" ve "Seçilen renge yakın renkler" paletlerinde ve Ses seviyesi göstergesi ve Her parça kendi rolünde efektlerinde renkler değişmez
 419d7bd1	AI (CED-Tiny), şarkının her bölümünde öne çıkan enstrümanı (vokal, gitar, piyano, bakır nefesliler, sentezleyici, yaylılar) tanır ve renkleri yavaşça değiştirir (vokal için mavi, bakır nefesliler için altın, gitar için turuncu vb.). Tek renkte ise "Enstrümanlar" efektinin hareketini değiştirir. Yalnızca bu PC'de çalışır, biraz CPU ve bellek kullanır
 eb06c11b	Ekran kartı: doğrudan yazma (saniyede en fazla {0}{1})
 965f43a6	Uygulama bu ekran kartına OpenRGB üzerinden değil, doğrudan (NVIDIA'nın I2C'si üzerinden) yazar. Tek renkli bir bölge tek seferde yazılır, bu yüzden hızlıdır ve parlaklık da müziği izler.
 0ac5666c	LED'lerin renkleri farklı olduğunda her yazma yaklaşık 35 ms sürer, bu yüzden otomatikte saniyede en fazla 10 kez gönderir (vuruş anında düzenli gönderimi beklemeden hemen gönderir).
 c3734abc	Bunu sağdaki "Saniyedeki güncelleme" ile değiştirebilirsiniz, ancak artırmak daha fazla CPU kullanır. LED'lerin renkleri farklı olduğu kareler, artırsanız bile saniyede yaklaşık 14 ile sınırlıdır (uygulama her yazma süresi kadar bekler)
+8dcbb878	 (hâlâ yükseliyor; ölçülen {0:F1} °C'den tahmin edildi)
+f4726ccb	%{0:F0} hızda sıcaklığın oturması bekleniyor. Gereken hız bu adımda belirlenir, bu yüzden sıvı soğutucunun sıvısı tamamen ısınana kadar en fazla {1:F0} dk beklenir (adım {2} / {3}, geçen {4})
+42c9f249	%{0:F0} hızda sıcaklığın oturması bekleniyor… (adım {1} / {2}, geçen {3}, en fazla {4:F0} dk)
+10e83d72	Adımlar: {0} · yaklaşık {1}–{2} dk (sıvı soğutucuda uzun olan). Pompalar dahil değildir.
+bc5be07b	• Sıvı soğutucunun sıvısı yavaş ısınır; bu yüzden gereken hızı belirleyen adımlar, sıcaklık oturana kadar en fazla {0:F0} dk ölçülür.
+0b51d73d	Otomatik kurulum başlıyor (yaklaşık {0}–{1} dk).\n\n
+bbdc7d0b	Şu an {0:F0}°C / fan %{1:F0} / tahmini oturma {2:F0}°C
+19569812	* ↑ işaretli adımlar ölçüm biterken hâlâ ısınıyordu. Uygulama oturacakları sıcaklığı tahmin etti ve gereken hızı belirlerken pay ekledi
+5cbcfec8	* Uzun yükte fanlar birden hızlanmasın diye eğri hedefin 10°C altından itibaren yavaşça yükselir ve hedefin 2°C altında %{0:F0} olur
+903dee0e	Yeniden ölçmek, bu mevsimde de sessiz ve güvenli kalan eğriler verir (yaklaşık 30–60 dk).
+47437bdc	Paletin renkleri arasında yavaşça geçiş yapar. Bir renkte bir süre kalır, sonra yumuşakça sonrakine geçer (sese tepki vermez, yanıp sönmez)
+cb281e71	Gökkuşağı 1× hızda bir turu 30 sn'de (3× hızda 10 sn, 10× hızda 3 sn), nefes 1× hızda bir nefesi 6 sn'de tamamlar. Ruh hâli 1× hızda her 8 sn'de bir sonraki renge geçer
+9409032e	Çalışırken veya gece için. Enstrümanlarla birlikte yumuşak ve sade yanar

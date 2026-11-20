@@ -213,7 +213,6 @@ a08b7324	W tej temperaturze i niżej kolor jest jasnoniebieski (chłodno)
 0582db54	Temperatura czerwonego
 74068713	W tej temperaturze i wyżej kolor jest w pełni czerwony (gorąco). Pomiędzy: zielony → żółty
 181b9ba1	Prędkość
-6f30cf75	Tęcza przy 1× robi jedno okrążenie w 30 s (10 s przy 3×, 3 s przy 10×); oddychanie przy 1× trwa 6 s. Dla muzycznej „fali” to prędkość przepływu
 36bcf3d7	{0:F1}×
 f9dafe1e	Analizuje dźwięk z komputera i świeci w rytm uderzeń perkusji, tempa i wysokości dźwięku. Najpierw wybierz ustawienie wstępne, a poniżej popraw tylko to, co przeszkadza.
 5414b5c1	Bieżący dźwięk podzielony na 10 pasm typowego korektora (od 31 Hz do 16 kHz), od basów (lewo) do sopranów (prawo). Jasne słupki w środku to „ataki” np. perkusji, biała linia to niedawny szczyt
@@ -224,11 +223,10 @@ a8d258f0	Zapala się przy każdym wykrytym kicku (stopie). Podczas testu synchro
 2f3d51ba	Ustawia efekt, intensywność i paletę na zalecane połączenie. Jeśli sam zmienisz ustawienia poniżej, stanie się „Własne”
 932cdbc7	Styl muzyczny
 2c274961	Jak LED-y podążają za muzyką. Aby wybrać dla każdego urządzenia, użyj „Urządzenia” poniżej
-4d0abffb	„Stroboskop” mocno miga, dlatego można go wybrać tylko przy wyłączonym „Ogranicz miganie” poniżej.
 c87d9699	Intensywność
 541920a5	Jak mocno świeci uderzenie i jak często zmienia się kolor. Wybór ustawia też odpowiednio „Płynność”, „Akcent” i „Minimum” poniżej
 a800602a	Paleta
-5c25c402	Zestaw kolorów synchronizacji z muzyką. Przy każdym uderzeniu następuje kolejny kolor
+3ec973ca	Paleta kolorów oświetlenia reagującego na muzykę.
 758ca518	Wzmocnienie
 ab2026d3	+ sprawia, że nawet ciche dźwięki jasno świecą — do cichych utworów lub niskiej głośności. − daje jasność tylko głośnym dźwiękom
 65d61087	Czułość na uderzenia
@@ -250,9 +248,9 @@ a48b2636	Przyspiesza światło o 10 ms
 61644194	+, gdy światło wyprzedza dźwięk, −, gdy się spóźnia. Słuchawki i głośniki Bluetooth oraz telewizory (HDMI) odtwarzają dźwięk z opóźnieniem, więc użyj +
 0e36045a	Bluetooth opóźnia dźwięk; zalecane +150–200 ms
 ece319ca	Ustaw +180 ms
-e02412ea	Gdy włączone, mocne błyski są ograniczone do 3 na sekundę (aby chronić oczy i zdrowie osób wrażliwych na światło). Stroboskop również nie jest używany
+32e5db89	Gdy włączone, mocne błyski są ograniczone do 3 na sekundę (aby chronić oczy i zdrowie osób wrażliwych na światło)
 ff4e5cc2	Ogranicz miganie
-a2bb37bc	Ogranicza mocne błyski do 3 na sekundę. Po wyłączeniu dostępny staje się „Stroboskop”
+68a5628b	Ogranicza mocne błyski do 3 na sekundę
 03e1f9ef	⚠ Światła mogą intensywnie migać. Jeśli miganie źle na ciebie wpływa, natychmiast włącz ponownie „Ogranicz miganie”.
 dc8c4f99	Tempo
 9c0a6ff9	Auto: po uchwyceniu tempa przewiduje uderzenia i świeci bez opóźnienia. Tylko stopa: bez przewidywania, świeci tylko przy uderzeniu stopy. Wył.: bez tempa i uderzeń, tylko głośność
@@ -694,7 +692,6 @@ d3d56cef	Celu {0:F0}°C nie da się osiągnąć nawet na pełnej prędkości ({1
 7c323904	Uruchamianie obciążenia…
 be843d5e	Uruchom grę lub benchmark (start nastąpi automatycznie, gdy użycie GPU przekroczy 70%)
 83a5ad8f	Czekanie na nagrzanie przy pełnej prędkości…
-ac818524	Czekanie na ustabilizowanie temperatury przy {0:F0}%… (krok {1} / {2})
 f8650f35	Zatrzymywanie obciążenia i powrót do zwykłego sterowania…
 882d4f38	Gotowe
 9ea783e1	Przerwano: {0}
@@ -1037,36 +1034,23 @@ f7121884	Chill (spokojnie)
 40238fad	Impreza
 4c4b9639	Klub (intensywnie)
 58c4acf6	Wizualizer
-1ffc1da1	Filmy i gry
 a4d4ce26	Własne
 68a0416e	Powolna zmiana kolorów
 2ee44588	Wyłączone
 9a137ab5	{0} {1} (domyślnie {2})
 975db0d4	Zmiana koloru w rytm
-6f6c9db1	Na każde uderzenie przechodzi do następnego koloru, rozbłyskuje i gaśnie
-1acb0fe4	Puls
-fac18e83	Miks
-143bf4c6	Kolory mieszają się według siły basów, średnich i wysokich tonów
+24bb482c	Rozbłyskuje przy każdej stopie i przechodzi do następnego koloru na początku taktu lub nowej części
 d47d8919	Wskaźnik głośności
 c9601c4a	Świeci od krawędzi na tyle, na ile pozwala głośność, a punkt szczytowy powoli opada
 b9056e5c	Widmo
 1f55a216	Rozkłada tony od niskich do wysokich wzdłuż LED, każdy świeci według swojej siły
-ae14d063	Energia
-9097b7af	Pasma basów, średnich i wysokich tonów wydłużają się według swojej siły
-a8728d89	Płynąca fala
-0dbddecd	Kolor bieżącego dźwięku płynie od krawędzi (wodospad)
 7579942a	Fale
 8f1dc3a2	Przy każdym uderzeniu stopy rozchodzi się pierścień światła
 5c1949b1	Iskrzenie
-6ddfa1c0	Przy stopie wszystko łagodnie świeci, przy werblu skupiony błysk, przy hi-hacie iskrzą białe punkty
+88272375	Przy stopie wszystko łagodnie świeci, przy werblu skupiony błysk, przy hi-hacie iskrzą białe punkty, a przy uderzeniach gitary przebiega kolorowy pasek
 fa793be1	Każda część w swojej roli
-2683fb56	Każda część świeci w rytm własnego dźwięku, np. wentylatory do basów, karta graficzna do średnich, pamięć do wysokich. Kilka złączy wentylatorów dzieli się na basy, średnie i wysokie (zmienisz to w ustawieniu strefy „Dźwięk, na który reagować”)
-74a4376d	Podążanie za tempem
-934997b6	Pasmo światła biegnie w rytm
+e92a2994	Każda część świeci w rytm własnego dźwięku, np. wentylatory do basów, karta graficzna do średnich, pamięć do wysokich. Basy, średnie i wysokie rozpoznasz po kolorze. Kilka złączy wentylatorów dzieli się na basy, średnie i wysokie (zmienisz to w ustawieniu strefy „Dźwięk, na który reagować”)
 5d88da90	Nastrój
-e134b40a	Kolor zmienia się powoli według nastroju utworu (bez migania)
-c3873745	Stroboskop
-e266b3b4	Mocno miga w rytm (tylko gdy „Ogranicz miganie” jest wyłączone)
 3cada106	Według części
 78733543	Niskie (stopa, bas)
 23099007	Średnie (werbel, wokal)
@@ -1219,7 +1203,6 @@ fb923916	 tęcza (płynąca) i oddychanie stają się nieruchomą tęczą i sta�
 8ed6eae0	Jeśli moment świecenia rozjeżdża się z innymi urządzeniami, dopasuj go opcją „Świeć wcześniej”
 8444c4be	Diody podłączone wewnętrznym okablowaniem płytki (I2C), np. w pamięci, potrzebują czasu na każde wysłanie, dlatego w trybie automatycznym są ograniczone do 8 odświeżeń na sekundę (zmienisz to w „Odświeżeń na sekundę” po prawej). Zmiany koloru w synchronizacji z muzyką są wysyłane od razu, bez czekania na regularne odświeżenie. Ten sam kolor jest ponownie wysyłany co 60 sekund
 2a5ce6d5	Automatycznie (ustawienie ogólne)
-7a4362e3	 (intensywne miganie)
 2e7616aa	Fioletowy
 d624abb5	Niebieski
 1740eec3	Błękitny
@@ -1231,11 +1214,8 @@ f88712a8	Biały
 f73d92df	Wyłączone (zgaś diody)
 faccb7c6	Stały kolor (kolor wybrany w „Kolor”)
 8261ae67	Bez zmian (zatrzymaj na ostatnim kolorze)
-d24118e5	\nNie używaj w przypadku wrażliwości na migające światło. Nie można wybrać, gdy „Ogranicz miganie” jest włączone
-fa397c65	⚠ Intensywnie miga
 5812e0db	Świeci tylko kolorem wybranym w „Kolor i jasność”. Kolor się nie zmienia, w rytm dźwięku zmienia się tylko jasność
 a3ff6ad5	Świeci kolorem wybranym w „Kolor i jasność” oraz sąsiednimi kolorami po obu stronach
-a0c6bf54	Świeci kolorami zestawu {0}. Przy każdym uderzeniu przechodzi do następnego koloru z zestawu
 b4e8382b	Automatycznie (z wyprzedzeniem)
 3084a002	Po uchwyceniu tempa utworu przewiduje następne uderzenie i świeci bez opóźnienia (zalecane)
 90659e1d	Tylko stopa
@@ -1247,12 +1227,10 @@ df788b17	Kolor wybrany w „Kolor” powoli się rozjaśnia i przyciemnia
 3b1d43a4	Gasi diody, gdy dźwięk ucichnie
 25525b81	{0} ({1})
 bb1834e5	Ustawienia poniżej zostały dostosowane ręcznie. Wybranie innego ustawienia wstępnego przywraca jego kombinację
-1cf255e8	Do pracy lub w nocy. Kolory zmieniają się powoli i łagodnie
 9df36e7d	Bezpieczny wybór. Przyjemnie pulsuje z basem
 4beab2e2	Żywy efekt, w którym z każdym uderzeniem perkusji rozchodzi się pierścień światła
 f6ac23cd	Najbardziej intensywny efekt z mocną zmianą koloru na każde uderzenie
 b7e7d574	Rozkłada tony od niskich do wysokich wzdłuż LED, by dźwięk był widoczny
-7c3c3b30	Subtelny, ciepły efekt, który nie przeszkadza w filmach i grach
 355fd781	{0}\nEfekt: {1} · Intensywność: {2} · Kolory: {3}
 67f5dc44	\n(Po wyłączeniu „Ogranicz miganie” miga jeszcze intensywniej)
 e3c74af7	Spokojnie i łagodnie. Kolory zmieniają się powoli co takt
@@ -1260,7 +1238,6 @@ e3c74af7	Spokojnie i łagodnie. Kolory zmieniają się powoli co takt
 39194da9	Żwawa reakcja. Kolory zmieniają się co miarę
 283c2191	Maksymalna reakcja. Kolory zmieniają się natychmiast co miarę, a początek taktu jest akcentowany
 899bfdf5	{0}\nPo wybraniu: reakcja {1:F0} ms · wygładzanie {2:F0} ms · kontrast {3:F0}% · minimum {4:F0}%
-1763988d	Szybkość płynięcia
 782c7098	Teraz połowa tempa
 3da3fc0d	Teraz podwójne tempo
 587c7525	Wszystko domyślne (wartości intensywności „{0}”)
@@ -1486,7 +1463,6 @@ bb5165cb	Wyłącz połączenie LED
 9803ac5d	Efekt LED: wył.
 633b3564	Efekt LED: zgaszone
 79fe6abe	Efekt LED: {0}
-88443ff4	Intensywnie miga. Można wybrać po wyłączeniu „Ogranicz miganie” na ekranie Podświetlenie
 d6903426	Profil: {0}
 9dc4a781	Po zakończeniu aplikacji usuwa {0} z folderu aplikacji.
 e0cb734a	Sama aplikacja (exe itp.) i inne pliki zostają. Jeśli być może będzie jeszcze potrzebna, zostaw tę opcję wyłączoną.
@@ -1689,9 +1665,7 @@ d92849da	Zgłoś problem…
 42a72e3a	Konfiguracja automatyczna
 4610da9f	GPU: nie można zmierzyć, brak czujnika temperatury lub użycia
 462bc50c	• Wynik sprawdzasz przed zastosowaniem, więc przerwanie niczego nie zmienia.
-47647013	Kroki: {0} · ok. {1} min. Pompy są pominięte.
 48090db5	W trakcie pomiaru
-4ac2f56e	Rozpoczynam konfigurację automatyczną (ok. {0} min).\n\n
 50136e19	Wybierz wentylatory do pomiaru oraz CPU i/lub GPU. Pompy są pominięte (działają jak zwykle).
 53661bf6	zmierz {0} wentylator(y)
 5899b660	• Pomiar z CPU: w pełni obciąża CPU i stopniowo zmniejsza obroty od 100%.
@@ -1737,7 +1711,6 @@ fdc48725	Wybierz co najmniej jeden wentylator do pomiaru oraz CPU i/lub GPU.
 fe39437d	Wskazówka: potem zmierz na stronie „Konfiguracja automatyczna”, aby utworzyć najcichsze krzywe dla tego komputera (ok. 20–30 min).
 140786db	Ok. 1–2 min na wentylator. Gdy znane są obroty zatrzymania, minimalne obroty też są ustawiane na bezpieczną wartość
 14e2760b	Najpierw zmierz jeszcze niezmierzone wentylatory
-08749344	Ponowny pomiar da krzywe, które także w tej porze roku będą ciche i bezpieczne (ok. 20–30 min).
 5f83a291	Temperatura CPU w spoczynku jest o około {0:F0}°C wyższa niż podczas pomiaru automatycznej konfiguracji (w pokoju chyba zrobiło się cieplej).
 8d7a30b2	Otwórz automatyczną konfigurację
 c66cfe16	W pokoju jest o około {0:F0}°C cieplej niż podczas pomiaru automatycznej konfiguracji.
@@ -1961,7 +1934,7 @@ d71badc6	Przełącz na krzywą opartą na „{0}”
 d0514409	W profilu „{0}” przełączono na standardową krzywą opartą na „{1}”.
 dc31499c	Czujnik wirtualny „{0}”: nie można odczytać czujników źródłowych ({1}), więc jest liczony tylko z pozostałych czujników.
 a0b3b7dd	Instrumenty
-3c260d3f	Stopa rozświetla wszystko, werbel jedną stronę, hi-hat małe iskry, bas daleki koniec, wokal ogólną jasność, a gitara i klawisze płynące światło. Instrumenty da się rozróżnić nawet jednym kolorem (Tylko wybrany kolor)
+139d2c30	Stopa rozświetla wszystko, werbel jedną stronę, hi-hat małe iskry, bas daleki koniec, wokal ogólną jasność, a gitara i klawisze płynące światło. Instrumenty da się rozróżnić nawet jednym kolorem (Tylko wybrany kolor). Małe strefy i urządzenia o niskiej częstotliwości odświeżania pokazują mniej szczegółów.
 d3efe37c	Według instrumentu
 e8d8b63a	Tylko perkusja
 31b76718	Wysokość dźwięku (niskie, średnie, wysokie)
@@ -1980,24 +1953,29 @@ d5a051f9	Obroty potrzebne do utrzymania {0:F0}°C: {1:F0}% lub mniej (niższych 
 0c8c7106	* Nie zmierzono najniższych obrotów utrzymujących cel, więc ta krzywa nie zostanie wstawiona nawet po zastosowaniu (pozostaje obecna krzywa)
 e2a336cd	Nie zmierzono najniższych obrotów utrzymujących cel, więc krzywej nie wstawiono (pozostaje obecna krzywa).
 90a68504	Poniżej {0:F0}% obroty prawie się nie zmieniają (własne minimalne obroty wentylatora).
-97a3aac7	Reaguje na: świeci w rytm uderzeń (na stopę, dopóki tempo nie jest uchwycone; na basy przy wyłączonym tempie oraz na kartach graficznych i pamięciach). Kolor zmienia się co 1–4 uderzenia, zależnie od intensywności
-6d6e85e7	Reaguje na: narasta w rytm uderzeń, a między nimi łagodnie porusza się z basami (na stopę, dopóki tempo nie jest uchwycone; na basy przy wyłączonym tempie oraz na kartach graficznych i pamięciach). Kolor powoli zmienia się w czasie
-3704a505	Reaguje na: przyjmuje kolor najsilniejszych z basów, średnich i wysokich tonów
+f82e6ca4	Reaguje na: świeci na stopę (werbel słabiej, uderzenia bez perkusji pozostają ciemne; na basy przy wyłączonym tempie). Kolor zmienia się na stopę na początku taktu i przy nowej części utworu
 ba3eca1b	Reaguje na: długość zależy od głośności, a przy stopie i werblu podskakuje
-81cd1e18	Reaguje na: świeci według siły każdej wysokości dźwięku, od niskich do wysokich
-210faf7d	Reaguje na: każde pasmo wydłuża się według siły basów, średnich i wysokich tonów
-a35cc263	Reaguje na: płyną kolory basów, średnich i wysokich tonów, które właśnie brzmią
-a0098d0d	Reaguje na: przy każdym uderzeniu stopy pojawia się pierścień światła (w rytm uderzeń po uchwyceniu tempa)
-e367d987	Reaguje na: stopa, werbel i hi-hat świecą każdy w inny sposób
+55d26131	Reaguje na: koniec basowy świeci na stopę, reszta aż do wysokich według siły każdej wysokości dźwięku (każda wysokość ma własny kolor)
+1b304b0e	Reaguje na: przy każdym uderzeniu stopy (bębna basowego) pojawia się pierścień światła (także przy głośnych dźwiękach, np. wybuchach). Po uchwyceniu tempa wyprzedza powtarzające się uderzenia stopy
+06cc66f6	Reaguje na: stopa, werbel, hi-hat i początki dźwięków, np. gitary (gdy tempo jest uchwycone), świecą każdy w inny sposób
 4a0ca652	Reaguje na: tylko dźwięk wybrany dla każdej części (strefy): basy, średnie, wysokie lub instrument
 3d52d090	Reaguje na: każdy instrument (na kartach graficznych i pamięciach narasta w rytm uderzeń w kolorze wyróżniającego się instrumentu)
-630581a9	Reaguje na: pasmo światła biegnie w rytm uderzeń (tempa)
-e411765c	Reaguje na: zmienia się powoli według jasności dźwięku (niski czy wysoki) i głośności
-4c402832	Reaguje na: pierwsze uderzenie każdego taktu (mocna stopa, dopóki tempo nie jest uchwycone)
-e532ec45	Pulsuje w rytm uderzeń i zostawia długą, łagodną poświatę. Kolor nie zmienia się w rytm, tylko powoli przechodzi w kolejny
-6313ac02	Co sekundę sprawdza dźwięk z ostatnich 2 sekund. Kolory zmieniają się przez kilka sekund i nie migają. Kolory nie zmieniają się przy paletach „Tylko wybrany kolor” i „Kolory zbliżone do wybranego” ani przy efektach Wskaźnik głośności, Stroboskop i Każda część w swojej roli
+db443d49	Co sekundę sprawdza dźwięk z ostatnich 2 sekund. Kolory zmieniają się przez kilka sekund i nie migają. Kolory nie zmieniają się przy paletach „Tylko wybrany kolor” i „Kolory zbliżone do wybranego” ani przy efektach Wskaźnik głośności i Każda część w swojej roli
 419d7bd1	AI (CED-Tiny) rozpoznaje instrument wyróżniający się w każdej części utworu (wokal, gitara, fortepian, dęte blaszane, syntezator, smyczki) i powoli zmienia kolory (niebieski dla wokalu, złoty dla dętych blaszanych, pomarańczowy dla gitary itd.). Przy jednym kolorze zmienia zamiast tego sposób ruchu efektu „Instrumenty”. Działa tylko na tym PC i zużywa trochę CPU i pamięci
 eb06c11b	Karta graficzna: zapis bezpośredni (najwyżej {0} na sekundę{1})
 965f43a6	Aplikacja zapisuje do tej karty graficznej bezpośrednio (przez I2C NVIDIA), a nie przez OpenRGB. Strefa w jednym kolorze jest zapisywana za jednym razem, więc działa szybko, a jasność też podąża za muzyką.
 0ac5666c	Gdy LED-y mają różne kolory, każdy zapis trwa ok. 35 ms, więc w trybie automatycznym aplikacja wysyła najwyżej 10 razy na sekundę (w momencie uderzenia wysyła od razu, nie czekając na regularną wysyłkę).
 c3734abc	Można to zmienić opcją „Odświeżeń na sekundę” po prawej, ale więcej zużywa więcej CPU. Klatki, w których LED-y mają różne kolory, nawet po zwiększeniu osiągają najwyżej ok. 14 na sekundę (aplikacja odczekuje tyle, ile trwa każdy zapis)
+8dcbb878	 (nadal rośnie; przewidziane z zmierzonych {0:F1} °C)
+f4726ccb	Czekanie na ustabilizowanie temperatury przy {0:F0}%. Ten krok wyznacza potrzebne obroty, więc czeka do {1:F0} min, aż płyn chłodzenia wodnego całkiem się nagrzeje (krok {2} / {3}, minęło {4})
+42c9f249	Czekanie na ustabilizowanie temperatury przy {0:F0}%… (krok {1} / {2}, minęło {3}, najwyżej {4:F0} min)
+10e83d72	Kroki: {0} · ok. {1}–{2} min (z chłodzeniem wodnym dłużej). Pompy są pominięte.
+bc5be07b	• Płyn chłodzenia wodnego nagrzewa się powoli, więc kroki wyznaczające potrzebne obroty są mierzone do {0:F0} min, aż temperatura się ustabilizuje.
+0b51d73d	Rozpoczynam konfigurację automatyczną (ok. {0}–{1} min).\n\n
+bbdc7d0b	Teraz {0:F0}°C / wentylator {1:F0}% / ustabilizuje się ok. {2:F0}°C
+19569812	* Kroki oznaczone ↑ wciąż się nagrzewały w chwili pomiaru. Aplikacja przewidziała, gdzie się ustabilizują, i dodała zapas przy wyznaczaniu potrzebnych obrotów
+5cbcfec8	* Aby wentylatory nie przyspieszały nagle przy długim obciążeniu, krzywa rośnie stopniowo od 10°C poniżej celu i osiąga {0:F0}% 2°C poniżej celu
+903dee0e	Ponowny pomiar da krzywe, które także w tej porze roku będą ciche i bezpieczne (ok. 30–60 min).
+47437bdc	Powoli przechodzi przez kolory palety. Zatrzymuje się na chwilę na jednym kolorze, a potem płynnie przechodzi do następnego (nie reaguje na dźwięk, bez migania)
+cb281e71	Tęcza przy 1× robi jedno okrążenie w 30 s (10 s przy 3×, 3 s przy 10×); oddychanie przy 1× trwa 6 s. Nastrój przy 1× zmienia kolor na następny co 8 s
+9409032e	Do pracy lub w nocy. Świeci łagodnie i delikatnie w rytm instrumentów

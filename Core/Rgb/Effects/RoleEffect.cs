@@ -13,9 +13,16 @@ namespace ProFanController;
 ///   中音: スネアのたびに光り（τ 0.18 秒）、ボーカルなどの中音の強さで明るさが残る
 ///   高音: ハイハットのたびに白っぽく短く光り（τ 0.09 秒）、高音の強さで明るさが残る
 ///   音全体: 音量で明るさが変わる（点滅しない）
-/// 色は役割ごとにパレットの位置をずらす（低音 0・中音 1/3・高音 2/3）。ビートで色が進むときも、役割の違いは保たれる。
+/// 色は役割ごとにパレットの決まった位置の色（低音 0・中音 1/3・高音 2/3）。ビートで色を進めない（色でどの役割か分かるように。
+/// 6.15.10 は拍ごとに全部の色が進み、どのゾーンの色も 1 曲の間に色相環をひと回りしていた）。
+/// 明るさを変えないグラボ（FixedBrightness）だけは、色しか見せられないので、今までどおりビートで色を進める。
 /// パレット「選んだ色だけ」なら、すべて同じ色で明るさだけが変わる。
-/// 遅いデバイス（slow）は、光の消え方を 1.8 倍ゆっくりにする（一瞬の光を取りこぼさないように）
+/// 速いデバイスでは、中音・高音のパーツに分けるキックの光を小さくする（FastBeatShare。どのパーツもキックで一緒に光ると、役割の違いが見えない）。
+/// 中音は、スネアが NoSnareSec 秒見つからない曲（スネアがキックと重なっている曲など）では、今までどおり BeatShare を分ける。
+/// キックと同時（KickClickSec 以内）のハイハットは、キックの打つ音の高音なので、高音のパーツを光らせない。
+/// 遅いデバイス（slow）と、直接書き込むグラボは、光の消え方を 1.8 倍ゆっくりにする（一瞬の光を取りこぼさないように）。
+/// 直接書き込むグラボでは、スネア・ハイハットの光は定期便を待たずに送る（c.SendNow。1 秒に 10 回の定期便では 60〜90 ミリ秒遅れていた）。
+/// 更新の遅いデバイスで「激しい点滅を抑える」がオンなら、8 分音符の刻みの裏（拍の間）のハイハットの光を弱める（SlowGridHatGain。1 秒 3 回の強い光を拍に残す）
 ///
 /// 楽器ごとの役割（キックから後。InstrumentFeatures の手がかりで光る。どれも「らしさ」なので、取り違えることがある）:
 ///   キック: キックのたびにゾーン全体が光る（τ 0.22 秒）。下地は、キックが続いている間だけ明るい（ベースの音では明るくならない）。
@@ -49,6 +56,25 @@ public sealed class RoleEffect : IMusicEffect
     public const double HatMinGapSec = 0.15;
     /// <summary>ハイハットの光で白へ寄せる割合（× 光の強さ）</summary>
     public const float HatWhiteMix = 0.35f;
+    /// <summary>
+    /// 更新の遅いデバイス（メモリ・直接書き込むグラボ）で「激しい点滅を抑える」がオン、テンポをつかんでいて GridHatMinBpm 以上のとき:
+    /// 8 分音符の刻みの裏（拍の間。GridTolSec 以内）に来たハイハットで、1 つ前に光ったハイハットも 8 分音符の刻みの上（1 拍以内）にあるもの
+    /// （曲の刻みのハイハット）の、光の明るさの倍率（白へ寄せる色はそのまま）。曲の刻みのハイハットでも高音のパーツが強く光ると、
+    /// 強い点滅の制限（1 秒に 3 回）を拍の間の光で使い切り、拍の光が 1 回おきに暗くなっていた
+    /// （6.15.10 は送らないコマも数えていたので、たまたま拍の間の光のほうが暗くなっていた）。
+    /// 刻みに乗っていない高音（ゲームのクリック音、曲が変わった直後の前の曲の刻みとずれたハイハットなど）は弱めない
+    /// </summary>
+    public const float SlowGridHatGain = 0.5f;
+    /// <summary>刻みの位置とみなす幅（秒。出来事の時刻と拍の予測のずれを見込む）</summary>
+    public const double GridTolSec = 0.035;
+    /// <summary>
+    /// 刻みの裏のハイハットを弱めるテンポの下限（BPM）。これより遅いと、拍と刻みの裏のハイハットを全部光らせても 1 秒に 3 回くらいに収まる
+    /// （90 BPM でちょうど 3 回）。速い曲（140 BPM 以上）はテンポを半分にしてつかむので、拍の予測の裏が本当の拍になるが、
+    /// 半分にしたテンポはこれより遅いので弱めない
+    /// </summary>
+    public const double GridHatMinBpm = 100;
+    /// <summary>刻みの裏のハイハットを弱めるか（オフにできるのは比べる用。アプリは変えない）</summary>
+    internal static bool GridHatDim { get; set; } = true;
 
     /// <summary>音が鳴っている間の下地の明るさと、音の強さで足す幅（どのパーツも真っ暗にならないように）</summary>
     public const float BodyLevel = 0.12f;
@@ -59,8 +85,20 @@ public sealed class RoleEffect : IMusicEffect
     /// <summary>出来事の光を満点にする多さ（1 秒あたり）。これより多く鳴る音は √(RefRate / 多さ) 倍に弱める（下限 MinFlashAmp）</summary>
     public const float RefRate = 2f;
     public const float MinFlashAmp = 0.75f;
-    /// <summary>低音以外のパーツにも分けるキックの光の割合</summary>
+    /// <summary>低音以外のパーツにも分けるキックの光の割合（遅いデバイス。速いデバイスの中音でスネアがないときも）</summary>
     public const float BeatShare = 0.45f;
+    /// <summary>
+    /// 速いデバイスで、中音・高音のパーツに分けるキックの光の割合。0.45 だと、どのパーツもキックで一緒に光り、
+    /// 低音と中音の明るさの動きがほぼ同じになっていた（四つ打ちの曲で相関 0.9）。
+    /// 遅いデバイスは 0.45 のまま（1 秒に 10 回ほどしか送れないので、光の始まりを拍に乗せる。SlowDeviceBench）
+    /// </summary>
+    public const float FastBeatShare = 0.15f;
+    /// <summary>スネアがこの秒数見つからなければ、中音のパーツは BeatShare のまま（スネアがキックと重なる曲・弱い曲で、中音が暗くならないように）</summary>
+    public const double NoSnareSec = 4.0;
+    /// <summary>キックとこの秒数以内のハイハットは、キックの打つ音の高音とみなす（速いデバイスの高音のパーツは光らない）</summary>
+    public const double KickClickSec = 0.03;
+    /// <summary>速いデバイスの高音のパーツの下地: 高音の強さに近づく時定数（秒。上がる・下がる）。キックの打つ音の高音で下地が脈打たないように</summary>
+    public const double TrebleBodyUpSec = 0.25, TrebleBodyDownSec = 0.4;
     /// <summary>出来事の多さをならす割合（1 回ごと）</summary>
     private const float RateFollow = 0.15f;
 
@@ -139,6 +177,17 @@ public sealed class RoleEffect : IMusicEffect
     private readonly float[] _glow = new float[Roles];
     private readonly float[] _flash = new float[Roles];
     private readonly LinColor[] _color = new LinColor[Roles];
+    /// <summary>最後に受け付けたハイハットを、拍の間の刻みとして弱めたか（SlowGridHatGain）</summary>
+    private bool _hatDimmed;
+    /// <summary>今のコマのデバイス（Update の初めに EffectContext から写す）: 直接書き込むグラボか・速いデバイスか</summary>
+    private bool _direct, _fast;
+    /// <summary>1 つ前に受け付けたハイハットの時刻・強さ（直後にキックが来たら、受け付けたのを取り消して戻す）</summary>
+    private double _prevHatT;
+    private float _prevHatS;
+    /// <summary>最後のスネアの時刻と、ハイハットの間隔を数える時刻（キックと同時のハイハットでも進める）</summary>
+    private double _lastSnareT, _hatGateT;
+    /// <summary>速いデバイスの高音のパーツの、ゆっくりにした下地の強さ</summary>
+    private float _trebleBody;
 
     // 楽器ごとの役割（番号は MusicRole。0〜3 は使わない）
     private static readonly int RoleCount = MusicRoles.Count;
@@ -182,8 +231,6 @@ public sealed class RoleEffect : IMusicEffect
 
     public RoleEffect(bool slow = false) => _slow = slow;
 
-    public string Name => MusicStyles.Role;
-
     /// <summary>役割ごとの今の明るさ（0〜1。テスト用。楽器ごとの役割は、ゾーン全体の明るさ）</summary>
     public float LevelOf(MusicRole r) => MusicRoles.IsInstrument(r) ? _iglow[(int)r] : _glow[(int)r];
 
@@ -196,6 +243,9 @@ public sealed class RoleEffect : IMusicEffect
         Array.Fill(_peak, PeakFloor);
         Array.Fill(_rate, RefRate);
         Array.Fill(_lastHitT, double.NegativeInfinity);
+        _hatDimmed = false;
+        _prevHatT = _lastSnareT = _hatGateT = double.NegativeInfinity;
+        _prevHatS = _trebleBody = 0;
 
         Array.Clear(_drumPresence);
         Array.Clear(_presHold);
@@ -238,11 +288,33 @@ public sealed class RoleEffect : IMusicEffect
     private double Tau(MusicRole r)
     {
         double t = r switch { MusicRole.Bass => BassTauSec, MusicRole.Mid => MidTauSec, MusicRole.Treble => TrebleTauSec, _ => AllTauSec };
-        return _slow ? t * SlowFactor : t;
+        return _slow || _direct ? t * SlowFactor : t;
+    }
+
+    /// <summary>
+    /// 役割の色: パレットの決まった位置の色（ビートで進めない）。明るさを変えないグラボは、色しか見せられないのでビートで進める
+    /// </summary>
+    private static LinColor RoleColor(EffectContext c, double off) => c.FixedBrightness ? c.ColorAt(off) : c.PalAt(off);
+
+    /// <summary>役割の色（Lab。白へ寄せるとき用）。RoleColor と同じ決め方</summary>
+    private static Lab RoleLab(EffectContext c, double off) => c.FixedBrightness ? c.ColorLabAt(off) : c.PalLabAt(off);
+
+    /// <summary>同じコマの出来事に、時刻 t の KickClickSec 以内のキックがあるか</summary>
+    private static bool KickNear(IReadOnlyList<AudioEvent> ev, double t)
+    {
+        for (int i = 0; i < ev.Count; i++)
+            if (ev[i].Kind == AudioEventKind.Kick && Math.Abs(ev[i].T - t) < KickClickSec) return true;
+        return false;
     }
 
     public void Update(EffectContext c)
     {
+        // 更新の遅いデバイスで点滅を抑えるとき、8 分音符の刻みの裏のハイハットは弱く光る（SlowGridHatGain。明るさを変えないグラボは色で見せるので変えない）
+        var beat = c.Beat;
+        _direct = c.DirectWrite;
+        _fast = !c.SlowDevice;
+        bool dimGridHat = GridHatDim && c.Music.ReduceFlashing && c.SlowDevice && (c.DirectWrite || !c.FixedBrightness) && c.HasTempo && c.Locked
+            && beat.HasTempo && beat.Period > 0 && 60 / beat.Period >= GridHatMinBpm;
         // 役割ごとの出来事（キック・スネア・ハイハット）。光った本当の時刻を覚える
         var ev = c.Events;
         for (int i = 0; i < ev.Count; i++)
@@ -256,7 +328,15 @@ public sealed class RoleEffect : IMusicEffect
                 _ => -1,
             };
             if (r < 0) continue;
-            float s = Math.Clamp(0.55f + 0.25f * e.Strength, 0, 1);
+            int ti = (int)MusicRole.Treble;
+            // 速いデバイス: 受け付けたハイハットのすぐあと（KickClickSec 以内）にキックが来たら、そのハイハットはキックの打つ音なので取り消す
+            if (_fast && e.Kind == AudioEventKind.Kick && Math.Abs(e.T - _hitT[ti]) < KickClickSec)
+            {
+                _hitT[ti] = _prevHatT;
+                _hitS[ti] = _prevHatS;
+            }
+            // 大きな音のすぐあとの小さな音は弱く光る
+            float s = Math.Clamp(0.55f + 0.25f * e.Strength, 0, 1) * c.LoudRel(e.T);
             if (e.Kind == AudioEventKind.Hat)
             {
                 // ハイハットは詰めて光らせない（MusicTuning.HatResponse の間隔）。明るさは下げない
@@ -266,9 +346,22 @@ public sealed class RoleEffect : IMusicEffect
                 var (_, minGap) = MusicTuning.HatResponse(c.Music);
                 minGap = Math.Max(minGap, HatMinGapSec);
                 if (e.T - _hitT[r] < minGap && e.T >= _hitT[r]) continue;
+                if (e.T - _hatGateT < minGap && e.T >= _hatGateT) continue;
+                // 間隔は、キックと同時のハイハットからも数える（6.15.10 と同じ間合い。拍のあとの 16 分音符の弱いハイハットが、
+                // 裏拍のハイハットの光を止めないように）
+                _hatGateT = e.T;
+                // 速いデバイス: キックと同時のハイハットでは、高音のパーツを光らせない（キックの打つ音の高音。高音のパーツがキックのたびに光っていた）
+                if (_fast && (Math.Abs(e.T - _hitT[(int)MusicRole.Bass]) < KickClickSec || KickNear(ev, e.T))) continue;
+                _prevHatT = _hitT[r];
+                _prevHatS = _hitS[r];
+                // 刻みの裏で、1 つ前に光ったハイハットも刻みの上（1 拍以内）なら、曲の刻みのハイハットとして弱める
+                _hatDimmed = dimGridHat && OnOffBeat(beat, e.T) && e.T - _hitT[r] <= beat.Period + GridTolSec && OnEighths(beat, _hitT[r]);
             }
             _hitT[r] = e.T;
             _hitS[r] = s;
+            if (e.Kind == AudioEventKind.Snare) _lastSnareT = e.T;
+            // 直接書き込むグラボ: スネア・ハイハットの光は定期便を待たずに送る（キックの拍は、もともと早めに送っている）
+            if (_direct && c.Locked && r != (int)MusicRole.Bass) c.SendNow = true;
             // 出来事の多さ（1 秒あたり）: 間隔から求めて、ならしておく
             double gap = e.T - _lastHitT[r];
             if (gap > 0.02 && gap < 4) _rate[r] += (1 / (float)gap - _rate[r]) * RateFollow;
@@ -277,13 +370,14 @@ public sealed class RoleEffect : IMusicEffect
 
         var f = c.Frame;
         bool active = f.Activity > 0.3f;
-        // キックの光（どのパーツにも BeatShare の割合で分ける。役割が分かれすぎず、全体が拍に合わせて動くように）
+        // キックの光（ほかのパーツにも少し分ける。遅いデバイスは BeatShare、速いデバイスは FastBeatShare。全体が拍から離れすぎないように）
         int bi = (int)MusicRole.Bass;
         float kick = _hitS[bi] * (float)Math.Exp(-Math.Max(0, c.T - _hitT[bi]) / Tau(MusicRole.Bass));
         // ビートの光（テンポをつかんでいれば予測した拍でも光る。キックを検出しそこねた拍でも光るように）。
         // コマの間の最大値から経過時間だけ減らした値も見る（1 秒間のコマ数が少ないデバイスでも拍を取りこぼさない）
         float beatFl = Math.Max(c.Fl, c.FlPeak * (float)Math.Exp(-Math.Max(0, c.T - c.FlPeakT) / Tau(MusicRole.Bass)));
-        kick = Math.Max(kick, beatFl);
+        // 予測した拍で光るのは、最後のキックから KickBeatSec 秒まで（キックのない音で、拍を作って光らせない。楽器ごとの役割のキックと同じ）
+        if (c.T - _hitT[bi] < KickBeatSec) kick = Math.Max(kick, beatFl);
         for (int r = 0; r < Roles; r++)
         {
             var role = (MusicRole)r;
@@ -300,10 +394,19 @@ public sealed class RoleEffect : IMusicEffect
             // 役割ごとに、最近の強さの山で割ってそろえる（中音はふつう低音より弱いので、そのままだと中音のパーツだけ暗い）
             _peak[r] = Math.Max(raw, Math.Max(PeakFloor, _peak[r] * EffectContext.Decay(c.Dt, PeakReleaseSec)));
             float level = Math.Clamp(raw / _peak[r], 0, 1);
+            if (_fast && role == MusicRole.Treble)
+            {
+                _trebleBody = EffectContext.Follow(_trebleBody, level, c.Dt, TrebleBodyUpSec, TrebleBodyDownSec);
+                level = _trebleBody;
+            }
             // 出来事の光: 多く鳴る音（ハイハットは 1 秒に 8 回など）ほど弱くする（どのパーツも同じくらいの目立ち方にする）
             float amp = Math.Clamp(MathF.Sqrt(RefRate / Math.Max(_rate[r], 0.25f)), MinFlashAmp, 1f);
             float own = role == MusicRole.All ? 0f : amp * _hitS[r] * (float)Math.Exp(-Math.Max(0, c.T - _hitT[r]) / tau);
-            float hit = role == MusicRole.Bass ? Math.Max(own, kick) : Math.Max(own, BeatShare * kick);
+            // 白へ寄せる色は、ハイハットの光の強さのまま
+            float tint = own;
+            if (role == MusicRole.Treble && _hatDimmed) own *= SlowGridHatGain;
+            float share = !_fast || role == MusicRole.All || (role == MusicRole.Mid && c.T - _lastSnareT > NoSnareSec) ? BeatShare : FastBeatShare;
+            float hit = role == MusicRole.Bass ? Math.Max(own, kick) : Math.Max(own, share * kick);
             _flash[r] = hit;
             // 音が鳴っている間は、どのパーツも下地の明るさ（Body）＋音の強さで光り、出来事でさらに光る（音が止まって門が閉じたら下地は消える）
             float body = active ? BodyLevel + BodyRange * level : 0.6f * level;
@@ -311,12 +414,27 @@ public sealed class RoleEffect : IMusicEffect
             float x = body + hit * (1 - body);
             _glow[r] = Math.Max(x, _glow[r] * EffectContext.Decay(c.Dt, tau));
             double off = role switch { MusicRole.Bass => 0, MusicRole.Mid => 1 / 3.0, MusicRole.Treble => 2 / 3.0, _ => 0.5 };
-            _color[r] = role == MusicRole.Treble && own > 0.05f
-                ? OkLab.ToLed(Lab.Lerp(c.ColorLabAt(off), Lab.White, HatWhiteMix * own), c.Gamma)
-                : c.ColorAt(off);
+            _color[r] = role == MusicRole.Treble && tint > 0.05f
+                ? OkLab.ToLed(Lab.Lerp(RoleLab(c, off), Lab.White, HatWhiteMix * tint), c.Gamma)
+                : RoleColor(c, off);
         }
 
         UpdateInstruments(c, beatFl, active);
+    }
+
+    /// <summary>時刻 t が、8 分音符の刻みの裏（拍と拍のまん中。GridTolSec 以内）か。拍の頭は入れない（拍の光と同じ 1 回の光）</summary>
+    public static bool OnOffBeat(BeatState b, double t)
+    {
+        if (!b.HasTempo || !(b.Period > 0)) return false;
+        return Math.Abs(b.Phase(t) - 0.5) * b.Period < GridTolSec;
+    }
+
+    /// <summary>時刻 t が、8 分音符の刻みの上（拍の頭か裏。GridTolSec 以内）か</summary>
+    public static bool OnEighths(BeatState b, double t)
+    {
+        if (!b.HasTempo || !(b.Period > 0)) return false;
+        double q = b.Phase(t) * 2;
+        return Math.Abs(q - Math.Round(q)) * b.Period / 2 < GridTolSec;
     }
 
     // =====================================================================
@@ -355,6 +473,8 @@ public sealed class RoleEffect : IMusicEffect
         {
             var e = ev[i];
             float s = Math.Clamp(0.55f + 0.25f * e.Strength, 0, 1);
+            // キック・スネアは、大きな音のすぐあとの小さな音なら弱く光る
+            if (e.Kind is AudioEventKind.Kick or AudioEventKind.Snare) s *= c.LoudRel(e.T);
             switch (e.Kind)
             {
                 case AudioEventKind.Kick:
@@ -476,8 +596,8 @@ public sealed class RoleEffect : IMusicEffect
                 MusicRole.Pad => PitchHueRange * _padY,
                 _ => 0,
             };
-            _icolor[r] = c.ColorAt(off);
-            if (role == MusicRole.Pad) _padEnd = c.ColorAt(off + PadSpread);
+            _icolor[r] = RoleColor(c, off);
+            if (role == MusicRole.Pad) _padEnd = RoleColor(c, off + PadSpread);
         }
         // ボーカルの光のかたまりの場所（音名の向きの sin。B と C の間でも跳ばない）
         _vocalPos = 0.5f + 0.35f * _voxY;
@@ -594,7 +714,7 @@ public sealed class RoleEffect : IMusicEffect
     private void SpawnSnare(EffectContext c, double t0, float strength, float gain)
     {
         _snarePos = (_snarePos + SnareStep) % 1.0;
-        var col = c.ColorAt(OffsetOf(MusicRole.Snare)) * (gain * c.SectionGain(0.6f));
+        var col = RoleColor(c, OffsetOf(MusicRole.Snare)) * (gain * c.SectionGain(0.6f));
         float scale = Math.Clamp(0.6f + 0.2f * strength, 0.6f, 1f);
         for (int k = 0; k < c.SegmentCount; k++)
         {
@@ -615,7 +735,7 @@ public sealed class RoleEffect : IMusicEffect
     private void SpawnHat(EffectContext c, double t0, float strength, float gain)
     {
         float level = gain * c.SectionGain(0.6f) * (0.6f + 0.4f * Math.Clamp((strength - 1f) / 2f, 0f, 1f));
-        var col = OkLab.ToLed(Lab.Lerp(c.ColorLabAt(OffsetOf(MusicRole.Hat)), Lab.White, HatParticleWhite), c.Gamma) * level;
+        var col = OkLab.ToLed(Lab.Lerp(RoleLab(c, OffsetOf(MusicRole.Hat)), Lab.White, HatParticleWhite), c.Gamma) * level;
         for (int k = 0; k < c.SegmentCount; k++)
         {
             var s = c.Segments[k];
@@ -730,7 +850,7 @@ public sealed class RoleEffect : IMusicEffect
             case MusicRole.Hat when s.Small:
             {
                 // 小さいゾーン: 明るさはほとんど変えず、色を白へ寄せる（ゾーン全体の点滅に見えないように）
-                var lab = Lab.Lerp(c.ColorLabAt(OffsetOf(MusicRole.Hat)), Lab.White, SmallHatWhite * Math.Clamp(_smallHat, 0, 1));
+                var lab = Lab.Lerp(RoleLab(c, OffsetOf(MusicRole.Hat)), Lab.White, SmallHatWhite * Math.Clamp(_smallHat, 0, 1));
                 var col = OkLab.ToLed(lab, c.Gamma) * c.Ilin(Math.Min(1f, glow + SmallHatLift * _smallHat));
                 for (int j = s.Start; j < s.Start + s.Count; j++) dst[j] = col;
                 return;

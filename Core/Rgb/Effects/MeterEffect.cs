@@ -11,6 +11,7 @@ namespace ProFanController;
 ///   長さ ℓ = LoudShare × 聞こえ方の音量（LoudVU）＋ BeatShare × 弾み
 ///   弾み B: キック・スネアを検出した本当の時刻に、強さに応じて 0.6〜1 まで上がり、τ = 0.12 秒で戻る
 ///   （低音の量ではなく「叩いた瞬間」で弾ませる。低音が鳴り続ける曲でも、ふだんは半分くらいで、叩くたびに上まで伸びてすぐ戻る）
+///   大きな音のすぐあとの小さな音は、弾みも小さい（EffectContext.LoudRel）
 ///   静かなところは短く、無音なら消える（音量の分もキックもなくなる）
 ///   a_j = clamp(ℓ × Ne − jx, 0, 1)、LED の色 = メーター色（緑 → 黄 → 赤、位置で決まる）× Ilin(a_j)
 ///   ピークの点: 長さが点より上がったら点をそこへ上げて 0.5 秒止め、その後は重力（2.5 / 秒²）で落とす。
@@ -49,8 +50,6 @@ public sealed class MeterEffect : IMusicEffect
     private readonly double[] _histT = new double[HistoryLength];
     private readonly float[] _histV = new float[HistoryLength];
     private int _histCount, _histHead;
-
-    public string Name => MusicStyles.Meter;
 
     /// <summary>いまのピークの点の高さ（0〜1。テスト用）</summary>
     public float DotHeight => _h;
@@ -150,7 +149,7 @@ public sealed class MeterEffect : IMusicEffect
         {
             var ev = events[i];
             if (ev.Kind is not (AudioEventKind.Kick or AudioEventKind.Snare) || ev.Strength < MinStrength) continue;
-            float v = BounceOf(ev);
+            float v = BounceOf(ev) * c.LoudRel(ev.T);
             _kicks.Add((ev.T, v, Math.Clamp(LoudAt(ev.T, loud) + BeatShare * v, 0f, 1f)));
         }
         while (_kicks.Count > 0 && _kicks[0].T < c.T - 2) _kicks.RemoveAt(0);

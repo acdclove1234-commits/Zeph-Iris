@@ -13,6 +13,8 @@ namespace ProFanController;
 /// （実際の曲では 1 秒に 4〜7 回になることがあった）。3 回を使い切っている間に明るくなるときは、その区域の LED を同じ割合で暗くして、
 /// 0.1 秒の間に上がるのを 0.17 まで（前のコマからも同じ傾きまで）にする（色は変えない。速く明るくなる代わりに、なめらかに少しずつ明るくなる）。
 /// 数えるのは送った値（Commit）で、テストの数え方とまったく同じ。暗くするかは光の量で決め、送る値の丸めの差（上がりで 0.006 まで）を見込む。
+/// 描いたコマを全部は送らないデバイス（グラボ・メモリなど。SentOnly）は、実際に送ったコマだけで数える（送らなかったコマは見えないので、
+/// 描いたコマで数えると、送ったコマの間の 1 段の上がりや、送る時刻にそろった点滅の始まりを数えそこねて、1 秒に 4〜5 回になっていた）。
 /// 描画のスレッドからだけ使う。配列は区域の数・LED の数が変わったときだけ作り直す（毎コマ new しない）
 /// </summary>
 public sealed class FlashGuard
@@ -26,8 +28,8 @@ public sealed class FlashGuard
     public const float CapRise = 0.17f;
     /// <summary>
     /// QuarterMinLeds 個以上の LED のデバイスは、全体・ゾーンのほかに 4 分の 1 ずつの区域も見る（長いテープの一部だけが強く点滅するとき:
-    /// スネアの粒・音量メーターやエナジーの帯の先など。録音 7 曲で、4 分の 1 の区域の強い点滅は 1 秒に最大 4〜6 回 → 3 回。
-    /// 代わりにエナジーの「光った拍」が 63% → 57%、音量メーターが 62% → 59% に下がる）。
+    /// スネアの粒・音量メーターやスペクトラムの帯の先など。録音 7 曲で、4 分の 1 の区域の強い点滅は 1 秒に最大 4〜6 回 → 3 回。
+    /// 代わりに音量メーターの「光った拍」が 62% → 59% に下がる。6.15.x のときの測定）。
     /// オフにできるのは調べる用（アプリは変えない）
     /// </summary>
     internal static bool Quarters { get; set; } = true;
@@ -56,6 +58,12 @@ public sealed class FlashGuard
     private float[] _now = Array.Empty<float>();
     private double _lastT = double.NaN;
     private bool _pending, _store;
+
+    /// <summary>
+    /// 送ったコマだけで数える（描いたコマを全部は送らないデバイス。Commit は送ったときだけ呼ぶ）。
+    /// 0.1 秒前の明るさには、そのとき LED に出ていた値（0.1 秒より前に送った値）も入れる
+    /// </summary>
+    public bool SentOnly { get; set; }
 
     /// <summary>暗くしたコマの数（テスト・調べる用）</summary>
     public int Capped { get; private set; }
@@ -94,7 +102,7 @@ public sealed class FlashGuard
             _start[k] = Math.Clamp(zones[k - 1].Start, 0, n);
             _len[k] = Math.Clamp(zones[k - 1].Length, 0, n - _start[k]);
         }
-        // 長いデバイスは 4 分の 1 ずつも見る（音量メーター・エナジーの帯の先、スネアの粒など、一部だけが強く点滅するとき）
+        // 長いデバイスは 4 分の 1 ずつも見る（音量メーター・スペクトラムの帯の先、スネアの粒など、一部だけが強く点滅するとき）
         for (int q = 0; q < nq; q++)
         {
             int s = q * n / 4, e = (q + 1) * n / 4;
@@ -116,6 +124,9 @@ public sealed class FlashGuard
     /// </summary>
     public void Apply(LinColor[] light, int n, double t)
     {
+        // 前のコマを描いたのに送らなかった（SentOnly）: その間、LED は前に送った値のまま。そのコマの時刻で、強い上がりが
+        // まだ続いていたかを確かめ直す（続いていると見なしたままだと、次の点滅の始まりを数えず、暗くもしない）
+        if (_pending && _store && SentOnly) EndHeldRuns(_lastT);
         _pending = false;
         if (_areas == 0 || n != _len[0]) return;
         if (!double.IsNaN(_lastT) && t < _lastT) Reset();
@@ -175,6 +186,17 @@ public sealed class FlashGuard
         if (_count < Hist) _count++;
     }
 
+    /// <summary>SentOnly: 時刻 t まで前に送った値のままだったとき、その時刻で上がりが 0.2 未満なら、強い上がりは終わっている</summary>
+    private void EndHeldRuns(double t)
+    {
+        if (_count == 0 || !(t > _t[_head])) return;
+        for (int a = 0; a < _areas; a++)
+        {
+            float held = _m[a * Hist + _head];
+            if (held - Lowest(a, t, held) < StrongRise + TieEps) _run[a] = false;
+        }
+    }
+
     private static float Mean(Rgb[] o, int s, int len)
     {
         int sum = 0;
@@ -196,15 +218,22 @@ public sealed class FlashGuard
 
     /// <summary>
     /// 前のコマまでの、0.1 秒以内でいちばん暗い平均（なければ今の値）。すぐ前のコマはいつも入れる
-    /// （1 秒に 10 コマより少ないときも、コマとコマの間の跳びは一瞬で明るくなるのと同じ）
+    /// （1 秒に 10 コマより少ないときも、コマとコマの間の跳びは一瞬で明るくなるのと同じ）。
+    /// SentOnly では、0.1 秒前に LED に出ていた値（窓の中のいちばん古いコマより前に送った値）も入れる
     /// </summary>
     private float Lowest(int a, double t, float now)
     {
         float lo = now;
+        double oldest = t;
         for (int j = 0, idx = _head; j < _count; j++, idx = (idx + Hist - 1) % Hist)
         {
-            if (j > 0 && t - _t[idx] > RiseWindowSec + WindowEps) break;
+            if (j > 0 && t - _t[idx] > RiseWindowSec + WindowEps)
+            {
+                if (SentOnly && t - oldest < RiseWindowSec - WindowEps) lo = MathF.Min(lo, _m[a * Hist + idx]);
+                break;
+            }
             lo = MathF.Min(lo, _m[a * Hist + idx]);
+            oldest = _t[idx];
         }
         return lo;
     }

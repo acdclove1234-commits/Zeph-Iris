@@ -110,6 +110,9 @@ public sealed class DeviceRenderer
     private readonly FlashGuard _guard = new();
     private LedSteady.Kind[] _steadyKinds = Array.Empty<LedSteady.Kind>();
     private readonly SectionMeter _section = new();
+    private readonly PresenceMeter _presence = new();
+    /// <summary>最後に音の手ごたえを進めた時刻（描いた時刻。音楽連動で描いていない間が長ければ、測り直す）</summary>
+    private double _presenceT = double.NegativeInfinity;
     private readonly IMusicEffect?[] _effects = new IMusicEffect?[EffectCatalog.VariantCount];
     private readonly int[] _effectLayout = new int[EffectCatalog.VariantCount];
     private MoodEffect? _idleMood;
@@ -175,8 +178,6 @@ public sealed class DeviceRenderer
     private float _prevIdleW;
     private double _fullIdleFor;
     private bool _idleFlushed;
-    private (long, long) _ownStep;
-    private bool _hasOwnStep;
 
     public DeviceRenderer(RgbDevice device)
     {
@@ -201,7 +202,7 @@ public sealed class DeviceRenderer
     /// <summary>
     /// いま、ビートの色替え（全デバイスで共有する色・追いかけの色の段）を描いているか（音楽連動で音が鳴っているとき）。
     /// グラボは小さな色の変化を送らないので、このときだけ、色替えが終わったところで差が小さくても 1 回送る。
-    /// ムード・ミックスなど色替えを描かない光り方では、共有の色が変わっても見た目は変わらないので送らない
+    /// ムード・スペクトラムなど色替えを描かない光り方では、共有の色が変わっても見た目は変わらないので送らない
     /// </summary>
     public bool DrawsColorSteps => _layer == Layer.Music && _idle.Weight < 1 && UsesColorSteps(_variant);
 
@@ -211,12 +212,9 @@ public sealed class DeviceRenderer
     /// <summary>
     /// このコマで、音が止まったときの光り方に切り替わってから 0.5 秒たった、またはビートの色替えを描く光り方で音楽連動に戻った。
     /// グラボは切り替えの最後のわずかな差を送らない（ちかちかしやすいグラボは、一度の切り替えでも差が 40 以下だと送らない）ので、
-    /// ここで 1 回送る。ムード・ミックスなど少しずつ変わる光り方へ戻ったときは、ふだんと同じく小さな差は送らない
+    /// ここで 1 回送る。ムード・スペクトラムなど少しずつ変わる光り方へ戻ったときは、ふだんと同じく小さな差は送らない
     /// </summary>
     public bool IdleRampDone { get; private set; }
-
-    /// <summary>このコマで、テンポ追従の帯の色が一度に変わった（共有の色とは別に 2 拍ごと）</summary>
-    public bool OwnColorStep { get; private set; }
 
     /// <summary>このコマで、光り方が定期便を待たずに早めに送ってほしいと言った（EffectContext.SendNow）</summary>
     public bool SendNowRequested { get; private set; }
@@ -251,6 +249,15 @@ public sealed class DeviceRenderer
     /// <summary>送る直前の強い点滅の制限（テスト・調べる用）</summary>
     internal FlashGuard Guard => _guard;
 
+    /// <summary>
+    /// 描いたコマを全部は送らないデバイス（RgbDeviceChannel がコマごとに決める）: 強い点滅の制限は、送ったコマだけで数える。
+    /// そのときは描いたあとに数えず、送ったときに CommitSent を呼ぶ
+    /// </summary>
+    internal bool DeferGuardCommit { get => _guard.SentOnly; set => _guard.SentOnly = value; }
+
+    /// <summary>DeferGuardCommit のとき、送った値で強い点滅を数える（Render のすぐあと、送ったときだけ）</summary>
+    internal void CommitSent(Rgb[] sent, int n) => _guard.Commit(sent, n);
+
     /// <summary>このデバイスは、AttackHold・LedSteady を使わないか（直接書き込むグラボ）</summary>
     private bool NoAttackHold => Device.DirectGpu && DirectGpuNoAttackHold;
     private bool NoSteady => Device.DirectGpu && DirectGpuNoSteady;
@@ -262,14 +269,10 @@ public sealed class DeviceRenderer
     public const double IdleFlushAfterSec = 0.5;
 
     /// <summary>
-    /// ビートの色替えを描く光り方か（共有の色を描く: ビートで色替え・エナジー・流れる波・波紋・ストロボ、
-    /// 小さなゾーンでパルスを描く音量メーター、2 拍ごとに色の段を進めるテンポ追従）。
-    /// パルスは色を時刻でゆっくり変える（ビートで切り替えない）ので入れない
+    /// ビートの色替えを描く光り方か（共有の色を描く: ビートで色替え・波紋、小さなゾーンでパルスを描く音量メーター）
     /// </summary>
     public static bool UsesColorSteps(EffectVariant v) => v is EffectVariant.BeatHue or EffectVariant.BeatHueSlow
-        or EffectVariant.PulseLoudSlow
-        or EffectVariant.Energy or EffectVariant.Scroll or EffectVariant.Ripple or EffectVariant.Strobe
-        or EffectVariant.Meter or EffectVariant.Chase;
+        or EffectVariant.PulseLoudSlow or EffectVariant.Ripple or EffectVariant.Meter;
 
     /// <summary>激しい点滅の制限（受け付けた光の数など。表示・テスト用）</summary>
     public FlashLimiter Limiter => _beat.Limiter;
@@ -308,29 +311,21 @@ public sealed class DeviceRenderer
         AmbientEffects.Handles(mode) && Device.IsLowWrite && !(settings?.AnimateOnGpu == true && !Device.IsFlickerProne) ? 0 : t;
 
     /// <summary>
-    /// ちかちかしやすいデバイスで使う音楽連動の光り方（書き込みの回数を減らす）。
-    ///   ・全体の設定に任せている（自動）ときは、色が絶えず少しずつ変わるミックス・ムードも「ビートで色替え」にする
-    ///   ・デバイスごとに選んだ光り方は、遅いデバイス用の版にする（ムードを選んだときはムードのまま）
+    /// ちかちかしやすいデバイスで使う音楽連動の光り方（書き込みの回数を減らす）: 音量メーターは音量で光る遅い版のパルス、
+    /// ほかは遅い版の「ビートで色替え」（デバイスごとに選んだ光り方も同じ）
     /// </summary>
-    public static EffectVariant FlickerProneVariant(EffectVariant v, string? deviceEffect)
+    public static EffectVariant FlickerProneVariant(EffectVariant v, string? deviceEffect) => v switch
     {
-        bool auto = string.IsNullOrEmpty(deviceEffect) || deviceEffect == EffectCatalog.Auto;
-        return v switch
-        {
-            EffectVariant.Mood => auto ? EffectVariant.BeatHueSlow : EffectVariant.Mood,
-            EffectVariant.Pulse or EffectVariant.PulseSlow => EffectVariant.PulseSlow,
-            EffectVariant.PulseLoudSlow or EffectVariant.Meter => EffectVariant.PulseLoudSlow,
-            _ => EffectVariant.BeatHueSlow,
-        };
-    }
+        EffectVariant.PulseLoudSlow or EffectVariant.Meter => EffectVariant.PulseLoudSlow,
+        _ => EffectVariant.BeatHueSlow,
+    };
 
     /// <summary>
     /// 書き込みを最小限にする描き方（明るさ一定・色は一度に切り替え）にするか。
     /// ちかちかしやすいデバイスは常に、ほかのグラボはビートで色が切り替わる光り方のときだけ
     /// </summary>
     private bool IsLowWriteFor(EffectVariant variant) => Device.IsFlickerProne
-        || (Device.IsGpu && variant is EffectVariant.BeatHue or EffectVariant.BeatHueSlow or EffectVariant.Pulse
-            or EffectVariant.PulseSlow or EffectVariant.PulseLoudSlow);
+        || (Device.IsGpu && variant is EffectVariant.BeatHue or EffectVariant.BeatHueSlow or EffectVariant.PulseLoudSlow);
 
     /// <summary>0.4 秒のクロスフェードの途中（テスト用）</summary>
     internal bool Crossfading => _fade.Active;
@@ -363,7 +358,6 @@ public sealed class DeviceRenderer
     {
         int n = output.Length;
         IdleRampDone = false;
-        OwnColorStep = false;
         SendNowRequested = SendEvenIfSmallRequested = false;
         if (n == 0) return;
         var cfg = input.Cfg ?? new RgbConfig();
@@ -397,7 +391,7 @@ public sealed class DeviceRenderer
         EffectVariant variant = _variant;
         if (layer == Layer.Music)
         {
-            variant = EffectCatalog.Resolve(music.Effect, settings.Effect, Device.IsSlow, music.StrobeAllowed);
+            variant = EffectCatalog.Resolve(music.Effect, settings.Effect, Device.IsSlow);
             // 光り方の置き換えは、ちかちかしやすいデバイス（ASRock の Radeon）だけ。
             // ほかのグラボは全体と同じ光り方にする（グラボだけ違う動きになって、連動していないように見えないように）
             if (Device.IsFlickerProne) variant = FlickerProneVariant(variant, settings.Effect);
@@ -486,11 +480,11 @@ public sealed class DeviceRenderer
         }
         _fade.Apply(_light, input.T);
         // 音楽連動: 明るくなった直後の小さな下がりを止める（低音の値の上下で、光の立ち上がりが段つきになってちらつく）。
-        // 波紋・ストロボ・ムード・音量メーター・エナジーは使わない（AttackHold.Applies）。
+        // 波紋・音量メーターは使わない（AttackHold.Applies）。
         // 書き込みを減らすデバイス（グラボ）は、光り方の側で立ち上がりを遅らせているので使わない（NoAttackHold は調べる用。ふだんはオフ）
         if (layer == Layer.Music && !Device.IsLowWrite && !NoAttackHold && AttackHold.Applies(variant)) _attack.Apply(_light, n, dt);
         else _attack.Reset();
-        // 音楽連動: LED ごとに、明るさの向きが短い間に戻らないようにする（ちらつき止め。ストロボの LED は除く）。
+        // 音楽連動: LED ごとに、明るさの向きが短い間に戻らないようにする（ちらつき止め）。
         // 書き込みを減らすデバイス（グラボ）は明るさを一定にしているので使わない（NoSteady は調べる用。ふだんはオフ）
         if (afterEmergency) _steady.Reset();
         if (layer == Layer.Music && !Device.IsLowWrite && !NoSteady && SteadyKinds(variant) is var (any, kinds, kind) && any) _steady.Apply(_light, n, dt, kinds, kind);
@@ -520,27 +514,30 @@ public sealed class DeviceRenderer
         // 雷・波・音楽連動: ディザリングの代わりに、前に送った値を保つ（暗い色が 2・3・2・3 と行き来しない）
         if (hold && !dither) _out.WriteHold(_light, output, 1f);
         else _out.Write(_light, output, 1f, dither);
-        // 強い点滅の制限は、送る値で数える（Apply していなければ何もしない）
-        _guard.Commit(output, n);
+        // 強い点滅の制限は、送る値で数える（Apply していなければ何もしない）。全部は送らないデバイスは、送ったときに数える（CommitSent）
+        if (!_guard.SentOnly) _guard.Commit(output, n);
         _hasLast = true;
     }
 
     /// <summary>
     /// ちらつき止め（LedSteady）の LED ごとの直し方。ゾーンごとの光り方がなければ、デバイスの光り方で全部同じ（kinds は null）。
-    /// ゾーンごとに選んだ光り方があれば、ゾーンの光り方ごと（ストロボのゾーンの LED は直さない）
+    /// ゾーンごとに選んだ光り方があれば、ゾーンの光り方ごと
     /// </summary>
     private (bool Any, LedSteady.Kind[]? Kinds, LedSteady.Kind Kind) SteadyKinds(EffectVariant variant)
     {
         var kind = LedSteady.KindOf(variant);
-        if (!_hasZoneEffects) return (kind != LedSteady.Kind.Skip, null, kind);
+        var c = _ctx;
+        // 小さいゾーン（Small）の波紋は、光が動かず、ゾーン全体が 1 色で明るさだけが変わる（PulseEffect）ので、
+        // 動く光の直し方ではなく、すべての直し方を使う（風・雨の音で、明るさが細かく上下していた）
+        if (!_hasZoneEffects && !(kind == LedSteady.Kind.Moving && c.HasSmallSegment)) return (kind != LedSteady.Kind.Skip, null, kind);
         int n = _light.Length;
         if (_steadyKinds.Length != n) _steadyKinds = new LedSteady.Kind[n];
         Array.Fill(_steadyKinds, kind);
-        var c = _ctx;
-        for (int k = 0; k < c.SegmentCount && k < _segVariant.Length; k++)
+        for (int k = 0; k < c.SegmentCount; k++)
         {
             var s = c.Segments[k];
-            var zk = LedSteady.KindOf(_segVariant[k]);
+            var zk = _hasZoneEffects && k < _segVariant.Length ? LedSteady.KindOf(_segVariant[k]) : kind;
+            if (zk == LedSteady.Kind.Moving && s.Small) zk = LedSteady.Kind.Full;
             for (int j = s.Start; j < s.Start + s.Count && j < n; j++) _steadyKinds[j] = zk;
         }
         bool any = false;
@@ -710,7 +707,7 @@ public sealed class DeviceRenderer
             var v = deviceVariant;
             if (_hasZoneEffects && _segEffect[k] is string effect)
             {
-                v = EffectCatalog.Resolve(music.Effect, effect, Device.IsSlow, music.StrobeAllowed);
+                v = EffectCatalog.Resolve(music.Effect, effect, Device.IsSlow);
                 if (Device.IsFlickerProne) v = FlickerProneVariant(v, effect);
             }
             _segVariant[k] = v;
@@ -762,36 +759,38 @@ public sealed class DeviceRenderer
         c.Dt = dt;
         SampleWindow(input.Features, t0, t1);
         c.Section = _section.Update(c.Frame, dt);
+        // 音楽連動で描いていない間（ほかのモード・高温のときなど）が長かったら、手ごたえを測り直す
+        // （その間の時間は数えていないので、前の大きな音を覚えたままだと、次の音を暗く始めてしまう）
+        if (!(input.T - _presenceT <= PresenceMeter.ResetAfterSilenceSec))
+        {
+            _presence.Reset();
+        }
+        _presenceT = input.T;
+        _presence.Update(c.Frame, dt);
+        // 出来事（銃声・爆発・キックなど）は、その音量ですぐ手ごたえを上げる（ならした音量が追いつく前の、光の頭を暗くしない）
+        // （ギターの音の出だし Tonal はきらめきだけが使う。ほかの光り方・手ごたえは今までどおり）
+        foreach (var e in c.Events) if (e.T <= c.T && e.Kind != AudioEventKind.Tonal) _presence.Lift(c.LoudDbAt(e.T));
+        c.Presence = _presence.Value;
 
         _beat.Update(c, t0, t1);
         BeatDriver.SyncSharedColor(c);
 
-        var fx = Use(variant);
+        Use(variant);
         _activeVariant = variant;
-        var chaseFx = fx as ChaseEffect;
         if (_hasZoneEffects)
         {
             // ゾーンごとに選んだ光り方も、1 コマに 1 回だけ進める
             for (int k = 0; k < _segVariant.Length; k++)
             {
                 if (_segVariant[k] == variant) continue;
-                var zfx = Use(_segVariant[k]);
-                chaseFx ??= zfx as ChaseEffect;
+                Use(_segVariant[k]);
             }
         }
-        if (chaseFx is { } chase)
-        {
-            var k = chase.ColorStep;
-            OwnColorStep = _hasOwnStep && k != _ownStep;
-            _ownStep = k;
-            _hasOwnStep = true;
-        }
-        else
-        {
-            _hasOwnStep = false;
-        }
 
-        _idle.Update(c.Frame, music.IdleDelaySec, dt);
+        // 静かな場面（音の手ごたえが小さい）が続いたとき、更新の遅いデバイス（メモリ・直接書き込むグラボ）は、止まっているときの光り方へ切り替える
+        // （いちばん暗いときの明るさが高く、暗くしても小さな音で色が変わり続けるため）。速いデバイスは暗くするだけ（ApplyPresence。光り方の見た目のまま）。
+        // 明るさを一定にするグラボは切り替えない（止まっているときの光り方はゆっくり色が変わるので、かえって変化が増える）
+        _idle.Update(c.Frame, music.IdleDelaySec, dt, _presence.Hushed && c.SlowDevice && !c.FixedBrightness);
         float w = _idle.Weight;
         // 止まっているときの光り方が全部になって 0.5 秒（1 回だけ）。音楽連動に戻ったとき（ビートの色替えを描く光り方だけ。
         // 止まっている間に進んだ色替えは、差が小さいと届いていないことがある）
@@ -801,7 +800,11 @@ public sealed class DeviceRenderer
         if (w < 1) _idleFlushed = false;
         IdleRampDone = settled || (w <= 0 && _prevIdleW > 0 && UsesColorSteps(variant));
         _prevIdleW = w;
-        if (w < 1) RenderMusicSegments(variant, _main);
+        if (w < 1)
+        {
+            RenderMusicSegments(variant, _main);
+            ApplyPresence(_main, c);
+        }
         // 光り方が早めに送ってほしい・小さな変化でも送ってほしいコマ（音が止まったときの光り方だけのときは使わない）
         SendNowRequested = w < 1 && c.SendNow;
         SendEvenIfSmallRequested = w < 1 && c.SendEvenIfSmall;
@@ -811,7 +814,46 @@ public sealed class DeviceRenderer
             // ちかちかしやすいデバイスは、途中の色を何度も書かないよう、半分を過ぎたところで一度に切り替える
             float s = Device.IsFlickerProne ? (w >= 0.5f ? 1f : 0f) : EffectContext.Smoothstep(w);
             if (s >= 1) _idleBuf.AsSpan().CopyTo(_main);
-            else if (s > 0) for (int i = 0; i < _main.Length; i++) _main[i] = LinColor.Lerp(_main[i], _idleBuf[i], s);
+            else if (s > 0)
+            {
+                for (int i = 0; i < _main.Length; i++)
+                {
+                    var a = _main[i];
+                    var b = _idleBuf[i];
+                    var m = LinColor.Lerp(a, b, s);
+                    // 明るさを一定にするグラボは、色が遠いと混ぜた途中が暗くなる（緑と紫の間が灰色）。いちばん強い成分を
+                    // 2 つの色の間の値にそろえて、音が止まったときの色の切り替えが、明るさの上下に見えないようにする
+                    if (Device.IsLowWrite)
+                    {
+                        float target = a.MaxChannel + (b.MaxChannel - a.MaxChannel) * s;
+                        float mx = m.MaxChannel;
+                        if (mx > 1e-6f) m = m * (target / mx);
+                    }
+                    _main[i] = m;
+                }
+            }
+        }
+    }
+
+    /// <summary>
+    /// 音の手ごたえ（PresenceMeter）に合わせて、どの光り方もまとめて暗くする（静かな場面で、小さな音を大きく光らせない）。
+    /// いちばん暗いときの明るさ（F0）より下げない。明るさを一定にするグラボは変えない
+    /// </summary>
+    private static void ApplyPresence(LinColor[] dst, EffectContext c)
+    {
+        if (c.FixedBrightness) return;
+        if (c.Presence < 1) ApplyPresence(dst, 0, dst.Length, c.Presence, c.F0);
+    }
+
+    private static void ApplyPresence(LinColor[] dst, int start, int count, float presence, float f0)
+    {
+        float k = PresenceMeter.MinGain + (1 - PresenceMeter.MinGain) * presence;
+        for (int i = start; i < start + count; i++)
+        {
+            var m = dst[i];
+            float mx = Math.Max(m.R, Math.Max(m.G, m.B));
+            if (mx <= f0 || mx <= 0) continue;
+            dst[i] = m * (Math.Max(f0, mx * k) / mx);
         }
     }
 
@@ -851,7 +893,7 @@ public sealed class DeviceRenderer
         var c = _ctx;
         for (int k = 0; k < c.SegmentCount; k++)
         {
-            var v = _hasZoneEffects && k < _segVariant.Length ? _segVariant[k] : deviceVariant;
+            var v = k < _segVariant.Length ? _segVariant[k] : deviceVariant;
             var fx = _effects[(int)v]!;
             if (v == deviceVariant)
             {
@@ -963,7 +1005,7 @@ public sealed class DeviceRenderer
         if (double.IsNaN(_gridCursor) || _gridCursor < from) _gridCursor = from;
     }
 
-    /// <summary>音量・帯の強さの並び（LoudT・LoudV・BassV・MidV・TrebleV）に 1 つ足す（いっぱいなら足さない）</summary>
+    /// <summary>音量の並び（LoudT・LoudV）に 1 つ足す（いっぱいなら足さない）</summary>
     private void AddLoud(double t, AudioFrame f)
     {
         var c = _ctx;
@@ -971,9 +1013,6 @@ public sealed class DeviceRenderer
         if (k >= EffectContext.MaxWindowSamples) return;
         c.LoudT[k] = t;
         c.LoudV[k] = f.LoudVU;
-        c.BassV[k] = f.BassE;
-        c.MidV[k] = f.MidE;
-        c.TrebleV[k] = f.TrebleE;
         c.LoudCount = k + 1;
     }
 

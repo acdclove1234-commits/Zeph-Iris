@@ -170,7 +170,6 @@ public static class ModeSyncBenchTests
         {
             string m = spec.Effect;
             var music = (tweak?.Invoke(ResolvedMusic.Default) ?? ResolvedMusic.Default) with { Effect = m };
-            if (m == MusicStyles.Strobe) music = music with { StrobeAllowed = true, ReduceFlashing = false };
             var input = new RenderInput { Cfg = cfg, Music = music, Device = spec.Settings };
             return new Lane { Mode = spec.Label, R = new DeviceRenderer(dev), In = input, Out = new Rgb[dev.LedCount],
                 Prev = new int[dev.LedCount], Dir = new int[dev.LedCount], Flip = new int[dev.LedCount],

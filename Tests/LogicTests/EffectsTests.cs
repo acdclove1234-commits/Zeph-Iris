@@ -331,8 +331,7 @@ public static class EffectsTests
                 total++;
                 try
                 {
-                    var m = Music(effect) with { StrobeAllowed = true, ReduceFlashing = effect != MusicStyles.Strobe };
-                    var rig = new Rig(make(), MusicCfg(), m);
+                    var rig = new Rig(make(), MusicCfg(), Music(effect));
                     if (effect == MusicStyles.Ripple) rig.Synth.Locked = false; // 予測ビートとキックの両方を通す
                     float peak = 0;
                     bool finite = true;
@@ -353,13 +352,13 @@ public static class EffectsTests
             }
         }
         foreach (var f in failures) T.Info(f);
-        T.Check(ok == total, $"all 12 effects render 10 s on 1/3/6/30/80/250 LEDs, ASRock and GPU layouts ({ok}/{total})");
+        T.Check(ok == total, $"all {MusicStyles.All.Length} effects render 10 s on 1/3/6/30/80/250 LEDs, ASRock and GPU layouts ({ok}/{total})");
 
         // 小さいゾーン（6 個未満）は全体で光る代わりの光り方
         var small = new Rig(Strip(3), MusicCfg(), Music(MusicStyles.Spectrum));
         small.Run(0.3, 2, 60);
         var l = small.R.LastLight;
-        T.Check(l[0] == l[1] && l[1] == l[2], "Spectrum on a 3-LED zone falls back to a whole-zone colour (Mix)");
+        T.Check(l[0] == l[1] && l[1] == l[2], "Spectrum on a 3-LED zone falls back to a whole-zone colour (MixEffect)");
     }
 
     // ================= 個々の光り方 =================
@@ -411,76 +410,129 @@ public static class EffectsTests
         T.Check(c.G > 0.25f && c.R < 0.05f * c.G && c.B < 0.05f * c.G, $"BeatHue with Mono uses the chosen colour (green) ({c.R:F2},{c.G:F2},{c.B:F2})");
     }
 
-    public static void TestPulseAfterglow()
+    /// <summary>
+    /// 話し声の疲れ（TalkFatigue）: テンポをつかめていない「ビートで色替え」は、話し声らしい出来事（言葉の出だしのスネアと立ち上がりが
+    /// 1 秒に 3〜4 回、不規則に続く）が 4 秒を超えて続くと、キックの光を弱くしていく（14〜24 秒の光の山の平均が、2〜4 秒の半分以下）。
+    /// ドラムのないピアノ（0.5〜1.4 秒ごとの音）では弱めない（90% 以上のまま）。音のない 2 秒のあとは、また最初の明るさで光る
+    /// </summary>
+    public static void TestBeatHueTalkFatigue()
     {
-        var cfg = MusicCfg(gamma: false);
-        var m = Music(MusicStyles.Pulse, Palettes.Fire) with { TempoMode = TempoModes.Off, MinBrightness = 0 };
-        foreach (bool slow in new[] { false, true })
+        foreach (bool talk in new[] { true, false })
         {
-            var x = new Manual(slow ? Strip(5, slow: true) : Strip(5), cfg, m);
-            // 光り方「パルス」は残光を長くして、「ビートで色替え」より、ふわっと残るようにしてある
-            double tau = slow ? PulseEffect.SlowSwellGlowSec : PulseEffect.SwellGlowSec;
-            double t = 0;
-            for (; t < 1.0; t += 0.01) { x.In.Frame.BassE = 0; x.Step(t); }
-            for (; t < 1.1; t += 0.01) { x.In.Frame.BassE = 1; x.Step(t); }
-            double tEnd = t - 0.01;
-            float top = x.R.LastLight[0].R;
-            double at1 = 0, at2 = 0;
-            for (; t < tEnd + 2 * tau + 0.05; t += 0.01)
+            var cfg = MusicCfg(gamma: false);
+            var m = Music(MusicStyles.BeatHue, Palettes.Fire) with { MinBrightness = 0 };
+            var x = new Manual(Strip(24), cfg, m);
+            var rng = new Random(talk ? 71 : 72);
+            var hits = new List<double>();
+            for (double t = 1; t < 24; t += talk ? 0.24 + 0.12 * rng.NextDouble() : 0.5 + 0.9 * rng.NextDouble()) hits.Add(Math.Round(t, 2));
+            hits.Add(27.0);
+            int h = 0;
+            var peaks = new List<(double T, float V)>();
+            float best = 0;
+            double bestT = 0;
+            for (double t = 0; t < 28; t += 0.01)
             {
-                x.In.Frame.BassE = 0;
-                x.Step(t);
-                if (Math.Abs(t - (tEnd + tau)) < 0.005) at1 = x.R.LastLight[0].R;
-                if (Math.Abs(t - (tEnd + 2 * tau)) < 0.005) at2 = x.R.LastLight[0].R;
+                t = Math.Round(t, 2);
+                // 音のある間は −20 dBFS、24〜27 秒は無音（数え直す）
+                x.In.Frame.RmsDb = t >= 24 && t < 27 ? -90 : -20;
+                var ev = new List<AudioEvent>();
+                while (h < hits.Count && hits[h] <= t)
+                {
+                    ev.Add(new AudioEvent(2 * h, AudioEventKind.Snare, hits[h], 2f));
+                    ev.Add(new AudioEvent(2 * h + 1, AudioEventKind.Onset, hits[h], 1.6f));
+                    if (best > 0) peaks.Add((bestT, best));
+                    best = 0;
+                    bestT = hits[h];
+                    h++;
+                }
+                x.Step(t, ev.ToArray());
+                if (t - bestT < 0.1) best = Math.Max(best, x.R.LastLight[0].MaxChannel);
             }
-            string v = slow ? "slow device" : "fast device";
-            // 遅いデバイスは立ち上がりを 40 ミリ秒遅らせる（0.1 秒の低音で 1 − e^−2.5 = 0.92）
-            T.Check(top > (slow ? 0.9f : 0.99f), $"Pulse ({v}): bass hit lights the device fully ({top:F3})");
-            // 遅いデバイスは、いちばん暗いときでも 45% は光らせる（チカチカ防止）。床を引いた残りが e^-1・e^-2 で減る
-            double f0 = slow ? DeviceRenderer.SlowMinBrightness : 0;
-            T.Near((at1 - f0) / (top - f0), Math.Exp(-1), 0.03, $"Pulse ({v}): afterglow after τg = {tau}s is e^-1");
-            T.Near((at2 - f0) / (top - f0), Math.Exp(-2), 0.03, $"Pulse ({v}): afterglow after 2τg is e^-2");
-            // 色はビートで切り替えず、時刻でゆっくり進む（2 秒では Fire の最初の赤から、まだ少ししか進まない）
-            var last = x.R.LastLight[0];
-            var want = ColorPalette.Get(Palettes.Fire, null).At((t - 0.01) / PulseEffect.ColorHoldSec * ColorPalette.Get(Palettes.Fire, null).Step, false);
-            T.Check(last.B < 0.01f && last.R > 0 && Math.Abs(last.G / last.R - want.G / want.R) < 0.03f,
-                $"Pulse ({v}): colour drifts slowly with time from the palette's first colour (G/R {last.G / Math.Max(last.R, 1e-6f):F3}, expected {want.G / want.R:F3})");
+            if (best > 0) peaks.Add((bestT, best));
+            double Avg(double a, double b) => peaks.Where(p => p.T >= a && p.T < b && p.V > 0.02).Select(p => (double)p.V).DefaultIfEmpty(0).Average();
+            double early = Avg(2, 4), late = Avg(14, 24), again = Avg(26.9, 27.5);
+            T.Info($"{(talk ? "talk" : "drumless piano")}: flash peaks 2-4 s {early:F2}, 14-24 s {late:F2}, after a pause {again:F2}");
+            if (talk)
+            {
+                T.Check(late <= 0.5 * early, $"long talk: kick flashes get weaker ({late:F2} vs {early:F2})");
+                T.Check(again >= 0.9 * early, $"after a pause the first flash is full again ({again:F2} vs {early:F2})");
+            }
+            else T.Check(late >= 0.9 * early, $"drumless piano: flashes keep their strength ({late:F2} vs {early:F2})");
         }
     }
 
     /// <summary>
-    /// パルスの色は、強いキックが続いてもビートでは切り替わらない（ビートで色替えとの違い）。
-    /// どのデバイスも同じ時刻なら同じ色（デバイスごとにずれない）
+    /// 小さいゾーン（6 個未満）の波紋は、全体を輪の明るさで光らせる: 低音だけでは下地（0.15 × 低音）しか光らず、
+    /// キックで明るくなり、輪の消え方 τ（FadeTauSec）で暗くなる（輪の明るさ × SmallGain は 1 で頭打ちになるので、
+    /// τ のあとと 2τ のあとの比が e^-1。τ のあとは光ったときより暗い）
     /// </summary>
-    public static void TestPulseColorIgnoresBeats()
+    public static void TestSmallZonePulseAfterglow()
     {
         var cfg = MusicCfg(gamma: false);
-        var m = Music(MusicStyles.Pulse, Palettes.Neon) with { TempoMode = TempoModes.Auto, MinBrightness = 0 };
-        var a = new Manual(Strip(5), cfg, m);
-        var b = new Manual(Strip(8), cfg, m);
-        long id = 0;
-        var hues = new List<LinColor>();
-        for (double t = 0; t < 4; t += 1 / 60.0)
+        var m = Music(MusicStyles.Ripple, Palettes.Fire) with { TempoMode = TempoModes.Off, MinBrightness = 0 };
+        var x = new Manual(Strip(5), cfg, m);
+        double tau = RippleEffect.FadeTauSec;
+        double t = 0;
+        for (; t < 1.0; t += 0.01) { x.In.Frame.BassE = 0; x.Step(t); }
+        float bassOnly = 0;
+        for (; t < 1.1; t += 0.01) { x.In.Frame.BassE = 1; x.Step(t); bassOnly = Math.Max(bassOnly, x.R.LastLight[0].MaxChannel); }
+        for (; t < 2.0; t += 0.01) { x.In.Frame.BassE = 0; x.Step(t); }
+        double tk = t;
+        x.Step(t, new AudioEvent(1, AudioEventKind.Kick, tk, 3f));
+        t += 0.01;
+        double tTop = tk + 0.03;
+        float top = 0;
+        double at1 = 0, at2 = 0;
+        for (; t < tTop + 2 * tau + 0.05; t += 0.01)
         {
-            bool kick = Math.Floor(t * 2) > Math.Floor((t - 1 / 60.0) * 2);
-            foreach (var x in new[] { a, b })
-            {
-                x.In.Events.Clear();
-                if (kick) x.In.Events.Add(new AudioEvent(++id, AudioEventKind.Kick, t, 2.5f));
-                x.In.Frame.BassE = 0.8f;
-                x.Step(t);
-            }
-            var c = a.R.LastLight[0];
-            if (c.MaxChannel > 0.05f) hues.Add(c * (1f / c.MaxChannel));
+            x.Step(t);
+            if (Math.Abs(t - tTop) < 0.005) top = x.R.LastLight[0].MaxChannel;
+            if (Math.Abs(t - (tTop + tau)) < 0.005) at1 = x.R.LastLight[0].MaxChannel;
+            if (Math.Abs(t - (tTop + 2 * tau)) < 0.005) at2 = x.R.LastLight[0].MaxChannel;
         }
-        float maxJump = 0;
-        for (int i = 1; i < hues.Count; i++)
-            maxJump = Math.Max(maxJump, Math.Max(Math.Abs(hues[i].R - hues[i - 1].R), Math.Max(Math.Abs(hues[i].G - hues[i - 1].G), Math.Abs(hues[i].B - hues[i - 1].B))));
-        T.Check(maxJump < 0.05f, $"Pulse: 8 strong kicks do not switch the colour at once (largest change per frame {maxJump:F3})");
-        var ca = a.R.LastLight[0];
-        var cb = b.R.LastLight[0];
-        T.Check(Math.Abs(ca.R / ca.MaxChannel - cb.R / cb.MaxChannel) < 0.01f && Math.Abs(ca.B / ca.MaxChannel - cb.B / cb.MaxChannel) < 0.01f,
-            "Pulse: two devices show the same colour at the same time");
+        var l = x.R.LastLight;
+        T.Info($"Ripple 5-LED zone: bass only {bassOnly:F3}, kick {top:F3}, after τ {at1:F3}, after 2τ {at2:F3}");
+        T.Check(l[0] == l[4], "Ripple on a 5-LED zone lights the whole zone in one colour");
+        T.Check(bassOnly < 0.2f, $"small-zone Ripple: bass without a kick lights only the dim underlay ({bassOnly:F3})");
+        T.Check(top > 0.5f, $"small-zone Ripple: a kick lights the zone clearly ({top:F3})");
+        T.Check(at1 < 0.6 * top, $"small-zone Ripple: after τ = {tau}s the ring light has faded ({at1:F3} vs {top:F3})");
+        T.Near(at2 / at1, Math.Exp(-1), 0.03, $"small-zone Ripple: from τ to 2τ it fades by e^-1 (τ = {tau}s)");
+    }
+
+    /// <summary>
+    /// 更新の遅いデバイス（メモリなど。グラボ以外）の音量メーターは、音量で光る遅い版のパルス（PulseLoudSlow）で光る:
+    /// 立ち上がりは 40 ミリ秒遅らせ（0.1 秒の音で 1 − e^−2.5 = 0.92）、いちばん暗いときでも 75% は光らせ（チカチカ防止）、
+    /// 床を引いた残りが残光 τg = 0.45 秒で e^-1・e^-2 と減る（音量の戻り 0.40 秒は残光より速いので、残光の減り方になる）
+    /// </summary>
+    public static void TestSlowDeviceMeterPulse()
+    {
+        var cfg = MusicCfg(gamma: false);
+        var m = Music(MusicStyles.Meter, Palettes.Fire) with { TempoMode = TempoModes.Off, MinBrightness = 0 };
+        var x = new Manual(Strip(5, slow: true), cfg, m);
+        double tau = PulseEffect.SlowGlowTauSec;
+        double t = 0;
+        for (; t < 1.0; t += 0.01) { x.In.Frame.LoudVU = 0; x.Step(t); }
+        T.Check(x.R.ActiveVariant == EffectVariant.PulseLoudSlow, $"Meter on a slow device uses the slow loudness pulse ({x.R.ActiveVariant})");
+        double f0 = DeviceRenderer.SlowMinBrightness;
+        float floorLevel = x.R.LastLight[0].MaxChannel;
+        T.Near(floorLevel, f0, 0.02, $"slow Meter: silence keeps the {f0:P0} floor ({floorLevel:F3})");
+        for (; t < 1.1; t += 0.01) { x.In.Frame.LoudVU = 1; x.Step(t); }
+        double tEnd = t - 0.01;
+        float top = x.R.LastLight[0].MaxChannel;
+        double rise = (top - f0) / (1 - f0);
+        T.Check(rise > 0.88 && rise < 0.97, $"slow Meter: 0.1 s of sound rises to 1 − e^-2.5 above the floor (40 ms attack) ({rise:F3})");
+        double at1 = 0, at2 = 0;
+        for (; t < tEnd + 2 * tau + 0.05; t += 0.01)
+        {
+            x.In.Frame.LoudVU = 0;
+            x.Step(t);
+            if (Math.Abs(t - (tEnd + tau)) < 0.005) at1 = x.R.LastLight[0].MaxChannel;
+            if (Math.Abs(t - (tEnd + 2 * tau)) < 0.005) at2 = x.R.LastLight[0].MaxChannel;
+        }
+        var l = x.R.LastLight;
+        T.Check(l[0] == l[4], "slow Meter lights the whole device in one colour");
+        T.Near((at1 - f0) / (top - f0), Math.Exp(-1), 0.03, $"slow Meter: afterglow after τg = {tau}s is e^-1 above the floor");
+        T.Near((at2 - f0) / (top - f0), Math.Exp(-2), 0.03, "slow Meter: afterglow after 2τg is e^-2 above the floor");
     }
 
     public static void TestSpectrumFollowsBands()
@@ -569,6 +621,26 @@ public static class EffectsTests
         T.Check(meter.Level < rest + 0.08f, "a weak kick (below 1.2×) does not bounce");
     }
 
+    public static void TestRippleLoudRiseWithoutKick()
+    {
+        var x = new Manual(Strip(1), MusicCfg(), Music(MusicStyles.Ripple));
+        var history = new FeatureRing();
+        x.In.Features = history;
+        for (int i = 0; i < 120; i++)
+        {
+            double t = i / 60.0;
+            x.In.Frame.T = t;
+            x.In.Frame.Activity = 1;
+            x.In.Frame.GateOpen = true;
+            x.In.Frame.RmsDb = x.In.Frame.LoudDb = i < 60 ? -48f : -15f;
+            x.In.Frame.SubE = i < 60 ? 0.1f : 0.9f;
+            history.Write(x.In.Frame);
+            x.Step(t);
+        }
+        var ripple = (RippleEffect)x.R.CurrentEffect!;
+        T.Check(ripple.Spawned == 1, $"one ring at the loud rise over rain ({ripple.Spawned})");
+    }
+
     public static void TestRippleRadiusUsesEventTime()
     {
         var cfg = MusicCfg(gamma: false);
@@ -646,6 +718,7 @@ public static class EffectsTests
         var m = Music(MusicStyles.Sparkle) with { MinBrightness = 0 };
         var x = new Manual(Strip(60), cfg, m, new RgbDeviceSettings { Mirror = false });
         x.In.Frame.MidE = 0;
+        x.In.Frame.RmsDb = -20;   // 音は鳴っている（デジタルの無音の中の予測の拍では光らない）
         x.In.Beat = new BeatState(0.5, 1.0, 0, 0.95, true, 0);
         float onBeat = 0, between = 0;
         for (double t = 1.6; t <= 4.0; t += 1 / 60.0)
@@ -659,7 +732,7 @@ public static class EffectsTests
         T.Check(onBeat > between * 1.5, $"Sparkle brightens on the predicted beat without a kick event (on beat {onBeat:F3}, between {between:F3})");
     }
 
-    public static void TestSparkleAndChase()
+    public static void TestSparkleHats()
     {
         // きらめき: ハイハットで粒が出て、0.08 秒で消える
         var cfg = MusicCfg(gamma: false);
@@ -676,18 +749,6 @@ public static class EffectsTests
         sparks = 0;
         for (int i = 0; i < 100; i++) if (Max(x.R.LastLight, i) > baseLevel + 0.05f) sparks++;
         T.Check(sparks == 0, "Sparkle: sparks fade out (τ 70 ms)");
-
-        // テンポ追従: 偶数拍で帯が伸びる
-        var c = new Rig(Strip(40), MusicCfg(gamma: false), Music(MusicStyles.Chase) with { MinBrightness = 0 }, new RgbDeviceSettings { Mirror = false });
-        c.Synth.Conf = 1;
-        double beat0 = c.Synth.FirstBeat + 4 * c.Synth.Period; // 偶数拍
-        c.Run(0.3, beat0 + 0.25 * c.Synth.Period, 60);
-        float early = 0;
-        for (int i = 0; i < 40; i++) if (Max(c.R.LastLight, i) > 0.3f) early++;
-        c.Run(beat0 + 0.25 * c.Synth.Period, beat0 + 0.8 * c.Synth.Period, 60);
-        float late = 0;
-        for (int i = 0; i < 40; i++) if (Max(c.R.LastLight, i) > 0.3f) late++;
-        T.Check(early > 4 && late > early, $"Chase: the bar grows during an even beat ({early} → {late} LEDs)");
     }
 
     // ================= 重ね合わせ（音が止まったとき・点滅の制限・緊急時・同期テスト） =================
@@ -712,7 +773,7 @@ public static class EffectsTests
         rig.Run(12.0, 12.45, 60);
         T.Check(rig.R.IdleWeight == 0, "sound returns → back to music within 0.4 s (0.15 s debounce + 0.25 s ramp)");
 
-        var off = new Rig(Strip(30), MusicCfg(), Music(MusicStyles.Pulse) with { IdleDelaySec = 1, IdleEffect = IdleEffects.Off });
+        var off = new Rig(Strip(30), MusicCfg(), Music(MusicStyles.BeatHue) with { IdleDelaySec = 1, IdleEffect = IdleEffects.Off });
         off.Synth.SilentFrom = 0;
         off.Run(0.3, 3, 60);
         T.Check(off.Out.All(c => c == Rgb.Black), "IdleEffect Off → dark after the delay");
@@ -768,7 +829,7 @@ public static class EffectsTests
     public static void TestEmergencyOverridesMusic()
     {
         var cfg = MusicCfg();
-        var x = new Manual(Asrock(), cfg, Music(MusicStyles.Pulse));
+        var x = new Manual(Asrock(), cfg, Music(MusicStyles.BeatHue));
         x.In.Frame.BassE = 1;
         x.Step(1.0);
         x.Step(1.1);
@@ -779,7 +840,8 @@ public static class EffectsTests
         T.Check(x.Out.All(c => c == new Rgb(0x20, 0, 0)), "emergency: blinks to dark red at 1 Hz");
         T.Check(RgbEffects.EmergencyColor(1.2) == new Rgb(0xFF, 0, 0) && RgbEffects.EmergencyColor(1.7) == new Rgb(0x20, 0, 0), "blink matches RgbEffects.EmergencyColor");
         x.In.Emergency = false;
-        x.Step(2.0);
+        // 「ビートで色替え」は拍（テンポをつかめないときはキック）で光るので、キックを 1 つ鳴らす
+        x.Step(2.0, new AudioEvent(1, AudioEventKind.Kick, 2.0, 3f));
         x.Step(2.05);
         T.Check(x.Out.Any(c => c.R > 0x20 && c.R < 0xFF) || x.Out.Any(c => c.G > 0 || c.B > 0), "after emergency: crossfades back to music");
         cfg.BlinkOnEmergency = false;
@@ -791,7 +853,7 @@ public static class EffectsTests
     public static void TestSyncTestFlash()
     {
         var cfg = MusicCfg(gamma: false);
-        var x = new Manual(Strip(8), cfg, Music(MusicStyles.Pulse));
+        var x = new Manual(Strip(8), cfg, Music(MusicStyles.BeatHue));
         x.In.SyncTest = true;
         x.Step(0.9);
         T.Check(x.Out.All(c => c == Rgb.Black), "sync test: dark between clicks");
@@ -809,30 +871,26 @@ public static class EffectsTests
         T.Check(gpu.IsSlow && !Asrock().IsSlow, "GPU (I2C) is slow, ASRock USB is fast");
         (string Effect, EffectVariant Want)[] cases =
         {
-            (MusicStyles.Pulse, EffectVariant.PulseSlow), (MusicStyles.BeatHue, EffectVariant.BeatHueSlow),
-            (MusicStyles.Spectrum, EffectVariant.MixSlow), (MusicStyles.Energy, EffectVariant.MixSlow), (MusicStyles.Mix, EffectVariant.MixSlow),
-            (MusicStyles.Meter, EffectVariant.PulseLoudSlow), (MusicStyles.Scroll, EffectVariant.BeatHueSlow),
+            (MusicStyles.BeatHue, EffectVariant.BeatHueSlow), (MusicStyles.Spectrum, EffectVariant.MixSlow),
+            (MusicStyles.Meter, EffectVariant.PulseLoudSlow),
             (MusicStyles.Ripple, EffectVariant.BeatHueSlow), (MusicStyles.Sparkle, EffectVariant.BeatHueSlow),
-            (MusicStyles.Chase, EffectVariant.BeatHueSlow), (MusicStyles.Strobe, EffectVariant.BeatHueSlow), (MusicStyles.Mood, EffectVariant.Mood),
-            (MusicStyles.Role, EffectVariant.RoleSlow),
+            (MusicStyles.Role, EffectVariant.RoleSlow), (MusicStyles.Ensemble, EffectVariant.EnsembleSlow),
         };
         bool all = true;
         foreach (var (effect, want) in cases)
         {
-            var got = EffectCatalog.Resolve(effect, "Auto", isSlow: true, strobeAllowed: true);
+            var got = EffectCatalog.Resolve(effect, "Auto", isSlow: true);
             if (got != want) { all = false; T.Info($"{effect}: got {got}, want {want}"); }
         }
         T.Check(all, "slow device + Auto → slow variants (A12 table)");
-        T.Check(EffectCatalog.Resolve(MusicStyles.Pulse, MusicStyles.Spectrum, true, false) == EffectVariant.Spectrum, "explicit per-device effect is kept on slow devices");
-        T.Check(EffectCatalog.Resolve(MusicStyles.Pulse, MusicStyles.Strobe, true, true) == EffectVariant.BeatHue, "Strobe never on slow devices");
-        T.Check(EffectCatalog.Resolve(MusicStyles.Strobe, "Auto", false, false) == EffectVariant.BeatHue, "Strobe not allowed (reduce flashing) → BeatHue");
-        T.Check(EffectCatalog.Resolve(MusicStyles.Strobe, "Auto", false, true) == EffectVariant.Strobe, "Strobe allowed on fast devices");
-        T.Check(EffectCatalog.Resolve(MusicStyles.Spectrum, "", false, false) == EffectVariant.Spectrum, "empty per-device effect = Auto");
+        T.Check(EffectCatalog.Resolve(MusicStyles.BeatHue, MusicStyles.Spectrum, true) == EffectVariant.Spectrum, "explicit per-device effect is kept on slow devices");
+        T.Check(EffectCatalog.Resolve(MusicStyles.Spectrum, "", false) == EffectVariant.Spectrum, "empty per-device effect = Auto");
+        T.Check(EffectCatalog.Resolve(MusicStyles.Spectrum, "NoSuchStyle", false) == EffectVariant.Spectrum, "unknown per-device effect = Auto");
 
         var rig = new Rig(gpu, MusicCfg(), Music(MusicStyles.Spectrum));
         rig.Run(0.3, 2, 8);
         // グラボも全体と同じ光り方（遅いデバイス用の版）。置き換えるのは ASRock の Radeon だけ
-        T.Check(rig.R.ActiveEffect == MusicStyles.Mix && rig.R.ActiveVariant == EffectVariant.MixSlow, $"renderer on the GPU keeps the global effect ({rig.R.ActiveEffect})");
+        T.Check(rig.R.ActiveEffect == MusicStyles.Spectrum && rig.R.ActiveVariant == EffectVariant.MixSlow, $"renderer on the GPU keeps the global effect ({rig.R.ActiveEffect})");
         var pg = new Rig(new RgbDevice(7, "ASRock Radeon RX 7900 XTX Phantom Gaming", 4, RgbDevice.TypeGpu, new[] { 1, 1, 1, 1 }), MusicCfg(), Music(MusicStyles.Spectrum));
         pg.Run(0.3, 2, 8);
         T.Check(pg.R.ActiveVariant == EffectVariant.BeatHueSlow, $"flicker-prone ASRock GPU uses the low-write variant ({pg.R.ActiveEffect})");
@@ -878,7 +936,7 @@ public static class EffectsTests
         T.Check(dst[0].R == 1, "without dithering: plain rounding");
 
         // 遅いデバイスはディザリングしない（毎回同じ値）
-        var slow = new Manual(Strip(4, slow: true), MusicCfg(), Music(MusicStyles.Mood) with { MinBrightness = 0.05 });
+        var slow = new Manual(Strip(4, slow: true), MusicCfg(), Music(MusicStyles.Spectrum) with { MinBrightness = 0.05 });
         var values = new HashSet<byte>();
         for (int i = 0; i < 30; i++) { slow.Step(1 + i * 1e-4); values.Add(slow.Out[0].B); }
         T.Check(values.Count == 1, "slow devices: no temporal dithering");
@@ -951,9 +1009,9 @@ public static class EffectsTests
         double[] fpsList = { 144, 60, 30, 8 };
         string[] effects =
         {
-            MusicStyles.Pulse, MusicStyles.BeatHue, MusicStyles.Mix, MusicStyles.Mood, MusicStyles.Spectrum, MusicStyles.Energy,
-            MusicStyles.Meter, MusicStyles.Scroll, MusicStyles.Ripple, MusicStyles.Chase, MusicStyles.Sparkle,
-            MusicStyles.Pulse + " unlocked", MusicStyles.BeatHue + " unlocked",
+            MusicStyles.BeatHue, MusicStyles.Spectrum,
+            MusicStyles.Meter, MusicStyles.Ripple, MusicStyles.Sparkle,
+            MusicStyles.BeatHue + " unlocked",
         };
         const int Offsets = 6;
         foreach (string name in effects)
@@ -1037,7 +1095,7 @@ public static class EffectsTests
         var setups = new List<(string Name, Rig Rig)>();
         foreach (var effect in MusicStyles.All)
         {
-            var m = Music(effect) with { StrobeAllowed = true, ReduceFlashing = effect != MusicStyles.Strobe };
+            var m = Music(effect);
             setups.Add((effect, new Rig(Asrock(), MusicCfg(), m)));
             setups.Add((effect + " (GPU)", new Rig(Gpu(), MusicCfg(), m)));
             // 楽器の AI の場面の色: 測る間（4〜9 秒）に、シンセ → 歌の移り変わり（5〜7.5 秒）と、移り変わった後がある
@@ -1051,10 +1109,10 @@ public static class EffectsTests
         var idle = new Rig(Asrock(), MusicCfg(), Music(MusicStyles.Spectrum) with { IdleDelaySec = 1 });
         idle.Synth.SilentFrom = 1.5;
         setups.Add(("idle Mood", idle));
-        setups.Add(("Rainbow mode", new Rig(Asrock(), new RgbConfig { Mode = RgbModes.Rainbow }, Music(MusicStyles.Pulse))));
-        setups.Add(("Breathing mode", new Rig(Asrock(), new RgbConfig { Mode = RgbModes.Breathing }, Music(MusicStyles.Pulse))));
-        setups.Add(("Temperature mode", new Rig(Asrock(), new RgbConfig { Mode = RgbModes.Temperature }, Music(MusicStyles.Pulse))));
-        var sync = new Rig(Asrock(), MusicCfg(), Music(MusicStyles.Pulse));
+        setups.Add(("Rainbow mode", new Rig(Asrock(), new RgbConfig { Mode = RgbModes.Rainbow }, Music(MusicStyles.BeatHue))));
+        setups.Add(("Breathing mode", new Rig(Asrock(), new RgbConfig { Mode = RgbModes.Breathing }, Music(MusicStyles.BeatHue))));
+        setups.Add(("Temperature mode", new Rig(Asrock(), new RgbConfig { Mode = RgbModes.Temperature }, Music(MusicStyles.BeatHue))));
+        var sync = new Rig(Asrock(), MusicCfg(), Music(MusicStyles.BeatHue));
         sync.In.SyncTest = true;
         setups.Add(("sync test", sync));
 
@@ -1080,7 +1138,7 @@ public static class EffectsTests
         foreach (bool scenes in new[] { false, true })
         foreach (var effect in MusicStyles.All)
         {
-            var m = Music(effect) with { StrobeAllowed = true, ReduceFlashing = effect != MusicStyles.Strobe, CrossfadeMs = 600, SceneColors = scenes };
+            var m = Music(effect) with { CrossfadeMs = 600, SceneColors = scenes };
             var rig = new Rig(new RgbDevice(0, "300", 300, 4, new[] { 60, 120, 120 }, "HID"), MusicCfg(), m);
             rig.Run(0.3, 2.0, 60);
             rig.UseRing = true;

@@ -87,6 +87,28 @@ public sealed class OnsetDetector
         /// （キックの包絡線が上がる前に、響き線の帯が先に上がる）ので、スネアと決めるのは 1 回待ってから
         /// </summary>
         internal static bool EarlyPositive = false;
+        /// <summary>
+        /// 長い FFT のスネアに必要な、響き線の帯（1〜5 kHz）の上がり（dB。0 = 見ない）。
+        /// 上がり = 候補の WireLeadSec 前から今までのいちばん大きい値 ÷ その前 WirePreSec のいちばん大きい値。
+        /// 合成音で測ると、低いうなり（25〜48 Hz ののこぎり波）の候補はどれも 1 dB より小さく、ふつうのスネアは 9 dB より大きい。
+        /// 0.7 dB では雑音まじりのうなりが通り、3 dB では本物のスネアを落としすぎる
+        /// </summary>
+        internal static double WireMinDb = 1.5;
+        /// <summary>響き線の上がりを見るとき、候補の時刻からさかのぼる長さ（秒。長い FFT の時刻は少しずれるので）</summary>
+        internal static double WireLeadSec = 0.015;
+        /// <summary>響き線の上がりを比べる「前」の長さ（秒）</summary>
+        internal static double WirePreSec = 0.035;
+        /// <summary>響き線の上がりの山を探す、候補の時刻からの長さの下限（秒）</summary>
+        internal static double WirePostSec = 0.030;
+        /// <summary>
+        /// 響き線が上がっていなくても、つかんだ拍の上ならスネアにするための「スネアが鳴っている」の長さ（秒）。
+        /// 最後の、響き線がはっきり上がったスネアからこの長さの間で、その前のスネアとの間もこの半分（3 秒）以内なら「鳴っている」とする（キックは KickTune.ContextSec の 3 秒）。
+        /// 録音した曲で、3 秒あまりドラムのない間のあとの最初のスネアを落としていたので、キックより長くした。
+        /// 1 回だけで決めないのは、エンジンのかかり始めのような 1 回の音で、そのあとのうなりを通さないため
+        /// </summary>
+        internal static double WireContextSec = 6.0;
+        /// <summary>響き線がまだ上がっていない候補を、決めるまでに余分に待つコマ数（1 コマ約 11 ミリ秒。出さないことになった候補だけ待つ）</summary>
+        internal static int WireWaitHops = 1;
     }
     /// <summary>光らせる出来事の大きさの見分け方（テストから変えられるようにしてある。アプリの中では変えない）</summary>
     internal static class EventTune
@@ -120,6 +142,11 @@ public sealed class OnsetDetector
         /// 合成音では約 18 ミリ秒早く光るが、取り違えを増やさないため使わない（テストで前後を比べるため残してある）
         /// </summary>
         internal static bool FastSnare = false;
+        /// <summary>
+        /// スネアにしなかった中音の立ち上がり（響き線の音がない・ハイハットの帯も同時に上がった）を、Tonal の出来事にするか
+        /// （ギターのストローク・はじく音。きらめきが色の帯で見せる）。false にすると今までどおり出さない（テストで前後を比べるため）
+        /// </summary>
+        internal static bool Tonal = true;
     }
 
     /// <summary>キックの見分け方（テストから変えられるようにしてある。アプリの中では変えない）</summary>
@@ -168,6 +195,14 @@ public sealed class OnsetDetector
         internal static double ContextSec = 3.0;
         /// <summary>ドラムが鳴っているとみなす、門を通った割合の下限と、その指数平均の重み</summary>
         internal static double ContextMinRatio = 0.4, ContextAlpha = 0.1;
+        /// <summary>
+        /// 音の多い曲での目立ちの見方（Percussiveness）: 1〜5 kHz がキックの包絡線から DenseRelDb 以内（ひずんだギターの壁など）なら、
+        /// 目立ちを DenseProm0 dB で 0・DenseProm1 dB で 1 にする（ふだんは 6〜10 dB）。
+        /// ギターを 8 分で刻む合成のロックでは、本物のキックの「カチッ」の上がりが 0.4〜2.5 dB・目立ちが 6〜9 dB しかなく、
+        /// キックの 5〜8 割をベースの音にしていた（本物のキックの 1〜5 kHz は −16〜−8 dB）。ベースだけの曲は 1〜5 kHz がずっと小さい（−23 dB 以下）ので変わらない。
+        /// −20 dB では、録音した曲でメモリ（音量メーター）の拍の合い方が少し下がった。0 以上にすると使わない（テストで前後を比べるため）
+        /// </summary>
+        internal static double DenseRelDb = -18, DenseProm0 = 5, DenseProm1 = 7;
     }
 
     /// <summary>
@@ -187,7 +222,8 @@ public sealed class OnsetDetector
     ///     ベースの音の出だしは高い帯にほとんど音が出ない（合成音で、上がり 2.3 dB 以下・キックの包絡線から −36〜−56 dB）。
     ///     ハイハットと同時のベースの音は、上がっても小さすぎる
     ///   ・目立ち: キックの包絡線の山が、いつもの大きさ（512 個ごとの最大値の中央値）より大きく上（prominenceDb。6 dB で 0・10 dB で 1）。
-    ///     「カチッ」のないキック（808 のような音）のため。続けて鳴るベースの音は、いつもの大きさから 7 dB 以内
+    ///     「カチッ」のないキック（808 のような音）のため。続けて鳴るベースの音は、いつもの大きさから 7 dB 以内。
+    ///     1〜5 kHz がキックの包絡線から 18 dB 以内の音の多い曲では、5 dB で 0・7 dB で 1（KickTune.DenseRelDb）
     /// どれも NaN なら NaN（見ない）
     /// </summary>
     internal static double Percussiveness(double clickRiseDb, double clickRelDb, double prominenceDb)
@@ -195,6 +231,9 @@ public sealed class OnsetDetector
         static double Ramp(double x, double lo, double hi) => Math.Clamp((x - lo) / (hi - lo), 0, 1);
         double click = double.IsFinite(clickRiseDb) && double.IsFinite(clickRelDb) ? Math.Min(Ramp(clickRiseDb, 2, 4), Ramp(clickRelDb, -34, -29)) : double.NaN;
         double prom = double.IsFinite(prominenceDb) ? Ramp(prominenceDb, 6, 10) : double.NaN;
+        // 音の多い曲（1〜5 kHz がキックの包絡線から 18 dB 以内。ひずんだギターの壁など）では「カチッ」が埋もれるので、目立ちの下限を下げる
+        if (KickTune.DenseRelDb < 0 && double.IsFinite(prominenceDb) && double.IsFinite(clickRelDb) && clickRelDb >= KickTune.DenseRelDb)
+            prom = Math.Max(prom, Ramp(prominenceDb, KickTune.DenseProm0, KickTune.DenseProm1));
         if (double.IsNaN(click)) return prom;
         return double.IsNaN(prom) ? click : Math.Max(click, prom);
     }
@@ -207,6 +246,8 @@ public sealed class OnsetDetector
     public BeatState? Grid { get; set; }
     /// <summary>最後に門を通った（打楽器らしい）キックの候補の時刻</summary>
     private double _lastPercKickT = double.NegativeInfinity;
+    /// <summary>響き線の帯がはっきり上がったスネア（長い FFT で上がりを確かめたもの・短い FFT のもの）を出した、最後と、その 1 つ前の時刻</summary>
+    private double _wireSnareT = double.NegativeInfinity, _wireSnareT2 = double.NegativeInfinity;
     /// <summary>最近のキックの候補のうち、門を通った割合（指数平均）</summary>
     private double _percPassRatio;
 
@@ -225,6 +266,29 @@ public sealed class OnsetDetector
         if (fromBeat <= KickTune.OnBeatSec) return false;
         if (KickTune.GateMode == 2 && Math.Abs(ph - 0.5) * g.Period <= KickTune.OnBeatSec) return false;
         return true;
+    }
+
+    /// <summary>響き線の帯がはっきり上がったスネアの時刻を覚える（最後と、その 1 つ前）</summary>
+    private void NoteWireSnare(double t)
+    {
+        if (t <= _wireSnareT) return;
+        _wireSnareT2 = _wireSnareT;
+        _wireSnareT = t;
+    }
+
+    /// <summary>
+    /// 時刻 t が、ドラムの鳴っている曲（直近 KickTune.ContextSec 秒に打楽器らしいキック、または直近 SnareTune.WireContextSec 秒に
+    /// 響き線の帯がはっきり上がったスネアがあり、その前のスネアとの間もその半分以内）で、つかんだ拍の頭（± OnBeatSec）の上か
+    /// </summary>
+    private bool OnDrumBackedBeat(double t)
+    {
+        bool kicks = t - _lastPercKickT <= KickTune.ContextSec;
+        bool snares = t - _wireSnareT <= SnareTune.WireContextSec && _wireSnareT - _wireSnareT2 <= SnareTune.WireContextSec / 2;
+        if (!kicks && !snares) return false;
+        var g = Grid;
+        if (g is null || !g.Locked || !g.HasTempo) return false;
+        double ph = g.Phase(t);
+        return Math.Min(ph, 1 - ph) * g.Period <= KickTune.OnBeatSec;
     }
 
     /// <summary>
@@ -431,6 +495,10 @@ public sealed class OnsetDetector
     private double _snareT;
     private float _snareS;
     private double _snareMid, _snareHi;
+    /// <summary>響き線の上がりを確かめるために、決めるのを待ったか</summary>
+    private bool _snareWaited;
+    /// <summary>待ってから響き線の上がりが見えたとき、時刻を合わせ直す範囲（候補の時刻からの秒）</summary>
+    private const double WireRetimeMinSec = 0.008, WireRetimeMaxSec = 0.060;
     /// <summary>スネアの候補を見つけたコマの、キックの帯の立ち上がり・ハイハット・低い中音（早めに決められるかの調査用）</summary>
     private double _snareKickBandFirst;
     private bool _snareHatFirst, _snareG1First;
@@ -492,6 +560,8 @@ public sealed class OnsetDetector
     private readonly PeakPicker _hatFast, _snareFast2;
     /// <summary>短い FFT で出したハイハット・スネアの時刻と、長い FFT で出したスネアの時刻（同じ音を 2 回出さない）</summary>
     private double _fastHatT = double.NegativeInfinity, _fastSnareT = double.NegativeInfinity, _lastSnareT = double.NegativeInfinity;
+    /// <summary>最後に出した Tonal の出来事の時刻（同じ音を 2 回出さない）</summary>
+    private double _lastTonalT = double.NegativeInfinity;
     /// <summary>回と回の間に確かめるときの、短い FFT の Y と帯ごとの立ち上がり（状態は変えない）</summary>
     private readonly double[] _yP = Array.Empty<double>();
     private readonly double[] _bandP = new double[4];
@@ -537,6 +607,8 @@ public sealed class OnsetDetector
     internal Action<double, float, bool, bool, bool>? DiagSnare { get; set; }
     /// <summary>調査用: スネアの候補を決めたとき（時刻, 見つけたコマのキックの帯, そのコマでハイハットも, そのコマで低い中音も, キックが近い, ハイハットだけ, キックのコマ − 候補のコマ）</summary>
     internal Action<double, double, bool, bool, bool, bool, long>? DiagSnareFirst { get; set; }
+    /// <summary>調査用: 長い FFT のスネアの候補の、響き線の帯の上がりを確かめたとき（時刻・上がり dB・スネアにしたか）</summary>
+    internal Action<double, double, bool>? DiagSnareWire { get; set; }
     /// <summary>調査用: 1 回ごとの時刻・立ち上がりの強さ・4 つの帯の強さ（配列は使い回すので、受け取った側で写すこと）</summary>
     internal Action<double, double, double[]>? DiagHop { get; set; }
 
@@ -562,10 +634,11 @@ public sealed class OnsetDetector
         }
         _hatFast.Reset();
         _snareFast2.Reset();
-        _fastHatT = _fastSnareT = _lastSnareT = double.NegativeInfinity;
+        _fastHatT = _fastSnareT = _lastSnareT = _lastTonalT = double.NegativeInfinity;
         _hopIndex = -1;
         _lastKickHop = long.MinValue / 4;
         _lastPercKickT = double.NegativeInfinity;
+        _wireSnareT = _wireSnareT2 = double.NegativeInfinity;
         _percPassRatio = 0;
         _lastHatHop = long.MinValue / 4;
         _snareHop = -1;
@@ -651,12 +724,16 @@ public sealed class OnsetDetector
         bool isKick = kickFired;
         bool bassCand = false, bassLike = false;
         double bassCandT = double.NaN;
+        // キックの手がかり（波紋が、本物のキックかを見分けるのに使う）: 最近のキックの大きさからの dB と、立ち上がりの dB
+        double kickBodyDb = double.NaN, kickRiseDb = double.NaN;
         if (kickFired && kick is not null)
         {
             // 「最近のキックの大きさ」は、打楽器らしさも確かめてから覚える（ベースの音を覚えないように）
-            isKick = kick.TryFindOnset(KickMinRiseDb, KickMaxBelowRecentDb, false, out int ago, out _);
+            isKick = kick.TryFindOnset(KickMinRiseDb, KickMaxBelowRecentDb, false, out int ago, out double riseDb);
             if (isKick)
             {
+                kickBodyDb = kick.FoundPeakDb - kick.KickRefDb;
+                kickRiseDb = riseDb;
                 // 打楽器らしさが低い（「カチッ」もなく目立ちもしない = ベースの音の出だし）ときは、キックにしない
                 double tc = tHop - ago / (double)_sampleRate;
                 double clickPeakDb = double.NaN;
@@ -725,10 +802,10 @@ public sealed class OnsetDetector
             _snareHop = -1;
             _hatPend.Clear();
             _onsetPend.Clear();
-            _fastHatT = _fastSnareT = _lastSnareT = double.NegativeInfinity;
+            _fastHatT = _fastSnareT = _lastSnareT = _lastTonalT = double.NegativeInfinity;
             return;
         }
-        if (isKick) events!.Add(AudioEventKind.Kick, tKick, (float)_pickers[0].Strength);
+        if (isKick) events!.Add(AudioEventKind.Kick, tKick, (float)_pickers[0].Strength, (float)kickBodyDb, (float)kickRiseDb);
 
         // 4b. 短い FFT と包絡線で、その回のうちに確かめられたハイハット・スネアは、すぐに出来事にする（FastHit）。
         //     確かめられなかった音は、今までどおり長い FFT で見つける（同じ音を 2 回出さない。DuplicateSec）
@@ -770,6 +847,7 @@ public sealed class OnsetDetector
                 _snareG1 = false;
                 _snareBig = false;
                 _snareMid = _snareHi = 0;
+                _snareWaited = false;
                 _snareKickBandFirst = _bandNorm[0];
                 _snareHatFirst = hat;
                 _snareG1First = s1 && _snarePick1.Strength >= minS;
@@ -795,15 +873,51 @@ public sealed class OnsetDetector
             if (hatOnly && SnareTune.HatLeakRatio > 0 && _snareMid >= SnareTune.HatLeakRatio * _snareHi) hatOnly = false;
             // 中音だけの立ち上がり（低い中音も高音も出ていない）は、ボーカルやギターとみなす（スネアは胴の音か響き線の音が一緒に出る）
             if (SnareTune.HiMin > 0 && !_snareG1 && _snareHi < SnareTune.HiMin) hatOnly = true;
-            DiagSnare?.Invoke(_snareT, _snareS, _snareG1, kickNear, hatOnly);
-            DiagSnareFirst?.Invoke(_snareT, _snareKickBandFirst, _snareHatFirst, _snareG1First, kickNear, hatOnly, _lastKickHop - _snareHop);
-            // 短い FFT で先に出したスネアと同じ音なら出さない
-            if (!kickNear && !hatOnly && _snareBig && Math.Abs(_snareT - _fastSnareT) > DuplicateSec)
+            // 低いうなり（エンジンの音・長く続く低いベースの音）は、FFT の窓の中で倍音どうしが揺れて、スネアのように見える。
+            // 響き線の帯（1〜5 kHz）が、直前のいちばん大きいところより上がっていない音はスネアにしない。
+            // ただし、ドラムが鳴っている曲で、つかんだ拍の上の音はそのまま（拍の上の管楽器の出だしなどを落とさない）
+            bool wireOk = true, wait = false;
+            if (SnareTune.WireMinDb > 0 && snareEnv is not null && !kickNear && !hatOnly && _snareBig)
             {
-                events!.Add(AudioEventKind.Snare, _snareT, _snareS);
-                _lastSnareT = _snareT;
+                double age = Math.Max(0, tHop - _snareT);
+                int ago = (int)Math.Round((age + SnareTune.WireLeadSec) * _sampleRate);
+                double wire = snareEnv.RiseOverMaxAt(ago, SnareTune.WirePreSec, Math.Max(SnareTune.WirePostSec, age) + SnareTune.WireLeadSec);
+                bool risen = wire >= SnareTune.WireMinDb;
+                wireOk = risen || OnDrumBackedBeat(_snareT);
+                // 長い FFT の時刻が本当の音より早く、響き線がまだ上がっていないだけのこともあるので、少しだけ待って確かめ直す
+                // （待つのは、出さないことになった候補だけ。ふつうのスネアの光は遅れない）
+                wait = !wireOk && hop < _snareHop + SnareTune.HoldHops + SnareTune.WireWaitHops;
+                if (!wait)
+                {
+                    // 待ってから上がりが見えたときは、時刻を響き線の立ち上がりに合わせる
+                    if (risen && _snareWaited && snareEnv.TryFindOnset(SnareTune.WireMinDb, out int wAgo, out _))
+                    {
+                        double tw = tHop - wAgo / (double)_sampleRate;
+                        if (tw > _snareT + WireRetimeMinSec && tw < _snareT + WireRetimeMaxSec) _snareT = tw;
+                    }
+                    if (risen) NoteWireSnare(_snareT);
+                    DiagSnareWire?.Invoke(_snareT, wire, wireOk);
+                }
             }
-            _snareHop = -1;
+            if (wait) _snareWaited = true;
+            else
+            {
+                DiagSnare?.Invoke(_snareT, _snareS, _snareG1, kickNear, hatOnly);
+                DiagSnareFirst?.Invoke(_snareT, _snareKickBandFirst, _snareHatFirst, _snareG1First, kickNear, hatOnly, _lastKickHop - _snareHop);
+                // 短い FFT で先に出したスネアと同じ音なら出さない
+                if (wireOk && !kickNear && !hatOnly && _snareBig && Math.Abs(_snareT - _fastSnareT) > DuplicateSec)
+                {
+                    events!.Add(AudioEventKind.Snare, _snareT, _snareS);
+                    _lastSnareT = _snareT;
+                }
+                else if (EventTune.Tonal && !kickNear && _snareBig && (hatOnly || !wireOk) && Math.Abs(_snareT - _lastTonalT) > DuplicateSec)
+                {
+                    // 打楽器ではない中音の立ち上がり（ギターのストローク・はじく音など）。きらめきだけが使う
+                    events!.Add(AudioEventKind.Tonal, _snareT, _snareS);
+                    _lastTonalT = _snareT;
+                }
+                _snareHop = -1;
+            }
         }
     }
 
@@ -839,6 +953,7 @@ public sealed class OnsetDetector
         if (Math.Abs(t - _fastSnareT) <= DuplicateSec || Math.Abs(t - _lastSnareT) <= DuplicateSec) return;
         events.Add(AudioEventKind.Snare, t, (float)Math.Max(SnareTune.MinStrength, bn / thr));
         _fastSnareT = t;
+        NoteWireSnare(t);
     }
 
     /// <summary>

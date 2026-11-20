@@ -161,7 +161,7 @@ public sealed class ColorPalette
 
     /// <summary>
     /// 選んだ色から作るパレット: [選んだ色, 色相 +25°・少し明るく, 色相 −25°・少し暗く]。
-    /// 位置 0 が選んだ色そのものなので、パルスなどは選んだ色で光る。表せない色は鮮やかさを下げて収める
+    /// 位置 0 が選んだ色そのもの（最初の色は選んだ色で光る）。表せない色は鮮やかさを下げて収める
     /// </summary>
     private static ColorPalette BuildMono(Rgb color)
     {
@@ -204,10 +204,10 @@ public static class ScenePalettes
 
     /// <summary>
     /// 場面の色を使う光り方か。音量メーター（緑・黄・赤に意味がある。遅いデバイスで代わりに使う音量のパルスも同じ扱い）・
-    /// ストロボ（白）・パーツごとの役割（ゾーンの色が「どのパーツ・どの楽器か」を表す。遅いデバイスでは役割の側で場面の色を出している）は使わない
+    /// パーツごとの役割（ゾーンの色が「どのパーツ・どの楽器か」を表す。遅いデバイスでは役割の側で場面の色を出している）は使わない
     /// </summary>
     public static bool Applies(EffectVariant v) =>
-        v is not (EffectVariant.Meter or EffectVariant.PulseLoudSlow or EffectVariant.Strobe or EffectVariant.Role or EffectVariant.RoleSlow);
+        v is not (EffectVariant.Meter or EffectVariant.PulseLoudSlow or EffectVariant.Role or EffectVariant.RoleSlow);
 
     /// <summary>このパレット・光り方で場面の色を使うか（選んだ色だけ・選んだ色と近い色では使わない）</summary>
     public static bool Applies(ResolvedMusic music, EffectVariant v) =>

@@ -1,5 +1,5 @@
 // ==================================================
-// AmbientEffects.cs - 音楽連動ではない、動きのある光り方 (雷・波・さえずり・炎・オーロラ・流れ星・心拍)
+// AmbientEffects.cs - 音楽連動ではない、動きのある光り方 (雷・波・さえずり・炎・オーロラ・流れ星・心拍・ムード)
 // Dependencies: .NET 8 (MIT License)
 // See CREDITS.txt for full license details.
 // ==================================================
@@ -50,7 +50,30 @@ public static class AmbientEffects
             case RgbModes.Heartbeat:
                 dst[..n].Fill(Heartbeat(ts, c, gamma));
                 break;
+            case RgbModes.Mood:
+            {
+                var pal = Palette(cfg, baseColor);
+                for (int i = 0; i < n; i++) dst[i] = Mood(ts, pos[i], pal, gamma);
+                break;
+            }
         }
+    }
+
+    /// <summary>ムードの色の組み合わせ（「選んだ色」のパレットは、デバイス・ゾーンで選んだ色も使う）</summary>
+    private static ColorPalette Palette(RgbConfig cfg, Rgb baseColor) =>
+        ColorPalette.Get(cfg.ModePalette, Palettes.UsesStaticColor(cfg.ModePalette) ? HexOf(baseColor) : null);
+
+    // 色の文字列（#RRGGBB）は、色が変わったときだけ作る（毎コマ new しない）
+    private sealed record HexMemo(Rgb Color, string Hex);
+    private static HexMemo? _hexMemo;
+
+    private static string HexOf(Rgb c)
+    {
+        var m = _hexMemo;
+        if (m is not null && m.Color == c) return m.Hex;
+        m = new HexMemo(c, c.Hex);
+        _hexMemo = m;
+        return m.Hex;
     }
 
     // ================================================================
@@ -229,6 +252,30 @@ public static class AmbientEffects
         double lub2 = Math.Exp(-Math.Pow((ph - 1) / 0.07, 2));   // 次の拍の頭（境目でつながるように）
         double k = 0.22 + 0.78 * Math.Max(Math.Max(lub, dub), lub2);
         return Lin(c.R * k, c.G * k, c.B * k, gamma);
+    }
+
+    // ================================================================
+    // ムード: パレットの色に、ゆっくり移り変わる。1 色にしばらくとどまってから、次の色へなめらかに移る。
+    // LED の並びで色を少しだけずらし、明るさもゆっくり少しだけ揺れる（点滅しない）。
+    // 音楽連動だった「ムード」の、小節ごとに次の色へ移る見た目を、時刻だけで作る
+
+    /// <summary>1 色ごとの時間（秒。速さ 1 のとき。次の色へ移る時間を含む）</summary>
+    public const double MoodStepSec = 8;
+    /// <summary>そのうち次の色へ移っている時間の割合</summary>
+    public const double MoodFadeShare = 0.4;
+    /// <summary>明るさの揺れの範囲（いちばん暗いとき・いちばん明るいとき）と周期（秒）</summary>
+    public const double MoodLow = 0.6, MoodHigh = 0.85, MoodSwellSec = 14;
+
+    private static LinColor Mood(double ts, double p, ColorPalette pal, bool gamma)
+    {
+        double u = ts / MoodStepSec;
+        double step = Math.Floor(u);
+        double g = Math.Clamp((u - step - (1 - MoodFadeShare)) / MoodFadeShare, 0, 1);
+        g = g * g * (3 - 2 * g);
+        double x = (step + g) * pal.Step + 0.12 * (p - 0.5) + 0.04 * Math.Sin(2 * Math.PI * ts / 20);
+        double swell = 0.5 - 0.5 * Math.Cos(2 * Math.PI * (ts / MoodSwellSec - 0.3 * p));
+        double level = MoodLow + (MoodHigh - MoodLow) * swell;
+        return pal.At(x, gamma) * OutputStage.Lin((float)level, gamma);
     }
 
     // ================================================================

@@ -230,7 +230,6 @@ public static class BeatTuneSweepTests
             .Concat(typeof(OnsetDetector.SnareTune).GetFields(System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.NonPublic).Select(f => f))
             .Concat(typeof(BeatHueEffect.Tune).GetFields(System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.NonPublic))
             .Concat(typeof(BeatFlash.Tune).GetFields(System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.NonPublic))
-            .Concat(typeof(PulseEffect.Tune).GetFields(System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.NonPublic))
             .Concat(typeof(OnsetDetector.KickTune).GetFields(System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.NonPublic))
             .Concat(typeof(BeatDriver).GetFields(System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.NonPublic).Where(x => !x.IsLiteral && !x.IsInitOnly))
             .ToArray();

@@ -833,4 +833,192 @@ public static class InstrumentEnsembleTests
             }
         }
     }
+
+    /// <summary>時刻ごとの、目で見た明るさの上がり幅（ゾーンの平均。0.15 秒以内のいちばん明るいコマ − 直前 70 ミリ秒の平均。下がったときは 0）</summary>
+    private static List<double> Rises(List<EnsembleFrame> fr, IEnumerable<double> times, int leds = 24)
+    {
+        var list = new List<double>();
+        foreach (double tk in times)
+        {
+            var before = EnsembleRun.Between(fr, tk - 0.08, tk - 0.01).ToList();
+            var after = EnsembleRun.Between(fr, tk - 0.01, tk + 0.15).ToList();
+            if (before.Count == 0 || after.Count == 0) continue;
+            list.Add(Math.Max(0, after.Max(f => EnsembleRun.Perceived(f, 0, leds)) - before.Average(f => EnsembleRun.Perceived(f, 0, leds))));
+        }
+        return list;
+    }
+
+    private static double MeanRise(List<EnsembleFrame> fr, IEnumerable<double> times, int leds = 24) => Rises(fr, times, leds).DefaultIfEmpty(0).Average();
+
+    /// <summary>設定画面で強さを選んだときと同じ値の「楽器で光る」（単色・点滅を抑える）</summary>
+    private static ResolvedMusic AtIntensity(string intensity)
+    {
+        var cfg = new RgbConfig { Mode = RgbModes.Music, MusicStyle = MusicStyles.Ensemble };
+        MusicTuning.ApplyIntensity(cfg.Music, intensity);
+        return MusicTuning.Resolve(cfg) with { Palette = Palettes.Solid, ReduceFlashing = true, SceneColors = false };
+    }
+
+    /// <summary>
+    /// C14: キック・スネアがはっきり光る（6.15.11。「楽器で光る」はメリハリが足りないと言われた。6.15.10 はキックの上がり幅が 0.2 ほどで、
+    /// ハイハットの粒のほうがキックより明るかった）:
+    ///   ・キックだけ: キックの光（ゾーンの平均・目で見た明るさ）は、ハイハットだけのときの粒（いちばん明るい LED）より 0.1 以上明るい
+    ///   ・音の多い曲（DenseMix・歌・ギター・パッド・金管）でも、キックでゾーンの平均が 0.3 以上上がり、スネアでも 0.2 以上上がる
+    /// </summary>
+    public static void TestKicksAndSnaresStandOut()
+    {
+        var k = Source("kick", 12);
+        var fk = EnsembleRun.Run(k.Buf, EnsembleRun.Solid());
+        double kickPeak = k.KickTimes.Where(t => t > 3).Average(t => EnsembleRun.Between(fk, t - 0.01, t + 0.15).Max(f => EnsembleRun.Perceived(f)));
+        var h = Source("hat", 12);
+        var fh = EnsembleRun.Run(h.Buf, EnsembleRun.Solid()).Where(f => f.T > 3).ToList();
+        double hatPeak = fh.Max(f => f.Out.Max(o => OkLab.LinearToSrgb(EnsembleRun.Code(o))));
+        T.Info($"kick-only zone-mean peak {kickPeak:F3}, brightest hat sparkle LED {hatPeak:F3} (perceived)");
+        T.Check(kickPeak >= hatPeak + 0.1, $"a kick lights brighter than a hat sparkle ({kickPeak:F3} ≥ {hatPeak:F3} + 0.1)");
+
+        var g = new SignalGen(Fs, 20, seed: 9);
+        g.DenseMix(118, 0.5, 19.8);
+        g.VocalTone(2, 8, InstrumentSources.VocalNotes, 0.6);
+        for (double t = 6; t < 14; t += 0.5) g.Strum(t, new[] { 196.0, 246.9, 293.7, 392 }, 0.06);
+        g.PadChord(10, 16, InstrumentSources.PadChord1);
+        var fr = EnsembleRun.Run(g.Buf, EnsembleRun.Solid());
+        var snares = g.SnareTimes.Where(t => t > 3).ToHashSet();
+        double kick = MeanRise(fr, g.KickTimes.Where(t => t > 3 && !snares.Contains(t)));
+        double snare = MeanRise(fr, snares);
+        T.Info($"dense mix: perceived zone-mean rise at kicks {kick:F3}, at kick + snare {snare:F3}");
+        T.Check(kick >= 0.3, $"dense mix: a kick raises the zone mean by ≥ 0.3 ({kick:F3})");
+        T.Check(snare >= 0.2, $"dense mix: a snare raises the zone mean by ≥ 0.2 ({snare:F3})");
+    }
+
+    /// <summary>
+    /// C15: 強さの設定で、キックの光の大きさが変わる（「控えめ」&lt;「ふつう」&lt;「強め」≤「最大」。6.15.10 は「強め」と「最大」が同じで、
+    /// 下地だけが変わっていた）。どの強さでも、「激しい点滅を抑える」がオンなら強い点滅は 1 秒に 3 回まで
+    /// </summary>
+    public static void TestIntensityScalesTheHits()
+    {
+        var g = new SignalGen(Fs, 16, seed: 21);
+        g.DenseMix(124, 0.5, 15.8);
+        var kicks = g.KickTimes.Where(t => t > 3 && !g.SnareTimes.Contains(t)).ToList();
+        var rises = new List<double>();
+        foreach (var i in Intensities.All)
+        {
+            var fr = EnsembleRun.Run(g.Buf, AtIntensity(i));
+            rises.Add(MeanRise(fr, kicks));
+            int most = EnsembleRun.MaxPerSecond(EnsembleRun.StrongFlashes(fr.Where(f => f.T > 3).ToList(), 0, 24));
+            T.Check(most <= 3, $"{i}: ≤ 3 strong flashes in every 1 s window with reduce flashing ({most})");
+        }
+        T.Info("kick rise by intensity " + string.Join(" / ", Intensities.All.Zip(rises, (i, r) => $"{i} {r:F3}")));
+        T.Check(rises[0] + 0.03 < rises[1] && rises[1] + 0.03 < rises[2] && rises[3] >= rises[2] - 0.005,
+            $"the kick grows with the intensity setting (Subtle {rises[0]:F3} < Moderate {rises[1]:F3} < High {rises[2]:F3} ≤ Intense {rises[3]:F3})");
+    }
+
+    /// <summary>
+    /// C16: 「激しい点滅を抑える」がオンでテンポをつかんでいるとき、拍の間の音（ブリッジミュートの刻み）が点滅の制限を先に使って、
+    /// 拍のキック・スネアが弱くなることがない（6.15.10 は、先に来た音から順に制限を使ったので、ロックの刻みの曲で拍の間だけが光り続けることがあった）。
+    /// 拍の頭（キック・スネア）の上がり幅は 0.25 以上で、拍の間の刻みの上がり幅の 2 倍以上。
+    /// 拍の間でも、拍の頭よりずっと大きな音（ゲームの銃声など）は今までどおり光る
+    /// </summary>
+    public static void TestBeatKeepsTheFlashBudget()
+    {
+        var s = GuitarMixes.Rock();
+        // A メロ（ブリッジミュートの 8 分の刻み）の、テンポをつかんだあとの所
+        double p = 60 / s.Bpm, t0 = 0.5, from = 6, to = t0 + 10 * 4 * p;
+        var on = new List<double>();
+        var off = new List<double>();
+        for (double t = t0; t < to - 1e-9; t += p)
+        {
+            if (t < from) continue;
+            on.Add(t);
+            double o = t + p / 2;
+            if (!s.Kicks.Any(x => Math.Abs(x - o) < 0.02)) off.Add(o);
+        }
+        var fr = EnsembleRun.Run(s.With, EnsembleRun.Solid());
+        double beat = MeanRise(fr, on), between = MeanRise(fr, off);
+        T.Info($"rock verse, reduce flashing: rise on the beat {beat:F3}, between beats (palm-muted chugs) {between:F3}");
+        T.Check(beat >= 0.25 && beat >= 2 * between, $"the beat keeps its flash (on the beat {beat:F3} ≥ 0.25 and ≥ 2× between beats {between:F3})");
+
+        // 拍の間の大きな音: 120 BPM のドラムの上に、拍の間（裏拍の少し前）に 9 dB 大きな破裂音
+        var g = new SignalGen(Fs, 20, seed: 31);
+        g.Loop(120, 0.5, 19.5, snare: true, kickAmp: 0.4);
+        var shots = new List<double>();
+        for (double t = 6.85; t < 19; t += 1.5) { g.Snare(t, 1.0); g.Kick(t, 1.0); shots.Add(t); }
+        var fg = EnsembleRun.Run(g.Buf, EnsembleRun.Solid());
+        var ps = Rises(fg, shots);
+        int lit = ps.Count(x => x >= 0.2);
+        T.Info($"loud off-beat hits over a beat: {lit} of {ps.Count} raise the zone mean by ≥ 0.2 (mean {ps.Average():F3})");
+        T.Check(ps.Count >= 7 && lit >= ps.Count - 1, $"a much louder hit between beats still flashes ({lit} of {ps.Count})");
+    }
+
+    /// <summary>
+    /// C17: ベースの音の出だし（太鼓の「カツッ」という高い音がない）をキックと取り違えても、大きくは光らせない
+    /// （キックを大きくしたので、ベースだけの曲でゾーン全体が点滅しないように）。本物のキックの光は、その 1.6 倍以上
+    /// </summary>
+    public static void TestBassNotesDoNotFlashLikeKicks()
+    {
+        var b = Source("bass", 12);
+        var evs = new List<(double T, AudioEventKind Kind, double Seen)>();
+        var fb = EnsembleRun.Run(b.Buf, EnsembleRun.Solid(), events: evs);
+        var bassKicks = evs.Where(e => e.Kind == AudioEventKind.Kick && e.T > 3).Select(e => e.T).ToList();
+        double bass = MeanRise(fb, bassKicks);
+        var k = Source("kick", 12);
+        double kick = MeanRise(EnsembleRun.Run(k.Buf, EnsembleRun.Solid()), k.KickTimes.Where(t => t > 3));
+        T.Info($"bass line: {bassKicks.Count} kick events, rise {bass:F3}; real kicks rise {kick:F3}");
+        T.Check(bassKicks.Count == 0 || kick >= 1.6 * bass, $"bass notes taken for kicks light much less than real kicks ({bass:F3} vs {kick:F3}, ≥ 1.6×)");
+    }
+
+#if BEATHUE_BETA
+    public static void TestFixedBrightnessTracksInstrumentWithoutDrums()
+    {
+        var c = new EffectContext { SlowDevice = true, FixedBrightness = true, F0 = 1, Dt = 0.1f,
+            Music = ResolvedMusic.Default with { Effect = MusicStyles.Ensemble } };
+        var effect = new EnsembleEffect(slow: true);
+        effect.Reset(c);
+        c.Frame.Activity = 1;
+        var output = new LinColor[1];
+        LinColor Phrase(float vocal, float guitar)
+        {
+            c.Frame.Vocal = vocal;
+            c.Frame.GuitarKeys = guitar;
+            for (int frame = 0; frame < 60; frame++)
+            {
+                c.TPrev = c.T;
+                c.T += c.Dt;
+                effect.Update(c);
+            }
+            effect.Render(c, new LedSegment(0, 1, false, false), output);
+            return output[0];
+        }
+        var voice = Phrase(1, 0);
+        var guitar = Phrase(0, 1);
+        T.Check(voice != guitar && effect.SlowState.Dominant == 2 && double.IsNegativeInfinity(effect.SlowState.AccentT),
+            "fixed-brightness GPU changes from the vocal colour to the guitar colour without a beat");
+    }
+
+    public static void TestDirectGpuShowsInstrumentPosition()
+    {
+        var gpu = new RgbDevice(7, "Direct GPU", 41, RgbDevice.TypeGpu, new[] { 4, 20, 17 }, "") { DirectGpu = true };
+        foreach (var source in new[] { "bass", "strum" })
+        {
+            var signal = Source(source, 12);
+            var frames = EnsembleRun.Run(signal.Buf, EnsembleRun.Solid(), gpu);
+            var spread = frames.Where((f, i) => f.T > 3 && i % 6 == 0)
+                .Select(f => f.Out.Skip(4).Take(20).Max(EnsembleRun.Code) - f.Out.Skip(4).Take(20).Min(EnsembleRun.Code))
+                .OrderBy(x => x).ToArray();
+            double upper = spread[spread.Length * 9 / 10];
+            T.Check(upper >= 0.05, $"direct GPU {source}: spatial brightness range at 10 Hz (90th percentile {upper:F3})");
+        }
+    }
+
+    public static void TestSmallStripShowsBassPosition()
+    {
+        var g = Source("bass", 12);
+        var frames = EnsembleRun.Run(g.Buf, EnsembleRun.Solid(), EnsembleRun.Strip(4));
+        var ratios = g.BassNoteTimes.Where(t => t > 3)
+            .SelectMany(t => EnsembleRun.Between(frames, t + 0.08, t + 0.3))
+            .Select(f => EnsembleRun.Mean(f, 0, 1) / Math.Max(1e-3, EnsembleRun.Mean(f, 3, 4)))
+            .OrderBy(r => r).ToArray();
+        double median = ratios[ratios.Length / 2];
+        T.Check(median >= 1.5, $"four LEDs: bass lights the low end (median end-to-end ratio {median:F2})");
+    }
+#endif
+
 }

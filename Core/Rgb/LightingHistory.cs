@@ -89,8 +89,6 @@ public sealed class LightingHistory
         // プリセットの名前は最後に戻す（値を書き換えている途中で「カスタム」にされないように）
         foreach (var p in MusicScalars.Where(p => p.Name != nameof(MusicConfig.Preset))) Copy(p, src.Music, cfg.Music);
         cfg.Music.Preset = src.Music.Preset;
-        // 「激しい点滅を抑える」がオンのあいだは、ストロボには戻さない
-        if (cfg.Music.ReduceFlashing && cfg.MusicStyle == MusicStyles.Strobe) cfg.MusicStyle = MusicStyles.BeatHue;
 
         bool changed = false;
         if (Json(cfg.Devices) != Json(src.Devices)) { cfg.Devices = src.Devices ?? new(); changed = true; }

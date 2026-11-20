@@ -19,7 +19,7 @@ namespace ProFanController;
 ///      ・判定に使う細かい帯（FineBands = 24。40 Hz〜16 kHz を対数で 24 等分）: 超低音・低音・中音・高音のまとめた帯、
 ///        自動音量調整の基準（CeilingDb）、聞こえ方の音量、音の重心に使う。
 ///        まとめた帯を 1 オクターブの帯から作ると、低音（3 本）の中でベースの音がキックを埋もれさせ、拍で光る割合が下がる
-///        （合成した 10 曲で、ビートで色替え・パルスの光る拍が 81% → 65〜67%）。細かく分けて自動バランスをかけると、キックの成分が浮き出る
+///        （合成した 10 曲で、ビートで色替えの光る拍が 81% → 65〜67%。6.15.x のときの測定）。細かく分けて自動バランスをかけると、キックの成分が浮き出る
 ///      どちらも、低い帯は 2048 点の FFT（周波数を細かく見られる）、高い帯は 1024 点（時間に細かい）。
 ///      見せる帯は 2 kHz までが 2048 点・4 kHz からが 1024 点（中音・高音の帯の中で遅れをそろえる）
 ///   2. dB にして、高音ほど少し持ち上げる（傾き）。帯ごとの偏りを 8 秒の平均で少しならす（自動バランス）
@@ -69,6 +69,18 @@ public sealed class BandAnalyzer
     private const double CeilingRiseSec = 0.30;
     /// <summary>基準が下がる速さ（dB／秒）</summary>
     private const double CeilingFallDbPerSec = 3.0;
+    /// <summary>
+    /// 直近の大きな音の高さを止めておく秒数と、そのあと下がる速さ（dB／秒）。
+    /// 基準は 0.3 秒で大きな音に追いつくので、まわりが静かなところの 1 回だけの音（銃声など）は、小さな音でも最大まで光っていた。
+    /// そこで、直近の大きな音から PeakFloorLoudDb・PeakFloorBandDb 下までは基準を下げない（大きな音のあとの小さな音は、小さく光る）。
+    /// 静かなあとの最初の大きな音は、今までどおり最大まで光る。音楽では基準がいつも大きな音の近くにあるので変わらない
+    /// </summary>
+    private const double PeakHoldSec = 3.0, PeakFallDbPerSec = 3.0;
+    /// <summary>
+    /// 直近の大きな音から、この dB 下までは基準を下げない（聞こえ方の音量 LoudVU・帯の明るさ）。
+    /// 帯は 18 dB（16 dB だと、曲のスペクトラムの光り方が少し変わった）
+    /// </summary>
+    private const double PeakFloorLoudDb = 16, PeakFloorBandDb = 18;
     /// <summary>自動バランスの平均の時定数（秒）</summary>
     private const double EqSec = 8.0;
     /// <summary>自動バランスで下げる・上げる量の上限（dB）</summary>
@@ -193,6 +205,8 @@ public sealed class BandAnalyzer
     private readonly WarmEma[] _fRef = new WarmEma[FineBands];
     private CeilingTracker _ceil;
     private CeilingTracker _loudCeil;
+    // 直近の大きな音の高さ（見せる帯・まとめた帯・聞こえ方の音量の瞬間の値・平滑化した値）
+    private PeakHold _bandPk, _groupPk, _loudPk, _progPk;
     private readonly AsymEnv[] _gDisp = new AsymEnv[GroupCount];
     private readonly PunchStream[] _gPunch = new PunchStream[GroupCount];
     private readonly LowTracker[] _gLow = new LowTracker[GroupCount];
@@ -255,6 +269,8 @@ public sealed class BandAnalyzer
     public double LoudVU { get; private set; }
     /// <summary>音の重心（Hz。1.5 秒で平滑化）</summary>
     public double CentroidHz { get; private set; }
+    /// <summary>直近の大きな音（dBFS。LoudDb のいちばん大きい値を 3 秒止めてから、1 秒に 3 dB 下げる。光の強さを音の大きさに合わせるのに使う）</summary>
+    public double ProgramPeakDb => _progPk.V;
 
     /// <summary>見せる帯 k に含まれる FFT の番号の数（テスト・調査用）</summary>
     public int BinCount(int k) => _bands.BinCount(k);
@@ -287,6 +303,10 @@ public sealed class BandAnalyzer
         _ceil = new CeilingTracker { C = -30 };
         _bandCeil = new CeilingTracker { C = -30 };
         _loudCeil = new CeilingTracker { C = -30 };
+        _bandPk.Reset(-120);
+        _groupPk.Reset(-120);
+        _loudPk.Reset(-120);
+        _progPk.Reset(-120);
         _loudDb.V = -120;
         _loudVu.V = 0;
         _centroid.V = Math.Log2(500);
@@ -336,8 +356,11 @@ public sealed class BandAnalyzer
         AutoBalance(_fLeq, _fRef, _fScratch, gateOpen, beta);
 
         // 3. 全体で 1 つの基準（いちばん大きい帯を追いかける）
-        double c = TrackCeiling(ref _ceil, _fLeq, gateOpen);
+        double c = TrackCeiling(ref _ceil, _fLeq, gateOpen, out double loudest);
         CeilingDb = c;
+        // 直近の大きな音から PeakFloorBandDb 下までは、基準を下げない（CeilingDb はそのまま）
+        _groupPk.Update(loudest, gateOpen, _dt, PeakHoldSec, PeakFallDbPerSec, CeilingMinDb);
+        c = Math.Max(c, _groupPk.V - PeakFloorBandDb);
 
         // 4. 見せる帯: パワー → dB → 自動バランス → 自分の基準で 0〜1 → 平滑化とパンチ。
         //    明るさに対応させる幅は、設定の「音の幅」を上限に、その帯の実際の音の上下（静かな側 10% の位置）に合わせて狭める
@@ -349,7 +372,9 @@ public sealed class BandAnalyzer
             _leq[k] = 10 * Math.Log10(p + PowerFloor) + tilt * _bands.OctFrom1k[k];
         }
         AutoBalance(_leq, _ref, _scratch, gateOpen, beta);
-        double cb = TrackCeiling(ref _bandCeil, _leq, gateOpen);
+        double cb = TrackCeiling(ref _bandCeil, _leq, gateOpen, out double loudestBand);
+        _bandPk.Update(loudestBand, gateOpen, _dt, PeakHoldSec, PeakFallDbPerSec, CeilingMinDb);
+        cb = Math.Max(cb, _bandPk.V - PeakFloorBandDb);
         for (int k = 0; k < Bands; k++)
         {
             if (gateOpen) _low[k].Update(_leq[k], LowStepDb);
@@ -380,7 +405,10 @@ public sealed class BandAnalyzer
         LoudDb = _loudDb.StepA(loudInst, _aLoudUp, _aLoudDown);
         if (gateOpen) _loudCeil.Update(loudInst, _aCeil, _ceilFall, CeilingMinDb);
         double loudRange = Math.Clamp(range * 0.3, 9, 24);
-        double vl = Math.Clamp((loudInst + gain - _loudCeil.C) / loudRange * LoudCeilingAt + LoudCeilingAt, 0, 1) * a;
+        _loudPk.Update(loudInst, gateOpen, _dt, PeakHoldSec, PeakFallDbPerSec, CeilingMinDb);
+        _progPk.Update(LoudDb, gateOpen, _dt, PeakHoldSec, PeakFallDbPerSec, CeilingMinDb);
+        double loudCeil = Math.Max(_loudCeil.C, _loudPk.V - PeakFloorLoudDb);
+        double vl = Math.Clamp((loudInst + gain - loudCeil) / loudRange * LoudCeilingAt + LoudCeilingAt, 0, 1) * a;
         LoudVU = _loudVu.StepA(vl, _aLoudUp, _aLoudDown);
 
         // 7. 音の重心（対数の周波数で平均。1.5 秒で平滑化）。音が鳴っているときだけ
@@ -407,10 +435,10 @@ public sealed class BandAnalyzer
         }
     }
 
-    /// <summary>いちばん大きい帯を基準として追いかける（鳴っているときだけ）。いまの基準（dBFS）を返す</summary>
-    private double TrackCeiling(ref CeilingTracker ceil, double[] leq, bool gateOpen)
+    /// <summary>いちばん大きい帯を基準として追いかける（鳴っているときだけ）。いまの基準（dBFS）を返す。x = いちばん大きい帯の dB</summary>
+    private double TrackCeiling(ref CeilingTracker ceil, double[] leq, bool gateOpen, out double x)
     {
-        double x = double.NegativeInfinity;
+        x = double.NegativeInfinity;
         for (int k = 0; k < leq.Length; k++) if (leq[k] > x) x = leq[k];
         if (gateOpen) ceil.Update(x, _aCeil, _ceilFall, CeilingMinDb);
         return ceil.C;
@@ -558,6 +586,8 @@ public sealed class KickPath
 
     /// <summary>最後に TryFindOnset で見つけた山の大きさ（dB。振幅）。見つからなかった・CommitOnset で覚えた後は NaN</summary>
     public double FoundPeakDb => _foundPeakDb;
+    /// <summary>最近のキックの大きさ（dB。まだ覚えていなければ NaN）</summary>
+    public double KickRefDb => _kickRefReady ? _kickRefDb : double.NaN;
 
     /// <summary>512 個ごとの包絡線の最大値（dB）の中央値の見積もり（まだなければ NaN）</summary>
     public double MedianHopDb => _lowKick.Ready ? _lowKick.L : double.NaN;
